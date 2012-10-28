@@ -41,9 +41,15 @@ class Fixture
         }
 
         if ($container instanceof ObjectManager) {
-            return $loader->load($file, new ORM\Doctrine($container));
+            $persister = new ORM\Doctrine($container);
+        } else {
+            throw new \InvalidValueException('Unknown container type '.get_class($container));
         }
 
-        throw new \InvalidValueException('Unknown container type '.get_class($container));
+        $objects = $loader->load($file);
+        $persister->persist($objects);
+
+        return $objects;
+
     }
 }

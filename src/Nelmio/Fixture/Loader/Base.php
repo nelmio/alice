@@ -51,7 +51,7 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function load($data, ORMInterface $persister)
+    public function load($data)
     {
         if (!is_array($data)) {
             $loader = $this;
@@ -82,8 +82,6 @@ class Base implements LoaderInterface
                 }
             }
         }
-
-        $persister->persist($objects);
 
         return $objects;
     }

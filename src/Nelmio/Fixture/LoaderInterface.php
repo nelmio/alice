@@ -17,9 +17,8 @@ interface LoaderInterface
      * Loads a fixture file
      *
      * @param string       $file filename
-     * @param ORMInterface $orm  ORM persister instance
      */
-    public function load($file, ORMInterface $orm);
+    public function load($file);
 
     /**
      * Returns a reference to a fixture by name

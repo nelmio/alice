@@ -36,7 +36,7 @@ class Yaml extends Base
     /**
      * {@inheritDoc}
      */
-    public function load($file, ORMInterface $persister)
+    public function load($file)
     {
         ob_start();
         $loader = $this;
@@ -53,6 +53,6 @@ class Yaml extends Base
             throw new \UnexpectedValueException('Yaml files must parse to an array of data');
         }
 
-        return parent::load($data, $persister);
+        return parent::load($data);
     }
 }
