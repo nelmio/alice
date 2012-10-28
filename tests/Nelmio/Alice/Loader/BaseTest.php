@@ -370,4 +370,26 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user9'));
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user10'));
     }
+
+    public function testConstructorCustomProviders()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'user0' => array(
+                    'username' => '<fooGenerator>',
+                ),
+            ),
+        ));
+
+        $this->assertEquals('foo', $res[0]->username);
+    }
+}
+
+class FakerProvider
+{
+    public function fooGenerator()
+    {
+        return 'foo';
+    }
 }
