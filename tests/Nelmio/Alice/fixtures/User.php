@@ -1,6 +1,6 @@
 <?php
 
-namespace Nelmio\Fixture\fixtures;
+namespace Nelmio\Alice\fixtures;
 
 class User
 {

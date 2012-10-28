@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Nelmio Fixture package.
+ * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
  *
@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Fixture\Loader;
+namespace Nelmio\Alice\Loader;
 
-use Nelmio\Fixture\TestORM;
-use Nelmio\Fixture\Loader\Base;
-use Nelmio\Fixture\fixtures\User;
+use Nelmio\Alice\TestORM;
+use Nelmio\Alice\Loader\Base;
+use Nelmio\Alice\fixtures\User;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
-    const USER = 'Nelmio\Fixture\fixtures\User';
-    const GROUP = 'Nelmio\Fixture\fixtures\Group';
+    const USER = 'Nelmio\Alice\fixtures\User';
+    const GROUP = 'Nelmio\Alice\fixtures\Group';
 
     protected $orm;
     protected $loader;

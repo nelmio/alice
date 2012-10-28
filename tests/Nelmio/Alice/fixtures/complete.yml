@@ -1,4 +1,4 @@
-Nelmio\Fixture\fixtures\User:
+Nelmio\Alice\fixtures\User:
     user0:
         username: johnny
         fullname: John Smith
@@ -12,7 +12,7 @@ Nelmio\Fixture\fixtures\User:
         email: <email>
         favoriteNumber: 40%? <randomNumber(1, 99)>
 
-Nelmio\Fixture\fixtures\Group:
+Nelmio\Alice\fixtures\Group:
     group{0...1}:
         name: <company>
         members: 20%? 3x @user*

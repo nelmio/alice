@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Nelmio Fixture package.
+ * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
  *
@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Fixture;
+namespace Nelmio\Alice;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-class Fixture
+class Fixtures
 {
     /**
      * Loads a fixture file into an object container

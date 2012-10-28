@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Nelmio Fixture package.
+ * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
  *
@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Fixture\Loader;
+namespace Nelmio\Alice\Loader;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Yaml\Yaml as YamlParser;
-use Nelmio\Fixture\LoaderInterface;
-use Nelmio\Fixture\ORMInterface;
+use Nelmio\Alice\LoaderInterface;
+use Nelmio\Alice\ORMInterface;
 
 /**
  * Loads fixtures from a yaml file

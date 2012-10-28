@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Nelmio Fixture package.
+ * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
  *
@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Fixture;
+namespace Nelmio\Alice;
 
-class FixtureTest extends \PHPUnit_Framework_TestCase
+class FixturesTest extends \PHPUnit_Framework_TestCase
 {
-    const USER = 'Nelmio\Fixture\fixtures\User';
-    const GROUP = 'Nelmio\Fixture\fixtures\Group';
+    const USER = 'Nelmio\Alice\fixtures\User';
+    const GROUP = 'Nelmio\Alice\fixtures\Group';
 
     public function testLoadLoadsYamlFilesAndDoctrineORM()
     {
         $om = $this->getDoctrineManagerMock(13);
-        $objects = Fixture::load(__DIR__.'/fixtures/complete.yml', $om);
+        $objects = Fixtures::load(__DIR__.'/fixtures/complete.yml', $om);
 
         $this->assertCount(13, $objects);
 
@@ -37,7 +37,7 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
     {
         $om = $this->getDoctrineManagerMock(1);
 
-        $objects = Fixture::load(array(
+        $objects = Fixtures::load(array(
             self::USER => array(
                 'user1' => array(
                     'username' => 'johnny',
@@ -58,7 +58,7 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
     {
         $om = $this->getDoctrineManagerMock(1);
 
-        $objects = Fixture::load(__DIR__.'/fixtures/basic.php', $om);
+        $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om);
 
         $this->assertCount(1, $objects);
 

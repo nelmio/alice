@@ -14,4 +14,4 @@ if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader
     exit(1);
 }
 
-$loader->add('Nelmio\Fixture', __DIR__);
+$loader->add('Nelmio\Alice\\', __DIR__);
