@@ -1,7 +1,5 @@
-Alice - Expressive fixtures generator
+Alice - Expressive fixtures generator [![Build Status](https://secure.travis-ci.org/nelmio/alice.png?branch=master)](http://travis-ci.org/nelmio/alice)
 =====================================
-
-[![Build Status](https://secure.travis-ci.org/nelmio/alice.png?branch=master)](http://travis-ci.org/nelmio/alice)
 
 Alice allows you to create a ton of fixtures/fake data for use while
 developing or testing your project. It gives you a few essential tools to
@@ -277,3 +275,7 @@ there are two ways to solve the problem:
    ```
 
    That way you can now use `name: <groupName>` to generate specific group names.
+
+## License ##
+
+Released under the MIT License, see LICENSE.
