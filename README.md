@@ -23,30 +23,30 @@ persister in the container you give it.
 
 Examples:
 
-    ```php
-    // load a yaml file into a Doctrine\Common\Persistence\ObjectManager object
-    $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager);
+```php
+// load a yaml file into a Doctrine\Common\Persistence\ObjectManager object
+$objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager);
 
-    // load a php file into a Doctrine\Common\Persistence\ObjectManager object
-    $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.php', $objectManager);
-    ```
+// load a php file into a Doctrine\Common\Persistence\ObjectManager object
+$objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.php', $objectManager);
+```
 
 ### Detailed Usage ###
 
 If you want a bit more control you can instantiate the various object yourself
 and make it work just as easily:
 
-    ```php
-    // load objects from a yaml file
-    $loader = new \Nelmio\Alice\Loader\Yaml();
-    $objects = $loader->load(__DIR__.'/fixtures.yml');
+```php
+// load objects from a yaml file
+$loader = new \Nelmio\Alice\Loader\Yaml();
+$objects = $loader->load(__DIR__.'/fixtures.yml');
 
-    // optionally persist them into the doctrine object manager
-    // you can also do that yourself or persist them in another way
-    // if you do not use doctrine
-    $persister = new \Nelmio\Alice\ORM\Doctrine($objectManager);
-    $persister->persist($objects);
-    ```
+// optionally persist them into the doctrine object manager
+// you can also do that yourself or persist them in another way
+// if you do not use doctrine
+$persister = new \Nelmio\Alice\ORM\Doctrine($objectManager);
+$persister->persist($objects);
+```
 
 > **Note**: To load plain PHP files, you can use the `\Nelmio\Alice\Loader\Base`
 > class instead.
@@ -58,25 +58,25 @@ and make it work just as easily:
 The most basic functionality of this library is to turn flat yaml files into
 objects. You can define many objects of different classes in one file as such:
 
-    ```yaml
-    Nelmio\Entity\User:
-        user0:
-            username: bob
-            fullname: Bob
-            birthDate: 1980-10-10
-            email: bob@example.org
-            favoriteNumber: 42
-        user1:
-            username: alice
-            fullname: Alice
-            birthDate: 1978-07-12
-            email: alice@example.org
-            favoriteNumber: 27
+```yaml
+Nelmio\Entity\User:
+    user0:
+        username: bob
+        fullname: Bob
+        birthDate: 1980-10-10
+        email: bob@example.org
+        favoriteNumber: 42
+    user1:
+        username: alice
+        fullname: Alice
+        birthDate: 1978-07-12
+        email: alice@example.org
+        favoriteNumber: 27
 
-    Nelmio\Entity\Group:
-        group1:
-            name: Admins
-    ```
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+```
 
 This works fine, but it is not very powerful and is completely static. You
 still have to do most of the work. Let's see how to make this more interesting.
@@ -88,15 +88,15 @@ to remove duplication from the yaml file.
 
 You can do that by defining a range in the fixture name:
 
-    ```yaml
-    Nelmio\Entity\User:
-        user{1..10}:
-            username: bob
-            fullname: Bob
-            birthDate: 1980-10-10
-            email: bob@example.org
-            favoriteNumber: 42
-    ```
+```yaml
+Nelmio\Entity\User:
+    user{1..10}:
+        username: bob
+        fullname: Bob
+        birthDate: 1980-10-10
+        email: bob@example.org
+        favoriteNumber: 42
+```
 
 Now it will generate ten users, with names user1 to user10. Pretty good but
 we only have 10 bobs with the same name, username and email, which is not
@@ -108,15 +108,15 @@ Alice integrates with the [Faker](https://github.com/fzaninotto/Faker) library.
 Using `<foo>` you can call faker data providers to generate random data. Let's
 turn our static bob user into a randomized entry:
 
-    ```yaml
-    Nelmio\Entity\User:
-        user{1..10}:
-            username: <username>
-            fullname: <firstName> <lastName>
-            birthDate: <date>
-            email: <email>
-            favoriteNumber: <numberBetween(1, 200)>
-    ```
+```yaml
+Nelmio\Entity\User:
+    user{1..10}:
+        username: <username>
+        fullname: <firstName> <lastName>
+        birthDate: <date>
+        email: <email>
+        favoriteNumber: <numberBetween(1, 200)>
+```
 
 As you see in the last line, you can also pass arguments to those just as if
 you were calling a function.
@@ -132,15 +132,15 @@ and you can ommit the empty value if null is ok as such: `%50? value`.
 
 Let's update the user definition with this new information:
 
-    ```yaml
-    Nelmio\Entity\User:
-        user{1..10}:
-            username: <username>
-            fullname: <firstName> <lastName>
-            birthDate: <date>
-            email: <email>
-            favoriteNumber: 50%? <numberBetween(1, 200)>
-    ```
+```yaml
+Nelmio\Entity\User:
+    user{1..10}:
+        username: <username>
+        fullname: <firstName> <lastName>
+        birthDate: <date>
+        email: <email>
+        favoriteNumber: 50%? <numberBetween(1, 200)>
+```
 
 Now only half the user will have a number filled-in.
 
@@ -152,15 +152,15 @@ allows you to reference one object from another one. You can do that with the
 
 Let's add a fixed owner to the group:
 
-    ```yaml
-    Nelmio\Entity\User:
-        # ...
+```yaml
+Nelmio\Entity\User:
+    # ...
 
-    Nelmio\Entity\Group:
-        group1:
-            name: Admins
-            owner: @user1
-    ```
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+        owner: @user1
+```
 
 > **Note**: There is one limitation, you can only refer to objects that are
 > defined above in the file.
@@ -170,39 +170,39 @@ Let's add a fixed owner to the group:
 If we want to also add group members, there are two ways to do this.
 One is to define an array of references to have a fixed set of members:
 
-    ```yaml
-    Nelmio\Entity\User:
-        # ...
+```yaml
+Nelmio\Entity\User:
+    # ...
 
-    Nelmio\Entity\Group:
-        group1:
-            name: Admins
-            owner: @user1
-            members: [@user2, @user3]
-    ```
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+        owner: @user1
+        members: [@user2, @user3]
+```
 
 The other, which is more interesting, is to define a reference with a wildcard,
 telling Alice how many object you want:
 
-    ```yaml
-    Nelmio\Entity\User:
-        # ...
+```yaml
+Nelmio\Entity\User:
+    # ...
 
-    Nelmio\Entity\Group:
-        group1:
-            name: Admins
-            owner: @user1
-            members: 5x @user*
-    ```
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+        owner: @user1
+        members: 5x @user*
+```
 
 In this case it will pick 5 fixture objects which have a name matching `user*`.
 
 You can also randomize the amount by combining it with faker data:
 
-    ```yaml
-        # ...
-            members: <numberBetween(1, 10)>x @user*
-    ```
+```yaml
+    # ...
+        members: <numberBetween(1, 10)>x @user*
+```
 
 ### Variables ###
 
@@ -214,18 +214,18 @@ using the traditional PHP `$variable` notation.
 
 Let's add created/modified dates to our group:
 
-    ```yaml
-    Nelmio\Entity\User:
-        # ...
+```yaml
+Nelmio\Entity\User:
+    # ...
 
-    Nelmio\Entity\Group:
-        group1:
-            name: Admins
-            owner: @user1
-            members: <numberBetween(1, 10)>x @user*
-            created: <dateTimeBetween('-200 days', 'now')>
-            updated: <dateTimeBetween($created, 'now')>
-    ```
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+        owner: @user1
+        members: <numberBetween(1, 10)>x @user*
+        created: <dateTimeBetween('-200 days', 'now')>
+        updated: <dateTimeBetween($created, 'now')>
+```
 
 As you can see, we make sure that the update date is between the creation
 date and the current time, which ensure the data will look real enough.
@@ -245,35 +245,35 @@ there are two ways to solve the problem:
    use the standard Doctrine Fixtures package in a Symfony2 project, you could
    do the following:
 
-    ```php
-    <?php
+   ```php
+   <?php
 
-    namespace Acme\DemoBundle\DataFixtures\ORM;
+   namespace Acme\DemoBundle\DataFixtures\ORM;
 
-    use Doctrine\Common\Persistence\ObjectManager;
-    use Doctrine\Common\DataFixtures\FixtureInterface;
-    use Nelmio\Alice\Fixtures;
+   use Doctrine\Common\Persistence\ObjectManager;
+   use Doctrine\Common\DataFixtures\FixtureInterface;
+   use Nelmio\Alice\Fixtures;
 
-    class LoadFixtureData implements FixtureInterface
-    {
-        public function load(ObjectManager $om)
-        {
-            // pass $this as an additional faker provider to make the "groupName"
-            // method available as a data provider
-            Fixture::load(__DIR__.'/fixtures.yml', $om, array('providers' => array($this)));
-        }
+   class LoadFixtureData implements FixtureInterface
+   {
+       public function load(ObjectManager $om)
+       {
+           // pass $this as an additional faker provider to make the "groupName"
+           // method available as a data provider
+           Fixture::load(__DIR__.'/fixtures.yml', $om, array('providers' => array($this)));
+       }
 
-        public function groupName()
-        {
-            $names = array(
-                'Group A',
-                'Group B',
-                'Group C',
-            );
+       public function groupName()
+       {
+           $names = array(
+               'Group A',
+               'Group B',
+               'Group C',
+           );
 
-            return $names[array_rand($names)];
-        }
-    }
-    ```
+           return $names[array_rand($names)];
+       }
+   }
+   ```
 
    That way you can now use `name: <groupName>` to generate specific group names.
