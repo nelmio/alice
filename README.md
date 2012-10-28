@@ -276,6 +276,33 @@ there are two ways to solve the problem:
 
    That way you can now use `name: <groupName>` to generate specific group names.
 
+### Complete Sample ###
+
+In the end, using all the tools above, we have this file creating a bunch of
+users and a group, all of it being linked together, and with little typing:
+
+```yaml
+Nelmio\Entity\User:
+    user{1..10}:
+        username: <username>
+        fullname: <firstName> <lastName>
+        birthDate: <date>
+        email: <email>
+        favoriteNumber: 50%? <numberBetween(1, 200)>
+
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+        owner: @user1
+        members: <numberBetween(1, 10)>x @user*
+        created: <dateTimeBetween('-200 days', 'now')>
+        updated: <dateTimeBetween($created, 'now')>
+```
+
+If you like to have a few specific users with specific data to write tests
+against of course you can define them above/below the ones using the randomized
+data. Combine it all as you see fit!
+
 ## License ##
 
 Released under the MIT License, see LICENSE.
