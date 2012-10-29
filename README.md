@@ -103,8 +103,10 @@ so fancy yet.
 ### Faker Data ###
 
 Alice integrates with the [Faker](https://github.com/fzaninotto/Faker) library.
-Using `<foo>` you can call faker data providers to generate random data. Let's
-turn our static bob user into a randomized entry:
+Using `<foo>` you can call Faker data providers to generate random data. Check
+the [list of Faker providers](https://github.com/fzaninotto/Faker#formatters).
+
+Let's turn our static bob user into a randomized entry:
 
 ```yaml
 Nelmio\Entity\User:
