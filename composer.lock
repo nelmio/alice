@@ -1,31 +1,31 @@
 {
-    "hash": "135db04d98ddcfbf55ea138abe43251b",
+    "hash": "e9a607b4d156f41e2e8914ba164422d5",
     "packages": [
         {
             "name": "fzaninotto/faker",
-            "version": "dev-master",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker",
-                "reference": "cdd97657c0950886f82637e62482e0b606786a88"
+                "reference": "v1.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fzaninotto/Faker/zipball/cdd97657c0950886f82637e62482e0b606786a88",
-                "reference": "cdd97657c0950886f82637e62482e0b606786a88",
+                "url": "https://github.com/fzaninotto/Faker/zipball/v1.1.0",
+                "reference": "v1.1.0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1351445052",
+            "time": "2012-10-29 02:32:06",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.1.x-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Faker": "src/"
@@ -101,7 +101,7 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "fzaninotto/faker": 20
-    }
+    "stability-flags": [
+
+    ]
 }
