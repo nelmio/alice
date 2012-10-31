@@ -162,6 +162,22 @@ Nelmio\Entity\Group:
         owner: @user1
 ```
 
+If you would like a random user instead of a fixed one, you can define a
+reference with a wildcard:
+
+```yaml
+Nelmio\Entity\User:
+    # ...
+
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+        owner: @user*
+```
+
+It will then pick any object whose name matches `user*` where `*` can be any
+string.
+
 > **Note**: There is one limitation, you can only refer to objects that are
 > defined above in the file.
 
@@ -182,7 +198,7 @@ Nelmio\Entity\Group:
 ```
 
 The other, which is more interesting, is to define a reference with a wildcard,
-telling Alice how many object you want:
+and also tell Alice how many object you want:
 
 ```yaml
 Nelmio\Entity\User:
@@ -203,6 +219,9 @@ You can also randomize the amount by combining it with faker data:
     # ...
         members: <numberBetween(1, 10)>x @user*
 ```
+
+> **Note**: You do not need to define multi-references inside an array, since
+> they are automatically translated to an array of objects.
 
 ### Variables ###
 
