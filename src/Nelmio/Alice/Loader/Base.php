@@ -127,11 +127,7 @@ class Base implements LoaderInterface
             $val = $this->process($val, $variables);
 
             // add relations if available
-            if (is_array($val)
-                && (method_exists($obj, $method = 'add'.rtrim($key, 's').'s')
-                    || method_exists($obj, $method = 'add'.rtrim($key, 's'))
-                )
-            ) {
+            if (is_array($val) && $method = $this->findAdderMethod($obj, $key)) {
                 foreach ($val as $rel) {
                     $obj->{$method}($rel);
                 }
@@ -258,5 +254,20 @@ class Base implements LoaderInterface
         shuffle($availableRefs);
 
         return array_slice($availableRefs, 0, min($count, count($availableRefs)));
+    }
+
+    private function findAdderMethod($obj, $key)
+    {
+        if (method_exists($obj, $method = 'add'.$key)) {
+            return $method;
+        }
+
+        if (method_exists($obj, $method = 'add'.rtrim($key, 's'))) {
+            return $method;
+        }
+
+        if (substr($key, -3) === 'ies' && method_exists($obj, $method = 'add'.substr($key, 0, -3).'y')) {
+            return $method;
+        }
     }
 }
