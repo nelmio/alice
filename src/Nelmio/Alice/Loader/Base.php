@@ -41,12 +41,35 @@ class Base implements LoaderInterface
 {
     protected $references = array();
 
+    /**
+     * @var \Faker\Generator[]
+     */
+    private $generators;
+
+    /**
+     * Default locale to use with faker
+     *
+     * @var string
+     */
+    private $defaultLocale;
+
+    /**
+     * Custom faker providers to use with faker generator
+     *
+     * @var array
+     */
+    private $providers;
+
+    /**
+     * @param string $locale default locale to use with faker if none is
+     *      specified in the expression
+     * @param array $providers custom faker providers in addition to the default
+     *      ones from faker
+     */
     public function __construct($locale = 'en_US', array $providers = array())
     {
-        $this->generator = \Faker\Factory::create($locale);
-        foreach ($providers as $provider) {
-            $this->generator->addProvider($provider);
-        }
+        $this->defaultLocale = $locale;
+        $this->providers = $providers;
     }
 
     /**
@@ -112,7 +135,34 @@ class Base implements LoaderInterface
         $args = func_get_args();
         array_shift($args);
 
-        return $this->generator->format($formatter, $args);
+        $locale = null;
+        if (strpos($formatter, ':')) {
+            list($locale, $formatter) = explode(':', $formatter);
+        }
+        return $this->getGenerator($locale)->format($formatter, $args);
+    }
+
+
+    /**
+     * Get the generator for this locale
+     *
+     * @param string $locale the requested locale, defaults to constructor injected default
+     *
+     * @return \Faker\Generator the generator for the requested locale
+     */
+    protected function getGenerator($locale = null)
+    {
+        if (is_null($locale)) {
+            $locale = $this->defaultLocale;
+        }
+        if (! isset($this->generators[$locale])) {
+            $generator = \Faker\Factory::create($locale);
+            foreach ($this->providers as $provider) {
+                $generator->addProvider($provider);
+            }
+            $this->generators[$locale] = $generator;
+        }
+        return $this->generators[$locale];
     }
 
     private function createObject($class, $name, $data)
@@ -207,11 +257,11 @@ class Base implements LoaderInterface
         };
 
         // format placeholders without preg_replace if there is only one to avoid __toString() being called
-        if (preg_match('#^<(?<name>[a-z0-9_]+?)(?:\((?<args>.+?)\))?>$#i', $data, $matches)) {
+        if (preg_match('#^<(?<name>([a-z]+(_[a-z]+)?:)?[a-z0-9_]+?)(?:\((?<args>.+?)\))?>$#i', $data, $matches)) {
             $data = $replacePlaceholder($matches);
         } else {
             // format placeholders inline
-            $data = preg_replace_callback('#<(?<name>[a-z0-9_]+?)(?:\((?<args>.+?)\))?>#i', function ($matches) use ($replacePlaceholder) {
+            $data = preg_replace_callback('#<(?<name>([a-z_]+:)?[a-z0-9_]+?)(?:\((?<args>.+?)\))?>#i', function ($matches) use ($replacePlaceholder) {
                 return $replacePlaceholder($matches);
             }, $data);
         }
