@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Loader;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Yaml\Yaml as YamlParser;
+use Symfony\Component\Form\Util\FormUtil;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\ORMInterface;
 
@@ -260,6 +261,14 @@ class Base implements LoaderInterface
     {
         if (method_exists($obj, $method = 'add'.$key)) {
             return $method;
+        }
+
+        if (class_exists('Symfony\Component\Form\Util\FormUtil') && method_exists('Symfony\Component\Form\Util\FormUtil', 'singularify')) {
+            foreach (FormUtil::singularify($key) as $singularForm) {
+                if (method_exists($obj, $method = 'add'.$singularForm)) {
+                    return $method;
+                }
+            }
         }
 
         if (method_exists($obj, $method = 'add'.rtrim($key, 's'))) {
