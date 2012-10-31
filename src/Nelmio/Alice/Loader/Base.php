@@ -176,7 +176,11 @@ class Base implements LoaderInterface
             } else {
                 $emptyVal = is_array($trueVal) ? array() : null;
 
-                return isset($match['false']) ? $this->process($match['false'], $variables) : $emptyVal;
+                if (isset($match['false']) && '' !== $match['false']) {
+                    return $this->process($match['false'], $variables);
+                }
+
+                return $emptyVal;
             }
         }
 
@@ -220,6 +224,9 @@ class Base implements LoaderInterface
             if (strpos($matches['reference'], '*')) {
                 $data = $this->getRandomReferences($matches['reference'], isset($matches['multi']) ? $matches['multi'] : 1);
             } else {
+                if (isset($matches['multi']) && '' !== $matches['multi']) {
+                    throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
+                }
                 $data = $this->getReference($matches['reference']);
             }
         }
