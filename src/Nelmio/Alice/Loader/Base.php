@@ -222,9 +222,9 @@ class Base implements LoaderInterface
         // process references
         if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)$}i', $data, $matches)) {
             if (strpos($matches['reference'], '*')) {
-                $data = $this->getRandomReferences($matches['reference'], isset($matches['multi']) ? $matches['multi'] : 1);
+                $data = $this->getRandomReferences($matches['reference'], ('' !== $matches['multi']) ? $matches['multi'] : null);
             } else {
-                if (isset($matches['multi']) && '' !== $matches['multi']) {
+                if ('' !== $matches['multi']) {
                     throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
                 }
                 $data = $this->getReference($matches['reference']);
@@ -249,6 +249,10 @@ class Base implements LoaderInterface
 
         if (!$availableRefs) {
             throw new \UnexpectedValueException('Reference mask "'.$mask.'" did not match any existing reference, make sure the object is created after its references');
+        }
+
+        if (null === $count) {
+            return $availableRefs[array_rand($availableRefs)];
         }
 
         shuffle($availableRefs);

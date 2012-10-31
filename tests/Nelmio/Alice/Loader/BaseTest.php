@@ -149,6 +149,26 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('alice', current($group->getMembers())->username);
     }
 
+    public function testLoadParsesSingleWildcardReference()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => 'bob',
+                ),
+            ),
+            self::GROUP => array(
+                'a' => array(
+                    'owner' => '@user*'
+                ),
+            ),
+        ));
+
+        $group = $res[1];
+        $this->assertInstanceOf(self::USER, $group->getOwner());
+        $this->assertEquals('bob', $group->getOwner()->username);
+    }
+
     public function testLoadParsesMultiReferences()
     {
         $usernames = range('a', 'z');

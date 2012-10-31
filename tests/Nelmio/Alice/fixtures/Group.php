@@ -5,6 +5,7 @@ namespace Nelmio\Alice\fixtures;
 class Group
 {
     private $name;
+    private $owner;
     private $members = array();
 
     public function getName()
@@ -17,12 +18,22 @@ class Group
         $this->name = $name;
     }
 
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(User $owner)
+    {
+        $this->owner = $owner;
+    }
+
     public function getMembers()
     {
         return $this->members;
     }
 
-    public function addMember($member)
+    public function addMember(User $member)
     {
         $this->members[] = $member;
     }
