@@ -40,6 +40,10 @@ use Nelmio\Alice\ORMInterface;
 class Base implements LoaderInterface
 {
     protected $references = array();
+    /**
+     * @var ObjectManager
+     */
+    protected $manager;
 
     public function __construct($locale = 'en_US', array $providers = array())
     {
@@ -130,10 +134,11 @@ class Base implements LoaderInterface
             // add relations if available
             if (is_array($val) && $method = $this->findAdderMethod($obj, $key)) {
                 foreach ($val as $rel) {
+                    $rel = $this->checkForEntity($obj, $method, $rel);
                     $obj->{$method}($rel);
                 }
             } elseif (method_exists($obj, 'set'.$key)) {
-                // set value
+                $val = $this->checkForEntity($obj, 'set'.$key, $val);
                 $obj->{'set'.$key}($val);
                 $variables[$key] = $val;
             } elseif (property_exists($obj, $key)) {
@@ -145,6 +150,45 @@ class Base implements LoaderInterface
         }
 
         return $this->references[$name] = $obj;
+    }
+
+    /**
+     * checks if the value is typehinted with an entity and can be fetched from the db
+     *
+     * @param object $obj
+     * @param string $method
+     * @param string $value
+     * @return mixed
+     */
+    private function checkForEntity($obj, $method, $value)
+    {
+        $reflection = new \ReflectionMethod(get_class($obj), $method);
+        $params = $reflection->getParameters();
+
+        if ($params[0]->getClass() && is_numeric($value)) {
+            $value = $this->findEntity($params[0]->getClass()->getName(), $value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * if provided an integer and the setter needs an Object, try to find it with the OM
+     *
+     * @param string $class the class to find
+     * @param int $id the entity id
+     * @return object
+     * @throws \UnexpectedValueException
+     */
+    private function findEntity($class, $id)
+    {
+        $entity = $this->manager->find($class, $id);
+
+        if (!$entity) {
+            throw new \UnexpectedValueException('Entity for Id ' . $id . ' and Class ' . $class . ' not found');
+        }
+
+        return $entity;
     }
 
     private function process($data, array $variables)
@@ -278,5 +322,10 @@ class Base implements LoaderInterface
         if (substr($key, -3) === 'ies' && method_exists($obj, $method = 'add'.substr($key, 0, -3).'y')) {
             return $method;
         }
+    }
+
+    public function setObjectManager(ObjectManager $manager)
+    {
+        $this->manager = $manager;
     }
 }

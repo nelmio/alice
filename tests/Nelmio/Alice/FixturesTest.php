@@ -11,12 +11,14 @@
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\fixtures\User;
+
 class FixturesTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\fixtures\User';
     const GROUP = 'Nelmio\Alice\fixtures\Group';
 
-    public function testLoadLoadsYamlFilesAndDoctrineORM()
+    public function testLoadYamlFilesAndDoctrineORM()
     {
         $om = $this->getDoctrineManagerMock(13);
         $objects = Fixtures::load(__DIR__.'/fixtures/complete.yml', $om);
@@ -33,9 +35,9 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(3, $group->getMembers());
     }
 
-    public function testLoadLoadsArrays()
+    public function testLoadArrays()
     {
-        $om = $this->getDoctrineManagerMock(1);
+        $om = $this->getDoctrineManagerMock(2);
 
         $objects = Fixtures::load(array(
             self::USER => array(
@@ -44,9 +46,15 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                     'favoriteNumber' => 42,
                 ),
             ),
+            self::GROUP => array(
+                'group1' => array(
+                    'owner' => 1
+                ),
+            ),
+
         ), $om);
 
-        $this->assertCount(1, $objects);
+        $this->assertCount(2, $objects);
 
         $user = $objects[0];
         $this->assertInstanceOf(self::USER, $user);
@@ -54,13 +62,13 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $user->favoriteNumber);
     }
 
-    public function testLoadLoadsPHPfiles()
+    public function testLoadPHPfiles()
     {
-        $om = $this->getDoctrineManagerMock(1);
+        $om = $this->getDoctrineManagerMock(2);
 
         $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om);
 
-        $this->assertCount(1, $objects);
+        $this->assertCount(2, $objects);
 
         $user = $objects[0];
         $this->assertInstanceOf(self::USER, $user);
@@ -70,13 +78,19 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     protected function getDoctrineManagerMock($objects = null)
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager', array('persist', 'flush'));
+        $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
+            ->setMethods(array('persist', 'flush','find'))
+            ->getMockForAbstractClass()
+        ;
 
         $om->expects($objects ? $this->exactly($objects) : $this->any())
             ->method('persist');
 
         $om->expects($this->once())
             ->method('flush');
+
+        $om->expects($this->once())
+            ->method('find')->will($this->returnValue(new User()));
 
         return $om;
     }
