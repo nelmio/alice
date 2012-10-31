@@ -264,7 +264,7 @@ class Base implements LoaderInterface
         }
 
         if (class_exists('Symfony\Component\Form\Util\FormUtil') && method_exists('Symfony\Component\Form\Util\FormUtil', 'singularify')) {
-            foreach (FormUtil::singularify($key) as $singularForm) {
+            foreach ((array) FormUtil::singularify($key) as $singularForm) {
                 if (method_exists($obj, $method = 'add'.$singularForm)) {
                     return $method;
                 }
