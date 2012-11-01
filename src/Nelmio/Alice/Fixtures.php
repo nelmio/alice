@@ -37,13 +37,13 @@ class Fixtures
         } elseif ((is_string($file) && preg_match('{\.php$}', $file)) || is_array($file)) {
             $loader = new Loader\Base($options['locale'], $options['providers']);
         } else {
-            throw new \InvalidValueException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
+            throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
         }
 
         if ($container instanceof ObjectManager) {
             $persister = new ORM\Doctrine($container);
         } else {
-            throw new \InvalidValueException('Unknown container type '.get_class($container));
+            throw new \InvalidArgumentException('Unknown container type '.get_class($container));
         }
 
         $objects = $loader->load($file);
