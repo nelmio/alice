@@ -128,7 +128,7 @@ example might be personal data you don't want to share, to reflect this in
 our fixtures and be sure the site works and looks alright even when users
 don't enter a favorite number, we can make Alice fill it in *sometimes* using
 the `50%? value : empty value` notation. It's a bit like the ternary operator,
-and you can ommit the empty value if null is ok as such: `%50? value`.
+and you can omit the empty value if null is ok as such: `%50? value`.
 
 Let's update the user definition with this new information:
 
