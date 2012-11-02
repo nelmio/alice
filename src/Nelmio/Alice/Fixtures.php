@@ -50,6 +50,5 @@ class Fixtures
         $persister->persist($objects);
 
         return $objects;
-
     }
 }
