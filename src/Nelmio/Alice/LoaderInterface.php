@@ -16,14 +16,14 @@ interface LoaderInterface
     /**
      * Loads a fixture file
      *
-     * @param string       $file filename
+     * @param string $file filename
      */
     public function load($file);
 
     /**
      * Returns a reference to a fixture by name
      *
-     * @param string $name
+     * @param  string $name
      * @return object
      */
     public function getReference($name);

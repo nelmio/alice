@@ -11,10 +11,7 @@
 
 namespace Nelmio\Alice\Loader;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Yaml\Yaml as YamlParser;
-use Nelmio\Alice\LoaderInterface;
-use Nelmio\Alice\ORMInterface;
 
 /**
  * Loads fixtures from a yaml file

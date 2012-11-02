@@ -11,11 +11,8 @@
 
 namespace Nelmio\Alice\Loader;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Yaml\Yaml as YamlParser;
 use Symfony\Component\Form\Util\FormUtil;
 use Nelmio\Alice\LoaderInterface;
-use Nelmio\Alice\ORMInterface;
 
 /**
  * Loads fixtures from an array or php file
@@ -139,7 +136,6 @@ class Base implements LoaderInterface
         return $this->getGenerator($locale)->format($formatter, $args);
     }
 
-
     /**
      * Get the generator for this locale
      *
@@ -247,6 +243,7 @@ class Base implements LoaderInterface
                 if (isset($variables[$match[1]])) {
                     return '$variables['.var_export($match[1], true).']';
                 }
+
                 return $match[0];
             }, $args);
 
