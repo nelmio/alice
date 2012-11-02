@@ -346,6 +346,34 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertLessThanOrEqual(strtotime("-9days"), $res[0]->fullname->getTimestamp());
     }
 
+    public function testLoadParsesFakerDataWithLocale()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user0' => array(
+                    'username' => '<fr_FR:siren>',
+                ),
+            ),
+        ));
+
+        $this->assertRegExp('{^\d{3} \d{3} \d{3}$}', $res[0]->username);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Unknown formatter "siren"
+     */
+    public function testLoadParsesFakerDataUsesDefaultLocale()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user0' => array(
+                    'username' => '<siren>',
+                ),
+            ),
+        ));
+    }
+
     public function testLoadCreatesInclusiveRangesOfObjects()
     {
         $res = $this->loadData(array(
