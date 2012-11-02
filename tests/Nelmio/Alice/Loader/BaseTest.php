@@ -297,7 +297,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertNotEquals('<firstName> <lastName>', $res[0]->username);
-        $this->assertRegExp('{^[a-z]+ [a-z]+$}i', $res[0]->username);
+        $this->assertRegExp('{^[\w\']+ [\w\']+$}i', $res[0]->username);
     }
 
     public function testLoadParsesFakerDataWithArgs()
