@@ -24,4 +24,14 @@ class TestORM implements ORMinterface
     {
         return $this->objects;
     }
+
+    /**
+     * @param string $class
+     * @param int $id
+     * @return mixed
+     */
+    public function find($class, $id)
+    {
+        return null;
+    }
 }

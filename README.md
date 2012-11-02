@@ -188,8 +188,22 @@ Nelmio\Entity\Group:
 It will then pick any object whose name matches `user*` where `*` can be any
 string.
 
-> **Note**: There is one limitation, you can only refer to objects that are
-> defined above in the file.
+If you would use an Entity with ID which is already persisted in your Database (and not fixtured)
+you could simply provide the id to use:
+
+```yaml
+Nelmio\Entity\Group:
+    group1:
+        owner: 1 #this will try to fetch the User (as typehinted in your class) with the id 1
+```
+
+its also possible to link random IDs:
+
+```yaml
+Nelmio\Entity\Group:
+    group1:
+        owner: <numberBetween(1, 200)>
+```
 
 ### Multiple References ###
 

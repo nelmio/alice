@@ -19,4 +19,11 @@ interface ORMInterface
      * @param array[object] $objects instance to persist in the DB
      */
     public function persist(array $objects);
+
+    /**
+     * @param string $class
+     * @param int $id
+     * @return mixed
+     */
+    public function find($class, $id);
 }

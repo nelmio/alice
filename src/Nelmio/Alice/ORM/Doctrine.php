@@ -41,4 +41,22 @@ class Doctrine implements ORMInterface
             $this->om->flush();
         }
     }
+
+    /**
+     * finds an entity by class and id
+     *
+     * @param string $class
+     * @param int $id
+     * @return mixed
+     */
+    public function find($class, $id)
+    {
+        $entity = $this->om->find($class, $id);
+
+        if (!$entity) {
+            throw new \UnexpectedValueException('Entity with Id ' . $id . ' and Class ' . $class . ' not found');
+        }
+
+        return $entity;
+    }
 }

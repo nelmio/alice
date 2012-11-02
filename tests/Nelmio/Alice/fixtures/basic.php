@@ -7,4 +7,9 @@ return array(
             'favoriteNumber' => 42,
         ),
     ),
+    'Nelmio\Alice\fixtures\Group' => array(
+        'group1' => array(
+            'owner' => 1
+        ),
+    ),
 );
