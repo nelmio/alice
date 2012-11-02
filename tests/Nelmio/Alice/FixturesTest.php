@@ -18,7 +18,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     const USER = 'Nelmio\Alice\fixtures\User';
     const GROUP = 'Nelmio\Alice\fixtures\Group';
 
-    public function testLoadYamlFilesAndDoctrineORM()
+    public function testLoadLoadsYamlFilesAndDoctrineORM()
     {
         $om = $this->getDoctrineManagerMock(13);
         $objects = Fixtures::load(__DIR__.'/fixtures/complete.yml', $om);
@@ -35,7 +35,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(3, $group->getMembers());
     }
 
-    public function testLoadArrays()
+    public function testLoadLoadsArrays()
     {
         $om = $this->getDoctrineManagerMock(2);
 
@@ -62,7 +62,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $user->favoriteNumber);
     }
 
-    public function testLoadPHPfiles()
+    public function testLoadLoadsPHPfiles()
     {
         $om = $this->getDoctrineManagerMock(2);
 

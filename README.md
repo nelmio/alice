@@ -47,7 +47,8 @@ $persister->persist($objects);
 ```
 
 > **Note**: To load plain PHP files, you can use the `\Nelmio\Alice\Loader\Base`
-> class instead.
+> class instead. These PHP files must return an array containing the same
+> structure as the yaml files have.
 
 ## Reference ##
 
@@ -121,6 +122,15 @@ Nelmio\Entity\User:
 As you see in the last line, you can also pass arguments to those just as if
 you were calling a function.
 
+#### Localized Fake Data ####
+
+Faker can create localized data for adresses, phone numbers and so on. You can
+set the default locale to use by passing a `locale` value in the `$options`
+array of Fixtures::load.
+
+Additionally, you can mix locales by adding a locale prefix to the faker key,
+i.e. `<fr_FR:phoneNumber>` or `<de_DE:firstName>`.
+
 ### Optional Data ###
 
 Some fields do not have to be filled-in, like the `favoriteNumber` in this
@@ -128,7 +138,7 @@ example might be personal data you don't want to share, to reflect this in
 our fixtures and be sure the site works and looks alright even when users
 don't enter a favorite number, we can make Alice fill it in *sometimes* using
 the `50%? value : empty value` notation. It's a bit like the ternary operator,
-and you can ommit the empty value if null is ok as such: `%50? value`.
+and you can omit the empty value if null is ok as such: `%50? value`.
 
 Let's update the user definition with this new information:
 

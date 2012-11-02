@@ -11,11 +11,9 @@
 
 namespace Nelmio\Alice\Loader;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Yaml\Yaml as YamlParser;
 use Symfony\Component\Form\Util\FormUtil;
-use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\ORMInterface;
+use Nelmio\Alice\LoaderInterface;
 
 /**
  * Loads fixtures from an array or php file
@@ -41,16 +39,39 @@ class Base implements LoaderInterface
 {
     protected $references = array();
     /**
-     * @var ObjectManager
+     * @var ORMInterface
      */
     protected $manager;
 
+    /**
+     * @var \Faker\Generator[]
+     */
+    private $generators;
+
+    /**
+     * Default locale to use with faker
+     *
+     * @var string
+     */
+    private $defaultLocale;
+
+    /**
+     * Custom faker providers to use with faker generator
+     *
+     * @var array
+     */
+    private $providers;
+
+    /**
+     * @param string $locale default locale to use with faker if none is
+     *      specified in the expression
+     * @param array $providers custom faker providers in addition to the default
+     *      ones from faker
+     */
     public function __construct($locale = 'en_US', array $providers = array())
     {
-        $this->generator = \Faker\Factory::create($locale);
-        foreach ($providers as $provider) {
-            $this->generator->addProvider($provider);
-        }
+        $this->defaultLocale = $locale;
+        $this->providers = $providers;
     }
 
     /**
@@ -111,12 +132,35 @@ class Base implements LoaderInterface
         return $this->references;
     }
 
-    public function fake($formatter, $arg = null, $arg2 = null, $arg3 = null)
+    public function fake($formatter, $locale = null, $arg = null, $arg2 = null, $arg3 = null)
     {
         $args = func_get_args();
         array_shift($args);
+        array_shift($args);
 
-        return $this->generator->format($formatter, $args);
+        return $this->getGenerator($locale)->format($formatter, $args);
+    }
+
+    /**
+     * Get the generator for this locale
+     *
+     * @param string $locale the requested locale, defaults to constructor injected default
+     *
+     * @return \Faker\Generator the generator for the requested locale
+     */
+    private function getGenerator($locale = null)
+    {
+        $locale = $locale ?: $this->defaultLocale;
+
+        if (!isset($this->generators[$locale])) {
+            $generator = \Faker\Factory::create($locale);
+            foreach ($this->providers as $provider) {
+                $generator->addProvider($provider);
+            }
+            $this->generators[$locale] = $generator;
+        }
+
+        return $this->generators[$locale];
     }
 
     private function createObject($class, $name, $data)
@@ -166,29 +210,10 @@ class Base implements LoaderInterface
         $params = $reflection->getParameters();
 
         if ($params[0]->getClass() && is_numeric($value)) {
-            $value = $this->findEntity($params[0]->getClass()->getName(), $value);
+            $value = $this->manager->find($params[0]->getClass()->getName(), $value);
         }
 
         return $value;
-    }
-
-    /**
-     * if provided an integer and the setter needs an Object, try to find it with the OM
-     *
-     * @param string $class the class to find
-     * @param int $id the entity id
-     * @return object
-     * @throws \UnexpectedValueException
-     */
-    private function findEntity($class, $id)
-    {
-        $entity = $this->manager->find($class, $id);
-
-        if (!$entity) {
-            throw new \UnexpectedValueException('Entity for Id ' . $id . ' and Class ' . $class . ' not found');
-        }
-
-        return $entity;
     }
 
     private function process($data, array $variables)
@@ -233,10 +258,10 @@ class Base implements LoaderInterface
         $that = $this;
         // replaces a placeholder by the result of a ->fake call
         $replacePlaceholder = function ($matches) use ($variables, $that) {
-            $args = (!empty($matches['args']) ? ', '.$matches['args'] : '');
+            $args = !empty($matches['args']) ? $matches['args'] : null;
 
             if (!$args) {
-                return $that->fake($matches['name']);
+                return $that->fake($matches['name'], $matches['locale']);
             }
 
             // replace references to other variables in the same object
@@ -244,18 +269,23 @@ class Base implements LoaderInterface
                 if (isset($variables[$match[1]])) {
                     return '$variables['.var_export($match[1], true).']';
                 }
+
                 return $match[0];
             }, $args);
 
-            return eval('return $that->fake('.var_export($matches['name'], true) . $args.');');
+            $locale = var_export($matches['locale'], true);
+            $name = var_export($matches['name'], true);
+
+            return eval('return $that->fake(' . $name . ', ' . $locale . ', ' . $args . ');');
         };
 
         // format placeholders without preg_replace if there is only one to avoid __toString() being called
-        if (preg_match('#^<(?<name>[a-z0-9_]+?)(?:\((?<args>.+?)\))?>$#i', $data, $matches)) {
+        $placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)(?:\((?<args>.+?)\))?>';
+        if (preg_match('#^'.$placeHolderRegex.'$#i', $data, $matches)) {
             $data = $replacePlaceholder($matches);
         } else {
             // format placeholders inline
-            $data = preg_replace_callback('#<(?<name>[a-z0-9_]+?)(?:\((?<args>.+?)\))?>#i', function ($matches) use ($replacePlaceholder) {
+            $data = preg_replace_callback('#'.$placeHolderRegex.'#i', function ($matches) use ($replacePlaceholder) {
                 return $replacePlaceholder($matches);
             }, $data);
         }
@@ -324,7 +354,7 @@ class Base implements LoaderInterface
         }
     }
 
-    public function setObjectManager(ObjectManager $manager)
+    public function setORM(ORMInterface $manager)
     {
         $this->manager = $manager;
     }

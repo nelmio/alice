@@ -297,7 +297,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertNotEquals('<firstName> <lastName>', $res[0]->username);
-        $this->assertRegExp('{^[a-z]+ [a-z]+$}i', $res[0]->username);
+        $this->assertRegExp('{^[\w\']+ [\w\']+$}i', $res[0]->username);
     }
 
     public function testLoadParsesFakerDataWithArgs()
@@ -344,6 +344,34 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DateTime', $res[0]->fullname);
         $this->assertGreaterThanOrEqual(strtotime("-20days"), $res[0]->username->getTimestamp());
         $this->assertLessThanOrEqual(strtotime("-9days"), $res[0]->fullname->getTimestamp());
+    }
+
+    public function testLoadParsesFakerDataWithLocale()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user0' => array(
+                    'username' => '<fr_FR:siren>',
+                ),
+            ),
+        ));
+
+        $this->assertRegExp('{^\d{3} \d{3} \d{3}$}', $res[0]->username);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Unknown formatter "siren"
+     */
+    public function testLoadParsesFakerDataUsesDefaultLocale()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user0' => array(
+                    'username' => '<siren>',
+                ),
+            ),
+        ));
     }
 
     public function testLoadCreatesInclusiveRangesOfObjects()

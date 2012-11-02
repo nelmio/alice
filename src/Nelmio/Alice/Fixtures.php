@@ -18,9 +18,9 @@ class Fixtures
     /**
      * Loads a fixture file into an object container
      *
-     * @param string|array $file filename to load data from or data array
+     * @param string|array $file      filename to load data from or data array
      * @param object       $container object container
-     * @param array        $options available options:
+     * @param array        $options   available options:
      *                                - providers: an array of additional faker providers
      *                                - locale: the faker locale
      */
@@ -37,21 +37,20 @@ class Fixtures
         } elseif ((is_string($file) && preg_match('{\.php$}', $file)) || is_array($file)) {
             $loader = new Loader\Base($options['locale'], $options['providers']);
         } else {
-            throw new \InvalidValueException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
+            throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
         }
 
         if ($container instanceof ObjectManager) {
             $persister = new ORM\Doctrine($container);
         } else {
-            throw new \InvalidValueException('Unknown container type '.get_class($container));
+            throw new \InvalidArgumentException('Unknown container type '.get_class($container));
         }
 
-        $loader->setObjectManager($container);
+        $loader->setORM($persister);
 
         $objects = $loader->load($file);
         $persister->persist($objects);
 
         return $objects;
-
     }
 }
