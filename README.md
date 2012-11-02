@@ -47,7 +47,8 @@ $persister->persist($objects);
 ```
 
 > **Note**: To load plain PHP files, you can use the `\Nelmio\Alice\Loader\Base`
-> class instead.
+> class instead. These PHP files must return an array containing the same
+> structure as the yaml files have.
 
 ## Reference ##
 
