@@ -130,15 +130,12 @@ class Base implements LoaderInterface
         return $this->references;
     }
 
-    public function fake($formatter, $arg = null, $arg2 = null, $arg3 = null)
+    public function fake($formatter, $locale = null, $arg = null, $arg2 = null, $arg3 = null)
     {
         $args = func_get_args();
         array_shift($args);
+        array_shift($args);
 
-        $locale = null;
-        if (strpos($formatter, ':')) {
-            list($locale, $formatter) = explode(':', $formatter);
-        }
         return $this->getGenerator($locale)->format($formatter, $args);
     }
 
@@ -150,18 +147,18 @@ class Base implements LoaderInterface
      *
      * @return \Faker\Generator the generator for the requested locale
      */
-    protected function getGenerator($locale = null)
+    private function getGenerator($locale = null)
     {
-        if (is_null($locale)) {
-            $locale = $this->defaultLocale;
-        }
-        if (! isset($this->generators[$locale])) {
+        $locale = $locale ?: $this->defaultLocale;
+
+        if (!isset($this->generators[$locale])) {
             $generator = \Faker\Factory::create($locale);
             foreach ($this->providers as $provider) {
                 $generator->addProvider($provider);
             }
             $this->generators[$locale] = $generator;
         }
+
         return $this->generators[$locale];
     }
 
@@ -239,10 +236,10 @@ class Base implements LoaderInterface
         $that = $this;
         // replaces a placeholder by the result of a ->fake call
         $replacePlaceholder = function ($matches) use ($variables, $that) {
-            $args = (!empty($matches['args']) ? ', '.$matches['args'] : '');
+            $args = !empty($matches['args']) ? $matches['args'] : null;
 
             if (!$args) {
-                return $that->fake($matches['name']);
+                return $that->fake($matches['name'], $matches['locale']);
             }
 
             // replace references to other variables in the same object
@@ -253,15 +250,19 @@ class Base implements LoaderInterface
                 return $match[0];
             }, $args);
 
-            return eval('return $that->fake('.var_export($matches['name'], true) . $args.');');
+            $locale = var_export($matches['locale'], true);
+            $name = var_export($matches['name'], true);
+
+            return eval('return $that->fake(' . $name . ', ' . $locale . ', ' . $args . ');');
         };
 
         // format placeholders without preg_replace if there is only one to avoid __toString() being called
-        if (preg_match('#^<(?<name>([a-z]+(_[a-z]+)?:)?[a-z0-9_]+?)(?:\((?<args>.+?)\))?>$#i', $data, $matches)) {
+        $placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)(?:\((?<args>.+?)\))?>';
+        if (preg_match('#^'.$placeHolderRegex.'$#i', $data, $matches)) {
             $data = $replacePlaceholder($matches);
         } else {
             // format placeholders inline
-            $data = preg_replace_callback('#<(?<name>([a-z_]+:)?[a-z0-9_]+?)(?:\((?<args>.+?)\))?>#i', function ($matches) use ($replacePlaceholder) {
+            $data = preg_replace_callback('#'.$placeHolderRegex.'#i', function ($matches) use ($replacePlaceholder) {
                 return $replacePlaceholder($matches);
             }, $data);
         }
