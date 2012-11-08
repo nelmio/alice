@@ -11,7 +11,10 @@ if needed.
 
 This is installable via [Composer](https://getcomposer.org/) as [nelmio/alice](https://packagist.org/packages/nelmio/alice).
 
-**BC Break Warning**: For compat with XML/HTML in fixtures, the round braces are now enforced on faker calls, i.e. use `<foo()>` instead of `<foo>`. If you don't have time to upgrade you can require `"nelmio/alice": "1.0.x-dev#12423116eed"` in the meantime.
+**BC Break Warning**: For compat with XML/HTML in fixtures, the round braces
+are now enforced on faker calls, i.e. use `<foo()>` instead of `<foo>`. If
+you don't have time to upgrade you can require
+`"nelmio/alice": "1.0.x-dev#12423116eed"` in the meantime.
 
 ## Usage ##
 
@@ -190,16 +193,18 @@ Nelmio\Entity\Group:
 It will then pick any object whose name matches `user*` where `*` can be any
 string.
 
-If you would use an Entity with ID which is already persisted in your Database (and not fixtured)
-you could simply provide the id to use:
+There is one limitation, you can only refer to objects that are defined above
+in the file. If you want to use an existing object that is already present in
+your database you can also provide the id of the object. For this to work
+however the setter method for that property must have a type hint.
 
 ```yaml
 Nelmio\Entity\Group:
     group1:
-        owner: 1 #this will try to fetch the User (as typehinted in your class) with the id 1
+        owner: 1 # this will try to fetch the User (as typehinted in Group::setOwner) with id 1
 ```
 
-its also possible to link random IDs:
+It is also possible to create a relation to a random object by id:
 
 ```yaml
 Nelmio\Entity\Group:
