@@ -178,11 +178,11 @@ class Base implements LoaderInterface
             // add relations if available
             if (is_array($val) && $method = $this->findAdderMethod($obj, $key)) {
                 foreach ($val as $rel) {
-                    $rel = $this->checkForEntity($obj, $method, $rel);
+                    $rel = $this->checkTypeHints($obj, $method, $rel);
                     $obj->{$method}($rel);
                 }
             } elseif (method_exists($obj, 'set'.$key)) {
-                $val = $this->checkForEntity($obj, 'set'.$key, $val);
+                $val = $this->checkTypeHints($obj, 'set'.$key, $val);
                 $obj->{'set'.$key}($val);
                 $variables[$key] = $val;
             } elseif (property_exists($obj, $key)) {
@@ -197,23 +197,47 @@ class Base implements LoaderInterface
     }
 
     /**
-     * Checks if the value is typehinted with a class and can be fetched from the db
+     * Checks if the value is typehinted with a class and if the current value can be coerced into that type
+     *
+     * It can either convert to datetime or attempt to fetched from the db by id
      *
      * @param  object $obj
      * @param  string $method
      * @param  string $value
      * @return mixed
      */
-    private function checkForEntity($obj, $method, $value)
+    private function checkTypeHints($obj, $method, $value)
     {
+        if (!is_numeric($value) && !is_string($value)) {
+            return $value;
+        }
+
         $reflection = new \ReflectionMethod(get_class($obj), $method);
         $params = $reflection->getParameters();
 
-        if ($params[0]->getClass() && is_numeric($value)) {
+        if (!$params[0]->getClass()) {
+            return $value;
+        }
+
+        $hintedClass = $params[0]->getClass()->getName();
+
+        if ($hintedClass === 'DateTime') {
+            try {
+                if (preg_match('{^[0-9]+$}', $value)) {
+                    $value = '@'.$value;
+                }
+
+                return new \DateTime($value);
+            } catch (\Exception $e) {
+                throw new \UnexpectedValueException('Could not convert '.$value.' to DateTime for '.get_class($obj).'::'.$method, 0, $e);
+            }
+        }
+
+        if (is_numeric($value)) {
             if (!$this->manager) {
                 throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\ORMInterface object on this instance');
             }
-            $value = $this->manager->find($params[0]->getClass()->getName(), $value);
+            $value = $this->manager->find($hintedClass, $value);
         }
 
         return $value;

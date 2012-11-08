@@ -7,6 +7,7 @@ class Group
     private $name;
     private $owner;
     private $members = array();
+    private $creationDate;
 
     public function getName()
     {
@@ -36,5 +37,15 @@ class Group
     public function addMember(User $member)
     {
         $this->members[] = $member;
+    }
+
+    public function setCreationDate(\DateTime $date)
+    {
+        $this->creationDate = $date;
+    }
+
+    public function getCreationDate()
+    {
+        return $this->creationDate;
     }
 }

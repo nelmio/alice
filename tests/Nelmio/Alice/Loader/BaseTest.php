@@ -272,6 +272,24 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('name', $this->loader->getReference('user3')->username);
     }
 
+    public function testLoadCoercesDatesForDateTimeHints()
+    {
+        $res = $this->loadData(array(
+            self::GROUP => array(
+                'group0' => array(
+                    'creationDate' => '2012-01-05',
+                ),
+                'group1' => array(
+                    'creationDate' => '<unixTime()>',
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf('DateTime', $res[0]->getCreationDate());
+        $this->assertEquals('2012-01-05', $res[0]->getCreationDate()->format('Y-m-d'));
+        $this->assertInstanceOf('DateTime', $res[1]->getCreationDate());
+    }
+
     public function testLoadParsesFakerData()
     {
         $res = $this->loadData(array(
