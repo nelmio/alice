@@ -197,11 +197,11 @@ class Base implements LoaderInterface
     }
 
     /**
-     * checks if the value is typehinted with an entity and can be fetched from the db
+     * Checks if the value is typehinted with a class and can be fetched from the db
      *
-     * @param object $obj
-     * @param string $method
-     * @param string $value
+     * @param  object $obj
+     * @param  string $method
+     * @param  string $value
      * @return mixed
      */
     private function checkForEntity($obj, $method, $value)
@@ -210,6 +210,9 @@ class Base implements LoaderInterface
         $params = $reflection->getParameters();
 
         if ($params[0]->getClass() && is_numeric($value)) {
+            if (!$this->manager) {
+                throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\ORMInterface object on this instance');
+            }
             $value = $this->manager->find($params[0]->getClass()->getName(), $value);
         }
 

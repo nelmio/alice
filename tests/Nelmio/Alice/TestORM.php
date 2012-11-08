@@ -26,8 +26,8 @@ class TestORM implements ORMinterface
     }
 
     /**
-     * @param string $class
-     * @param int $id
+     * @param  string $class
+     * @param  int    $id
      * @return mixed
      */
     public function find($class, $id)
