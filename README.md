@@ -11,6 +11,8 @@ if needed.
 
 This is installable via [Composer](https://getcomposer.org/) as [nelmio/alice](https://packagist.org/packages/nelmio/alice).
 
+**BC Break Warning**: For compat with XML/HTML in fixtures, the round braces are now enforced on faker calls, i.e. use `<foo()>` instead of `<foo>`. If you don't have time to upgrade you can require `"nelmio/alice": "1.0.x-dev#12423116eed"` in the meantime.
+
 ## Usage ##
 
 ### Basic Usage ###
@@ -104,7 +106,7 @@ so fancy yet.
 ### Faker Data ###
 
 Alice integrates with the [Faker](https://github.com/fzaninotto/Faker) library.
-Using `<foo>` you can call Faker data providers to generate random data. Check
+Using `<foo()>` you can call Faker data providers to generate random data. Check
 the [list of Faker providers](https://github.com/fzaninotto/Faker#formatters).
 
 Let's turn our static bob user into a randomized entry:
@@ -112,10 +114,10 @@ Let's turn our static bob user into a randomized entry:
 ```yaml
 Nelmio\Entity\User:
     user{1..10}:
-        username: <username>
-        fullname: <firstName> <lastName>
-        birthDate: <date>
-        email: <email>
+        username: <username()>
+        fullname: <firstName()> <lastName()>
+        birthDate: <date()>
+        email: <email()>
         favoriteNumber: <numberBetween(1, 200)>
 ```
 
@@ -129,7 +131,7 @@ set the default locale to use by passing a `locale` value in the `$options`
 array of Fixtures::load.
 
 Additionally, you can mix locales by adding a locale prefix to the faker key,
-i.e. `<fr_FR:phoneNumber>` or `<de_DE:firstName>`.
+i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
 
 ### Optional Data ###
 
@@ -145,10 +147,10 @@ Let's update the user definition with this new information:
 ```yaml
 Nelmio\Entity\User:
     user{1..10}:
-        username: <username>
-        fullname: <firstName> <lastName>
-        birthDate: <date>
-        email: <email>
+        username: <username()>
+        fullname: <firstName()> <lastName()>
+        birthDate: <date()>
+        email: <email()>
         favoriteNumber: 50%? <numberBetween(1, 200)>
 ```
 
@@ -269,7 +271,7 @@ there are two ways to solve the problem:
    PHP templates, it quickly ends up very messy if you do too much logic, so
    it's best to extract logic out of the templates.
 2. Add a custom Faker Provider class. These are just classes that expose public
-   methods, all the public methods are available as `<method>` in the Alice
+   methods, all the public methods are available as `<method()>` in the Alice
    fixture files. For example if you want a custom group name generator and you
    use the standard Doctrine Fixtures package in a Symfony2 project, you could
    do the following:
@@ -305,7 +307,7 @@ there are two ways to solve the problem:
    }
    ```
 
-   That way you can now use `name: <groupName>` to generate specific group names.
+   That way you can now use `name: <groupName()>` to generate specific group names.
 
 ### Complete Sample ###
 
@@ -315,10 +317,10 @@ users and a group, all of it being linked together, and with little typing:
 ```yaml
 Nelmio\Entity\User:
     user{1..10}:
-        username: <username>
-        fullname: <firstName> <lastName>
-        birthDate: <date>
-        email: <email>
+        username: <username()>
+        fullname: <firstName()> <lastName()>
+        birthDate: <date()>
+        email: <email()>
         favoriteNumber: 50%? <numberBetween(1, 200)>
 
 Nelmio\Entity\Group:

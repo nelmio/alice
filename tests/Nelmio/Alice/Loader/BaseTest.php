@@ -277,13 +277,13 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData(array(
             self::USER => array(
                 'user0' => array(
-                    'username' => '<firstName>',
+                    'username' => '<firstName()>',
                 ),
             ),
         ));
 
-        $this->assertNotEquals('<firstName>', $res[0]->username);
-        $this->assertNotEmpty('<firstName>', $res[0]->username);
+        $this->assertNotEquals('<firstName()>', $res[0]->username);
+        $this->assertNotEmpty($res[0]->username);
     }
 
     public function testLoadParsesFakerDataMultiple()
@@ -291,12 +291,12 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData(array(
             self::USER => array(
                 'user0' => array(
-                    'username' => '<firstName> <lastName>',
+                    'username' => '<firstName()> <lastName()>',
                 ),
             ),
         ));
 
-        $this->assertNotEquals('<firstName> <lastName>', $res[0]->username);
+        $this->assertNotEquals('<firstName()> <lastName()>', $res[0]->username);
         $this->assertRegExp('{^[\w\']+ [\w\']+$}i', $res[0]->username);
     }
 
@@ -351,7 +351,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData(array(
             self::USER => array(
                 'user0' => array(
-                    'username' => '<fr_FR:siren>',
+                    'username' => '<fr_FR:siren()>',
                 ),
             ),
         ));
@@ -368,7 +368,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData(array(
             self::USER => array(
                 'user0' => array(
-                    'username' => '<siren>',
+                    'username' => '<siren()>',
                 ),
             ),
         ));
@@ -425,7 +425,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user0' => array(
-                    'username' => '<fooGenerator>',
+                    'username' => '<fooGenerator()>',
                 ),
             ),
         ));

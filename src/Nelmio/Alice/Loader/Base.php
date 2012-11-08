@@ -232,7 +232,7 @@ class Base implements LoaderInterface
         $that = $this;
         // replaces a placeholder by the result of a ->fake call
         $replacePlaceholder = function ($matches) use ($variables, $that) {
-            $args = !empty($matches['args']) ? $matches['args'] : null;
+            $args = isset($matches['args']) && '' !== $matches['args'] ? $matches['args'] : null;
 
             if (!$args) {
                 return $that->fake($matches['name'], $matches['locale']);
@@ -254,7 +254,7 @@ class Base implements LoaderInterface
         };
 
         // format placeholders without preg_replace if there is only one to avoid __toString() being called
-        $placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)(?:\((?<args>.+?)\))?>';
+        $placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)\((?<args>(?:[^)]*|\)(?!>))*)\)>';
         if (preg_match('#^'.$placeHolderRegex.'$#i', $data, $matches)) {
             $data = $replacePlaceholder($matches);
         } else {
