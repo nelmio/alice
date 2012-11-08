@@ -78,10 +78,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     protected function getDoctrineManagerMock($objects = null)
     {
-        $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
-            ->setMethods(array('persist', 'flush', 'find'))
-            ->getMockForAbstractClass()
-        ;
+        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $om->expects($objects ? $this->exactly($objects) : $this->any())
             ->method('persist');
