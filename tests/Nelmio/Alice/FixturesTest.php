@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\fixtures\User;
+
 class FixturesTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\fixtures\User';
@@ -35,7 +37,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadLoadsArrays()
     {
-        $om = $this->getDoctrineManagerMock(1);
+        $om = $this->getDoctrineManagerMock(2);
 
         $objects = Fixtures::load(array(
             self::USER => array(
@@ -44,9 +46,15 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                     'favoriteNumber' => 42,
                 ),
             ),
+            self::GROUP => array(
+                'group1' => array(
+                    'owner' => 1
+                ),
+            ),
+
         ), $om);
 
-        $this->assertCount(1, $objects);
+        $this->assertCount(2, $objects);
 
         $user = $objects[0];
         $this->assertInstanceOf(self::USER, $user);
@@ -56,11 +64,11 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadLoadsPHPfiles()
     {
-        $om = $this->getDoctrineManagerMock(1);
+        $om = $this->getDoctrineManagerMock(2);
 
         $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om);
 
-        $this->assertCount(1, $objects);
+        $this->assertCount(2, $objects);
 
         $user = $objects[0];
         $this->assertInstanceOf(self::USER, $user);
@@ -70,13 +78,19 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     protected function getDoctrineManagerMock($objects = null)
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager', array('persist', 'flush'));
+        $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
+            ->setMethods(array('persist', 'flush','find'))
+            ->getMockForAbstractClass()
+        ;
 
         $om->expects($objects ? $this->exactly($objects) : $this->any())
             ->method('persist');
 
         $om->expects($this->once())
             ->method('flush');
+
+        $om->expects($this->once())
+            ->method('find')->will($this->returnValue(new User()));
 
         return $om;
     }

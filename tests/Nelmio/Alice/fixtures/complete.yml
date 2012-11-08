@@ -19,3 +19,4 @@ Nelmio\Alice\fixtures\Group:
     group1:
         name: <company()>
         members: 3x @user*
+        owner: 1

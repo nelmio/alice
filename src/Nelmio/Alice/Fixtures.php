@@ -46,6 +46,8 @@ class Fixtures
             throw new \InvalidArgumentException('Unknown container type '.get_class($container));
         }
 
+        $loader->setORM($persister);
+
         $objects = $loader->load($file);
         $persister->persist($objects);
 

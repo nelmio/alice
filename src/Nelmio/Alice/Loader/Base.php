@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Loader;
 
 use Symfony\Component\Form\Util\FormUtil;
+use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 
 /**
@@ -37,6 +38,10 @@ use Nelmio\Alice\LoaderInterface;
 class Base implements LoaderInterface
 {
     protected $references = array();
+    /**
+     * @var ORMInterface
+     */
+    protected $manager;
 
     /**
      * @var \Faker\Generator[]
@@ -173,10 +178,11 @@ class Base implements LoaderInterface
             // add relations if available
             if (is_array($val) && $method = $this->findAdderMethod($obj, $key)) {
                 foreach ($val as $rel) {
+                    $rel = $this->checkForEntity($obj, $method, $rel);
                     $obj->{$method}($rel);
                 }
             } elseif (method_exists($obj, 'set'.$key)) {
-                // set value
+                $val = $this->checkForEntity($obj, 'set'.$key, $val);
                 $obj->{'set'.$key}($val);
                 $variables[$key] = $val;
             } elseif (property_exists($obj, $key)) {
@@ -188,6 +194,26 @@ class Base implements LoaderInterface
         }
 
         return $this->references[$name] = $obj;
+    }
+
+    /**
+     * checks if the value is typehinted with an entity and can be fetched from the db
+     *
+     * @param object $obj
+     * @param string $method
+     * @param string $value
+     * @return mixed
+     */
+    private function checkForEntity($obj, $method, $value)
+    {
+        $reflection = new \ReflectionMethod(get_class($obj), $method);
+        $params = $reflection->getParameters();
+
+        if ($params[0]->getClass() && is_numeric($value)) {
+            $value = $this->manager->find($params[0]->getClass()->getName(), $value);
+        }
+
+        return $value;
     }
 
     private function process($data, array $variables)
@@ -326,5 +352,10 @@ class Base implements LoaderInterface
         if (substr($key, -3) === 'ies' && method_exists($obj, $method = 'add'.substr($key, 0, -3).'y')) {
             return $method;
         }
+    }
+
+    public function setORM(ORMInterface $manager)
+    {
+        $this->manager = $manager;
     }
 }
