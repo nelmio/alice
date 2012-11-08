@@ -21,6 +21,8 @@ interface ORMInterface
     public function persist(array $objects);
 
     /**
+     * Finds an object by class and id
+     *
      * @param string $class
      * @param int $id
      * @return mixed

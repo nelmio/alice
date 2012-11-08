@@ -43,11 +43,7 @@ class Doctrine implements ORMInterface
     }
 
     /**
-     * finds an entity by class and id
-     *
-     * @param string $class
-     * @param int $id
-     * @return mixed
+     * {@inheritDoc}
      */
     public function find($class, $id)
     {
