@@ -80,6 +80,7 @@ class Base implements LoaderInterface
     public function load($data)
     {
         if (!is_array($data)) {
+            // $loader is defined to give access to $loader->fake() in the included file's context
             $loader = $this;
             $includeWrapper = function () use ($data, $loader) {
                 return include $data;
