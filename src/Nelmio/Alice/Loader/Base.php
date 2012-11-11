@@ -148,7 +148,7 @@ class Base implements LoaderInterface
 
         if ($formatter == 'current') {
             if ($this->currentRangeId === null) {
-                throw new \OutOfRangeException('Cannot use <current()> out of fixtures ranges.');
+                throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges.');
             }
             
             return $this->currentRangeId;

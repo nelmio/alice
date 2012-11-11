@@ -177,8 +177,9 @@ Nelmio\Entity\Group:
         owner: @user1
 ```
 
-To use a dynamic reference you might want to use `<current()>` which is replaced
-with the current id:
+If you want to create ten users and ten groups and have each user own one
+group, you can use `<current()>` which is replaced with the current id of
+each iteration when using fixture ranges:
 
 ```yaml
 Nelmio\Entity\User:
