@@ -65,7 +65,7 @@ class Base implements LoaderInterface
     /**
      * @var int
      */
-    private $current;
+    private $currentRangeId;
 
     /**
      * @param string $locale default locale to use with faker if none is
@@ -106,9 +106,10 @@ class Base implements LoaderInterface
                         list($to, $from) = array($from, $to);
                     }
                     for ($i = $from; $i <= $to; $i++) {
-                        $this->current = $i;
+                        $this->currentRangeId = $i;
                         $objects[] = $this->createObject($class, str_replace($match[0], $i, $name), $spec);
                     }
+                    $this->currentRangeId = null;
                 } else {
                     $objects[] = $this->createObject($class, $name, $spec);
                 }
@@ -145,7 +146,11 @@ class Base implements LoaderInterface
         array_shift($args);
 
         if ($formatter == 'current') {
-            return $this->current;
+            if ($this->currentRangeId === null) {
+                throw new \OutOfRangeException('Cannot use <current()> out of fixtures ranges.');
+            }
+            
+            return $this->currentRangeId;
         }
 
         return $this->getGenerator($locale)->format($formatter, $args);
