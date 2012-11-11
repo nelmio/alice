@@ -15,16 +15,18 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class Fixtures
 {
+    private static $loaders = array();
+
     /**
      * Loads a fixture file into an object container
      *
-     * @param string|array $file      filename to load data from or data array
+     * @param string|array $file      filename or array of filenames to load data from, or data array
      * @param object       $container object container
      * @param array        $options   available options:
      *                                - providers: an array of additional faker providers
      *                                - locale: the faker locale
      */
-    public static function load($file, $container, array $options = array())
+    public static function load($files, $container, array $options = array())
     {
         $defaults = array(
             'locale' => 'en_US',
@@ -32,25 +34,42 @@ class Fixtures
         );
         $options = array_merge($defaults, $options);
 
-        if (is_string($file) && preg_match('{\.ya?ml(\.php)?$}', $file)) {
-            $loader = new Loader\Yaml($options['locale'], $options['providers']);
-        } elseif ((is_string($file) && preg_match('{\.php$}', $file)) || is_array($file)) {
-            $loader = new Loader\Base($options['locale'], $options['providers']);
-        } else {
-            throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
-        }
-
         if ($container instanceof ObjectManager) {
             $persister = new ORM\Doctrine($container);
         } else {
             throw new \InvalidArgumentException('Unknown container type '.get_class($container));
         }
 
-        $loader->setORM($persister);
+        if (is_string($files) || is_array($files) && !is_string(current($files))) {
+            $files = array($files);
+        }
 
-        $objects = $loader->load($file);
+        $objects = array();
+        foreach ($files as $file) {
+            if (is_string($file) && preg_match('{\.ya?ml(\.php)?$}', $file)) {
+                $loader = self::getLoader('Yaml', $options);
+            } elseif ((is_string($file) && preg_match('{\.php$}', $file)) || is_array($file)) {
+                $loader = self::getLoader('Base', $options);
+            } else {
+                throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
+            }
+
+            $loader->setORM($persister);
+            $objects = array_merge($objects, $loader->load($file));
+        }
+
         $persister->persist($objects);
 
         return $objects;
+    }
+
+    private static function getLoader($class, $options)
+    {
+        if (!isset(self::$loaders[$class])) {
+            $fqcn = 'Nelmio\Alice\Loader\\'.$class;
+            self::$loaders[$class] = new $fqcn($options['locale'], $options['providers']);
+        }
+
+        return self::$loaders[$class];
     }
 }
