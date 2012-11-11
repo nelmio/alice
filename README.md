@@ -177,6 +177,18 @@ Nelmio\Entity\Group:
         owner: @user1
 ```
 
+To use a dynamic reference you might want to use `<current()>` which is replaced
+with the current id:
+
+```yaml
+Nelmio\Entity\User:
+    # ...
+
+Nelmio\Entity\Group:
+    group{1..10}:
+        owner: @user<current()>
+```
+
 If you would like a random user instead of a fixed one, you can define a
 reference with a wildcard:
 

@@ -16,6 +16,7 @@ Nelmio\Alice\fixtures\Group:
     group{0...1}:
         name: <company()>
         members: 20%? 3x @user*
+        owner: @user<current()>
     group1:
         name: <company()>
         members: 3x @user*

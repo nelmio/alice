@@ -30,6 +30,10 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('johnny', $user->username);
         $this->assertEquals(42, $user->favoriteNumber);
 
+        $user = $objects[0];
+        $group = $objects[11];
+        $this->assertSame($user, $group->getOwner());
+
         $group = end($objects);
         $this->assertInstanceOf(self::GROUP, $group);
         $this->assertCount(3, $group->getMembers());
