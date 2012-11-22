@@ -37,6 +37,16 @@ $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.php', $objectManager)
 Note: You can also pass an array of filenames if you have multiple files with
 references spanning more than one.
 
+#### Options
+
+`Fixtures::load` accepts a third `$options` argument that is an array
+with the following keys:
+
+- locale: the default locale
+- providers: an array of additional Faker providers
+- seed: a seed to make sure Faker generates data consistently across runs, set
+  to null to disable (defaults to 1)
+
 ### Detailed Usage ###
 
 If you want a bit more control you can instantiate the various object yourself

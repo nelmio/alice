@@ -25,12 +25,15 @@ class Fixtures
      * @param array        $options   available options:
      *                                - providers: an array of additional faker providers
      *                                - locale: the faker locale
+     *                                - seed: a seed to make sure faker generates data consistently across
+     *                                  runs, set to null to disable
      */
     public static function load($files, $container, array $options = array())
     {
         $defaults = array(
             'locale' => 'en_US',
             'providers' => array(),
+            'seed' => 1,
         );
         $options = array_merge($defaults, $options);
 
@@ -67,7 +70,7 @@ class Fixtures
     {
         if (!isset(self::$loaders[$class])) {
             $fqcn = 'Nelmio\Alice\Loader\\'.$class;
-            self::$loaders[$class] = new $fqcn($options['locale'], $options['providers']);
+            self::$loaders[$class] = new $fqcn($options['locale'], $options['providers'], $options['seed']);
         }
 
         return self::$loaders[$class];

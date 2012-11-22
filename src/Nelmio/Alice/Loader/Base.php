@@ -38,6 +38,7 @@ use Nelmio\Alice\LoaderInterface;
 class Base implements LoaderInterface
 {
     protected $references = array();
+
     /**
      * @var ORMInterface
      */
@@ -72,11 +73,17 @@ class Base implements LoaderInterface
      *      specified in the expression
      * @param array $providers custom faker providers in addition to the default
      *      ones from faker
+     * @param int $seed a seed to make sure faker generates data consistently across
+     *      runs, set to null to disable
      */
-    public function __construct($locale = 'en_US', array $providers = array())
+    public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
     {
         $this->defaultLocale = $locale;
         $this->providers = $providers;
+
+        if (is_numeric($seed)) {
+            mt_srand($seed);
+        }
     }
 
     /**
@@ -150,7 +157,7 @@ class Base implements LoaderInterface
             if ($this->currentRangeId === null) {
                 throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges.');
             }
-            
+
             return $this->currentRangeId;
         }
 
@@ -279,7 +286,7 @@ class Base implements LoaderInterface
             if (substr($threshold, -1) === '%') {
                 $threshold = substr($threshold, 0, -1) / 100;
             }
-            $randVal = rand(0, 100) / 100;
+            $randVal = mt_rand(0, 100) / 100;
             if ($threshold > 0 && $randVal <= $threshold) {
                 return $trueVal;
             } else {
@@ -357,7 +364,7 @@ class Base implements LoaderInterface
         $availableRefs = array();
         foreach ($this->references as $key => $val) {
             if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
-                $availableRefs[$key] = $val;
+                $availableRefs[] = $val;
             }
         }
 
@@ -366,12 +373,16 @@ class Base implements LoaderInterface
         }
 
         if (null === $count) {
-            return $availableRefs[array_rand($availableRefs)];
+            return $availableRefs[mt_rand(0, count($availableRefs) - 1)];
         }
 
-        shuffle($availableRefs);
+        $res = array();
+        while ($count-- && $availableRefs) {
+            $ref = array_splice($availableRefs, mt_rand(0, count($availableRefs) - 1), 1);
+            $res[] = current($ref);
+        }
 
-        return array_slice($availableRefs, 0, min($count, count($availableRefs)));
+        return $res;
     }
 
     private function findAdderMethod($obj, $key)
