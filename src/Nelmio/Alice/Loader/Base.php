@@ -132,7 +132,7 @@ class Base implements LoaderInterface
      */
     public function getReference($name)
     {
-        $parts = explode('.', $name);
+        $parts = explode('->', $name);
 
         if (isset($this->references[$parts[0]])) {
             $reference = $this->references[$parts[0]];
@@ -361,7 +361,7 @@ class Base implements LoaderInterface
         }
 
         // process references
-        if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)$}i', $data, $matches)) {
+        if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+(?:\->(?<property>[a-z0-9_.*-]+))?)$}i', $data, $matches)) {
             if (strpos($matches['reference'], '*')) {
                 $data = $this->getRandomReferences($matches['reference'], ('' !== $matches['multi']) ? $matches['multi'] : null);
             } else {

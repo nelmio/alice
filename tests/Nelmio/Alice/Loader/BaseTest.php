@@ -157,7 +157,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                     'username' => 'alice',
                 ),
                 'user2' => array(
-                    'username' => '@user1.username',
+                    'username' => '@user1->username',
                 ),
             )
         ));
