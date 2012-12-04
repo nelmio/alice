@@ -147,6 +147,8 @@ class Base implements LoaderInterface
                 $getter = 'get'.ucfirst($property);
                 if(method_exists($reference, $getter) && is_callable(array($reference, $getter))) {
                     return $reference->$getter();
+                } else {
+                    throw new \UnexpectedValueException('Property '.$property.' is not defined for reference '.$name);
                 }
             }
 
