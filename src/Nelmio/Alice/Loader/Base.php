@@ -130,15 +130,12 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function getReference($name)
+    public function getReference($name, $property = null)
     {
-        $parts = explode('->', $name);
+        if (isset($this->references[$name])) {
+            $reference = $this->references[$name];
 
-        if (isset($this->references[$parts[0]])) {
-            $reference = $this->references[$parts[0]];
-
-            if (count($parts) > 1) {
-                $property = $parts[1];
+            if ($property !== null) {
                 if(property_exists($reference, $property)) {
                     $prop = new \ReflectionProperty($reference, $property);
 
@@ -361,14 +358,14 @@ class Base implements LoaderInterface
         }
 
         // process references
-        if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+(?:\->(?<property>[a-z0-9_.*-]+))?)$}i', $data, $matches)) {
+        if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_.*-]+))?$}i', $data, $matches)) {
             if (strpos($matches['reference'], '*')) {
                 $data = $this->getRandomReferences($matches['reference'], ('' !== $matches['multi']) ? $matches['multi'] : null);
             } else {
                 if ('' !== $matches['multi']) {
                     throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
                 }
-                $data = $this->getReference($matches['reference']);
+                $data = $this->getReference($matches['reference'], isset($matches['property']) ? $matches['property'] : null);
             }
         }
 
