@@ -43,7 +43,11 @@ class Fixtures
             throw new \InvalidArgumentException('Unknown container type '.get_class($container));
         }
 
-        if (is_string($files) || is_array($files) && !is_string(current($files))) {
+        if ( is_array($files) === false) {
+            $files = glob($files);
+        }
+
+        if (!is_string(current($files))) {
             $files = array($files);
         }
 
