@@ -149,6 +149,25 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('alice', current($group->getMembers())->username);
     }
 
+    public function testLoadParsesPropertyReferences()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => 'alice',
+                ),
+                'user2' => array(
+                    'username' => '@user1.username',
+                ),
+            )
+        ));
+
+        $this->assertInstanceOf(self::USER, $res[0]);
+        $this->assertInstanceOf(self::USER, $res[1]);
+        $this->assertEquals('alice', $res[0]->username);
+        $this->assertEquals($res[0]->username, $res[1]->username);
+    }
+
     public function testLoadParsesSingleWildcardReference()
     {
         $res = $this->loadData(array(

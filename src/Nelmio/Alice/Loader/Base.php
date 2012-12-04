@@ -132,7 +132,27 @@ class Base implements LoaderInterface
      */
     public function getReference($name)
     {
-        if (isset($this->references[$name])) {
+        $parts = explode('.', $name);
+
+        if (isset($this->references[$parts[0]])) {
+            $reference = $this->references[$parts[0]];
+
+            if (count($parts) > 1) {
+                $property = $parts[1];
+                if(property_exists($reference, $property)) {
+                    $prop = new \ReflectionProperty($reference, $property);
+
+                    if ($prop->isPublic()) {
+                        return $reference->{$property};
+                    }
+                }
+
+                $getter = 'get'.ucfirst($property);
+                if(method_exists($reference, $getter) && is_callable(array($reference, $getter))) {
+                    return $reference->$getter();
+                }
+            }
+
             return $this->references[$name];
         }
 

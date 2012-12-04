@@ -62,10 +62,11 @@ class Fixtures
             }
 
             $loader->setORM($persister);
-            $objects = array_merge($objects, $loader->load($file));
-        }
+            $set = $loader->load($file);
+            $persister->persist($set);
 
-        $persister->persist($objects);
+            $objects = array_merge($objects, $set);
+        }
 
         return $objects;
     }
