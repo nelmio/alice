@@ -190,6 +190,37 @@ Nelmio\Entity\Group:
         owner: @user1
 ```
 
+Alice also allows you to directly reference objects' properties using the ```@name->property``` notation.
+
+```yaml
+Nelmio\Entity\User:
+    # ...
+
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+        owner: @user1->username
+```
+
+To be able to use this feature, your entities have to match some requirements :
+* You can reference public properties
+* You can reference properties reachable through a getter (i.e : ```@name->property``` will call ```$name->getProperty()``` if ```property``` is not public)
+* You can reference entities' ID but you will then have to split fixtures in multiple files (this is because objects are persisted at the end of each file processing) :
+
+```yaml
+# fixture_user.yml
+Nelmio\Entity\User:
+    # ...
+```
+
+```yaml
+# fixture_group.yml
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+        owner: @user1->id
+```
+
 If you want to create ten users and ten groups and have each user own one
 group, you can use `<current()>` which is replaced with the current id of
 each iteration when using fixture ranges:

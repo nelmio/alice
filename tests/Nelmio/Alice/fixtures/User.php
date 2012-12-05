@@ -9,4 +9,9 @@ class User
     public $birthDate;
     public $email;
     public $favoriteNumber;
+
+    public function getAge()
+    {
+        return 25;
+    }
 }

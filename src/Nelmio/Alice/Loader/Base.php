@@ -130,9 +130,28 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function getReference($name)
+    public function getReference($name, $property = null)
     {
         if (isset($this->references[$name])) {
+            $reference = $this->references[$name];
+
+            if ($property !== null) {
+                if(property_exists($reference, $property)) {
+                    $prop = new \ReflectionProperty($reference, $property);
+
+                    if ($prop->isPublic()) {
+                        return $reference->{$property};
+                    }
+                }
+
+                $getter = 'get'.ucfirst($property);
+                if(method_exists($reference, $getter) && is_callable(array($reference, $getter))) {
+                    return $reference->$getter();
+                } else {
+                    throw new \UnexpectedValueException('Property '.$property.' is not defined for reference '.$name);
+                }
+            }
+
             return $this->references[$name];
         }
 
@@ -341,14 +360,14 @@ class Base implements LoaderInterface
         }
 
         // process references
-        if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)$}i', $data, $matches)) {
+        if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_.*-]+))?$}i', $data, $matches)) {
             if (strpos($matches['reference'], '*')) {
                 $data = $this->getRandomReferences($matches['reference'], ('' !== $matches['multi']) ? $matches['multi'] : null);
             } else {
                 if ('' !== $matches['multi']) {
                     throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
                 }
-                $data = $this->getReference($matches['reference']);
+                $data = $this->getReference($matches['reference'], isset($matches['property']) ? $matches['property'] : null);
             }
         }
 
