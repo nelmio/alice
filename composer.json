@@ -17,7 +17,8 @@
     },
     "require-dev": {
         "doctrine/common": "~2.3",
-        "symfony/form": "~2.1"
+        "symfony/form": "~2.1",
+        "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
         "psr-0": { "Nelmio\\Alice\\": "src/" }
