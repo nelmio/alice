@@ -39,6 +39,22 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(3, $group->getMembers());
     }
 
+    public function testLoadLoadsYamlFilesAsArray()
+    {
+        $om = $this->getDoctrineManagerMock(13);
+        $objects = Fixtures::load(array(__DIR__.'/fixtures/complete.yml'), $om);
+
+        $this->assertCount(13, $objects);
+    }
+
+    public function testLoadLoadsYamlFilesAsGlobString()
+    {
+        $om = $this->getDoctrineManagerMock(13);
+        $objects = Fixtures::load(__DIR__.'/fixtures/complete.y*', $om);
+
+        $this->assertCount(13, $objects);
+    }
+
     public function testLoadLoadsArrays()
     {
         $om = $this->getDoctrineManagerMock(2);

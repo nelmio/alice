@@ -24,9 +24,10 @@ interface LoaderInterface
      * Returns a reference to a fixture by name
      *
      * @param  string $name
+     * @param  string $property optionally return only a given property of the reference
      * @return object
      */
-    public function getReference($name);
+    public function getReference($name, $property = null);
 
     /**
      * Returns all references created by the loader

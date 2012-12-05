@@ -20,7 +20,7 @@ class Fixtures
     /**
      * Loads a fixture file into an object container
      *
-     * @param string|array $file      filename or array of filenames to load data from, or data array
+     * @param string|array $file      filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
      * @param object       $container object container
      * @param array        $options   available options:
      *                                - providers: an array of additional faker providers
@@ -43,10 +43,12 @@ class Fixtures
             throw new \InvalidArgumentException('Unknown container type '.get_class($container));
         }
 
-        if ( is_array($files) === false) {
+        // glob strings to filenames
+        if (!is_array($files)) {
             $files = glob($files);
         }
 
+        // wrap the data array in an array of one data array
         if (!is_string(current($files))) {
             $files = array($files);
         }

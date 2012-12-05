@@ -136,7 +136,7 @@ class Base implements LoaderInterface
             $reference = $this->references[$name];
 
             if ($property !== null) {
-                if(property_exists($reference, $property)) {
+                if (property_exists($reference, $property)) {
                     $prop = new \ReflectionProperty($reference, $property);
 
                     if ($prop->isPublic()) {
@@ -145,11 +145,11 @@ class Base implements LoaderInterface
                 }
 
                 $getter = 'get'.ucfirst($property);
-                if(method_exists($reference, $getter) && is_callable(array($reference, $getter))) {
+                if (method_exists($reference, $getter) && is_callable(array($reference, $getter))) {
                     return $reference->$getter();
-                } else {
-                    throw new \UnexpectedValueException('Property '.$property.' is not defined for reference '.$name);
                 }
+
+                throw new \UnexpectedValueException('Property '.$property.' is not defined for reference '.$name);
             }
 
             return $this->references[$name];
@@ -360,7 +360,7 @@ class Base implements LoaderInterface
         }
 
         // process references
-        if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_.*-]+))?$}i', $data, $matches)) {
+        if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i', $data, $matches)) {
             if (strpos($matches['reference'], '*')) {
                 $data = $this->getRandomReferences($matches['reference'], ('' !== $matches['multi']) ? $matches['multi'] : null);
             } else {
