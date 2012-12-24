@@ -207,7 +207,7 @@ class Base implements LoaderInterface
 
     private function createObject($class, $name, $data)
     {
-        $obj = new $class;
+        $obj = unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
         $variables = array();
         foreach ($data as $key => $val) {
             if (is_array($val) && '{' === key($val)) {
@@ -228,7 +228,11 @@ class Base implements LoaderInterface
                 $obj->{'set'.$key}($val);
                 $variables[$key] = $val;
             } elseif (property_exists($obj, $key)) {
-                $obj->$key = $val;
+                $reflObj  = new \ReflectionObject($obj);
+                $reflProp = $reflObj->getProperty($key);
+                $reflProp->setAccessible(true);
+                $reflProp->setValue($obj, $val);
+
                 $variables[$key] = $val;
             } else {
                 throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object.');
