@@ -228,10 +228,9 @@ class Base implements LoaderInterface
                 $obj->{'set'.$key}($val);
                 $variables[$key] = $val;
             } elseif (property_exists($obj, $key)) {
-                $reflObj  = new \ReflectionObject($obj);
-                $reflProp = $reflObj->getProperty($key);
-                $reflProp->setAccessible(true);
-                $reflProp->setValue($obj, $val);
+                $refl = new \ReflectionProperty($obj, $key);
+                $refl->setAccessible(true);
+                $refl->setValue($obj, $val);
 
                 $variables[$key] = $val;
             } else {
