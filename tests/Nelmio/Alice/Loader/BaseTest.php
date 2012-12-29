@@ -19,6 +19,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\fixtures\User';
     const GROUP = 'Nelmio\Alice\fixtures\Group';
+    const CONTACT = 'Nelmio\Alice\fixtures\Contact';
 
     protected $orm;
     protected $loader;
@@ -490,6 +491,29 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $res);
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user9'));
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user10'));
+    }
+
+    public function testLoadCreatesObjcetsWithRequiredConstructors()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => 'alice',
+                ),
+            ),
+            self::CONTACT => array(
+                'contact' => array(
+                    'user' => '@user',
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
+        $this->assertInstanceOf(self::CONTACT, $this->loader->getReference('contact'));
+        $this->assertSame(
+            $this->loader->getReference('user'),
+            $this->loader->getReference('contact')->getUser()
+        );
     }
 
     public function testConstructorCustomProviders()
