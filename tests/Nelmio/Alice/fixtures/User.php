@@ -10,6 +10,12 @@ class User
     public $email;
     public $favoriteNumber;
 
+    public function __construct($username = null, $email = null)
+    {
+        $this->username = $username;
+        $this->email    = $email;
+    }
+
     public function getAge()
     {
         return 25;

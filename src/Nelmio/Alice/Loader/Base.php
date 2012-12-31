@@ -223,6 +223,12 @@ class Base implements LoaderInterface
                     $rel = $this->checkTypeHints($obj, $method, $rel);
                     $obj->{$method}($rel);
                 }
+            } elseif (is_array($val) && method_exists($obj, $key)) {
+                foreach ($val as $num => $param) {
+                    $val[$key] = $this->checkTypeHints($obj, $key, $param, $num);
+                }
+                call_user_func_array(array($obj, $key), $val);
+                $variables[$key] = $val;
             } elseif (method_exists($obj, 'set'.$key)) {
                 $val = $this->checkTypeHints($obj, 'set'.$key, $val);
                 $obj->{'set'.$key}($val);
@@ -246,12 +252,13 @@ class Base implements LoaderInterface
      *
      * It can either convert to datetime or attempt to fetched from the db by id
      *
-     * @param  object $obj
-     * @param  string $method
-     * @param  string $value
+     * @param  object  $obj
+     * @param  string  $method
+     * @param  string  $value
+     * @param  integer $pNum
      * @return mixed
      */
-    private function checkTypeHints($obj, $method, $value)
+    private function checkTypeHints($obj, $method, $value, $pNum = 0)
     {
         if (!is_numeric($value) && !is_string($value)) {
             return $value;
@@ -260,11 +267,11 @@ class Base implements LoaderInterface
         $reflection = new \ReflectionMethod(get_class($obj), $method);
         $params = $reflection->getParameters();
 
-        if (!$params[0]->getClass()) {
+        if (!$params[$pNum]->getClass()) {
             return $value;
         }
 
-        $hintedClass = $params[0]->getClass()->getName();
+        $hintedClass = $params[$pNum]->getClass()->getName();
 
         if ($hintedClass === 'DateTime') {
             try {
