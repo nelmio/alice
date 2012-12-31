@@ -516,6 +516,21 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testLoadCallsCustomMethodWithMultipleArguments()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('alice', 'alice@example.com'),
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
+        $this->assertSame('alice', $this->loader->getReference('user')->username);
+        $this->assertSame('alice@example.com', $this->loader->getReference('user')->email);
+    }
+
     public function testConstructorCustomProviders()
     {
         $loader = new Base('en_US', array(new FakerProvider));
@@ -528,6 +543,22 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertEquals('foo', $res[0]->username);
+    }
+
+    public function testLoadCallsCustomMethodWithMultipleArgumentsAndCustomProviders()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('<fooGenerator()>', '<fooGenerator()>@example.com'),
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res[0]);
+        $this->assertSame('foo', $res[0]->username);
+        $this->assertSame('foo@example.com', $res[0]->email);
     }
 }
 
