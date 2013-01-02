@@ -207,7 +207,24 @@ class Base implements LoaderInterface
 
     private function createObject($class, $name, $data)
     {
-        $obj = unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
+        try {
+            $reflector = new \ReflectionMethod($class, '__construct');
+            $argc = $reflector->getNumberOfRequiredParameters();
+
+            if (0 === $argc) {
+                $obj = new $class();
+            } else {
+                if (-1 === version_compare(phpversion(), '5.4')) {
+                    $obj = unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
+                } else {
+                    $reflector = new \ReflectionClass($class);
+                    $obj = $reflector->newInstanceWithoutConstructor();
+                }
+            }
+        } catch (\ReflectionException $exception) {
+            $obj = new $class();
+        }
+
         $variables = array();
         foreach ($data as $key => $val) {
             if (is_array($val) && '{' === key($val)) {
