@@ -26,6 +26,13 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     protected function loadData(array $data, array $options = array())
     {
+        $loader = $this->createLoader($options);
+
+        return $loader->load($data, $this->orm);
+    }
+
+    protected function createLoader(array $options = array())
+    {
         $defaults = array(
             'locale' => 'en_US',
             'providers' => array(),
@@ -33,9 +40,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $options = array_merge($defaults, $options);
 
         $this->orm = new TestORM;
-        $this->loader = new Base($options['locale'], $options['providers']);
 
-        return $this->loader->load($data, $this->orm);
+        return $this->loader = new Base($options['locale'], $options['providers']);
     }
 
     public function testLoadCreatesInstances()
@@ -75,6 +81,15 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->loader->getReference('foo');
+    }
+
+    public function testLoadInvalidFile()
+    {
+        try {
+            $res = $this->createLoader()->load($file = __DIR__.'/../fixtures/complete.yml');
+        } catch (\UnexpectedValueException $e) {
+            $this->assertEquals('Included file "'.$file.'" must return an array of data', $e->getMessage());
+        }
     }
 
     public function testGetReferences()

@@ -94,12 +94,17 @@ class Base implements LoaderInterface
         if (!is_array($data)) {
             // $loader is defined to give access to $loader->fake() in the included file's context
             $loader = $this;
-            $includeWrapper = function () use ($data, $loader) {
-                return include $data;
+            $filename = $data;
+            $includeWrapper = function () use ($filename, $loader) {
+                ob_start();
+                $res = include $filename;
+                ob_end_clean();
+
+                return $res;
             };
             $data = $includeWrapper();
             if (!is_array($data)) {
-                throw new \UnexpectedValueException('Included PHP files must return an array of data');
+                throw new \UnexpectedValueException('Included file "'.$filename.'" must return an array of data');
             }
         }
 
