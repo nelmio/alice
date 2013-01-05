@@ -493,7 +493,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user10'));
     }
 
-    public function testLoadCreatesObjcetsWithRequiredConstructors()
+    public function testLoadBypassesConstructorsWithRequiredArgs()
     {
         $res = $this->loadData(array(
             self::USER => array(
@@ -516,7 +516,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testLoadCallsCustomMethodWithMultipleArguments()
+    public function testLoadCallsConstructorIfProvided()
     {
         $res = $this->loadData(array(
             self::USER => array(
@@ -524,11 +524,36 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                     '__construct' => array('alice', 'alice@example.com'),
                 ),
             ),
+            self::CONTACT => array(
+                'contact' => array(
+                    '__construct' => array('@user'),
+                ),
+            ),
         ));
 
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
         $this->assertSame('alice', $this->loader->getReference('user')->username);
         $this->assertSame('alice@example.com', $this->loader->getReference('user')->email);
+        $this->assertSame(
+            $this->loader->getReference('user'),
+            $this->loader->getReference('contact')->getUser()
+        );
+    }
+
+    public function testLoadCallsCustomMethodAfterCtor()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'doStuff' => array(0, 3, 'bob'),
+                    '__construct' => array('alice', 'alice@example.com'),
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res[0]);
+        $this->assertSame('bob', $res[0]->username);
+        $this->assertSame('alice@example.com', $res[0]->email);
     }
 
     public function testConstructorCustomProviders()
@@ -559,6 +584,21 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $res[0]);
         $this->assertSame('foo', $res[0]->username);
         $this->assertSame('foo@example.com', $res[0]->email);
+    }
+
+    public function testLoadCallsConstructorWithHintedParams()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array(null, null, '<dateTimeBetween("-10years", "now")>'),
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res[0]);
+        $this->assertInstanceOf('DateTime', $res[0]->birthDate);
     }
 }
 

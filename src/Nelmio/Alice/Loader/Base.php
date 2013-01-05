@@ -207,23 +207,7 @@ class Base implements LoaderInterface
 
     private function createObject($class, $name, $data)
     {
-        try {
-            $reflector = new \ReflectionMethod($class, '__construct');
-            $argc = $reflector->getNumberOfRequiredParameters();
-
-            if (0 === $argc) {
-                $obj = new $class();
-            } else {
-                if (-1 === version_compare(phpversion(), '5.4')) {
-                    $obj = unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
-                } else {
-                    $reflector = new \ReflectionClass($class);
-                    $obj = $reflector->newInstanceWithoutConstructor();
-                }
-            }
-        } catch (\ReflectionException $exception) {
-            $obj = new $class();
-        }
+        $obj = $this->createInstance($class, $data);
 
         $variables = array();
         foreach ($data as $key => $val) {
@@ -242,7 +226,7 @@ class Base implements LoaderInterface
                 }
             } elseif (is_array($val) && method_exists($obj, $key)) {
                 foreach ($val as $num => $param) {
-                    $val[$key] = $this->checkTypeHints($obj, $key, $param, $num);
+                    $val[$num] = $this->checkTypeHints($obj, $key, $param, $num);
                 }
                 call_user_func_array(array($obj, $key), $val);
                 $variables[$key] = $val;
@@ -264,12 +248,51 @@ class Base implements LoaderInterface
         return $this->references[$name] = $obj;
     }
 
+    private function createInstance($class, array &$data)
+    {
+        try {
+            // constructor is defined explicitly
+            if (isset($data['__construct'])) {
+                if (!is_array($data['__construct'])) {
+                    throw new \UnexpectedValueException('Constructor calls must be defined as an array of arguments');
+                }
+
+                $reflClass = new \ReflectionClass($class);
+                $args = $this->process($data['__construct'], array());
+                unset($data['__construct']);
+                foreach ($args as $num => $param) {
+                    $args[$num] = $this->checkTypeHints($class, '__construct', $param, $num);
+                }
+
+                return $reflClass->newInstanceArgs($args);
+            }
+
+            // call the constructor if it contains optional params only
+            $reflMethod = new \ReflectionMethod($class, '__construct');
+            if (0 === $reflMethod->getNumberOfRequiredParameters()) {
+                return new $class();
+            }
+
+            // don't call it if it has mandatory params that were not provided
+            if (version_compare(PHP_VERSION, '5.4', '<')) {
+                // unserialize hack for php <5.4
+                return unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
+            }
+
+            $reflClass = new \ReflectionClass($class);
+
+            return $reflClass->newInstanceWithoutConstructor();
+        } catch (\ReflectionException $exception) {
+            return new $class();
+        }
+    }
+
     /**
      * Checks if the value is typehinted with a class and if the current value can be coerced into that type
      *
      * It can either convert to datetime or attempt to fetched from the db by id
      *
-     * @param  object  $obj
+     * @param  mixed   $obj instance or class name
      * @param  string  $method
      * @param  string  $value
      * @param  integer $pNum
@@ -281,7 +304,7 @@ class Base implements LoaderInterface
             return $value;
         }
 
-        $reflection = new \ReflectionMethod(get_class($obj), $method);
+        $reflection = new \ReflectionMethod($obj, $method);
         $params = $reflection->getParameters();
 
         if (!$params[$pNum]->getClass()) {
@@ -298,7 +321,7 @@ class Base implements LoaderInterface
 
                 return new \DateTime($value);
             } catch (\Exception $e) {
-                throw new \UnexpectedValueException('Could not convert '.$value.' to DateTime for '.get_class($obj).'::'.$method, 0, $e);
+                throw new \UnexpectedValueException('Could not convert '.$value.' to DateTime for '.$reflection->getDeclaringClass()->getName().'::'.$method, 0, $e);
             }
         }
 
