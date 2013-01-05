@@ -508,6 +508,21 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user10'));
     }
 
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Cannot use <current()> out of fixtures ranges.
+     */
+    public function testCurrentProviderFailsOutOfRanges()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => '<current()>',
+                ),
+            ),
+        ));
+    }
+
     public function testLoadBypassesConstructorsWithRequiredArgs()
     {
         $res = $this->loadData(array(
