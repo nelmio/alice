@@ -179,7 +179,7 @@ class Base implements LoaderInterface
 
         if ($formatter == 'current') {
             if ($this->currentRangeId === null) {
-                throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges.');
+                throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges');
             }
 
             return $this->currentRangeId;
@@ -212,12 +212,12 @@ class Base implements LoaderInterface
 
     private function createObject($class, $name, $data)
     {
-        $obj = $this->createInstance($class, $data);
+        $obj = $this->createInstance($class, $name, $data);
 
         $variables = array();
         foreach ($data as $key => $val) {
             if (is_array($val) && '{' === key($val)) {
-                throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml.');
+                throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
 
             // process values
@@ -246,25 +246,40 @@ class Base implements LoaderInterface
 
                 $variables[$key] = $val;
             } else {
-                throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object.');
+                throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
             }
         }
 
         return $this->references[$name] = $obj;
     }
 
-    private function createInstance($class, array &$data)
+    private function createInstance($class, $name, array &$data)
     {
         try {
             // constructor is defined explicitly
             if (isset($data['__construct'])) {
-                if (!is_array($data['__construct'])) {
-                    throw new \UnexpectedValueException('Constructor calls must be defined as an array of arguments');
+                $args = $data['__construct'];
+                unset($data['__construct']);
+
+                // constructor override
+                if (false === $args) {
+                    if (version_compare(PHP_VERSION, '5.4', '<')) {
+                        // unserialize hack for php <5.4
+                        return unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
+                    }
+
+                    $reflClass = new \ReflectionClass($class);
+
+                    return $reflClass->newInstanceWithoutConstructor();
                 }
 
+                if (!is_array($args)) {
+                    throw new \UnexpectedValueException('The __construct call in object '.$name.' must be defined as an array of arguments or false to bypass it');
+                }
+
+                // create object with given args
                 $reflClass = new \ReflectionClass($class);
-                $args = $this->process($data['__construct'], array());
-                unset($data['__construct']);
+                $args = $this->process($args, array());
                 foreach ($args as $num => $param) {
                     $args[$num] = $this->checkTypeHints($class, '__construct', $param, $num);
                 }
@@ -278,15 +293,8 @@ class Base implements LoaderInterface
                 return new $class();
             }
 
-            // don't call it if it has mandatory params that were not provided
-            if (version_compare(PHP_VERSION, '5.4', '<')) {
-                // unserialize hack for php <5.4
-                return unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
-            }
-
-            $reflClass = new \ReflectionClass($class);
-
-            return $reflClass->newInstanceWithoutConstructor();
+            // exception otherwise
+            throw new \RuntimeException('You must specify a __construct method with its arguments in object '.$name.' since class '.$class.' has mandatory constructor arguments');
         } catch (\ReflectionException $exception) {
             return new $class();
         }

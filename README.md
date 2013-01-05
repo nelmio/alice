@@ -165,15 +165,23 @@ Nelmio\Entity\User:
 
 ### Specifying Constructor Arguments ###
 
-When a constructor has mandatory arguments Alice will just create the object
-without calling the constructor. If you wish to run its code, you must define
-it as explained above, for example if the User was immutable and only accepted
-a username in the constructor you could do the following:
+When a constructor has mandatory arguments you must define it as explained
+above, for example if the User required a username in the constructor you
+could do the following:
 
 ```yaml
 Nelmio\Entity\User:
     user1:
         __construct: [<username()>]
+```
+
+If you specify `false` in place of constructor arguments, Alice will
+instantiate the object without executing the constructor:
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        __construct: false
 ```
 
 ### Optional Data ###

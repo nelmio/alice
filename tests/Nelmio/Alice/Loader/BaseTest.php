@@ -510,7 +510,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Cannot use <current()> out of fixtures ranges.
+     * @expectedExceptionMessage Cannot use <current()> out of fixtures ranges
      */
     public function testCurrentProviderFailsOutOfRanges()
     {
@@ -525,7 +525,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not determine how to assign inexistent to a Nelmio\Alice\fixtures\User object.
+     * @expectedExceptionMessage Could not determine how to assign inexistent to a Nelmio\Alice\fixtures\User object
      */
     public function testArbitraryPropertyNamesFail()
     {
@@ -538,7 +538,22 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    public function testLoadBypassesConstructorsWithRequiredArgs()
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage
+     */
+    public function testLoadFailsOnConstructorsWithRequiredArgs()
+    {
+        $res = $this->loadData(array(
+            self::CONTACT => array(
+                'contact' => array(
+                    'user' => '@user',
+                ),
+            ),
+        ));
+    }
+
+    public function testLoadCanBypassConstructorsWithRequiredArgs()
     {
         $res = $this->loadData(array(
             self::USER => array(
@@ -548,6 +563,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             ),
             self::CONTACT => array(
                 'contact' => array(
+                    '__construct' => false,
                     'user' => '@user',
                 ),
             ),
