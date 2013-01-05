@@ -523,6 +523,21 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Could not determine how to assign inexistent to a Nelmio\Alice\fixtures\User object.
+     */
+    public function testArbitraryPropertyNamesFail()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'inexistent' => 'foo',
+                ),
+            ),
+        ));
+    }
+
     public function testLoadBypassesConstructorsWithRequiredArgs()
     {
         $res = $this->loadData(array(
