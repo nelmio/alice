@@ -149,6 +149,33 @@ array of Fixtures::load.
 Additionally, you can mix locales by adding a locale prefix to the faker key,
 i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
 
+### Calling Methods ###
+
+Sometimes though you need to call a method to initialize some more data, you
+can do this just like with properties but instead using the method name and
+giving it an array of arguments. For example let's assume the user class has
+a `setLocation` method that requires a latitude and a longitude:
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        username: <username()>
+        setLocation: [40.689269, -74.044737]
+```
+
+### Specifying Constructor Arguments ###
+
+When a constructor has mandatory arguments Alice will just create the object
+without calling the constructor. If you wish to run its code, you must define
+it as explained above, for example if the User was immutable and only accepted
+a username in the constructor you could do the following:
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        __construct: [<username()>]
+```
+
 ### Optional Data ###
 
 Some fields do not have to be filled-in, like the `favoriteNumber` in this
@@ -387,8 +414,8 @@ there are two ways to solve the problem:
 
 ### Complete Sample ###
 
-In the end, using all the tools above, we have this file creating a bunch of
-users and a group, all of it being linked together, and with little typing:
+In the end, using most of the tools above, we have this file creating a bunch
+of users and a group, all of it being linked together, and with little typing:
 
 ```yaml
 Nelmio\Entity\User:
