@@ -424,20 +424,22 @@ class Base implements LoaderInterface
 
         // process references
         if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i', $data, $matches)) {
+            $multi    = ('' !== $matches['multi']) ? $matches['multi'] : null;
+            $property = isset($matches['property']) ? $matches['property'] : null;
             if (strpos($matches['reference'], '*')) {
-                $data = $this->getRandomReferences($matches['reference'], ('' !== $matches['multi']) ? $matches['multi'] : null);
+                $data = $this->getRandomReferences($matches['reference'], $multi, $property);
             } else {
-                if ('' !== $matches['multi']) {
+                if (null !== $multi) {
                     throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
                 }
-                $data = $this->getReference($matches['reference'], isset($matches['property']) ? $matches['property'] : null);
+                $data = $this->getReference($matches['reference'], $property);
             }
         }
 
         return $data;
     }
 
-    private function getRandomReferences($mask, $count = 1)
+    private function getRandomReferences($mask, $count = 1, $property = null)
     {
         if ($count === 0) {
             return array();
@@ -446,7 +448,7 @@ class Base implements LoaderInterface
         $availableRefs = array();
         foreach ($this->references as $key => $val) {
             if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
-                $availableRefs[] = $val;
+                $availableRefs[] = $key;
             }
         }
 
@@ -455,13 +457,13 @@ class Base implements LoaderInterface
         }
 
         if (null === $count) {
-            return $availableRefs[mt_rand(0, count($availableRefs) - 1)];
+            return $this->getReference($availableRefs[mt_rand(0, count($availableRefs) - 1)], $property);
         }
 
         $res = array();
         while ($count-- && $availableRefs) {
             $ref = array_splice($availableRefs, mt_rand(0, count($availableRefs) - 1), 1);
-            $res[] = current($ref);
+            $res[] = $this->getReference(current($ref), $property);
         }
 
         return $res;
