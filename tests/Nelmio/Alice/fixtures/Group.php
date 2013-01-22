@@ -8,6 +8,8 @@ class Group
     private $owner;
     private $members = array();
     private $creationDate;
+    private $contactEmail;
+    private $supportEmails = array();
 
     public function getName()
     {
@@ -47,5 +49,25 @@ class Group
     public function getCreationDate()
     {
         return $this->creationDate;
+    }
+
+    public function setContactEmail($email)
+    {
+        $this->contactEmail = $email;
+    }
+
+    public function getContactEmail()
+    {
+        return $this->contactEmail;
+    }
+
+    public function addSupportEmail($email)
+    {
+        $this->supportEmails[] = $email;
+    }
+
+    public function getSupportEmails()
+    {
+        return $this->supportEmails;
     }
 }

@@ -257,6 +257,42 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testLoadParsesSingleWildcardReferenceWithProperty()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => 'bob',
+                    'email'    => 'bob@gmail.com',
+                ),
+            ),
+            self::GROUP => array(
+                'a' => array(
+                    'contactEmail' => '@user*->email',
+                ),
+            ),
+        ));
+        $group = $res[1];
+        $this->assertEquals('bob@gmail.com', $group->getContactEmail());
+    }
+
+    public function testLoadParsesMultiReferencesWithProperty()
+    {
+        $emails = array_map(function ($char) { return $char.'@gmail.com'; }, range('a', 'z'));
+        $data = array();
+        foreach ($emails as $key => $email) {
+            $data[self::USER]['user'.$key]['email'] = $email;
+        }
+        $data[self::GROUP]['a']['supportEmails'] = '5x @user*->email';
+        $res = $this->loadData($data);
+
+        $group = $this->loader->getReference('a');
+        $this->assertCount(5, $group->getSupportEmails());
+        foreach ($group->getSupportEmails() as $email) {
+            $this->assertContains($email, $emails);
+        }
+    }
+
     /**
      * @expectedException UnexpectedValueException
      * @expectedExceptionMessage Reference mask "user*" did not match any existing reference, make sure the object is created after its references
