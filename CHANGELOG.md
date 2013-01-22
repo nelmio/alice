@@ -1,3 +1,7 @@
+* 1.3.0 (2013-01-22)
+
+  * Added support for multi and random references together with properties: `5x @user*->property`
+
 * 1.2.0 (2013-01-06)
 
   * Added support for calling methods: `methodName: [arg, arg2, ..]`
