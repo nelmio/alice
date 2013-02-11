@@ -120,11 +120,18 @@ class Base implements LoaderInterface
                     }
                     for ($i = $from; $i <= $to; $i++) {
                         $this->currentRangeId = $i;
-                        $objects[] = $this->createObject($class, str_replace($match[0], $i, $name), $spec);
+                        $object = $this->createObject($class, str_replace($match[0], $i, $name), $spec);
                     }
                     $this->currentRangeId = null;
                 } else {
-                    $objects[] = $this->createObject($class, $name, $spec);
+                    $object = $this->createObject($class, $name, $spec);
+                }
+
+                if (isset($object)) {
+                    $objects[] = array(
+                        'object'    => $object,
+                        'persister' => isset($spec['_persister']) ? $spec['_persister'] : null
+                    );
                 }
             }
         }
@@ -216,6 +223,10 @@ class Base implements LoaderInterface
 
         $variables = array();
         foreach ($data as $key => $val) {
+            if ('_persister' === $key) {
+                continue;
+            }
+
             if (is_array($val) && '{' === key($val)) {
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }

@@ -20,15 +20,16 @@ class Fixtures
     /**
      * Loads a fixture file into an object container
      *
-     * @param string|array $file      filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
-     * @param object       $container object container
-     * @param array        $options   available options:
-     *                                - providers: an array of additional faker providers
-     *                                - locale: the faker locale
-     *                                - seed: a seed to make sure faker generates data consistently across
-     *                                  runs, set to null to disable
+     * @param string|array $file       filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
+     * @param object       $container  object container
+     * @param array        $options    available options:
+     *                                 - providers: an array of additional faker providers
+     *                                 - locale: the faker locale
+     *                                 - seed: a seed to make sure faker generates data consistently across
+     *                                   runs, set to null to disable
+     * @param array        $persisters custom persisters
      */
-    public static function load($files, $container, array $options = array())
+    public static function load($files, $container, array $options = array(), $persisters = array())
     {
         $defaults = array(
             'locale' => 'en_US',
@@ -38,7 +39,7 @@ class Fixtures
         $options = array_merge($defaults, $options);
 
         if ($container instanceof ObjectManager) {
-            $persister = new ORM\Doctrine($container);
+            $persister = new ORM\Doctrine($container, true, $persisters);
         } else {
             throw new \InvalidArgumentException('Unknown container type '.get_class($container));
         }
