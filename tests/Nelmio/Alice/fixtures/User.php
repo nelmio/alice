@@ -9,6 +9,8 @@ class User
     public $birthDate;
     public $email;
     public $favoriteNumber;
+    public $is_moderator;
+    public $is_admin;
 
     public function __construct($username = null, $email = null, \DateTime $birthDate = null)
     {

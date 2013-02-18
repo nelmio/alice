@@ -697,6 +697,45 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $res[0]);
         $this->assertInstanceOf('DateTime', $res[0]->birthDate);
     }
+    
+    public function testApplyDatasetInheritance()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'base' => array(
+                    '@abstract' => 1, 
+                    'username' => 'curtis_norris79', 
+                    'fullname' => 'Curits Norris', 
+                    'email' => 'curtis@norris.org', 
+                    'is_admin' => false, 
+                    'is_moderator' => false
+                ), 
+                'moderator' => array(
+                    '@inherits' => 'base', 
+                    'is_moderator' => true
+                ), 
+                'admin' => array(
+                    '@inherits' => 'moderator', 
+                    'is_admin' => true
+                )
+            ) 
+        ));
+        
+        $moderator = $res[0];
+        $this->assertEquals("curtis_norris79", $moderator->username);
+        $this->assertEquals("Curits Norris", $moderator->fullname);
+        $this->assertEquals("curtis@norris.org", $moderator->email);
+        $this->assertTrue($moderator->is_moderator);
+        $this->assertFalse($moderator->is_admin);
+        
+        $admin = $res[1];
+        $this->assertEquals("curtis_norris79", $admin->username);
+        $this->assertEquals("Curits Norris", $admin->fullname);
+        $this->assertEquals("curtis@norris.org", $admin->email);
+        $this->assertTrue($admin->is_moderator);
+        $this->assertTrue($admin->is_admin);
+    }
 }
 
 class FakerProvider

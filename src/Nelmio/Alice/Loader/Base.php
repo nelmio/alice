@@ -108,6 +108,22 @@ class Base implements LoaderInterface
             }
         }
 
+        // apply dataset inheritance
+        foreach ($data as $class => $datasets) {
+            foreach ($datasets as $name => $dataset) {
+                $data[$class][$name] = $this->applyDatasetInheritance($datasets, $dataset);
+            }
+        }
+        
+        // unset abstract dataset
+        foreach ($data as $class => $datasets) {
+            foreach ($datasets as $name => $dataset) {
+                if (isset($dataset["@abstract"])) {
+                    unset($data[$class][$name]);
+                }
+            }
+        }
+
         $objects = array();
 
         foreach ($data as $class => $instances) {
@@ -186,6 +202,25 @@ class Base implements LoaderInterface
         }
 
         return $this->getGenerator($locale)->format($formatter, $args);
+    }
+
+    /**
+     * Applies the inheritance of datasets
+     *
+     * @param array $datasets
+     * @param array $dataset
+     *
+     * @return array new dataset with inherited data
+     */
+    private function applyDatasetInheritance($datasets, $dataset)
+    {
+        if (isset($dataset["@inherits"])) {
+            $dataset = array_merge($this->applyDatasetInheritance($datasets, $datasets[$dataset["@inherits"]]), $dataset);
+            unset($dataset["@inherits"]);
+            unset($dataset["@abstract"]);
+        }
+
+        return $dataset;
     }
 
     /**
