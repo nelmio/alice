@@ -125,11 +125,11 @@ class Base implements LoaderInterface
                     }
                     for ($i = $from; $i <= $to; $i++) {
                         $this->currentRangeId = $i;
-                        $objects[] = $this->createObject($class, str_replace($match[0], $i, $name), $spec, $name);
+                        $objects[] = $this->createObject($class, str_replace($match[0], $i, $name), $spec);
                     }
                     $this->currentRangeId = null;
                 } else {
-                    $objects[] = $this->createObject($class, $name, $spec, $name);
+                    $objects[] = $this->createObject($class, $name, $spec);
                 }
             }
         }
@@ -215,7 +215,7 @@ class Base implements LoaderInterface
         return $this->generators[$locale];
     }
 
-    private function createObject($class, $name, $data, $objectDescription)
+    private function createObject($class, $name, $data)
     {
         $obj = $this->createInstance($class, $name, $data);
 
@@ -242,14 +242,14 @@ class Base implements LoaderInterface
                 } else {
                     $valHash = "";
                 }
-            } while ($unique && --$i > 0 && isset($this->uniqueValues[$objectDescription . $key][$valHash]));
+            } while ($unique && --$i > 0 && isset($this->uniqueValues[$class . $key][$valHash]));
 
-            if ($unique && isset($this->uniqueValues[$objectDescription . $key][$valHash])) {
-                throw new \RuntimeException("Couldn't generate random unique value for $class: $objectDescription->$key in $uniqueTriesLimit tries.");
+            if ($unique && isset($this->uniqueValues[$class . $key][$valHash])) {
+                throw new \RuntimeException("Couldn't generate random unique value for $class: $key in $uniqueTriesLimit tries.");
             }
 
             if ($unique) {
-                $this->uniqueValues[$objectDescription . $key][$valHash] = true;
+                $this->uniqueValues[$class . $key][$valHash] = true;
             }
 
             // add relations if available

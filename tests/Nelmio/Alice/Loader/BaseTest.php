@@ -714,6 +714,25 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($usernames, array_unique($usernames));
     }
 
+    public function testGeneratedValuesAreUniqueAcrossAClass()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'user{0..4}' => array(
+                    'username' => '<randomNumber()>!'
+                ),
+                'user{5..9}' => array(
+                    'username' => '<randomNumber()>!'
+                )
+            )
+        ));
+
+        $usernames = array_map(function (User $u) { return $u->username; }, $res);
+
+        $this->assertEquals($usernames, array_unique($usernames));
+    }
+
     /**
      * @expectedException \RuntimeException
      */
