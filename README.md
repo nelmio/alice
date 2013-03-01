@@ -346,6 +346,23 @@ You can also randomize the amount by combining it with faker data:
 > **Note**: You do not need to define multi-references inside an array, since
 > they are automatically translated to an array of objects.
 
+### Handling Unique Constraints ###
+
+Quite often some database fields have a unique constraint set on them, in which
+case having the fixtures randomly failing to generate because of bad luck is
+quite annoying. This is especially important if you generate large amounts of
+objects, as otherwise you will most likely never encounter this issue.
+
+By declaring the key as unique using the `(unique)` flag at the end, Alice
+will make sure every element of this class that is created has a unique value
+for that property. For example:
+
+```yaml
+Nelmio\Entity\User:
+    user{1..10}:
+        username (unique): <username()>
+```
+
 ### Variables ###
 
 For some advanced use cases you sometimes need to reference one property
