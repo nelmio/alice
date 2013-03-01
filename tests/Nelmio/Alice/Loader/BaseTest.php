@@ -704,7 +704,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user{0..9}' => array(
-                    'username' => '<randomNumber()>!'
+                    'username(unique)' => '<randomNumber()>'
                 )
             )
         ));
@@ -720,10 +720,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user{0..4}' => array(
-                    'username' => '<randomNumber()>!'
+                    'username(unique)' => '<randomNumber()>'
                 ),
                 'user{5..9}' => array(
-                    'username' => '<randomNumber()>!'
+                    'username (unique)' => '<randomNumber()>'
                 )
             )
         ));
@@ -742,7 +742,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user{0..1}' => array(
-                    'username' => '<fooGenerator()>!'
+                    'username(unique)' => '<fooGenerator()>'
                 )
             )
         ));

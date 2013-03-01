@@ -222,15 +222,18 @@ class Base implements LoaderInterface
 
         $variables = array();
         foreach ($data as $key => $val) {
+            $flags = array();
+            if (preg_match('{^.+\((.+)\)$}', $key, $matches)) {
+                $flags = preg_split('{\s*,\s*}', $matches[1]);
+                $key = trim(substr($key, 0, strlen($key) - strlen($matches[1]) - 2));
+            }
+
             if (is_array($val) && '{' === key($val)) {
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
 
             $i = $uniqueTriesLimit = 128;
-            $unique = is_string($val) && strpos($val, "!") === (strlen($val) - 1);
-            if ($unique) {
-                $val = substr($val, 0, -1);
-            }
+            $unique = in_array('unique', $flags, true);
 
             do {
                 // process values
