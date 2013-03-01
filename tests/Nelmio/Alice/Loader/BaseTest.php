@@ -697,6 +697,56 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $res[0]);
         $this->assertInstanceOf('DateTime', $res[0]->birthDate);
     }
+
+    public function testGeneratedValuesAreUnique()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'user{0..9}' => array(
+                    'username' => '<randomNumber()>!'
+                )
+            )
+        ));
+
+        $usernames = array_map(function (User $u) { return $u->username; }, $res);
+
+        $this->assertEquals($usernames, array_unique($usernames));
+    }
+
+    public function testGeneratedValuesAreUniqueAcrossAClass()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'user{0..4}' => array(
+                    'username' => '<randomNumber()>!'
+                ),
+                'user{5..9}' => array(
+                    'username' => '<randomNumber()>!'
+                )
+            )
+        ));
+
+        $usernames = array_map(function (User $u) { return $u->username; }, $res);
+
+        $this->assertEquals($usernames, array_unique($usernames));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testUniqueValuesException()
+    {
+        $loader = new Base("en_US", array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'user{0..1}' => array(
+                    'username' => '<fooGenerator()>!'
+                )
+            )
+        ));
+    }
 }
 
 class FakerProvider
@@ -704,5 +754,10 @@ class FakerProvider
     public function fooGenerator()
     {
         return 'foo';
+    }
+
+    public function randomNumber()
+    {
+        return mt_rand(0, 9);
     }
 }
