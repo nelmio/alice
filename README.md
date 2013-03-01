@@ -11,11 +11,6 @@ if needed.
 
 This is installable via [Composer](https://getcomposer.org/) as [nelmio/alice](https://packagist.org/packages/nelmio/alice).
 
-**BC Break Warning**: For compat with XML/HTML in fixtures, the round braces
-are now enforced on faker calls, i.e. use `<foo()>` instead of `<foo>`. If
-you don't have time to upgrade you can require
-`"nelmio/alice": "1.0.x-dev#12423116eed"` in the meantime.
-
 ## Usage ##
 
 ### Basic Usage ###
