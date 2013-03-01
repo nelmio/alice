@@ -69,6 +69,11 @@ class Base implements LoaderInterface
     private $currentRangeId;
 
     /**
+     * @var array
+     */
+    private $uniqueValues = array();
+
+    /**
      * @param string $locale default locale to use with faker if none is
      *      specified in the expression
      * @param array $providers custom faker providers in addition to the default
@@ -120,11 +125,11 @@ class Base implements LoaderInterface
                     }
                     for ($i = $from; $i <= $to; $i++) {
                         $this->currentRangeId = $i;
-                        $objects[] = $this->createObject($class, str_replace($match[0], $i, $name), $spec);
+                        $objects[] = $this->createObject($class, str_replace($match[0], $i, $name), $spec, $name);
                     }
                     $this->currentRangeId = null;
                 } else {
-                    $objects[] = $this->createObject($class, $name, $spec);
+                    $objects[] = $this->createObject($class, $name, $spec, $name);
                 }
             }
         }
@@ -210,7 +215,7 @@ class Base implements LoaderInterface
         return $this->generators[$locale];
     }
 
-    private function createObject($class, $name, $data)
+    private function createObject($class, $name, $data, $objectDescription)
     {
         $obj = $this->createInstance($class, $name, $data);
 
@@ -220,31 +225,55 @@ class Base implements LoaderInterface
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
 
-            // process values
-            $val = $this->process($val, $variables);
+            $i = $uniqueTriesLimit = 128;
+            $unique = is_string($val) && strpos($val, "!") === (strlen($val) - 1);
+            if ($unique) {
+                $val = substr($val, 0, -1);
+            }
+
+            do {
+                // process values
+                $generatedVal = $this->process($val, $variables);
+
+                if ($unique) {
+                    $valHash = is_object($generatedVal) ?
+                        spl_object_hash($generatedVal) :
+                        (is_numeric($generatedVal) ? $generatedVal : md5($generatedVal));
+                } else {
+                    $valHash = "";
+                }
+            } while ($unique && --$i > 0 && isset($this->uniqueValues[$objectDescription . $key][$valHash]));
+
+            if ($unique && isset($this->uniqueValues[$objectDescription . $key][$valHash])) {
+                throw new \RuntimeException("Couldn't generate random unique value for $class: $objectDescription->$key in $uniqueTriesLimit tries.");
+            }
+
+            if ($unique) {
+                $this->uniqueValues[$objectDescription . $key][$valHash] = true;
+            }
 
             // add relations if available
-            if (is_array($val) && $method = $this->findAdderMethod($obj, $key)) {
-                foreach ($val as $rel) {
+            if (is_array($generatedVal) && $method = $this->findAdderMethod($obj, $key)) {
+                foreach ($generatedVal as $rel) {
                     $rel = $this->checkTypeHints($obj, $method, $rel);
                     $obj->{$method}($rel);
                 }
-            } elseif (is_array($val) && method_exists($obj, $key)) {
-                foreach ($val as $num => $param) {
-                    $val[$num] = $this->checkTypeHints($obj, $key, $param, $num);
+            } elseif (is_array($generatedVal) && method_exists($obj, $key)) {
+                foreach ($generatedVal as $num => $param) {
+                    $generatedVal[$num] = $this->checkTypeHints($obj, $key, $param, $num);
                 }
-                call_user_func_array(array($obj, $key), $val);
-                $variables[$key] = $val;
+                call_user_func_array(array($obj, $key), $generatedVal);
+                $variables[$key] = $generatedVal;
             } elseif (method_exists($obj, 'set'.$key)) {
-                $val = $this->checkTypeHints($obj, 'set'.$key, $val);
-                $obj->{'set'.$key}($val);
-                $variables[$key] = $val;
+                $generatedVal = $this->checkTypeHints($obj, 'set'.$key, $generatedVal);
+                $obj->{'set'.$key}($generatedVal);
+                $variables[$key] = $generatedVal;
             } elseif (property_exists($obj, $key)) {
                 $refl = new \ReflectionProperty($obj, $key);
                 $refl->setAccessible(true);
-                $refl->setValue($obj, $val);
+                $refl->setValue($obj, $generatedVal);
 
-                $variables[$key] = $val;
+                $variables[$key] = $generatedVal;
             } else {
                 throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
             }
