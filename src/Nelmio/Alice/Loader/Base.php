@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Loader;
 
 use Symfony\Component\Form\Util\FormUtil;
+use Symfony\Component\PropertyAccess\StringUtil;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 
@@ -475,7 +476,13 @@ class Base implements LoaderInterface
             return $method;
         }
 
-        if (class_exists('Symfony\Component\Form\Util\FormUtil') && method_exists('Symfony\Component\Form\Util\FormUtil', 'singularify')) {
+        if (class_exists('Symfony\Component\PropertyAccess\StringUtil') && method_exists('Symfony\Component\PropertyAccess\StringUtil', 'singularify')) {
+            foreach ((array) StringUtil::singularify($key) as $singularForm) {
+                if (method_exists($obj, $method = 'add'.$singularForm)) {
+                    return $method;
+                }
+            }
+        } elseif (class_exists('Symfony\Component\Form\Util\FormUtil') && method_exists('Symfony\Component\Form\Util\FormUtil', 'singularify')) {
             foreach ((array) FormUtil::singularify($key) as $singularForm) {
                 if (method_exists($obj, $method = 'add'.$singularForm)) {
                     return $method;
