@@ -232,28 +232,29 @@ class Base implements LoaderInterface
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
 
-            $i = $uniqueTriesLimit = 128;
-            $unique = in_array('unique', $flags, true);
+            if (in_array('unique', $flags, true)) {
+                $i = $uniqueTriesLimit = 128;
 
-            do {
-                // process values
-                $generatedVal = $this->process($val, $variables);
+                do {
+                    // process values
+                    $generatedVal = $this->process($val, $variables);
 
-                if ($unique) {
-                    $valHash = is_object($generatedVal) ?
-                        spl_object_hash($generatedVal) :
-                        (is_numeric($generatedVal) ? $generatedVal : md5($generatedVal));
-                } else {
-                    $valHash = "";
+                    if (is_object($generatedVal)) {
+                        $valHash = spl_object_hash($generatedVal);
+                    } elseif (is_array($generatedVal)) {
+                        $valHash = hash('md4', serialize($generatedVal));
+                    } else {
+                        $valHash = $generatedVal;
+                    }
+                } while (--$i > 0 && isset($this->uniqueValues[$class . $key][$valHash]));
+
+                if (isset($this->uniqueValues[$class . $key][$valHash])) {
+                    throw new \RuntimeException("Couldn't generate random unique value for $class: $key in $uniqueTriesLimit tries.");
                 }
-            } while ($unique && --$i > 0 && isset($this->uniqueValues[$class . $key][$valHash]));
 
-            if ($unique && isset($this->uniqueValues[$class . $key][$valHash])) {
-                throw new \RuntimeException("Couldn't generate random unique value for $class: $key in $uniqueTriesLimit tries.");
-            }
-
-            if ($unique) {
                 $this->uniqueValues[$class . $key][$valHash] = true;
+            } else {
+                $generatedVal = $this->process($val, $variables);
             }
 
             // add relations if available

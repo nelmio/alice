@@ -704,14 +704,17 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user{0..9}' => array(
-                    'username(unique)' => '<randomNumber()>'
+                    'username(unique)' => '<randomNumber()>',
+                    'favoriteNumber (unique)' => array('<randomNumber()>', '<randomNumber()>'),
                 )
             )
         ));
 
         $usernames = array_map(function (User $u) { return $u->username; }, $res);
+        $favNumberPairs = array_map(function (User $u) { return serialize($u->favoriteNumber); }, $res);
 
         $this->assertEquals($usernames, array_unique($usernames));
+        $this->assertEquals($favNumberPairs, array_unique($favNumberPairs));
     }
 
     public function testGeneratedValuesAreUniqueAcrossAClass()
