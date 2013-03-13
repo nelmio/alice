@@ -34,6 +34,7 @@ class Fixtures
             'locale' => 'en_US',
             'providers' => array(),
             'seed' => 1,
+            'logger' => null,
         );
         $options = array_merge($defaults, $options);
 
@@ -63,6 +64,9 @@ class Fixtures
                 throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
             }
 
+            if (null !== $options['logger']) {
+                $loader->setLogger($options['logger']);
+            }
             $loader->setORM($persister);
             $set = $loader->load($file);
             $persister->persist($set);
