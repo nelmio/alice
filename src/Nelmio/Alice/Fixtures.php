@@ -64,9 +64,12 @@ class Fixtures
                 throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
             }
 
-            if (null !== $options['logger']) {
+            if (is_callable($options['logger'])) {
                 $loader->setLogger($options['logger']);
+            } elseif (null !== $options['logger']) {
+                throw new \RuntimeException('Logger must be callable.');
             }
+
             $loader->setORM($persister);
             $set = $loader->load($file);
             $persister->persist($set);

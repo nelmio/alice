@@ -96,6 +96,18 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $user->favoriteNumber);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testLoadWithLogger()
+    {
+        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+
+        $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om, array(
+            'logger' => 'not callable'
+        ));
+    }
+
     protected function getDoctrineManagerMock($objects = null)
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');

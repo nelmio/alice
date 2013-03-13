@@ -561,7 +561,7 @@ class Base implements LoaderInterface
     public function log($message)
     {
         $logger = $this->logger;
-        if (is_callable($logger)) {
+        if (null !== $logger) {
             $logger($message);
         }
     }
