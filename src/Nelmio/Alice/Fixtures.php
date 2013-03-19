@@ -73,13 +73,34 @@ class Fixtures
         return $objects;
     }
 
+    private static function generateLoaderKey($class, $options)
+    {
+        return sprintf(
+            '%s_%s_%s_%s',
+            $class,
+            (is_numeric($options['seed'])
+             ? strval($options['seed'])
+             : gettype($options['seed'])
+            ),
+            $options['locale'],
+            (empty($options['providers'])
+             ? ''
+             : md5(implode('', $options['providers']))
+            )
+        );
+    }
+
     private static function getLoader($class, $options)
     {
-        if (!isset(self::$loaders[$class])) {
+        // Generate an array key based not only on the loader's class - but also
+        // on the options, so that separate loaders will be created when we want
+        // to load several fixtures that use different custom providers.
+        $loaderKey = self::generateLoaderKey($class, $options);
+        if (!isset(self::$loaders[$loaderKey])) {
             $fqcn = 'Nelmio\Alice\Loader\\'.$class;
-            self::$loaders[$class] = new $fqcn($options['locale'], $options['providers'], $options['seed']);
+            self::$loaders[$loaderKey] = new $fqcn($options['locale'], $options['providers'], $options['seed']);
         }
 
-        return self::$loaders[$class];
+        return self::$loaders[$loaderKey];
     }
 }
