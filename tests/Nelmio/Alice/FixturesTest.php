@@ -39,6 +39,169 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(3, $group->getMembers());
     }
 
+    public function testThatNewLoaderIsCreatedForDifferingOptions()
+    {
+        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om->expects($this->any())
+            ->method('find')->will($this->returnValue(new User()));
+
+        $optionsBatch = array(
+            // default options
+            array(),
+            // full list 
+            array(
+                'locale'    => 'en_US',
+                'seed'      => 1,
+                'providers' => array(
+                    'Nelmio\Alice\FooProvider'
+                )
+            ),
+            // check that loader isn't created twice for the same options
+            array(
+                'locale'    => 'en_US',
+                'seed'      => 1,
+                'providers' => array(
+                    new \Nelmio\Alice\FooProvider()
+                )
+            ),
+            // check that loader isn't created twice for the same options
+            array(
+                'locale'    => 'en_US',
+                'seed'      => 1,
+                'providers' => array(
+                    // this time we have the leading backslash
+                    '\Nelmio\Alice\FooProvider'
+                )
+            ),
+            // check that a new loader will be created for the same options
+            // when the format of fixtures is different
+            array(
+                'locale'    => 'en_US',
+                'seed'      => 1,
+                'providers' => array(
+                    'Nelmio\Alice\FooProvider'
+                ),
+                'fixtures' => array(
+                    self::USER => array(
+                        'user1' => array(
+                            'username' => 'johnny',
+                            'favoriteNumber' => 42,
+                        ),
+                    ),
+                    self::GROUP => array(
+                        'group1' => array(
+                            'owner' => 1
+                        ),
+                    ),
+                ),
+            ),
+            // check various combinations of options (non-exhaustive)
+            array(
+                'locale'    => 'ja_JP',
+                'seed'      => 3,
+                'providers' => array(
+                    'Nelmio\Alice\BarProvider'
+                ),
+            ),
+            array(
+                'locale'    => 'ja_JP',
+                'seed'      => 3,
+                'providers' => array(
+                    'Nelmio\Alice\FooProvider',
+                    'Nelmio\Alice\BarProvider'
+                ),
+            ),
+            array(
+                'locale'    => 'ru_RU',
+                'seed'      => 1,
+                'providers' => array(
+                    'Nelmio\Alice\BarProvider'
+                )
+            ),
+            array(
+                'locale'    => 'ru_RU',
+                'seed'      => 100,
+            ),
+            array(
+                'locale'    => 'ru_RU',
+                'seed'      => null,
+            ),
+            array(
+                'locale'    => 'de_DE',
+                'fixtures' => array(
+                    self::USER => array(
+                        'user1' => array(
+                            'username' => 'johnny',
+                            'favoriteNumber' => 42,
+                        ),
+                    ),
+                    self::GROUP => array(
+                        'group1' => array(
+                            'owner' => 1
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                'locale'    => 'de_DE',
+            ),
+            array(
+                'locale'    => 'fr_FR',
+                'seed'      => null,
+                'providers' => array(
+                    'Nelmio\Alice\BarProvider'
+                )
+            ),
+            array(
+                'locale'    => 'fr_FR',
+                'seed'      => null,
+                'providers' => array(
+                    'Nelmio\Alice\FooProvider'
+                )
+            ),
+        );
+
+        foreach ($optionsBatch as $item) {
+            $fixtures = isset($item['fixtures'])
+                        ? isset($item['fixtures'])
+                        : __DIR__.'/fixtures/complete.yml';
+            Fixtures::load(
+                $fixtures,
+                $om,
+                $item
+            );
+        }
+
+        $prop = new \ReflectionProperty('\Nelmio\Alice\Fixtures', 'loaders');
+        $prop->setAccessible(true);
+        $loaders = $prop->getValue();
+
+        $this->assertEquals(12, count($loaders));
+    }
+
+    public function testThatExceptionIsThrownForInvalidProvider()
+    {
+        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om->expects($this->any())
+            ->method('find')->will($this->returnValue(new User()));
+
+        $this->setExpectedException(
+            '\InvalidArgumentException',
+            'The provider should be a string or an object, got array instead'
+        );
+
+        Fixtures::load(
+            __DIR__.'/fixtures/complete.yml',
+            $om,
+            array(
+                'providers' => array(
+                    'Nelmio\Alice\FooProvider',
+                    array('foo'),
+                ),
+            )
+        );
+    }
+
     public function testLoadLoadsYamlFilesAsArray()
     {
         $om = $this->getDoctrineManagerMock(13);
