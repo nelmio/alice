@@ -1,7 +1,7 @@
 <?php
 namespace Nelmio\Alice;
 
-class FooProvider extends \Faker\Provider\Base
+class FooProvider
 {
     public static function foo($str)
     {

@@ -61,7 +61,16 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 'locale'    => 'en_US',
                 'seed'      => 1,
                 'providers' => array(
-                    'Nelmio\Alice\FooProvider'
+                    new \Nelmio\Alice\FooProvider()
+                )
+            ),
+            // check that loader isn't created twice for the same options
+            array(
+                'locale'    => 'en_US',
+                'seed'      => 1,
+                'providers' => array(
+                    // this time we have the leading backslash
+                    '\Nelmio\Alice\FooProvider'
                 )
             ),
             // check that a new loader will be created for the same options
@@ -168,6 +177,29 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $loaders = $prop->getValue();
 
         $this->assertEquals(12, count($loaders));
+    }
+
+    public function testThatExceptionIsThrownForInvalidProvider()
+    {
+        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om->expects($this->any())
+            ->method('find')->will($this->returnValue(new User()));
+
+        $this->setExpectedException(
+            '\InvalidArgumentException',
+            'The provider should be a string or an object, got array instead'
+        );
+
+        Fixtures::load(
+            __DIR__.'/fixtures/complete.yml',
+            $om,
+            array(
+                'providers' => array(
+                    'Nelmio\Alice\FooProvider',
+                    array('foo'),
+                ),
+            )
+        );
     }
 
     public function testLoadLoadsYamlFilesAsArray()
