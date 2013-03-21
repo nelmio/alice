@@ -73,13 +73,53 @@ class Fixtures
         return $objects;
     }
 
-    private static function getLoader($class, $options)
+    private static function generateLoaderKey($class, array $options)
     {
-        if (!isset(self::$loaders[$class])) {
-            $fqcn = 'Nelmio\Alice\Loader\\'.$class;
-            self::$loaders[$class] = new $fqcn($options['locale'], $options['providers'], $options['seed']);
+        $providers = '';
+        if (!empty($options['providers'])) {
+            foreach ($options['providers'] as $item) {
+                if (is_object($item)) {
+                    $item = get_class($item);
+                } elseif (!is_string($item)) {
+                    $msg = 'The provider should be a string or an object, got '
+                           . (is_scalar($item) ? $item : gettype($item))
+                            . ' instead';
+                    throw new \InvalidArgumentException($msg);
+                }
+
+                // turn all of the class names into fully-qualified ones
+                $item = '\\' . ltrim($item, '\\');
+
+                $providers .= $item;
+            }
         }
 
-        return self::$loaders[$class];
+        return sprintf(
+            '%s_%s_%s_%s',
+            $class,
+            (is_numeric($options['seed'])
+             ? strval($options['seed'])
+             : gettype($options['seed'])
+            ),
+            $options['locale'],
+            (!strlen($providers)
+             ? ''
+             : md5($providers)
+            )
+        );
+    }
+
+    private static function getLoader($class, array $options)
+    {
+        // Generate an array key based not only on the loader's class - but also
+        // on the options, so that separate loaders will be created when we want
+        // to load several fixtures that use different custom providers.
+        $loaderKey = self::generateLoaderKey($class, $options);
+        if (!isset(self::$loaders[$loaderKey])) {
+            $fqcn = 'Nelmio\Alice\Loader\\'.$class;
+            self::$loaders[$loaderKey] = new $fqcn($options['locale'], $options['providers'], $options['seed']);
+        }
+
+        return self::$loaders[$loaderKey];
     }
 }
