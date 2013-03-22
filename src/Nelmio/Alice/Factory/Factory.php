@@ -170,7 +170,8 @@ class Definition
         foreach ($this->assocations as $assocName => $assoc) {
             $data = $this->factory->build($assocName, $assoc['num'], $assoc['values']);
 
-            $assocClass = array_keys($data)[0];
+            $assocClass = array_keys($data);
+            $assocClass = $assocClass[0];
 
             if (isset($dataset[$assocClass])) {
                 $dataset[$assocClass] = array_merge($dataset[$assocClass], $data[$assocClass]);
