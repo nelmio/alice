@@ -27,7 +27,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory
             ->define('user')
             ->of('Entity\User')
-            ->values(['username' => 'Bob', 'email' => '<email()>'])
+            ->values(array('username' => 'Bob', 'email' => '<email()>'))
         ;
 
         return $this->factory;

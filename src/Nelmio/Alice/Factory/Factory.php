@@ -106,7 +106,7 @@ class Definition
 
     public function constructWith()
     {
-        return $this->values(["__construct" => func_get_args()]);
+        return $this->values(array("__construct" => func_get_args()));
     }
 
     public function values(array $values)
@@ -125,7 +125,7 @@ class Definition
 
     public function assocOne($rel, $name, $values = array())
     {
-        $this->values([$rel => "@$name"]);
+        $this->values(array($rel => "@$name"));
 
         return $this->assocation($name, 1, $values);
     }
@@ -142,10 +142,10 @@ class Definition
             $values = array_map(function($n) { return "@" . $n; }, $names);
             $values = '[' . implode(', ', $values) . ']';
 
-            return $this->values([$rel => $values]);
+            return $this->values(array($rel => $values));
         }
 
-        $this->values([$rel => "${num}x @$name"]);
+        $this->values(array($rel => "${num}x @$name"));
 
         return $this->assocation($name, $num, $values);
     }
@@ -156,7 +156,7 @@ class Definition
         preg_match("/([a-zA-Z0-9_-]*)/", $name, $matches);
         $name = $matches[1];
 
-        $this->assocations[$name] = ['num' => $num, 'values' => $values];
+        $this->assocations[$name] = array('num' => $num, 'values' => $values);
 
         return $this;
     }
@@ -181,14 +181,14 @@ class Definition
 
         $key = $num == 1 ? $this->name : $this->name . "{1..$num}";
 
-        $data = [
+        $data = array(
             $key => array_merge($this->values, $overrideValues)
-        ];
+        );
 
         if (isset($dataset[$this->className])) {
             $dataset[$this->className] = array_merge($dataset[$this->className], $data);
         } else {
-            $dataset = array_merge($dataset, [$this->className => $data]);
+            $dataset = array_merge($dataset, array($this->className => $data));
         }
 
         return $dataset;
