@@ -83,7 +83,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                 'user0' => array(
                     'username' => 'johnny',
                     'fullname' => 'John Smith',
-                    'birthDate' => '339980400',
+                    'birthDate' => 339980400,
                     'email' => '<email()>',
                     'favoriteNumber' => 42
                 )
