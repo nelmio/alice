@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Factory;
 
+use Symfony\Component\Yaml\Yaml as YamlParser;
+
 /**
  * Factory provides fluent interfaces for defining and building datasets.
  *
@@ -20,14 +22,69 @@ class Factory
 {
     protected $definitions;
 
+    protected $uses = array();
+
     public function __construct()
     {
         $this->definitions = new Definitions;
     }
 
-    public function define($name)
+    public function define($name, $override = false)
     {
-        return $this->definitions->add(new Definition($this, $this->definitions, $name));
+        if (false === $override || !$this->definitions->exists($name)) {
+            return $this->definitions->add(new Definition($this, $this->definitions, $name));
+
+        }
+
+        return $this->definitions->get($name);
+    }
+
+    public function import($filename)
+    {
+        if (preg_match("/.*\.yml/", $filename)) {
+            ob_start();
+            $includeWrapper = function () use ($filename) {
+                return include $filename;
+            };
+            $data = $includeWrapper();
+            if (true !== $data) {
+                $yaml = ob_get_clean();
+                $data = YamlParser::parse($yaml);
+            }
+        } else {
+            $includeWrapper = function () use ($filename) {
+                ob_start();
+                $res = include $filename;
+                ob_end_clean();
+
+                return $res;
+            };
+            $data = $includeWrapper();
+        }
+
+        if (!is_array($data)) {
+            throw new \UnexpectedValueException('Import data must be an array of data');
+        }
+
+        foreach ($data as $className => $dataset) {
+            foreach ($dataset as $name => $data) {
+                # todo automatic detection of assocations?
+                $this
+                    ->define($name)
+                    ->of($className)
+                    ->values($data)
+                ;
+            }
+        }
+
+        return $this;
+    }
+
+    public function with($name, $sum = 1, $values = array())
+    {
+        $this->uses[$name] = array($sum, $values);
+
+        return $this;
     }
 
     public function build($name, $num = 1, $values = array())
@@ -36,7 +93,17 @@ class Factory
             throw new \Exception("Unknown definition name");
         }
 
-        return $this->definitions->get($name)->toArray($num, $values);
+        # $this->definitions->get($name)->toArray($num, $values);
+        $definition = $this->definitions->get($name);
+
+        foreach ($this->uses as $useName => $useDataset) {
+            list($useNum, $useValues) = $useDataset;
+            $definition->with($useName, $useNum, $useValues);
+        }
+
+        $this->uses = array();
+
+        return $definition->toArray($num, $values);
     }
 }
 
@@ -76,7 +143,7 @@ class Definition
 
     protected $values = array();
 
-    protected $assocations = array();
+    protected $uses = array();
 
     private $inherited = false;
 
@@ -156,7 +223,12 @@ class Definition
         preg_match("/([a-zA-Z0-9_-]*)/", $name, $matches);
         $name = $matches[1];
 
-        $this->assocations[$name] = array('num' => $num, 'values' => $values);
+        return $this->with($name, $num, $values);
+    }
+
+    public function with($name, $num = 1, $values = array())
+    {
+        $this->uses[$name] = array('num' => $num, 'values' => $values);
 
         return $this;
     }
@@ -167,14 +239,14 @@ class Definition
 
         $dataset = array();
 
-        foreach ($this->assocations as $assocName => $assoc) {
-            $data = $this->factory->build($assocName, $assoc['num'], $assoc['values']);
+        foreach ($this->uses as $useName => $useData) {
+            $data = $this->factory->build($useName, $useData['num'], $useData['values']);
 
-            $assocClass = array_keys($data);
-            $assocClass = $assocClass[0];
+            $useClass = array_keys($data);
+            $useClass = $useClass[0];
 
-            if (isset($dataset[$assocClass])) {
-                $dataset[$assocClass] = array_merge($dataset[$assocClass], $data[$assocClass]);
+            if (isset($dataset[$useClass])) {
+                $dataset[$useClass] = array_merge($dataset[$useClass], $data[$useClass]);
             } else {
                 $dataset = array_merge($dataset, $data);
             }
@@ -210,14 +282,14 @@ class Definition
         return $this->values;
     }
 
-    protected function getAssocations()
-    {
-        return $this->assocations;
-    }
-
     protected function getClassName()
     {
         return $this->className;
+    }
+
+    protected function getUses()
+    {
+        return $this->uses;
     }
 
     protected function inheritFromParent()
@@ -228,7 +300,7 @@ class Definition
 
             $this->className = empty($this->className) ? $parentDefinition->getClassName() : $this->className;
             $this->values = array_merge($parentDefinition->getValues(), $this->values);
-            $this->assocations = array_merge($parentDefinition->getAssocations(), $this->assocations);
+            $this->uses = array_merge($parentDefinition->getUses(), $this->uses);
 
             $this->inherited = true;
         }

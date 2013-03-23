@@ -22,10 +22,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory = new Factory();
     }
 
-    public function defineSimpleEntity()
+    public function defineSimpleEntity($name = 'user')
     {
         $this->factory
-            ->define('user')
+            ->define($name)
             ->of('Entity\User')
             ->values(array('username' => 'Bob', 'email' => '<email()>'))
         ;
@@ -47,6 +47,50 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expected, $data);
+    }
+
+    public function testBuildDatasets()
+    {
+        $this->defineSimpleEntity('user1');
+        $this->defineSimpleEntity('user2');
+
+        $data = $this->factory->with('user1')->build('user2');
+
+        $expected = array(
+            'Entity\User' => array(
+                'user1' => array(
+                    'username' => 'Bob',
+                    'email' => '<email()>'
+                ),
+                'user2' => array(
+                    'username' => 'Bob',
+                    'email' => '<email()>'
+                )
+            )
+        );
+
+        $this->assertEquals($expected, $data);
+    }
+
+    public function testImportDefinition()
+    {
+        $this->factory
+            ->import(__DIR__ . '/../fixtures/complete.yml')
+        ;
+
+        $expected = array(
+            'Nelmio\Alice\fixtures\User' => array(
+                'user0' => array(
+                    'username' => 'johnny',
+                    'fullname' => 'John Smith',
+                    'birthDate' => '339980400',
+                    'email' => '<email()>',
+                    'favoriteNumber' => 42
+                )
+            )
+        );
+
+        $this->assertEquals($expected, $this->factory->build('user0'));
     }
 
     public function testBuildMultipleSimpleEntity()
