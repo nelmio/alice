@@ -41,6 +41,8 @@ with the following keys:
 - providers: an array of additional Faker providers
 - seed: a seed to make sure Faker generates data consistently across runs, set
   to null to disable (defaults to 1)
+- logger: a callable or Psr\Log\LoggerInterface object that will receive progress
+  information during the loading of the fixtures
 
 ### Detailed Usage ###
 
