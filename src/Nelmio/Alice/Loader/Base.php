@@ -75,6 +75,11 @@ class Base implements LoaderInterface
     private $uniqueValues = array();
 
     /**
+     * @var callable
+     */
+    private $logger;
+
+    /**
      * @param string $locale default locale to use with faker if none is
      *      specified in the expression
      * @param array $providers custom faker providers in addition to the default
@@ -117,6 +122,7 @@ class Base implements LoaderInterface
         $objects = array();
 
         foreach ($data as $class => $instances) {
+            $this->log('Loading '.$class);
             foreach ($instances as $name => $spec) {
                 if (preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $match)) {
                     $from = $match[1];
@@ -535,5 +541,28 @@ class Base implements LoaderInterface
     public function setORM(ORMInterface $manager)
     {
         $this->manager = $manager;
+    }
+
+    /**
+     * Set the logger callable to execute with the log() method.
+     *
+     * @param $logger
+     */
+    public function setLogger($logger)
+    {
+        $this->logger = $logger;
+    }
+
+   /**
+     * Logs a message using the logger.
+     *
+     * @param string $message
+     */
+    public function log($message)
+    {
+        $logger = $this->logger;
+        if (null !== $logger) {
+            $logger($message);
+        }
     }
 }

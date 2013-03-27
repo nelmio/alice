@@ -34,6 +34,7 @@ class Fixtures
             'locale' => 'en_US',
             'providers' => array(),
             'seed' => 1,
+            'logger' => null,
         );
         $options = array_merge($defaults, $options);
 
@@ -61,6 +62,12 @@ class Fixtures
                 $loader = self::getLoader('Base', $options);
             } else {
                 throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
+            }
+
+            if (is_callable($options['logger'])) {
+                $loader->setLogger($options['logger']);
+            } elseif (null !== $options['logger']) {
+                throw new \RuntimeException('Logger must be callable.');
             }
 
             $loader->setORM($persister);
