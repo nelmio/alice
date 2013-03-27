@@ -17,7 +17,7 @@
     },
     "require-dev": {
         "doctrine/common": "~2.3",
-        "symfony/form": "~2.1",
+        "symfony/property-access": "~2.2",
         "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
