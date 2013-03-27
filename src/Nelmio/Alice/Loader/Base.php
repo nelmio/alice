@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Loader;
 
 use Symfony\Component\Form\Util\FormUtil;
 use Symfony\Component\PropertyAccess\StringUtil;
+use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 
@@ -75,7 +76,7 @@ class Base implements LoaderInterface
     private $uniqueValues = array();
 
     /**
-     * @var callable
+     * @var callable|LoggerInterface
      */
     private $logger;
 
@@ -546,7 +547,7 @@ class Base implements LoaderInterface
     /**
      * Set the logger callable to execute with the log() method.
      *
-     * @param $logger
+     * @param callable|LoggerInterface $logger
      */
     public function setLogger($logger)
     {
@@ -560,8 +561,9 @@ class Base implements LoaderInterface
      */
     public function log($message)
     {
-        $logger = $this->logger;
-        if (null !== $logger) {
+        if ($this->logger instanceof LoggerInterface) {
+            $this->logger->debug($message);
+        } elseif ($logger = $this->logger) {
             $logger($message);
         }
     }

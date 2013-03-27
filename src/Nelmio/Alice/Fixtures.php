@@ -12,6 +12,7 @@
 namespace Nelmio\Alice;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 class Fixtures
 {
@@ -27,6 +28,7 @@ class Fixtures
      *                                - locale: the faker locale
      *                                - seed: a seed to make sure faker generates data consistently across
      *                                  runs, set to null to disable
+     *                                - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
      */
     public static function load($files, $container, array $options = array())
     {
@@ -64,10 +66,10 @@ class Fixtures
                 throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
             }
 
-            if (is_callable($options['logger'])) {
+            if (is_callable($options['logger']) || $options['logger'] instanceof LoggerInterface) {
                 $loader->setLogger($options['logger']);
             } elseif (null !== $options['logger']) {
-                throw new \RuntimeException('Logger must be callable.');
+                throw new \RuntimeException('Logger must be callable or an instance of Psr\Log\LoggerInterface.');
             }
 
             $loader->setORM($persister);
