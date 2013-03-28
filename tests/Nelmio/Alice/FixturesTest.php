@@ -48,7 +48,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $optionsBatch = array(
             // default options
             array(),
-            // full list 
+            // full list
             array(
                 'locale'    => 'en_US',
                 'seed'      => 1,

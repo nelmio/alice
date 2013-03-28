@@ -346,7 +346,7 @@ class Base implements LoaderInterface
      *
      * It can either convert to datetime or attempt to fetched from the db by id
      *
-     * @param  mixed   $obj instance or class name
+     * @param  mixed   $obj    instance or class name
      * @param  string  $method
      * @param  string  $value
      * @param  integer $pNum
