@@ -416,7 +416,7 @@ there are two ways to solve the problem:
        {
            // pass $this as an additional faker provider to make the "groupName"
            // method available as a data provider
-           Fixture::load(__DIR__.'/fixtures.yml', $om, array('providers' => array($this)));
+           Fixtures::load(__DIR__.'/fixtures.yml', $om, array('providers' => array($this)));
        }
 
        public function groupName()
