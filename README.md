@@ -16,8 +16,8 @@ This is installable via [Composer](https://getcomposer.org/) as [nelmio/alice](h
 ### Basic Usage ###
 
 The easiest way to use this is to call the static `Nelmio\Fixture\Fixture::load`
-method. It will bootstrap everything for you and return you a set of objects
-persister in the container you give it.
+method. It will bootstrap everything for you and return you a set of persisted
+objects in the container you give it.
 
 Examples:
 
