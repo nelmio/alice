@@ -17,13 +17,14 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\fixtures\User';
     const GROUP = 'Nelmio\Alice\fixtures\Group';
+    const CONTACT = 'Nelmio\Alice\fixtures\Contact';
 
     public function testLoadLoadsYamlFilesAndDoctrineORM()
     {
-        $om = $this->getDoctrineManagerMock(13);
-        $objects = Fixtures::load(__DIR__.'/fixtures/complete.yml', $om);
+        $om = $this->getDoctrineManagerMock(14);
+        $objects = Fixtures::load(__DIR__.'/fixtures/complete.yml', $om, array('providers' => array($this)));
 
-        $this->assertCount(13, $objects);
+        $this->assertCount(14, $objects);
 
         $user = $objects[0];
         $this->assertInstanceOf(self::USER, $user);
@@ -31,12 +32,17 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $user->favoriteNumber);
 
         $user = $objects[0];
-        $group = $objects[11];
+        $group = $objects[12];
         $this->assertSame($user, $group->getOwner());
 
-        $group = end($objects);
-        $this->assertInstanceOf(self::GROUP, $group);
-        $this->assertCount(3, $group->getMembers());
+        $lastGroup = end($objects);
+        $this->assertInstanceOf(self::GROUP, $lastGroup);
+        $this->assertCount(3, $lastGroup->getMembers());
+
+        $contact = $objects[11];
+        $this->assertInstanceOf(self::CONTACT, $contact);
+        $this->assertSame($user, $contact->getUser());
+        $this->assertSame($lastGroup->contactPerson, $contact->getUser());
     }
 
     public function testThatNewLoaderIsCreatedForDifferingOptions()
@@ -165,6 +171,10 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             $fixtures = isset($item['fixtures'])
                         ? isset($item['fixtures'])
                         : __DIR__.'/fixtures/complete.yml';
+            if (!isset($item['providers'])) {
+                $item['providers'] = array();
+            }
+            $item['providers'][] = $this;
             Fixtures::load(
                 $fixtures,
                 $om,
@@ -197,6 +207,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 'providers' => array(
                     'Nelmio\Alice\FooProvider',
                     array('foo'),
+                    $this,
                 ),
             )
         );
@@ -204,18 +215,18 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadLoadsYamlFilesAsArray()
     {
-        $om = $this->getDoctrineManagerMock(13);
-        $objects = Fixtures::load(array(__DIR__.'/fixtures/complete.yml'), $om);
+        $om = $this->getDoctrineManagerMock(14);
+        $objects = Fixtures::load(array(__DIR__.'/fixtures/complete.yml'), $om, array('providers' => array($this)));
 
-        $this->assertCount(13, $objects);
+        $this->assertCount(14, $objects);
     }
 
     public function testLoadLoadsYamlFilesAsGlobString()
     {
-        $om = $this->getDoctrineManagerMock(13);
-        $objects = Fixtures::load(__DIR__.'/fixtures/complete.y*', $om);
+        $om = $this->getDoctrineManagerMock(14);
+        $objects = Fixtures::load(__DIR__.'/fixtures/complete.y*', $om, array('providers' => array($this)));
 
-        $this->assertCount(13, $objects);
+        $this->assertCount(14, $objects);
     }
 
     public function testLoadLoadsArrays()
@@ -285,5 +296,13 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             ->method('find')->will($this->returnValue(new User()));
 
         return $om;
+    }
+
+    /**
+     * Custom provider for the complete.yml file
+     */
+    public function contactName($user)
+    {
+        return $user->username;
     }
 }

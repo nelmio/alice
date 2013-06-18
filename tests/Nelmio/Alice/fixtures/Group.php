@@ -10,6 +10,8 @@ class Group
     private $creationDate;
     private $contactEmail;
     private $supportEmails = array();
+    public $contactPerson;
+    public $contactPersonName;
 
     public function getName()
     {
