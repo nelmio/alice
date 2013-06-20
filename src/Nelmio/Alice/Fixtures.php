@@ -48,7 +48,7 @@ class Fixtures
 
         // glob strings to filenames
         if (!is_array($files)) {
-            $files = glob($files);
+            $files = glob($files, GLOB_BRACE);
         }
 
         // wrap the data array in an array of one data array
