@@ -379,7 +379,7 @@ class Base implements LoaderInterface
             }
         }
 
-        if (is_numeric($value)) {
+        if ($hintedClass) {
             if (!$this->manager) {
                 throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\ORMInterface object on this instance');
             }
