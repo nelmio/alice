@@ -41,6 +41,8 @@ class Base implements LoaderInterface
 {
     protected $references = array();
 
+    protected $templates = array();
+
     /**
      * @var ORMInterface
      */
@@ -125,7 +127,20 @@ class Base implements LoaderInterface
         foreach ($data as $class => $instances) {
             $this->log('Loading '.$class);
             foreach ($instances as $name => $spec) {
-                if (preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $match)) {
+                if (preg_match('#(.+)@(.+)#', $name, $match)) {
+                    $templateName = $this->templates[$match[2]];
+                    if (isset($templateName)) {
+                        $name = $match[1];
+                        $spec = array_merge($templateName, $spec);
+                    } else {
+                        throw new \RuntimeException('The template "'.$templateName.'" does not exist');
+                    }
+                }
+
+                if (preg_match('#^_(.+)_$#', $name, $match)) {
+                    $this->templates[$match[1]] = $spec;
+                    continue;
+                } elseif (preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $match)) {
                     $from = $match[1];
                     $to = empty($match[2]) ? $match[3] : $match[3] - 1;
                     if ($from > $to) {
@@ -137,6 +152,7 @@ class Base implements LoaderInterface
                     }
                     $this->currentRangeId = null;
                 } else {
+                    $this->templates[$name] = $spec;
                     $objects[] = $this->createObject($class, $name, $spec);
                 }
             }
