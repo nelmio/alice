@@ -39,6 +39,9 @@ use Nelmio\Alice\LoaderInterface;
  */
 class Base implements LoaderInterface
 {
+    /**
+     * @var array
+     */
     protected $references = array();
 
     /**
@@ -199,6 +202,22 @@ class Base implements LoaderInterface
         }
 
         return $this->getGenerator($locale)->format($formatter, $args);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setProviders(array $providers)
+    {
+        $this->providers = $providers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setReferences(array $references)
+    {
+        $this->references = $references;
     }
 
     /**

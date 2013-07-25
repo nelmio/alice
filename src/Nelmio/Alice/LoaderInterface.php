@@ -35,4 +35,15 @@ interface LoaderInterface
      * @return array[object]
      */
     public function getReferences();
+
+    /**
+     * @param array $providers
+     */
+    public function setProviders(array $providers);
+
+    /**
+     * @param array $references
+     */
+    public function setReferences(array $references);
+
 }
