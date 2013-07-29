@@ -13,6 +13,25 @@ This is installable via [Composer](https://getcomposer.org/) as [nelmio/alice](h
 
 To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://github.com/hautelook/AliceBundle) package instead.
 
+## Table of Contents
+
+- [Usage](#usage)
+  - [Basic Usage](#basic-usage)
+  - [Detailed Usage](#detailed-usage)
+- [Reference](#reference)
+  - [Creating Fixtures](#creating-fixtures)
+  - [Fixture Ranges](#fixture-ranges)
+  - [Faker Data](#faker-data)
+  - [Calling Methods](#calling-methods)
+  - [Specifying Constructor Arguments](#specifying-constructor-arguments)
+  - [Optional Data](#optional-data)
+  - [References](#references)
+  - [Multiple References](#multiple-references)
+  - [Handling Unique Constraints](#handling-unique-constraints)
+  - [Variables](#variables)
+  - [Custom Faker Data Providers](#custom-faker-data-providers)
+  - [Complete Sample](#complete-sample)
+
 ## Usage ##
 
 ### Basic Usage ###
@@ -45,6 +64,8 @@ with the following keys:
   to null to disable (defaults to 1)
 - logger: a callable or Psr\Log\LoggerInterface object that will receive progress
   information during the loading of the fixtures
+- persist_once: only persist objects once if multiple files are passed, by default
+  objects are persisted after each file
 
 ### Detailed Usage ###
 
@@ -117,6 +138,20 @@ Nelmio\Entity\User:
 Now it will generate ten users, with names user1 to user10. Pretty good but
 we only have 10 bobs with the same name, username and email, which is not
 so fancy yet.
+
+You can also specify a list of values instead of a range:
+
+```yaml
+Nelmio\Entity\User:
+    user{alice, bob}:
+        username: <current()>
+        fullname: <current()>
+        birthDate: 1980-10-10
+        email: <current()>@example.org
+        favoriteNumber: 42
+```
+
+To go further we can just randomize data.
 
 ### Faker Data ###
 
