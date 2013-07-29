@@ -71,7 +71,7 @@ class Base implements LoaderInterface
     /**
      * @var int
      */
-    private $currentRangeId;
+    private $currentValue;
 
     /**
      * @var array
@@ -135,10 +135,17 @@ class Base implements LoaderInterface
                         list($to, $from) = array($from, $to);
                     }
                     for ($i = $from; $i <= $to; $i++) {
-                        $this->currentRangeId = $i;
+                        $this->currentValue = $i;
                         $objects[] = $this->createObject($class, str_replace($match[0], $i, $name), $spec);
                     }
-                    $this->currentRangeId = null;
+                    $this->currentValue = null;
+                } elseif (preg_match('#\{(\w+(,\s*\w+)*)\}#i', $name, $match)) {
+                    $enumItems = array_map('trim', explode(',', $match[1]));
+                    foreach ($enumItems as $item) {
+                        $this->currentValue = $item;
+                        $objects[] = $this->createObject($class, str_replace($match[0], $item, $name), $spec);
+                    }
+                    $this->currentValue = null;
                 } else {
                     $objects[] = $this->createObject($class, $name, $spec);
                 }
@@ -194,11 +201,11 @@ class Base implements LoaderInterface
         array_shift($args);
 
         if ($formatter == 'current') {
-            if ($this->currentRangeId === null) {
-                throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges');
+            if ($this->currentValue === null) {
+                throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges or enum');
             }
 
-            return $this->currentRangeId;
+            return $this->currentValue;
         }
 
         return $this->getGenerator($locale)->format($formatter, $args);
