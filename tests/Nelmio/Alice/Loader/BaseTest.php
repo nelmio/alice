@@ -548,18 +548,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $res = $this->loadData(array(
             self::USER => array(
-                'user_{alice, bob}' => array(
+                'user_{alice, bob, foo bar}' => array(
                     'username' => '<current()>',
                     'email'    => '<current()>@gmail.com'
                 ),
             ),
         ));
 
-        $this->assertCount(2, $res);
+        $this->assertCount(3, $res);
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user_alice'));
         $this->assertEquals('alice', $this->loader->getReference('user_alice')->username);
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user_bob'));
         $this->assertEquals('bob', $this->loader->getReference('user_bob')->username);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user_foo bar'));
+        $this->assertEquals('foo bar', $this->loader->getReference('user_foo bar')->username);
     }
 
     /**

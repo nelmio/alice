@@ -139,7 +139,7 @@ class Base implements LoaderInterface
                         $objects[] = $this->createObject($class, str_replace($match[0], $i, $name), $spec);
                     }
                     $this->currentValue = null;
-                } elseif (preg_match('#\{(\w+(,\s*\w+)*)\}#i', $name, $match)) {
+                } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
                     $enumItems = array_map('trim', explode(',', $match[1]));
                     foreach ($enumItems as $item) {
                         $this->currentValue = $item;
