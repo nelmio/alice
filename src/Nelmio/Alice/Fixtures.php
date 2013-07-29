@@ -18,6 +18,24 @@ class Fixtures
 {
     private static $loaders = array();
 
+    protected $container;
+    protected $defaultOptions;
+    protected $processors;
+
+    public function __construct($container, array $defaultOptions = array(), array $processors = array())
+    {
+        $this->container = $container;
+        $defaults = array(
+            'locale' => 'en_US',
+            'providers' => array(),
+            'seed' => 1,
+            'logger' => null,
+            'persist_once' => false,
+        );
+        $this->defaultOptions = array_merge($defaults, $defaultOptions);
+        $this->processors = $processors;
+    }
+
     /**
      * Loads a fixture file into an object container
      *
@@ -30,22 +48,23 @@ class Fixtures
      *                                  runs, set to null to disable
      *                                - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
      *                                - persist_once: only persist objects once if multiple files are passsed
+     * @param array        $processors optional array of ProcessorInterface instances
      */
-    public static function load($files, $container, array $options = array())
+    public static function load($files, $container, array $options = array(), array $processors = array())
     {
-        $defaults = array(
-            'locale' => 'en_US',
-            'providers' => array(),
-            'seed' => 1,
-            'logger' => null,
-            'persist_once' => false,
-        );
-        $options = array_merge($defaults, $options);
+        $fixtures = new static($container, $options, $processors);
 
-        if ($container instanceof ObjectManager) {
-            $persister = new ORM\Doctrine($container);
+        return $fixtures->loadFiles($files);
+    }
+
+    public function loadFiles($files, array $options = array())
+    {
+        $options = array_merge($this->defaultOptions, $options);
+
+        if ($this->container instanceof ObjectManager) {
+            $persister = new ORM\Doctrine($this->container);
         } else {
-            throw new \InvalidArgumentException('Unknown container type '.get_class($container));
+            throw new \InvalidArgumentException('Unknown container type '.get_class($this->container));
         }
 
         // glob strings to filenames
@@ -78,17 +97,39 @@ class Fixtures
             $set = $loader->load($file);
 
             if (!$options['persist_once']) {
-                $persister->persist($set);
+                $this->persist($persister, $set);
             }
 
             $objects = array_merge($objects, $set);
         }
 
         if ($options['persist_once']) {
-            $persister->persist($objects);
+            $this->persist($persister, $objects);
         }
 
         return $objects;
+    }
+
+    public function addProcessor(ProcessorInterface $processor)
+    {
+        $this->processors[] = $processor;
+    }
+
+    private function persist($persister, $objects)
+    {
+        foreach ($this->processors as $proc) {
+            foreach ($objects as $obj) {
+                $proc->preProcess($proc);
+            }
+        }
+
+        $persister->persist($objects);
+
+        foreach ($this->processors as $proc) {
+            foreach ($objects as $obj) {
+                $proc->postProcess($proc);
+            }
+        }
     }
 
     private static function generateLoaderKey($class, array $options)
