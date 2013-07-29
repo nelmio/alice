@@ -30,7 +30,7 @@ class Fixtures
             'providers' => array(),
             'seed' => 1,
             'logger' => null,
-            'persist_once' => false,
+            'persist_once' => true,
         );
         $this->defaultOptions = array_merge($defaults, $defaultOptions);
         $this->processors = $processors;
@@ -47,7 +47,7 @@ class Fixtures
      *                                - seed: a seed to make sure faker generates data consistently across
      *                                  runs, set to null to disable
      *                                - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
-     *                                - persist_once: only persist objects once if multiple files are passsed
+     *                                - persist_once: if set to false, objects are persisted after every file is parsed and not once at the end
      * @param array        $processors optional array of ProcessorInterface instances
      */
     public static function load($files, $container, array $options = array(), array $processors = array())

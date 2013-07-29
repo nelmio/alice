@@ -65,8 +65,8 @@ with the following keys:
   to null to disable (defaults to 1)
 - logger: a callable or Psr\Log\LoggerInterface object that will receive progress
   information during the loading of the fixtures
-- persist_once: only persist objects once if multiple files are passed, by default
-  objects are persisted after each file
+- persist_once: if set to false, objects are persisted after every file is parsed,
+  by default everything is persisted once at the end
 
 ### Detailed Usage ###
 
