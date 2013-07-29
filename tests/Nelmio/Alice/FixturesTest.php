@@ -282,6 +282,24 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    public function testMakesOnlyOneFlushWithPersistOnce()
+    {
+        $om = $this->getDoctrineManagerMock(14);
+        $objects = Fixtures::load(
+            array(
+                __DIR__.'/fixtures/part_1.yml',
+                __DIR__.'/fixtures/part_2.yml',
+            ),
+            $om,
+            array(
+                'providers' => array($this),
+                'persist_once' => true
+            )
+        );
+
+        $this->assertCount(14, $objects);
+    }
+
     protected function getDoctrineManagerMock($objects = null)
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');

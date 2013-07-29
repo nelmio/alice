@@ -29,6 +29,7 @@ class Fixtures
      *                                - seed: a seed to make sure faker generates data consistently across
      *                                  runs, set to null to disable
      *                                - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
+     *                                - persist_once: only persist objects once if multiple files are passsed
      */
     public static function load($files, $container, array $options = array())
     {
@@ -37,6 +38,7 @@ class Fixtures
             'providers' => array(),
             'seed' => 1,
             'logger' => null,
+            'persist_once' => false,
         );
         $options = array_merge($defaults, $options);
 
@@ -74,9 +76,16 @@ class Fixtures
 
             $loader->setORM($persister);
             $set = $loader->load($file);
-            $persister->persist($set);
+
+            if (!$options['persist_once']) {
+                $persister->persist($set);
+            }
 
             $objects = array_merge($objects, $set);
+        }
+
+        if ($options['persist_once']) {
+            $persister->persist($objects);
         }
 
         return $objects;
