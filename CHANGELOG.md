@@ -1,3 +1,13 @@
+### 1.5.0 (2013-07-29)
+
+  * Added extensibility features to allow the creation of a Symfony2 AliceBundle (hautelook/alice-bundle)
+  * Added possibility to fetch objects by id with non-numeric ids
+  * Added `(local)` flag for classes and objects to create value objects that should not be persisted
+  * Added enums to create multiple objects (like fixture ranges but with names)
+  * Added ProcessorInterface to be able to modify objects before they get persisted
+  * Fixed cross-file references, everything is now persisted at once
+  * Fixed self-referencing of objects
+
 ### 1.4.0 (2013-04-15)
 
   * Added possibility to mark fields as unique, so that random values are generated uniquely
