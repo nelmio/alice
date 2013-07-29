@@ -127,6 +127,7 @@ class Base implements LoaderInterface
 
         foreach ($data as $class => $instances) {
             $this->log('Loading '.$class);
+            list($class, $classFlags) = $this->parseFlags($class);
             foreach ($instances as $name => $spec) {
                 if (preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $match)) {
                     $from = $match[1];
@@ -136,18 +137,28 @@ class Base implements LoaderInterface
                     }
                     for ($i = $from; $i <= $to; $i++) {
                         $this->currentValue = $i;
-                        $objects[] = $this->createObject($class, str_replace($match[0], $i, $name), $spec);
+                        $curName = str_replace($match[0], $i, $name);
+                        list($curName, $instanceFlags) = $this->parseFlags($curName);
+                        $objects[] = $this->createObject($class, $curName, $spec);
                     }
                     $this->currentValue = null;
                 } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
                     $enumItems = array_map('trim', explode(',', $match[1]));
                     foreach ($enumItems as $item) {
                         $this->currentValue = $item;
-                        $objects[] = $this->createObject($class, str_replace($match[0], $item, $name), $spec);
+                        $curName = str_replace($match[0], $item, $name);
+                        list($curName, $instanceFlags) = $this->parseFlags($curName);
+                        $objects[] = $this->createObject($class, $curName, $spec);
                     }
                     $this->currentValue = null;
                 } else {
+                    list($name, $instanceFlags) = $this->parseFlags($name);
                     $objects[] = $this->createObject($class, $name, $spec);
+                }
+
+                // remove the object from the object store if it is local only since it should not be persisted
+                if (isset($classFlags['local']) || isset($instanceFlags['local'])) {
+                    array_pop($objects);
                 }
             }
         }
@@ -249,23 +260,36 @@ class Base implements LoaderInterface
         return $this->generators[$locale];
     }
 
+    private function parseFlags($key)
+    {
+        $flags = array();
+        if (preg_match('{^(.+?)\s*\((.+)\)$}', $key, $matches)) {
+            foreach (preg_split('{\s*,\s*}', $matches[2]) as $flag) {
+                $val = true;
+                if ($pos = strpos($flag, ':')) {
+                    $flag = trim(substr($flag, 0, $pos));
+                    $val = trim(substr($flag, $pos+1));
+                }
+                $flags[$flag] = $val;
+            }
+            $key = $matches[1];
+        }
+
+        return array($key, $flags);
+    }
+
     private function createObject($class, $name, $data)
     {
         $obj = $this->createInstance($class, $name, $data);
 
         $variables = array();
         foreach ($data as $key => $val) {
-            $flags = array();
-            if (preg_match('{^.+\((.+)\)$}', $key, $matches)) {
-                $flags = preg_split('{\s*,\s*}', $matches[1]);
-                $key = trim(substr($key, 0, strlen($key) - strlen($matches[1]) - 2));
-            }
-
+            list($key, $flags) = $this->parseFlags($key);
             if (is_array($val) && '{' === key($val)) {
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
 
-            if (in_array('unique', $flags, true)) {
+            if (isset($flags['unique'])) {
                 $i = $uniqueTriesLimit = 128;
 
                 do {

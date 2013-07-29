@@ -29,6 +29,7 @@ To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://g
   - [Multiple References](#multiple-references)
   - [Handling Unique Constraints](#handling-unique-constraints)
   - [Variables](#variables)
+  - [Value Objects](#value-objects)
   - [Custom Faker Data Providers](#custom-faker-data-providers)
   - [Complete Sample](#complete-sample)
 
@@ -422,6 +423,28 @@ Nelmio\Entity\Group:
 
 As you can see, we make sure that the update date is between the creation
 date and the current time, which ensure the data will look real enough.
+
+### Value Objects ###
+
+Sometimes you require value objects that are not persisted by an ORM, but
+are just stored on other objects. You can use the `(local)` flag on the class
+or the instance name to mark them as non-persistable. They will be available
+as references to use in other objects, but will not be returned by the
+`LoaderInterface::load` call.
+
+For example this avoids getting an error because Geopoint is not an Entity
+if you use the Doctrine persister.
+
+```yaml
+Nelmio\Data\Geopoint (local):
+    geo1:
+        __construct: [<latitude()>, <longitude()>]
+
+Nelmio\Entity\Location:
+    loc{1..100}:
+        name: <city()>
+        geopoint: @geo1
+```
 
 ### Custom Faker Data Providers ###
 

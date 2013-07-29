@@ -564,6 +564,32 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo bar', $this->loader->getReference('user_foo bar')->username);
     }
 
+    public function testLocalObjectsAreNotReturned()
+    {
+        $res = $this->loadData(array(
+            self::GROUP.' (local)' => array(
+                'group' => array(
+                    'name' => 'foo'
+                ),
+            ),
+            self::USER => array(
+                'user' => array(
+                    'email'    => '@group'
+                ),
+                'user2 (local)' => array(
+                    'email'    => '@group'
+                ),
+            ),
+        ));
+
+        $this->assertCount(1, $res);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user2'));
+        $this->assertInstanceOf(self::GROUP, $this->loader->getReference('group'));
+        $this->assertSame($this->loader->getReference('user')->email, $this->loader->getReference('group'));
+        $this->assertSame($this->loader->getReference('user2')->email, $this->loader->getReference('group'));
+    }
+
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Cannot use <current()> out of fixtures ranges
