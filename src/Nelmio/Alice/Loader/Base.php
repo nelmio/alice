@@ -123,12 +123,12 @@ class Base implements LoaderInterface
             }
         }
 
-        $objects = array();
-
-        foreach ($data as $class => $instances) {
+        // create instances
+        $instances = array();
+        foreach ($data as $class => $specs) {
             $this->log('Loading '.$class);
             list($class, $classFlags) = $this->parseFlags($class);
-            foreach ($instances as $name => $spec) {
+            foreach ($specs as $name => $spec) {
                 if (preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $match)) {
                     $from = $match[1];
                     $to = empty($match[2]) ? $match[3] : $match[3] - 1;
@@ -136,30 +136,36 @@ class Base implements LoaderInterface
                         list($to, $from) = array($from, $to);
                     }
                     for ($i = $from; $i <= $to; $i++) {
-                        $this->currentValue = $i;
                         $curName = str_replace($match[0], $i, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $objects[] = $this->createObject($class, $curName, $spec);
+                        $instances[] = array($this->createInstance($class, $curName, $spec), $class, $curName, $spec, $classFlags, $instanceFlags, $i);
                     }
-                    $this->currentValue = null;
                 } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
                     $enumItems = array_map('trim', explode(',', $match[1]));
                     foreach ($enumItems as $item) {
-                        $this->currentValue = $item;
                         $curName = str_replace($match[0], $item, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $objects[] = $this->createObject($class, $curName, $spec);
+                        $instances[] = array($this->createInstance($class, $curName, $spec), $class, $curName, $spec, $classFlags, $instanceFlags, $item);
                     }
-                    $this->currentValue = null;
                 } else {
                     list($name, $instanceFlags) = $this->parseFlags($name);
-                    $objects[] = $this->createObject($class, $name, $spec);
+                    $instances[] = array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null);
                 }
+            }
+        }
 
-                // remove the object from the object store if it is local only since it should not be persisted
-                if (isset($classFlags['local']) || isset($instanceFlags['local'])) {
-                    array_pop($objects);
-                }
+        // populate instances
+        $objects = array();
+        foreach ($instances as $instanceData) {
+            list($instance, $class, $name, $spec, $classFlags, $instanceFlags, $curValue) = $instanceData;
+
+            $this->currentValue = $curValue;
+            $this->populateObject($instance, $class, $name, $spec);
+            $this->currentValue = null;
+
+            // add the object in the object store unless it's local
+            if (!isset($classFlags['local']) && !isset($instanceFlags['local'])) {
+                $objects[] = $instance;
             }
         }
 
@@ -278,10 +284,8 @@ class Base implements LoaderInterface
         return array($key, $flags);
     }
 
-    private function createObject($class, $name, $data)
+    private function populateObject($instance, $class, $name, $data)
     {
-        $obj = $this->createInstance($class, $name, $data);
-
         $variables = array();
         foreach ($data as $key => $val) {
             list($key, $flags) = $this->parseFlags($key);
@@ -315,33 +319,31 @@ class Base implements LoaderInterface
             }
 
             // add relations if available
-            if (is_array($generatedVal) && $method = $this->findAdderMethod($obj, $key)) {
+            if (is_array($generatedVal) && $method = $this->findAdderMethod($instance, $key)) {
                 foreach ($generatedVal as $rel) {
-                    $rel = $this->checkTypeHints($obj, $method, $rel);
-                    $obj->{$method}($rel);
+                    $rel = $this->checkTypeHints($instance, $method, $rel);
+                    $instance->{$method}($rel);
                 }
-            } elseif (is_array($generatedVal) && method_exists($obj, $key)) {
+            } elseif (is_array($generatedVal) && method_exists($instance, $key)) {
                 foreach ($generatedVal as $num => $param) {
-                    $generatedVal[$num] = $this->checkTypeHints($obj, $key, $param, $num);
+                    $generatedVal[$num] = $this->checkTypeHints($instance, $key, $param, $num);
                 }
-                call_user_func_array(array($obj, $key), $generatedVal);
+                call_user_func_array(array($instance, $key), $generatedVal);
                 $variables[$key] = $generatedVal;
-            } elseif (method_exists($obj, 'set'.$key)) {
-                $generatedVal = $this->checkTypeHints($obj, 'set'.$key, $generatedVal);
-                $obj->{'set'.$key}($generatedVal);
+            } elseif (method_exists($instance, 'set'.$key)) {
+                $generatedVal = $this->checkTypeHints($instance, 'set'.$key, $generatedVal);
+                $instance->{'set'.$key}($generatedVal);
                 $variables[$key] = $generatedVal;
-            } elseif (property_exists($obj, $key)) {
-                $refl = new \ReflectionProperty($obj, $key);
+            } elseif (property_exists($instance, $key)) {
+                $refl = new \ReflectionProperty($instance, $key);
                 $refl->setAccessible(true);
-                $refl->setValue($obj, $generatedVal);
+                $refl->setValue($instance, $generatedVal);
 
                 $variables[$key] = $generatedVal;
             } else {
                 throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
             }
         }
-
-        return $this->references[$name] = $obj;
     }
 
     private function createInstance($class, $name, array &$data)
@@ -356,12 +358,12 @@ class Base implements LoaderInterface
                 if (false === $args) {
                     if (version_compare(PHP_VERSION, '5.4', '<')) {
                         // unserialize hack for php <5.4
-                        return unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
+                        return $this->references[$name] = unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
                     }
 
                     $reflClass = new \ReflectionClass($class);
 
-                    return $reflClass->newInstanceWithoutConstructor();
+                    return $this->references[$name] = $reflClass->newInstanceWithoutConstructor();
                 }
 
                 if (!is_array($args)) {
@@ -375,19 +377,19 @@ class Base implements LoaderInterface
                     $args[$num] = $this->checkTypeHints($class, '__construct', $param, $num);
                 }
 
-                return $reflClass->newInstanceArgs($args);
+                return $this->references[$name] = $reflClass->newInstanceArgs($args);
             }
 
             // call the constructor if it contains optional params only
             $reflMethod = new \ReflectionMethod($class, '__construct');
             if (0 === $reflMethod->getNumberOfRequiredParameters()) {
-                return new $class();
+                return $this->references[$name] = new $class();
             }
 
             // exception otherwise
             throw new \RuntimeException('You must specify a __construct method with its arguments in object '.$name.' since class '.$class.' has mandatory constructor arguments');
         } catch (\ReflectionException $exception) {
-            return new $class();
+            return $this->references[$name] = new $class();
         }
     }
 

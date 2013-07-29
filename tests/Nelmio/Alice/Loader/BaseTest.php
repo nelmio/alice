@@ -544,6 +544,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user10'));
     }
 
+    public function testSelfReferencingObject()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user{1..10}' => array(
+                    'friends' => '3x @user*',
+                ),
+            ),
+        ));
+
+        $this->assertCount(10, $res);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user9')->friends[0]);
+    }
+
     public function testLoadCreatesEnumsOfObjects()
     {
         $res = $this->loadData(array(

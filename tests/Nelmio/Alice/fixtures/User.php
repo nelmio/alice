@@ -9,6 +9,7 @@ class User
     public $birthDate;
     public $email;
     public $favoriteNumber;
+    public $friends;
 
     public function __construct($username = null, $email = null, \DateTime $birthDate = null)
     {
