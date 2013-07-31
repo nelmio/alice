@@ -136,16 +136,18 @@ class Base implements LoaderInterface
                         list($to, $from) = array($from, $to);
                     }
                     for ($i = $from; $i <= $to; $i++) {
+                        $curSpec = $spec;
                         $curName = str_replace($match[0], $i, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $instances[] = array($this->createInstance($class, $curName, $spec), $class, $curName, $spec, $classFlags, $instanceFlags, $i);
+                        $instances[] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
                     }
                 } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
                     $enumItems = array_map('trim', explode(',', $match[1]));
                     foreach ($enumItems as $item) {
+                        $curSpec = $spec;
                         $curName = str_replace($match[0], $item, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $instances[] = array($this->createInstance($class, $curName, $spec), $class, $curName, $spec, $classFlags, $instanceFlags, $item);
+                        $instances[] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
                     }
                 } else {
                     list($name, $instanceFlags) = $this->parseFlags($name);

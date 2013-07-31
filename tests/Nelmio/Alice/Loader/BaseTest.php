@@ -658,7 +658,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
             self::CONTACT => array(
-                'contact' => array(
+                'contact{1..2}' => array(
                     '__construct' => false,
                     'user' => '@user',
                 ),
@@ -666,10 +666,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
-        $this->assertInstanceOf(self::CONTACT, $this->loader->getReference('contact'));
+        $this->assertInstanceOf(self::CONTACT, $this->loader->getReference('contact1'));
         $this->assertSame(
             $this->loader->getReference('user'),
-            $this->loader->getReference('contact')->getUser()
+            $this->loader->getReference('contact1')->getUser()
         );
     }
 
