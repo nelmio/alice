@@ -234,6 +234,7 @@ class Base implements LoaderInterface
     public function setProviders(array $providers)
     {
         $this->providers = $providers;
+        $this->emptyGenerators();
     }
 
     /**
@@ -242,6 +243,11 @@ class Base implements LoaderInterface
     public function setReferences(array $references)
     {
         $this->references = $references;
+    }
+
+    private function emptyGenerators()
+    {
+        $this->generators = array();
     }
 
     /**
