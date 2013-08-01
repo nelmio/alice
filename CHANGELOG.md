@@ -1,3 +1,8 @@
+### 1.5.1 (2013-08-01)
+
+  * Fixed persist_once issue, it is now disabled by default again
+  * Fixed regression in handling of suppressed constructors
+
 ### 1.5.0 (2013-07-29)
 
   * Added extensibility features to allow the creation of a Symfony2 AliceBundle (hautelook/alice-bundle)
