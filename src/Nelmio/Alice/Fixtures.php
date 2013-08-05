@@ -119,7 +119,7 @@ class Fixtures
     {
         foreach ($this->processors as $proc) {
             foreach ($objects as $obj) {
-                $proc->preProcess($proc);
+                $proc->preProcess($obj);
             }
         }
 
@@ -127,7 +127,7 @@ class Fixtures
 
         foreach ($this->processors as $proc) {
             foreach ($objects as $obj) {
-                $proc->postProcess($proc);
+                $proc->postProcess($obj);
             }
         }
     }
