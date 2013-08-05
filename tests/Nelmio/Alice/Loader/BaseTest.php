@@ -810,6 +810,34 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             )
         ));
     }
+
+    public function testCurrentInConstructor()
+    {
+        $res = $this->loadData(array(
+                self::USER => array(
+                    'user1' => array(
+                        '__construct' => array('alice', 'alice@example.com'),
+                    ),
+                    'user2' => array(
+                        '__construct' => array('bob', 'bob@example.com'),
+                    ),
+                ),
+                self::CONTACT => array(
+                    'contact{1..2}' => array(
+                        '__construct' => array('@user<current()>'),
+                    ),
+                ),
+            ));
+
+        $this->assertSame(
+            $this->loader->getReference('user1'),
+            $this->loader->getReference('contact1')->getUser()
+        );
+        $this->assertSame(
+            $this->loader->getReference('user2'),
+            $this->loader->getReference('contact2')->getUser()
+        );
+    }
 }
 
 class FakerProvider
