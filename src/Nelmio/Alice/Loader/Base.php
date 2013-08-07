@@ -139,7 +139,9 @@ class Base implements LoaderInterface
                         $curSpec = $spec;
                         $curName = str_replace($match[0], $i, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
+                        $this->currentValue = $i;
                         $instances[] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
+                        $this->currentValue = null;
                     }
                 } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
                     $enumItems = array_map('trim', explode(',', $match[1]));
@@ -147,7 +149,9 @@ class Base implements LoaderInterface
                         $curSpec = $spec;
                         $curName = str_replace($match[0], $item, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
+                        $this->currentValue = $item;
                         $instances[] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
+                        $this->currentValue = null;
                     }
                 } else {
                     list($name, $instanceFlags) = $this->parseFlags($name);
