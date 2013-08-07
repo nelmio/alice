@@ -1,3 +1,8 @@
+### 1.5.2 (2013-08-07)
+
+  * Fixed typo in the handling of processors
+  * Fixed regression in handling of <current()> in constructors
+
 ### 1.5.1 (2013-08-01)
 
   * Fixed persist_once issue, it is now disabled by default again
