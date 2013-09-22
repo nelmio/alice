@@ -298,7 +298,7 @@ class Base implements LoaderInterface
 
     private function populateObject($instance, $class, $name, $data)
     {
-        $variables = array();
+        $variables = array('this' => $instance);
         foreach ($data as $key => $val) {
             list($key, $flags) = $this->parseFlags($key);
             if (is_array($val) && '{' === key($val)) {
