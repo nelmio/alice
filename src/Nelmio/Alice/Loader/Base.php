@@ -45,6 +45,11 @@ class Base implements LoaderInterface
     protected $references = array();
 
     /**
+     * @var array
+     */
+    protected $incompleteInstances = array();
+
+    /**
      * @var ORMInterface
      */
     protected $manager;
@@ -82,6 +87,11 @@ class Base implements LoaderInterface
      * @var callable|LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var boolean
+     */
+    private $allowForwardReferences = false;
 
     /**
      * @param string $locale default locale to use with faker if none is
@@ -161,17 +171,30 @@ class Base implements LoaderInterface
         }
 
         // populate instances
+        $instances = array_merge($instances, $this->incompleteInstances);
+        $this->incompleteInstances = array();
         $objects = array();
+        $i = 0;
+
         foreach ($instances as $instanceData) {
             list($instance, $class, $name, $spec, $classFlags, $instanceFlags, $curValue) = $instanceData;
 
             $this->currentValue = $curValue;
-            $this->populateObject($instance, $class, $name, $spec);
-            $this->currentValue = null;
 
-            // add the object in the object store unless it's local
-            if (!isset($classFlags['local']) && !isset($instanceFlags['local'])) {
-                $objects[] = $instance;
+            try {
+                $this->populateObject($instance, $class, $name, $spec);
+                $this->currentValue = null;
+
+                // add the object in the object store unless it's local
+                if (!isset($classFlags['local']) && !isset($instanceFlags['local'])) {
+                    $objects[] = $instance;
+                }
+            } catch (MissingReferenceException $e) {
+                if (!$this->allowForwardReferences) {
+                    throw $e;
+                }
+
+                $this->incompleteInstances[] = $instanceData;
             }
         }
 
@@ -206,7 +229,7 @@ class Base implements LoaderInterface
             return $this->references[$name];
         }
 
-        throw new \UnexpectedValueException('Reference '.$name.' is not defined');
+        throw new MissingReferenceException('Reference '.$name.' is not defined');
     }
 
     /**
@@ -215,6 +238,11 @@ class Base implements LoaderInterface
     public function getReferences()
     {
         return $this->references;
+    }
+
+    public function getIncompleteInstances()
+    {
+        return $this->incompleteInstances;
     }
 
     public function fake($formatter, $locale = null, $arg = null, $arg2 = null, $arg3 = null)
@@ -537,6 +565,7 @@ class Base implements LoaderInterface
                 if (null !== $multi) {
                     throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
                 }
+
                 $data = $this->getReference($matches['reference'], $property);
             }
         }
@@ -630,5 +659,10 @@ class Base implements LoaderInterface
         } elseif ($logger = $this->logger) {
             $logger($message);
         }
+    }
+
+    public function enableForwardReferences($val = true)
+    {
+        $this->allowForwardReferences = !($val === false);
     }
 }
