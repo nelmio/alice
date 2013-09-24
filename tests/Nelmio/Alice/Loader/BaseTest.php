@@ -20,6 +20,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     const USER = 'Nelmio\Alice\fixtures\User';
     const GROUP = 'Nelmio\Alice\fixtures\Group';
     const CONTACT = 'Nelmio\Alice\fixtures\Contact';
+    const TOPIC = 'Nelmio\Alice\fixtures\Topic';
+    const CATEGORY = 'Nelmio\Alice\fixtures\Category';
 
     protected $orm;
 
@@ -31,6 +33,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     protected function loadData(array $data, array $options = array())
     {
         $loader = $this->createLoader($options);
+
+        if (in_array('enableForwardReferences', $options) && $options['enableForwardReferences']) {
+            $loader->enableForwardReferences();
+        }
 
         return $loader->load($data, $this->orm);
     }
@@ -731,6 +737,42 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $user3);
 
         $this->assertEquals('foo"@test.com', $user3->username);
+    }
+
+    public function testBiDirectionalReferencingObjects()
+    {
+        $this->loadData(array(
+            self::CATEGORY => array(
+                'category1' => array(
+                    'description' => 'category 1',
+                    'lastTopic' => '@topic1',
+                ),
+            ),
+        ), array('enableForwardReferences' => true));
+
+        $this->assertCount(1, $this->loader->getIncompleteInstances());
+
+        $this->loader->load(array(
+            self::TOPIC => array(
+                'topic1' => array(
+                    'subject' => 'topic 1',
+                    'parentCategory' => '@category1',
+                ),
+            ),
+        ));
+
+        $this->assertCount(0, $this->loader->getIncompleteInstances());
+
+        $category1 = $this->loader->getReference('category1');
+        $topic1 = $this->loader->getReference('topic1');
+
+        $this->assertInstanceOf(self::CATEGORY, $category1);
+        $this->assertInstanceOf(self::TOPIC, $category1->lastTopic);
+        $this->assertEquals($topic1, $category1->lastTopic);
+
+        $this->assertInstanceOf(self::TOPIC, $topic1);
+        $this->assertInstanceOf(self::CATEGORY, $topic1->parentCategory);
+        $this->assertEquals($category1, $topic1->parentCategory);
     }
 
     public function testLoadCreatesEnumsOfObjects()
