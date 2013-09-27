@@ -100,6 +100,11 @@ class Base implements LoaderInterface
     private $allowForwardReferences = false;
 
     /**
+     * @var array
+     */
+    private $currentLoadReferences = array();
+
+    /**
      * @param string $locale default locale to use with faker if none is
      *      specified in the expression
      * @param array $providers custom faker providers in addition to the default
@@ -125,8 +130,10 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function load($data)
+    public function load($data = array())
     {
+        $this->currentLoadReferences = array();
+
         if (!is_array($data)) {
             // $loader is defined to give access to $loader->fake() in the included file's context
             $loader = $this;
@@ -204,6 +211,8 @@ class Base implements LoaderInterface
         }
 
         // populate instances
+        $this->currentLoadReferences = array_map(function ($instanceData) { return $instanceData[2]; }, $instances);
+        array_push($this->currentLoadReferences, 'self');
         $instances = array_merge($instances, $this->incompleteInstances);
         $this->incompleteInstances = array();
         $objects = array();
@@ -213,7 +222,7 @@ class Base implements LoaderInterface
             $this->currentValue = $curValue;
 
             try {
-                $this->populateObject($instance, $class, $name, $spec);
+                $this->populateObject($instance, $class, $name, $spec, $classFlags, $instanceFlags, $curValue);
                 $this->currentValue = null;
 
                 // add the object in the object store unless it's local
@@ -221,7 +230,7 @@ class Base implements LoaderInterface
                     $objects[$instanceName] = $instance;
                 }
             } catch (MissingReferenceException $e) {
-                if (!$this->allowForwardReferences) {
+                if ($e->getCode() == MissingReferenceException::FORWARD && !$this->allowForwardReferences) {
                     throw $e;
                 }
 
@@ -440,7 +449,7 @@ class Base implements LoaderInterface
         return array($key, $flags);
     }
 
-    private function populateObject($instance, $class, $name, $data)
+    private function populateObject($instance, $class, $name, $data, $classFlags, $instanceFlags, $curValue)
     {
         $variables = array();
 
@@ -460,64 +469,69 @@ class Base implements LoaderInterface
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
 
-            if (isset($flags['unique'])) {
-                $i = $uniqueTriesLimit = 128;
+            try {
+                if (isset($flags['unique'])) {
+                    $i = $uniqueTriesLimit = 128;
 
-                do {
-                    // process values
-                    $generatedVal = $this->process($val, $variables);
+                    do {
+                        // process values
+                        $generatedVal = $this->process($val, $variables);
 
-                    if (is_object($generatedVal)) {
-                        $valHash = spl_object_hash($generatedVal);
-                    } elseif (is_array($generatedVal)) {
-                        $valHash = hash('md4', serialize($generatedVal));
-                    } else {
-                        $valHash = $generatedVal;
+                        if (is_object($generatedVal)) {
+                            $valHash = spl_object_hash($generatedVal);
+                        } elseif (is_array($generatedVal)) {
+                            $valHash = hash('md4', serialize($generatedVal));
+                        } else {
+                            $valHash = $generatedVal;
+                        }
+                    } while (--$i > 0 && isset($this->uniqueValues[$class . $key][$valHash]));
+
+                    if (isset($this->uniqueValues[$class . $key][$valHash])) {
+                        throw new \RuntimeException("Couldn't generate random unique value for $class: $key in $uniqueTriesLimit tries.");
                     }
-                } while (--$i > 0 && isset($this->uniqueValues[$class . $key][$valHash]));
 
-                if (isset($this->uniqueValues[$class . $key][$valHash])) {
-                    throw new \RuntimeException("Couldn't generate random unique value for $class: $key in $uniqueTriesLimit tries.");
-                }
-
-                $this->uniqueValues[$class . $key][$valHash] = true;
-            } else {
-                $generatedVal = $this->process($val, $variables);
-            }
-
-            // add relations if available
-            if (is_array($generatedVal) && $method = $this->findAdderMethod($instance, $key)) {
-                foreach ($generatedVal as $rel) {
-                    $rel = $this->checkTypeHints($instance, $method, $rel);
-                    $instance->{$method}($rel);
-                }
-            } elseif (isset($customSetter)) {
-                $instance->$customSetter($key, $generatedVal);
-                $variables[$key] = $generatedVal;
-            } elseif (is_array($generatedVal) && method_exists($instance, $key)) {
-                foreach ($generatedVal as $num => $param) {
-                    $generatedVal[$num] = $this->checkTypeHints($instance, $key, $param, $num);
-                }
-                call_user_func_array(array($instance, $key), $generatedVal);
-                $variables[$key] = $generatedVal;
-            } elseif (method_exists($instance, 'set'.$key)) {
-                $generatedVal = $this->checkTypeHints($instance, 'set'.$key, $generatedVal);
-                if(!is_callable(array($instance, 'set'.$key))) {
-                    $refl = new \ReflectionMethod($instance, 'set'.$key);
-                    $refl->setAccessible(true);
-                    $refl->invoke($instance, $generatedVal);
+                    $this->uniqueValues[$class . $key][$valHash] = true;
                 } else {
-                    $instance->{'set'.$key}($generatedVal);
+                    $generatedVal = $this->process($val, $variables);
                 }
-                $variables[$key] = $generatedVal;
-            } elseif (property_exists($instance, $key)) {
-                $refl = new \ReflectionProperty($instance, $key);
-                $refl->setAccessible(true);
-                $refl->setValue($instance, $generatedVal);
 
-                $variables[$key] = $generatedVal;
-            } else {
-                throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
+                // add relations if available
+                if (is_array($generatedVal) && $method = $this->findAdderMethod($instance, $key)) {
+                    foreach ($generatedVal as $rel) {
+                        $rel = $this->checkTypeHints($instance, $method, $rel);
+                        $instance->{$method}($rel);
+                    }
+                } elseif (isset($customSetter)) {
+                    $instance->$customSetter($key, $generatedVal);
+                    $variables[$key] = $generatedVal;
+                } elseif (is_array($generatedVal) && method_exists($instance, $key)) {
+                    foreach ($generatedVal as $num => $param) {
+                        $generatedVal[$num] = $this->checkTypeHints($instance, $key, $param, $num);
+                    }
+                    call_user_func_array(array($instance, $key), $generatedVal);
+                    $variables[$key] = $generatedVal;
+                } elseif (method_exists($instance, 'set'.$key)) {
+                    $generatedVal = $this->checkTypeHints($instance, 'set'.$key, $generatedVal);
+                    if(!is_callable(array($instance, 'set'.$key))) {
+                        $refl = new \ReflectionMethod($instance, 'set'.$key);
+                        $refl->setAccessible(true);
+                        $refl->invoke($instance, $generatedVal);
+                    } else {
+                        $instance->{'set'.$key}($generatedVal);
+                    }
+                    $variables[$key] = $generatedVal;
+                } elseif (property_exists($instance, $key)) {
+                    $refl = new \ReflectionProperty($instance, $key);
+                    $refl->setAccessible(true);
+                    $refl->setValue($instance, $generatedVal);
+
+                    $variables[$key] = $generatedVal;
+                } else {
+                    throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
+                }
+            } catch (MissingReferenceException $e) {
+                $instanceData = array($instance, $class, $name, $data, $classFlags, $instanceFlags, $curValue, $e);
+                $this->incompleteInstances[] = $instanceData;
             }
         }
 
@@ -672,6 +686,7 @@ class Base implements LoaderInterface
         if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i', $data, $matches)) {
             $multi    = ('' !== $matches['multi']) ? $matches['multi'] : null;
             $property = isset($matches['property']) ? $matches['property'] : null;
+
             if (strpos($matches['reference'], '*')) {
                 $data = $this->getRandomReferences($matches['reference'], $multi, $property);
             } else {
@@ -681,6 +696,10 @@ class Base implements LoaderInterface
 
                 $data = $this->getReference($matches['reference'], $property);
             }
+
+            if ($this->refersToPersistedId($matches['reference'], $property, $data)) {
+                throw new MissingReferenceException('Reference to ' . $matches['reference'] . '->' . $matches['property'] . ' is in the same file and is null so it has been deferred', MissingReferenceException::DEFERRED);
+            }
         }
 
         // unescape at-signs
@@ -689,6 +708,11 @@ class Base implements LoaderInterface
         }
 
         return $data;
+    }
+
+    protected function refersToPersistedId($reference, $property, $data)
+    {
+        return in_array($reference, $this->currentLoadReferences) && is_null($data);
     }
 
     private function getRandomReferences($mask, $count = 1, $property = null)

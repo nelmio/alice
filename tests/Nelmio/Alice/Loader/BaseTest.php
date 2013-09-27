@@ -775,6 +775,68 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($category1, $topic1->parentCategory);
     }
 
+    public function testDeferredReference()
+    {
+        $res = $this->loadData(array(
+            self::CATEGORY => array(
+                'category' => array(
+                    'description' => 'category 1',
+                ),
+            ),
+        ));
+
+        $category = $this->loader->getReference('category');
+        $this->assertInstanceOf(self::CATEGORY, $category);
+        $this->assertEmpty($category->id);
+
+        $this->orm->persist($res);
+        $this->assertNotEmpty($category->id);
+
+        $res = $this->loader->load(array(
+            self::TOPIC => array(
+                'topic' => array(
+                    'subject' => 'Child Topic',
+                    'parentCategory' => '@category->id',
+                ),
+            ),
+        ));
+
+        $topic = $this->loader->getReference('topic');
+        $this->assertInstanceOf(self::TOPIC, $topic);
+        $this->assertNotEmpty($topic->parentCategory);
+    }
+
+    public function testDeferredReferenceSameFile()
+    {
+        $res = $this->loadData(array(
+            self::TOPIC => array(
+                'topicParent' => array(
+                    'subject' => 'Parent Topic',
+                ),
+                'topicChild' => array(
+                    'subject' => 'Child Topic',
+                    'parentTopicId' => '@topicParent->id',
+                ),
+            ),
+        ));
+
+        $topicParent = $this->loader->getReference('topicParent');
+        $this->assertInstanceOf(self::TOPIC, $topicParent);
+        $this->assertEmpty($topicParent->id);
+
+        $topicChild = $this->loader->getReference('topicChild');
+        $this->assertInstanceOf(self::TOPIC, $topicChild);
+        $this->assertEmpty($topicChild->parentTopicId);
+
+        $this->assertCount(1, $this->loader->getIncompleteInstances());
+
+        $this->orm->persist($res);
+
+        $this->loader->load();
+        $this->assertNotEmpty($topicParent->id);
+        $this->assertNotEmpty($topicChild->parentTopicId);
+    }
+
     public function testLoadCreatesEnumsOfObjects()
     {
         $res = $this->loadData(array(

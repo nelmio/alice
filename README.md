@@ -103,7 +103,21 @@ Since an exception will no longer be thrown on unmet references, you
 will need to call `getIncompleteInstances()` at the end of your
 fixture loading run to see if you have any such fixtures.
 
-#### Persisting of incomplete object trees ####
+### Deferred Referencing ###
+
+If a fixture references a property of a fixture defined in the same
+file, instantiation of that object will be deferred until the referred
+to object has been persisted. (The assumption is that the data you are
+trying to reference is some sort of entity id).
+
+After the first persist you could then run `Base::load()` to process
+the incomplete instances to fill in the blanks and then you can
+persist them again.
+
+If you require a more stringent definition of what fields qualify you
+may override `Base::refersToPersistedId($reference, $property, $data)`
+
+#### Persisting of Incomplete Object Trees ####
 
 When using this feature you might get an error such as:
 
