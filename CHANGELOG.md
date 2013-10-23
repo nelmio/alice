@@ -17,7 +17,7 @@
   * Added ProcessorInterface to be able to modify objects before they get persisted
   * Fixed cross-file references, everything is now persisted at once
   * Fixed self-referencing of objects
-  * glob patterns now accept braces
+  * glob patterns now accept braces (http://php.net/manual/en/function.glob.php)
 
 ### 1.4.0 (2013-04-15)
 
