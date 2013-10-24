@@ -5,6 +5,7 @@ namespace Nelmio\Alice\fixtures;
 class Group
 {
     private $name;
+    private $sortName;
     private $owner;
     private $members = array();
     private $creationDate;
@@ -21,6 +22,15 @@ class Group
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function getSortName()
+    {
+        return $this->sortName;
+    }
+
+    protected function setSortName($sortName) {
+        $this->sortName = $sortName;
     }
 
     public function getOwner()
