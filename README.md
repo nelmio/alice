@@ -11,7 +11,7 @@ if needed.
 
 This is installable via [Composer](https://getcomposer.org/) as [nelmio/alice](https://packagist.org/packages/nelmio/alice).
 
-To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://github.com/hautelook/AliceBundle) package instead.
+To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://github.com/hautelook/AliceBundle) or [h4cc/alice-fixtures-bundle](https://github.com/h4cc/AliceFixturesBundle) package instead.
 
 ## Table of Contents
 
