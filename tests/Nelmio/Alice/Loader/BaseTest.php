@@ -131,6 +131,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('group', $group->getName());
     }
 
+    public function testLoadAssignsDataToNonPublicSetters()
+    {
+        $res = $this->loadData(array(
+            self::GROUP => array(
+                'a' => array(
+                    'sortName' => 'group'
+                ),
+            ),
+        ));
+
+        $group = $res[0];
+        $this->assertEquals('group', $group->getSortName());
+    }
+
     public function testLoadAddsReferencesToAdders()
     {
         $res = $this->loadData(array(

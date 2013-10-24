@@ -344,7 +344,13 @@ class Base implements LoaderInterface
                 $variables[$key] = $generatedVal;
             } elseif (method_exists($instance, 'set'.$key)) {
                 $generatedVal = $this->checkTypeHints($instance, 'set'.$key, $generatedVal);
-                $instance->{'set'.$key}($generatedVal);
+                if(!is_callable(array($instance, 'set'.$key))) {
+                    $refl = new \ReflectionMethod($instance, 'set'.$key);
+                    $refl->setAccessible(true);
+                    $refl->invoke($instance, $generatedVal);
+                } else {
+                    $instance->{'set'.$key}($generatedVal);
+                }
                 $variables[$key] = $generatedVal;
             } elseif (property_exists($instance, $key)) {
                 $refl = new \ReflectionProperty($instance, $key);
