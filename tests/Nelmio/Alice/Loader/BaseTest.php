@@ -852,6 +852,43 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             $this->loader->getReference('contact2')->getUser()
         );
     }
+
+    public function testCustomSetFunction()
+    {
+        $this->loadData(
+            array(
+                self::USER => array(
+                    'user' => array(
+                        'username' => 'foo',
+                        'fullname' => 'foo bar',
+                        '__set' => 'customSetter'
+                    )
+                )
+            )
+        );
+
+        $this->assertEquals('foo set by custom setter', $this->loader->getReference('user')->username);
+        $this->assertEquals('foo bar set by custom setter', $this->loader->getReference('user')->fullname);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Setter customNonexistantSetter not found in object
+     */
+    public function testCustomNonexistantSetFunction()
+    {
+        $this->loadData(
+            array(
+                self::USER => array(
+                    'user' => array(
+                        'username' => 'foo',
+                        'fullname' => 'foo bar',
+                        '__set' => 'customNonexistantSetter'
+                    )
+                )
+            )
+        );
+    }
 }
 
 class FakerProvider

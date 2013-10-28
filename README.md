@@ -31,6 +31,7 @@ To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://g
   - [Variables](#variables)
   - [Value Objects](#value-objects)
   - [Custom Faker Data Providers](#custom-faker-data-providers)
+  - [Custom Setter](#custom-setter)
   - [Complete Sample](#complete-sample)
 
 ## Usage ##
@@ -493,6 +494,26 @@ there are two ways to solve the problem:
    ```
 
    That way you can now use `name: <groupName()>` to generate specific group names.
+
+### Custom Setter ###
+
+In case, you want to specify a custom function that will be used to set all the values,
+you can specify a `__set` value:
+
+```yaml
+Nelmio\Data\Geopoint:
+    geo1:
+        __set: customSetter
+        foo: bar
+```
+
+When the objects are populated, the `customSetter` function will be called, with the first parameter
+being the `key`, the second one being the `value` (so similar to the magic PHP setter). In the above
+example, the following call will be made on the instance when populating:
+
+```php
+$geopoint->customSetter('foo', 'bar');
+```
 
 ### Complete Sample ###
 
