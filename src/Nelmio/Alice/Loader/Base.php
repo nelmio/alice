@@ -299,6 +299,15 @@ class Base implements LoaderInterface
     private function populateObject($instance, $class, $name, $data)
     {
         $variables = array();
+
+        if (isset($data['__set'])) {
+            if (!method_exists($instance, $data['__set'])) {
+                throw new \RuntimeException('Setter ' . $data['__set'] . ' not found in object');
+            }
+            $customSetter = $data['__set'];
+            unset($data['__set']);
+        }
+
         foreach ($data as $key => $val) {
             list($key, $flags) = $this->parseFlags($key);
             if (is_array($val) && '{' === key($val)) {
@@ -336,6 +345,8 @@ class Base implements LoaderInterface
                     $rel = $this->checkTypeHints($instance, $method, $rel);
                     $instance->{$method}($rel);
                 }
+            } elseif (isset($customSetter)) {
+                $instance->$customSetter($key, $generatedVal);
             } elseif (is_array($generatedVal) && method_exists($instance, $key)) {
                 foreach ($generatedVal as $num => $param) {
                     $generatedVal[$num] = $this->checkTypeHints($instance, $key, $param, $num);

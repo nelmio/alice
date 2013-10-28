@@ -27,4 +27,9 @@ class User
     {
         $this->username = $arg;
     }
+
+    public function customSetter($key, $value)
+    {
+        $this->$key = $value . ' set by custom setter';
+    }
 }
