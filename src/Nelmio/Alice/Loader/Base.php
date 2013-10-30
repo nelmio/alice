@@ -395,7 +395,26 @@ class Base implements LoaderInterface
                     return $this->references[$name] = $reflClass->newInstanceWithoutConstructor();
                 }
 
-                if (!is_array($args)) {
+                /**
+                 * Sequential arrays call the constructor, hashes call a static method
+                 *
+                 * array('foo', 'bar') => new $class('foo', 'bar')
+                 * array('foo' => array('bar')) => $class::foo('bar')
+                 */
+                if (is_array($args)) {
+                    $constructor = '__construct';
+                    list($index, $values) = each($args);
+                    if ($index !== 0) {
+                        if (!is_array($values)) {
+                            throw new \UnexpectedValueException("The static '$index' call in object '$name' must be given an array");
+                        }
+                        if (!is_callable(array($class, $index))) {
+                            throw new \UnexpectedValueException("Cannot call static method '$index' on class '$class' as a constructor for object '$name'");
+                        }
+                        $constructor = $index;
+                        $args = $values;
+                    }
+                } else {
                     throw new \UnexpectedValueException('The __construct call in object '.$name.' must be defined as an array of arguments or false to bypass it');
                 }
 
@@ -403,10 +422,19 @@ class Base implements LoaderInterface
                 $reflClass = new \ReflectionClass($class);
                 $args = $this->process($args, array());
                 foreach ($args as $num => $param) {
-                    $args[$num] = $this->checkTypeHints($class, '__construct', $param, $num);
+                    $args[$num] = $this->checkTypeHints($class, $constructor, $param, $num);
                 }
 
-                return $this->references[$name] = $reflClass->newInstanceArgs($args);
+                if ($constructor === '__construct') {
+                    $instance = $reflClass->newInstanceArgs($args);
+                } else {
+                    $instance = forward_static_call_array(array($class, $constructor), $args);
+                    if (!($instance instanceof $class)) {
+                        throw new \UnexpectedValueException("The static constructor '$constructor' for object '$name' returned an object that is not an instance of '$class'");
+                    }
+                }
+
+                return $this->references[$name] = $instance;
             }
 
             // call the constructor if it contains optional params only

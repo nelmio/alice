@@ -211,6 +211,15 @@ Nelmio\Entity\User:
         __construct: [<username()>]
 ```
 
+If you want to call a static method, instead of a constructor, you can specify
+a hash as the constructor:
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        __construct: { create: [<username()>] }
+```
+
 If you specify `false` in place of constructor arguments, Alice will
 instantiate the object without executing the constructor:
 
