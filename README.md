@@ -211,8 +211,8 @@ Nelmio\Entity\User:
         __construct: [<username()>]
 ```
 
-If you want to call a static method, instead of a constructor, you can specify
-a hash as the constructor:
+If you want to call a static factory method instead of a constructor, you can
+specify a hash as the constructor:
 
 ```yaml
 Nelmio\Entity\User:
