@@ -711,6 +711,61 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testLoadCallsStaticConstructorIfProvided()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('create' => array('alice')),
+                ),
+            ),
+        ));
+        $this->assertInstanceOf(self::USER, $res[0]);
+        $this->assertSame('alice', $res[0]->username);
+    }
+
+    /**
+     * @expectedException UnexpectedValueException
+     * @expectedExceptionMessage
+     */
+    public function testLoadFailsOnInvalidStaticConstructor() {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('invalidMethod' => array('alice@example.com')),
+                ),
+            ),
+        ));
+    }
+
+    /**
+     * @expectedException UnexpectedValueException
+     * @expectedExceptionMessage
+     */
+    public function testLoadFailsOnScalarStaticConstructorArgs() {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('create' => 'alice@example.com'),
+                ),
+            ),
+        ));
+    }
+
+    /**
+     * @expectedException UnexpectedValueException
+     * @expectedExceptionMessage
+     */
+    public function testLoadFailsIfStaticMethodDoesntReturnAnInstance() {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('bogusCreate' => array('alice@example.com')),
+                ),
+            ),
+        ));
+    }
+
     public function testLoadCallsCustomMethodAfterCtor()
     {
         $res = $this->loadData(array(
