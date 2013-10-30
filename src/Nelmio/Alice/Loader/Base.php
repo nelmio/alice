@@ -140,7 +140,7 @@ class Base implements LoaderInterface
                         $curName = str_replace($match[0], $i, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
                         $this->currentValue = $i;
-                        $instances[] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
+                        $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
                         $this->currentValue = null;
                     }
                 } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
@@ -150,19 +150,19 @@ class Base implements LoaderInterface
                         $curName = str_replace($match[0], $item, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
                         $this->currentValue = $item;
-                        $instances[] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
+                        $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
                         $this->currentValue = null;
                     }
                 } else {
                     list($name, $instanceFlags) = $this->parseFlags($name);
-                    $instances[] = array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null);
+                    $instances[$name] = array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null);
                 }
             }
         }
 
         // populate instances
         $objects = array();
-        foreach ($instances as $instanceData) {
+        foreach ($instances as $instanceName => $instanceData) {
             list($instance, $class, $name, $spec, $classFlags, $instanceFlags, $curValue) = $instanceData;
 
             $this->currentValue = $curValue;
@@ -171,7 +171,7 @@ class Base implements LoaderInterface
 
             // add the object in the object store unless it's local
             if (!isset($classFlags['local']) && !isset($instanceFlags['local'])) {
-                $objects[] = $instance;
+                $objects[$instanceName] = $instance;
             }
         }
 

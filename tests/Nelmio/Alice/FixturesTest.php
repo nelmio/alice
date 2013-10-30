@@ -23,7 +23,8 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     {
         $om = $this->getDoctrineManagerMock(14);
         $objects = Fixtures::load(__DIR__.'/fixtures/complete.yml', $om, array('providers' => array($this)));
-
+		$objects = array_values($objects);
+		
         $this->assertCount(14, $objects);
 
         $user = $objects[0];
@@ -247,9 +248,10 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             ),
 
         ), $om);
-
+		$objects = array_values($objects);
+        
         $this->assertCount(2, $objects);
-
+		
         $user = $objects[0];
         $this->assertInstanceOf(self::USER, $user);
         $this->assertEquals('johnny', $user->username);
@@ -261,7 +263,8 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $om = $this->getDoctrineManagerMock(2);
 
         $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om);
-
+		$objects = array_values($objects);
+        
         $this->assertCount(2, $objects);
 
         $user = $objects[0];
