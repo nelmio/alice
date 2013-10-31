@@ -23,24 +23,23 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     {
         $om = $this->getDoctrineManagerMock(14);
         $objects = Fixtures::load(__DIR__.'/fixtures/complete.yml', $om, array('providers' => array($this)));
-		$objects = array_values($objects);
-		
+
         $this->assertCount(14, $objects);
 
-        $user = $objects[0];
+        $user = $objects['user0'];
         $this->assertInstanceOf(self::USER, $user);
         $this->assertEquals('johnny', $user->username);
         $this->assertEquals(42, $user->favoriteNumber);
 
-        $user = $objects[0];
-        $group = $objects[12];
+        $user = $objects['user0'];
+        $group = $objects['group0'];
         $this->assertSame($user, $group->getOwner());
 
-        $lastGroup = end($objects);
+        $lastGroup = $objects['group1'];
         $this->assertInstanceOf(self::GROUP, $lastGroup);
         $this->assertCount(3, $lastGroup->getMembers());
 
-        $contact = $objects[11];
+        $contact = $objects['contact0'];
         $this->assertInstanceOf(self::CONTACT, $contact);
         $this->assertSame($user, $contact->getUser());
         $this->assertSame($lastGroup->contactPerson, $contact->getUser());
@@ -248,11 +247,10 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             ),
 
         ), $om);
-		$objects = array_values($objects);
-        
+
         $this->assertCount(2, $objects);
-		
-        $user = $objects[0];
+
+        $user = $objects['user1'];
         $this->assertInstanceOf(self::USER, $user);
         $this->assertEquals('johnny', $user->username);
         $this->assertEquals(42, $user->favoriteNumber);
@@ -263,11 +261,10 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $om = $this->getDoctrineManagerMock(2);
 
         $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om);
-		$objects = array_values($objects);
-        
+
         $this->assertCount(2, $objects);
 
-        $user = $objects[0];
+        $user = $objects['user1'];
         $this->assertInstanceOf(self::USER, $user);
         $this->assertEquals('johnny', $user->username);
         $this->assertEquals(42, $user->favoriteNumber);

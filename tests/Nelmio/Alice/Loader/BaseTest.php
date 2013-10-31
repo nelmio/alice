@@ -51,9 +51,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 'bob' => array(),
             ),
         ));
-		$res = array_values($res);
-        $user = $res[0];
-        
+        $user = $res['bob'];
+
         $this->assertInstanceOf(self::USER, $user);
     }
 
@@ -64,9 +63,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 'bob' => array(),
             ),
         ));
-		$res = array_values($res);
-        $user = $res[0];
-        
+        $user = $res['bob'];
+
         $this->assertSame($user, $this->loader->getReference('bob'));
     }
 
@@ -101,9 +99,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 'bob' => array(),
             ),
         ));
-		$references = array_values($this->loader->getReferences());
-		
-        $this->assertSame($res['bob'], $references[0]);
+        $references = $this->loader->getReferences();
+
+        $this->assertSame($res['bob'], $references['bob']);
     }
 
     public function testLoadAssignsDataToProperties()
@@ -115,9 +113,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
-		$user = $res[0];
-		
+        $user = $res['bob'];
+
         $this->assertEquals('bob', $user->username);
     }
 
@@ -130,9 +127,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-		$res = array_values($res);
-        $group = $res[0];
-        
+        $group = $res['a'];
+
         $this->assertEquals('group', $group->getName());
     }
 
@@ -145,9 +141,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-		$res = array_values($res);
-        $group = $res[0];
-        
+        $group = $res['a'];
+
         $this->assertEquals('group', $group->getSortName());
     }
 
@@ -160,9 +155,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-		$res = array_values($res);
-        $group = $res[0];
-        
+        $group = $res['a'];
+
         $this->assertSame($user, current($group->getMembers()));
     }
 
@@ -180,9 +174,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
-        $group = $res[1];
-        
+        $group = $res['a'];
+
         $this->assertInstanceOf(self::USER, current($group->getMembers()));
         $this->assertEquals('alice', current($group->getMembers())->username);
     }
@@ -199,12 +192,11 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         ));
-		$res = array_values($res);
-		
-        $this->assertInstanceOf(self::USER, $res[0]);
-        $this->assertInstanceOf(self::USER, $res[1]);
-        $this->assertEquals('alice', $res[0]->username);
-        $this->assertEquals($res[0]->username, $res[1]->username);
+
+        $this->assertInstanceOf(self::USER, $res['user1']);
+        $this->assertInstanceOf(self::USER, $res['user2']);
+        $this->assertEquals('alice', $res['user1']->username);
+        $this->assertEquals($res['user1']->username, $res['user2']->username);
     }
 
     public function testLoadParsesPropertyReferencesGetter()
@@ -219,11 +211,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         ));
-		$res = array_values($res);
-		
-        $this->assertInstanceOf(self::USER, $res[0]);
-        $this->assertInstanceOf(self::USER, $res[1]);
-        $this->assertEquals($res[0]->getAge(), $res[1]->favoriteNumber);
+
+        $this->assertInstanceOf(self::USER, $res['user1']);
+        $this->assertInstanceOf(self::USER, $res['user2']);
+        $this->assertEquals($res['user1']->getAge(), $res['user2']->favoriteNumber);
     }
 
     /**
@@ -258,9 +249,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
-        $group = $res[1];
-        
+        $group = $res['a'];
+
         $this->assertInstanceOf(self::USER, $group->getOwner());
         $this->assertEquals('bob', $group->getOwner()->username);
     }
@@ -297,9 +287,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
-        $group = $res[1];
-        
+        $group = $res['a'];
+
         $this->assertEquals('bob@gmail.com', $group->getContactEmail());
     }
 
@@ -351,9 +340,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-		$res = array_values($res);
-        $group = $res[1];
-        
+        $group = $res['a'];
+
         $this->assertCount(1, $group->getMembers());
     }
 
@@ -419,11 +407,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertInstanceOf('DateTime', $res[0]->getCreationDate());
-        $this->assertEquals('2012-01-05', $res[0]->getCreationDate()->format('Y-m-d'));
-        $this->assertInstanceOf('DateTime', $res[1]->getCreationDate());
+        $this->assertInstanceOf('DateTime', $res['group0']->getCreationDate());
+        $this->assertEquals('2012-01-05', $res['group0']->getCreationDate()->format('Y-m-d'));
+        $this->assertInstanceOf('DateTime', $res['group1']->getCreationDate());
     }
 
     public function testLoadParsesFakerData()
@@ -435,10 +422,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-		$res = array_values($res);
-		
-        $this->assertNotEquals('<firstName()>', $res[0]->username);
-        $this->assertNotEmpty($res[0]->username);
+
+        $this->assertNotEquals('<firstName()>', $res['user0']->username);
+        $this->assertNotEmpty($res['user0']->username);
     }
 
     public function testLoadParsesFakerDataMultiple()
@@ -450,10 +436,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertNotEquals('<firstName()> <lastName()>', $res[0]->username);
-        $this->assertRegExp('{^[\w\']+ [\w\']+$}i', $res[0]->username);
+        $this->assertNotEquals('<firstName()> <lastName()>', $res['user0']->username);
+        $this->assertRegExp('{^[\w\']+ [\w\']+$}i', $res['user0']->username);
     }
 
     public function testLoadParsesFakerDataWithArgs()
@@ -465,11 +450,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertInstanceOf('DateTime', $res[0]->username);
-        $this->assertGreaterThanOrEqual(strtotime("yesterday"), $res[0]->username->getTimestamp());
-        $this->assertLessThanOrEqual(strtotime("tomorrow"), $res[0]->username->getTimestamp());
+        $this->assertInstanceOf('DateTime', $res['user0']->username);
+        $this->assertGreaterThanOrEqual(strtotime("yesterday"), $res['user0']->username->getTimestamp());
+        $this->assertLessThanOrEqual(strtotime("tomorrow"), $res['user0']->username->getTimestamp());
     }
 
     public function testLoadParsesFakerDataWithPhpArgs()
@@ -481,11 +465,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertInstanceOf('DateTime', $res[0]->username);
-        $this->assertGreaterThanOrEqual(strtotime("yesterday"), $res[0]->username->getTimestamp());
-        $this->assertLessThanOrEqual(strtotime("tomorrow"), $res[0]->username->getTimestamp());
+        $this->assertInstanceOf('DateTime', $res['user0']->username);
+        $this->assertGreaterThanOrEqual(strtotime("yesterday"), $res['user0']->username->getTimestamp());
+        $this->assertLessThanOrEqual(strtotime("tomorrow"), $res['user0']->username->getTimestamp());
     }
 
     public function testLoadParsesVariables()
@@ -498,11 +481,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertInstanceOf('DateTime', $res[0]->fullname);
-        $this->assertGreaterThanOrEqual(strtotime("-20days"), $res[0]->username->getTimestamp());
-        $this->assertLessThanOrEqual(strtotime("-9days"), $res[0]->fullname->getTimestamp());
+        $this->assertInstanceOf('DateTime', $res['user0']->fullname);
+        $this->assertGreaterThanOrEqual(strtotime("-20days"), $res['user0']->username->getTimestamp());
+        $this->assertLessThanOrEqual(strtotime("-9days"), $res['user0']->fullname->getTimestamp());
     }
 
     public function testLoadParsesFakerDataWithLocale()
@@ -514,9 +496,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertRegExp('{^\d{3} \d{3} \d{3}$}', $res[0]->username);
+        $this->assertRegExp('{^\d{3} \d{3} \d{3}$}', $res['user0']->username);
     }
 
     /**
@@ -603,14 +584,14 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-		//var_dump($res);
+
         $this->assertCount(3, $res);
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user_alice'));
-        $this->assertEquals('alice', $this->loader->getReference('user_alice')->username);
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user_bob'));
-        $this->assertEquals('bob', $this->loader->getReference('user_bob')->username);
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user_foo bar'));
-        $this->assertEquals('foo bar', $this->loader->getReference('user_foo bar')->username);
+        $this->assertInstanceOf(self::USER, $res['user_alice']);
+        $this->assertEquals('alice', $res['user_alice']->username);
+        $this->assertInstanceOf(self::USER, $res['user_bob']);
+        $this->assertEquals('bob', $res['user_bob']->username);
+        $this->assertInstanceOf(self::USER, $res['user_foo bar']);
+        $this->assertEquals('foo bar', $res['user_foo bar']->username);
     }
 
     public function testLocalObjectsAreNotReturned()
@@ -741,10 +722,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
-        
-        $this->assertInstanceOf(self::USER, $res[0]);
-        $this->assertSame('alice', $res[0]->username);
+
+        $this->assertInstanceOf(self::USER, $res['user']);
+        $this->assertSame('alice', $res['user']->username);
     }
 
     /**
@@ -799,11 +779,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertInstanceOf(self::USER, $res[0]);
-        $this->assertSame('bob', $res[0]->username);
-        $this->assertSame('alice@example.com', $res[0]->email);
+        $this->assertInstanceOf(self::USER, $res['user']);
+        $this->assertSame('bob', $res['user']->username);
+        $this->assertSame('alice@example.com', $res['user']->email);
     }
 
     public function testConstructorCustomProviders()
@@ -816,9 +795,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertEquals('foo', $res[0]->username);
+        $this->assertEquals('foo', $res['user0']->username);
     }
 
     public function testLoadCallsCustomMethodWithMultipleArgumentsAndCustomProviders()
@@ -831,11 +809,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertInstanceOf(self::USER, $res[0]);
-        $this->assertSame('foo', $res[0]->username);
-        $this->assertSame('foo@example.com', $res[0]->email);
+        $this->assertInstanceOf(self::USER, $res['user']);
+        $this->assertSame('foo', $res['user']->username);
+        $this->assertSame('foo@example.com', $res['user']->email);
     }
 
     public function testLoadCallsConstructorWithHintedParams()
@@ -848,10 +825,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         ));
-        $res = array_values($res);
 
-        $this->assertInstanceOf(self::USER, $res[0]);
-        $this->assertInstanceOf('DateTime', $res[0]->birthDate);
+        $this->assertInstanceOf(self::USER, $res['user']);
+        $this->assertInstanceOf('DateTime', $res['user']->birthDate);
     }
 
     public function testGeneratedValuesAreUnique()
