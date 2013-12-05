@@ -347,13 +347,13 @@ class Base implements LoaderInterface
                 }
             } elseif (isset($customSetter)) {
                 $instance->$customSetter($key, $generatedVal);
-            } elseif (is_array($generatedVal) && method_exists($instance, $key)) {
+            } elseif (is_array($generatedVal) && (method_exists($instance, $key) || is_callable(array($instance, $key))) {
                 foreach ($generatedVal as $num => $param) {
                     $generatedVal[$num] = $this->checkTypeHints($instance, $key, $param, $num);
                 }
                 call_user_func_array(array($instance, $key), $generatedVal);
                 $variables[$key] = $generatedVal;
-            } elseif (method_exists($instance, 'set'.$key)) {
+            } elseif (method_exists($instance, 'set'.$key) || is_callable(array($instance, 'set'.$key)) {
                 $generatedVal = $this->checkTypeHints($instance, 'set'.$key, $generatedVal);
                 if(!is_callable(array($instance, 'set'.$key))) {
                     $refl = new \ReflectionMethod($instance, 'set'.$key);
@@ -363,7 +363,7 @@ class Base implements LoaderInterface
                     $instance->{'set'.$key}($generatedVal);
                 }
                 $variables[$key] = $generatedVal;
-            } elseif (property_exists($instance, $key)) {
+            } elseif (property_exists($instance, $key) || isset($instance->{$key})) {
                 $refl = new \ReflectionProperty($instance, $key);
                 $refl->setAccessible(true);
                 $refl->setValue($instance, $generatedVal);
