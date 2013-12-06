@@ -20,7 +20,7 @@ use Nelmio\Alice\ORMInterface;
 class Doctrine implements ORMInterface
 {
     protected $om;
-    private $flush;
+    protected $flush;
 
     public function __construct(ObjectManager $om, $doFlush = true)
     {
