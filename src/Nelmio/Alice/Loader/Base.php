@@ -347,6 +347,7 @@ class Base implements LoaderInterface
                 }
             } elseif (isset($customSetter)) {
                 $instance->$customSetter($key, $generatedVal);
+                $variables[$key] = $generatedVal;
             } elseif (is_array($generatedVal) && method_exists($instance, $key)) {
                 foreach ($generatedVal as $num => $param) {
                     $generatedVal[$num] = $this->checkTypeHints($instance, $key, $param, $num);
