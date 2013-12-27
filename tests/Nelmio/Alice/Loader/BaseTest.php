@@ -22,6 +22,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     const CONTACT = 'Nelmio\Alice\fixtures\Contact';
 
     protected $orm;
+
+    /**
+     * @var \Nelmio\Alice\Loader\Base
+     */
     protected $loader;
 
     protected function loadData(array $data, array $options = array())
@@ -913,20 +917,27 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testCustomSetFunction()
     {
-        $this->loadData(
+        $loader = $this->createLoader(
+            array(
+                'providers' => array(new FakerProvider())
+            )
+        );
+        $loader->load(
             array(
                 self::USER => array(
                     'user' => array(
                         'username' => 'foo',
                         'fullname' => 'foo bar',
-                        '__set' => 'customSetter'
+                        '__set' => 'customSetter',
+                        'test_variable' => '<noop($username)>',
                     )
                 )
             )
         );
 
-        $this->assertEquals('foo set by custom setter', $this->loader->getReference('user')->username);
-        $this->assertEquals('foo bar set by custom setter', $this->loader->getReference('user')->fullname);
+        $this->assertEquals('foo set by custom setter', $loader->getReference('user')->username);
+        $this->assertEquals('foo bar set by custom setter', $loader->getReference('user')->fullname);
+        $this->assertEquals('foo set by custom setter', $loader->getReference('user')->test_variable);
     }
 
     /**
@@ -959,5 +970,10 @@ class FakerProvider
     public function randomNumber()
     {
         return mt_rand(0, 9);
+    }
+
+    public function noop($str)
+    {
+        return $str;
     }
 }
