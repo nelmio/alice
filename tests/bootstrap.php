@@ -7,6 +7,8 @@ function includeIfExists($file)
     }
 }
 
+date_default_timezone_set('UTC');
+
 if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))) {
     echo 'You must set up the project dependencies, run the following commands:'.PHP_EOL.
         'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
