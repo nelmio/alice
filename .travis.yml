@@ -10,7 +10,3 @@ before_script:
   - composer install --prefer-source
 
 script: vendor/bin/phpunit
-
-matrix:
-  allow_failures:
-    - php: hhvm
