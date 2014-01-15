@@ -549,7 +549,7 @@ class Base implements LoaderInterface
 
             // replace references to other variables in the same object
             $args = preg_replace_callback('{\{?\$([a-z0-9_]+)\}?}i', function ($match) use ($variables) {
-                if (isset($variables[$match[1]])) {
+                if (array_key_exists($match[1], $variables)) {
                     return '$variables['.var_export($match[1], true).']';
                 }
 
