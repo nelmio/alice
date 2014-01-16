@@ -958,6 +958,22 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    public function testNullVariable()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '0%? adrien',
+                    'fullname' => '<noop($username)>',
+                ),
+            ),
+        ));
+
+        $this->assertNull($loader->getReference('user')->username);
+        $this->assertNull($loader->getReference('user')->fullname);
+    }
 }
 
 class FakerProvider
