@@ -587,6 +587,11 @@ class Base implements LoaderInterface
             }
         }
 
+        // unescape at-signs
+        if (is_string($data) && false !== strpos($data, '\\')) {
+            $data = preg_replace('{\\\\([@\\\\])}', '$1', $data);
+        }
+
         return $data;
     }
 

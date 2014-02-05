@@ -974,6 +974,21 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($loader->getReference('user')->username);
         $this->assertNull($loader->getReference('user')->fullname);
     }
+
+    public function testAtLiteral()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('\\@<fooGenerator()> \\\\@foo \\\\\\@foo \\foo'),
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res['user']);
+        $this->assertSame('@foo \\@foo \\@foo \\foo', $res['user']->username);
+    }
 }
 
 class FakerProvider

@@ -349,6 +349,9 @@ Nelmio\Entity\Group:
         owner: <numberBetween(1, 200)>
 ```
 
+> **Note**: To create a string `@foo` that is not a reference you can escape it
+> as `\@foo`
+
 ### Multiple References ###
 
 If we want to also add group members, there are two ways to do this.
