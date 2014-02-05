@@ -556,6 +556,19 @@ class Base implements LoaderInterface
                 return $match[0];
             }, $args);
 
+            // replace references to other objects
+            $args = preg_replace_callback('{(?:\b|^)(?:(?<multi>\d+)x )?(?<!\\\\)@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?(?:\b|$)}i', function ($match) use ($that) {
+                $multi    = ('' !== $match['multi']) ? $match['multi'] : null;
+                $property = isset($match['property']) ? $match['property'] : null;
+                if (strpos($match['reference'], '*')) {
+                    return '$that->getRandomReferences(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
+                }
+                if (null !== $multi) {
+                    throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$match['multi'].'x @user*", otherwise you would always get only one item.');
+                }
+                return '$that->getReference(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
+            }, $args);
+
             $locale = var_export($matches['locale'], true);
             $name = var_export($matches['name'], true);
 

@@ -221,6 +221,23 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($res['user1']->getAge(), $res['user2']->favoriteNumber);
     }
 
+    public function testLoadParsesReferencesInFakerProviders()
+    {
+        $loader = new Base('en_US', array(new FakerProvider));
+        $res = $loader->load(array(
+            self::USER => array(
+                'bob' => array(
+                    'username' => 'Bob',
+                ),
+                'user' => array(
+                    'username' => '<noop(@bob)>',
+                ),
+            ),
+        ));
+
+        $this->assertEquals($res['bob'], $res['user']->username);
+    }
+
     /**
      * @expectedException UnexpectedValueException
      * @expectedExceptionMessage Property doesnotexist is not defined for reference user1
