@@ -84,6 +84,11 @@ class Base implements LoaderInterface
     private $logger;
 
     /**
+     * @var int
+     */
+    private $baseSeed = null;
+
+    /**
      * @param string $locale default locale to use with faker if none is
      *      specified in the expression
      * @param array $providers custom faker providers in addition to the default
@@ -97,7 +102,7 @@ class Base implements LoaderInterface
         $this->providers = $providers;
 
         if (is_numeric($seed)) {
-            mt_srand($seed);
+            $this->baseSeed = $seed;
         }
     }
 
@@ -138,6 +143,7 @@ class Base implements LoaderInterface
                     for ($i = $from; $i <= $to; $i++) {
                         $curSpec = $spec;
                         $curName = str_replace($match[0], $i, $name);
+                        $this->resetRandomSeed(array($curName));
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
                         $this->currentValue = $i;
                         $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
@@ -148,12 +154,14 @@ class Base implements LoaderInterface
                     foreach ($enumItems as $item) {
                         $curSpec = $spec;
                         $curName = str_replace($match[0], $item, $name);
+                        $this->resetRandomSeed(array($curName));
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
                         $this->currentValue = $item;
                         $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
                         $this->currentValue = null;
                     }
                 } else {
+                    $this->resetRandomSeed(array($name));
                     list($name, $instanceFlags) = $this->parseFlags($name);
                     $instances[$name] = array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null);
                 }
@@ -251,6 +259,12 @@ class Base implements LoaderInterface
         $this->references = $references;
     }
 
+    private function resetRandomSeed(array $descriptors)
+    {
+        $offset = hexdec(substr(md5(implode("-", $descriptors)), 0, 14));
+        mt_srand($this->baseSeed + $offset);
+    }
+
     private function emptyGenerators()
     {
         $this->generators = array();
@@ -310,6 +324,7 @@ class Base implements LoaderInterface
 
         foreach ($data as $key => $val) {
             list($key, $flags) = $this->parseFlags($key);
+            $this->resetRandomSeed(array($name, $key));
             if (is_array($val) && '{' === key($val)) {
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
