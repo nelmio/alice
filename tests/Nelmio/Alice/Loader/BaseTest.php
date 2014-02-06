@@ -994,6 +994,121 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $res['user']);
         $this->assertSame('@foo \\@foo \\@foo \\foo', $res['user']->username);
     }
+
+    public function testRandomDataUnchangedOnReload()
+    {
+        $res1 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                    'email'  => '<email()>'
+                )
+            )
+        ));
+
+        $res2 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                    'email'  => '<email()>'
+                )
+            )
+        ));
+
+        $this->assertEquals($res1['user']->email, $res2['user']->email);
+        $this->assertEquals($res1['user']->username, $res2['user']->username);
+    }
+
+    public function testRandomDataUnaffectedByFieldOrder()
+    {
+        $res1 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                    'email'  => '<email()>'
+                )
+            )
+        ));
+
+        # Order of fields flipped
+        $res2 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'email'  => '<email()>',
+                    'username' => '<username()>'
+                )
+            )
+        ));
+
+        $this->assertEquals($res1['user']->email, $res2['user']->email);
+        $this->assertEquals($res1['user']->username, $res2['user']->username);
+    }
+
+    public function testFieldRandomDataUnaffectedByEntityOrder()
+    {
+        $res1 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                )
+            ),
+            self::GROUP => array(
+                'group' => array(
+                    'name' => '<company()>'
+                )
+            )
+        ));
+
+        # Order of entities flipped
+        $res2 = $this->loadData(array(
+            self::GROUP => array(
+                'group' => array(
+                    'name' => '<company()>'
+                )
+            ),
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                )
+            )
+        ));
+
+        $this->assertEquals($res1['user']->username, $res2['user']->username);
+        $this->assertEquals($res1['group']->getName(), $res2['group']->getName());
+    }
+
+    public function testCtorRandomDataUnaffectedByEntityOrder()
+    {
+        $res1 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('<username()>')
+                )
+            ),
+            self::GROUP => array(
+                'group' => array(
+                    '__construct' => array('<company()>')
+                )
+            )
+        ));
+
+        # Order of entities flipped
+        $res2 = $this->loadData(array(
+            self::GROUP => array(
+                'group' => array(
+                    '__construct' => array('<company()>')
+                )
+            ),
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('<username()>')
+                )
+            )
+        ));
+
+        $this->assertEquals($res1['user']->username, $res2['user']->username);
+        $this->assertEquals($res1['group']->getName(), $res2['group']->getName());
+    }
 }
 
 class FakerProvider
