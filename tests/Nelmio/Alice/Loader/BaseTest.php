@@ -28,18 +28,17 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected $loader;
 
-    protected function loadData(array $data, array $options = array())
+    protected function loadData($data, array $options = array())
     {
-        $loader = $this->createLoader($options);
-
-        return $loader->load($data, $this->orm);
+        $this->createLoader($options);
+        return $this->loader->load($data, $this->orm);
     }
 
     protected function createLoader(array $options = array())
     {
         $defaults = array(
             'locale' => 'en_US',
-            'providers' => array(),
+            'providers' => array(new FakerProvider),
         );
         $options = array_merge($defaults, $options);
 
@@ -89,11 +88,14 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadInvalidFile()
     {
+        $exceptionCaught = false;
         try {
-            $res = $this->createLoader()->load($file = __DIR__.'/../fixtures/complete.yml');
+            $res = $this->loadData($file = __DIR__.'/../fixtures/complete.yml');
         } catch (\UnexpectedValueException $e) {
+            $exceptionCaught = true;
             $this->assertEquals('Included file "'.$file.'" must return an array of data', $e->getMessage());
         }
+        $this->assertTrue($exceptionCaught);
     }
 
     public function testGetReferences()
@@ -223,8 +225,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadParsesReferencesInFakerProviders()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
-        $res = $loader->load(array(
+        $res = $this->loadData(array(
             self::USER => array(
                 'bob' => array(
                     'username' => 'Bob',
@@ -808,8 +809,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorCustomProviders()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
-        $res = $loader->load(array(
+        $res = $this->loadData(array(
             self::USER => array(
                 'user0' => array(
                     'username' => '<fooGenerator()>',
@@ -822,8 +822,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadCallsCustomMethodWithMultipleArgumentsAndCustomProviders()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
-        $res = $loader->load(array(
+        $res = $this->loadData(array(
             self::USER => array(
                 'user' => array(
                     '__construct' => array('<fooGenerator()>', '<fooGenerator()>@example.com'),
@@ -838,8 +837,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadCallsConstructorWithHintedParams()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
-        $res = $loader->load(array(
+        $res = $this->loadData(array(
             self::USER => array(
                 'user' => array(
                     '__construct' => array(null, null, '<dateTimeBetween("-10years", "now")>'),
@@ -853,8 +851,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGeneratedValuesAreUnique()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
-        $res = $loader->load(array(
+        $res = $this->loadData(array(
             self::USER => array(
                 'user{0..9}' => array(
                     'username(unique)' => '<randomNumber()>',
@@ -872,8 +869,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGeneratedValuesAreUniqueAcrossAClass()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
-        $res = $loader->load(array(
+        $res = $this->loadData(array(
             self::USER => array(
                 'user{0..4}' => array(
                     'username(unique)' => '<randomNumber()>'
@@ -894,8 +890,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     public function testUniqueValuesException()
     {
-        $loader = new Base("en_US", array(new FakerProvider));
-        $res = $loader->load(array(
+        $res = $this->loadData(array(
             self::USER => array(
                 'user{0..1}' => array(
                     'username(unique)' => '<fooGenerator()>'
@@ -934,12 +929,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testCustomSetFunction()
     {
-        $loader = $this->createLoader(
-            array(
-                'providers' => array(new FakerProvider())
-            )
-        );
-        $loader->load(
+        $this->loadData(
             array(
                 self::USER => array(
                     'user' => array(
@@ -952,9 +942,9 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals('foo set by custom setter', $loader->getReference('user')->username);
-        $this->assertEquals('foo bar set by custom setter', $loader->getReference('user')->fullname);
-        $this->assertEquals('foo set by custom setter', $loader->getReference('user')->test_variable);
+        $this->assertEquals('foo set by custom setter', $this->loader->getReference('user')->username);
+        $this->assertEquals('foo bar set by custom setter', $this->loader->getReference('user')->fullname);
+        $this->assertEquals('foo set by custom setter', $this->loader->getReference('user')->test_variable);
     }
 
     /**
@@ -978,8 +968,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testNullVariable()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
-        $loader->load(array(
+        $this->loadData(array(
             self::USER => array(
                 'user' => array(
                     'username' => '0%? adrien',
@@ -988,14 +977,13 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             ),
         ));
 
-        $this->assertNull($loader->getReference('user')->username);
-        $this->assertNull($loader->getReference('user')->fullname);
+        $this->assertNull($this->loader->getReference('user')->username);
+        $this->assertNull($this->loader->getReference('user')->fullname);
     }
 
     public function testAtLiteral()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
-        $res = $loader->load(array(
+        $res = $this->loadData(array(
             self::USER => array(
                 'user' => array(
                     '__construct' => array('\\@<fooGenerator()> \\\\@foo \\\\\\@foo \\foo'),
@@ -1005,6 +993,121 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(self::USER, $res['user']);
         $this->assertSame('@foo \\@foo \\@foo \\foo', $res['user']->username);
+    }
+
+    public function testRandomDataUnchangedOnReload()
+    {
+        $res1 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                    'email'  => '<email()>'
+                )
+            )
+        ));
+
+        $res2 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                    'email'  => '<email()>'
+                )
+            )
+        ));
+
+        $this->assertEquals($res1['user']->email, $res2['user']->email);
+        $this->assertEquals($res1['user']->username, $res2['user']->username);
+    }
+
+    public function testRandomDataUnaffectedByFieldOrder()
+    {
+        $res1 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                    'email'  => '<email()>'
+                )
+            )
+        ));
+
+        # Order of fields flipped
+        $res2 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'email'  => '<email()>',
+                    'username' => '<username()>'
+                )
+            )
+        ));
+
+        $this->assertEquals($res1['user']->email, $res2['user']->email);
+        $this->assertEquals($res1['user']->username, $res2['user']->username);
+    }
+
+    public function testFieldRandomDataUnaffectedByEntityOrder()
+    {
+        $res1 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                )
+            ),
+            self::GROUP => array(
+                'group' => array(
+                    'name' => '<company()>'
+                )
+            )
+        ));
+
+        # Order of entities flipped
+        $res2 = $this->loadData(array(
+            self::GROUP => array(
+                'group' => array(
+                    'name' => '<company()>'
+                )
+            ),
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>',
+                )
+            )
+        ));
+
+        $this->assertEquals($res1['user']->username, $res2['user']->username);
+        $this->assertEquals($res1['group']->getName(), $res2['group']->getName());
+    }
+
+    public function testCtorRandomDataUnaffectedByEntityOrder()
+    {
+        $res1 = $this->loadData(array(
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('<username()>')
+                )
+            ),
+            self::GROUP => array(
+                'group' => array(
+                    '__construct' => array('<company()>')
+                )
+            )
+        ));
+
+        # Order of entities flipped
+        $res2 = $this->loadData(array(
+            self::GROUP => array(
+                'group' => array(
+                    '__construct' => array('<company()>')
+                )
+            ),
+            self::USER => array(
+                'user' => array(
+                    '__construct' => array('<username()>')
+                )
+            )
+        ));
+
+        $this->assertEquals($res1['user']->username, $res2['user']->username);
+        $this->assertEquals($res1['group']->getName(), $res2['group']->getName());
     }
 }
 
