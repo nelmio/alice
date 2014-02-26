@@ -45,6 +45,11 @@ class Yaml extends Base
             $yaml = ob_get_clean();
             $data = YamlParser::parse($yaml);
         }
+        else
+        {
+            // make sure to clean up if theres a failure
+            ob_end_clean();
+        }
 
         if (!is_array($data)) {
             throw new \UnexpectedValueException('Yaml files must parse to an array of data');
