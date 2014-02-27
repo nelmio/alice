@@ -45,6 +45,11 @@ class Base implements LoaderInterface
     protected $references = array();
 
     /**
+     * @var array
+     */
+    protected $templates = array();
+
+    /**
      * @var ORMInterface
      */
     protected $manager;
@@ -155,6 +160,18 @@ class Base implements LoaderInterface
                     }
                 } else {
                     list($name, $instanceFlags) = $this->parseFlags($name);
+                    if (!empty($instanceFlags)) {
+                        foreach (array_keys($instanceFlags) as $flag) {
+                            if(preg_match('#^extends\s*(.+)$#', $flag, $match)) {
+                                $template = $this->getTemplate($match[1]);
+                                $spec = array_merge($template, $spec);
+                            }
+                        }
+                    }
+                    if (isset($instanceFlags['template'])) {
+                        $this->templates[$name] = $spec;
+                        continue;
+                    }
                     $instances[$name] = array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null);
                 }
             }
@@ -324,6 +341,15 @@ class Base implements LoaderInterface
         } catch (\ReflectionException $exception) {
             return $this->references[$name] = new $class();
         }
+    }
+
+    private function getTemplate($name)
+    {
+        if (!array_key_exists($name, $this->templates)) {
+            throw new \UnexpectedValueException('Template '.$name.' is not defined.');
+        }
+
+        return $this->templates[$name];
     }
 
     private function emptyGenerators()
