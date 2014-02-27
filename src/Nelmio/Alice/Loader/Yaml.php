@@ -44,9 +44,7 @@ class Yaml extends Base
         if (true !== $data) {
             $yaml = ob_get_clean();
             $data = YamlParser::parse($yaml);
-        }
-        else
-        {
+        } else {
             // make sure to clean up if theres a failure
             ob_end_clean();
         }
