@@ -16,6 +16,7 @@ use Symfony\Component\PropertyAccess\StringUtil;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
+use Nelmio\Alice\Instances\Instance;
 
 /**
  * Loads fixtures from an array or php file
@@ -110,20 +111,18 @@ class Base implements LoaderInterface
         $data = !is_array($dataOrFilename) ? $this->parseFile($dataOrFilename) : $dataOrFilename;
 
         // create instances
-        $instances = $this->createInstances($data);
+        $instances = $this->buildInstances($data);
 
         // populate instances
         $objects = array();
-        foreach ($instances as $instanceName => $instanceData) {
-            list($instance, $class, $name, $spec, $classFlags, $instanceFlags, $curValue) = $instanceData;
-
-            $this->currentValue = $curValue;
-            $this->populateObject($instance, $class, $name, $spec);
+        foreach ($instances as $instance) {
+            $this->currentValue = $instance->currentValue;
+            $this->populateObject($instance->object, $instance->class, $instance->name, $instance->spec);
             $this->currentValue = null;
 
             // add the object in the object store unless it's local
-            if (!isset($classFlags['local']) && !isset($instanceFlags['local'])) {
-                $objects[$instanceName] = $instance;
+            if (!isset($instance->classFlags['local']) && !isset($instance->instanceFlags['local'])) {
+                $objects[$instance->name] = $instance->object;
             }
         }
 
@@ -227,7 +226,7 @@ class Base implements LoaderInterface
         return $data;
     }
 
-    protected function createInstances($data)
+    protected function buildInstances($data)
     {
         $instances = array();
         foreach ($data as $class => $specs) {
@@ -245,8 +244,9 @@ class Base implements LoaderInterface
                         $curName = str_replace($match[0], $i, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
                         $this->currentValue = $i;
-                        $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
+                        $instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i));
                         $this->currentValue = null;
+                        $instances[] = $instance;
                     }
                 } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
                     $enumItems = array_map('trim', explode(',', $match[1]));
@@ -255,12 +255,14 @@ class Base implements LoaderInterface
                         $curName = str_replace($match[0], $item, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
                         $this->currentValue = $item;
-                        $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
+                        $instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item));
                         $this->currentValue = null;
+                        $instances[] = $instance;
                     }
                 } else {
                     list($name, $instanceFlags) = $this->parseFlags($name);
-                    $instances[$name] = array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null);
+                    $instance = new Instance(array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null));
+                    $instances[] = $instance;
                 }
             }
         }
