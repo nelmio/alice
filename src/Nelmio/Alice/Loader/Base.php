@@ -110,41 +110,7 @@ class Base implements LoaderInterface
         $data = !is_array($dataOrFilename) ? $this->parseFile($dataOrFilename) : $dataOrFilename;
 
         // create instances
-        $instances = array();
-        foreach ($data as $class => $specs) {
-            $this->log('Loading '.$class);
-            list($class, $classFlags) = $this->parseFlags($class);
-            foreach ($specs as $name => $spec) {
-                if (preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $match)) {
-                    $from = $match[1];
-                    $to = empty($match[2]) ? $match[3] : $match[3] - 1;
-                    if ($from > $to) {
-                        list($to, $from) = array($from, $to);
-                    }
-                    for ($i = $from; $i <= $to; $i++) {
-                        $curSpec = $spec;
-                        $curName = str_replace($match[0], $i, $name);
-                        list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $this->currentValue = $i;
-                        $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
-                        $this->currentValue = null;
-                    }
-                } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
-                    $enumItems = array_map('trim', explode(',', $match[1]));
-                    foreach ($enumItems as $item) {
-                        $curSpec = $spec;
-                        $curName = str_replace($match[0], $item, $name);
-                        list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $this->currentValue = $item;
-                        $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
-                        $this->currentValue = null;
-                    }
-                } else {
-                    list($name, $instanceFlags) = $this->parseFlags($name);
-                    $instances[$name] = array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null);
-                }
-            }
-        }
+        $instances = $this->createInstances($data);
 
         // populate instances
         $objects = array();
@@ -259,6 +225,46 @@ class Base implements LoaderInterface
             throw new \UnexpectedValueException("Included file \"{$filename}\" must return an array of data");
         }
         return $data;
+    }
+
+    protected function createInstances($data)
+    {
+        $instances = array();
+        foreach ($data as $class => $specs) {
+            $this->log('Loading '.$class);
+            list($class, $classFlags) = $this->parseFlags($class);
+            foreach ($specs as $name => $spec) {
+                if (preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $match)) {
+                    $from = $match[1];
+                    $to = empty($match[2]) ? $match[3] : $match[3] - 1;
+                    if ($from > $to) {
+                        list($to, $from) = array($from, $to);
+                    }
+                    for ($i = $from; $i <= $to; $i++) {
+                        $curSpec = $spec;
+                        $curName = str_replace($match[0], $i, $name);
+                        list($curName, $instanceFlags) = $this->parseFlags($curName);
+                        $this->currentValue = $i;
+                        $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
+                        $this->currentValue = null;
+                    }
+                } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
+                    $enumItems = array_map('trim', explode(',', $match[1]));
+                    foreach ($enumItems as $item) {
+                        $curSpec = $spec;
+                        $curName = str_replace($match[0], $item, $name);
+                        list($curName, $instanceFlags) = $this->parseFlags($curName);
+                        $this->currentValue = $item;
+                        $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
+                        $this->currentValue = null;
+                    }
+                } else {
+                    list($name, $instanceFlags) = $this->parseFlags($name);
+                    $instances[$name] = array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null);
+                }
+            }
+        }
+        return $instances;
     }
 
     protected function createInstance($class, $name, array &$data)
