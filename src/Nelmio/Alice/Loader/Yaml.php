@@ -33,12 +33,12 @@ class Yaml extends Base
     /**
      * {@inheritDoc}
      */
-    public function load($file)
+    protected function parseFile($filename)
     {
-        ob_start();
         $loader = $this;
-        $includeWrapper = function () use ($file, $loader) {
-            return include $file;
+        ob_start();
+        $includeWrapper = function () use ($filename, $loader) {
+            return include $filename;
         };
         $data = $includeWrapper();
         if (true !== $data) {
@@ -50,6 +50,6 @@ class Yaml extends Base
             throw new \UnexpectedValueException('Yaml files must parse to an array of data');
         }
 
-        return parent::load($data);
+        return $data;
     }
 }
