@@ -104,24 +104,10 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function load($data)
+    public function load($dataOrFilename)
     {
-        if (!is_array($data)) {
-            // $loader is defined to give access to $loader->fake() in the included file's context
-            $loader = $this;
-            $filename = $data;
-            $includeWrapper = function () use ($filename, $loader) {
-                ob_start();
-                $res = include $filename;
-                ob_end_clean();
-
-                return $res;
-            };
-            $data = $includeWrapper();
-            if (!is_array($data)) {
-                throw new \UnexpectedValueException('Included file "'.$filename.'" must return an array of data');
-            }
-        }
+        // ensure our data is loaded
+        $data = !is_array($dataOrFilename) ? $this->parseFile($dataOrFilename) : $dataOrFilename;
 
         // create instances
         $instances = array();
@@ -249,6 +235,30 @@ class Base implements LoaderInterface
     public function setReferences(array $references)
     {
         $this->references = $references;
+    }
+
+    /**
+     * parses a file at the given filename
+     *
+     * @param string filename
+     * @return string data
+     */
+    protected function parseFile($filename)
+    {
+        $loader = $this;
+        $includeWrapper = function() use ($filename, $loader) {
+            ob_start();
+            $res = include $filename;
+            ob_end_clean();
+
+            return $res;
+        };
+
+        $data = $includeWrapper();
+        if (!is_array($data)) {
+            throw new \UnexpectedValueException("Included file \"{$filename}\" must return an array of data");
+        }
+        return $data;
     }
 
     protected function createInstance($class, $name, array &$data)
