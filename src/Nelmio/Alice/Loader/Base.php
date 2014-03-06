@@ -18,6 +18,7 @@ use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Instances\Instance;
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Util\TypeHintChecker;
 
 /**
  * Loads fixtures from an array or php file
@@ -98,6 +99,7 @@ class Base implements LoaderInterface
         $this->defaultLocale = $locale;
         $this->providers = $providers;
         $this->referenceCollection = new Collection;
+        $this->typeHintChecker = new TypeHintChecker;
 
         if (is_numeric($seed)) {
             mt_srand($seed);
@@ -295,7 +297,7 @@ class Base implements LoaderInterface
                 $reflClass = new \ReflectionClass($class);
                 $args = $this->process($args, array());
                 foreach ($args as $num => $param) {
-                    $args[$num] = $this->checkTypeHints($class, $constructor, $param, $num);
+                    $args[$num] = $this->typeHintChecker->check($class, $constructor, $param, $num);
                 }
 
                 if ($constructor === '__construct') {
@@ -414,7 +416,7 @@ class Base implements LoaderInterface
             // add relations if available
             if (is_array($generatedVal) && $method = $this->findAdderMethod($instance, $key)) {
                 foreach ($generatedVal as $rel) {
-                    $rel = $this->checkTypeHints($instance, $method, $rel);
+                    $rel = $this->typeHintChecker->check($instance, $method, $rel);
                     $instance->{$method}($rel);
                 }
             } elseif (isset($customSetter)) {
@@ -422,12 +424,12 @@ class Base implements LoaderInterface
                 $variables[$key] = $generatedVal;
             } elseif (is_array($generatedVal) && method_exists($instance, $key)) {
                 foreach ($generatedVal as $num => $param) {
-                    $generatedVal[$num] = $this->checkTypeHints($instance, $key, $param, $num);
+                    $generatedVal[$num] = $this->typeHintChecker->check($instance, $key, $param, $num);
                 }
                 call_user_func_array(array($instance, $key), $generatedVal);
                 $variables[$key] = $generatedVal;
             } elseif (method_exists($instance, 'set'.$key)) {
-                $generatedVal = $this->checkTypeHints($instance, 'set'.$key, $generatedVal);
+                $generatedVal = $this->typeHintChecker->check($instance, 'set'.$key, $generatedVal);
                 if(!is_callable(array($instance, 'set'.$key))) {
                     $refl = new \ReflectionMethod($instance, 'set'.$key);
                     $refl->setAccessible(true);
@@ -446,54 +448,6 @@ class Base implements LoaderInterface
                 throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
             }
         }
-    }
-
-    /**
-     * Checks if the value is typehinted with a class and if the current value can be coerced into that type
-     *
-     * It can either convert to datetime or attempt to fetched from the db by id
-     *
-     * @param  mixed   $obj    instance or class name
-     * @param  string  $method
-     * @param  string  $value
-     * @param  integer $pNum
-     * @return mixed
-     */
-    private function checkTypeHints($obj, $method, $value, $pNum = 0)
-    {
-        if (!is_numeric($value) && !is_string($value)) {
-            return $value;
-        }
-
-        $reflection = new \ReflectionMethod($obj, $method);
-        $params = $reflection->getParameters();
-
-        if (!$params[$pNum]->getClass()) {
-            return $value;
-        }
-
-        $hintedClass = $params[$pNum]->getClass()->getName();
-
-        if ($hintedClass === 'DateTime') {
-            try {
-                if (preg_match('{^[0-9]+$}', $value)) {
-                    $value = '@'.$value;
-                }
-
-                return new \DateTime($value);
-            } catch (\Exception $e) {
-                throw new \UnexpectedValueException('Could not convert '.$value.' to DateTime for '.$reflection->getDeclaringClass()->getName().'::'.$method, 0, $e);
-            }
-        }
-
-        if ($hintedClass) {
-            if (!$this->manager) {
-                throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\ORMInterface object on this instance');
-            }
-            $value = $this->manager->find($hintedClass, $value);
-        }
-
-        return $value;
     }
 
     private function process($data, array $variables)
@@ -637,6 +591,7 @@ class Base implements LoaderInterface
     public function setORM(ORMInterface $manager)
     {
         $this->manager = $manager;
+        $this->typeHintChecker->setORM($manager);
     }
 
     /**
