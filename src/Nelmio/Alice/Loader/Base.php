@@ -47,7 +47,7 @@ class Base implements LoaderInterface
     /**
      * @var Collection
      */
-    protected $referenceCollection;
+    protected $instances;
 
     /**
      * @var ORMInterface
@@ -74,14 +74,14 @@ class Base implements LoaderInterface
      */
     public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
     {
-        $this->referenceCollection = new Collection;
+        $this->instances       = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
-        $this->processor = new Processor($locale, $this->referenceCollection, $providers);
+        $this->processor       = new Processor($locale, $this->instances, $providers);
 
         $this->instanceBuilders = array(
-            new Builders\RangeBuilder($this->referenceCollection, $this->processor, $this->typeHintChecker),
-            new Builders\ListBuilder($this->referenceCollection, $this->processor, $this->typeHintChecker),
-            new Builders\BaseBuilder($this->referenceCollection, $this->processor, $this->typeHintChecker)
+            new Builders\RangeBuilder($this->instances, $this->processor, $this->typeHintChecker),
+            new Builders\ListBuilder($this->instances, $this->processor, $this->typeHintChecker),
+            new Builders\BaseBuilder($this->instances, $this->processor, $this->typeHintChecker)
         );
 
         if (is_numeric($seed)) {
@@ -121,7 +121,7 @@ class Base implements LoaderInterface
      */
     public function getReference($name, $property = null)
     {
-        return $this->referenceCollection->getInstance($name, $property);
+        return $this->instances->getInstance($name, $property);
     }
 
     /**
@@ -129,7 +129,7 @@ class Base implements LoaderInterface
      */
     public function getReferences()
     {
-        return $this->referenceCollection->getInstances();
+        return $this->instances->toArray();
     }
 
     /**
@@ -143,9 +143,9 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function setReferences(array $references)
+    public function setReferences(array $instances)
     {
-        $this->referenceCollection->setReferences($references);
+        $this->instances = new Collection($instances);
     }
 
     /**

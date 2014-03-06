@@ -11,29 +11,20 @@
 
 namespace Nelmio\Alice\Instances;
 
-class Collection {
+use Doctrine\Common\Collections\ArrayCollection;
 
-	private $instances = array();
+class Collection extends ArrayCollection {
 
-	public function getInstances()
+	public function set($key, $value)
 	{
-		return $this->instances;
-	}
-
-	public function setInstances(array $instances)
-	{
-		$this->instances = $instances;
-	}
-
-	public function addInstance($name, $instance)
-	{
-		return $this->instances[$name] = $instance;
+		parent::set($key, $value);
+		return $value;
 	}
 
 	public function getInstance($name, $property = null)
 	{
-		if (isset($this->instances[$name])) {
-			$instance = $this->instances[$name];
+		if ($this->containsKey($name)) {
+			$instance = $this->get($name);
 
 			if ($property !== null) {
 				if (property_exists($instance, $property)) {
@@ -52,7 +43,7 @@ class Collection {
 				throw new \UnexpectedValueException('Property '.$property.' is not defined for instance '.$name);
 			}
 
-			return $this->instances[$name];
+			return $this->get($name);
 		}
 
 		throw new \UnexpectedValueException('Instance '.$name.' is not defined');
@@ -65,7 +56,7 @@ class Collection {
     }
 
     $availableInstances = array();
-    foreach ($this->instances as $key => $val) {
+    foreach ($this->toArray() as $key => $val) {
         if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
             $availableInstances[] = $key;
         }

@@ -23,12 +23,12 @@ class BaseBuilder implements BuilderInterface {
 	/**
 	 * @var Collection
 	 */
-	protected $referenceCollection;
+	protected $instances;
 
-	function __construct(Collection $referenceCollection, Processor $processor, TypeHintChecker $typeHintChecker) {
-		$this->referenceCollection = $referenceCollection;
-		$this->processor           = $processor;
-		$this->typeHintChecker     = $typeHintChecker;
+	function __construct(Collection $instances, Processor $processor, TypeHintChecker $typeHintChecker) {
+		$this->instances       = $instances;
+		$this->processor       = $processor;
+		$this->typeHintChecker = $typeHintChecker;
 	}
 
 	/**
@@ -70,12 +70,12 @@ class BaseBuilder implements BuilderInterface {
 				if (false === $args) {
 					if (version_compare(PHP_VERSION, '5.4', '<')) {
 						// unserialize hack for php <5.4
-						return $this->referenceCollection->addInstance($name, unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class)));
+						return $this->instances->set($name, unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class)));
 					}
 
 					$reflClass = new \ReflectionClass($class);
 
-					return $this->referenceCollection->addInstance($name, $reflClass->newInstanceWithoutConstructor());
+					return $this->instances->set($name, $reflClass->newInstanceWithoutConstructor());
 				}
 
 				//
@@ -117,19 +117,19 @@ class BaseBuilder implements BuilderInterface {
 					}
 				}
 
-				return $this->referenceCollection->addInstance($name, $instance);
+				return $this->instances->set($name, $instance);
 			}
 
 			// call the constructor if it contains optional params only
 			$reflMethod = new \ReflectionMethod($class, '__construct');
 			if (0 === $reflMethod->getNumberOfRequiredParameters()) {
-				return $this->referenceCollection->addInstance($name, new $class());
+				return $this->instances->set($name, new $class());
 			}
 
 			// exception otherwise
 			throw new \RuntimeException('You must specify a __construct method with its arguments in object '.$name.' since class '.$class.' has mandatory constructor arguments');
 		} catch (\ReflectionException $exception) {
-			return $this->referenceCollection->addInstance($name, new $class());
+			return $this->instances->set($name, new $class());
 		}
 	}
 
