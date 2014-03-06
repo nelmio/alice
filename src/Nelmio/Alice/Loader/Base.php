@@ -567,7 +567,7 @@ class Base implements LoaderInterface
             }, $args);
 
             // replace references to other objects
-            $args = preg_replace_callback('{(?:\b|^)(?:(?<multi>\d+)x )?(?<!\\\\)@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?(?:\b|$)}i', function ($match) use ($that) {
+            $args = preg_replace_callback('{(?:(?<multi>\d+)x )?(?<!\\\\)@(?<reference>[a-z0-9_.*]+)(?:\->(?<property>[a-z0-9_-]+))?}i', function ($match) use ($that, $args) {
                 $multi    = ('' !== $match['multi']) ? $match['multi'] : null;
                 $property = isset($match['property']) ? $match['property'] : null;
                 if (strpos($match['reference'], '*')) {
