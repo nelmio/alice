@@ -394,6 +394,10 @@ You can also randomize the amount by combining it with faker data:
 > **Note**: You do not need to define multi-references inside an array, since
 > they are automatically translated to an array of objects.
 
+#### Self reference ####
+
+The `@self` reference is assigned to the current fixture instance.
+
 ### Handling Unique Constraints ###
 
 Quite often some database fields have a unique constraint set on them, in which
