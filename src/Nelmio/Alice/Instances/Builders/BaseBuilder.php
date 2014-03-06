@@ -15,6 +15,7 @@ use Nelmio\Alice\Instances\Builders\BuilderInterface;
 use Nelmio\Alice\Instances\Instance;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Processor;
+use Nelmio\Alice\Util\FlagParser;
 use Nelmio\Alice\Util\TypeHintChecker;
 
 class BaseBuilder implements BuilderInterface {
@@ -51,8 +52,8 @@ class BaseBuilder implements BuilderInterface {
 	 */
 	public function build($class, $name, array $spec)
 	{
-		list($class, $classFlags)   = $this->parseFlags($class);
-		list($name, $instanceFlags) = $this->parseFlags($name);
+		list($class, $classFlags)   = FlagParser::parse($class);
+		list($name, $instanceFlags) = FlagParser::parse($name);
 		$instance = new Instance(array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null));
 		return $instance;
 	}
@@ -130,24 +131,6 @@ class BaseBuilder implements BuilderInterface {
 		} catch (\ReflectionException $exception) {
 			return $this->referenceCollection->addInstance($name, new $class());
 		}
-	}
-
-	protected function parseFlags($key)
-	{
-		$flags = array();
-		if (preg_match('{^(.+?)\s*\((.+)\)$}', $key, $matches)) {
-			foreach (preg_split('{\s*,\s*}', $matches[2]) as $flag) {
-				$val = true;
-				if ($pos = strpos($flag, ':')) {
-					$flag = trim(substr($flag, 0, $pos));
-					$val = trim(substr($flag, $pos+1));
-				}
-				$flags[$flag] = $val;
-			}
-			$key = $matches[1];
-		}
-
-		return array($key, $flags);
 	}
 
 }

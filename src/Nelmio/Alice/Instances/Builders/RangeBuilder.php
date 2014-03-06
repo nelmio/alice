@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Instances\Builders;
 
 use Nelmio\Alice\Instances\Instance;
+use Nelmio\Alice\Util\FlagParser;
 
 class RangeBuilder extends BaseBuilder {
 
@@ -32,7 +33,7 @@ class RangeBuilder extends BaseBuilder {
 	{
 		$instances = array();
 
-		list($class, $classFlags) = $this->parseFlags($class);
+		list($class, $classFlags) = FlagParser::parse($class);
 		$from = $this->matches[1];
 		$to = empty($this->matches[2]) ? $this->matches[3] : $this->matches[3] - 1;
 		if ($from > $to) {
@@ -41,7 +42,7 @@ class RangeBuilder extends BaseBuilder {
 		for ($i = $from; $i <= $to; $i++) {
 			$curSpec = $spec;
 			$curName = str_replace($this->matches[0], $i, $name);
-			list($curName, $instanceFlags) = $this->parseFlags($curName);
+			list($curName, $instanceFlags) = FlagParser::parse($curName);
 			$this->processor->setCurrentValue($i);
 			$instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i));
 			$this->processor->unsetCurrentValue();

@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Instances\Builders;
 
 use Nelmio\Alice\Instances\Instance;
+use Nelmio\Alice\Util\FlagParser;
 
 class ListBuilder extends BaseBuilder {
 
@@ -32,12 +33,12 @@ class ListBuilder extends BaseBuilder {
 	{
 		$instances = array();
 
-		list($class, $classFlags) = $this->parseFlags($class);
+		list($class, $classFlags) = FlagParser::parse($class);
 		$enumItems = array_map('trim', explode(',', $this->matches[1]));
 		foreach ($enumItems as $item) {
 			$curSpec = $spec;
 			$curName = str_replace($this->matches[0], $item, $name);
-			list($curName, $instanceFlags) = $this->parseFlags($curName);
+			list($curName, $instanceFlags) = FlagParser::parse($curName);
 			$this->processor->setCurrentValue($item);
 			$instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item));
 			$this->processor->unsetCurrentValue();

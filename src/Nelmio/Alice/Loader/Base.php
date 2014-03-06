@@ -19,6 +19,7 @@ use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Instances\Builders;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Processor;
+use Nelmio\Alice\Util\FlagParser;
 use Nelmio\Alice\Util\TypeHintChecker;
 
 /**
@@ -196,24 +197,6 @@ class Base implements LoaderInterface
         return $instances;
     }
 
-    private function parseFlags($key)
-    {
-        $flags = array();
-        if (preg_match('{^(.+?)\s*\((.+)\)$}', $key, $matches)) {
-            foreach (preg_split('{\s*,\s*}', $matches[2]) as $flag) {
-                $val = true;
-                if ($pos = strpos($flag, ':')) {
-                    $flag = trim(substr($flag, 0, $pos));
-                    $val = trim(substr($flag, $pos+1));
-                }
-                $flags[$flag] = $val;
-            }
-            $key = $matches[1];
-        }
-
-        return array($key, $flags);
-    }
-
     private function populateObject($instance, $class, $name, $data)
     {
         $variables = array();
@@ -227,7 +210,7 @@ class Base implements LoaderInterface
         }
 
         foreach ($data as $key => $val) {
-            list($key, $flags) = $this->parseFlags($key);
+            list($key, $flags) = FlagParser::parse($key);
             if (is_array($val) && '{' === key($val)) {
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
