@@ -16,7 +16,7 @@ use Symfony\Component\PropertyAccess\StringUtil;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
-use Nelmio\Alice\Instances\Instance;
+use Nelmio\Alice\Instances\Builders;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\TypeHintChecker;
@@ -76,6 +76,12 @@ class Base implements LoaderInterface
         $this->referenceCollection = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
         $this->processor = new Processor($locale, $this->referenceCollection, $providers);
+
+        $this->instanceBuilders = array(
+            new Builders\RangeBuilder($this->referenceCollection, $this->processor, $this->typeHintChecker),
+            new Builders\ListBuilder($this->referenceCollection, $this->processor, $this->typeHintChecker),
+            new Builders\BaseBuilder($this->referenceCollection, $this->processor, $this->typeHintChecker)
+        );
 
         if (is_numeric($seed)) {
             mt_srand($seed);
@@ -168,119 +174,26 @@ class Base implements LoaderInterface
     protected function buildInstances($data)
     {
         $instances = array();
+
         foreach ($data as $class => $specs) {
             $this->log('Loading '.$class);
-            list($class, $classFlags) = $this->parseFlags($class);
             foreach ($specs as $name => $spec) {
-                if (preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $match)) {
-                    $from = $match[1];
-                    $to = empty($match[2]) ? $match[3] : $match[3] - 1;
-                    if ($from > $to) {
-                        list($to, $from) = array($from, $to);
+                foreach ($this->instanceBuilders as $builder) {
+                    if ($builder->canBuild($name)) {
+                        $newInstances = $builder->build($class, $name, $spec);
+                        if (is_array($newInstances)) {
+                            $instances = array_merge($instances, $newInstances);
+                        }
+                        else {
+                            $instances[] = $newInstances;
+                        }
+                        break;
                     }
-                    for ($i = $from; $i <= $to; $i++) {
-                        $curSpec = $spec;
-                        $curName = str_replace($match[0], $i, $name);
-                        list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $this->processor->setCurrentValue($i);
-                        $instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i));
-                        $this->processor->unsetCurrentValue();
-                        $instances[] = $instance;
-                    }
-                } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
-                    $enumItems = array_map('trim', explode(',', $match[1]));
-                    foreach ($enumItems as $item) {
-                        $curSpec = $spec;
-                        $curName = str_replace($match[0], $item, $name);
-                        list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $this->processor->setCurrentValue($item);
-                        $instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item));
-                        $this->processor->unsetCurrentValue();
-                        $instances[] = $instance;
-                    }
-                } else {
-                    list($name, $instanceFlags) = $this->parseFlags($name);
-                    $instance = new Instance(array($this->createInstance($class, $name, $spec), $class, $name, $spec, $classFlags, $instanceFlags, null));
-                    $instances[] = $instance;
                 }
             }
         }
+        
         return $instances;
-    }
-
-    protected function createInstance($class, $name, array &$data)
-    {
-        try {
-            // constructor is defined explicitly
-            if (isset($data['__construct'])) {
-                $args = $data['__construct'];
-                unset($data['__construct']);
-
-                // constructor override
-                if (false === $args) {
-                    if (version_compare(PHP_VERSION, '5.4', '<')) {
-                        // unserialize hack for php <5.4
-                        return $this->referenceCollection->addInstance($name, unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class)));
-                    }
-
-                    $reflClass = new \ReflectionClass($class);
-
-                    return $this->referenceCollection->addInstance($name, $reflClass->newInstanceWithoutConstructor());
-                }
-
-                /**
-                 * Sequential arrays call the constructor, hashes call a static method
-                 *
-                 * array('foo', 'bar') => new $class('foo', 'bar')
-                 * array('foo' => array('bar')) => $class::foo('bar')
-                 */
-                if (is_array($args)) {
-                    $constructor = '__construct';
-                    list($index, $values) = each($args);
-                    if ($index !== 0) {
-                        if (!is_array($values)) {
-                            throw new \UnexpectedValueException("The static '$index' call in object '$name' must be given an array");
-                        }
-                        if (!is_callable(array($class, $index))) {
-                            throw new \UnexpectedValueException("Cannot call static method '$index' on class '$class' as a constructor for object '$name'");
-                        }
-                        $constructor = $index;
-                        $args = $values;
-                    }
-                } else {
-                    throw new \UnexpectedValueException('The __construct call in object '.$name.' must be defined as an array of arguments or false to bypass it');
-                }
-
-                // create object with given args
-                $reflClass = new \ReflectionClass($class);
-                $args = $this->processor->process($args, array());
-                foreach ($args as $num => $param) {
-                    $args[$num] = $this->typeHintChecker->check($class, $constructor, $param, $num);
-                }
-
-                if ($constructor === '__construct') {
-                    $instance = $reflClass->newInstanceArgs($args);
-                } else {
-                    $instance = forward_static_call_array(array($class, $constructor), $args);
-                    if (!($instance instanceof $class)) {
-                        throw new \UnexpectedValueException("The static constructor '$constructor' for object '$name' returned an object that is not an instance of '$class'");
-                    }
-                }
-
-                return $this->referenceCollection->addInstance($name, $instance);
-            }
-
-            // call the constructor if it contains optional params only
-            $reflMethod = new \ReflectionMethod($class, '__construct');
-            if (0 === $reflMethod->getNumberOfRequiredParameters()) {
-                return $this->referenceCollection->addInstance($name, new $class());
-            }
-
-            // exception otherwise
-            throw new \RuntimeException('You must specify a __construct method with its arguments in object '.$name.' since class '.$class.' has mandatory constructor arguments');
-        } catch (\ReflectionException $exception) {
-            return $this->referenceCollection->addInstance($name, new $class());
-        }
     }
 
     private function parseFlags($key)
