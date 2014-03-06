@@ -74,7 +74,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage Reference foo is not defined
+     * @expectedExceptionMessage Instance foo is not defined
      */
     public function testGetBadReference()
     {
@@ -240,7 +240,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage Property doesnotexist is not defined for reference user1
+     * @expectedExceptionMessage Property doesnotexist is not defined for instance user1
      */
     public function testLoadParsesPropertyReferencesDoesNotExist()
     {

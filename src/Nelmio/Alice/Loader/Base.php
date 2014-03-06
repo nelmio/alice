@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Instances\Instance;
+use Nelmio\Alice\Instances\Collection;
 
 /**
  * Loads fixtures from an array or php file
@@ -41,9 +42,9 @@ use Nelmio\Alice\Instances\Instance;
 class Base implements LoaderInterface
 {
     /**
-     * @var array
+     * @var Collection
      */
-    protected $references = array();
+    protected $referenceCollection;
 
     /**
      * @var ORMInterface
@@ -96,6 +97,7 @@ class Base implements LoaderInterface
     {
         $this->defaultLocale = $locale;
         $this->providers = $providers;
+        $this->referenceCollection = new Collection;
 
         if (is_numeric($seed)) {
             mt_srand($seed);
@@ -134,30 +136,7 @@ class Base implements LoaderInterface
      */
     public function getReference($name, $property = null)
     {
-        if (isset($this->references[$name])) {
-            $reference = $this->references[$name];
-
-            if ($property !== null) {
-                if (property_exists($reference, $property)) {
-                    $prop = new \ReflectionProperty($reference, $property);
-
-                    if ($prop->isPublic()) {
-                        return $reference->{$property};
-                    }
-                }
-
-                $getter = 'get'.ucfirst($property);
-                if (method_exists($reference, $getter) && is_callable(array($reference, $getter))) {
-                    return $reference->$getter();
-                }
-
-                throw new \UnexpectedValueException('Property '.$property.' is not defined for reference '.$name);
-            }
-
-            return $this->references[$name];
-        }
-
-        throw new \UnexpectedValueException('Reference '.$name.' is not defined');
+        return $this->referenceCollection->getInstance($name, $property);
     }
 
     /**
@@ -165,7 +144,7 @@ class Base implements LoaderInterface
      */
     public function getReferences()
     {
-        return $this->references;
+        return $this->referenceCollection->getInstances();
     }
 
     public function fake($formatter, $locale = null, $arg = null, $arg2 = null, $arg3 = null)
@@ -199,7 +178,7 @@ class Base implements LoaderInterface
      */
     public function setReferences(array $references)
     {
-        $this->references = $references;
+        $this->referenceCollection->setReferences($references);
     }
 
     /**
@@ -281,12 +260,12 @@ class Base implements LoaderInterface
                 if (false === $args) {
                     if (version_compare(PHP_VERSION, '5.4', '<')) {
                         // unserialize hack for php <5.4
-                        return $this->references[$name] = unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class));
+                        return $this->referenceCollection->addInstance($name, unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class)));
                     }
 
                     $reflClass = new \ReflectionClass($class);
 
-                    return $this->references[$name] = $reflClass->newInstanceWithoutConstructor();
+                    return $this->referenceCollection->addInstance($name, $reflClass->newInstanceWithoutConstructor());
                 }
 
                 /**
@@ -328,19 +307,19 @@ class Base implements LoaderInterface
                     }
                 }
 
-                return $this->references[$name] = $instance;
+                return $this->referenceCollection->addInstance($name, $instance);
             }
 
             // call the constructor if it contains optional params only
             $reflMethod = new \ReflectionMethod($class, '__construct');
             if (0 === $reflMethod->getNumberOfRequiredParameters()) {
-                return $this->references[$name] = new $class();
+                return $this->referenceCollection->addInstance($name, new $class());
             }
 
             // exception otherwise
             throw new \RuntimeException('You must specify a __construct method with its arguments in object '.$name.' since class '.$class.' has mandatory constructor arguments');
         } catch (\ReflectionException $exception) {
-            return $this->references[$name] = new $class();
+            return $this->referenceCollection->addInstance($name, new $class());
         }
     }
 
@@ -633,7 +612,7 @@ class Base implements LoaderInterface
         }
 
         $availableRefs = array();
-        foreach ($this->references as $key => $val) {
+        foreach ($this->referenceCollection->getInstances() as $key => $val) {
             if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
                 $availableRefs[] = $key;
             }
