@@ -11,12 +11,13 @@
 
 namespace Nelmio\Alice\Instances\Builders;
 
+use Nelmio\Alice\Instances\Builders\BuilderInterface;
 use Nelmio\Alice\Instances\Instance;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\TypeHintChecker;
 
-class BaseBuilder {
+class BaseBuilder implements BuilderInterface {
 
 	/**
 	 * @var Collection
@@ -48,7 +49,7 @@ class BaseBuilder {
 	 * @param array $spec
 	 * @return Instance|array
 	 */
-	public function build($class, $name, $spec)
+	public function build($class, $name, array $spec)
 	{
 		list($class, $classFlags)   = $this->parseFlags($class);
 		list($name, $instanceFlags) = $this->parseFlags($name);
