@@ -558,7 +558,7 @@ class Base implements LoaderInterface
                 $multi    = ('' !== $match['multi']) ? $match['multi'] : null;
                 $property = isset($match['property']) ? $match['property'] : null;
                 if (strpos($match['reference'], '*')) {
-                    return '$that->getRandomReferences(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
+                    return '$that->referenceCollection->getRandomInstances(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
                 }
                 if (null !== $multi) {
                     throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$match['multi'].'x @user*", otherwise you would always get only one item.');
@@ -588,7 +588,7 @@ class Base implements LoaderInterface
             $multi    = ('' !== $matches['multi']) ? $matches['multi'] : null;
             $property = isset($matches['property']) ? $matches['property'] : null;
             if (strpos($matches['reference'], '*')) {
-                $data = $this->getRandomReferences($matches['reference'], $multi, $property);
+                $data = $this->referenceCollection->getRandomInstances($matches['reference'], $multi, $property);
             } else {
                 if (null !== $multi) {
                     throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
@@ -603,36 +603,6 @@ class Base implements LoaderInterface
         }
 
         return $data;
-    }
-
-    private function getRandomReferences($mask, $count = 1, $property = null)
-    {
-        if ($count === 0) {
-            return array();
-        }
-
-        $availableRefs = array();
-        foreach ($this->referenceCollection->getInstances() as $key => $val) {
-            if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
-                $availableRefs[] = $key;
-            }
-        }
-
-        if (!$availableRefs) {
-            throw new \UnexpectedValueException('Reference mask "'.$mask.'" did not match any existing reference, make sure the object is created after its references');
-        }
-
-        if (null === $count) {
-            return $this->getReference($availableRefs[mt_rand(0, count($availableRefs) - 1)], $property);
-        }
-
-        $res = array();
-        while ($count-- && $availableRefs) {
-            $ref = array_splice($availableRefs, mt_rand(0, count($availableRefs) - 1), 1);
-            $res[] = $this->getReference(current($ref), $property);
-        }
-
-        return $res;
     }
 
     private function findAdderMethod($obj, $key)

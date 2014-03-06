@@ -25,6 +25,11 @@ class Collection {
 		$this->instances = $instances;
 	}
 
+	public function addInstance($name, $instance)
+	{
+		return $this->instances[$name] = $instance;
+	}
+
 	public function getInstance($name, $property = null)
 	{
 		if (isset($this->instances[$name])) {
@@ -53,9 +58,34 @@ class Collection {
 		throw new \UnexpectedValueException('Instance '.$name.' is not defined');
 	}
 
-	public function addInstance($name, $instance)
+	public function getRandomInstances($mask, $count=1, $property)
 	{
-		return $this->instances[$name] = $instance;
+		if ($count === 0) {
+        return array();
+    }
+
+    $availableInstances = array();
+    foreach ($this->instances as $key => $val) {
+        if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
+            $availableInstances[] = $key;
+        }
+    }
+
+    if (!$availableInstances) {
+        throw new \UnexpectedValueException('Instance mask "'.$mask.'" did not match any existing instance, make sure the object is created after its references');
+    }
+
+    if (null === $count) {
+        return $this->getInstance($availableInstances[mt_rand(0, count($availableInstances) - 1)], $property);
+    }
+
+    $res = array();
+    while ($count-- && $availableInstances) {
+        $ref = array_splice($availableInstances, mt_rand(0, count($availableInstances) - 1), 1);
+        $res[] = $this->getInstance(current($ref), $property);
+    }
+
+    return $res;
 	}
 
 }

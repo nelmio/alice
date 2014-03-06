@@ -332,7 +332,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage Reference mask "user*" did not match any existing reference, make sure the object is created after its references
+     * @expectedExceptionMessage Instance mask "user*" did not match any existing instance, make sure the object is created after its references
      */
     public function testLoadFailsMultiReferencesIfNoneMatch()
     {
