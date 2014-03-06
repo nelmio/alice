@@ -18,6 +18,7 @@ use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Instances\Instance;
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\TypeHintChecker;
 
 /**
@@ -53,30 +54,6 @@ class Base implements LoaderInterface
     protected $manager;
 
     /**
-     * @var \Faker\Generator[]
-     */
-    private $generators;
-
-    /**
-     * Default locale to use with faker
-     *
-     * @var string
-     */
-    private $defaultLocale;
-
-    /**
-     * Custom faker providers to use with faker generator
-     *
-     * @var array
-     */
-    private $providers;
-
-    /**
-     * @var int
-     */
-    private $currentValue;
-
-    /**
      * @var array
      */
     private $uniqueValues = array();
@@ -96,10 +73,9 @@ class Base implements LoaderInterface
      */
     public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
     {
-        $this->defaultLocale = $locale;
-        $this->providers = $providers;
         $this->referenceCollection = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
+        $this->processor = new Processor($locale, $this->referenceCollection, $providers);
 
         if (is_numeric($seed)) {
             mt_srand($seed);
@@ -120,9 +96,9 @@ class Base implements LoaderInterface
         // populate instances
         $objects = array();
         foreach ($instances as $instance) {
-            $this->currentValue = $instance->currentValue;
+            $this->processor->setCurrentValue($instance->currentValue);
             $this->populateObject($instance->object, $instance->class, $instance->name, $instance->spec);
-            $this->currentValue = null;
+            $this->processor->unsetCurrentValue();
 
             // add the object in the object store unless it's local
             if (!isset($instance->classFlags['local']) && !isset($instance->instanceFlags['local'])) {
@@ -149,30 +125,12 @@ class Base implements LoaderInterface
         return $this->referenceCollection->getInstances();
     }
 
-    public function fake($formatter, $locale = null, $arg = null, $arg2 = null, $arg3 = null)
-    {
-        $args = func_get_args();
-        array_shift($args);
-        array_shift($args);
-
-        if ($formatter == 'current') {
-            if ($this->currentValue === null) {
-                throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges or enum');
-            }
-
-            return $this->currentValue;
-        }
-
-        return $this->getGenerator($locale)->format($formatter, $args);
-    }
-
     /**
      * {@inheritDoc}
      */
     public function setProviders(array $providers)
     {
-        $this->providers = $providers;
-        $this->emptyGenerators();
+        $this->processor->setProviders($providers);
     }
 
     /**
@@ -224,9 +182,9 @@ class Base implements LoaderInterface
                         $curSpec = $spec;
                         $curName = str_replace($match[0], $i, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $this->currentValue = $i;
+                        $this->processor->setCurrentValue($i);
                         $instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i));
-                        $this->currentValue = null;
+                        $this->processor->unsetCurrentValue();
                         $instances[] = $instance;
                     }
                 } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
@@ -235,9 +193,9 @@ class Base implements LoaderInterface
                         $curSpec = $spec;
                         $curName = str_replace($match[0], $item, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $this->currentValue = $item;
+                        $this->processor->setCurrentValue($item);
                         $instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item));
-                        $this->currentValue = null;
+                        $this->processor->unsetCurrentValue();
                         $instances[] = $instance;
                     }
                 } else {
@@ -295,7 +253,7 @@ class Base implements LoaderInterface
 
                 // create object with given args
                 $reflClass = new \ReflectionClass($class);
-                $args = $this->process($args, array());
+                $args = $this->processor->process($args, array());
                 foreach ($args as $num => $param) {
                     $args[$num] = $this->typeHintChecker->check($class, $constructor, $param, $num);
                 }
@@ -323,33 +281,6 @@ class Base implements LoaderInterface
         } catch (\ReflectionException $exception) {
             return $this->referenceCollection->addInstance($name, new $class());
         }
-    }
-
-    private function emptyGenerators()
-    {
-        $this->generators = array();
-    }
-
-    /**
-     * Get the generator for this locale
-     *
-     * @param string $locale the requested locale, defaults to constructor injected default
-     *
-     * @return \Faker\Generator the generator for the requested locale
-     */
-    private function getGenerator($locale = null)
-    {
-        $locale = $locale ?: $this->defaultLocale;
-
-        if (!isset($this->generators[$locale])) {
-            $generator = \Faker\Factory::create($locale);
-            foreach ($this->providers as $provider) {
-                $generator->addProvider($provider);
-            }
-            $this->generators[$locale] = $generator;
-        }
-
-        return $this->generators[$locale];
     }
 
     private function parseFlags($key)
@@ -393,7 +324,7 @@ class Base implements LoaderInterface
 
                 do {
                     // process values
-                    $generatedVal = $this->process($val, $variables);
+                    $generatedVal = $this->processor->process($val, $variables);
 
                     if (is_object($generatedVal)) {
                         $valHash = spl_object_hash($generatedVal);
@@ -410,7 +341,7 @@ class Base implements LoaderInterface
 
                 $this->uniqueValues[$class . $key][$valHash] = true;
             } else {
-                $generatedVal = $this->process($val, $variables);
+                $generatedVal = $this->processor->process($val, $variables);
             }
 
             // add relations if available
@@ -448,115 +379,6 @@ class Base implements LoaderInterface
                 throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
             }
         }
-    }
-
-    private function process($data, array $variables)
-    {
-        if (is_array($data)) {
-            foreach ($data as $key => $val) {
-                $data[$key] = $this->process($val, $variables);
-            }
-
-            return $data;
-        }
-
-        // check for conditional values (20%? true : false)
-        if (is_string($data) && preg_match('{^(?<threshold>[0-9.]+%?)\? (?<true>.+?)(?: : (?<false>.+?))?$}', $data, $match)) {
-            // process true val since it's always needed
-            $trueVal = $this->process($match['true'], $variables);
-
-            // compute threshold and check if we are beyond it
-            $threshold = $match['threshold'];
-            if (substr($threshold, -1) === '%') {
-                $threshold = substr($threshold, 0, -1) / 100;
-            }
-            $randVal = mt_rand(0, 100) / 100;
-            if ($threshold > 0 && $randVal <= $threshold) {
-                return $trueVal;
-            } else {
-                $emptyVal = is_array($trueVal) ? array() : null;
-
-                if (isset($match['false']) && '' !== $match['false']) {
-                    return $this->process($match['false'], $variables);
-                }
-
-                return $emptyVal;
-            }
-        }
-
-        // return non-string values
-        if (!is_string($data)) {
-            return $data;
-        }
-
-        $that = $this;
-        // replaces a placeholder by the result of a ->fake call
-        $replacePlaceholder = function ($matches) use ($variables, $that) {
-            $args = isset($matches['args']) && '' !== $matches['args'] ? $matches['args'] : null;
-
-            if (!$args) {
-                return $that->fake($matches['name'], $matches['locale']);
-            }
-
-            // replace references to other variables in the same object
-            $args = preg_replace_callback('{\{?\$([a-z0-9_]+)\}?}i', function ($match) use ($variables) {
-                if (array_key_exists($match[1], $variables)) {
-                    return '$variables['.var_export($match[1], true).']';
-                }
-
-                return $match[0];
-            }, $args);
-
-            // replace references to other objects
-            $args = preg_replace_callback('{(?:\b|^)(?:(?<multi>\d+)x )?(?<!\\\\)@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?(?:\b|$)}i', function ($match) use ($that) {
-                $multi    = ('' !== $match['multi']) ? $match['multi'] : null;
-                $property = isset($match['property']) ? $match['property'] : null;
-                if (strpos($match['reference'], '*')) {
-                    return '$that->referenceCollection->getRandomInstances(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
-                }
-                if (null !== $multi) {
-                    throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$match['multi'].'x @user*", otherwise you would always get only one item.');
-                }
-                return '$that->getReference(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
-            }, $args);
-
-            $locale = var_export($matches['locale'], true);
-            $name = var_export($matches['name'], true);
-
-            return eval('return $that->fake(' . $name . ', ' . $locale . ', ' . $args . ');');
-        };
-
-        // format placeholders without preg_replace if there is only one to avoid __toString() being called
-        $placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)\((?<args>(?:[^)]*|\)(?!>))*)\)>';
-        if (preg_match('#^'.$placeHolderRegex.'$#i', $data, $matches)) {
-            $data = $replacePlaceholder($matches);
-        } else {
-            // format placeholders inline
-            $data = preg_replace_callback('#'.$placeHolderRegex.'#i', function ($matches) use ($replacePlaceholder) {
-                return $replacePlaceholder($matches);
-            }, $data);
-        }
-
-        // process references
-        if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i', $data, $matches)) {
-            $multi    = ('' !== $matches['multi']) ? $matches['multi'] : null;
-            $property = isset($matches['property']) ? $matches['property'] : null;
-            if (strpos($matches['reference'], '*')) {
-                $data = $this->referenceCollection->getRandomInstances($matches['reference'], $multi, $property);
-            } else {
-                if (null !== $multi) {
-                    throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
-                }
-                $data = $this->getReference($matches['reference'], $property);
-            }
-        }
-
-        // unescape at-signs
-        if (is_string($data) && false !== strpos($data, '\\')) {
-            $data = preg_replace('{\\\\([@\\\\])}', '$1', $data);
-        }
-
-        return $data;
     }
 
     private function findAdderMethod($obj, $key)
