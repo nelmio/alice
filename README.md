@@ -189,7 +189,7 @@ i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
 #### Default Providers ####
 
 Alice includes a default identity provider, `<identity()>`, that
-simply returns whatever is passed to is.  This allows you among other
+simply returns whatever is passed to it.  This allows you among other
 things to use a PHP expression while still benefitting from
 [variable replacement](#variables).
 
@@ -409,6 +409,17 @@ You can also randomize the amount by combining it with faker data:
 
 The `@self` reference is assigned to the current fixture instance.
 
+#### Passing references to providers ####
+
+You can pass references to providers much like you can pass [variables](#variables):
+
+```yaml
+Nelmio\Entity\Group:
+    group1:
+        owner: <numberBetween(1, 200)>
+    group2:
+        owner: <numberBetween(@group1->owner, 200)>
+```
 ### Handling Unique Constraints ###
 
 Quite often some database fields have a unique constraint set on them, in which

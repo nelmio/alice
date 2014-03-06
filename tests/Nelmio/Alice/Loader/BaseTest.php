@@ -667,6 +667,38 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test user', $user2->fullname);
     }
 
+    public function testPassingReferenceToProvider()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => 'testuser',
+                ),
+                'user2' => array(
+                    'username' => '<(@user1->username)>',
+                ),
+                'user3' => array(
+                    'username' => '<(@user1->username . "_" . @user2->username)>',
+                ),
+            ),
+        ));
+
+        $this->assertCount(3, $res);
+
+        $user1 = $this->loader->getReference('user1');
+        $this->assertInstanceOf(self::USER, $user1);
+
+        $user2 = $this->loader->getReference('user2');
+        $this->assertInstanceOf(self::USER, $user2);
+
+        $this->assertEquals($user1->username, $user2->username);
+
+        $user3 = $this->loader->getReference('user3');
+        $this->assertInstanceOf(self::USER, $user3);
+
+        $this->assertEquals($user1->username . '_' . $user2->username, $user3->username);
+    }
+
     public function testLoadCreatesEnumsOfObjects()
     {
         $res = $this->loadData(array(
