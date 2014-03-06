@@ -16,6 +16,7 @@ use Symfony\Component\PropertyAccess\StringUtil;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
+use Nelmio\Alice\Provider\IdentityProvider;
 
 /**
  * Loads fixtures from an array or php file
@@ -99,11 +100,16 @@ class Base implements LoaderInterface
     public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
     {
         $this->defaultLocale = $locale;
-        $this->providers = $providers;
+        $this->providers = array_merge($this->getBuiltInProviders(), $providers);
 
         if (is_numeric($seed)) {
             mt_srand($seed);
         }
+    }
+
+    private function getBuiltInProviders()
+    {
+        return array(new IdentityProvider());
     }
 
     /**
@@ -574,6 +580,10 @@ class Base implements LoaderInterface
         $replacePlaceholder = function ($matches) use ($variables, $that) {
             $args = isset($matches['args']) && '' !== $matches['args'] ? $matches['args'] : null;
 
+            if (trim($matches['name']) == '') {
+                $matches['name'] = 'identity';
+            }
+
             if (!$args) {
                 return $that->fake($matches['name'], $matches['locale']);
             }
@@ -607,7 +617,7 @@ class Base implements LoaderInterface
         };
 
         // format placeholders without preg_replace if there is only one to avoid __toString() being called
-        $placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)\((?<args>(?:[^)]*|\)(?!>))*)\)>';
+        $placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)?\((?<args>(?:[^)]*|\)(?!>))*)\)>';
         if (preg_match('#^'.$placeHolderRegex.'$#i', $data, $matches)) {
             $data = $replacePlaceholder($matches);
         } else {
