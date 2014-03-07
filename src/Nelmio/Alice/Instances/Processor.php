@@ -18,7 +18,7 @@ class Processor {
 	/**
 	 * @var Collection
 	 */
-	protected $referenceCollection;
+	protected $instances;
 
 	/**
 	 * Custom faker providers to use with faker generator
@@ -44,10 +44,10 @@ class Processor {
 	 */
 	private $currentValue;
 
-	function __construct($locale = 'en_US', Collection $referenceCollection, array $providers) {
+	function __construct($locale = 'en_US', Collection $instances, array $providers) {
 		$this->defaultLocale = $locale;
-		$this->referenceCollection = $referenceCollection;
-		$this->providers = $providers;
+		$this->instances     = $instances;
+		$this->providers     = $providers;
 	}
 
 	public function setProviders(array $providers)
@@ -128,12 +128,12 @@ class Processor {
 				$multi    = ('' !== $match['multi']) ? $match['multi'] : null;
 				$property = isset($match['property']) ? $match['property'] : null;
 				if (strpos($match['reference'], '*')) {
-					return '$that->referenceCollection->getRandomInstances(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
+					return '$that->instances->getRandomInstances(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
 				}
 				if (null !== $multi) {
 					throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$match['multi'].'x @user*", otherwise you would always get only one item.');
 				}
-				return '$that->referenceCollection->getInstance(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
+				return '$that->instances->getInstance(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
 			}, $args);
 
 			$locale = var_export($matches['locale'], true);
@@ -158,12 +158,12 @@ class Processor {
 			$multi    = ('' !== $matches['multi']) ? $matches['multi'] : null;
 			$property = isset($matches['property']) ? $matches['property'] : null;
 			if (strpos($matches['reference'], '*')) {
-				$data = $this->referenceCollection->getRandomInstances($matches['reference'], $multi, $property);
+				$data = $this->instances->getRandomInstances($matches['reference'], $multi, $property);
 			} else {
 				if (null !== $multi) {
 					throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
 				}
-				$data = $this->referenceCollection->getInstance($matches['reference'], $property);
+				$data = $this->instances->getInstance($matches['reference'], $property);
 			}
 		}
 

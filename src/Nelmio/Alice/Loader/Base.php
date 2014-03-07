@@ -47,7 +47,7 @@ class Base implements LoaderInterface
     /**
      * @var Collection
      */
-    protected $referenceCollection;
+    protected $instances;
 
     /**
      * @var ORMInterface
@@ -74,14 +74,14 @@ class Base implements LoaderInterface
      */
     public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
     {
-        $this->referenceCollection = new Collection;
+        $this->instances       = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
-        $this->processor = new Processor($locale, $this->referenceCollection, $providers);
+        $this->processor       = new Processor($locale, $this->instances, $providers);
 
         $this->instanceBuilders = array(
-            new Builders\RangeBuilder($this->referenceCollection, $this->processor, $this->typeHintChecker),
-            new Builders\ListBuilder($this->referenceCollection, $this->processor, $this->typeHintChecker),
-            new Builders\BaseBuilder($this->referenceCollection, $this->processor, $this->typeHintChecker)
+            new Builders\RangeBuilder($this->processor, $this->typeHintChecker),
+            new Builders\ListBuilder($this->processor, $this->typeHintChecker),
+            new Builders\BaseBuilder($this->processor, $this->typeHintChecker)
         );
 
         if (is_numeric($seed)) {
@@ -98,18 +98,18 @@ class Base implements LoaderInterface
         $data = !is_array($dataOrFilename) ? $this->parseFile($dataOrFilename) : $dataOrFilename;
 
         // create instances
-        $instances = $this->buildInstances($data);
+        $this->instances->addAll($newInstances = $this->buildInstances($data));
 
         // populate instances
         $objects = array();
-        foreach ($instances as $instance) {
-            $this->processor->setCurrentValue($instance->currentValue);
-            $this->populateObject($instance->object, $instance->class, $instance->name, $instance->spec);
+        foreach ($newInstances as $instance) {
+            $this->processor->setCurrentValue($instance->valueForCurrent);
+            $this->populateObject($instance->asObject(), $instance->class, $instance->name, $instance->spec);
             $this->processor->unsetCurrentValue();
 
             // add the object in the object store unless it's local
-            if (!isset($instance->classFlags['local']) && !isset($instance->instanceFlags['local'])) {
-                $objects[$instance->name] = $instance->object;
+            if (!isset($instance->classFlags['local']) && !isset($instance->nameFlags['local'])) {
+                $objects[$instance->name] = $instance->asObject();
             }
         }
 
@@ -121,7 +121,7 @@ class Base implements LoaderInterface
      */
     public function getReference($name, $property = null)
     {
-        return $this->referenceCollection->getInstance($name, $property);
+        return $this->instances->getInstance($name, $property);
     }
 
     /**
@@ -129,7 +129,7 @@ class Base implements LoaderInterface
      */
     public function getReferences()
     {
-        return $this->referenceCollection->getInstances();
+        return $this->instances->toObjectArray();
     }
 
     /**
@@ -143,9 +143,10 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function setReferences(array $references)
+    public function setReferences(array $instances)
     {
-        $this->referenceCollection->setReferences($references);
+        $this->instances->clear();
+        $this->instances->addAll($instances);
     }
 
     /**
@@ -172,6 +173,12 @@ class Base implements LoaderInterface
         return $data;
     }
 
+    /**
+     * builds a collection of instances
+     *
+     * @param array $data
+     * @return Collection
+     */
     protected function buildInstances($data)
     {
         $instances = array();
@@ -197,12 +204,12 @@ class Base implements LoaderInterface
         return $instances;
     }
 
-    private function populateObject($instance, $class, $name, $data)
+    private function populateObject($object, $class, $name, $data)
     {
         $variables = array();
 
         if (isset($data['__set'])) {
-            if (!method_exists($instance, $data['__set'])) {
+            if (!method_exists($object, $data['__set'])) {
                 throw new \RuntimeException('Setter ' . $data['__set'] . ' not found in object');
             }
             $customSetter = $data['__set'];
@@ -241,34 +248,34 @@ class Base implements LoaderInterface
             }
 
             // add relations if available
-            if (is_array($generatedVal) && $method = $this->findAdderMethod($instance, $key)) {
+            if (is_array($generatedVal) && $method = $this->findAdderMethod($object, $key)) {
                 foreach ($generatedVal as $rel) {
-                    $rel = $this->typeHintChecker->check($instance, $method, $rel);
-                    $instance->{$method}($rel);
+                    $rel = $this->typeHintChecker->check($object, $method, $rel);
+                    $object->{$method}($rel);
                 }
             } elseif (isset($customSetter)) {
-                $instance->$customSetter($key, $generatedVal);
+                $object->$customSetter($key, $generatedVal);
                 $variables[$key] = $generatedVal;
-            } elseif (is_array($generatedVal) && method_exists($instance, $key)) {
+            } elseif (is_array($generatedVal) && method_exists($object, $key)) {
                 foreach ($generatedVal as $num => $param) {
-                    $generatedVal[$num] = $this->typeHintChecker->check($instance, $key, $param, $num);
+                    $generatedVal[$num] = $this->typeHintChecker->check($object, $key, $param, $num);
                 }
-                call_user_func_array(array($instance, $key), $generatedVal);
+                call_user_func_array(array($object, $key), $generatedVal);
                 $variables[$key] = $generatedVal;
-            } elseif (method_exists($instance, 'set'.$key)) {
-                $generatedVal = $this->typeHintChecker->check($instance, 'set'.$key, $generatedVal);
-                if(!is_callable(array($instance, 'set'.$key))) {
-                    $refl = new \ReflectionMethod($instance, 'set'.$key);
+            } elseif (method_exists($object, 'set'.$key)) {
+                $generatedVal = $this->typeHintChecker->check($object, 'set'.$key, $generatedVal);
+                if(!is_callable(array($object, 'set'.$key))) {
+                    $refl = new \ReflectionMethod($object, 'set'.$key);
                     $refl->setAccessible(true);
-                    $refl->invoke($instance, $generatedVal);
+                    $refl->invoke($object, $generatedVal);
                 } else {
-                    $instance->{'set'.$key}($generatedVal);
+                    $object->{'set'.$key}($generatedVal);
                 }
                 $variables[$key] = $generatedVal;
-            } elseif (property_exists($instance, $key)) {
-                $refl = new \ReflectionProperty($instance, $key);
+            } elseif (property_exists($object, $key)) {
+                $refl = new \ReflectionProperty($object, $key);
                 $refl->setAccessible(true);
-                $refl->setValue($instance, $generatedVal);
+                $refl->setValue($object, $generatedVal);
 
                 $variables[$key] = $generatedVal;
             } else {

@@ -11,48 +11,51 @@
 
 namespace Nelmio\Alice\Instances;
 
-class Collection {
+use Doctrine\Common\Collections\ArrayCollection;
 
-	private $instances = array();
+class Collection extends ArrayCollection {
 
-	public function getInstances()
+	public function addAll($instances)
 	{
-		return $this->instances;
+		foreach ($instances as $instance) {
+			$this->set($instance->name, $instance);
+		}
 	}
 
-	public function setInstances(array $instances)
+	public function toObjectArray()
 	{
-		$this->instances = $instances;
-	}
+		$objectArray = array();
 
-	public function addInstance($name, $instance)
-	{
-		return $this->instances[$name] = $instance;
+		$this->forAll(function($name, $instance) use (&$objectArray) {
+			$objectArray[$name] = $instance->asObject();
+		});
+
+		return $objectArray;
 	}
 
 	public function getInstance($name, $property = null)
 	{
-		if (isset($this->instances[$name])) {
-			$instance = $this->instances[$name];
+		if ($this->containsKey($name)) {
+			$object = $this->get($name)->asObject();
 
 			if ($property !== null) {
-				if (property_exists($instance, $property)) {
-					$prop = new \ReflectionProperty($instance, $property);
+				if (property_exists($object, $property)) {
+					$prop = new \ReflectionProperty($object, $property);
 
 					if ($prop->isPublic()) {
-						return $instance->{$property};
+						return $object->{$property};
 					}
 				}
 
 				$getter = 'get'.ucfirst($property);
-				if (method_exists($instance, $getter) && is_callable(array($instance, $getter))) {
-					return $instance->$getter();
+				if (method_exists($object, $getter) && is_callable(array($object, $getter))) {
+					return $object->$getter();
 				}
 
 				throw new \UnexpectedValueException('Property '.$property.' is not defined for instance '.$name);
 			}
 
-			return $this->instances[$name];
+			return $object;
 		}
 
 		throw new \UnexpectedValueException('Instance '.$name.' is not defined');
@@ -65,7 +68,7 @@ class Collection {
     }
 
     $availableInstances = array();
-    foreach ($this->instances as $key => $val) {
+    foreach ($this->toArray() as $key => $val) {
         if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
             $availableInstances[] = $key;
         }
