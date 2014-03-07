@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\Builders;
+namespace Nelmio\Alice\Instances\FixtureBuilders;
 
-use Nelmio\Alice\Instances\Instance;
+use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Util\FlagParser;
 
 class ListBuilder extends BaseBuilder {
@@ -31,18 +31,18 @@ class ListBuilder extends BaseBuilder {
 	 */
 	public function build($class, $name, array $spec)
 	{
-		$instances = array();
+		$fixtures = array();
 
 		$enumItems = array_map('trim', explode(',', $this->matches[1]));
 		foreach ($enumItems as $itemName) {
 			$currentName = str_replace($this->matches[0], $itemName, $name);
 			$this->processor->setCurrentValue($itemName);
-			$instance = new Instance($class, $currentName, $spec, $this->processor, $this->typeHintChecker, $itemName);
+			$fixture = new Fixture($class, $currentName, $spec, $this->processor, $this->typeHintChecker, $itemName);
 			$this->processor->unsetCurrentValue();
-			$instances[] = $instance;
+			$fixtures[] = $fixture;
 		}
 
-		return $instances;
+		return $fixtures;
 	}
 
 }

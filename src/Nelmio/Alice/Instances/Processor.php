@@ -18,7 +18,7 @@ class Processor {
 	/**
 	 * @var Collection
 	 */
-	protected $instances;
+	protected $fixtures;
 
 	/**
 	 * Custom faker providers to use with faker generator
@@ -44,9 +44,9 @@ class Processor {
 	 */
 	private $currentValue;
 
-	function __construct($locale = 'en_US', Collection $instances, array $providers) {
+	function __construct($locale = 'en_US', Collection $fixtures, array $providers) {
 		$this->defaultLocale = $locale;
-		$this->instances     = $instances;
+		$this->fixtures      = $fixtures;
 		$this->providers     = $providers;
 	}
 
@@ -128,12 +128,12 @@ class Processor {
 				$multi    = ('' !== $match['multi']) ? $match['multi'] : null;
 				$property = isset($match['property']) ? $match['property'] : null;
 				if (strpos($match['reference'], '*')) {
-					return '$that->instances->getRandomInstances(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
+					return '$that->fixtures->getRandomFixture(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
 				}
 				if (null !== $multi) {
 					throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$match['multi'].'x @user*", otherwise you would always get only one item.');
 				}
-				return '$that->instances->getInstance(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
+				return '$that->fixtures->getFixture(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
 			}, $args);
 
 			$locale = var_export($matches['locale'], true);
@@ -147,27 +147,27 @@ class Processor {
 		if (preg_match('#^'.$placeHolderRegex.'$#i', $data, $matches)) {
 			$data = $replacePlaceholder($matches);
 		} else {
-							// format placeholders inline
+			// format placeholders inline
 			$data = preg_replace_callback('#'.$placeHolderRegex.'#i', function ($matches) use ($replacePlaceholder) {
 				return $replacePlaceholder($matches);
 			}, $data);
 		}
 
-						// process references
+		// process references
 		if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i', $data, $matches)) {
 			$multi    = ('' !== $matches['multi']) ? $matches['multi'] : null;
 			$property = isset($matches['property']) ? $matches['property'] : null;
 			if (strpos($matches['reference'], '*')) {
-				$data = $this->instances->getRandomInstances($matches['reference'], $multi, $property);
+				$data = $this->fixtures->getRandomFixture($matches['reference'], $multi, $property);
 			} else {
 				if (null !== $multi) {
 					throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
 				}
-				$data = $this->instances->getInstance($matches['reference'], $property);
+				$data = $this->fixtures->getFixture($matches['reference'], $property);
 			}
 		}
 
-						// unescape at-signs
+		// unescape at-signs
 		if (is_string($data) && false !== strpos($data, '\\')) {
 			$data = preg_replace('{\\\\([@\\\\])}', '$1', $data);
 		}

@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\Builders;
+namespace Nelmio\Alice\Instances\FixtureBuilders;
 
-use Nelmio\Alice\Instances\Builders\BuilderInterface;
-use Nelmio\Alice\Instances\Instance;
+use Nelmio\Alice\Instances\FixtureBuilders\BuilderInterface;
+use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\TypeHintChecker;
 
@@ -46,7 +46,7 @@ class BaseBuilder implements BuilderInterface {
 	 */
 	public function build($class, $name, array $spec)
 	{
-		return new Instance($class, $name, $spec, $this->processor, $this->typeHintChecker);
+		return new Fixture($class, $name, $spec, $this->processor, $this->typeHintChecker);
 	}
 
 }

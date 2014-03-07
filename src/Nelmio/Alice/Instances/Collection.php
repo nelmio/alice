@@ -15,10 +15,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Collection extends ArrayCollection {
 
-	public function addAll($instances)
+	public function addAll($fixtures)
 	{
-		foreach ($instances as $instance) {
-			$this->set($instance->name, $instance);
+		foreach ($fixtures as $fixture) {
+			$this->set($fixture->name, $fixture);
 		}
 	}
 
@@ -26,14 +26,14 @@ class Collection extends ArrayCollection {
 	{
 		$objectArray = array();
 
-		$this->forAll(function($name, $instance) use (&$objectArray) {
-			$objectArray[$name] = $instance->asObject();
+		$this->forAll(function($name, $fixture) use (&$objectArray) {
+			$objectArray[$name] = $fixture->asObject();
 		});
 
 		return $objectArray;
 	}
 
-	public function getInstance($name, $property = null)
+	public function getFixture($name, $property = null)
 	{
 		if ($this->containsKey($name)) {
 			$object = $this->get($name)->asObject();
@@ -61,31 +61,31 @@ class Collection extends ArrayCollection {
 		throw new \UnexpectedValueException('Instance '.$name.' is not defined');
 	}
 
-	public function getRandomInstances($mask, $count=1, $property)
+	public function getRandomFixture($mask, $count=1, $property)
 	{
 		if ($count === 0) {
         return array();
     }
 
-    $availableInstances = array();
+    $availableFixtures = array();
     foreach ($this->toArray() as $key => $val) {
         if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
-            $availableInstances[] = $key;
+            $availableFixtures[] = $key;
         }
     }
 
-    if (!$availableInstances) {
+    if (!$availableFixtures) {
         throw new \UnexpectedValueException('Instance mask "'.$mask.'" did not match any existing instance, make sure the object is created after its references');
     }
 
     if (null === $count) {
-        return $this->getInstance($availableInstances[mt_rand(0, count($availableInstances) - 1)], $property);
+        return $this->getFixture($availableFixtures[mt_rand(0, count($availableFixtures) - 1)], $property);
     }
 
     $res = array();
-    while ($count-- && $availableInstances) {
-        $ref = array_splice($availableInstances, mt_rand(0, count($availableInstances) - 1), 1);
-        $res[] = $this->getInstance(current($ref), $property);
+    while ($count-- && $availableFixtures) {
+        $ref = array_splice($availableFixtures, mt_rand(0, count($availableFixtures) - 1), 1);
+        $res[] = $this->getFixture(current($ref), $property);
     }
 
     return $res;

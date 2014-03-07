@@ -16,7 +16,7 @@ use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\FlagParser;
 use Nelmio\Alice\Util\TypeHintChecker;
 
-class Instance {
+class Fixture {
 
 	/**
 	 * @var Processor
@@ -42,7 +42,14 @@ class Instance {
 	public $valueForCurrent;
 
 	/**
-	 * 
+	 * built a class representation of a fixture
+	 *
+	 * @param string $class
+	 * @param string $name
+	 * @param array $spec
+	 * @param Processor $processor
+	 * @param TypeHintChecker $typeHintChecker
+	 * @param string $valueForCurrent - when <current()> is called, this value is used
 	 */
 	function __construct($class, $name, array $spec, Processor $processor, TypeHintChecker $typeHintChecker, $valueForCurrent=null) {
 		list($this->class, $this->classFlags) = FlagParser::parse($class);
