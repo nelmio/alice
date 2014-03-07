@@ -33,18 +33,15 @@ class RangeBuilder extends BaseBuilder {
 	{
 		$instances = array();
 
-		list($class, $classFlags) = FlagParser::parse($class);
 		$from = $this->matches[1];
 		$to = empty($this->matches[2]) ? $this->matches[3] : $this->matches[3] - 1;
 		if ($from > $to) {
 			list($to, $from) = array($from, $to);
 		}
-		for ($i = $from; $i <= $to; $i++) {
-			$curSpec = $spec;
-			$curName = str_replace($this->matches[0], $i, $name);
-			list($curName, $instanceFlags) = FlagParser::parse($curName);
-			$this->processor->setCurrentValue($i);
-			$instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i));
+		for ($currentIndex = $from; $currentIndex <= $to; $currentIndex++) {
+			$currentName = str_replace($this->matches[0], $currentIndex, $name);
+			$this->processor->setCurrentValue($currentIndex);
+			$instance = new Instance($class, $currentName, $spec, $this->processor, $this->typeHintChecker, $currentIndex);
 			$this->processor->unsetCurrentValue();
 			$instances[] = $instance;
 		}

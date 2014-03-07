@@ -33,14 +33,11 @@ class ListBuilder extends BaseBuilder {
 	{
 		$instances = array();
 
-		list($class, $classFlags) = FlagParser::parse($class);
 		$enumItems = array_map('trim', explode(',', $this->matches[1]));
-		foreach ($enumItems as $item) {
-			$curSpec = $spec;
-			$curName = str_replace($this->matches[0], $item, $name);
-			list($curName, $instanceFlags) = FlagParser::parse($curName);
-			$this->processor->setCurrentValue($item);
-			$instance = new Instance(array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item));
+		foreach ($enumItems as $itemName) {
+			$currentName = str_replace($this->matches[0], $itemName, $name);
+			$this->processor->setCurrentValue($itemName);
+			$instance = new Instance($class, $currentName, $spec, $this->processor, $this->typeHintChecker, $itemName);
 			$this->processor->unsetCurrentValue();
 			$instances[] = $instance;
 		}

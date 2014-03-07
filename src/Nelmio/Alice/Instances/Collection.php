@@ -15,35 +15,47 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Collection extends ArrayCollection {
 
-	public function set($key, $value)
+	public function addAll($instances)
 	{
-		parent::set($key, $value);
-		return $value;
+		foreach ($instances as $instance) {
+			$this->set($instance->name, $instance);
+		}
+	}
+
+	public function toObjectArray()
+	{
+		$objectArray = array();
+
+		$this->forAll(function($name, $instance) use (&$objectArray) {
+			$objectArray[$name] = $instance->asObject();
+		});
+
+		return $objectArray;
 	}
 
 	public function getInstance($name, $property = null)
 	{
 		if ($this->containsKey($name)) {
-			$instance = $this->get($name);
+			$object = $this->get($name)->asObject();
 
 			if ($property !== null) {
-				if (property_exists($instance, $property)) {
-					$prop = new \ReflectionProperty($instance, $property);
+				if (property_exists($object, $property)) {
+					$prop = new \ReflectionProperty($object, $property);
 
 					if ($prop->isPublic()) {
-						return $instance->{$property};
+						return $object->{$property};
 					}
 				}
 
 				$getter = 'get'.ucfirst($property);
-				if (method_exists($instance, $getter) && is_callable(array($instance, $getter))) {
-					return $instance->$getter();
+				if (method_exists($object, $getter) && is_callable(array($object, $getter))) {
+					return $object->$getter();
 				}
 
 				throw new \UnexpectedValueException('Property '.$property.' is not defined for instance '.$name);
 			}
 
-			return $this->get($name);
+			return $object;
 		}
 
 		throw new \UnexpectedValueException('Instance '.$name.' is not defined');
