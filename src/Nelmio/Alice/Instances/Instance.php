@@ -59,70 +59,85 @@ class Instance {
 				unset($this->spec['__construct']);
 
 				// constructor override
-				if (false === $args) {
-					if (version_compare(PHP_VERSION, '5.4', '<')) {
-						// unserialize hack for php <5.4
-						return $this->object = unserialize(sprintf('O:%d:"%s":0:{}', strlen($this->class), $this->class));
-					}
-
-					$reflClass = new \ReflectionClass($this->class);
-
-					return $this->object = $reflClass->newInstanceWithoutConstructor();
+				if ($args === false) {
+					return version_compare(PHP_VERSION, '5.4', '<') ? $this->instantiateByUnserialize() : $this->instantiateByReflectionWithoutConstructor();
 				}
 
-				//
-				// Sequential arrays call the constructor, hashes call a static method
-				//
-				// array('foo', 'bar') => new $this->class('foo', 'bar')
-				// array('foo' => array('bar')) => $this->class::foo('bar')
-				//
-				if (is_array($args)) {
-					$constructor = '__construct';
-					list($index, $values) = each($args);
-					if ($index !== 0) {
-						if (!is_array($values)) {
-							throw new \UnexpectedValueException("The static '$index' call in object '$name' must be given an array");
-						}
-						if (!is_callable(array($this->class, $index))) {
-							throw new \UnexpectedValueException("Cannot call static method '$index' on class '$this->class' as a constructor for object '$name'");
-						}
-						$constructor = $index;
-						$args = $values;
-					}
-				} else {
-					throw new \UnexpectedValueException('The __construct call in object '.$this->name.' must be defined as an array of arguments or false to bypass it');
-				}
-
-				// create object with given args
-				$reflClass = new \ReflectionClass($this->class);
-				$args = $this->processor->process($args, array());
-				foreach ($args as $num => $param) {
-					$args[$num] = $this->typeHintChecker->check($this->class, $constructor, $param, $num);
-				}
-
-				if ($constructor === '__construct') {
-					$instance = $reflClass->newInstanceArgs($args);
-				} else {
-					$instance = forward_static_call_array(array($this->class, $constructor), $args);
-					if (!($instance instanceof $this->class)) {
-						throw new \UnexpectedValueException("The static constructor '$constructor' for object '$name' returned an object that is not an instance of '$this->class'");
-					}
-				}
-
-				return $this->object = $instance;
+				return $this->instantiateByReflectionWithConstructor($args);
 			}
 
 			// call the constructor if it contains optional params only
 			$reflMethod = new \ReflectionMethod($this->class, '__construct');
 			if (0 === $reflMethod->getNumberOfRequiredParameters()) {
-				return $this->object = new $this->class();
+				return $this->instantiateByEmptyConstructor();
 			}
 
 			// exception otherwise
 			throw new \RuntimeException('You must specify a __construct method with its arguments in object '.$name.' since class '.$this->class.' has mandatory constructor arguments');
 		} catch (\ReflectionException $exception) {
-			return $this->object = new $this->class();
+			return $this->instantiateByEmptyConstructor();
 		}
+	}
+
+	private function instantiateByUnserialize()
+	{
+		// unserialize hack for php <5.4
+		return $this->object = unserialize(sprintf('O:%d:"%s":0:{}', strlen($this->class), $this->class));
+	}
+
+	private function instantiateByReflectionWithoutConstructor()
+	{
+		$reflClass = new \ReflectionClass($this->class);
+		return $this->object = $reflClass->newInstanceWithoutConstructor();
+	}
+
+	private function instantiateByReflectionWithConstructor($args)
+	{
+		//
+		// Sequential arrays call the constructor, hashes call a static method
+		//
+		// array('foo', 'bar') => new $this->class('foo', 'bar')
+		// array('foo' => array('bar')) => $this->class::foo('bar')
+		//
+		if (is_array($args)) {
+			$constructor = '__construct';
+			list($index, $values) = each($args);
+			if ($index !== 0) {
+				if (!is_array($values)) {
+					throw new \UnexpectedValueException("The static '$index' call in object '$name' must be given an array");
+				}
+				if (!is_callable(array($this->class, $index))) {
+					throw new \UnexpectedValueException("Cannot call static method '$index' on class '$this->class' as a constructor for object '$name'");
+				}
+				$constructor = $index;
+				$args = $values;
+			}
+		} else {
+			throw new \UnexpectedValueException('The __construct call in object '.$this->name.' must be defined as an array of arguments or false to bypass it');
+		}
+
+				// create object with given args
+		$reflClass = new \ReflectionClass($this->class);
+		$args = $this->processor->process($args, array());
+		foreach ($args as $num => $param) {
+			$args[$num] = $this->typeHintChecker->check($this->class, $constructor, $param, $num);
+		}
+
+		if ($constructor === '__construct') {
+			$instance = $reflClass->newInstanceArgs($args);
+		} else {
+			$instance = forward_static_call_array(array($this->class, $constructor), $args);
+			if (!($instance instanceof $this->class)) {
+				throw new \UnexpectedValueException("The static constructor '$constructor' for object '$name' returned an object that is not an instance of '$this->class'");
+			}
+		}
+
+		return $this->object = $instance;
+	}
+
+	private function instantiateByEmptyConstructor()
+	{
+		return $this->object = new $this->class();
 	}
 
 }
