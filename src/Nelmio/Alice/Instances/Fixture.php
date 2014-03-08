@@ -75,7 +75,10 @@ class Fixture {
 		try {
 			foreach ($this->instantiators as $instantiator) {
 				if ($instantiator->canInstantiate($this->class, $this->spec)) {
-					return $this->object = $instantiator->instantiate($this->class, $this->name, $this->spec);
+					$this->processor->setCurrentValue($this->valueForCurrent);
+					$this->object = $instantiator->instantiate($this->class, $this->name, $this->spec);
+					$this->processor->unsetCurrentValue();
+					return $this->object;
 				}
 			}
 

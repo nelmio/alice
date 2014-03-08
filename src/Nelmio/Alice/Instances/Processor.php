@@ -18,7 +18,7 @@ class Processor {
 	/**
 	 * @var Collection
 	 */
-	protected $fixtures;
+	protected $objects;
 
 	/**
 	 * Custom faker providers to use with faker generator
@@ -44,9 +44,9 @@ class Processor {
 	 */
 	private $currentValue;
 
-	function __construct($locale = 'en_US', Collection $fixtures, array $providers) {
+	function __construct($locale = 'en_US', Collection $objects, array $providers) {
 		$this->defaultLocale = $locale;
-		$this->fixtures      = $fixtures;
+		$this->objects       = $objects;
 		$this->providers     = $providers;
 	}
 
@@ -128,12 +128,12 @@ class Processor {
 				$multi    = ('' !== $match['multi']) ? $match['multi'] : null;
 				$property = isset($match['property']) ? $match['property'] : null;
 				if (strpos($match['reference'], '*')) {
-					return '$that->fixtures->getRandomFixture(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
+					return '$that->objects->random(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
 				}
 				if (null !== $multi) {
 					throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$match['multi'].'x @user*", otherwise you would always get only one item.');
 				}
-				return '$that->fixtures->getFixture(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
+				return '$that->objects->find(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
 			}, $args);
 
 			$locale = var_export($matches['locale'], true);
@@ -158,12 +158,12 @@ class Processor {
 			$multi    = ('' !== $matches['multi']) ? $matches['multi'] : null;
 			$property = isset($matches['property']) ? $matches['property'] : null;
 			if (strpos($matches['reference'], '*')) {
-				$data = $this->fixtures->getRandomFixture($matches['reference'], $multi, $property);
+				$data = $this->objects->random($matches['reference'], $multi, $property);
 			} else {
 				if (null !== $multi) {
 					throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
 				}
-				$data = $this->fixtures->getFixture($matches['reference'], $property);
+				$data = $this->objects->find($matches['reference'], $property);
 			}
 		}
 

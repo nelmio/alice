@@ -47,7 +47,7 @@ class Base implements LoaderInterface
     /**
      * @var Collection
      */
-    protected $fixtures;
+    protected $objects;
 
     /**
      * @var ORMInterface
@@ -74,9 +74,9 @@ class Base implements LoaderInterface
      */
     public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
     {
-        $this->fixtures        = new Collection;
+        $this->objects         = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
-        $this->processor       = new Processor($locale, $this->fixtures, $providers);
+        $this->processor       = new Processor($locale, $this->objects, $providers);
 
         $this->fixtureBuilders = array(
             new FixtureBuilders\RangeBuilder($this->processor, $this->typeHintChecker),
@@ -98,18 +98,18 @@ class Base implements LoaderInterface
         $data = !is_array($dataOrFilename) ? $this->parseFile($dataOrFilename) : $dataOrFilename;
 
         // create fixtures
-        $this->fixtures->addAll($newFixtures = $this->buildFixtures($data));
+        $newFixtures = $this->buildFixtures($data);
 
         // populate fixtures
         $objects = array();
-        foreach ($newFixtures as $instance) {
-            $this->processor->setCurrentValue($instance->valueForCurrent);
-            $this->populateObject($instance->asObject(), $instance->class, $instance->name, $instance->spec);
+        foreach ($newFixtures as $fixture) {
+            $this->processor->setCurrentValue($fixture->valueForCurrent);
+            $this->populateObject($fixture->asObject(), $fixture->class, $fixture->name, $fixture->spec);
             $this->processor->unsetCurrentValue();
 
             // add the object in the object store unless it's local
-            if (!isset($instance->classFlags['local']) && !isset($instance->nameFlags['local'])) {
-                $objects[$instance->name] = $instance->asObject();
+            if (!isset($fixture->classFlags['local']) && !isset($fixture->nameFlags['local'])) {
+                $objects[$fixture->name] = $fixture->asObject();
             }
         }
 
@@ -121,7 +121,7 @@ class Base implements LoaderInterface
      */
     public function getReference($name, $property = null)
     {
-        return $this->fixtures->getFixture($name, $property);
+        return $this->objects->find($name, $property);
     }
 
     /**
@@ -129,7 +129,7 @@ class Base implements LoaderInterface
      */
     public function getReferences()
     {
-        return $this->fixtures->toObjectArray();
+        return $this->objects->toArray();
     }
 
     /**
@@ -143,10 +143,10 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function setReferences(array $fixtures)
+    public function setReferences(array $objects)
     {
-        $this->fixtures->clear();
-        $this->fixtures->addAll($fixtures);
+        $this->objects->clear();
+        $this->objects->addAll($objects);
     }
 
     /**
@@ -199,6 +199,10 @@ class Base implements LoaderInterface
                     }
                 }
             }
+        }
+
+        foreach ($fixtures as $fixture) {
+            $this->objects->set($fixture->name, $fixture->asObject());
         }
         
         return $fixtures;
