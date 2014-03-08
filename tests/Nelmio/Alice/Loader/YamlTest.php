@@ -22,7 +22,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         $data = $loader->parse($file);
         $expectedData = array(
             'Nelmio\Alice\fixtures\Product' => array(
-                'product0' => [
+                'product0' => array(
                     'status'    => 'in_stock',
                     'site'      => '<word()>',
                     'changed'   => 'y',
@@ -35,8 +35,8 @@ class YamlTest extends \PHPUnit_Framework_TestCase
                     'markDeleted'=> '<word()>',
                     'paid'      => 'y',
                     'user'      => '@user1',
-                ],
-                'product1' => [
+                ),
+                'product1' => array(
                     'status'    => 'in_stock',
                     'site'      => '<word()>',
                     'changed'   => 'n',
@@ -49,7 +49,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
                     'markDeleted'=> '<word()>',
                     'paid'      => 'n',
                     'user'      => '@user0',
-                ],
+                ),
 
             )
         );
