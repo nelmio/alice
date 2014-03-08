@@ -383,6 +383,8 @@ class Base implements LoaderInterface
             unset($data['__set']);
         }
 
+        $this->references['self'] = $instance;
+
         foreach ($data as $key => $val) {
             list($key, $flags) = $this->parseFlags($key);
             if (is_array($val) && '{' === key($val)) {
@@ -449,6 +451,9 @@ class Base implements LoaderInterface
                 throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
             }
         }
+
+        $this->references['self'] = null;
+        unset($this->references['self']);
     }
 
     /**
