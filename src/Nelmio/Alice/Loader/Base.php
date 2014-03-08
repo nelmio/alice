@@ -452,7 +452,6 @@ class Base implements LoaderInterface
             }
         }
 
-        $this->references['self'] = null;
         unset($this->references['self']);
     }
 
