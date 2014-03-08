@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\Builders;
+namespace Nelmio\Alice\Instances\FixtureBuilders;
 
 interface BuilderInterface
 {
     /**
-     * tests whether this class can build an instance with the given name
+     * tests whether this class can build an fixture with the given name
      *
      * @param string $name
      * @return boolean
@@ -22,12 +22,12 @@ interface BuilderInterface
     public function canBuild($name);
 
     /**
-     * builds an instance from the given class, name, and spec
+     * builds an fixture from the given class, name, and spec
      *
      * @param string $class
      * @param string $name
      * @param array $spec
-     * @return Instance|array
+     * @return Fixture|array
      */
     public function build($class, $name, array $spec);
 

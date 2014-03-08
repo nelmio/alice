@@ -15,28 +15,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Collection extends ArrayCollection {
 
-	public function addAll($instances)
+	public function addAll($objects)
 	{
-		foreach ($instances as $instance) {
-			$this->set($instance->name, $instance);
+		foreach ($objects as $object) {
+			$this->set($object->name, $object);
 		}
 	}
 
-	public function toObjectArray()
-	{
-		$objectArray = array();
-
-		$this->forAll(function($name, $instance) use (&$objectArray) {
-			$objectArray[$name] = $instance->asObject();
-		});
-
-		return $objectArray;
-	}
-
-	public function getInstance($name, $property = null)
+	public function find($name, $property = null)
 	{
 		if ($this->containsKey($name)) {
-			$object = $this->get($name)->asObject();
+			$object = $this->get($name);
 
 			if ($property !== null) {
 				if (property_exists($object, $property)) {
@@ -61,31 +50,31 @@ class Collection extends ArrayCollection {
 		throw new \UnexpectedValueException('Instance '.$name.' is not defined');
 	}
 
-	public function getRandomInstances($mask, $count=1, $property)
+	public function random($mask, $count=1, $property)
 	{
 		if ($count === 0) {
         return array();
     }
 
-    $availableInstances = array();
+    $availableObjects = array();
     foreach ($this->toArray() as $key => $val) {
         if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
-            $availableInstances[] = $key;
+            $availableObjects[] = $key;
         }
     }
 
-    if (!$availableInstances) {
+    if (!$availableObjects) {
         throw new \UnexpectedValueException('Instance mask "'.$mask.'" did not match any existing instance, make sure the object is created after its references');
     }
 
     if (null === $count) {
-        return $this->getInstance($availableInstances[mt_rand(0, count($availableInstances) - 1)], $property);
+        return $this->find($availableObjects[mt_rand(0, count($availableObjects) - 1)], $property);
     }
 
     $res = array();
-    while ($count-- && $availableInstances) {
-        $ref = array_splice($availableInstances, mt_rand(0, count($availableInstances) - 1), 1);
-        $res[] = $this->getInstance(current($ref), $property);
+    while ($count-- && $availableObjects) {
+        $ref = array_splice($availableObjects, mt_rand(0, count($availableObjects) - 1), 1);
+        $res[] = $this->find(current($ref), $property);
     }
 
     return $res;

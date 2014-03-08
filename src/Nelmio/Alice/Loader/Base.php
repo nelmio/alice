@@ -16,8 +16,8 @@ use Symfony\Component\PropertyAccess\StringUtil;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
-use Nelmio\Alice\Instances\Builders;
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\FixtureBuilders;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\FlagParser;
 use Nelmio\Alice\Util\TypeHintChecker;
@@ -47,7 +47,7 @@ class Base implements LoaderInterface
     /**
      * @var Collection
      */
-    protected $instances;
+    protected $objects;
 
     /**
      * @var ORMInterface
@@ -74,14 +74,14 @@ class Base implements LoaderInterface
      */
     public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
     {
-        $this->instances       = new Collection;
+        $this->objects         = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
-        $this->processor       = new Processor($locale, $this->instances, $providers);
+        $this->processor       = new Processor($locale, $this->objects, $providers);
 
-        $this->instanceBuilders = array(
-            new Builders\RangeBuilder($this->processor, $this->typeHintChecker),
-            new Builders\ListBuilder($this->processor, $this->typeHintChecker),
-            new Builders\BaseBuilder($this->processor, $this->typeHintChecker)
+        $this->fixtureBuilders = array(
+            new FixtureBuilders\RangeBuilder($this->processor, $this->typeHintChecker),
+            new FixtureBuilders\ListBuilder($this->processor, $this->typeHintChecker),
+            new FixtureBuilders\BaseBuilder($this->processor, $this->typeHintChecker)
         );
 
         if (is_numeric($seed)) {
@@ -97,19 +97,19 @@ class Base implements LoaderInterface
         // ensure our data is loaded
         $data = !is_array($dataOrFilename) ? $this->parseFile($dataOrFilename) : $dataOrFilename;
 
-        // create instances
-        $this->instances->addAll($newInstances = $this->buildInstances($data));
+        // create fixtures
+        $newFixtures = $this->buildFixtures($data);
 
-        // populate instances
+        // populate fixtures
         $objects = array();
-        foreach ($newInstances as $instance) {
-            $this->processor->setCurrentValue($instance->valueForCurrent);
-            $this->populateObject($instance->asObject(), $instance->class, $instance->name, $instance->spec);
+        foreach ($newFixtures as $fixture) {
+            $this->processor->setCurrentValue($fixture->valueForCurrent);
+            $this->populateObject($fixture->asObject(), $fixture->class, $fixture->name, $fixture->spec);
             $this->processor->unsetCurrentValue();
 
             // add the object in the object store unless it's local
-            if (!isset($instance->classFlags['local']) && !isset($instance->nameFlags['local'])) {
-                $objects[$instance->name] = $instance->asObject();
+            if (!isset($fixture->classFlags['local']) && !isset($fixture->nameFlags['local'])) {
+                $objects[$fixture->name] = $fixture->asObject();
             }
         }
 
@@ -121,7 +121,7 @@ class Base implements LoaderInterface
      */
     public function getReference($name, $property = null)
     {
-        return $this->instances->getInstance($name, $property);
+        return $this->objects->find($name, $property);
     }
 
     /**
@@ -129,7 +129,7 @@ class Base implements LoaderInterface
      */
     public function getReferences()
     {
-        return $this->instances->toObjectArray();
+        return $this->objects->toArray();
     }
 
     /**
@@ -143,10 +143,10 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function setReferences(array $instances)
+    public function setReferences(array $objects)
     {
-        $this->instances->clear();
-        $this->instances->addAll($instances);
+        $this->objects->clear();
+        $this->objects->addAll($objects);
     }
 
     /**
@@ -174,34 +174,38 @@ class Base implements LoaderInterface
     }
 
     /**
-     * builds a collection of instances
+     * builds a collection of fixtures
      *
      * @param array $data
      * @return Collection
      */
-    protected function buildInstances($data)
+    protected function buildFixtures($data)
     {
-        $instances = array();
+        $fixtures = array();
 
         foreach ($data as $class => $specs) {
             $this->log('Loading '.$class);
             foreach ($specs as $name => $spec) {
-                foreach ($this->instanceBuilders as $builder) {
+                foreach ($this->fixtureBuilders as $builder) {
                     if ($builder->canBuild($name)) {
-                        $newInstances = $builder->build($class, $name, $spec);
-                        if (is_array($newInstances)) {
-                            $instances = array_merge($instances, $newInstances);
+                        $newFixtures = $builder->build($class, $name, $spec);
+                        if (is_array($newFixtures)) {
+                            $fixtures = array_merge($fixtures, $newFixtures);
                         }
                         else {
-                            $instances[] = $newInstances;
+                            $fixtures[] = $newFixtures;
                         }
                         break;
                     }
                 }
             }
         }
+
+        foreach ($fixtures as $fixture) {
+            $this->objects->set($fixture->name, $fixture->asObject());
+        }
         
-        return $instances;
+        return $fixtures;
     }
 
     private function populateObject($object, $class, $name, $data)

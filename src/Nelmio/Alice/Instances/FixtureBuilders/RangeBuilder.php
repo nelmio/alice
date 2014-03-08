@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\Builders;
+namespace Nelmio\Alice\Instances\FixtureBuilders;
 
-use Nelmio\Alice\Instances\Instance;
+use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Util\FlagParser;
 
 class RangeBuilder extends BaseBuilder {
@@ -31,7 +31,7 @@ class RangeBuilder extends BaseBuilder {
 	 */
 	public function build($class, $name, array $spec)
 	{
-		$instances = array();
+		$fixtures = array();
 
 		$from = $this->matches[1];
 		$to = empty($this->matches[2]) ? $this->matches[3] : $this->matches[3] - 1;
@@ -41,12 +41,12 @@ class RangeBuilder extends BaseBuilder {
 		for ($currentIndex = $from; $currentIndex <= $to; $currentIndex++) {
 			$currentName = str_replace($this->matches[0], $currentIndex, $name);
 			$this->processor->setCurrentValue($currentIndex);
-			$instance = new Instance($class, $currentName, $spec, $this->processor, $this->typeHintChecker, $currentIndex);
+			$fixture = new Fixture($class, $currentName, $spec, $this->processor, $this->typeHintChecker, $currentIndex);
 			$this->processor->unsetCurrentValue();
-			$instances[] = $instance;
+			$fixtures[] = $fixture;
 		}
 
-		return $instances;
+		return $fixtures;
 	}
 
 }
