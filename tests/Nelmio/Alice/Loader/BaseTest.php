@@ -21,7 +21,6 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     const USER = 'Nelmio\Alice\fixtures\User';
     const GROUP = 'Nelmio\Alice\fixtures\Group';
     const CONTACT = 'Nelmio\Alice\fixtures\Contact';
-    const PRODUCT = 'Nelmio\Alice\fixtures\Product';
 
     protected $orm;
 
