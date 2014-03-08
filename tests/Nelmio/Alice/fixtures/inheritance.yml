@@ -1,0 +1,10 @@
+Nelmio\Alice\fixtures\Product:
+  product0:
+    __extend: base/product
+    changed: y
+    user: @user1
+  product1:
+    __extend: base/product
+    amount: 45
+    paid: n
+    user: @user0

@@ -23,6 +23,7 @@ use Symfony\Component\Yaml\Yaml as YamlParser;
  *
  *     Namespace\Class:
  *         name:
+ *              __extend: path_to_parent #optional
  *             property: value
  *             property2: value
  *         name2:
@@ -30,10 +31,13 @@ use Symfony\Component\Yaml\Yaml as YamlParser;
  */
 class Yaml extends Base
 {
+
     /**
-     * {@inheritDoc}
+     * @param $file
+     * @return array
+     * @throws \UnexpectedValueException
      */
-    public function load($file)
+    public function parse($file)
     {
         ob_start();
         $loader = $this;
@@ -49,7 +53,38 @@ class Yaml extends Base
         if (!is_array($data)) {
             throw new \UnexpectedValueException('Yaml files must parse to an array of data');
         }
+        $data = $this->processExtend($data, $file);
+        return $data;
+    }
 
+    /**
+     * @param $data
+     * @param $file
+     * @return mixed
+     */
+    protected function processExtend($data, $file)
+    {
+        foreach ($data as $className => $fixtures) {
+            if (is_array($fixtures) && !empty($fixtures)) {
+                foreach ($fixtures as $fixtureName => $fixtureValues) {
+                    if (isset($fixtureValues['__extend'])) {
+                        $parentFile = dirname($file) . DIRECTORY_SEPARATOR . $fixtureValues['__extend'] . '.yml';
+                        $parentData = $this->parse($parentFile);
+                        $data[$className][$fixtureName] = array_merge($parentData, $fixtureValues);
+                        unset($data[$className][$fixtureName]['__extend']);
+                    }
+                }
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function load($file)
+    {
+        $data = $this->parse($file);
         return parent::load($data);
     }
 }
