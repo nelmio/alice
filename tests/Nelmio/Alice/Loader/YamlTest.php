@@ -20,8 +20,8 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         $file = __DIR__ . '/../fixtures/inheritance.yml';
         $loader = new \Nelmio\Alice\Loader\Yaml();
         $data = $loader->parse($file);
-        $expectedData = [
-            'Nelmio\Alice\fixtures\Product' => [
+        $expectedData = array(
+            'Nelmio\Alice\fixtures\Product' => array(
                 'product0' => [
                     'status'    => 'in_stock',
                     'site'      => '<word()>',
@@ -51,8 +51,8 @@ class YamlTest extends \PHPUnit_Framework_TestCase
                     'user'      => '@user0',
                 ],
 
-            ]
-        ];
+            )
+        );
         $this->assertEquals($expectedData, $data);
     }
 
