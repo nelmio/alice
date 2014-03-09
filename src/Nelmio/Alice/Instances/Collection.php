@@ -15,13 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Collection extends ArrayCollection {
 
-	public function addAll($objects)
-	{
-		foreach ($objects as $object) {
-			$this->set($object->name, $object);
-		}
-	}
-
 	public function find($name, $property = null)
 	{
 		if ($this->containsKey($name)) {

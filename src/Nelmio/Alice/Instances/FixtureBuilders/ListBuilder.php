@@ -37,7 +37,7 @@ class ListBuilder extends BaseBuilder {
 		foreach ($enumItems as $itemName) {
 			$currentName = str_replace($this->matches[0], $itemName, $name);
 			$this->processor->setCurrentValue($itemName);
-			$fixture = new Fixture($class, $currentName, $spec, $this->processor, $this->typeHintChecker, $itemName);
+			$fixture = new Fixture($class, $currentName, $spec, $itemName);
 			$this->processor->unsetCurrentValue();
 			$fixtures[] = $fixture;
 		}

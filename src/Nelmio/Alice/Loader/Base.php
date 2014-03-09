@@ -17,7 +17,9 @@ use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\FixtureBuilders;
+use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\FlagParser;
 use Nelmio\Alice\Util\TypeHintChecker;
@@ -84,6 +86,15 @@ class Base implements LoaderInterface
             new FixtureBuilders\BaseBuilder($this->processor, $this->typeHintChecker)
         );
 
+        $instantiators = array(
+            new Instantiator\Methods\Unserialize(),
+            new Instantiator\Methods\ReflectionWithoutConstructor(),
+            new Instantiator\Methods\ReflectionWithConstructor($this->processor, $this->typeHintChecker),
+            new Instantiator\Methods\EmptyConstructor(),
+        );
+
+        $this->instantiator = new Instantiator\Instantiator($instantiators, $this->processor);
+
         if (is_numeric($seed)) {
             mt_srand($seed);
         }
@@ -100,16 +111,19 @@ class Base implements LoaderInterface
         // create fixtures
         $newFixtures = $this->buildFixtures($data);
 
-        // populate fixtures
+        // instantiate fixtures
+        $this->instantiateFixtures($newFixtures);
+
+        // populate objects
         $objects = array();
         foreach ($newFixtures as $fixture) {
-            $this->processor->setCurrentValue($fixture->valueForCurrent);
-            $this->populateObject($fixture->asObject(), $fixture->class, $fixture->name, $fixture->spec);
+            $this->processor->setCurrentValue($fixture->getValueForCurrent());
+            $this->populateObject($fixture);
             $this->processor->unsetCurrentValue();
 
             // add the object in the object store unless it's local
-            if (!isset($fixture->classFlags['local']) && !isset($fixture->nameFlags['local'])) {
-                $objects[$fixture->name] = $fixture->asObject();
+            if (!isset($fixture->getClassFlags()['local']) && !isset($fixture->getNameFlags()['local'])) {
+                $objects[$fixture->getName()] = $this->getReference($fixture->getName());
             }
         }
 
@@ -146,14 +160,16 @@ class Base implements LoaderInterface
     public function setReferences(array $objects)
     {
         $this->objects->clear();
-        $this->objects->addAll($objects);
+        foreach ($objects as $name => $object) {
+            $this->objects->set($name, $object);
+        }
     }
 
     /**
      * parses a file at the given filename
      *
      * @param string filename
-     * @return string data
+     * @return array data
      */
     protected function parseFile($filename)
     {
@@ -179,7 +195,7 @@ class Base implements LoaderInterface
      * @param array $data
      * @return Collection
      */
-    protected function buildFixtures($data)
+    protected function buildFixtures(array $data)
     {
         $fixtures = array();
 
@@ -200,24 +216,39 @@ class Base implements LoaderInterface
                 }
             }
         }
-
-        foreach ($fixtures as $fixture) {
-            $this->objects->set($fixture->name, $fixture->asObject());
-        }
         
         return $fixtures;
     }
 
-    private function populateObject($object, $class, $name, $data)
+    /**
+     * creates an empty instance for each fixture, and adds it to our object collection
+     *
+     * @param array $fixtures
+     */
+    protected function instantiateFixtures(array $fixtures)
     {
+        foreach ($fixtures as $fixture) {
+            $this->objects->set(
+                $fixture->getName(), 
+                $this->instantiator->instantiate($fixture)
+            );
+        }
+    }
+
+    private function populateObject(Fixture $fixture)
+    {
+        $object = $this->getReference($fixture->getName());
+        $class = $fixture->getClass();
+        $name = $fixture->getName();
+        $data = $fixture->getPropertyMap();
+
         $variables = array();
 
-        if (isset($data['__set'])) {
-            if (!method_exists($object, $data['__set'])) {
-                throw new \RuntimeException('Setter ' . $data['__set'] . ' not found in object');
+        if (!is_null($fixture->getCustomSetter())) {
+            if (!method_exists($object, $fixture->getCustomSetter())) {
+                throw new \RuntimeException('Setter ' . $fixture->getCustomSetter() . ' not found in object');
             }
-            $customSetter = $data['__set'];
-            unset($data['__set']);
+            $getCustomSetter = $fixture->getCustomSetter();
         }
 
         foreach ($data as $key => $val) {
@@ -257,8 +288,8 @@ class Base implements LoaderInterface
                     $rel = $this->typeHintChecker->check($object, $method, $rel);
                     $object->{$method}($rel);
                 }
-            } elseif (isset($customSetter)) {
-                $object->$customSetter($key, $generatedVal);
+            } elseif (isset($getCustomSetter)) {
+                $object->$getCustomSetter($key, $generatedVal);
                 $variables[$key] = $generatedVal;
             } elseif (is_array($generatedVal) && method_exists($object, $key)) {
                 foreach ($generatedVal as $num => $param) {

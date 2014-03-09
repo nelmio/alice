@@ -46,7 +46,7 @@ class BaseBuilder implements BuilderInterface {
 	 */
 	public function build($class, $name, array $spec)
 	{
-		return new Fixture($class, $name, $spec, $this->processor, $this->typeHintChecker);
+		return new Fixture($class, $name, $spec, null);
 	}
 
 }
