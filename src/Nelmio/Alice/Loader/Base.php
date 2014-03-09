@@ -218,11 +218,11 @@ class Base implements LoaderInterface
 
         $variables = array();
 
-        if (!is_null($fixture->customSetter())) {
-            if (!method_exists($object, $fixture->customSetter())) {
-                throw new \RuntimeException('Setter ' . $fixture->customSetter() . ' not found in object');
+        if (!is_null($fixture->getCustomSetter())) {
+            if (!method_exists($object, $fixture->getCustomSetter())) {
+                throw new \RuntimeException('Setter ' . $fixture->getCustomSetter() . ' not found in object');
             }
-            $customSetter = $fixture->customSetter();
+            $getCustomSetter = $fixture->getCustomSetter();
         }
 
         foreach ($data as $key => $val) {
@@ -262,8 +262,8 @@ class Base implements LoaderInterface
                     $rel = $this->typeHintChecker->check($object, $method, $rel);
                     $object->{$method}($rel);
                 }
-            } elseif (isset($customSetter)) {
-                $object->$customSetter($key, $generatedVal);
+            } elseif (isset($getCustomSetter)) {
+                $object->$getCustomSetter($key, $generatedVal);
                 $variables[$key] = $generatedVal;
             } elseif (is_array($generatedVal) && method_exists($object, $key)) {
                 foreach ($generatedVal as $num => $param) {

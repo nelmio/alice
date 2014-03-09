@@ -62,12 +62,12 @@ class Fixture {
 		);
 	}
 
-	public function constructorArgs()
+	public function getConstructorArgs()
 	{
 		return $this->spec['__construct'];
 	}
 
-	public function customSetter()
+	public function getCustomSetter()
 	{
 		return $this->spec['__set'];
 	}
@@ -75,8 +75,8 @@ class Fixture {
 	public function getPropertyMap()
 	{
 		$propertyMap = $this->spec;
-		if (!is_null($this->constructorArgs())) { unset($propertyMap['__construct']); };
-		if (!is_null($this->customSetter())) { unset($propertyMap['__set']); };
+		if (!is_null($this->getConstructorArgs())) { unset($propertyMap['__construct']); };
+		if (!is_null($this->getCustomSetter())) { unset($propertyMap['__set']); };
 		return $propertyMap;
 	}
 

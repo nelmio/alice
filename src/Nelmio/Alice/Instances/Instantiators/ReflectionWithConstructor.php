@@ -34,12 +34,12 @@ class ReflectionWithConstructor {
 
 	public function canInstantiate(Fixture $fixture)
 	{
-		return !is_null($fixture->constructorArgs()) && $fixture->constructorArgs();
+		return !is_null($fixture->getConstructorArgs()) && $fixture->getConstructorArgs();
 	}
 
 	public function instantiate(Fixture $fixture)
 	{
-		$args = $fixture->constructorArgs();
+		$args = $fixture->getConstructorArgs();
 
 		//
 		// Sequential arrays call the constructor, hashes call a static method
