@@ -11,22 +11,10 @@
 
 namespace Nelmio\Alice\Instances;
 
-use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\FlagParser;
 
 class Fixture {
-
-	/**
-	 * @var Processor
-	 */
-	protected $processor;
-
-	/**
-	 * @var array
-	 */
-	protected $instantiators;
 	
-	protected $object = null;
 	protected $class;
 	protected $name;
 	protected $spec;
@@ -44,14 +32,12 @@ class Fixture {
 	 * @param TypeHintChecker $typeHintChecker
 	 * @param string $valueForCurrent - when <current()> is called, this value is used
 	 */
-	function __construct($class, $name, array $spec, $valueForCurrent, Processor $processor, array $instantiators) {
+	function __construct($class, $name, array $spec, $valueForCurrent) {
 		list($this->class, $this->classFlags) = FlagParser::parse($class);
 		list($this->name, $this->nameFlags)   = FlagParser::parse($name);
+		
 		$this->spec            = $spec;
 		$this->valueForCurrent = $valueForCurrent;
-
-		$this->processor     = $processor;
-		$this->instantiators = $instantiators;
 	}
 
 	public function getClass()
@@ -95,27 +81,6 @@ class Fixture {
 	public function getCustomSetter()
 	{
 		return $this->spec['__set'];
-	}
-
-	public function asObject()
-	{
-		if (!is_null($this->object)) { return $this->object; }
-
-		try {
-			foreach ($this->instantiators as $instantiator) {
-				if ($instantiator->canInstantiate($this)) {
-					$this->processor->setCurrentValue($this->valueForCurrent);
-					$this->object = $instantiator->instantiate($this);
-					$this->processor->unsetCurrentValue();
-					return $this->object;
-				}
-			}
-
-			// exception otherwise
-			throw new \RuntimeException('You must specify a __construct method with its arguments in object '.$this->name.' since class '.$this->class.' has mandatory constructor arguments');
-		} catch (\ReflectionException $exception) {
-			return $this->object = new $this->class();
-		}
 	}
 
 }

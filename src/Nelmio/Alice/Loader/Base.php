@@ -19,6 +19,7 @@ use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\FixtureBuilders;
+use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\FlagParser;
 use Nelmio\Alice\Util\TypeHintChecker;
@@ -85,6 +86,15 @@ class Base implements LoaderInterface
             new FixtureBuilders\BaseBuilder($this->processor, $this->typeHintChecker)
         );
 
+        $instantiators = array(
+            new Instantiator\Methods\Unserialize(),
+            new Instantiator\Methods\ReflectionWithoutConstructor(),
+            new Instantiator\Methods\ReflectionWithConstructor($this->processor, $this->typeHintChecker),
+            new Instantiator\Methods\EmptyConstructor(),
+        );
+
+        $this->instantiator = new Instantiator\Instantiator($instantiators, $this->processor);
+
         if (is_numeric($seed)) {
             mt_srand($seed);
         }
@@ -101,7 +111,10 @@ class Base implements LoaderInterface
         // create fixtures
         $newFixtures = $this->buildFixtures($data);
 
-        // populate fixtures
+        // instantiate fixtures
+        $this->instantiateFixtures($newFixtures);
+
+        // populate objects
         $objects = array();
         foreach ($newFixtures as $fixture) {
             $this->processor->setCurrentValue($fixture->getValueForCurrent());
@@ -110,7 +123,7 @@ class Base implements LoaderInterface
 
             // add the object in the object store unless it's local
             if (!isset($fixture->getClassFlags()['local']) && !isset($fixture->getNameFlags()['local'])) {
-                $objects[$fixture->getName()] = $fixture->asObject();
+                $objects[$fixture->getName()] = $this->getReference($fixture->getName());
             }
         }
 
@@ -156,7 +169,7 @@ class Base implements LoaderInterface
      * parses a file at the given filename
      *
      * @param string filename
-     * @return string data
+     * @return array data
      */
     protected function parseFile($filename)
     {
@@ -182,7 +195,7 @@ class Base implements LoaderInterface
      * @param array $data
      * @return Collection
      */
-    protected function buildFixtures($data)
+    protected function buildFixtures(array $data)
     {
         $fixtures = array();
 
@@ -203,17 +216,28 @@ class Base implements LoaderInterface
                 }
             }
         }
-
-        foreach ($fixtures as $fixture) {
-            $this->objects->set($fixture->getName(), $fixture->asObject());
-        }
         
         return $fixtures;
     }
 
+    /**
+     * creates an empty instance for each fixture, and adds it to our object collection
+     *
+     * @param array $fixtures
+     */
+    protected function instantiateFixtures(array $fixtures)
+    {
+        foreach ($fixtures as $fixture) {
+            $this->objects->set(
+                $fixture->getName(), 
+                $this->instantiator->instantiate($fixture)
+            );
+        }
+    }
+
     private function populateObject(Fixture $fixture)
     {
-        $object = $fixture->asObject();
+        $object = $this->getReference($fixture->getName());
         $class = $fixture->getClass();
         $name = $fixture->getName();
         $data = $fixture->getPropertyMap();

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\Instantiators;
+namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
 use Nelmio\Alice\Instances\Fixture;
 

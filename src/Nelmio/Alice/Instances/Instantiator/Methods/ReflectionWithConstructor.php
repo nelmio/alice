@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\Instantiators;
+namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\Processor;
@@ -66,7 +66,11 @@ class ReflectionWithConstructor {
 
 				// create object with given args
 		$reflClass = new \ReflectionClass($fixture->getClass());
+		
+		$this->processor->setCurrentValue($fixture->getValueForCurrent());
 		$args = $this->processor->process($args, array());
+		$this->processor->unsetCurrentValue();
+		
 		foreach ($args as $num => $param) {
 			$args[$num] = $this->typeHintChecker->check($fixture->getClass(), $constructor, $param, $num);
 		}
