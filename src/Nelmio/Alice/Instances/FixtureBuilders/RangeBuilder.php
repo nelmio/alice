@@ -41,7 +41,7 @@ class RangeBuilder extends BaseBuilder {
 		for ($currentIndex = $from; $currentIndex <= $to; $currentIndex++) {
 			$currentName = str_replace($this->matches[0], $currentIndex, $name);
 			$this->processor->setCurrentValue($currentIndex);
-			$fixture = new Fixture($class, $currentName, $spec, $this->processor, $this->typeHintChecker, $currentIndex);
+			$fixture = $this->newFixture($class, $currentName, $spec, $currentIndex);
 			$this->processor->unsetCurrentValue();
 			$fixtures[] = $fixture;
 		}

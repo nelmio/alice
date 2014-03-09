@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Instances\FixtureBuilders;
 
 use Nelmio\Alice\Instances\FixtureBuilders\BuilderInterface;
 use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Instances\Instantiators;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\TypeHintChecker;
 
@@ -46,7 +47,19 @@ class BaseBuilder implements BuilderInterface {
 	 */
 	public function build($class, $name, array $spec)
 	{
-		return new Fixture($class, $name, $spec, $this->processor, $this->typeHintChecker);
+		return $this->newFixture($class, $name, $spec);
+	}
+
+	protected function newFixture($class, $name, array $spec, $valueForCurrent = null)
+	{
+		$instantiators = array(
+			new Instantiators\Unserialize(),
+			new Instantiators\ReflectionWithoutConstructor(),
+			new Instantiators\ReflectionWithConstructor($this->processor, $this->typeHintChecker),
+			new Instantiators\EmptyConstructor(),
+		);
+		
+		return new Fixture($class, $name, $spec, $valueForCurrent, $this->processor, $instantiators);
 	}
 
 }

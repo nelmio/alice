@@ -11,10 +11,8 @@
 
 namespace Nelmio\Alice\Instances;
 
-use Nelmio\Alice\Instances\Instantiators;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\FlagParser;
-use Nelmio\Alice\Util\TypeHintChecker;
 
 class Fixture {
 
@@ -46,20 +44,14 @@ class Fixture {
 	 * @param TypeHintChecker $typeHintChecker
 	 * @param string $valueForCurrent - when <current()> is called, this value is used
 	 */
-	function __construct($class, $name, array $spec, Processor $processor, TypeHintChecker $typeHintChecker, $valueForCurrent=null) {
+	function __construct($class, $name, array $spec, $valueForCurrent, Processor $processor, array $instantiators) {
 		list($this->class, $this->classFlags) = FlagParser::parse($class);
 		list($this->name, $this->nameFlags)   = FlagParser::parse($name);
 		$this->spec            = $spec;
 		$this->valueForCurrent = $valueForCurrent;
-		
-		$this->processor       = $processor;
 
-		$this->instantiators = array(
-			new Instantiators\Unserialize(),
-			new Instantiators\ReflectionWithoutConstructor(),
-			new Instantiators\ReflectionWithConstructor($processor, $typeHintChecker),
-			new Instantiators\EmptyConstructor(),
-		);
+		$this->processor     = $processor;
+		$this->instantiators = $instantiators;
 	}
 
 	public function getClass()
