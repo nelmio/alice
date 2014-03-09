@@ -449,8 +449,8 @@ Nelmio\Entity\User:
         age: <numberBetween(1, 50)>
 ```
 
-Inheritance also allows to extend from several templates. The first declared `extends`
-will always override values from next declated `extends` templates.
+Inheritance also allows to extend from several templates. The last declared `extends`
+will always override values from previous declared `extends` templates.
 
 In the following example, the age from `user_young` will override the age from `user`
 in `user1`
@@ -462,7 +462,7 @@ Nelmio\Entity\User:
         age: <numberBetween(1, 40)>
     user_young (template):
         age: <numberBetween(1, 20)>
-    user1 (extends user_young, extends user):
+    user1 (extends user, extends user_young):
         name: <firstName()>
         lastname: <lastName()>
         city: <city()>

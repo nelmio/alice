@@ -692,20 +692,21 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
                 'user_favorite_number (template)' => array(
                     'fullname' => 'testfullname',
+                    'email'    => 'favorite@email.com',
                     'favoriteNumber'    => 2
                 ),
                 'user_full (template, extends user_minimal, extends user_favorite_number)' => array(
-                    'fullname'       => 'myfullname',
+                    'fullname' => 'myfullname',
                 ),
                 'user (extends user_full)' => array(
-                    'friends'  => 'myfriends'
+                    'friends' => 'myfriends'
                 ),
             ),
         ));
 
         $this->assertCount(1, $res);
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
-        $this->assertSame($this->loader->getReference('user')->email, 'base@email.com');
+        $this->assertSame($this->loader->getReference('user')->email, 'favorite@email.com');
         $this->assertSame($this->loader->getReference('user')->favoriteNumber, 2);
         $this->assertSame($this->loader->getReference('user')->fullname, 'myfullname');
         $this->assertSame($this->loader->getReference('user')->friends, 'myfriends');
@@ -715,21 +716,19 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $res = $this->loadData(array(
             self::USER => array(
-                'user_minimal (template)' => array(
-                    'email'    => 'base@email.com'
+                'user_short_name (template)' => array(
+                    'favoriteNumber'    => 2,
+                    'username' => 'name'
                 ),
-                'user_favorite_number (template)' => array(
-                    'fullname' => 'testfullname',
-                    'favoriteNumber'    => 2
+                'user_medium_name (template)' => array(
+                    'username' => 'name_medium',
+                    'fullname' => 'my real name'
                 ),
-                'user_random (template, extends user_minimal)' => array(
-                    'fullname'       => 'name_random',
+                'user_long_name (template)' => array(
+                    'username' => 'my_very_long_name',
                 ),
-                'user_full (template, extends user_minimal)' => array(
-                    'fullname'       => 'myfullname',
-                ),
-                'user (extends user_full, extends user_random, extends user_favorite_number)' => array(
-                    'friends'  => 'myfriends',
+                'user (extends user_short_name, extends user_medium_name, extends user_long_name)' => array(
+                    'email' => 'base@email.com',
                 ),
             ),
         ));
@@ -738,8 +737,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
         $this->assertSame($this->loader->getReference('user')->email, 'base@email.com');
         $this->assertSame($this->loader->getReference('user')->favoriteNumber, 2);
-        $this->assertSame($this->loader->getReference('user')->fullname, 'myfullname');
-        $this->assertSame($this->loader->getReference('user')->friends, 'myfriends');
+        $this->assertSame($this->loader->getReference('user')->fullname, 'my real name');
+        $this->assertSame($this->loader->getReference('user')->username, 'my_very_long_name');
     }
 
     /**
