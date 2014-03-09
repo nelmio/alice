@@ -32,8 +32,8 @@ class Fixture {
 	public $class;
 	public $name;
 	protected $spec;
-	public $classFlags;
-	public $nameFlags;
+	protected $classFlags;
+	protected $nameFlags;
 	public $valueForCurrent;
 
 	/**
@@ -78,6 +78,16 @@ class Fixture {
 		if (!is_null($this->getConstructorArgs())) { unset($propertyMap['__construct']); };
 		if (!is_null($this->getCustomSetter())) { unset($propertyMap['__set']); };
 		return $propertyMap;
+	}
+
+	public function getClassFlags()
+	{
+		return $this->classFlags;
+	}
+
+	public function getNameFlags()
+	{
+		return $this->nameFlags;
 	}
 
 	public function asObject()

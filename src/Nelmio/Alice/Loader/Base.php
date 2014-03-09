@@ -109,7 +109,7 @@ class Base implements LoaderInterface
             $this->processor->unsetCurrentValue();
 
             // add the object in the object store unless it's local
-            if (!isset($fixture->classFlags['local']) && !isset($fixture->nameFlags['local'])) {
+            if (!isset($fixture->getClassFlags()['local']) && !isset($fixture->getNameFlags()['local'])) {
                 $objects[$fixture->name] = $fixture->asObject();
             }
         }
