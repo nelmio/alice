@@ -24,11 +24,6 @@ class Fixture {
 	protected $processor;
 
 	/**
-	 * @var TypeHintChecker
-	 */
-	protected $typeHintChecker;
-
-	/**
 	 * @var array
 	 */
 	protected $instantiators;
@@ -58,12 +53,11 @@ class Fixture {
 		$this->spec            = $spec;
 		$this->valueForCurrent = $valueForCurrent;
 		$this->processor       = $processor;
-		$this->typeHintChecker = $typeHintChecker;
 
 		$this->instantiators = array(
 			new Instantiators\Unserialize(),
 			new Instantiators\ReflectionWithoutConstructor(),
-			new Instantiators\ReflectionWithConstructor($this->processor, $this->typeHintChecker),
+			new Instantiators\ReflectionWithConstructor($processor, $typeHintChecker),
 			new Instantiators\EmptyConstructor(),
 		);
 	}
