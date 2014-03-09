@@ -104,13 +104,13 @@ class Base implements LoaderInterface
         // populate fixtures
         $objects = array();
         foreach ($newFixtures as $fixture) {
-            $this->processor->setCurrentValue($fixture->valueForCurrent);
+            $this->processor->setCurrentValue($fixture->getValueForCurrent());
             $this->populateObject($fixture);
             $this->processor->unsetCurrentValue();
 
             // add the object in the object store unless it's local
             if (!isset($fixture->getClassFlags()['local']) && !isset($fixture->getNameFlags()['local'])) {
-                $objects[$fixture->name] = $fixture->asObject();
+                $objects[$fixture->getName()] = $fixture->asObject();
             }
         }
 
@@ -147,7 +147,9 @@ class Base implements LoaderInterface
     public function setReferences(array $objects)
     {
         $this->objects->clear();
-        $this->objects->addAll($objects);
+        foreach ($objects as $name => $object) {
+            $this->objects->set($name, $object);
+        }
     }
 
     /**
@@ -203,7 +205,7 @@ class Base implements LoaderInterface
         }
 
         foreach ($fixtures as $fixture) {
-            $this->objects->set($fixture->name, $fixture->asObject());
+            $this->objects->set($fixture->getName(), $fixture->asObject());
         }
         
         return $fixtures;
@@ -212,8 +214,8 @@ class Base implements LoaderInterface
     private function populateObject(Fixture $fixture)
     {
         $object = $fixture->asObject();
-        $class = $fixture->class;
-        $name = $fixture->name;
+        $class = $fixture->getClass();
+        $name = $fixture->getName();
         $data = $fixture->getPropertyMap();
 
         $variables = array();

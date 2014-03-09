@@ -29,12 +29,12 @@ class Fixture {
 	protected $instantiators;
 	
 	protected $object = null;
-	public $class;
-	public $name;
+	protected $class;
+	protected $name;
 	protected $spec;
 	protected $classFlags;
 	protected $nameFlags;
-	public $valueForCurrent;
+	protected $valueForCurrent;
 
 	/**
 	 * built a class representation of a fixture
@@ -49,9 +49,9 @@ class Fixture {
 	function __construct($class, $name, array $spec, Processor $processor, TypeHintChecker $typeHintChecker, $valueForCurrent=null) {
 		list($this->class, $this->classFlags) = FlagParser::parse($class);
 		list($this->name, $this->nameFlags)   = FlagParser::parse($name);
-		
 		$this->spec            = $spec;
 		$this->valueForCurrent = $valueForCurrent;
+		
 		$this->processor       = $processor;
 
 		$this->instantiators = array(
@@ -62,14 +62,14 @@ class Fixture {
 		);
 	}
 
-	public function getConstructorArgs()
+	public function getClass()
 	{
-		return $this->spec['__construct'];
+		return $this->class;
 	}
 
-	public function getCustomSetter()
+	public function getName()
 	{
-		return $this->spec['__set'];
+		return $this->name;
 	}
 
 	public function getPropertyMap()
@@ -88,6 +88,21 @@ class Fixture {
 	public function getNameFlags()
 	{
 		return $this->nameFlags;
+	}
+
+	public function getValueForCurrent()
+	{
+		return $this->valueForCurrent;
+	}
+
+	public function getConstructorArgs()
+	{
+		return $this->spec['__construct'];
+	}
+
+	public function getCustomSetter()
+	{
+		return $this->spec['__set'];
 	}
 
 	public function asObject()

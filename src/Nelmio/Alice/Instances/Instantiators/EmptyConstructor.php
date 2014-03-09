@@ -17,12 +17,13 @@ class EmptyConstructor {
 
 	public function canInstantiate(Fixture $fixture)
 	{
-		return (new \ReflectionMethod($fixture->class, '__construct'))->getNumberOfRequiredParameters() === 0;
+		return (new \ReflectionMethod($fixture->getClass(), '__construct'))->getNumberOfRequiredParameters() === 0;
 	}
 
 	public function instantiate($fixture)
 	{
-		return new $fixture->class();
+		$class = $fixture->getClass();
+		return new $class();
 	}
 
 }

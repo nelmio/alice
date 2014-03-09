@@ -23,7 +23,7 @@ class Unserialize {
 	public function instantiate(Fixture $fixture)
 	{
 		// unserialize hack for php <5.4
-		return unserialize(sprintf('O:%d:"%s":0:{}', strlen($fixture->class), $fixture->class));
+		return unserialize(sprintf('O:%d:"%s":0:{}', strlen($fixture->getClass()), $fixture->getClass()));
 	}
 
 }

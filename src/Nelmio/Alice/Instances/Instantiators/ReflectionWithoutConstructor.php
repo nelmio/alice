@@ -22,7 +22,7 @@ class ReflectionWithoutConstructor {
 
 	public function instantiate(Fixture $fixture)
 	{
-		$reflClass = new \ReflectionClass($fixture->class);
+		$reflClass = new \ReflectionClass($fixture->getClass());
 		return $reflClass->newInstanceWithoutConstructor();
 	}
 
