@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\FixtureBuilders;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\FlagParser;
@@ -104,7 +105,7 @@ class Base implements LoaderInterface
         $objects = array();
         foreach ($newFixtures as $fixture) {
             $this->processor->setCurrentValue($fixture->valueForCurrent);
-            $this->populateObject($fixture->asObject(), $fixture->class, $fixture->name, $fixture->spec);
+            $this->populateObject($fixture);
             $this->processor->unsetCurrentValue();
 
             // add the object in the object store unless it's local
@@ -208,16 +209,20 @@ class Base implements LoaderInterface
         return $fixtures;
     }
 
-    private function populateObject($object, $class, $name, $data)
+    private function populateObject(Fixture $fixture)
     {
+        $object = $fixture->asObject();
+        $class = $fixture->class;
+        $name = $fixture->name;
+        $data = $fixture->getPropertyMap();
+
         $variables = array();
 
-        if (isset($data['__set'])) {
-            if (!method_exists($object, $data['__set'])) {
-                throw new \RuntimeException('Setter ' . $data['__set'] . ' not found in object');
+        if (!is_null($fixture->customSetter())) {
+            if (!method_exists($object, $fixture->customSetter())) {
+                throw new \RuntimeException('Setter ' . $fixture->customSetter() . ' not found in object');
             }
-            $customSetter = $data['__set'];
-            unset($data['__set']);
+            $customSetter = $fixture->customSetter();
         }
 
         foreach ($data as $key => $val) {

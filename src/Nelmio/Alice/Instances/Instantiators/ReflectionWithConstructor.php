@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Instances\Instantiators;
 
+use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\TypeHintChecker;
 
@@ -31,52 +32,51 @@ class ReflectionWithConstructor {
 		$this->typeHintChecker = $typeHintChecker;
 	}
 
-	public function canInstantiate($class, array $spec)
+	public function canInstantiate(Fixture $fixture)
 	{
-		return isset($spec['__construct']) && $spec['__construct'];
+		return !is_null($fixture->constructorArgs()) && $fixture->constructorArgs();
 	}
 
-	public function instantiate($class, $name, array &$spec)
+	public function instantiate(Fixture $fixture)
 	{
-		$args = $spec['__construct'];
-		unset($spec['__construct']);
+		$args = $fixture->constructorArgs();
 
 		//
 		// Sequential arrays call the constructor, hashes call a static method
 		//
-		// array('foo', 'bar') => new $class('foo', 'bar')
-		// array('foo' => array('bar')) => $class::foo('bar')
+		// array('foo', 'bar') => new $fixture->class('foo', 'bar')
+		// array('foo' => array('bar')) => $fixture->class::foo('bar')
 		//
 		if (is_array($args)) {
 			$constructor = '__construct';
 			list($index, $values) = each($args);
 			if ($index !== 0) {
 				if (!is_array($values)) {
-					throw new \UnexpectedValueException("The static '$index' call in object '$name' must be given an array");
+					throw new \UnexpectedValueException("The static '$index' call in object '$fixture->name' must be given an array");
 				}
-				if (!is_callable(array($class, $index))) {
-					throw new \UnexpectedValueException("Cannot call static method '$index' on class '$class' as a constructor for object '$name'");
+				if (!is_callable(array($fixture->class, $index))) {
+					throw new \UnexpectedValueException("Cannot call static method '$index' on class '$fixture->class' as a constructor for object '$fixture->name'");
 				}
 				$constructor = $index;
 				$args = $values;
 			}
 		} else {
-			throw new \UnexpectedValueException("The __construct call in object '$name' must be defined as an array of arguments or false to bypass it");
+			throw new \UnexpectedValueException("The __construct call in object '$fixture->name' must be defined as an array of arguments or false to bypass it");
 		}
 
 				// create object with given args
-		$reflClass = new \ReflectionClass($class);
+		$reflClass = new \ReflectionClass($fixture->class);
 		$args = $this->processor->process($args, array());
 		foreach ($args as $num => $param) {
-			$args[$num] = $this->typeHintChecker->check($class, $constructor, $param, $num);
+			$args[$num] = $this->typeHintChecker->check($fixture->class, $constructor, $param, $num);
 		}
 
 		if ($constructor === '__construct') {
 			$instance = $reflClass->newInstanceArgs($args);
 		} else {
-			$instance = forward_static_call_array(array($class, $constructor), $args);
-			if (!($instance instanceof $class)) {
-				throw new \UnexpectedValueException("The static constructor '$constructor' for object '$name' returned an object that is not an instance of '$class'");
+			$instance = forward_static_call_array(array($fixture->class, $constructor), $args);
+			if (!($instance instanceof $fixture->class)) {
+				throw new \UnexpectedValueException("The static constructor '$constructor' for object '$fixture->name' returned an object that is not an instance of '$fixture->class'");
 			}
 		}
 

@@ -36,7 +36,7 @@ class Fixture {
 	protected $object = null;
 	public $class;
 	public $name;
-	public $spec;
+	protected $spec;
 	public $classFlags;
 	public $nameFlags;
 	public $valueForCurrent;
@@ -68,15 +68,33 @@ class Fixture {
 		);
 	}
 
+	public function constructorArgs()
+	{
+		return $this->spec['__construct'];
+	}
+
+	public function customSetter()
+	{
+		return $this->spec['__set'];
+	}
+
+	public function getPropertyMap()
+	{
+		$propertyMap = $this->spec;
+		if (!is_null($this->constructorArgs())) { unset($propertyMap['__construct']); };
+		if (!is_null($this->customSetter())) { unset($propertyMap['__set']); };
+		return $propertyMap;
+	}
+
 	public function asObject()
 	{
 		if (!is_null($this->object)) { return $this->object; }
 
 		try {
 			foreach ($this->instantiators as $instantiator) {
-				if ($instantiator->canInstantiate($this->class, $this->spec)) {
+				if ($instantiator->canInstantiate($this)) {
 					$this->processor->setCurrentValue($this->valueForCurrent);
-					$this->object = $instantiator->instantiate($this->class, $this->name, $this->spec);
+					$this->object = $instantiator->instantiate($this);
 					$this->processor->unsetCurrentValue();
 					return $this->object;
 				}

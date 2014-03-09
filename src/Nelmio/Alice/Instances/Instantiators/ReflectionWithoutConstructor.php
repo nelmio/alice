@@ -11,17 +11,18 @@
 
 namespace Nelmio\Alice\Instances\Instantiators;
 
+use Nelmio\Alice\Instances\Fixture;
+
 class ReflectionWithoutConstructor {
 
-	public function canInstantiate($class, array $spec)
+	public function canInstantiate(Fixture $fixture)
 	{
-		return isset($spec['__construct']) && $spec['__construct'] === false && !version_compare(PHP_VERSION, '5.4', '<');
+		return !is_null($fixture->constructorArgs()) && $fixture->constructorArgs() === false && !version_compare(PHP_VERSION, '5.4', '<');
 	}
 
-	public function instantiate($class, $name, array &$spec)
+	public function instantiate(Fixture $fixture)
 	{
-		unset($spec['__construct']);
-		$reflClass = new \ReflectionClass($class);
+		$reflClass = new \ReflectionClass($fixture->class);
 		return $reflClass->newInstanceWithoutConstructor();
 	}
 

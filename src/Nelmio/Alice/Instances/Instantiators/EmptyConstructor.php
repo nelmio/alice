@@ -11,16 +11,18 @@
 
 namespace Nelmio\Alice\Instances\Instantiators;
 
+use Nelmio\Alice\Instances\Fixture;
+
 class EmptyConstructor {
 
-	public function canInstantiate($class, array $spec)
+	public function canInstantiate(Fixture $fixture)
 	{
-		return (new \ReflectionMethod($class, '__construct'))->getNumberOfRequiredParameters() === 0;
+		return (new \ReflectionMethod($fixture->class, '__construct'))->getNumberOfRequiredParameters() === 0;
 	}
 
-	public function instantiate($class, $name, array &$spec)
+	public function instantiate($fixture)
 	{
-		return new $class();
+		return new $fixture->class();
 	}
 
 }
