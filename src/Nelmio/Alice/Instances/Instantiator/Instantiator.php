@@ -12,7 +12,6 @@
 namespace Nelmio\Alice\Instances\Instantiator;
 
 use Nelmio\Alice\Instances\Fixture;
-use Nelmio\Alice\Instances\Processor\Processor;
 
 class Instantiator {
 
@@ -21,14 +20,8 @@ class Instantiator {
 	 **/
 	protected $methods;
 
-	/**
-	 * @var Processor
-	 */
-	protected $processor;
-
-	function __construct(array $methods, Processor $processor) {
+	function __construct(array $methods) {
 		$this->methods   = $methods;
-		$this->processor = $processor;
 	}
 
 	public function instantiate(Fixture $fixture)
