@@ -34,54 +34,31 @@ class ReflectionWithConstructor {
 
 	public function canInstantiate(Fixture $fixture)
 	{
-		return !is_null($fixture->getConstructor()) && $fixture->getConstructor()->getValue();
+		return $fixture->shouldUseConstructor();
 	}
 
 	public function instantiate(Fixture $fixture)
 	{
-		$args = $fixture->getConstructor()->getValue();
+		$class             = $fixture->getClass();
+		$constructorMethod = $fixture->getConstructorMethod();
+		$constructorArgs   = $fixture->getConstructorArgs();
 
-		//
-		// Sequential arrays call the constructor, hashes call a static method
-		//
-		// array('foo', 'bar') => new $fixture->getClass()('foo', 'bar')
-		// array('foo' => array('bar')) => $fixture->getClass()::foo('bar')
-		//
-		if (is_array($args)) {
-			$constructor = '__construct';
-			list($index, $values) = each($args);
-			if ($index !== 0) {
-				if (!is_array($values)) {
-					throw new \UnexpectedValueException("The static '$index' call in object '{$fixture}' must be given an array");
-				}
-				if (!is_callable(array($fixture->getClass(), $index))) {
-					throw new \UnexpectedValueException("Cannot call static method '$index' on class '{$fixture->getClass()}' as a constructor for object '{$fixture}'");
-				}
-				$constructor = $index;
-				$args = $values;
-			}
-		} else {
-			throw new \UnexpectedValueException("The __construct call in object '{$fixture}' must be defined as an array of arguments or false to bypass it");
-		}
-
-		// create object with given args
-		$reflClass = new \ReflectionClass($fixture->getClass());
+		$reflClass = new \ReflectionClass($class);
 		
 		$this->processor->setCurrentValue($fixture->getValueForCurrent());
-		$args = $this->processor->parse($args, array());
+		$constructorArgs = $this->processor->parse($constructorArgs, array());
 		$this->processor->unsetCurrentValue();
 		
-		foreach ($args as $num => $param) {
-			$args[$num] = $this->typeHintChecker->check($fixture->getClass(), $constructor, $param, $num);
+		foreach ($constructorArgs as $index => $value) {
+			$constructorArgs[$index] = $this->typeHintChecker->check($class, $constructorMethod, $value, $index);
 		}
 
-		if ($constructor === '__construct') {
-			$instance = $reflClass->newInstanceArgs($args);
+		if ($constructorMethod === '__construct') {
+			$instance = $reflClass->newInstanceArgs($constructorArgs);
 		} else {
-			$instance = forward_static_call_array(array($fixture->getClass(), $constructor), $args);
-			$class = $fixture->getClass();
+			$instance = forward_static_call_array(array($class, $constructorMethod), $constructorArgs);
 			if (!($instance instanceof $class)) {
-				throw new \UnexpectedValueException("The static constructor '$constructor' for object '{$fixture}' returned an object that is not an instance of '{$fixture->getClass()}'");
+				throw new \UnexpectedValueException("The static constructor '{$constructorMethod}' for object '{$fixture}' returned an object that is not an instance of '{$class}'");
 			}
 		}
 

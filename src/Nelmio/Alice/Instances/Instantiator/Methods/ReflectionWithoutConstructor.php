@@ -17,7 +17,7 @@ class ReflectionWithoutConstructor {
 
 	public function canInstantiate(Fixture $fixture)
 	{
-		return !is_null($fixture->getConstructor()) && $fixture->getConstructor()->getValue() === false && !version_compare(PHP_VERSION, '5.4', '<');
+		return !$fixture->shouldUseConstructor() && !version_compare(PHP_VERSION, '5.4', '<');
 	}
 
 	public function instantiate(Fixture $fixture)
