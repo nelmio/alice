@@ -471,6 +471,40 @@ Nelmio\Entity\User:
         lastname: <lastName()>
         city: <city()>
 ```
+### Including files ###
+
+You may include files to you fixtures. Let's look at an example:
+
+Your fixture file:
+
+```yaml
+include:
+    - relative/path/to/file.yml
+    - relative/path/to/another/file.yml
+Nelmio\Entity\User:
+    user1 (extends user, extends user_young):
+        name: <firstName()>
+        lastname: <lastName()>
+        city: <city()>
+```
+
+In relative/path/to/file.yml
+```yaml
+Nelmio\Entity\User:
+    user (template):
+        username: <username()>
+        age: <numberBetween(1, 40)>
+```
+
+In relative/path/to/another/file.yml
+
+```yaml
+Nelmio\Entity\User:
+    user_young (template):
+        age: <numberBetween(1, 20)>
+```
+
+All files would be merged in one data set and your base fixture file takes precedence in case of duplicate keys.
 
 ### Variables ###
 
