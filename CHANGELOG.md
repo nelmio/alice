@@ -1,3 +1,13 @@
+### 1.6.0 (2014-02-05)
+
+  * The array of instances returned by load() now has the fixture name as key
+  * Added support for static factory methods to replace __construct
+  * Added a special __set property to define a custom setter for all properties
+  * Added support for @-references within faker provider calls e.g. `<foo(@obj)>`
+  * Added support for escaping @-signs to create literal strings starting with `@`, e.g. `\@foo`
+  * Fixed support for null variable references
+  * Fixed invalid invocation of private setters
+
 ### 1.5.2 (2013-08-07)
 
   * Fixed typo in the handling of processors

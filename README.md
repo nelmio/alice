@@ -28,6 +28,7 @@ To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://g
   - [References](#references)
   - [Multiple References](#multiple-references)
   - [Handling Unique Constraints](#handling-unique-constraints)
+  - [Fixture Inheritance](#fixture-inheritance)
   - [Variables](#variables)
   - [Value Objects](#value-objects)
   - [Custom Faker Data Providers](#custom-faker-data-providers)
@@ -349,6 +350,9 @@ Nelmio\Entity\Group:
         owner: <numberBetween(1, 200)>
 ```
 
+> **Note**: To create a string `@foo` that is not a reference you can escape it
+> as `\@foo`
+
 ### Multiple References ###
 
 If we want to also add group members, there are two ways to do this.
@@ -391,6 +395,10 @@ You can also randomize the amount by combining it with faker data:
 > **Note**: You do not need to define multi-references inside an array, since
 > they are automatically translated to an array of objects.
 
+#### Self reference ####
+
+The `@self` reference is assigned to the current fixture instance.
+
 ### Handling Unique Constraints ###
 
 Quite often some database fields have a unique constraint set on them, in which
@@ -406,6 +414,62 @@ for that property. For example:
 Nelmio\Entity\User:
     user{1..10}:
         username (unique): <username()>
+```
+
+### Fixture inheritance ###
+
+Base fixtures, to be extended from, can be created to be able to *only* need
+to define less additional values in a set of common fixture definitions
+
+
+By declaring a fixture as a template using the `(template)` flag, Alice will set
+the instance as a template for that file. Templates instances are not persisted.
+
+Templates can also make use of inheritance themselves, by extending from other
+templates, allowing you to create, mix and match templates. For example:
+
+```yaml
+Nelmio\Entity\User:
+    user_bare (template):
+        username: <username()>
+    user_full (template, extends user_bare):
+        name: <firstName()>
+        lastname: <lastName()>
+        city: <city()>
+```
+
+Templates can be extended by other fixtures making use of the `(extends)` flag
+followed by the name of the template to extend.
+
+```yaml
+Nelmio\Entity\User:
+    user (template):
+        username: <username()>
+        age: <numberBetween(1, 20)>
+    user1 (extends user):
+        name: <firstName()>
+        lastname: <lastName()>
+        city: <city()>
+        age: <numberBetween(1, 50)>
+```
+
+Inheritance also allows to extend from several templates. The last declared `extends`
+will always override values from previous declared `extends` templates.
+
+In the following example, the age from `user_young` will override the age from `user`
+in `user1`
+
+```yaml
+Nelmio\Entity\User:
+    user (template):
+        username: <username()>
+        age: <numberBetween(1, 40)>
+    user_young (template):
+        age: <numberBetween(1, 20)>
+    user1 (extends user, extends user_young):
+        name: <firstName()>
+        lastname: <lastName()>
+        city: <city()>
 ```
 
 ### Variables ###
