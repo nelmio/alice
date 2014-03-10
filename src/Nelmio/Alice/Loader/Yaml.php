@@ -37,13 +37,21 @@ class Yaml extends Base
     {
         ob_start();
         $loader = $this;
+
+        // isolates the file from current context variables and gives
+        // it access to the $loader object to inline php blocks if needed
         $includeWrapper = function () use ($file, $loader) {
             return include $file;
         };
         $data = $includeWrapper();
-        if (true !== $data) {
+
+        if (1 === $data) {
+            // include didn't return data but included correctly, parse it as yaml
             $yaml = ob_get_clean();
             $data = YamlParser::parse($yaml);
+        } else {
+            // make sure to clean up if theres a failure
+            ob_end_clean();
         }
 
         if (!is_array($data)) {
