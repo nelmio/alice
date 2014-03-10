@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\FixtureBuilders;
+namespace Nelmio\Alice\Instances\FixtureBuilder\Methods;
 
-interface BuilderInterface
+interface MethodInterface
 {
     /**
      * tests whether this class can build an fixture with the given name
@@ -27,7 +27,7 @@ interface BuilderInterface
      * @param string $class
      * @param string $name
      * @param array $spec
-     * @return Fixture|array
+     * @return array
      */
     public function build($class, $name, array $spec);
 
