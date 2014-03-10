@@ -699,6 +699,40 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($user1->username . '_' . $user2->username, $user3->username);
     }
 
+    public function testSkippingReferencesInStrings()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => '<("foo@test.com")>',
+                ),
+                'user2' => array(
+                    'username' => '<("foo@test" . "@com")>',
+                ),
+                'user3' => array(
+                    'username' => '<("foo\"@test.com")>',
+                ),
+            ),
+        ));
+
+        $this->assertCount(3, $res);
+
+        $user1 = $this->loader->getReference('user1');
+        $this->assertInstanceOf(self::USER, $user1);
+
+        $this->assertEquals('foo@test.com', $user1->username);
+
+        $user2 = $this->loader->getReference('user2');
+        $this->assertInstanceOf(self::USER, $user2);
+
+        $this->assertEquals('foo@test@com', $user2->username);
+
+        $user3 = $this->loader->getReference('user3');
+        $this->assertInstanceOf(self::USER, $user3);
+
+        $this->assertEquals('foo"@test.com', $user3->username);
+    }
+
     public function testLoadCreatesEnumsOfObjects()
     {
         $res = $this->loadData(array(
