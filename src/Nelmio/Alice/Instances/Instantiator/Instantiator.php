@@ -34,7 +34,7 @@ class Instantiator {
 			}
 
       // exception otherwise
-			throw new \RuntimeException("You must specify a __construct method with its arguments in object '{$fixture->getName()}' since class '{$fixture->getClass()}' has mandatory constructor arguments");
+			throw new \RuntimeException("You must specify a __construct method with its arguments in object '{$fixture}' since class '{$fixture->getClass()}' has mandatory constructor arguments");
 		} catch (\ReflectionException $exception) {
 			$class = $fixture->getClass();
 			return new $class();

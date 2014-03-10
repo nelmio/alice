@@ -34,12 +34,12 @@ class ReflectionWithConstructor {
 
 	public function canInstantiate(Fixture $fixture)
 	{
-		return !is_null($fixture->getConstructorArgs()) && $fixture->getConstructorArgs();
+		return !is_null($fixture->getConstructor()) && $fixture->getConstructor()->getValue();
 	}
 
 	public function instantiate(Fixture $fixture)
 	{
-		$args = $fixture->getConstructorArgs();
+		$args = $fixture->getConstructor()->getValue();
 
 		//
 		// Sequential arrays call the constructor, hashes call a static method
@@ -52,23 +52,23 @@ class ReflectionWithConstructor {
 			list($index, $values) = each($args);
 			if ($index !== 0) {
 				if (!is_array($values)) {
-					throw new \UnexpectedValueException("The static '$index' call in object '{$fixture->getName()}' must be given an array");
+					throw new \UnexpectedValueException("The static '$index' call in object '{$fixture}' must be given an array");
 				}
 				if (!is_callable(array($fixture->getClass(), $index))) {
-					throw new \UnexpectedValueException("Cannot call static method '$index' on class '{$fixture->getClass()}' as a constructor for object '{$fixture->getName()}'");
+					throw new \UnexpectedValueException("Cannot call static method '$index' on class '{$fixture->getClass()}' as a constructor for object '{$fixture}'");
 				}
 				$constructor = $index;
 				$args = $values;
 			}
 		} else {
-			throw new \UnexpectedValueException("The __construct call in object '{$fixture->getName()}' must be defined as an array of arguments or false to bypass it");
+			throw new \UnexpectedValueException("The __construct call in object '{$fixture}' must be defined as an array of arguments or false to bypass it");
 		}
 
-				// create object with given args
+		// create object with given args
 		$reflClass = new \ReflectionClass($fixture->getClass());
 		
 		$this->processor->setCurrentValue($fixture->getValueForCurrent());
-		$args = $this->processor->process($args, array());
+		$args = $this->processor->parse($args, array());
 		$this->processor->unsetCurrentValue();
 		
 		foreach ($args as $num => $param) {
@@ -81,7 +81,7 @@ class ReflectionWithConstructor {
 			$instance = forward_static_call_array(array($fixture->getClass(), $constructor), $args);
 			$class = $fixture->getClass();
 			if (!($instance instanceof $class)) {
-				throw new \UnexpectedValueException("The static constructor '$constructor' for object '{$fixture->getName()}' returned an object that is not an instance of '{$fixture->getClass()}'");
+				throw new \UnexpectedValueException("The static constructor '$constructor' for object '{$fixture}' returned an object that is not an instance of '{$fixture->getClass()}'");
 			}
 		}
 

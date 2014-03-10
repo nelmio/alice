@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Instances\Processor;
 
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\PropertyDefinition;
 use Nelmio\Alice\Instances\Processor\Methods;
 
 class Processor {
@@ -69,11 +70,15 @@ class Processor {
 		$this->currentValue = null;
 	}
 
-	public function process($data, array $variables)
+	public function process(PropertyDefinition $property, array $variables)
 	{
+		return $this->parse($property->getValue(), $variables);
+	}
+
+	public function parse($data, $variables) {
 		if (is_array($data)) {
-			foreach ($data as $key => $val) {
-				$data[$key] = $this->process($val, $variables);
+			foreach ($data as $key => $value) {
+				$data[$key] = $this->parse($value, $variables);
 			}
 
 			return $data;
@@ -82,7 +87,7 @@ class Processor {
 		// check for conditional values (20%? true : false)
 		if (is_string($data) && preg_match('{^(?<threshold>[0-9.]+%?)\? (?<true>.+?)(?: : (?<false>.+?))?$}', $data, $match)) {
 			// process true val since it's always needed
-			$trueVal = $this->process($match['true'], $variables);
+			$trueVal = $this->parse($match['true'], $variables);
 
 			// compute threshold and check if we are beyond it
 			$threshold = $match['threshold'];
@@ -96,7 +101,7 @@ class Processor {
 				$emptyVal = is_array($trueVal) ? array() : null;
 
 				if (isset($match['false']) && '' !== $match['false']) {
-					return $this->process($match['false'], $variables);
+					return $this->parse($match['false'], $variables);
 				}
 
 				return $emptyVal;

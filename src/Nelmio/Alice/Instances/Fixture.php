@@ -11,15 +11,46 @@
 
 namespace Nelmio\Alice\Instances;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Nelmio\Alice\Instances\PropertyDefinition;
 use Nelmio\Alice\Util\FlagParser;
 
 class Fixture {
 	
+	/**
+	 * @var string
+	 */
 	protected $class;
+	
+	/**
+	 * @var string
+	 */
 	protected $name;
+	
+	/**
+	 * @var array
+	 */
 	protected $spec;
+	
+	/**
+	 * @var ArrayCollection
+	 */
+	protected $properties;
+	
+	/**
+	 * @var array
+	 */
 	protected $classFlags;
+	
+	/**
+	 * @var array
+	 */
 	protected $nameFlags;
+	
+	/**
+	 * @var string
+	 */
 	protected $valueForCurrent;
 
 	/**
@@ -38,6 +69,11 @@ class Fixture {
 		
 		$this->spec            = $spec;
 		$this->valueForCurrent = $valueForCurrent;
+
+		$this->properties = new ArrayCollection();
+		foreach ($spec as $propertyName => $propertyValue) {
+			$this->properties->set($propertyName, new PropertyDefinition($propertyName, $propertyValue));
+		}
 	}
 
 	public function getClass()
@@ -50,12 +86,9 @@ class Fixture {
 		return $this->name;
 	}
 
-	public function getPropertyMap()
+	public function getProperties()
 	{
-		$propertyMap = $this->spec;
-		if (!is_null($this->getConstructorArgs())) { unset($propertyMap['__construct']); };
-		if (!is_null($this->getCustomSetter())) { unset($propertyMap['__set']); };
-		return $propertyMap;
+		return $this->properties->filter(function($property) { return $property->isBasic(); });
 	}
 
 	public function getClassFlags()
@@ -73,14 +106,29 @@ class Fixture {
 		return $this->valueForCurrent;
 	}
 
-	public function getConstructorArgs()
+	public function hasConstructor()
 	{
-		return $this->spec['__construct'];
+		return !is_null($this->getConstructor());
+	}
+
+	public function getConstructor()
+	{
+		return $this->properties->get('__construct');
+	}
+
+	public function hasCustomSetter()
+	{
+		return !is_null($this->getCustomSetter());
 	}
 
 	public function getCustomSetter()
 	{
-		return $this->spec['__set'];
+		return $this->properties->get('__set');
+	}
+
+	public function __toString()
+	{
+		return $this->getName();
 	}
 
 }

@@ -225,31 +225,32 @@ class Base implements LoaderInterface
     private function populateObject(Fixture $fixture)
     {
         $object = $this->getReference($fixture->getName());
-        $class = $fixture->getClass();
-        $name = $fixture->getName();
-        $data = $fixture->getPropertyMap();
+        $class  = $fixture->getClass();
+        $name   = $fixture->getName();
 
         $variables = array();
 
-        if (!is_null($fixture->getCustomSetter())) {
+        if ($fixture->hasCustomSetter()) {
             if (!method_exists($object, $fixture->getCustomSetter())) {
                 throw new \RuntimeException('Setter ' . $fixture->getCustomSetter() . ' not found in object');
             }
-            $getCustomSetter = $fixture->getCustomSetter();
+            $customSetter = $fixture->getCustomSetter()->getValue();
         }
 
-        foreach ($data as $key => $val) {
-            list($key, $flags) = FlagParser::parse($key);
+        foreach ($fixture->getProperties() as $property) {
+            $key = $property->getName();
+            $val = $property->getValue();
+
             if (is_array($val) && '{' === key($val)) {
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
 
-            if (isset($flags['unique'])) {
+            if (isset($property->getNameFlags()['unique'])) {
                 $i = $uniqueTriesLimit = 128;
 
                 do {
                     // process values
-                    $generatedVal = $this->processor->process($val, $variables);
+                    $generatedVal = $this->processor->process($property, $variables);
 
                     if (is_object($generatedVal)) {
                         $valHash = spl_object_hash($generatedVal);
@@ -266,7 +267,7 @@ class Base implements LoaderInterface
 
                 $this->uniqueValues[$class . $key][$valHash] = true;
             } else {
-                $generatedVal = $this->processor->process($val, $variables);
+                $generatedVal = $this->processor->process($property, $variables);
             }
 
             // add relations if available
@@ -275,8 +276,8 @@ class Base implements LoaderInterface
                     $rel = $this->typeHintChecker->check($object, $method, $rel);
                     $object->{$method}($rel);
                 }
-            } elseif (isset($getCustomSetter)) {
-                $object->$getCustomSetter($key, $generatedVal);
+            } elseif (isset($customSetter)) {
+                $object->$customSetter($key, $generatedVal);
                 $variables[$key] = $generatedVal;
             } elseif (is_array($generatedVal) && method_exists($object, $key)) {
                 foreach ($generatedVal as $num => $param) {
