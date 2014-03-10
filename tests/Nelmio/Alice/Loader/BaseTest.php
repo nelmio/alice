@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\fixtures\Product;
 use Nelmio\Alice\TestORM;
 use Nelmio\Alice\Loader\Base;
 use Nelmio\Alice\fixtures\User;
@@ -73,7 +74,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Reference foo is not defined
      */
     public function testGetBadReference()
