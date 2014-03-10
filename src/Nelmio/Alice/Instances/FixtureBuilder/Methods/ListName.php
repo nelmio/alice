@@ -9,14 +9,24 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\FixtureBuilders;
+namespace Nelmio\Alice\Instances\FixtureBuilder\Methods;
 
 use Nelmio\Alice\Instances\Fixture;
-use Nelmio\Alice\Util\FlagParser;
+use Nelmio\Alice\Instances\FixtureBuilder\Methods\MethodInterface;
+use Nelmio\Alice\Instances\Processor;
 
-class ListBuilder extends BaseBuilder {
+class ListName implements MethodInterface {
 
 	private $matches = array();
+
+	/**
+	 * @var Processor
+	 */
+	protected $processor;
+
+	function __construct(Processor $processor) {
+		$this->processor = $processor;
+	}
 
 	/**
 	 * {@inheritDoc}

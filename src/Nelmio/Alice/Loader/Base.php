@@ -18,7 +18,7 @@ use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Fixture;
-use Nelmio\Alice\Instances\FixtureBuilders;
+use Nelmio\Alice\Instances\FixtureBuilder;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Util\FlagParser;
@@ -80,20 +80,18 @@ class Base implements LoaderInterface
         $this->typeHintChecker = new TypeHintChecker;
         $this->processor       = new Processor($locale, $this->objects, $providers);
 
-        $this->fixtureBuilders = array(
-            new FixtureBuilders\RangeBuilder($this->processor, $this->typeHintChecker),
-            new FixtureBuilders\ListBuilder($this->processor, $this->typeHintChecker),
-            new FixtureBuilders\BaseBuilder($this->processor, $this->typeHintChecker)
-        );
+        $this->fixtureBuilder = new FixtureBuilder\FixtureBuilder(array(
+            new FixtureBuilder\Methods\RangeName($this->processor),
+            new FixtureBuilder\Methods\ListName($this->processor),
+            new FixtureBuilder\Methods\SimpleName()
+            ));
 
-        $instantiators = array(
+        $this->instantiator = new Instantiator\Instantiator(array(
             new Instantiator\Methods\Unserialize(),
             new Instantiator\Methods\ReflectionWithoutConstructor(),
             new Instantiator\Methods\ReflectionWithConstructor($this->processor, $this->typeHintChecker),
             new Instantiator\Methods\EmptyConstructor(),
-        );
-
-        $this->instantiator = new Instantiator\Instantiator($instantiators, $this->processor);
+            ), $this->processor);
 
         if (is_numeric($seed)) {
             mt_srand($seed);
@@ -192,28 +190,17 @@ class Base implements LoaderInterface
     /**
      * builds a collection of fixtures
      *
-     * @param array $data
+     * @param array $rawData
      * @return Collection
      */
-    protected function buildFixtures(array $data)
+    protected function buildFixtures(array $rawData)
     {
         $fixtures = array();
 
-        foreach ($data as $class => $specs) {
+        foreach ($rawData as $class => $specs) {
             $this->log('Loading '.$class);
             foreach ($specs as $name => $spec) {
-                foreach ($this->fixtureBuilders as $builder) {
-                    if ($builder->canBuild($name)) {
-                        $newFixtures = $builder->build($class, $name, $spec);
-                        if (is_array($newFixtures)) {
-                            $fixtures = array_merge($fixtures, $newFixtures);
-                        }
-                        else {
-                            $fixtures[] = $newFixtures;
-                        }
-                        break;
-                    }
-                }
+                $fixtures = array_merge($fixtures, $this->fixtureBuilder->build($class, $name, $spec));
             }
         }
         
@@ -231,7 +218,7 @@ class Base implements LoaderInterface
             $this->objects->set(
                 $fixture->getName(), 
                 $this->instantiator->instantiate($fixture)
-            );
+                );
         }
     }
 
@@ -369,12 +356,12 @@ class Base implements LoaderInterface
      *
      * @param string $message
      */
-    public function log($message)
-    {
-        if ($this->logger instanceof LoggerInterface) {
-            $this->logger->debug($message);
-        } elseif ($logger = $this->logger) {
-            $logger($message);
-        }
+   public function log($message)
+   {
+    if ($this->logger instanceof LoggerInterface) {
+        $this->logger->debug($message);
+    } elseif ($logger = $this->logger) {
+        $logger($message);
     }
+}
 }
