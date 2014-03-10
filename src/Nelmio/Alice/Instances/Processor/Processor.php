@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances;
+namespace Nelmio\Alice\Instances\Processor;
 
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\Processor\Methods;
 
 class Processor {
 
@@ -48,12 +49,14 @@ class Processor {
 		$this->defaultLocale = $locale;
 		$this->objects       = $objects;
 		$this->providers     = $providers;
+
+		$this->conditionalProcessor = new Methods\Conditional($this);
 	}
 
 	public function setProviders(array $providers)
 	{
 		$this->providers = $providers;
-		$this->emptyGenerators();
+		$this->generators = array();
 	}
 
 	public function setCurrentValue($value)
@@ -175,11 +178,9 @@ class Processor {
 		return $data;
 	}
 
-	private function fake($formatter, $locale = null, $arg = null, $arg2 = null, $arg3 = null)
+	private function fake($formatter, $locale = null)
 	{
-		$args = func_get_args();
-		array_shift($args);
-		array_shift($args);
+		$args = array_slice(func_get_args(), 2);
 
 		if ($formatter == 'current') {
 			if ($this->currentValue === null) {
@@ -190,11 +191,6 @@ class Processor {
 		}
 
 		return $this->getGenerator($locale)->format($formatter, $args);
-	}
-
-	private function emptyGenerators()
-	{
-		$this->generators = array();
 	}
 
 	/**

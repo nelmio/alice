@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
 use Nelmio\Alice\Instances\Fixture;
-use Nelmio\Alice\Instances\Processor;
+use Nelmio\Alice\Instances\Processor\Processor;
 use Nelmio\Alice\Util\TypeHintChecker;
 
 class ReflectionWithConstructor {

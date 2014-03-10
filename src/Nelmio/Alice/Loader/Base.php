@@ -78,7 +78,7 @@ class Base implements LoaderInterface
     {
         $this->objects         = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
-        $this->processor       = new Processor($locale, $this->objects, $providers);
+        $this->processor       = new Processor\Processor($locale, $this->objects, $providers);
 
         $this->fixtureBuilder = new FixtureBuilder\FixtureBuilder(array(
             new FixtureBuilder\Methods\RangeName($this->processor),

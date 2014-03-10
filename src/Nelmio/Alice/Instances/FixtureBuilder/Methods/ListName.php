@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Instances\FixtureBuilder\Methods;
 
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\FixtureBuilder\Methods\MethodInterface;
-use Nelmio\Alice\Instances\Processor;
+use Nelmio\Alice\Instances\Processor\Processor;
 
 class ListName implements MethodInterface {
 

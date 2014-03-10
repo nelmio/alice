@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Instances\Instantiator;
 
 use Nelmio\Alice\Instances\Fixture;
-use Nelmio\Alice\Instances\Processor;
+use Nelmio\Alice\Instances\Processor\Processor;
 
 class Instantiator {
 
