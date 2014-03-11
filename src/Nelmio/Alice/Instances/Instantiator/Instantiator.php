@@ -12,7 +12,6 @@
 namespace Nelmio\Alice\Instances\Instantiator;
 
 use Nelmio\Alice\Instances\Fixture;
-use Nelmio\Alice\Instances\Processor;
 
 class Instantiator {
 
@@ -21,14 +20,8 @@ class Instantiator {
 	 **/
 	protected $methods;
 
-	/**
-	 * @var Processor
-	 */
-	protected $processor;
-
-	function __construct(array $methods, Processor $processor) {
+	function __construct(array $methods) {
 		$this->methods   = $methods;
-		$this->processor = $processor;
 	}
 
 	public function instantiate(Fixture $fixture)
@@ -41,7 +34,7 @@ class Instantiator {
 			}
 
       // exception otherwise
-			throw new \RuntimeException("You must specify a __construct method with its arguments in object '{$fixture->getName()}' since class '{$fixture->getClass()}' has mandatory constructor arguments");
+			throw new \RuntimeException("You must specify a __construct method with its arguments in object '{$fixture}' since class '{$fixture->getClass()}' has mandatory constructor arguments");
 		} catch (\ReflectionException $exception) {
 			$class = $fixture->getClass();
 			return new $class();

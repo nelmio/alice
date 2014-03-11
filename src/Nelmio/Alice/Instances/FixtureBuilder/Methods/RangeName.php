@@ -13,20 +13,10 @@ namespace Nelmio\Alice\Instances\FixtureBuilder\Methods;
 
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\FixtureBuilder\Methods\MethodInterface;
-use Nelmio\Alice\Instances\Processor;
 
 class RangeName implements MethodInterface {
 
 	private $matches = array();
-
-	/**
-	 * @var Processor
-	 */
-	protected $processor;
-
-	function __construct(Processor $processor) {
-		$this->processor = $processor;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -50,9 +40,7 @@ class RangeName implements MethodInterface {
 		}
 		for ($currentIndex = $from; $currentIndex <= $to; $currentIndex++) {
 			$currentName = str_replace($this->matches[0], $currentIndex, $name);
-			$this->processor->setCurrentValue($currentIndex);
 			$fixture = new Fixture($class, $currentName, $spec, $currentIndex);
-			$this->processor->unsetCurrentValue();
 			$fixtures[] = $fixture;
 		}
 

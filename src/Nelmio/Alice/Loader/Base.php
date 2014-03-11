@@ -52,6 +52,11 @@ class Base implements LoaderInterface
     protected $objects;
 
     /**
+     * @var Faker
+     */
+    protected $fakerProcessorMethod;
+
+    /**
      * @var ORMInterface
      */
     protected $manager;
@@ -78,12 +83,20 @@ class Base implements LoaderInterface
     {
         $this->objects         = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
-        $this->processor       = new Processor($locale, $this->objects, $providers);
 
         $this->fixtureBuilder = new FixtureBuilder\FixtureBuilder(array(
-            new FixtureBuilder\Methods\RangeName($this->processor),
-            new FixtureBuilder\Methods\ListName($this->processor),
+            new FixtureBuilder\Methods\RangeName(),
+            new FixtureBuilder\Methods\ListName(),
             new FixtureBuilder\Methods\SimpleName()
+            ));
+
+        $this->fakerProcessorMethod = new Processor\Methods\Faker($this->objects, $providers, $locale);
+        $this->processor = new Processor\Processor(array(
+            new Processor\Methods\ArrayValue(),
+            new Processor\Methods\Conditional(),
+            new Processor\Methods\UnescapeAt(),
+            $this->fakerProcessorMethod,
+            new Processor\Methods\Reference($this->objects)
             ));
 
         $this->instantiator = new Instantiator\Instantiator(array(
@@ -115,10 +128,8 @@ class Base implements LoaderInterface
         // populate objects
         $objects = array();
         foreach ($newFixtures as $fixture) {
-            $this->processor->setCurrentValue($fixture->getValueForCurrent());
             $this->populateObject($fixture);
-            $this->processor->unsetCurrentValue();
-
+            
             // add the object in the object store unless it's local
             if (!isset($fixture->getClassFlags()['local']) && !isset($fixture->getNameFlags()['local'])) {
                 $objects[$fixture->getName()] = $this->getReference($fixture->getName());
@@ -149,7 +160,7 @@ class Base implements LoaderInterface
      */
     public function setProviders(array $providers)
     {
-        $this->processor->setProviders($providers);
+        $this->fakerProcessorMethod->setProviders($providers);
     }
 
     /**
@@ -225,31 +236,32 @@ class Base implements LoaderInterface
     private function populateObject(Fixture $fixture)
     {
         $object = $this->getReference($fixture->getName());
-        $class = $fixture->getClass();
-        $name = $fixture->getName();
-        $data = $fixture->getPropertyMap();
+        $class  = $fixture->getClass();
+        $name   = $fixture->getName();
 
         $variables = array();
 
-        if (!is_null($fixture->getCustomSetter())) {
+        if ($fixture->hasCustomSetter()) {
             if (!method_exists($object, $fixture->getCustomSetter())) {
                 throw new \RuntimeException('Setter ' . $fixture->getCustomSetter() . ' not found in object');
             }
-            $getCustomSetter = $fixture->getCustomSetter();
+            $customSetter = $fixture->getCustomSetter()->getValue();
         }
 
-        foreach ($data as $key => $val) {
-            list($key, $flags) = FlagParser::parse($key);
+        foreach ($fixture->getProperties() as $property) {
+            $key = $property->getName();
+            $val = $property->getValue();
+
             if (is_array($val) && '{' === key($val)) {
                 throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
             }
 
-            if (isset($flags['unique'])) {
+            if (isset($property->getNameFlags()['unique'])) {
                 $i = $uniqueTriesLimit = 128;
 
                 do {
                     // process values
-                    $generatedVal = $this->processor->process($val, $variables);
+                    $generatedVal = $this->processor->process($property, $variables, $fixture->getValueForCurrent());
 
                     if (is_object($generatedVal)) {
                         $valHash = spl_object_hash($generatedVal);
@@ -266,7 +278,7 @@ class Base implements LoaderInterface
 
                 $this->uniqueValues[$class . $key][$valHash] = true;
             } else {
-                $generatedVal = $this->processor->process($val, $variables);
+                $generatedVal = $this->processor->process($property, $variables, $fixture->getValueForCurrent());
             }
 
             // add relations if available
@@ -275,8 +287,8 @@ class Base implements LoaderInterface
                     $rel = $this->typeHintChecker->check($object, $method, $rel);
                     $object->{$method}($rel);
                 }
-            } elseif (isset($getCustomSetter)) {
-                $object->$getCustomSetter($key, $generatedVal);
+            } elseif (isset($customSetter)) {
+                $object->$customSetter($key, $generatedVal);
                 $variables[$key] = $generatedVal;
             } elseif (is_array($generatedVal) && method_exists($object, $key)) {
                 foreach ($generatedVal as $num => $param) {

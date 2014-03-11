@@ -11,15 +11,46 @@
 
 namespace Nelmio\Alice\Instances;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Nelmio\Alice\Instances\PropertyDefinition;
 use Nelmio\Alice\Util\FlagParser;
 
 class Fixture {
 	
+	/**
+	 * @var string
+	 */
 	protected $class;
+	
+	/**
+	 * @var string
+	 */
 	protected $name;
+	
+	/**
+	 * @var array
+	 */
 	protected $spec;
+	
+	/**
+	 * @var ArrayCollection
+	 */
+	protected $properties;
+	
+	/**
+	 * @var array
+	 */
 	protected $classFlags;
+	
+	/**
+	 * @var array
+	 */
 	protected $nameFlags;
+	
+	/**
+	 * @var string
+	 */
 	protected $valueForCurrent;
 
 	/**
@@ -38,6 +69,11 @@ class Fixture {
 		
 		$this->spec            = $spec;
 		$this->valueForCurrent = $valueForCurrent;
+
+		$this->properties = new ArrayCollection();
+		foreach ($spec as $propertyName => $propertyValue) {
+			$this->properties->set($propertyName, new PropertyDefinition($propertyName, $propertyValue));
+		}
 	}
 
 	public function getClass()
@@ -50,12 +86,9 @@ class Fixture {
 		return $this->name;
 	}
 
-	public function getPropertyMap()
+	public function getProperties()
 	{
-		$propertyMap = $this->spec;
-		if (!is_null($this->getConstructorArgs())) { unset($propertyMap['__construct']); };
-		if (!is_null($this->getCustomSetter())) { unset($propertyMap['__set']); };
-		return $propertyMap;
+		return $this->properties->filter(function($property) { return $property->isBasic(); });
 	}
 
 	public function getClassFlags()
@@ -73,14 +106,64 @@ class Fixture {
 		return $this->valueForCurrent;
 	}
 
+	public function getConstructorMethod()
+	{
+		return $this->getConstructorComponents()['method'];
+	}
+
 	public function getConstructorArgs()
 	{
-		return $this->spec['__construct'];
+		return $this->getConstructorComponents()['args'];
+	}
+
+	public function shouldUseConstructor()
+	{
+		return !is_null($this->getConstructor()) && $this->getConstructor()->getValue();
+	}
+
+	public function hasCustomSetter()
+	{
+		return !is_null($this->getCustomSetter());
 	}
 
 	public function getCustomSetter()
 	{
-		return $this->spec['__set'];
+		return $this->properties->get('__set');
+	}
+
+	public function __toString()
+	{
+		return $this->getName();
+	}
+
+	protected function getConstructor()
+	{
+		return $this->properties->get('__construct');
+	}
+
+	//
+	// Sequential arrays call the constructor, hashes call a static method
+	//
+	// array('foo', 'bar') => new $fixture->getClass()('foo', 'bar')
+	// array('foo' => array('bar')) => $fixture->getClass()::foo('bar')
+	//
+	public function getConstructorComponents()
+	{
+		if (!is_array($this->getConstructor()->getValue())) {
+			throw new \UnexpectedValueException("The __construct call in object '{$this}' must be defined as an array of arguments or false to bypass it");
+		}
+
+		list($method, $args) = each($this->getConstructor()->getValue());
+		if ($method !== 0) {
+			if (!is_callable(array($this->class, $method))) {
+				throw new \UnexpectedValueException("Cannot call static method '{$method}' on class '{$this->class}' as a constructor for object '{$this}'");
+			}
+			if (!is_array($args)) {
+				throw new \UnexpectedValueException("The static '{$method}' call in object '{$this}' must be given an array");
+			}
+			return array('method' => $method, 'args' => $args);	
+		}
+		return array('method' => '__construct', 'args' => $this->getConstructor()->getValue());
 	}
 
 }
