@@ -1,0 +1,107 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Nelmio\Alice\Instances\Populator;
+
+use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Instances\PropertyDefinition;
+use Nelmio\Alice\Instances\Populator\Methods;
+use Nelmio\Alice\Instances\Processor\Processor;
+
+class Populator {
+	
+	/**
+	* @var Collection
+	*/
+	protected $objects;
+
+	/**
+	 * @var Processor
+	 */
+	protected $processor;
+
+	/**
+	 * @var array
+	 */
+	private $uniqueValues = array();
+
+	function __construct(Collection $objects, Processor $processor, array $setters) {
+		$this->objects   = $objects;
+		$this->processor = $processor;
+		$this->setters   = $setters;
+	}
+
+	/**
+	 * populate all the properties for the object described by the given fixture
+	 *
+	 * @param Fixture $fixture
+	 */
+	public function populate(Fixture $fixture)
+	{
+		$class  = $fixture->getClass();
+		$name   = $fixture->getName();
+		$object = $this->objects->get($name);
+
+		foreach ($fixture->getProperties() as $property) {
+			$key = $property->getName();
+			$val = $property->getValue();
+
+			if (is_array($val) && '{' === key($val)) {
+				throw new \RuntimeException('Misformatted string in object '.$name.', '.$key.'\'s value should be quoted if you used yaml');
+			}
+
+			$value = $property->requiresUnique() ? 
+				$this->generateUnique($fixture, $property) : 
+				$this->processor->process($property, $fixture->getSetProperties(), $fixture->getValueForCurrent());
+
+			foreach ($this->setters as $setter) {
+				if ($setter->canSet($fixture, $object, $key, $value)) {
+					$setter->set($fixture, $object, $key, $value);
+					$fixture->setPropertyValue($key, $value);
+					break;
+				}
+			}
+
+			if (!array_key_exists($key, $fixture->getSetProperties())) {
+				throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
+			}
+		}
+	}
+
+	protected function generateUnique(Fixture $fixture, PropertyDefinition $property)
+	{
+		$class = $fixture->getClass();
+		$key = $property->getName();
+		$i = $uniqueTriesLimit = 128;
+
+		do {
+			// process values
+			$value = $this->processor->process($property, $fixture->getSetProperties(), $fixture->getValueForCurrent());
+
+			if (is_object($value)) {
+				$valHash = spl_object_hash($value);
+			} elseif (is_array($value)) {
+				$valHash = hash('md4', serialize($value));
+			} else {
+				$valHash = $value;
+			}
+		} while (--$i > 0 && isset($this->uniqueValues[$class . $key][$valHash]));
+
+		if (isset($this->uniqueValues[$class . $key][$valHash])) {
+			throw new \RuntimeException("Couldn't generate random unique value for $class: $key in $uniqueTriesLimit tries.");
+		}
+
+		$this->uniqueValues[$class . $key][$valHash] = true;
+		return $value;
+	}
+
+}

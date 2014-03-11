@@ -39,6 +39,16 @@ class PropertyDefinition extends Processable {
 	}
 
 	/**
+	 * returns true if this property requires unique values
+	 *
+	 * @return boolean
+	 **/
+	public function requiresUnique()
+	{
+		return isset($this->nameFlags['unique']);
+	}
+
+	/**
 	 * returns true if this definition is for a property to be set on the instance
 	 *
 	 * @return boolean
