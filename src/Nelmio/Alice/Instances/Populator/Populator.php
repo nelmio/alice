@@ -16,7 +16,6 @@ use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\PropertyDefinition;
 use Nelmio\Alice\Instances\Populator\Methods;
 use Nelmio\Alice\Instances\Processor\Processor;
-use Nelmio\Alice\Util\TypeHintChecker;
 
 class Populator {
 	
@@ -35,17 +34,10 @@ class Populator {
 	 */
 	private $uniqueValues = array();
 
-	function __construct(Collection $objects, Processor $processor, TypeHintChecker $typeHintChecker) {
-		$this->objects         = $objects;
-		$this->processor       = $processor;
-
-		$this->setters = array(
-			new Methods\ArrayAdd($typeHintChecker),
-			new Methods\Custom(),
-			new Methods\ArrayDirect($typeHintChecker),
-			new Methods\Direct($typeHintChecker),
-			new Methods\Property()
-			);
+	function __construct(Collection $objects, Processor $processor, array $setters) {
+		$this->objects   = $objects;
+		$this->processor = $processor;
+		$this->setters   = $setters;
 	}
 
 	/**

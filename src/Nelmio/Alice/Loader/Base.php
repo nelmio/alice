@@ -119,7 +119,13 @@ class Base implements LoaderInterface
 			new Instantiator\Methods\EmptyConstructor(),
 			), $this->processor);
 
-		$this->populator = new Populator\Populator($this->objects, $processor, $this->typeHintChecker);
+		$this->populator = new Populator\Populator($this->objects, $processor, array(
+			new Populator\Methods\ArrayAdd($this->typeHintChecker),
+			new Populator\Methods\Custom(),
+			new Populator\Methods\ArrayDirect($this->typeHintChecker),
+			new Populator\Methods\Direct($this->typeHintChecker),
+			new Populator\Methods\Property()
+			));
 
 		if (is_numeric($seed)) {
 			mt_srand($seed);
