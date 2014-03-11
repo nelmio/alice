@@ -20,12 +20,14 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 class Processor {
 
 	function __construct(Collection $objects, array $providers, $locale = 'en_US') {
-		$this->arrayProcessor       = new Methods\ArrayValue($this);
-		$this->conditionalProcessor = new Methods\Conditional($this);
-		$this->nonStringProcessor   = new Methods\NonString();
-		$this->unescapeAtProcessor 	= new Methods\UnescapeAt();
-		$this->fakerProcessor       = new Methods\Faker($objects, $providers, $locale);
-		$this->referenceProcessor   = new Methods\Reference($objects);
+		$this->methods = array(
+			new Methods\ArrayValue($this),
+			new Methods\Conditional($this),
+			new Methods\NonString(),
+			new Methods\UnescapeAt(),
+			new Methods\Faker($objects, $providers, $locale),
+			new Methods\Reference($objects)
+		);
 	}
 
 	public function setProviders(array $providers)
@@ -33,51 +35,21 @@ class Processor {
 		$this->fakerProcessor->setProviders($providers);
 	}
 
-	public function process($value, array $variables, $valueForCurrent = null)
+	public function process($valueOrProcessable, array $variables, $valueForCurrent = null)
 	{
-		$processable = $value instanceof ProcessableInterface ? $value : new Processable($value);
+		$value = $valueOrProcessable instanceof ProcessableInterface ? $valueOrProcessable->getValue() : $valueOrProcessable;
 
-		if (!is_null($valueForCurrent)) {
-			$this->valueForCurrent = $valueForCurrent;
-		}
-		if ($this->arrayProcessor->canProcess($processable)) {
-			return $this->arrayProcessor->process($processable, $variables);
-		}
+		if (!is_null($valueForCurrent)) { $this->valueForCurrent = $valueForCurrent; }
 
-		// check for conditional values (20%? true : false)
-		if ($this->conditionalProcessor->canProcess($processable)) {
-			return $this->conditionalProcessor->process($processable, $variables);
-		}
-
-		// return non-string values
-		if ($this->nonStringProcessor->canProcess($processable)) {
-			return $this->nonStringProcessor->process($processable, $variables);
+		foreach ($this->methods as $method) {
+			$processable = new Processable($value);
+			if ($method->canProcess($processable)) {
+				if (method_exists($method, 'setValueForCurrent')) { $method->setValueForCurrent($this->valueForCurrent); }
+				$value = $method->process($processable, $variables);
+			}
 		}
 		
-		$value = $processable->getValue();
-
-		// format placeholders without preg_replace if there is only one to avoid __toString() being called
-		$processable = new Processable($value);
-		if ($this->fakerProcessor->canProcess($processable)) {
-			$this->fakerProcessor->setValueForCurrent($this->valueForCurrent);
-			$value = $this->fakerProcessor->process($processable, $variables);
-		}
-
-		// process references
-		$processable = new Processable($value);
-		if ($this->referenceProcessor->canProcess($processable)) {
-			$value = $this->referenceProcessor->process($processable, $variables);
-		}
-
-		// unescape at-signs
-		$processable = new Processable($value);
-		if ($this->unescapeAtProcessor->canProcess($processable)) {
-			$value = $this->unescapeAtProcessor->process($processable, $variables);
-		}
-
-		if (!is_null($valueForCurrent)) {
-			$this->valueForCurrent = null;
-		}
+		if (!is_null($valueForCurrent)) { $this->valueForCurrent = null; }
 
 		return $value;
 	}
