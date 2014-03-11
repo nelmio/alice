@@ -14,6 +14,8 @@ namespace Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\PropertyDefinition;
 use Nelmio\Alice\Instances\Processor\Methods;
+use Nelmio\Alice\Instances\Processor\Processable;
+use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
 class Processor {
 
@@ -51,7 +53,10 @@ class Processor {
 		$this->objects       = $objects;
 		$this->providers     = $providers;
 
+		$this->arrayProcessor       = new Methods\ArrayValue($this);
 		$this->conditionalProcessor = new Methods\Conditional($this);
+		$this->nonStringProcessor   = new Methods\NonString();
+		$this->unescapeAtProcessor 	= new Methods\UnescapeAt();
 	}
 
 	public function setProviders(array $providers)
@@ -70,81 +75,58 @@ class Processor {
 		$this->currentValue = null;
 	}
 
-	public function process(PropertyDefinition $property, array $variables)
+	public function process($processable, array $variables)
 	{
-		return $this->parse($property->getValue(), $variables);
-	}
+		$processable = $processable instanceof ProcessableInterface ? $processable : new Processable($processable);
 
-	public function parse($data, $variables) {
-		if (is_array($data)) {
-			foreach ($data as $key => $value) {
-				$data[$key] = $this->parse($value, $variables);
-			}
-
-			return $data;
+		if ($this->arrayProcessor->canProcess($processable)) {
+			return $this->arrayProcessor->process($processable, $variables);
 		}
 
 		// check for conditional values (20%? true : false)
-		if (is_string($data) && preg_match('{^(?<threshold>[0-9.]+%?)\? (?<true>.+?)(?: : (?<false>.+?))?$}', $data, $match)) {
-			// process true val since it's always needed
-			$trueVal = $this->parse($match['true'], $variables);
-
-			// compute threshold and check if we are beyond it
-			$threshold = $match['threshold'];
-			if (substr($threshold, -1) === '%') {
-				$threshold = substr($threshold, 0, -1) / 100;
-			}
-			$randVal = mt_rand(0, 100) / 100;
-			if ($threshold > 0 && $randVal <= $threshold) {
-				return $trueVal;
-			} else {
-				$emptyVal = is_array($trueVal) ? array() : null;
-
-				if (isset($match['false']) && '' !== $match['false']) {
-					return $this->parse($match['false'], $variables);
-				}
-
-				return $emptyVal;
-			}
+		if ($this->conditionalProcessor->canProcess($processable)) {
+			return $this->conditionalProcessor->process($processable, $variables);
 		}
 
 		// return non-string values
-		if (!is_string($data)) {
-			return $data;
+		if ($this->nonStringProcessor->canProcess($processable)) {
+			return $this->nonStringProcessor->process($processable, $variables);
 		}
-
+		
+		$value = $processable->getValue();
+		
 		// format placeholders without preg_replace if there is only one to avoid __toString() being called
 		$placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)\((?<args>(?:[^)]*|\)(?!>))*)\)>';
-		if (preg_match('#^'.$placeHolderRegex.'$#i', $data, $matches)) {
-			$data = $this->replacePlaceholder($matches, $variables);
+		if (preg_match('#^'.$placeHolderRegex.'$#i', $value, $matches)) {
+			$value = $this->replacePlaceholder($matches, $variables);
 		} else {
 			// format placeholders inline
 			$that = $this;
-			$data = preg_replace_callback('#'.$placeHolderRegex.'#i', function ($matches) use ($that, $variables) {
+			$value = preg_replace_callback('#'.$placeHolderRegex.'#i', function ($matches) use ($that, $variables) {
 				return $that->replacePlaceholder($matches, $variables);
-			}, $data);
+			}, $value);
 		}
 
 		// process references
-		if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i', $data, $matches)) {
+		if (is_string($value) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i', $value, $matches)) {
 			$multi    = ('' !== $matches['multi']) ? $matches['multi'] : null;
 			$property = isset($matches['property']) ? $matches['property'] : null;
 			if (strpos($matches['reference'], '*')) {
-				$data = $this->objects->random($matches['reference'], $multi, $property);
+				$value = $this->objects->random($matches['reference'], $multi, $property);
 			} else {
 				if (null !== $multi) {
 					throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
 				}
-				$data = $this->objects->find($matches['reference'], $property);
+				$value = $this->objects->find($matches['reference'], $property);
 			}
 		}
 
 		// unescape at-signs
-		if (is_string($data) && false !== strpos($data, '\\')) {
-			$data = preg_replace('{\\\\([@\\\\])}', '$1', $data);
+		if ($this->unescapeAtProcessor->canProcess(new Processable($value))) {
+			$value = $this->unescapeAtProcessor->process(new Processable($value), $variables);
 		}
 
-		return $data;
+		return $value;
 	}
 
 	/**

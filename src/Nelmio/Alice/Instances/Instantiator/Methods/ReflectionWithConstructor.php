@@ -46,7 +46,7 @@ class ReflectionWithConstructor {
 		$reflClass = new \ReflectionClass($class);
 		
 		$this->processor->setCurrentValue($fixture->getValueForCurrent());
-		$constructorArgs = $this->processor->parse($constructorArgs, array());
+		$constructorArgs = $this->processor->process($constructorArgs, array());
 		$this->processor->unsetCurrentValue();
 		
 		foreach ($constructorArgs as $index => $value) {
