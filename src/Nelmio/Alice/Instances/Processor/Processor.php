@@ -19,30 +19,23 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
 class Processor {
 
-	/**
-	 * @var Collection
-	 */
-	protected $objects;
-
 	function __construct(Collection $objects, array $providers, $locale = 'en_US') {
-		$this->objects       = $objects;
-
 		$this->arrayProcessor       = new Methods\ArrayValue($this);
 		$this->conditionalProcessor = new Methods\Conditional($this);
 		$this->nonStringProcessor   = new Methods\NonString();
 		$this->unescapeAtProcessor 	= new Methods\UnescapeAt();
 		$this->fakerProcessor       = new Methods\Faker($objects, $providers, $locale);
+		$this->referenceProcessor   = new Methods\Reference($objects);
 	}
 
 	public function setProviders(array $providers)
 	{
-		$this->providers = $providers;
-		$this->generators = array();
+		$this->fakerProcessor->setProviders($providers);
 	}
 
-	public function process($processable, array $variables, $valueForCurrent = null)
+	public function process($value, array $variables, $valueForCurrent = null)
 	{
-		$processable = $processable instanceof ProcessableInterface ? $processable : new Processable($processable);
+		$processable = $value instanceof ProcessableInterface ? $value : new Processable($value);
 
 		if (!is_null($valueForCurrent)) {
 			$this->valueForCurrent = $valueForCurrent;
@@ -64,28 +57,22 @@ class Processor {
 		$value = $processable->getValue();
 
 		// format placeholders without preg_replace if there is only one to avoid __toString() being called
+		$processable = new Processable($value);
 		if ($this->fakerProcessor->canProcess($processable)) {
 			$this->fakerProcessor->setValueForCurrent($this->valueForCurrent);
 			$value = $this->fakerProcessor->process($processable, $variables);
 		}
 
 		// process references
-		if (is_string($value) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i', $value, $matches)) {
-			$multi    = ('' !== $matches['multi']) ? $matches['multi'] : null;
-			$property = isset($matches['property']) ? $matches['property'] : null;
-			if (strpos($matches['reference'], '*')) {
-				$value = $this->objects->random($matches['reference'], $multi, $property);
-			} else {
-				if (null !== $multi) {
-					throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$matches['multi'].'x @user*", otherwise you would always get only one item.');
-				}
-				$value = $this->objects->find($matches['reference'], $property);
-			}
+		$processable = new Processable($value);
+		if ($this->referenceProcessor->canProcess($processable)) {
+			$value = $this->referenceProcessor->process($processable, $variables);
 		}
 
 		// unescape at-signs
-		if ($this->unescapeAtProcessor->canProcess(new Processable($value))) {
-			$value = $this->unescapeAtProcessor->process(new Processable($value), $variables);
+		$processable = new Processable($value);
+		if ($this->unescapeAtProcessor->canProcess($processable)) {
+			$value = $this->unescapeAtProcessor->process($processable, $variables);
 		}
 
 		if (!is_null($valueForCurrent)) {

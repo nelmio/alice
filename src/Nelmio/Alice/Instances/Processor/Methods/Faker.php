@@ -56,6 +56,12 @@ class Faker {
 		$this->valueForCurrent = $valueForCurrent;
 	}
 
+	public function setProviders(array $providers)
+	{
+		$this->providers = $providers;
+		$this->generators = array();
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
