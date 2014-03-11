@@ -39,11 +39,13 @@ class Populator {
 		$this->objects         = $objects;
 		$this->processor       = $processor;
 
-		$this->arrayAddSetter    = new Methods\ArrayAdd($typeHintChecker);
-		$this->customSetter      = new Methods\Custom();
-		$this->arrayDirectSetter = new Methods\ArrayDirect($typeHintChecker);
-		$this->directSetter      = new Methods\Direct($typeHintChecker);
-		$this->propertySetter    = new Methods\Property();
+		$this->setters = array(
+			new Methods\ArrayAdd($typeHintChecker),
+			new Methods\Custom(),
+			new Methods\ArrayDirect($typeHintChecker),
+			new Methods\Direct($typeHintChecker),
+			new Methods\Property()
+			);
 	}
 
 	/**
@@ -57,8 +59,6 @@ class Populator {
 		$name   = $fixture->getName();
 		$object = $this->objects->get($name);
 
-		$variables = array();
-
 		foreach ($fixture->getProperties() as $property) {
 			$key = $property->getName();
 			$val = $property->getValue();
@@ -68,35 +68,24 @@ class Populator {
 			}
 
 			$value = $property->requiresUnique() ? 
-				$this->generateUnique($fixture, $property, $variables) : 
-				$this->processor->process($property, $variables, $fixture->getValueForCurrent());
+				$this->generateUnique($fixture, $property) : 
+				$this->processor->process($property, $fixture->getSetProperties(), $fixture->getValueForCurrent());
 
-			if ($this->arrayAddSetter->canSet($fixture, $object, $key, $value)) {
-				$this->arrayAddSetter->set($fixture, $object, $key, $value);
-			} 
-			elseif ($this->customSetter->canSet($fixture, $object, $key, $value)) {
-				$this->customSetter->set($fixture, $object, $key, $value);
-				$variables[$key] = $value;
-			} 
-			elseif ($this->arrayDirectSetter->canSet($fixture, $object, $key, $value)) {
-				$this->arrayDirectSetter->set($fixture, $object, $key, $value);
-				$variables[$key] = $value;
-			} 
-			elseif ($this->directSetter->canSet($fixture, $object, $key, $value)) {
-				$this->directSetter->set($fixture, $object, $key, $value);
-				$variables[$key] = $value;
-			} 
-			elseif ($this->propertySetter->canSet($fixture, $object, $key, $value)) {
-				$this->propertySetter->set($fixture, $object, $key, $value);
-				$variables[$key] = $value;
-			} 
-			else {
+			foreach ($this->setters as $setter) {
+				if ($setter->canSet($fixture, $object, $key, $value)) {
+					$setter->set($fixture, $object, $key, $value);
+					$fixture->setPropertyValue($key, $value);
+					break;
+				}
+			}
+
+			if (!array_key_exists($key, $fixture->getSetProperties())) {
 				throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
 			}
 		}
 	}
 
-	protected function generateUnique(Fixture $fixture, PropertyDefinition $property, array $variables)
+	protected function generateUnique(Fixture $fixture, PropertyDefinition $property)
 	{
 		$class = $fixture->getClass();
 		$key = $property->getName();
@@ -104,7 +93,7 @@ class Populator {
 
 		do {
 			// process values
-			$value = $this->processor->process($property, $variables, $fixture->getValueForCurrent());
+			$value = $this->processor->process($property, $fixture->getSetProperties(), $fixture->getValueForCurrent());
 
 			if (is_object($value)) {
 				$valHash = spl_object_hash($value);

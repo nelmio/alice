@@ -54,6 +54,11 @@ class Fixture {
 	protected $valueForCurrent;
 
 	/**
+	 * @var array
+	 */
+	protected $setProperties = array();
+
+	/**
 	 * built a class representation of a fixture
 	 *
 	 * @param string $class
@@ -129,6 +134,21 @@ class Fixture {
 	public function getCustomSetter()
 	{
 		return $this->properties->get('__set');
+	}
+
+	public function setPropertyValue($property, $value)
+	{
+		$this->setProperties[$property] = $value;
+	}
+
+	public function getPropertyValue($property)
+	{
+		return $this->setProperties[$property];
+	}
+
+	public function getSetProperties()
+	{
+		return $this->setProperties;
 	}
 
 	public function __toString()
