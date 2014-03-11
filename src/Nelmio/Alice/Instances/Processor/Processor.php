@@ -43,11 +43,6 @@ class Processor {
 	 */
 	private $defaultLocale;
 
-	/**
-	 * @var int
-	 */
-	private $currentValue;
-
 	function __construct($locale = 'en_US', Collection $objects, array $providers) {
 		$this->defaultLocale = $locale;
 		$this->objects       = $objects;
@@ -57,6 +52,7 @@ class Processor {
 		$this->conditionalProcessor = new Methods\Conditional($this);
 		$this->nonStringProcessor   = new Methods\NonString();
 		$this->unescapeAtProcessor 	= new Methods\UnescapeAt();
+		$this->fakerProcessor       = new Methods\Faker($locale, $providers);
 	}
 
 	public function setProviders(array $providers)
@@ -65,20 +61,13 @@ class Processor {
 		$this->generators = array();
 	}
 
-	public function setCurrentValue($value)
-	{
-		$this->currentValue = $value;
-	}
-
-	public function unsetCurrentValue()
-	{
-		$this->currentValue = null;
-	}
-
-	public function process($processable, array $variables)
+	public function process($processable, array $variables, $valueForCurrent = null)
 	{
 		$processable = $processable instanceof ProcessableInterface ? $processable : new Processable($processable);
 
+		if (!is_null($valueForCurrent)) {
+			$this->valueForCurrent = $valueForCurrent;
+		}
 		if ($this->arrayProcessor->canProcess($processable)) {
 			return $this->arrayProcessor->process($processable, $variables);
 		}
@@ -94,15 +83,15 @@ class Processor {
 		}
 		
 		$value = $processable->getValue();
-		
+
 		// format placeholders without preg_replace if there is only one to avoid __toString() being called
-		$placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)\((?<args>(?:[^)]*|\)(?!>))*)\)>';
-		if (preg_match('#^'.$placeHolderRegex.'$#i', $value, $matches)) {
+		$fakerRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)\((?<args>(?:[^)]*|\)(?!>))*)\)>';
+		if (preg_match('#^'.$fakerRegex.'$#i', $value, $matches)) {
 			$value = $this->replacePlaceholder($matches, $variables);
 		} else {
 			// format placeholders inline
 			$that = $this;
-			$value = preg_replace_callback('#'.$placeHolderRegex.'#i', function ($matches) use ($that, $variables) {
+			$value = preg_replace_callback('#'.$fakerRegex.'#i', function ($matches) use ($that, $variables) {
 				return $that->replacePlaceholder($matches, $variables);
 			}, $value);
 		}
@@ -124,6 +113,10 @@ class Processor {
 		// unescape at-signs
 		if ($this->unescapeAtProcessor->canProcess(new Processable($value))) {
 			$value = $this->unescapeAtProcessor->process(new Processable($value), $variables);
+		}
+
+		if (!is_null($valueForCurrent)) {
+			$this->valueForCurrent = null;
 		}
 
 		return $value;
@@ -172,11 +165,11 @@ class Processor {
 		$args = array_slice(func_get_args(), 2);
 
 		if ($formatter == 'current') {
-			if ($this->currentValue === null) {
+			if ($this->valueForCurrent === null) {
 				throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges or enum');
 			}
 
-			return $this->currentValue;
+			return $this->valueForCurrent;
 		}
 
 		return $this->getGenerator($locale)->format($formatter, $args);

@@ -13,20 +13,10 @@ namespace Nelmio\Alice\Instances\FixtureBuilder\Methods;
 
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\FixtureBuilder\Methods\MethodInterface;
-use Nelmio\Alice\Instances\Processor\Processor;
 
 class ListName implements MethodInterface {
 
 	private $matches = array();
-
-	/**
-	 * @var Processor
-	 */
-	protected $processor;
-
-	function __construct(Processor $processor) {
-		$this->processor = $processor;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -46,9 +36,7 @@ class ListName implements MethodInterface {
 		$enumItems = array_map('trim', explode(',', $this->matches[1]));
 		foreach ($enumItems as $itemName) {
 			$currentName = str_replace($this->matches[0], $itemName, $name);
-			$this->processor->setCurrentValue($itemName);
 			$fixture = new Fixture($class, $currentName, $spec, $itemName);
-			$this->processor->unsetCurrentValue();
 			$fixtures[] = $fixture;
 		}
 

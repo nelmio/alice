@@ -23,7 +23,7 @@ class Processable implements ProcessableInterface {
 	/**
 	 * @var array
 	 */
-	public $matches = array();
+	protected $matches = array();
 
 	function __construct($value) {
 		$this->value = $value;

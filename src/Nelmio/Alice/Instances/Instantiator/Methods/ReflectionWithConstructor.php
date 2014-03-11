@@ -45,9 +45,7 @@ class ReflectionWithConstructor {
 
 		$reflClass = new \ReflectionClass($class);
 		
-		$this->processor->setCurrentValue($fixture->getValueForCurrent());
-		$constructorArgs = $this->processor->process($constructorArgs, array());
-		$this->processor->unsetCurrentValue();
+		$constructorArgs = $this->processor->process($constructorArgs, array(), $fixture->getValueForCurrent());
 		
 		foreach ($constructorArgs as $index => $value) {
 			$constructorArgs[$index] = $this->typeHintChecker->check($class, $constructorMethod, $value, $index);

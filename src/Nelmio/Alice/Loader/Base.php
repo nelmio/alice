@@ -81,8 +81,8 @@ class Base implements LoaderInterface
         $this->processor       = new Processor\Processor($locale, $this->objects, $providers);
 
         $this->fixtureBuilder = new FixtureBuilder\FixtureBuilder(array(
-            new FixtureBuilder\Methods\RangeName($this->processor),
-            new FixtureBuilder\Methods\ListName($this->processor),
+            new FixtureBuilder\Methods\RangeName(),
+            new FixtureBuilder\Methods\ListName(),
             new FixtureBuilder\Methods\SimpleName()
             ));
 
@@ -115,10 +115,8 @@ class Base implements LoaderInterface
         // populate objects
         $objects = array();
         foreach ($newFixtures as $fixture) {
-            $this->processor->setCurrentValue($fixture->getValueForCurrent());
             $this->populateObject($fixture);
-            $this->processor->unsetCurrentValue();
-
+            
             // add the object in the object store unless it's local
             if (!isset($fixture->getClassFlags()['local']) && !isset($fixture->getNameFlags()['local'])) {
                 $objects[$fixture->getName()] = $this->getReference($fixture->getName());
@@ -250,7 +248,7 @@ class Base implements LoaderInterface
 
                 do {
                     // process values
-                    $generatedVal = $this->processor->process($property, $variables);
+                    $generatedVal = $this->processor->process($property, $variables, $fixture->getValueForCurrent());
 
                     if (is_object($generatedVal)) {
                         $valHash = spl_object_hash($generatedVal);
@@ -267,7 +265,7 @@ class Base implements LoaderInterface
 
                 $this->uniqueValues[$class . $key][$valHash] = true;
             } else {
-                $generatedVal = $this->processor->process($property, $variables);
+                $generatedVal = $this->processor->process($property, $variables, $fixture->getValueForCurrent());
             }
 
             // add relations if available
