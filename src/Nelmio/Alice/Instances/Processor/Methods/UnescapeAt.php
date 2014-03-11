@@ -11,10 +11,10 @@
 
 namespace Nelmio\Alice\Instances\Processor\Methods;
 
-use Nelmio\Alice\Instances\Processor\Processor;
+use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
-class UnescapeAt {
+class UnescapeAt implements MethodInterface {
 
 	/**
 	 * {@inheritDoc}

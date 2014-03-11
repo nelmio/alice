@@ -52,6 +52,11 @@ class Base implements LoaderInterface
     protected $objects;
 
     /**
+     * @var Faker
+     */
+    protected $fakerProcessorMethod;
+
+    /**
      * @var ORMInterface
      */
     protected $manager;
@@ -78,12 +83,20 @@ class Base implements LoaderInterface
     {
         $this->objects         = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
-        $this->processor       = new Processor\Processor($this->objects, $providers, $locale);
 
         $this->fixtureBuilder = new FixtureBuilder\FixtureBuilder(array(
             new FixtureBuilder\Methods\RangeName(),
             new FixtureBuilder\Methods\ListName(),
             new FixtureBuilder\Methods\SimpleName()
+            ));
+
+        $this->fakerProcessorMethod = new Processor\Methods\Faker($this->objects, $providers, $locale);
+        $this->processor = new Processor\Processor(array(
+            new Processor\Methods\ArrayValue(),
+            new Processor\Methods\Conditional(),
+            new Processor\Methods\UnescapeAt(),
+            $this->fakerProcessorMethod,
+            new Processor\Methods\Reference($this->objects)
             ));
 
         $this->instantiator = new Instantiator\Instantiator(array(
@@ -147,7 +160,7 @@ class Base implements LoaderInterface
      */
     public function setProviders(array $providers)
     {
-        $this->processor->setProviders($providers);
+        $this->fakerProcessorMethod->setProviders($providers);
     }
 
     /**

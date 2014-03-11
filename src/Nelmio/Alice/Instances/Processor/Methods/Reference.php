@@ -12,9 +12,10 @@
 namespace Nelmio\Alice\Instances\Processor\Methods;
 
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
-class Reference {
+class Reference implements MethodInterface {
 
 	/**
 	 * @var Collection

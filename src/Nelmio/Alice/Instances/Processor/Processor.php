@@ -12,29 +12,39 @@
 namespace Nelmio\Alice\Instances\Processor;
 
 use Nelmio\Alice\Instances\Collection;
-use Nelmio\Alice\Instances\PropertyDefinition;
-use Nelmio\Alice\Instances\Processor\Methods;
 use Nelmio\Alice\Instances\Processor\Processable;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
 class Processor {
 
-	function __construct(Collection $objects, array $providers, $locale = 'en_US') {
-		$this->methods = array(
-			new Methods\ArrayValue($this),
-			new Methods\Conditional($this),
-			new Methods\NonString(),
-			new Methods\UnescapeAt(),
-			new Methods\Faker($objects, $providers, $locale),
-			new Methods\Reference($objects)
-		);
+	/**
+	 * @var MethodInterface[]
+	 */
+	private $methods;
+
+	/**
+	 * @var string
+	 */
+	private $valueForCurrent;
+
+	function __construct(array $methods) {
+		$this->methods = $methods;
+
+		foreach ($this->methods as $method) {
+			if (method_exists($method, 'setProcessor')) {
+				$method->setProcessor($this);
+			}
+		}
 	}
 
-	public function setProviders(array $providers)
-	{
-		$this->fakerProcessor->setProviders($providers);
-	}
-
+	/**
+	 * processes a given value to return a value that can be set on the actual instance
+	 *
+	 * @param mixed $valueOrProcessable - the original value (or value container) to be converted
+	 * @param array $variables
+	 * @param string $valueForCurrent - in the event a fixture will need to support <current()>, this value must be passed in at the top of the process loop
+	 * @return mixed
+	 */
 	public function process($valueOrProcessable, array $variables, $valueForCurrent = null)
 	{
 		$value = $valueOrProcessable instanceof ProcessableInterface ? $valueOrProcessable->getValue() : $valueOrProcessable;

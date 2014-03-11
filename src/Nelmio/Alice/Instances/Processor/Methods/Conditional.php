@@ -11,12 +11,23 @@
 
 namespace Nelmio\Alice\Instances\Processor\Methods;
 
+use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\Processor;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
-class Conditional {
+class Conditional implements MethodInterface {
 
-	function __construct(Processor $processor) {
+	/**
+	 * @var Processor
+	 */
+	private $processor;
+
+	/**
+	 * sets the processor to handle recursive calls
+	 *
+	 * @param Processor
+	 */
+	public function setProcessor(Processor $processor) {
 		$this->processor = $processor;
 	}
 

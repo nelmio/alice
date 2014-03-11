@@ -12,9 +12,10 @@
 namespace Nelmio\Alice\Instances\Processor\Methods;
 
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
-class Faker {
+class Faker implements MethodInterface {
 
 	/**
 	 * @var Collection
@@ -51,11 +52,21 @@ class Faker {
 		$this->defaultLocale = $locale;
 	}
 
+	/**
+	 * sets the value for <current()>
+	 *
+	 * @param string
+	 */
 	public function setValueForCurrent($valueForCurrent)
 	{
 		$this->valueForCurrent = $valueForCurrent;
 	}
 
+	/**
+	 * sets the providers that can be used
+	 *
+	 * @param array
+	 */
 	public function setProviders(array $providers)
 	{
 		$this->providers = $providers;
@@ -89,6 +100,10 @@ class Faker {
 
 	/**
 	 * replaces a placeholder by the result of a ->fake call
+	 *
+	 * @param array $matches
+	 * @param array $variables
+	 * @return mixed
 	 */ 
 	private function replacePlaceholder($matches, array $variables) {
 		$args = isset($matches['args']) && '' !== $matches['args'] ? $matches['args'] : null;
@@ -125,6 +140,13 @@ class Faker {
 		return eval('return $this->fake(' . $name . ', ' . $locale . ', ' . $args . ');');
 	}
 
+	/**
+	 * returns a fake value
+	 *
+	 * @param string $formatter
+	 * @param string $locale
+	 * @return mixed
+	 */
 	private function fake($formatter, $locale = null)
 	{
 		$args = array_slice(func_get_args(), 2);
