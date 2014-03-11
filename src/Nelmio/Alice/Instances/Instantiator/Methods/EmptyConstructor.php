@@ -12,15 +12,22 @@
 namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
 use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
-class EmptyConstructor {
+class EmptyConstructor implements MethodInterface {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function canInstantiate(Fixture $fixture)
 	{
 		return (new \ReflectionMethod($fixture->getClass(), '__construct'))->getNumberOfRequiredParameters() === 0;
 	}
 
-	public function instantiate($fixture)
+	/**
+	 * {@inheritDoc}
+	 */
+	public function instantiate(Fixture $fixture)
 	{
 		$class = $fixture->getClass();
 		return new $class();
