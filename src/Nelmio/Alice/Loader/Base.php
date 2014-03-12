@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Loader;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
+use Nelmio\Alice\Provider\IdentityProvider;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\FixtureBuilder;
@@ -73,8 +74,8 @@ class Base implements LoaderInterface
 	 * @var Populator
 	 */
 	protected $populator;
-
-	/**
+	
+    /**
 	 * @var ORMInterface
 	 */
 	protected $manager;
@@ -97,7 +98,7 @@ class Base implements LoaderInterface
 		$this->objects         = new Collection;
 		$this->typeHintChecker = new TypeHintChecker;
 
-		$this->fakerProcessorMethod = new Processor\Methods\Faker($this->objects, $providers, $locale);
+		$this->fakerProcessorMethod = new Processor\Methods\Faker($this->objects, array_merge($this->getBuiltInProviders(), $providers), $locale);
 		$processor = new Processor\Processor(array(
 			new Processor\Methods\ArrayValue(),
 			new Processor\Methods\Conditional(),
@@ -131,6 +132,11 @@ class Base implements LoaderInterface
 			mt_srand($seed);
 		}
 	}
+
+    private function getBuiltInProviders()
+    {
+        return array(new IdentityProvider());
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -255,7 +261,9 @@ class Base implements LoaderInterface
 		$objects = array();
 		
 		foreach ($fixtures as $fixture) {
+			$this->objects->set('self', $this->objects->get($fixture->getName()));
 			$this->populator->populate($fixture);
+			$this->objects->remove('self');
 			
 			// add the object in the object store unless it's local
 			if (!isset($fixture->getClassFlags()['local']) && !isset($fixture->getNameFlags()['local'])) {

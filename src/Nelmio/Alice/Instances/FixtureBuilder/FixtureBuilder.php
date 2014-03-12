@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Instances\FixtureBuilder;
 
+use Nelmio\Alice\Instances\Collection;
+
 class FixtureBuilder {
 
 	/**
@@ -18,8 +20,14 @@ class FixtureBuilder {
 	 **/
 	protected $methods;
 
+	/**
+	 * @var Collection
+	 */
+	protected $templates;
+
 	function __construct(array $methods) {
 		$this->methods = $methods;
+		$this->templates = new Collection;
 	}
 
 	/**
@@ -31,8 +39,43 @@ class FixtureBuilder {
 	{
 		foreach ($this->methods as $method) {
 			if ($method->canBuild($name)) {
-				return $method->build($class, $name, $spec);
+				$fixtures = $method->build($class, $name, $spec);
+				
+				$indexesToRemove = array();
+				foreach ($fixtures as $index => $fixture) {
+					if ($fixture->hasExtensions()) {
+						foreach ($fixture->getExtensions() as $extension) {
+							$fixture->extendTemplate($this->getTemplate($extension));
+						}
+					}
+
+					if ($fixture->isTemplate()) {
+						$this->templates->set($fixture->getName(), $fixture);
+						$indexesToRemove[] = $index;
+					}
+				}
+
+				foreach ($indexesToRemove as $index) {
+					array_splice($fixtures, $index, 1);
+				}
+
+				return $fixtures;
 			}
 		}
+	}
+
+	/**
+	 * returns the template with the given name
+	 *
+	 * @param string $name
+	 * @return Fixture
+	 */
+	protected function getTemplate($name)
+	{
+			if (!$this->templates->containsKey($name)) {
+					throw new \UnexpectedValueException('Template '.$name.' is not defined.');
+			}
+
+			return $this->templates->get($name);
 	}
 }

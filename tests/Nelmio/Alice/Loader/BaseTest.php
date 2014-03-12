@@ -595,6 +595,144 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user9')->friends[0]);
     }
 
+    public function testSelfReference()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user{1..2}' => array(
+                    'username' => 'testuser<current()>',
+                    'fullname' => '@self->username',
+                ),
+            ),
+        ));
+
+        $this->assertCount(2, $res);
+
+        $user1 = $this->loader->getReference('user1');
+        $this->assertInstanceOf(self::USER, $user1);
+
+        $user2 = $this->loader->getReference('user2');
+        $this->assertInstanceOf(self::USER, $user2);
+
+        $this->assertEquals('testuser1', $user1->fullname);
+        $this->assertEquals('testuser2', $user2->fullname);
+    }
+
+    public function testIdentityProvider()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => 'testuser',
+                    'fullname' => '<identity($username)>',
+                ),
+                'user2' => array(
+                    'username' => 'test_user',
+                    'fullname' => '<identity(str_replace("_", " ", $username))>',
+                ),
+            ),
+        ));
+
+        $this->verifyIdentityProviderResults($res);
+    }
+
+    public function testDefaultIdentityProviderSugar()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => 'testuser',
+                    'fullname' => '<($username)>',
+                ),
+                'user2' => array(
+                    'username' => 'test_user',
+                    'fullname' => '<(str_replace("_", " ", $username))>',
+                ),
+            ),
+        ));
+
+        $this->verifyIdentityProviderResults($res);
+    }
+
+    protected function verifyIdentityProviderResults($res)
+    {
+        $this->assertCount(2, $res);
+
+        $user1 = $this->loader->getReference('user1');
+        $this->assertInstanceOf(self::USER, $user1);
+        $this->assertEquals('testuser', $user1->fullname);
+
+        $user2 = $this->loader->getReference('user2');
+        $this->assertInstanceOf(self::USER, $user2);
+        $this->assertEquals('test user', $user2->fullname);
+    }
+
+    public function testPassingReferenceToProvider()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => 'testuser',
+                ),
+                'user2' => array(
+                    'username' => '<(@user1->username)>',
+                ),
+                'user3' => array(
+                    'username' => '<(@user1->username . "_" . @user2->username)>',
+                ),
+            ),
+        ));
+
+        $this->assertCount(3, $res);
+
+        $user1 = $this->loader->getReference('user1');
+        $this->assertInstanceOf(self::USER, $user1);
+
+        $user2 = $this->loader->getReference('user2');
+        $this->assertInstanceOf(self::USER, $user2);
+
+        $this->assertEquals($user1->username, $user2->username);
+
+        $user3 = $this->loader->getReference('user3');
+        $this->assertInstanceOf(self::USER, $user3);
+
+        $this->assertEquals($user1->username . '_' . $user2->username, $user3->username);
+    }
+
+    public function testSkippingReferencesInStrings()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => '<("foo@test.com")>',
+                ),
+                'user2' => array(
+                    'username' => '<("foo@test" . "@com")>',
+                ),
+                'user3' => array(
+                    'username' => '<("foo\"@test.com")>',
+                ),
+            ),
+        ));
+
+        $this->assertCount(3, $res);
+
+        $user1 = $this->loader->getReference('user1');
+        $this->assertInstanceOf(self::USER, $user1);
+
+        $this->assertEquals('foo@test.com', $user1->username);
+
+        $user2 = $this->loader->getReference('user2');
+        $this->assertInstanceOf(self::USER, $user2);
+
+        $this->assertEquals('foo@test@com', $user2->username);
+
+        $user3 = $this->loader->getReference('user3');
+        $this->assertInstanceOf(self::USER, $user3);
+
+        $this->assertEquals('foo"@test.com', $user3->username);
+    }
+
     public function testLoadCreatesEnumsOfObjects()
     {
         $res = $this->loadData(array(
@@ -639,6 +777,167 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::GROUP, $this->loader->getReference('group'));
         $this->assertSame($this->loader->getReference('user')->email, $this->loader->getReference('group'));
         $this->assertSame($this->loader->getReference('user2')->email, $this->loader->getReference('group'));
+    }
+
+    public function testTemplateObjectsAreNotReturned()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user (template)' => array(
+                    'email'    => 'base@email.com'
+                ),
+                'user2 (extends user)' => array(
+                    'fullname'    => 'testfullname'
+                ),
+            ),
+        ));
+
+        $this->assertCount(1, $res);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user2'));
+        $this->assertSame($this->loader->getReference('user2')->email, 'base@email.com');
+        $this->assertSame($this->loader->getReference('user2')->fullname, 'testfullname');
+    }
+
+    public function testTemplateCanExtendOtherTemplateObjects()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user (template)' => array(
+                    'email'    => 'base@email.com'
+                ),
+                'user2 (template, extends user)' => array(
+                    'favoriteNumber'    => 2
+                ),
+                'user3 (extends user2)' => array(
+                    'fullname'    => 'testfullname'
+                ),
+            ),
+        ));
+
+        $this->assertCount(1, $res);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user3'));
+        $this->assertSame($this->loader->getReference('user3')->email, 'base@email.com');
+        $this->assertSame($this->loader->getReference('user3')->favoriteNumber, 2);
+        $this->assertSame($this->loader->getReference('user3')->fullname, 'testfullname');
+    }
+
+    public function testMultipleInheritanceInTemplates()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user_minimal (template)' => array(
+                    'email'    => 'base@email.com'
+                ),
+                'user_favorite_number (template)' => array(
+                    'fullname' => 'testfullname',
+                    'email'    => 'favorite@email.com',
+                    'favoriteNumber'    => 2
+                ),
+                'user_full (template, extends user_minimal, extends user_favorite_number)' => array(
+                    'fullname' => 'myfullname',
+                    'friends' => 'testfriends'
+                ),
+                'user (extends user_full)' => array(
+                    'friends' => 'myfriends'
+                ),
+            ),
+        ));
+
+        $this->assertCount(1, $res);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
+        $this->assertSame($this->loader->getReference('user')->email, 'favorite@email.com');
+        $this->assertSame($this->loader->getReference('user')->favoriteNumber, 2);
+        $this->assertSame($this->loader->getReference('user')->fullname, 'myfullname');
+        $this->assertSame($this->loader->getReference('user')->friends, 'myfriends');
+    }
+
+    public function testMultipleInheritanceInInstance()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user_short_name (template)' => array(
+                    'favoriteNumber'    => 2,
+                    'username' => 'name'
+                ),
+                'user_medium_name (template)' => array(
+                    'username' => 'name_medium',
+                    'fullname' => 'my real name'
+                ),
+                'user_long_name (template)' => array(
+                    'username' => 'my_very_long_name',
+                    'email' => 'test@email.com'
+                ),
+                'user (extends user_short_name, extends user_medium_name, extends user_long_name)' => array(
+                    'email' => 'base@email.com',
+                ),
+            ),
+        ));
+
+        $this->assertCount(1, $res);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
+        $this->assertSame($this->loader->getReference('user')->email, 'base@email.com');
+        $this->assertSame($this->loader->getReference('user')->favoriteNumber, 2);
+        $this->assertSame($this->loader->getReference('user')->fullname, 'my real name');
+        $this->assertSame($this->loader->getReference('user')->username, 'my_very_long_name');
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Template user_not_base is not defined
+     */
+    public function testInheritedObjectDoesntExist()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user_base (template)' => array(
+                    'email'    => 'base@email.com'
+                ),
+                'user (extends user_not_base)' => array(
+                    'friends'  => 'myfriends'
+                ),
+            ),
+        ));
+    }
+
+    public function testObjectsOverrideTemplates()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user (template)' => array(
+                    'email'    => 'base@email.com',
+                    'favoriteNumber'    => 2
+                ),
+                'user2 (extends user)' => array(
+                    'favoriteNumber'    => 42
+                ),
+            ),
+        ));
+
+        $this->assertCount(1, $res);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user2'));
+        $this->assertSame($this->loader->getReference('user2')->email, 'base@email.com');
+        $this->assertSame($this->loader->getReference('user2')->favoriteNumber, 42);
+    }
+
+    public function testObjectsInheritProviders()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user (template)' => array(
+                    'fullname'    => '<firstName()>',
+                    'favoriteNumber'    => 2
+                ),
+                'user2 (extends user)' => array(
+                    'favoriteNumber'    => 42
+                ),
+            ),
+        ));
+
+        $this->assertCount(1, $res);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user2'));
+        $this->assertNotEquals($this->loader->getReference('user2')->fullname, '<firstName()>');
+        $this->assertNotEmpty($this->loader->getReference('user2')->fullname);
+        $this->assertSame($this->loader->getReference('user2')->favoriteNumber, 42);
     }
 
     /**
