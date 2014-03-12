@@ -131,16 +131,27 @@ class Fixture {
 		return count($this->getExtensions()) > 0;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getClass()
 	{
 		return $this->class;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName()
 	{
 		return $this->name;
 	}
 
+	/**
+	 * returns the list of properties with the complex properties (__construct, __set, etc) filtered out
+	 *
+	 * @return ArrayCollection
+	 */
 	public function getProperties()
 	{
 		return $this->properties->filter(function($property) { return $property->isBasic(); });
@@ -186,51 +197,98 @@ class Fixture {
 		return in_array($flag, array_keys($this->nameFlags));
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getValueForCurrent()
 	{
 		return $this->valueForCurrent;
 	}
 
+	/**
+	 * returns the name of the static method to use as the constructor
+	 *
+	 * @return string
+	 */
 	public function getConstructorMethod()
 	{
 		return $this->getConstructorComponents()['method'];
 	}
 
+	/**
+	 * returns the list of arguments to pass to the constructor
+	 *
+	 * @return array
+	 */
 	public function getConstructorArgs()
 	{
 		return $this->getConstructorComponents()['args'];
 	}
 
+	/**
+	 * returns true when the __construct property has been specified in the spec
+	 *
+	 * @return boolean
+	 */
 	public function shouldUseConstructor()
 	{
 		return !is_null($this->getConstructor()) && $this->getConstructor()->getValue();
 	}
 
+	/**
+	 * returns true when the __set property has been specified in the spec
+	 *
+	 * @return boolean
+	 */
 	public function hasCustomSetter()
 	{
 		return !is_null($this->getCustomSetter());
 	}
 
+	/**
+	 * returns the name of the method to use as the custom setter
+	 *
+	 * @return string
+	 */
 	public function getCustomSetter()
 	{
 		return $this->properties->get('__set');
 	}
 
+	/**
+	 * allows registering a set property value on the fixture itself
+	 *
+	 * @param string $property
+	 * @param mixed $value
+	 */
 	public function setPropertyValue($property, $value)
 	{
 		$this->setProperties[$property] = $value;
 	}
 
+	/**
+	 * returns the value of a property that has been registered as set
+	 *
+	 * @return mixed $value
+	 */
 	public function getPropertyValue($property)
 	{
 		return $this->setProperties[$property];
 	}
 
+	/**
+	 * get a list of properties that have been registered as set
+	 *
+	 * @return array
+	 */
 	public function getSetProperties()
 	{
 		return $this->setProperties;
 	}
 
+	/**
+	 * display the fixture as a string
+	 */
 	public function __toString()
 	{
 		return $this->getName();
@@ -247,6 +305,11 @@ class Fixture {
 		$this->properties->set($name, new PropertyDefinition($name, $value));
 	}
 
+	/**
+	 * returns the constructor property
+	 *
+	 * @return PropertyDefinition
+	 */
 	protected function getConstructor()
 	{
 		return $this->properties->get('__construct');
