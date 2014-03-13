@@ -115,7 +115,7 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function load($data)
+    public function load($data, $entity = null)
     {
         if (!is_array($data)) {
             // $loader is defined to give access to $loader->fake() in the included file's context

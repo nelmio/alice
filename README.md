@@ -51,6 +51,11 @@ $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager)
 
 // load a php file into a Doctrine\Common\Persistence\ObjectManager object
 $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.php', $objectManager);
+
+// load a csv file into a Doctrine\Common\Persistence\ObjectManager object, with the Prize entity
+$objects = \Nelmio\Alice\Fixtures::load(array(
+		'Acme\\Bundle\\AcmeBundle\\Entity\\Prize' => __DIR__.'/prizes.csv'
+	), $objectManager);
 ```
 
 Note: You can also pass an array of filenames if you have multiple files with
@@ -91,6 +96,7 @@ $persister->persist($objects);
 > class instead. These PHP files must return an array containing the same
 > structure as the yaml files have.
 
+
 ## Reference ##
 
 ### Creating Fixtures ###
@@ -120,6 +126,17 @@ Nelmio\Entity\Group:
 
 This works fine, but it is not very powerful and is completely static. You
 still have to do most of the work. Let's see how to make this more interesting.
+
+#### CSV ####
+
+Each column should match to a property in your entity
+
+| name          | category      | qty   |
+| ------------- |:-------------:| -----:|
+| ticket        | right-aligned |  1600 |
+| football      | centered      |    12 |
+| game          | are neat      |     1 |
+
 
 ### Fixture Ranges ###
 
@@ -154,6 +171,17 @@ Nelmio\Entity\User:
         favoriteNumber: 42
 ```
 
+By default, entities created via CSV are given the entity name and the row number. Base on the example above this would be Prize1, Prize2, Prize3 and so forth. These can be used as references later.
+
+Alternatively you can add a special "_ref" column to the CSV which allows you to override this behaviour and also allows you to use the range notation. Leave empty to get the default again. 
+
+| _ref              |name           | category      | qty   |
+| ------------------|---------------|:-------------:| -----:|
+| prize{1..10}      | ticket        | right-aligned |  1600 |
+| prize{foot,game}  | football      | centered      |    12 |
+|                   | games         | are neat      |     1 |
+
+
 To go further we can just randomize data.
 
 ### Faker Data ###
@@ -173,6 +201,14 @@ Nelmio\Entity\User:
         email: <email()>
         favoriteNumber: <numberBetween(1, 200)>
 ```
+
+Similar in CSV...
+
+| _ref              |name           | category      | qty   |
+| ------------------|---------------|:-------------:| -----:|
+| prize{1..10}      | <username()>  | right-aligned |  1600 |
+| prize{foot,game}  | football      | centered      |    12 |
+|                   | games         | are neat      |     1 |
 
 As you see in the last line, you can also pass arguments to those just as if
 you were calling a function.
@@ -209,6 +245,7 @@ Nelmio\Entity\User:
         username: <username()>
         setLocation: [40.689269, -74.044737]
 ```
+
 
 ### Specifying Constructor Arguments ###
 

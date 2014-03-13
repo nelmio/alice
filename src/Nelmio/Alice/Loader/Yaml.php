@@ -33,7 +33,7 @@ class Yaml extends Base
     /**
      * {@inheritDoc}
      */
-    public function load($file)
+    public function load($file, $entity = null)
     {
         ob_start();
         $loader = $this;

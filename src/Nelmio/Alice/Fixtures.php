@@ -78,11 +78,13 @@ class Fixtures
         }
 
         $objects = array();
-        foreach ($files as $file) {
+        foreach ($files as $entity => $file) {
             if (is_string($file) && preg_match('{\.ya?ml(\.php)?$}', $file)) {
                 $loader = self::getLoader('Yaml', $options);
             } elseif ((is_string($file) && preg_match('{\.php$}', $file)) || is_array($file)) {
                 $loader = self::getLoader('Base', $options);
+            } elseif ((is_string($file) && preg_match('{\.csv}', $file)) || is_array($file)) {
+                $loader = self::getLoader('Csv', $options);
             } else {
                 throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
             }
@@ -94,7 +96,7 @@ class Fixtures
             }
 
             $loader->setORM($persister);
-            $set = $loader->load($file);
+            $set = $loader->load($file, $entity);
 
             if (!$options['persist_once']) {
                 $this->persist($persister, $set);

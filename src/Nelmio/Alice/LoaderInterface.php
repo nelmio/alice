@@ -17,8 +17,10 @@ interface LoaderInterface
      * Loads a fixture file
      *
      * @param string $file filename
+     * @param string|null $entity
+     * @return
      */
-    public function load($file);
+    public function load($file, $entity = null);
 
     /**
      * Returns a reference to a fixture by name

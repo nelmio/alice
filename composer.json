@@ -14,7 +14,7 @@
         "php": ">=5.3",
         "fzaninotto/faker": "~1.0",
         "symfony/yaml": "~2.0",
-        "morrislaptop/php-parsecsv": "dev-master"
+        "morrislaptop/php-parsecsv": "~1.0"
     },
     "require-dev": {
         "doctrine/common": "~2.3",
