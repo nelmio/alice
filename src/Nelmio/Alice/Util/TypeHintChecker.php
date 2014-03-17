@@ -20,6 +20,11 @@ class TypeHintChecker {
 	 */
 	protected $manager;
 
+	/**
+	 * public interface to set the ORM interface
+	 *
+	 * @param ORMInterface $manager
+	 */
 	public function setORM(ORMInterface $manager)
 	{
 		$this->manager = $manager;

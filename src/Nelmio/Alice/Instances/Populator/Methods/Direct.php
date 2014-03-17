@@ -51,6 +51,12 @@ class Direct implements MethodInterface {
 		}
 	}
 
+	/**
+	 * return the name of the setter for a given property
+	 *
+	 * @param string $property
+	 * @return string
+	 */
 	private function setterFor($property)
 	{
 		return "set{$property}";

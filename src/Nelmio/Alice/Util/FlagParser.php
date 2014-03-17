@@ -15,6 +15,12 @@ use Nelmio\Alice\ORMInterface;
 
 class FlagParser {
 
+	/**
+	 * parse the given key into a name and flags
+	 *
+	 * @param string $key
+	 * @return array
+	 */
 	public static function parse($key)
 	{
 		$flags = array();

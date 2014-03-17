@@ -78,7 +78,7 @@ class Base implements LoaderInterface
     /**
 	 * @var ORMInterface
 	 */
-	protected $manager;
+    protected $manager;
 
 	/**
 	 * @var callable|LoggerInterface
@@ -133,10 +133,15 @@ class Base implements LoaderInterface
 		}
 	}
 
-    private function getBuiltInProviders()
-    {
-        return array(new IdentityProvider());
-    }
+	/**
+	 * returns a list of all the default providers faker processing
+	 *
+	 * @return array
+	 */
+	private function getBuiltInProviders()
+	{
+		return array(new IdentityProvider());
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -274,6 +279,11 @@ class Base implements LoaderInterface
 		return $objects;
 	}
 
+	/**
+	 * public interface to set the ORM interface
+	 *
+	 * @param ORMInterface $manager
+	 */
 	public function setORM(ORMInterface $manager)
 	{
 		$this->manager = $manager;
@@ -297,10 +307,10 @@ class Base implements LoaderInterface
 	 */
    public function log($message)
    {
-	if ($this->logger instanceof LoggerInterface) {
-		$this->logger->debug($message);
-	} elseif ($logger = $this->logger) {
-		$logger($message);
-	}
+   	if ($this->logger instanceof LoggerInterface) {
+   		$this->logger->debug($message);
+   	} elseif ($logger = $this->logger) {
+   		$logger($message);
+   	}
    }
-}
+ }

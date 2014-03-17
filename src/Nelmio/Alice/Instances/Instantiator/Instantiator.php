@@ -24,6 +24,12 @@ class Instantiator {
 		$this->methods   = $methods;
 	}
 
+	/**
+	 * creates and returns an instance of the described class in the fixture
+	 *
+	 * @param Fixture $fixture
+	 * @return mixed
+	 */
 	public function instantiate(Fixture $fixture)
 	{
 		try {

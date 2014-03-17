@@ -77,6 +77,13 @@ class Populator {
 		}
 	}
 
+	/**
+	 * ensures that the property generated for the given fixture is a unique property
+	 *
+	 * @param Fixture $fixture
+	 * @param PropertyDefinition $property
+	 * @return mixed 
+	 */
 	protected function generateUnique(Fixture $fixture, PropertyDefinition $property)
 	{
 		$class = $fixture->getClass();
