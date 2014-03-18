@@ -105,7 +105,7 @@ class Faker implements MethodInterface {
 	 * @param array $variables
 	 * @return mixed
 	 */ 
-	private function replacePlaceholder($matches, array $variables) {
+	public function replacePlaceholder($matches, array $variables) {
 		$args = isset($matches['args']) && '' !== $matches['args'] ? $matches['args'] : null;
 		
 		if (trim($matches['name']) == '') {
