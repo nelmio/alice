@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Instances\Instantiator;
 
 use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
 class Instantiator {
 
@@ -22,6 +23,16 @@ class Instantiator {
 
 	function __construct(array $methods) {
 		$this->methods   = $methods;
+	}
+
+	/**
+	 * adds an instantiator for instantiation extensions
+	 *
+	 * @param MethodInterface $instantiator
+	 **/
+	public function addInstantiator(MethodInterface $instantiator)
+	{
+		array_unshift($this->methods, $instantiator);
 	}
 
 	/**
