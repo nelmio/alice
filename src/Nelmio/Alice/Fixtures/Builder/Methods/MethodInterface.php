@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\FixtureBuilder\Methods;
+namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
 interface MethodInterface
 {

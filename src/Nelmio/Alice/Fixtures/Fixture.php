@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances;
+namespace Nelmio\Alice\Fixtures;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Nelmio\Alice\Instances\PropertyDefinition;
+use Nelmio\Alice\Fixtures\PropertyDefinition;
 use Nelmio\Alice\Util\FlagParser;
 
 class Fixture {
@@ -77,85 +77,239 @@ class Fixture {
 
 		$this->properties = new ArrayCollection();
 		foreach ($spec as $propertyName => $propertyValue) {
-			$this->properties->set($propertyName, new PropertyDefinition($propertyName, $propertyValue));
+			$this->addProperty($propertyName, $propertyValue);
 		}
 	}
 
+	/**
+	 * returns true when the fixture has been flagged as a template
+	 */
+	public function isTemplate()
+	{
+		return $this->hasNameFlag('template');
+	}
+
+	/**
+	 * extends this fixture by the given template
+	 *
+	 * @param Fixture $template
+	 */
+	public function extendTemplate(Fixture $template)
+	{
+		if (!$template->isTemplate()) { throw new \InvalidArgumentException('Argument must be a template, not just a fixture.'); }
+
+		foreach ($template->properties as $property) {
+			if (!isset($this->spec[$property->getName()])) {
+				$this->addProperty($property->getName(), $property->getValue());
+			}
+		}
+	}
+
+	/**
+	 * returns a list of templates to extend
+	 *
+	 * @return array
+	 */
+	public function getExtensions()
+	{
+		$extensions = array_filter(array_keys($this->nameFlags), function($flag) {
+			return preg_match('#^extends\s*(.+)$#', $flag);
+		});
+
+		return array_map(function($extension) {
+			return str_replace('extends ', '', $extension);
+		}, $extensions);
+	}
+
+	/**
+	 * returns true if the fixture has extensions
+	 *
+	 * @return boolean
+	 */
+	public function hasExtensions()
+	{
+		return count($this->getExtensions()) > 0;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getClass()
 	{
 		return $this->class;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getName()
 	{
 		return $this->name;
 	}
 
+	/**
+	 * returns the list of properties with the complex properties (__construct, __set, etc) filtered out
+	 *
+	 * @return ArrayCollection
+	 */
 	public function getProperties()
 	{
 		return $this->properties->filter(function($property) { return $property->isBasic(); });
 	}
 
+	/**
+	 * get the list of class flags on this fixture
+	 *
+	 * @return array
+	 */
 	public function getClassFlags()
 	{
 		return $this->classFlags;
 	}
 
+	/**
+	 * returns true if this fixture has the given class flag
+	 *
+	 * @return boolean
+	 */
+	public function hasClassFlag($flag)
+	{
+		return in_array($flag, array_keys($this->classFlags));
+	}
+
+	/**
+	 * get the list of name flags on this fixture
+	 *
+	 * @return array
+	 */
 	public function getNameFlags()
 	{
 		return $this->nameFlags;
 	}
 
+	/**
+	 * returns true if this fixture has the given name flag
+	 *
+	 * @return boolean
+	 */
+	public function hasNameFlag($flag)
+	{
+		return in_array($flag, array_keys($this->nameFlags));
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getValueForCurrent()
 	{
 		return $this->valueForCurrent;
 	}
 
+	/**
+	 * returns the name of the static method to use as the constructor
+	 *
+	 * @return string
+	 */
 	public function getConstructorMethod()
 	{
 		return $this->getConstructorComponents()['method'];
 	}
 
+	/**
+	 * returns the list of arguments to pass to the constructor
+	 *
+	 * @return array
+	 */
 	public function getConstructorArgs()
 	{
 		return $this->getConstructorComponents()['args'];
 	}
 
+	/**
+	 * returns true when the __construct property has been specified in the spec
+	 *
+	 * @return boolean
+	 */
 	public function shouldUseConstructor()
 	{
 		return !is_null($this->getConstructor()) && $this->getConstructor()->getValue();
 	}
 
+	/**
+	 * returns true when the __set property has been specified in the spec
+	 *
+	 * @return boolean
+	 */
 	public function hasCustomSetter()
 	{
 		return !is_null($this->getCustomSetter());
 	}
 
+	/**
+	 * returns the name of the method to use as the custom setter
+	 *
+	 * @return string
+	 */
 	public function getCustomSetter()
 	{
 		return $this->properties->get('__set');
 	}
 
+	/**
+	 * allows registering a set property value on the fixture itself
+	 *
+	 * @param string $property
+	 * @param mixed $value
+	 */
 	public function setPropertyValue($property, $value)
 	{
 		$this->setProperties[$property] = $value;
 	}
 
+	/**
+	 * returns the value of a property that has been registered as set
+	 *
+	 * @return mixed $value
+	 */
 	public function getPropertyValue($property)
 	{
 		return $this->setProperties[$property];
 	}
 
+	/**
+	 * get a list of properties that have been registered as set
+	 *
+	 * @return array
+	 */
 	public function getSetProperties()
 	{
 		return $this->setProperties;
 	}
 
+	/**
+	 * display the fixture as a string
+	 */
 	public function __toString()
 	{
 		return $this->getName();
 	}
 
+	/**
+	 * creates and adds a PropertyDefinition to the fixture with the given name and value
+	 *
+	 * @param string $name
+	 * @param mixed $value
+	 */
+	protected function addProperty($name, $value)
+	{
+		$this->properties->set($name, new PropertyDefinition($name, $value));
+	}
+
+	/**
+	 * returns the constructor property
+	 *
+	 * @return PropertyDefinition
+	 */
 	protected function getConstructor()
 	{
 		return $this->properties->get('__construct');
@@ -167,7 +321,7 @@ class Fixture {
 	// array('foo', 'bar') => new $fixture->getClass()('foo', 'bar')
 	// array('foo' => array('bar')) => $fixture->getClass()::foo('bar')
 	//
-	public function getConstructorComponents()
+	protected function getConstructorComponents()
 	{
 		if (!is_array($this->getConstructor()->getValue())) {
 			throw new \UnexpectedValueException("The __construct call in object '{$this}' must be defined as an array of arguments or false to bypass it");

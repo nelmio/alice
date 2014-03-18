@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Instances\Populator\Methods;
 
-use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Populator\Methods\MethodInterface;
 use Nelmio\Alice\Util\TypeHintChecker;
 
@@ -51,6 +51,12 @@ class Direct implements MethodInterface {
 		}
 	}
 
+	/**
+	 * return the name of the setter for a given property
+	 *
+	 * @param string $property
+	 * @return string
+	 */
 	private function setterFor($property)
 	{
 		return "set{$property}";

@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Instances\Processor;
 
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\Processable;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
@@ -35,6 +36,16 @@ class Processor {
 				$method->setProcessor($this);
 			}
 		}
+	}
+
+	/**
+	 * adds a processor for processing extensions
+	 *
+	 * @param MethodInterface $processor
+	 **/
+	public function addProcessor(MethodInterface $processor)
+	{
+		array_unshift($this->methods, $processor);
 	}
 
 	/**

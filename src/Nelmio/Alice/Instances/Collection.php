@@ -15,6 +15,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Collection extends ArrayCollection {
 
+	/**
+	 * returns an object, or a property on that object if $property is not null
+	 *
+	 * @param string $name
+	 * @param string $property
+	 * @return mixed
+	 */
 	public function find($name, $property = null)
 	{
 		if ($this->containsKey($name)) {
@@ -43,6 +50,14 @@ class Collection extends ArrayCollection {
 		throw new \UnexpectedValueException('Instance '.$name.' is not defined');
 	}
 
+	/**
+	 * returns a random object or objects from the collection, or a property on that object if $property is not null
+	 *
+	 * @param string $mask
+	 * @param integer $count
+	 * @param string $property
+	 * @return mixed
+	 */
 	public function random($mask, $count=1, $property)
 	{
 		if ($count === 0) {

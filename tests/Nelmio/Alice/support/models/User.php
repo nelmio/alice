@@ -1,9 +1,10 @@
 <?php
 
-namespace Nelmio\Alice\fixtures;
+namespace Nelmio\Alice\support\models;
 
 class User
 {
+    public $uuid;
     public $username;
     public $fullname;
     public $birthDate;

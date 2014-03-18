@@ -86,11 +86,11 @@ class Faker implements MethodInterface {
 	 */
 	public function process(ProcessableInterface $processable, array $variables)
 	{
-		$fakerRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)\((?<args>(?:[^)]*|\)(?!>))*)\)>';
-		if ($processable->valueMatches('#^'.$fakerRegex.'$#i')) {
-			return $this->replacePlaceholder($processable->matches, $variables);
-		} else {
-			// format placeholders inline
+		$fakerRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)?\((?<args>(?:[^)]*|\)(?!>))*)\)>';
+	if ($processable->valueMatches('#^'.$fakerRegex.'$#i')) {
+		return $this->replacePlaceholder($processable->matches, $variables);
+	} else {
+					// format placeholders inline
 			$that = $this;
 			return preg_replace_callback('#'.$fakerRegex.'#i', function ($matches) use ($that, $variables) {
 				return $that->replacePlaceholder($matches, $variables);
@@ -107,6 +107,10 @@ class Faker implements MethodInterface {
 	 */ 
 	private function replacePlaceholder($matches, array $variables) {
 		$args = isset($matches['args']) && '' !== $matches['args'] ? $matches['args'] : null;
+		
+		if (trim($matches['name']) == '') {
+			$matches['name'] = 'identity';
+		}
 
 		if (!$args) {
 			return $this->fake($matches['name'], $matches['locale']);
@@ -122,7 +126,12 @@ class Faker implements MethodInterface {
 		}, $args);
 
 		// replace references to other objects
-		$args = preg_replace_callback('{(?:\b|^)(?:(?<multi>\d+)x )?(?<!\\\\)@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?(?:\b|$)}i', function ($match) {
+		$args = preg_replace_callback('{(?<string>".*?[^\\\\]")|(?:(?<multi>\d+)x )?(?<!\\\\)@(?<reference>[a-z0-9_.*]+)(?:\->(?<property>[a-z0-9_-]+))?}i', function ($match) {
+			
+			if (!empty($match['string'])) {
+				return $match['string'];
+			}
+
 			$multi    = ('' !== $match['multi']) ? $match['multi'] : null;
 			$property = isset($match['property']) ? $match['property'] : null;
 			if (strpos($match['reference'], '*')) {

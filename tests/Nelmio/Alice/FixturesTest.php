@@ -11,18 +11,18 @@
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\fixtures\User;
+use Nelmio\Alice\support\models\User;
 
 class FixturesTest extends \PHPUnit_Framework_TestCase
 {
-    const USER = 'Nelmio\Alice\fixtures\User';
-    const GROUP = 'Nelmio\Alice\fixtures\Group';
-    const CONTACT = 'Nelmio\Alice\fixtures\Contact';
+    const USER = 'Nelmio\Alice\support\models\User';
+    const GROUP = 'Nelmio\Alice\support\models\Group';
+    const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
     public function testLoadLoadsYamlFilesAndDoctrineORM()
     {
         $om = $this->getDoctrineManagerMock(14);
-        $objects = Fixtures::load(__DIR__.'/fixtures/complete.yml', $om, array('providers' => array($this)));
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/complete.yml', $om, array('providers' => array($this)));
 
         $this->assertCount(14, $objects);
 
@@ -170,7 +170,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         foreach ($optionsBatch as $item) {
             $fixtures = isset($item['fixtures'])
                         ? isset($item['fixtures'])
-                        : __DIR__.'/fixtures/complete.yml';
+                        : __DIR__.'/support/fixtures/complete.yml';
             if (!isset($item['providers'])) {
                 $item['providers'] = array();
             }
@@ -201,7 +201,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         );
 
         Fixtures::load(
-            __DIR__.'/fixtures/complete.yml',
+            __DIR__.'/support/fixtures/complete.yml',
             $om,
             array(
                 'providers' => array(
@@ -216,7 +216,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     public function testLoadLoadsYamlFilesAsArray()
     {
         $om = $this->getDoctrineManagerMock(14);
-        $objects = Fixtures::load(array(__DIR__.'/fixtures/complete.yml'), $om, array('providers' => array($this)));
+        $objects = Fixtures::load(array(__DIR__.'/support/fixtures/complete.yml'), $om, array('providers' => array($this)));
 
         $this->assertCount(14, $objects);
     }
@@ -224,7 +224,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     public function testLoadLoadsYamlFilesAsGlobString()
     {
         $om = $this->getDoctrineManagerMock(14);
-        $objects = Fixtures::load(__DIR__.'/fixtures/complete.y*', $om, array('providers' => array($this)));
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/complete.y*', $om, array('providers' => array($this)));
 
         $this->assertCount(14, $objects);
     }
@@ -260,7 +260,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     {
         $om = $this->getDoctrineManagerMock(2);
 
-        $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om);
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om);
 
         $this->assertCount(2, $objects);
 
@@ -277,7 +277,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om, array(
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, array(
             'logger' => 'not callable'
         ));
     }
@@ -287,8 +287,8 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $om = $this->getDoctrineManagerMock(14);
         $objects = Fixtures::load(
             array(
-                __DIR__.'/fixtures/part_1.yml',
-                __DIR__.'/fixtures/part_2.yml',
+                __DIR__.'/support/fixtures/part_1.yml',
+                __DIR__.'/support/fixtures/part_2.yml',
             ),
             $om,
             array(

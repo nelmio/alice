@@ -36,14 +36,20 @@ class Yaml extends Base
     protected function parseFile($filename)
     {
         $loader = $this;
+
         ob_start();
         $includeWrapper = function () use ($filename, $loader) {
             return include $filename;
         };
         $data = $includeWrapper();
-        if (true !== $data) {
+
+        if (1 === $data) {
+            // include didn't return data but included correctly, parse it as yaml
             $yaml = ob_get_clean();
             $data = YamlParser::parse($yaml);
+        } else {
+            // make sure to clean up if theres a failure
+            ob_end_clean();
         }
 
         if (!is_array($data)) {

@@ -12,9 +12,9 @@
 namespace Nelmio\Alice\Instances\Populator;
 
 use Nelmio\Alice\Instances\Collection;
-use Nelmio\Alice\Instances\Fixture;
-use Nelmio\Alice\Instances\PropertyDefinition;
-use Nelmio\Alice\Instances\Populator\Methods;
+use Nelmio\Alice\Fixtures\Fixture;
+use Nelmio\Alice\Fixtures\PropertyDefinition;
+use Nelmio\Alice\Instances\Populator\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\Processor;
 
 class Populator {
@@ -38,6 +38,16 @@ class Populator {
 		$this->objects   = $objects;
 		$this->processor = $processor;
 		$this->setters   = $setters;
+	}
+
+	/**
+	 * adds a populator for population extensions
+	 *
+	 * @param MethodInterface $setter
+	 **/
+	public function addPopulator(MethodInterface $setter)
+	{
+		array_unshift($this->setters, $setter);
 	}
 
 	/**
@@ -77,6 +87,13 @@ class Populator {
 		}
 	}
 
+	/**
+	 * ensures that the property generated for the given fixture is a unique property
+	 *
+	 * @param Fixture $fixture
+	 * @param PropertyDefinition $property
+	 * @return mixed 
+	 */
 	protected function generateUnique(Fixture $fixture, PropertyDefinition $property)
 	{
 		$class = $fixture->getClass();

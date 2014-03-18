@@ -1,6 +1,6 @@
 <?php
 
-namespace Nelmio\Alice\Instances;
+namespace Nelmio\Alice\Fixtures;
 
 use Nelmio\Alice\Instances\Processor\Processable;
 use Nelmio\Alice\Util\FlagParser;
@@ -78,6 +78,9 @@ class PropertyDefinition extends Processable {
 		return $this->name == '__set';
 	}
 
+	/** 
+	 * @return string
+	 */
 	public function __toString()
 	{
 		return $this->getValue();

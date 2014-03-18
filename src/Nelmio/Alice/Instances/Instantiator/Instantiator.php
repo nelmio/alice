@@ -11,7 +11,8 @@
 
 namespace Nelmio\Alice\Instances\Instantiator;
 
-use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Fixtures\Fixture;
+use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
 class Instantiator {
 
@@ -24,6 +25,22 @@ class Instantiator {
 		$this->methods   = $methods;
 	}
 
+	/**
+	 * adds an instantiator for instantiation extensions
+	 *
+	 * @param MethodInterface $instantiator
+	 **/
+	public function addInstantiator(MethodInterface $instantiator)
+	{
+		array_unshift($this->methods, $instantiator);
+	}
+
+	/**
+	 * creates and returns an instance of the described class in the fixture
+	 *
+	 * @param Fixture $fixture
+	 * @return mixed
+	 */
 	public function instantiate(Fixture $fixture)
 	{
 		try {
