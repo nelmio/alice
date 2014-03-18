@@ -9,7 +9,7 @@ class CustomInstantiator implements InstantiatorInterface {
 
 	public function canInstantiate(Fixture $fixture)
 	{
-		return preg_match('/ReferencedObject/', $fixture->getClass());
+		return preg_match('/User/', $fixture->getClass());
 	}
 
 	/**

@@ -17,7 +17,7 @@ use Nelmio\Alice\support\extensions\CustomInstantiator;
 
 class InstantiatorTest extends \PHPUnit_Framework_TestCase
 {
-    const REFERENCED_OBJECT = 'Nelmio\Alice\Instances\Instantiator\ReferencedObject';
+    const USER = 'Nelmio\Alice\support\models\User';
 
     /**
      * @var Instantiator
@@ -36,7 +36,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
 
     public function testAddInstantiator()
     {
-        $class = self::REFERENCED_OBJECT;
+        $class = self::USER;
         $fixture = new Fixture($class, 'referenced', array(), null);
 
         $this->createInstantiator();
@@ -45,9 +45,4 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($object instanceof $class);
         $this->assertFalse(is_null($object->uuid));
     }
-}
-
-class ReferencedObject
-{
-    public $uuid;
 }
