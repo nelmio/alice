@@ -39,7 +39,7 @@ To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://g
 
 ### Basic Usage ###
 
-The easiest way to use this is to call the static `Nelmio\Fixture\Fixture::load`
+The easiest way to use this is to call the static `Nelmio\Alice\Fixtures::load`
 method. It will bootstrap everything for you and return you a set of persisted
 objects in the container you give it.
 
