@@ -222,7 +222,8 @@ class Fixture {
 	 */
 	public function getConstructorMethod()
 	{
-		return $this->getConstructorComponents()['method'];
+		$constructorComponents = $this->getConstructorComponents();
+		return $constructorComponents['method'];
 	}
 
 	/**
@@ -232,7 +233,8 @@ class Fixture {
 	 */
 	public function getConstructorArgs()
 	{
-		return $this->getConstructorComponents()['args'];
+		$constructorComponents = $this->getConstructorComponents();
+		return $constructorComponents['args'];
 	}
 
 	/**
@@ -333,11 +335,12 @@ class Fixture {
 	//
 	protected function getConstructorComponents()
 	{
-		if (!is_array($this->getConstructor()->getValue())) {
+		$constructorValue = $this->getConstructor()->getValue();
+		if (!is_array($constructorValue)) {
 			throw new \UnexpectedValueException("The __construct call in object '{$this}' must be defined as an array of arguments or false to bypass it");
 		}
 
-		list($method, $args) = each($this->getConstructor()->getValue());
+		list($method, $args) = each($constructorValue);
 		if ($method !== 0) {
 			if (!is_callable(array($this->class, $method))) {
 				throw new \UnexpectedValueException("Cannot call static method '{$method}' on class '{$this->class}' as a constructor for object '{$this}'");
@@ -347,7 +350,7 @@ class Fixture {
 			}
 			return array('method' => $method, 'args' => $args);	
 		}
-		return array('method' => '__construct', 'args' => $this->getConstructor()->getValue());
+		return array('method' => '__construct', 'args' => $constructorValue);
 	}
 
 }
