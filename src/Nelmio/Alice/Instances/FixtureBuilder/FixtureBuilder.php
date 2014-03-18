@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Instances\FixtureBuilder;
 
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Instances\FixtureBuilder\Methods\MethodInterface;
 
 class FixtureBuilder {
 
@@ -28,6 +29,16 @@ class FixtureBuilder {
 	function __construct(array $methods) {
 		$this->methods = $methods;
 		$this->templates = new Collection;
+	}
+
+	/**
+	 * adds a builder for fixture building extensions
+	 *
+	 * @param MethodInterface $builder
+	 **/
+	public function addFixtureBuilder(MethodInterface $builder)
+	{
+		array_unshift($this->methods, $builder);
 	}
 
 	/**
