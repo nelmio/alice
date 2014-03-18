@@ -54,7 +54,10 @@ class Processable implements ProcessableInterface {
 	 */
 	public function getMatch($name)
 	{
-		return $this->matches[$name];
+		if (isset($this->matches[$name])) { 
+			return $this->matches[$name];
+		}
+		return null;
 	}
 
 }
