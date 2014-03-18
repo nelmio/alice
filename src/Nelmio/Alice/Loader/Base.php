@@ -75,10 +75,10 @@ class Base implements LoaderInterface
 	 */
 	protected $populator;
 	
-    /**
+	/**
 	 * @var ORMInterface
 	 */
-    protected $manager;
+	protected $manager;
 
 	/**
 	 * @var callable|LoggerInterface
@@ -98,49 +98,30 @@ class Base implements LoaderInterface
 		$this->objects         = new Collection;
 		$this->typeHintChecker = new TypeHintChecker;
 
-		$this->fakerProcessorMethod = new Processor\Methods\Faker($this->objects, array_merge($this->getBuiltInProviders(), $providers), $locale);
-		$processor = new Processor\Processor(array(
-			new Processor\Methods\ArrayValue(),
-			new Processor\Methods\Conditional(),
-			new Processor\Methods\UnescapeAt(),
-			$this->fakerProcessorMethod,
-			new Processor\Methods\Reference($this->objects)
-			));
+		$allProviders = array_merge($this->getBuiltInProviders(), $providers);
 
-		$this->fixtureBuilder = new FixtureBuilder\FixtureBuilder(array(
-			new FixtureBuilder\Methods\RangeName(),
-			new FixtureBuilder\Methods\ListName(),
-			new FixtureBuilder\Methods\SimpleName()
-			));
+		$this->processor = new Processor\Processor(
+			$this->getBuiltInProcessors($allProviders, $locale, $this->objects)
+			);
 
-		$this->instantiator = new Instantiator\Instantiator(array(
-			new Instantiator\Methods\Unserialize(),
-			new Instantiator\Methods\ReflectionWithoutConstructor(),
-			new Instantiator\Methods\ReflectionWithConstructor($processor, $this->typeHintChecker),
-			new Instantiator\Methods\EmptyConstructor(),
-			), $this->processor);
+		$this->fixtureBuilder = new FixtureBuilder\FixtureBuilder(
+			$this->getBuiltInBuilders()
+			);
 
-		$this->populator = new Populator\Populator($this->objects, $processor, array(
-			new Populator\Methods\ArrayAdd($this->typeHintChecker),
-			new Populator\Methods\Custom(),
-			new Populator\Methods\ArrayDirect($this->typeHintChecker),
-			new Populator\Methods\Direct($this->typeHintChecker),
-			new Populator\Methods\Property()
-			));
+		$this->instantiator = new Instantiator\Instantiator(
+			$this->getBuiltInInstantiators($this->processor, $this->typeHintChecker), 
+			$this->processor
+			);
+
+		$this->populator = new Populator\Populator(
+			$this->objects, 
+			$this->processor, 
+			$this->getBuiltInPopulators($this->typeHintChecker)
+			);
 
 		if (is_numeric($seed)) {
 			mt_srand($seed);
 		}
-	}
-
-	/**
-	 * returns a list of all the default providers faker processing
-	 *
-	 * @return array
-	 */
-	private function getBuiltInProviders()
-	{
-		return array(new IdentityProvider());
 	}
 
 	/**
@@ -194,6 +175,46 @@ class Base implements LoaderInterface
 		foreach ($objects as $name => $object) {
 			$this->objects->set($name, $object);
 		}
+	}
+
+	/**
+	 * adds a processor for processing extensions
+	 *
+	 * @param Processor\Methods\MethodInterface $processor
+	 **/
+	public function addProcessor(Processor\Methods\MethodInterface $processor)
+	{
+		$this->processor->addProcessor($processor);
+	}
+
+	/**
+	 * adds a builder for fixture building extensions
+	 *
+	 * @param FixtureBuilder\Methods\MethodInterface $builder
+	 **/
+	public function addFixtureBuilder(FixtureBuilder\Methods\MethodInterface $builder)
+	{
+		$this->fixtureBuilder->addFixtureBuilder($builder);
+	}
+
+	/**
+	 * adds an instantiator for instantiation extensions
+	 *
+	 * @param Instantiator\Methods\MethodInterface $instantiator
+	 **/
+	public function addInstantiator(Instantiator\Methods\MethodInterface $instantiator)
+	{
+		$this->instantiator->addInstantiator($instantiator);
+	}
+
+	/**
+	 * adds a populator for population extensions
+	 *
+	 * @param Populator\Methods\MethodInterface $populator
+	 **/
+	public function addPopulator(Populator\Methods\MethodInterface $populator)
+	{
+		$this->populator->addPopulator($populator);
 	}
 
 	/**
@@ -300,17 +321,96 @@ class Base implements LoaderInterface
 		$this->logger = $logger;
 	}
 
-   /**
-	 * Logs a message using the logger.
+	/**
+	* Logs a message using the logger.
+	*
+	* @param string $message
+	*/
+	public function log($message)
+	{
+		if ($this->logger instanceof LoggerInterface) {
+			$this->logger->debug($message);
+		} elseif ($logger = $this->logger) {
+			$logger($message);
+		}
+	}
+
+	/**
+	 * returns a list of all the default providers faker processing
 	 *
-	 * @param string $message
+	 * @return array
 	 */
-   public function log($message)
-   {
-   	if ($this->logger instanceof LoggerInterface) {
-   		$this->logger->debug($message);
-   	} elseif ($logger = $this->logger) {
-   		$logger($message);
-   	}
-   }
- }
+	private function getBuiltInProviders()
+	{
+		return array(new IdentityProvider());
+	}
+
+	/**
+	 * returns a list of all the default processor methods
+	 *
+	 * @param array $providers - a list of all providers to build the processors with
+	 * @param string $locale
+	 * @param Collection $objects
+	 * @return array
+	 */
+	private function getBuiltInProcessors(array $providers, $locale, Collection $objects)
+	{
+		$this->fakerProcessorMethod = new Processor\Methods\Faker($objects, $providers, $locale);
+		return array(
+			new Processor\Methods\ArrayValue(),
+			new Processor\Methods\Conditional(),
+			new Processor\Methods\UnescapeAt(),
+			$this->fakerProcessorMethod,
+			new Processor\Methods\Reference($objects)
+			);
+	}
+
+	/**
+	 * returns a list of all the default builder methods
+	 *
+	 * @return array
+	 */
+	private function getBuiltInBuilders()
+	{
+		return array(
+			new FixtureBuilder\Methods\RangeName(),
+			new FixtureBuilder\Methods\ListName(),
+			new FixtureBuilder\Methods\SimpleName()
+			);
+	}
+
+	/**
+	 * returns a list of all the default instantiator methods
+	 *
+	 * @param Processor\Processor $processor
+	 * @param TypeHintChecker $typeHintChecker
+	 * @return array
+	 */
+	private function getBuiltInInstantiators(Processor\Processor $processor, TypeHintChecker $typeHintChecker)
+	{
+		return array(
+			new Instantiator\Methods\Unserialize(),
+			new Instantiator\Methods\ReflectionWithoutConstructor(),
+			new Instantiator\Methods\ReflectionWithConstructor($processor, $typeHintChecker),
+			new Instantiator\Methods\EmptyConstructor(),
+			);
+	}
+
+	/**
+	 * returns a list of all the default populator methods
+	 *
+	 * @param TypeHintChecker $typeHintChecker
+	 * @return array
+	 */
+	private function getBuiltInPopulators(TypeHintChecker $typeHintChecker)
+	{
+		return array(
+			new Populator\Methods\ArrayAdd($typeHintChecker),
+			new Populator\Methods\Custom(),
+			new Populator\Methods\ArrayDirect($typeHintChecker),
+			new Populator\Methods\Direct($typeHintChecker),
+			new Populator\Methods\Property()
+			);
+	}
+
+}

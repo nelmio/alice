@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Loader;
 use Nelmio\Alice\TestORM;
 use Nelmio\Alice\Loader\Base;
 use Nelmio\Alice\support\models\User;
+use Nelmio\Alice\support\extensions;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
@@ -1304,6 +1305,76 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(self::USER, $res['user']);
         $this->assertSame('@foo \\@foo \\@foo \\foo', $res['user']->username);
+    }
+
+    public function testAddProcessor()
+    {
+        $loader = $this->createLoader();
+        $loader->addProcessor(new extensions\CustomProcessor);
+        $res = $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => 'uppercase processor:testusername'         
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res['user']);
+        $this->assertEquals('TESTUSERNAME', $res['user']->username);
+    }
+
+    public function testAddFixtureBuilder()
+    {
+        $loader = $this->createLoader();
+        $loader->addFixtureBuilder(new extensions\CustomBuilder);
+        $res = $loader->load(array(
+            self::USER => array(
+                'spec dumped' => array(
+                    'username' => '<username()>'         
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res['spec dumped']);
+        $this->assertNull($res['spec dumped']->username);
+    }
+
+    public function testAddInstantiator()
+    {
+        $loader = $this->createLoader();
+        $loader->addInstantiator(new extensions\CustomInstantiator);
+        $res = $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>'         
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res['user']);
+        $this->assertNotNull($res['user']->uuid);
+    }
+
+    public function testAddPopulator()
+    {
+        $loader = $this->createLoader();
+        $loader->addPopulator(new extensions\CustomPopulator);
+        $res = $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>'         
+                ),
+            ),
+            self::CONTACT => array(
+                'contact' => array(
+                    '__construct' => array('@user'),
+                    'magicProp' => 'magicValue'
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::CONTACT, $res['contact']);
+        $this->assertEquals('magicValue set by magic setter', $res['contact']->magicProp);
     }
 }
 
