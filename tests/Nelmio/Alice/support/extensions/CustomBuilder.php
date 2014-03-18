@@ -2,8 +2,8 @@
 
 namespace Nelmio\Alice\support\extensions;
 
-use Nelmio\Alice\Instances\Fixture;
-use Nelmio\Alice\Instances\FixtureBuilder\Methods\MethodInterface as BuilderInterface;
+use Nelmio\Alice\Fixtures\Fixture;
+use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface as BuilderInterface;
 
 class CustomBuilder implements BuilderInterface {
 

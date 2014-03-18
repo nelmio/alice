@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Instances\Populator\Methods;
 use Symfony\Component\Form\Util\FormUtil;
 use Symfony\Component\PropertyAccess\StringUtil;
 
-use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Populator\Methods\MethodInterface;
 use Nelmio\Alice\Util\TypeHintChecker;
 

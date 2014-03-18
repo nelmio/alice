@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Instances\Instantiator;
 
-use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
 class Instantiator {

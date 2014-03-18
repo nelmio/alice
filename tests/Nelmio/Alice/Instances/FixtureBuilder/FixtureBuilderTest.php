@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\FixtureBuilder;
+namespace Nelmio\Alice\Fixtures\Builder;
 
-use Nelmio\Alice\Instances\FixtureBuilder\FixtureBuilder;
+use Nelmio\Alice\Fixtures\Builder\Builder;
 use Nelmio\Alice\support\extensions\CustomBuilder;
 
-class FixtureBuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\support\models\User';
 
     /**
-     * @var FixtureBuilder
+     * @var Builder
      */
     protected $builder;
 
@@ -30,13 +30,13 @@ class FixtureBuilderTest extends \PHPUnit_Framework_TestCase
         );
         $options = array_merge($defaults, $options);
 
-        return $this->builder = new FixtureBuilder($options['methods']);
+        return $this->builder = new Builder($options['methods']);
     }
 
-    public function testAddFixtureBuilder()
+    public function testAddBuilder()
     {
         $this->createBuilder();
-        $this->builder->addFixtureBuilder(new CustomBuilder);
+        $this->builder->addBuilder(new CustomBuilder);
         $fixtures = $this->builder->build(self::USER, 'spec dumped', array( 'thisShould' => 'be gone' ));
         $this->assertTrue($fixtures[0]->getProperties()->isEmpty());
     }

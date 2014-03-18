@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
-use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Fixtures\Fixture;
 
 interface MethodInterface {
 

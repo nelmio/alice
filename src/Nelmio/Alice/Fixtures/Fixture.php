@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances;
+namespace Nelmio\Alice\Fixtures;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Nelmio\Alice\Instances\PropertyDefinition;
+use Nelmio\Alice\Fixtures\PropertyDefinition;
 use Nelmio\Alice\Util\FlagParser;
 
 class Fixture {

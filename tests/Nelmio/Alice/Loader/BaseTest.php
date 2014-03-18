@@ -1323,10 +1323,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TESTUSERNAME', $res['user']->username);
     }
 
-    public function testAddFixtureBuilder()
+    public function testAddBuilder()
     {
         $loader = $this->createLoader();
-        $loader->addFixtureBuilder(new extensions\CustomBuilder);
+        $loader->addBuilder(new extensions\CustomBuilder);
         $res = $loader->load(array(
             self::USER => array(
                 'spec dumped' => array(

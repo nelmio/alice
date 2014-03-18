@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\FixtureBuilder;
+namespace Nelmio\Alice\Fixtures\Builder;
 
 use Nelmio\Alice\Instances\Collection;
-use Nelmio\Alice\Instances\FixtureBuilder\Methods\MethodInterface;
+use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
 
-class FixtureBuilder {
+class Builder {
 
 	/**
 	 * @var array
@@ -36,7 +36,7 @@ class FixtureBuilder {
 	 *
 	 * @param MethodInterface $builder
 	 **/
-	public function addFixtureBuilder(MethodInterface $builder)
+	public function addBuilder(MethodInterface $builder)
 	{
 		array_unshift($this->methods, $builder);
 	}

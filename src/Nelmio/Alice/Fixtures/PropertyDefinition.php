@@ -1,6 +1,6 @@
 <?php
 
-namespace Nelmio\Alice\Instances;
+namespace Nelmio\Alice\Fixtures;
 
 use Nelmio\Alice\Instances\Processor\Processable;
 use Nelmio\Alice\Util\FlagParser;

@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances;
+namespace Nelmio\Alice\Fixtures;
 
-use Nelmio\Alice\Instances\Fixture;
+use Nelmio\Alice\Fixtures\Fixture;
 
 class FixtureTest extends \PHPUnit_Framework_TestCase
 {

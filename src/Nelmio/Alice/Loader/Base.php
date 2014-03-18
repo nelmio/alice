@@ -14,13 +14,13 @@ namespace Nelmio\Alice\Loader;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
-use Nelmio\Alice\Provider\IdentityProvider;
+use Nelmio\Alice\Fixtures\Builder;
+use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Collection;
-use Nelmio\Alice\Instances\Fixture;
-use Nelmio\Alice\Instances\FixtureBuilder;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Populator;
 use Nelmio\Alice\Instances\Processor;
+use Nelmio\Alice\Instances\Processor\Providers\IdentityProvider;
 use Nelmio\Alice\Util\TypeHintChecker;
 
 /**
@@ -56,7 +56,7 @@ class Base implements LoaderInterface
 	protected $typeHintChecker;
 
 	/**
-	 * @var FixtureBuilder
+	 * @var Builder
 	 */
 	protected $fixtureBuilder;
 
@@ -104,7 +104,7 @@ class Base implements LoaderInterface
 			$this->getBuiltInProcessors($allProviders, $locale, $this->objects)
 			);
 
-		$this->fixtureBuilder = new FixtureBuilder\FixtureBuilder(
+		$this->builder = new Builder\Builder(
 			$this->getBuiltInBuilders()
 			);
 
@@ -190,11 +190,11 @@ class Base implements LoaderInterface
 	/**
 	 * adds a builder for fixture building extensions
 	 *
-	 * @param FixtureBuilder\Methods\MethodInterface $builder
+	 * @param Builder\Methods\MethodInterface $builder
 	 **/
-	public function addFixtureBuilder(FixtureBuilder\Methods\MethodInterface $builder)
+	public function addBuilder(Builder\Methods\MethodInterface $builder)
 	{
-		$this->fixtureBuilder->addFixtureBuilder($builder);
+		$this->builder->addBuilder($builder);
 	}
 
 	/**
@@ -254,7 +254,7 @@ class Base implements LoaderInterface
 		foreach ($rawData as $class => $specs) {
 			$this->log('Loading '.$class);
 			foreach ($specs as $name => $spec) {
-				$fixtures = array_merge($fixtures, $this->fixtureBuilder->build($class, $name, $spec));
+				$fixtures = array_merge($fixtures, $this->builder->build($class, $name, $spec));
 			}
 		}
 		
@@ -373,9 +373,9 @@ class Base implements LoaderInterface
 	private function getBuiltInBuilders()
 	{
 		return array(
-			new FixtureBuilder\Methods\RangeName(),
-			new FixtureBuilder\Methods\ListName(),
-			new FixtureBuilder\Methods\SimpleName()
+			new Builder\Methods\RangeName(),
+			new Builder\Methods\ListName(),
+			new Builder\Methods\SimpleName()
 			);
 	}
 
