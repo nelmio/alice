@@ -13,13 +13,13 @@ namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\TestORM;
 use Nelmio\Alice\Loader\Base;
-use Nelmio\Alice\fixtures\User;
+use Nelmio\Alice\support\models\User;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
-    const USER = 'Nelmio\Alice\fixtures\User';
-    const GROUP = 'Nelmio\Alice\fixtures\Group';
-    const CONTACT = 'Nelmio\Alice\fixtures\Contact';
+    const USER = 'Nelmio\Alice\support\models\User';
+    const GROUP = 'Nelmio\Alice\support\models\Group';
+    const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
     protected $orm;
 
@@ -90,7 +90,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     public function testLoadInvalidFile()
     {
         try {
-            $res = $this->createLoader()->load($file = __DIR__.'/../fixtures/complete.yml');
+            $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/complete.yml');
         } catch (\UnexpectedValueException $e) {
             $this->assertEquals('Included file "'.$file.'" must return an array of data', $e->getMessage());
         }
@@ -957,7 +957,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not determine how to assign inexistent to a Nelmio\Alice\fixtures\User object
+     * @expectedExceptionMessage Could not determine how to assign inexistent to a Nelmio\Alice\support\models\User object
      */
     public function testArbitraryPropertyNamesFail()
     {

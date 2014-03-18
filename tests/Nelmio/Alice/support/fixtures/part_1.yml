@@ -1,4 +1,4 @@
-Nelmio\Alice\fixtures\User:
+Nelmio\Alice\support\models\User:
     user0:
         username: johnny
         fullname: John Smith

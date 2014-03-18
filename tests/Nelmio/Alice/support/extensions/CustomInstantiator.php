@@ -1,6 +1,6 @@
 <?php
 
-namespace Nelmio\Alice\TestExtensions;
+namespace Nelmio\Alice\support\extensions;
 
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface as InstantiatorInterface;

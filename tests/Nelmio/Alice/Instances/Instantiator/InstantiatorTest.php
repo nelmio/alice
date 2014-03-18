@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Instances\Instantiator;
 
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\Instantiator\Instantiator;
-use Nelmio\Alice\TestExtensions\CustomInstantiator;
+use Nelmio\Alice\support\extensions\CustomInstantiator;
 
 class InstantiatorTest extends \PHPUnit_Framework_TestCase
 {

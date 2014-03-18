@@ -1,6 +1,6 @@
 <?php
 
-namespace Nelmio\Alice\fixtures;
+namespace Nelmio\Alice\support\models;
 
 class Contact
 {

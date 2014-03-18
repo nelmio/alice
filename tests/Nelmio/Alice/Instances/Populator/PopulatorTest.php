@@ -15,7 +15,7 @@ use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\Populator\Populator;
 use Nelmio\Alice\Instances\Processor\Processor;
-use Nelmio\Alice\TestExtensions\CustomPopulator;
+use Nelmio\Alice\support\extensions\CustomPopulator;
 
 class PopulatorTest extends \PHPUnit_Framework_TestCase
 {

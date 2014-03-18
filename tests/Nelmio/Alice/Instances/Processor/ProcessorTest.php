@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Instances\Processor;
 
 use Nelmio\Alice\Instances\Processor\Processable;
 use Nelmio\Alice\Instances\Processor\Processor;
-use Nelmio\Alice\TestExtensions\CustomProcessor;
+use Nelmio\Alice\support\extensions\CustomProcessor;
 
 class ProcessorTest extends \PHPUnit_Framework_TestCase
 {

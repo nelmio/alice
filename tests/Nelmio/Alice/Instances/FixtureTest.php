@@ -15,9 +15,9 @@ use Nelmio\Alice\Instances\Fixture;
 
 class FixtureTest extends \PHPUnit_Framework_TestCase
 {
-	const USER = 'Nelmio\Alice\fixtures\User';
-	const GROUP = 'Nelmio\Alice\fixtures\Group';
-	const CONTACT = 'Nelmio\Alice\fixtures\Contact';
+	const USER = 'Nelmio\Alice\support\models\User';
+	const GROUP = 'Nelmio\Alice\support\models\Group';
+	const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
 	public function testIsTemplateWithTemplateNameFlag()
 	{

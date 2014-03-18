@@ -12,11 +12,11 @@
 namespace Nelmio\Alice\Instances\FixtureBuilder;
 
 use Nelmio\Alice\Instances\FixtureBuilder\FixtureBuilder;
-use Nelmio\Alice\TestExtensions\CustomBuilder;
+use Nelmio\Alice\support\extensions\CustomBuilder;
 
 class FixtureBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    const USER = 'Nelmio\Alice\fixtures\User';
+    const USER = 'Nelmio\Alice\support\models\User';
 
     /**
      * @var FixtureBuilder

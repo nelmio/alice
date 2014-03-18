@@ -1,6 +1,6 @@
 <?php
 
-namespace Nelmio\Alice\TestExtensions;
+namespace Nelmio\Alice\support\extensions;
 
 use Nelmio\Alice\Instances\Processor\Methods\MethodInterface as ProcessorInterface;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
