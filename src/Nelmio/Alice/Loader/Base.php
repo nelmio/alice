@@ -292,7 +292,7 @@ class Base implements LoaderInterface
 			$this->objects->remove('self');
 			
 			// add the object in the object store unless it's local
-			if (!isset($fixture->getClassFlags()['local']) && !isset($fixture->getNameFlags()['local'])) {
+			if (!$fixture->isLocal()) {
 				$objects[$fixture->getName()] = $this->getReference($fixture->getName());
 			}
 		}

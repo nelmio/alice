@@ -82,6 +82,16 @@ class Fixture {
 	}
 
 	/**
+	 * returns true when the fixture has either the local class or name flag
+	 *
+	 * @return boolean
+	 */
+	public function isLocal()
+	{
+		return $this->hasClassFlag('local') || $this->hasNameFlag('local');
+	}
+
+	/**
 	 * returns true when the fixture has been flagged as a template
 	 */
 	public function isTemplate()
