@@ -1,6 +1,6 @@
 <?php
 
-namespace Nelmio\Alice\Provider;
+namespace Nelmio\Alice\Instances\Processor\Providers;
 
 class IdentityProvider
 {

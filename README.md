@@ -475,10 +475,12 @@ Nelmio\Entity\User:
 ```
 
 Inheritance also allows to extend from several templates. The last declared `extends`
-will always override values from previous declared `extends` templates.
+will always override values from previous declared `extends` templates. However, 
+extensions properties will never override values set explicitly in the fixture spec 
+itself.
 
 In the following example, the age from `user_young` will override the age from `user`
-in `user1`
+in `user1`, while username will remain user1
 
 ```yaml
 Nelmio\Entity\User:
@@ -488,6 +490,7 @@ Nelmio\Entity\User:
     user_young (template):
         age: <numberBetween(1, 20)>
     user1 (extends user, extends user_young):
+        username: user1
         name: <firstName()>
         lastname: <lastName()>
         city: <city()>

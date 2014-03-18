@@ -13,13 +13,14 @@ namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\TestORM;
 use Nelmio\Alice\Loader\Base;
-use Nelmio\Alice\fixtures\User;
+use Nelmio\Alice\support\models\User;
+use Nelmio\Alice\support\extensions;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
-    const USER = 'Nelmio\Alice\fixtures\User';
-    const GROUP = 'Nelmio\Alice\fixtures\Group';
-    const CONTACT = 'Nelmio\Alice\fixtures\Contact';
+    const USER = 'Nelmio\Alice\support\models\User';
+    const GROUP = 'Nelmio\Alice\support\models\Group';
+    const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
     protected $orm;
 
@@ -74,7 +75,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage Reference foo is not defined
+     * @expectedExceptionMessage Instance foo is not defined
      */
     public function testGetBadReference()
     {
@@ -90,7 +91,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     public function testLoadInvalidFile()
     {
         try {
-            $res = $this->createLoader()->load($file = __DIR__.'/../fixtures/complete.yml');
+            $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/complete.yml');
         } catch (\UnexpectedValueException $e) {
             $this->assertEquals('Included file "'.$file.'" must return an array of data', $e->getMessage());
         }
@@ -240,7 +241,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage Property doesnotexist is not defined for reference user1
+     * @expectedExceptionMessage Property doesnotexist is not defined for instance user1
      */
     public function testLoadParsesPropertyReferencesDoesNotExist()
     {
@@ -332,7 +333,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage Reference mask "user*" did not match any existing reference, make sure the object is created after its references
+     * @expectedExceptionMessage Instance mask "user*" did not match any existing instance, make sure the object is created after its references
      */
     public function testLoadFailsMultiReferencesIfNoneMatch()
     {
@@ -835,6 +836,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
                 'user_full (template, extends user_minimal, extends user_favorite_number)' => array(
                     'fullname' => 'myfullname',
+                    'friends' => 'testfriends'
                 ),
                 'user (extends user_full)' => array(
                     'friends' => 'myfriends'
@@ -864,6 +866,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ),
                 'user_long_name (template)' => array(
                     'username' => 'my_very_long_name',
+                    'email' => 'test@email.com'
                 ),
                 'user (extends user_short_name, extends user_medium_name, extends user_long_name)' => array(
                     'email' => 'base@email.com',
@@ -955,7 +958,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not determine how to assign inexistent to a Nelmio\Alice\fixtures\User object
+     * @expectedExceptionMessage Could not determine how to assign inexistent to a Nelmio\Alice\support\models\User object
      */
     public function testArbitraryPropertyNamesFail()
     {
@@ -1302,6 +1305,76 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(self::USER, $res['user']);
         $this->assertSame('@foo \\@foo \\@foo \\foo', $res['user']->username);
+    }
+
+    public function testAddProcessor()
+    {
+        $loader = $this->createLoader();
+        $loader->addProcessor(new extensions\CustomProcessor);
+        $res = $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => 'uppercase processor:testusername'         
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res['user']);
+        $this->assertEquals('TESTUSERNAME', $res['user']->username);
+    }
+
+    public function testAddBuilder()
+    {
+        $loader = $this->createLoader();
+        $loader->addBuilder(new extensions\CustomBuilder);
+        $res = $loader->load(array(
+            self::USER => array(
+                'spec dumped' => array(
+                    'username' => '<username()>'         
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res['spec dumped']);
+        $this->assertNull($res['spec dumped']->username);
+    }
+
+    public function testAddInstantiator()
+    {
+        $loader = $this->createLoader();
+        $loader->addInstantiator(new extensions\CustomInstantiator);
+        $res = $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>'         
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::USER, $res['user']);
+        $this->assertNotNull($res['user']->uuid);
+    }
+
+    public function testAddPopulator()
+    {
+        $loader = $this->createLoader();
+        $loader->addPopulator(new extensions\CustomPopulator);
+        $res = $loader->load(array(
+            self::USER => array(
+                'user' => array(
+                    'username' => '<username()>'         
+                ),
+            ),
+            self::CONTACT => array(
+                'contact' => array(
+                    '__construct' => array('@user'),
+                    'magicProp' => 'magicValue'
+                ),
+            ),
+        ));
+
+        $this->assertInstanceOf(self::CONTACT, $res['contact']);
+        $this->assertEquals('magicValue set by magic setter', $res['contact']->magicProp);
     }
 }
 
