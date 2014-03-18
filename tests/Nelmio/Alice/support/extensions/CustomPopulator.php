@@ -9,7 +9,7 @@ class CustomPopulator implements PopulatorInterface {
 
 	public function canSet(Fixture $fixture, $object, $property, $value)
 	{
-		return preg_match('/MagicMethodPopulated/', $fixture->getClass());
+		return preg_match('/Contact/', $fixture->getClass());
 	}
 
 	/**

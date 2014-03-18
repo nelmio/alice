@@ -19,7 +19,7 @@ use Nelmio\Alice\support\extensions\CustomPopulator;
 
 class PopulatorTest extends \PHPUnit_Framework_TestCase
 {
-    const MAGIC_OBJECT = 'Nelmio\Alice\Instances\Populator\MagicMethodPopulated';
+    const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
     /**
      * @var Populator
@@ -40,29 +40,13 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
 
     public function testAddPopulator()
     {
-        $class = self::MAGIC_OBJECT;
+        $class = self::CONTACT;
         $fixture = new Fixture($class, 'test', array( 'magicProp' => 'magicValue' ), null);
-        $object = new $class;
+        $object = new $class(new \Nelmio\Alice\support\models\User);
 
         $this->createPopulator(array( 'objects' => new Collection(array( 'test' => $object )) ));
         $this->populator->addPopulator(new CustomPopulator);
         $this->populator->populate($fixture);
-        $this->assertEquals('magicValue', $object->magicProp);
+        $this->assertEquals('magicValue set by magic setter', $object->magicProp);
     }
-}
-
-class MagicMethodPopulated
-{   
-    protected $properties = array();
-
-    public function __get($property)
-    {
-        return $this->properties[$property];
-    }
-
-    public function __set($property, $value)
-    {
-        $this->properties[$property] = $value;
-    }
-
 }
