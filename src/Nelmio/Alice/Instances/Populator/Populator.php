@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Instances\Populator;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Fixture;
 use Nelmio\Alice\Instances\PropertyDefinition;
-use Nelmio\Alice\Instances\Populator\Methods;
+use Nelmio\Alice\Instances\Populator\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\Processor;
 
 class Populator {
@@ -38,6 +38,16 @@ class Populator {
 		$this->objects   = $objects;
 		$this->processor = $processor;
 		$this->setters   = $setters;
+	}
+
+	/**
+	 * adds a populator for population extensions
+	 *
+	 * @param MethodInterface $setter
+	 **/
+	public function addPopulator(MethodInterface $setter)
+	{
+		array_unshift($this->setters, $setter);
 	}
 
 	/**
