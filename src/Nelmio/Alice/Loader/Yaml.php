@@ -86,8 +86,8 @@ class Yaml extends Base
     }
 
     /**
-     * @param $data
-     * @param $includeData
+     * @param array $data
+     * @param array $includeData
      */
     private function mergeIncludeData(&$data, &$includeData)
     {
