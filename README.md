@@ -473,7 +473,7 @@ Nelmio\Entity\User:
 ```
 ### Including files ###
 
-You may include files to you fixtures. Let's look at an example:
+You may include files to your fixtures. Let's look at an example:
 
 Your fixture file:
 

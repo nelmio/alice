@@ -31,7 +31,7 @@ use Symfony\Component\Yaml\Yaml as YamlParser;
 class Yaml extends Base
 {
     /**
-     * @param $file
+     * @param string $file
      * @return array
      * @throws \UnexpectedValueException
      */
@@ -64,8 +64,8 @@ class Yaml extends Base
     }
 
     /**
-     * @param $data
-     * @param $file
+     * @param array $data
+     * @param string $file
      * @return mixed
      */
     protected function processInclude($data, $file)
