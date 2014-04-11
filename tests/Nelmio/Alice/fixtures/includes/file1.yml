@@ -1,0 +1,8 @@
+include:
+  - file2.yml
+
+Nelmio\Alice\fixtures\Shop:
+  shop1:
+    domain: <word()>
+  shop2:
+    domain: amazon.com
