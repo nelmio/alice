@@ -13,12 +13,13 @@ namespace Nelmio\Alice\Loader;
 
 class YamlTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testIncludeFiles()
     {
         $file = __DIR__ . '/../fixtures/include.yml';
         $loader = new \Nelmio\Alice\Loader\Yaml();
-        $data = $loader->parse($file);
+        $reflMethod = new \ReflectionMethod($loader, 'parse');
+        $reflMethod->setAccessible(true);
+        $data = $reflMethod->invoke($loader, $file);
         $expectedData = array(
             'Nelmio\\Alice\\fixtures\\Product' =>
                 array(

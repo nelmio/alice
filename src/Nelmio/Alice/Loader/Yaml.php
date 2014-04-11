@@ -31,11 +31,20 @@ use Symfony\Component\Yaml\Yaml as YamlParser;
 class Yaml extends Base
 {
     /**
+     * {@inheritDoc}
+     */
+    public function load($file)
+    {
+        $data = $this->parse($file);
+        return parent::load($data);
+    }
+
+    /**
      * @param string $file
      * @return array
      * @throws \UnexpectedValueException
      */
-    public function parse($file)
+    private function parse($file)
     {
         ob_start();
         $loader = $this;
@@ -59,7 +68,9 @@ class Yaml extends Base
         if (!is_array($data)) {
             throw new \UnexpectedValueException('Yaml files must parse to an array of data');
         }
-        $data = $this->processInclude($data, $file);
+
+        $data = $this->processIncludes($data, $file);
+
         return $data;
     }
 
@@ -68,19 +79,17 @@ class Yaml extends Base
      * @param string $file
      * @return mixed
      */
-    protected function processInclude($data, $file)
+    private function processIncludes($data, $file)
     {
         if (isset($data['include'])) {
             foreach ($data['include'] as $include) {
                 $includeFile = dirname($file) . DIRECTORY_SEPARATOR . $include;
                 $includeData = $this->parse($includeFile);
-                $this->mergeIncludeData($data, $includeData);
+                $data = $this->mergeIncludeData($data, $includeData);
             }
         }
+
         unset($data['include']);
-        foreach ($data as $class => $fixtures) {
-            $data[$class] = array_reverse($fixtures);
-        }
 
         return $data;
     }
@@ -89,25 +98,16 @@ class Yaml extends Base
      * @param array $data
      * @param array $includeData
      */
-    private function mergeIncludeData(&$data, &$includeData)
+    private function mergeIncludeData($data, $includeData)
     {
-        foreach ($includeData as $child => $value) {
-            if (isset($data[$child])) {
-                if (is_array($data[$child]) && is_array($value)) {
-                    $this->mergeIncludeData($data[$child], $value);
-                }
+        foreach ($includeData as $class => $fixtures) {
+            if (isset($data[$class])) {
+                $data[$class] = array_merge($fixtures, $data[$class]);
             } else {
-                $data[$child] = $value;
+                $data[$class] = $fixtures;
             }
         }
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function load($file)
-    {
-        $data = $this->parse($file);
-        return parent::load($data);
+        return $data;
     }
 }
