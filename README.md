@@ -29,6 +29,7 @@ To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://g
   - [Multiple References](#multiple-references)
   - [Handling Unique Constraints](#handling-unique-constraints)
   - [Fixture Inheritance](#fixture-inheritance)
+  - [Including files](#including-files)
   - [Variables](#variables)
   - [Value Objects](#value-objects)
   - [Custom Faker Data Providers](#custom-faker-data-providers)
@@ -440,8 +441,7 @@ Nelmio\Entity\User:
 ### Fixture inheritance ###
 
 Base fixtures, to be extended from, can be created to be able to *only* need
-to define less additional values in a set of common fixture definitions
-
+to define less additional values in a set of common fixture definitions.
 
 By declaring a fixture as a template using the `(template)` flag, Alice will set
 the instance as a template for that file. Templates instances are not persisted.
@@ -492,11 +492,10 @@ Nelmio\Entity\User:
         lastname: <lastName()>
         city: <city()>
 ```
+
 ### Including files ###
 
-You may include files to your fixtures. Let's look at an example:
-
-Your fixture file:
+You may include other files from your fixtures using the top-level `include` key:
 
 ```yaml
 include:
@@ -509,7 +508,8 @@ Nelmio\Entity\User:
         city: <city()>
 ```
 
-In relative/path/to/file.yml
+In relative/path/to/file.yml:
+
 ```yaml
 Nelmio\Entity\User:
     user (template):
@@ -517,7 +517,7 @@ Nelmio\Entity\User:
         age: <numberBetween(1, 40)>
 ```
 
-In relative/path/to/another/file.yml
+In relative/path/to/another/file.yml:
 
 ```yaml
 Nelmio\Entity\User:
@@ -525,7 +525,8 @@ Nelmio\Entity\User:
         age: <numberBetween(1, 20)>
 ```
 
-All files would be merged in one data set and your base fixture file takes precedence in case of duplicate keys.
+All files are merged in one data set before generation, and the includer's content
+takes precedence over included files' fixtures in case of duplicate keys.
 
 ### Variables ###
 
