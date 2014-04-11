@@ -302,10 +302,12 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $user = $objects['user11'];
         $this->assertInstanceOf(self::USER, $user);
         $this->assertEquals('John Doe', $user->fullname);
+        $this->assertNotEquals(127, $user->favoriteNumber);
 
         $user = $objects['user12'];
         $this->assertInstanceOf(self::USER, $user);
         $this->assertEquals('stormtrooper12', $user->username);
+        $this->assertEquals(42, $user->favoriteNumber);
 
         $user = $objects['user15'];
         $this->assertInstanceOf(self::USER, $user);
