@@ -31,9 +31,11 @@ use Symfony\Component\Yaml\Yaml as YamlParser;
 class Yaml extends Base
 {
     /**
-     * {@inheritDoc}
+     * @param string $file
+     * @return array
+     * @throws \UnexpectedValueException
      */
-    public function load($file)
+    public function parse($file)
     {
         ob_start();
         $loader = $this;
@@ -57,7 +59,55 @@ class Yaml extends Base
         if (!is_array($data)) {
             throw new \UnexpectedValueException('Yaml files must parse to an array of data');
         }
+        $data = $this->processInclude($data, $file);
+        return $data;
+    }
 
+    /**
+     * @param array $data
+     * @param string $file
+     * @return mixed
+     */
+    protected function processInclude($data, $file)
+    {
+        if (isset($data['include'])) {
+            foreach ($data['include'] as $include) {
+                $includeFile = dirname($file) . DIRECTORY_SEPARATOR . $include;
+                $includeData = $this->parse($includeFile);
+                $this->mergeIncludeData($data, $includeData);
+            }
+        }
+        unset($data['include']);
+        foreach ($data as $class => $fixtures) {
+            $data[$class] = array_reverse($fixtures);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     * @param array $includeData
+     */
+    private function mergeIncludeData(&$data, &$includeData)
+    {
+        foreach ($includeData as $child => $value) {
+            if (isset($data[$child])) {
+                if (is_array($data[$child]) && is_array($value)) {
+                    $this->mergeIncludeData($data[$child], $value);
+                }
+            } else {
+                $data[$child] = $value;
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function load($file)
+    {
+        $data = $this->parse($file);
         return parent::load($data);
     }
 }
