@@ -11,3 +11,15 @@ Nelmio\Alice\fixtures\User:
         birthDate: 80%? <date> : 0000-00-00
         email: <email()>
         favoriteNumber: 40%? <randomNumber(1, 99)>
+
+    user_bare (template):
+        username: <username()>
+    user_full (template, extends user_bare):
+        fullname: <firstName()> <lastName()>
+        birthDate: 80%? <date> : 0000-00-00
+        email: <email()>
+        favoriteNumber: 40%? <randomNumber(1, 99)>
+    user11 (extends user_bare):
+        fullname: John Doe
+    user{12..15} (extends user_bare):
+        username: stormtrooper<current()>

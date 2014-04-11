@@ -150,6 +150,15 @@ class Base implements LoaderInterface
                         $curSpec = $spec;
                         $curName = str_replace($match[0], $i, $name);
                         list($curName, $instanceFlags) = $this->parseFlags($curName);
+                        if (!empty($instanceFlags)) {
+                            // Reverse flag order: check templates from last to first, so that last one wins
+                            foreach (array_reverse(array_keys($instanceFlags)) as $flag) {
+                                if (preg_match('#^extends\s*(.+)$#', $flag, $match2)) {
+                                    $template = $this->getTemplate($match2[1]);
+                                    $curSpec = array_merge($template, $curSpec);
+                                }
+                            }
+                        }
                         $this->currentValue = $i;
                         $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
                         $this->currentValue = null;
