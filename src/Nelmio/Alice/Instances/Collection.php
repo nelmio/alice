@@ -11,10 +11,79 @@
 
 namespace Nelmio\Alice\Instances;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
-class Collection extends ArrayCollection
+/**
+ * All methods except #find and #random are copied from Doctrine\Common\Collections\ArrayCollection,
+ * to avoid a hard dependency. See ArrayCollection for attribution.
+ */
+class Collection
 {
+    /**
+     * An array containing the entries of this collection.
+     *
+     * @var array
+     */
+    private $_instances;
+
+    /**
+     * Initializes a new ArrayCollection.
+     *
+     * @param array $elements
+     */
+    public function __construct(array $elements = array())
+    {
+        $this->_instances = $elements;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toArray()
+    {
+        return $this->_instances;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function containsKey($name)
+    {
+        return isset($this->_instances[$name]) || array_key_exists($name, $this->_instances);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function get($name)
+    {
+        if (isset($this->_instances[$name])) {
+            return $this->_instances[$name];
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function set($name, $instance)
+    {
+        $this->_instances[$name] = $instance;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove($name)
+    {
+        if (isset($this->_instances[$name]) || array_key_exists($name, $this->_instances)) {
+            $removed = $this->_instances[$name];
+            unset($this->_instances[$name]);
+
+            return $removed;
+        }
+
+        return null;
+    }
+
     /**
      * returns an object, or a property on that object if $property is not null
      *
@@ -61,31 +130,31 @@ class Collection extends ArrayCollection
     public function random($mask, $count=1, $property)
     {
         if ($count === 0) {
-        return array();
-    }
-
-    $availableObjects = array();
-    foreach ($this->toArray() as $key => $val) {
-        if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
-            $availableObjects[] = $key;
+            return array();
         }
-    }
 
-    if (!$availableObjects) {
-        throw new \UnexpectedValueException('Instance mask "'.$mask.'" did not match any existing instance, make sure the object is created after its references');
-    }
+        $availableObjects = array();
+        foreach ($this->_instances as $name => $instance) {
+            if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $name)) {
+                $availableObjects[] = $name;
+            }
+        }
 
-    if (null === $count) {
-        return $this->find($availableObjects[mt_rand(0, count($availableObjects) - 1)], $property);
-    }
+        if (!$availableObjects) {
+            throw new \UnexpectedValueException('Instance mask "'.$mask.'" did not match any existing instance, make sure the object is created after its references');
+        }
 
-    $res = array();
-    while ($count-- && $availableObjects) {
-        $ref = array_splice($availableObjects, mt_rand(0, count($availableObjects) - 1), 1);
-        $res[] = $this->find(current($ref), $property);
-    }
+        if (null === $count) {
+            return $this->find($availableObjects[mt_rand(0, count($availableObjects) - 1)], $property);
+        }
 
-    return $res;
+        $res = array();
+        while ($count-- && $availableObjects) {
+            $ref = array_splice($availableObjects, mt_rand(0, count($availableObjects) - 1), 1);
+            $res[] = $this->find(current($ref), $property);
+        }
+
+        return $res;
     }
 
 }
