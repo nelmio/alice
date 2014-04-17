@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures\Builder;
 
-use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
 
 class Builder
@@ -22,14 +21,14 @@ class Builder
     protected $methods;
 
     /**
-     * @var Collection
+     * @var array
      */
     protected $templates;
 
     public function __construct(array $methods)
     {
         $this->methods = $methods;
-        $this->templates = new Collection;
+        $this->templates = array();
     }
 
     /**
@@ -62,7 +61,7 @@ class Builder
                     }
 
                     if ($fixture->isTemplate()) {
-                        $this->templates->set($fixture->getName(), $fixture);
+                        $this->templates[$fixture->getName()] = $fixture;
                         $indexesToRemove[] = $index;
                     }
                 }
@@ -84,10 +83,10 @@ class Builder
      */
     protected function getTemplate($name)
     {
-            if (!$this->templates->containsKey($name)) {
-                    throw new \UnexpectedValueException('Template '.$name.' is not defined.');
-            }
+        if (!(isset($this->templates[$name]) || array_key_exists($name, $this->templates))) {
+            throw new \UnexpectedValueException('Template '.$name.' is not defined.');
+        }
 
-            return $this->templates->get($name);
+        return $this->templates[$name];
     }
 }
