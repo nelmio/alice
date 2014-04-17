@@ -44,4 +44,13 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($object instanceof $class);
         $this->assertFalse(is_null($object->uuid));
     }
+
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage All methods passed into Instantiator must implement MethodInterface.
+     */
+    public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheInstantiator()
+    {
+        $instantiator = new Instantiator([ 'CustomInstantiator' ]);
+    }
 }

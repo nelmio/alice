@@ -48,4 +48,13 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
         $this->populator->populate($fixture);
         $this->assertEquals('magicValue set by magic setter', $object->magicProp);
     }
+
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage All setters passed into Populator must implement MethodInterface.
+     */
+    public function testOnlyMethodInterfacesCanBeUsedToInstantiateThePopulator()
+    {
+        $populator = new Populator(new Collection, new Processor(array()), [ 'CustomPopulator' ]);
+    }
 }

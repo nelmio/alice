@@ -39,4 +39,13 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $result = $this->processor->process($processable, array());
         $this->assertEquals('TEST MY CUSTOM PROCESSOR', $result);
     }
+
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage All methods passed into Processor must implement MethodInterface.
+     */
+    public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheProcessor()
+    {
+        $builder = new Processor([ 'CustomProcessor' ]);
+    }
 }

@@ -40,4 +40,13 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $fixtures = $this->builder->build(self::USER, 'spec dumped', array( 'thisShould' => 'be gone' ));
         $this->assertEmpty($fixtures[0]->getProperties());
     }
+
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage All methods passed into Builder must implement MethodInterface.
+     */
+    public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheBuilder()
+    {
+        $builder = new Builder([ 'CustomBuilder' ]);
+    }
 }

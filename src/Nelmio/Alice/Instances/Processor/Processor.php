@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Instances\Processor;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 
 class Processor
@@ -27,6 +28,12 @@ class Processor
 
     public function __construct(array $methods)
     {
+        foreach ($methods as $method) {
+            if (!($method instanceof MethodInterface)) {
+                throw new InvalidArgumentException("All methods passed into Processor must implement MethodInterface.");
+            }
+        }
+
         $this->methods = $methods;
 
         foreach ($this->methods as $method) {

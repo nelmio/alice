@@ -58,6 +58,7 @@ class Collection
         if (isset($this->_instances[$name])) {
             return $this->_instances[$name];
         }
+
         return null;
     }
 

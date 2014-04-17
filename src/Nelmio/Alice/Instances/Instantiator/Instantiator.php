@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Instances\Instantiator;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
@@ -23,6 +24,12 @@ class Instantiator
 
     public function __construct(array $methods)
     {
+        foreach ($methods as $method) {
+            if (!($method instanceof MethodInterface)) {
+                throw new InvalidArgumentException("All methods passed into Instantiator must implement MethodInterface.");
+            }
+        }
+
         $this->methods   = $methods;
     }
 

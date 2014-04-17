@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Instances\Populator;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Fixtures\PropertyDefinition;
@@ -36,6 +37,12 @@ class Populator
 
     public function __construct(Collection $objects, Processor $processor, array $setters)
     {
+        foreach ($setters as $setter) {
+            if (!($setter instanceof MethodInterface)) {
+                throw new InvalidArgumentException("All setters passed into Populator must implement MethodInterface.");
+            }
+        }
+
         $this->objects   = $objects;
         $this->processor = $processor;
         $this->setters   = $setters;

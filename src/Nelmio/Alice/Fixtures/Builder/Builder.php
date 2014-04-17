@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Fixtures\Builder;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
 
 class Builder
@@ -27,6 +28,12 @@ class Builder
 
     public function __construct(array $methods)
     {
+        foreach ($methods as $method) {
+            if (!($method instanceof MethodInterface)) {
+                throw new InvalidArgumentException("All methods passed into Builder must implement MethodInterface.");
+            }
+        }
+
         $this->methods = $methods;
         $this->templates = array();
     }
