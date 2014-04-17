@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 use Nelmio\Alice\Fixtures\PropertyDefinition;
 use Nelmio\Alice\Util\FlagParser;
 
@@ -34,7 +32,7 @@ class Fixture
     protected $spec;
 
     /**
-     * @var ArrayCollection
+     * @var array
      */
     protected $properties;
 
@@ -76,7 +74,7 @@ class Fixture
         $this->spec            = $spec;
         $this->valueForCurrent = $valueForCurrent;
 
-        $this->properties = new ArrayCollection();
+        $this->properties = array();
         foreach ($spec as $propertyName => $propertyValue) {
             $this->addProperty($propertyName, $propertyValue);
         }
@@ -161,11 +159,11 @@ class Fixture
     /**
      * returns the list of properties with the complex properties (__construct, __set, etc) filtered out
      *
-     * @return ArrayCollection
+     * @return array
      */
     public function getProperties()
     {
-        return $this->properties->filter(function ($property) { return $property->isBasic(); });
+        return array_filter($this->properties, function ($property) { return $property->isBasic(); });
     }
 
     /**
@@ -267,7 +265,7 @@ class Fixture
      */
     public function getCustomSetter()
     {
-        return $this->properties->get('__set');
+        return isset($this->properties['__set']) ? $this->properties['__set'] : null;
     }
 
     /**
@@ -317,7 +315,7 @@ class Fixture
      */
     protected function addProperty($name, $value)
     {
-        $this->properties->set($name, new PropertyDefinition($name, $value));
+        $this->properties[$name] = new PropertyDefinition($name, $value);
     }
 
     /**
@@ -327,7 +325,7 @@ class Fixture
      */
     protected function getConstructor()
     {
-        return $this->properties->get('__construct');
+        return isset($this->properties['__construct']) ? $this->properties['__construct'] : null;
     }
 
     //

@@ -38,6 +38,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->createBuilder();
         $this->builder->addBuilder(new CustomBuilder);
         $fixtures = $this->builder->build(self::USER, 'spec dumped', array( 'thisShould' => 'be gone' ));
-        $this->assertTrue($fixtures[0]->getProperties()->isEmpty());
+        $this->assertEmpty($fixtures[0]->getProperties());
     }
 }
