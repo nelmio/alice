@@ -29,7 +29,8 @@ class Group
         return $this->sortName;
     }
 
-    protected function setSortName($sortName) {
+    protected function setSortName($sortName)
+    {
         $this->sortName = $sortName;
     }
 

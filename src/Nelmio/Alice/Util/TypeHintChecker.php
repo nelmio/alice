@@ -13,24 +13,24 @@ namespace Nelmio\Alice\Util;
 
 use Nelmio\Alice\ORMInterface;
 
-class TypeHintChecker {
+class TypeHintChecker
+{
+    /**
+     * ORMInterface
+     */
+    protected $manager;
 
-	/**
-	 * ORMInterface
-	 */
-	protected $manager;
+    /**
+     * public interface to set the ORM interface
+     *
+     * @param ORMInterface $manager
+     */
+    public function setORM(ORMInterface $manager)
+    {
+        $this->manager = $manager;
+    }
 
-	/**
-	 * public interface to set the ORM interface
-	 *
-	 * @param ORMInterface $manager
-	 */
-	public function setORM(ORMInterface $manager)
-	{
-		$this->manager = $manager;
-	}
-
-	/**
+    /**
    * Checks if the value is typehinted with a class and if the current value can be coerced into that type
    *
    * It can either convert to datetime or attempt to fetched from the db by id
@@ -41,41 +41,41 @@ class TypeHintChecker {
    * @param  integer $pNum
    * @return mixed
    */
-	public function check($obj, $method, $value, $pNum = 0)
-	{
-		if (!is_numeric($value) && !is_string($value)) {
-			return $value;
-		}
+    public function check($obj, $method, $value, $pNum = 0)
+    {
+        if (!is_numeric($value) && !is_string($value)) {
+            return $value;
+        }
 
-		$reflection = new \ReflectionMethod($obj, $method);
-		$params = $reflection->getParameters();
+        $reflection = new \ReflectionMethod($obj, $method);
+        $params = $reflection->getParameters();
 
-		if (!$params[$pNum]->getClass()) {
-			return $value;
-		}
+        if (!$params[$pNum]->getClass()) {
+            return $value;
+        }
 
-		$hintedClass = $params[$pNum]->getClass()->getName();
+        $hintedClass = $params[$pNum]->getClass()->getName();
 
-		if ($hintedClass === 'DateTime') {
-			try {
-				if (preg_match('{^[0-9]+$}', $value)) {
-					$value = '@'.$value;
-				}
+        if ($hintedClass === 'DateTime') {
+            try {
+                if (preg_match('{^[0-9]+$}', $value)) {
+                    $value = '@'.$value;
+                }
 
-				return new \DateTime($value);
-			} catch (\Exception $e) {
-				throw new \UnexpectedValueException('Could not convert '.$value.' to DateTime for '.$reflection->getDeclaringClass()->getName().'::'.$method, 0, $e);
-			}
-		}
+                return new \DateTime($value);
+            } catch (\Exception $e) {
+                throw new \UnexpectedValueException('Could not convert '.$value.' to DateTime for '.$reflection->getDeclaringClass()->getName().'::'.$method, 0, $e);
+            }
+        }
 
-		if ($hintedClass) {
-			if (!$this->manager) {
-				throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\ORMInterface object on this instance');
-			}
-			$value = $this->manager->find($hintedClass, $value);
-		}
+        if ($hintedClass) {
+            if (!$this->manager) {
+                throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\ORMInterface object on this instance');
+            }
+            $value = $this->manager->find($hintedClass, $value);
+        }
 
-		return $value;
-	}
+        return $value;
+    }
 
 }

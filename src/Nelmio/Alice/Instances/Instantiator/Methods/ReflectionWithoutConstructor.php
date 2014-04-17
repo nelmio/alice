@@ -12,25 +12,25 @@
 namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
-class ReflectionWithoutConstructor implements MethodInterface {
+class ReflectionWithoutConstructor implements MethodInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function canInstantiate(Fixture $fixture)
+    {
+        return !$fixture->shouldUseConstructor() && !version_compare(PHP_VERSION, '5.4', '<');
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canInstantiate(Fixture $fixture)
-	{
-		return !$fixture->shouldUseConstructor() && !version_compare(PHP_VERSION, '5.4', '<');
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function instantiate(Fixture $fixture)
+    {
+        $reflClass = new \ReflectionClass($fixture->getClass());
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function instantiate(Fixture $fixture)
-	{
-		$reflClass = new \ReflectionClass($fixture->getClass());
-		return $reflClass->newInstanceWithoutConstructor();
-	}
+        return $reflClass->newInstanceWithoutConstructor();
+    }
 
 }

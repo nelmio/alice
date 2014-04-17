@@ -13,54 +13,54 @@ namespace Nelmio\Alice\Instances;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-class Collection extends ArrayCollection {
+class Collection extends ArrayCollection
+{
+    /**
+     * returns an object, or a property on that object if $property is not null
+     *
+     * @param  string $name
+     * @param  string $property
+     * @return mixed
+     */
+    public function find($name, $property = null)
+    {
+        if ($this->containsKey($name)) {
+            $object = $this->get($name);
 
-	/**
-	 * returns an object, or a property on that object if $property is not null
-	 *
-	 * @param string $name
-	 * @param string $property
-	 * @return mixed
-	 */
-	public function find($name, $property = null)
-	{
-		if ($this->containsKey($name)) {
-			$object = $this->get($name);
+            if ($property !== null) {
+                if (property_exists($object, $property)) {
+                    $prop = new \ReflectionProperty($object, $property);
 
-			if ($property !== null) {
-				if (property_exists($object, $property)) {
-					$prop = new \ReflectionProperty($object, $property);
+                    if ($prop->isPublic()) {
+                        return $object->{$property};
+                    }
+                }
 
-					if ($prop->isPublic()) {
-						return $object->{$property};
-					}
-				}
+                $getter = 'get'.ucfirst($property);
+                if (method_exists($object, $getter) && is_callable(array($object, $getter))) {
+                    return $object->$getter();
+                }
 
-				$getter = 'get'.ucfirst($property);
-				if (method_exists($object, $getter) && is_callable(array($object, $getter))) {
-					return $object->$getter();
-				}
+                throw new \UnexpectedValueException('Property '.$property.' is not defined for instance '.$name);
+            }
 
-				throw new \UnexpectedValueException('Property '.$property.' is not defined for instance '.$name);
-			}
+            return $object;
+        }
 
-			return $object;
-		}
+        throw new \UnexpectedValueException('Instance '.$name.' is not defined');
+    }
 
-		throw new \UnexpectedValueException('Instance '.$name.' is not defined');
-	}
-
-	/**
-	 * returns a random object or objects from the collection, or a property on that object if $property is not null
-	 *
-	 * @param string $mask
-	 * @param integer $count
-	 * @param string $property
-	 * @return mixed
-	 */
-	public function random($mask, $count=1, $property)
-	{
-		if ($count === 0) {
+    /**
+     * returns a random object or objects from the collection, or a property on that object if $property is not null
+     *
+     * @param  string  $mask
+     * @param  integer $count
+     * @param  string  $property
+     * @return mixed
+     */
+    public function random($mask, $count=1, $property)
+    {
+        if ($count === 0) {
         return array();
     }
 
@@ -86,6 +86,6 @@ class Collection extends ArrayCollection {
     }
 
     return $res;
-	}
+    }
 
 }

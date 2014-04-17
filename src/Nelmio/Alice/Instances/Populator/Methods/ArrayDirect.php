@@ -12,37 +12,37 @@
 namespace Nelmio\Alice\Instances\Populator\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\Instances\Populator\Methods\MethodInterface;
 use Nelmio\Alice\Util\TypeHintChecker;
 
-class ArrayDirect implements MethodInterface {
+class ArrayDirect implements MethodInterface
+{
+    /**
+     * @var TypeHintChecker
+     */
+    protected $typeHintChecker;
 
-	/**
-	 * @var TypeHintChecker
-	 */
-	protected $typeHintChecker;
+    public function __construct(TypeHintChecker $typeHintChecker)
+    {
+        $this->typeHintChecker = $typeHintChecker;
+    }
 
-	function __construct(TypeHintChecker $typeHintChecker) {
-		$this->typeHintChecker = $typeHintChecker;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function canSet(Fixture $fixture, $object, $property, $value)
+    {
+        return is_array($value) && method_exists($object, $property);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canSet(Fixture $fixture, $object, $property, $value)
-	{
-		return is_array($value) && method_exists($object, $property);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function set(Fixture $fixture, $object, $property, $value)
-	{
-		foreach ($value as $index => $param) {
-			$value[$index] = $this->typeHintChecker->check($object, $property, $param, $index);
-		}
-		call_user_func_array(array($object, $property), $value);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function set(Fixture $fixture, $object, $property, $value)
+    {
+        foreach ($value as $index => $param) {
+            $value[$index] = $this->typeHintChecker->check($object, $property, $param, $index);
+        }
+        call_user_func_array(array($object, $property), $value);
+    }
 
 }

@@ -12,54 +12,54 @@
 namespace Nelmio\Alice\Instances\Populator\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\Instances\Populator\Methods\MethodInterface;
 use Nelmio\Alice\Util\TypeHintChecker;
 
-class Direct implements MethodInterface {
+class Direct implements MethodInterface
+{
+    /**
+     * @var TypeHintChecker
+     */
+    protected $typeHintChecker;
 
-	/**
-	 * @var TypeHintChecker
-	 */
-	protected $typeHintChecker;
+    public function __construct(TypeHintChecker $typeHintChecker)
+    {
+        $this->typeHintChecker = $typeHintChecker;
+    }
 
-	function __construct(TypeHintChecker $typeHintChecker) {
-		$this->typeHintChecker = $typeHintChecker;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function canSet(Fixture $fixture, $object, $property, $value)
+    {
+        return method_exists($object, $this->setterFor($property));
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canSet(Fixture $fixture, $object, $property, $value)
-	{
-		return method_exists($object, $this->setterFor($property));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function set(Fixture $fixture, $object, $property, $value)
+    {
+        $setter = $this->setterFor($property);
+        $value = $this->typeHintChecker->check($object, $setter, $value);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function set(Fixture $fixture, $object, $property, $value)
-	{
-		$setter = $this->setterFor($property);
-		$value = $this->typeHintChecker->check($object, $setter, $value);
+        if (!is_callable(array($object, $setter))) {
+            $refl = new \ReflectionMethod($object, $setter);
+            $refl->setAccessible(true);
+            $refl->invoke($object, $value);
+        } else {
+            $object->{$setter}($value);
+        }
+    }
 
-		if(!is_callable(array($object, $setter))) {
-			$refl = new \ReflectionMethod($object, $setter);
-			$refl->setAccessible(true);
-			$refl->invoke($object, $value);
-		} else {
-			$object->{$setter}($value);
-		}
-	}
-
-	/**
-	 * return the name of the setter for a given property
-	 *
-	 * @param string $property
-	 * @return string
-	 */
-	private function setterFor($property)
-	{
-		return "set{$property}";
-	}
+    /**
+     * return the name of the setter for a given property
+     *
+     * @param  string $property
+     * @return string
+     */
+    private function setterFor($property)
+    {
+        return "set{$property}";
+    }
 
 }

@@ -15,22 +15,22 @@ use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor;
 
-class SimpleName implements MethodInterface {
+class SimpleName implements MethodInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function canBuild($name)
+    {
+        return true;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canBuild($name)
-	{
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function build($class, $name, array $spec)
-	{
-		return array(new Fixture($class, $name, $spec, null));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function build($class, $name, array $spec)
+    {
+        return array(new Fixture($class, $name, $spec, null));
+    }
 
 }

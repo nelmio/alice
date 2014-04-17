@@ -12,44 +12,45 @@
 namespace Nelmio\Alice\Instances\Processor\Methods;
 
 use Nelmio\Alice\Instances\Collection;
-use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
-class Reference implements MethodInterface {
+class Reference implements MethodInterface
+{
+    /**
+     * @var Collection
+     */
+    protected $objects;
 
-	/**
-	 * @var Collection
-	 */
-	protected $objects;
+    public function __construct(Collection $objects)
+    {
+        $this->objects = $objects;
+    }
 
-	function __construct(Collection $objects) {
-		$this->objects = $objects;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function canProcess(ProcessableInterface $processable)
+    {
+        return is_string($processable->getValue()) && $processable->valueMatches('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i');
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canProcess(ProcessableInterface $processable)
-	{
-		return is_string($processable->getValue()) && $processable->valueMatches('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i');
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function process(ProcessableInterface $processable, array $variables)
+    {
+        $multi = ('' !== $processable->getMatch('multi')) ? $processable->getMatch('multi') : null;
+        $property = !is_null($processable->getMatch('property')) ? $processable->getMatch('property') : null;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function process(ProcessableInterface $processable, array $variables)
-	{
-		$multi = ('' !== $processable->getMatch('multi')) ? $processable->getMatch('multi') : null;
-		$property = !is_null($processable->getMatch('property')) ? $processable->getMatch('property') : null;
-		
-		if (strpos($processable->getMatch('reference'), '*')) {
-			return $this->objects->random($processable->getMatch('reference'), $multi, $property);
-		} else {
-			if (null !== $multi) {
-				throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$processable->getMatch('multi').'x @user*", otherwise you would always get only one item.');
-			}
-			return $this->objects->find($processable->getMatch('reference'), $property);
-		}
-	}
+        if (strpos($processable->getMatch('reference'), '*')) {
+            return $this->objects->random($processable->getMatch('reference'), $multi, $property);
+        } else {
+            if (null !== $multi) {
+                throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$processable->getMatch('multi').'x @user*", otherwise you would always get only one item.');
+            }
+
+            return $this->objects->find($processable->getMatch('reference'), $property);
+        }
+    }
 
 }

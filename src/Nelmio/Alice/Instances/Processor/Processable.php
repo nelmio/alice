@@ -11,53 +11,55 @@
 
 namespace Nelmio\Alice\Instances\Processor;
 
-use Nelmio\Alice\Instances\Processor\ProcessableInterface;
+class Processable implements ProcessableInterface
+{
+    /**
+     * @var string
+     */
+    protected $value;
 
-class Processable implements ProcessableInterface {
+    /**
+     * @var array
+     */
+    public $matches = array();
 
-	/**
-	 * @var string
-	 */
-	protected $value;
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
 
-	/**
-	 * @var array
-	 */
-	public $matches = array();
+    /**
+     * {@inheritDoc}
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 
-	function __construct($value) {
-		$this->value = $value;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function valueMatches($regexString)
+    {
+        if (preg_match($regexString, $this->value, $matches)) {
+            $this->matches = array_merge($this->matches, $matches);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getValue()
-	{
-		return $this->value;
-	}
+            return true;
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function valueMatches($regexString)
-	{
-		if (preg_match($regexString, $this->value, $matches)) {
-			$this->matches = array_merge($this->matches, $matches);
-			return true;
-		}
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getMatch($name)
-	{
-		if (isset($this->matches[$name])) { 
-			return $this->matches[$name];
-		}
-		return null;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function getMatch($name)
+    {
+        if (isset($this->matches[$name])) {
+            return $this->matches[$name];
+        }
+
+        return null;
+    }
 
 }

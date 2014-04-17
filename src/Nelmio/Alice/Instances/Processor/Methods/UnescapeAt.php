@@ -11,26 +11,26 @@
 
 namespace Nelmio\Alice\Instances\Processor\Methods;
 
-use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
-class UnescapeAt implements MethodInterface {
+class UnescapeAt implements MethodInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function canProcess(ProcessableInterface $processable)
+    {
+        return is_string($processable->getValue()) && false !== strpos($processable->getValue(), '\\');
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canProcess(ProcessableInterface $processable)
-	{
-		return is_string($processable->getValue()) && false !== strpos($processable->getValue(), '\\');
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function process(ProcessableInterface $processable, array $variables)
+    {
+        $value = $processable->getValue();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function process(ProcessableInterface $processable, array $variables)
-	{
-		$value = $processable->getValue();
-		return preg_replace('{\\\\([@\\\\])}', '$1', $value);
-	}
+        return preg_replace('{\\\\([@\\\\])}', '$1', $value);
+    }
 
 }

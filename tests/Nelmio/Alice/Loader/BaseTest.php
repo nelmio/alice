@@ -12,7 +12,6 @@
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\TestORM;
-use Nelmio\Alice\Loader\Base;
 use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\extensions;
 
@@ -1052,7 +1051,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      * @expectedException UnexpectedValueException
      * @expectedExceptionMessage
      */
-    public function testLoadFailsOnInvalidStaticConstructor() {
+    public function testLoadFailsOnInvalidStaticConstructor()
+    {
         $res = $this->loadData(array(
             self::USER => array(
                 'user' => array(
@@ -1066,7 +1066,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      * @expectedException UnexpectedValueException
      * @expectedExceptionMessage
      */
-    public function testLoadFailsOnScalarStaticConstructorArgs() {
+    public function testLoadFailsOnScalarStaticConstructorArgs()
+    {
         $res = $this->loadData(array(
             self::USER => array(
                 'user' => array(
@@ -1080,7 +1081,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      * @expectedException UnexpectedValueException
      * @expectedExceptionMessage
      */
-    public function testLoadFailsIfStaticMethodDoesntReturnAnInstance() {
+    public function testLoadFailsIfStaticMethodDoesntReturnAnInstance()
+    {
         $res = $this->loadData(array(
             self::USER => array(
                 'user' => array(
@@ -1314,7 +1316,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user' => array(
-                    'username' => 'uppercase processor:testusername'         
+                    'username' => 'uppercase processor:testusername'
                 ),
             ),
         ));
@@ -1330,7 +1332,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'spec dumped' => array(
-                    'username' => '<username()>'         
+                    'username' => '<username()>'
                 ),
             ),
         ));
@@ -1346,7 +1348,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user' => array(
-                    'username' => '<username()>'         
+                    'username' => '<username()>'
                 ),
             ),
         ));
@@ -1362,7 +1364,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user' => array(
-                    'username' => '<username()>'         
+                    'username' => '<username()>'
                 ),
             ),
             self::CONTACT => array(

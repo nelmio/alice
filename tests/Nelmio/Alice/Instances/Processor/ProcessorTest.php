@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Instances\Processor;
 
-use Nelmio\Alice\Instances\Processor\Processable;
-use Nelmio\Alice\Instances\Processor\Processor;
 use Nelmio\Alice\support\extensions\CustomProcessor;
 
 class ProcessorTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +33,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testAddProcessor()
     {
         $processable = new Processable('uppercase processor:test my custom processor');
-        
+
         $this->createProcessor();
         $this->processor->addProcessor(new CustomProcessor);
         $result = $this->processor->process($processable, array());

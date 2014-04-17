@@ -39,15 +39,15 @@ class Fixtures
     /**
      * Loads a fixture file into an object container
      *
-     * @param string|array $file      filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
-     * @param object       $container object container
-     * @param array        $options   available options:
-     *                                - providers: an array of additional faker providers
-     *                                - locale: the faker locale
-     *                                - seed: a seed to make sure faker generates data consistently across
-     *                                  runs, set to null to disable
-     *                                - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
-     *                                - persist_once: only persist objects once if multiple files are passsed
+     * @param string|array $file       filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
+     * @param object       $container  object container
+     * @param array        $options    available options:
+     *                                 - providers: an array of additional faker providers
+     *                                 - locale: the faker locale
+     *                                 - seed: a seed to make sure faker generates data consistently across
+     *                                 runs, set to null to disable
+     *                                 - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
+     *                                 - persist_once: only persist objects once if multiple files are passsed
      * @param array        $processors optional array of ProcessorInterface instances
      */
     public static function load($files, $container, array $options = array(), array $processors = array())

@@ -15,29 +15,29 @@ use Nelmio\Alice\Fixtures\Fixture;
 
 class FixtureTest extends \PHPUnit_Framework_TestCase
 {
-	const USER = 'Nelmio\Alice\support\models\User';
-	const GROUP = 'Nelmio\Alice\support\models\Group';
-	const CONTACT = 'Nelmio\Alice\support\models\Contact';
+    const USER = 'Nelmio\Alice\support\models\User';
+    const GROUP = 'Nelmio\Alice\support\models\Group';
+    const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
-	public function testIsTemplateWithTemplateNameFlag()
-	{
-		$fixture = new Fixture(self::USER, 'user (template)', array(), null);
+    public function testIsTemplateWithTemplateNameFlag()
+    {
+        $fixture = new Fixture(self::USER, 'user (template)', array(), null);
 
-		$this->assertTrue($fixture->isTemplate());
-	}
-	
-	public function testIsNotTemplateWithoutTemplateNameFlag()
-	{
-		$fixture = new Fixture(self::USER, 'user', array(), null);
+        $this->assertTrue($fixture->isTemplate());
+    }
 
-		$this->assertFalse($fixture->isTemplate());
-	}
+    public function testIsNotTemplateWithoutTemplateNameFlag()
+    {
+        $fixture = new Fixture(self::USER, 'user', array(), null);
 
-	public function testIsNotTemplateWithExtendsNameFlag($value='')
-	{
-		$fixture = new Fixture(self::USER, 'user (extends user_template)', array(), null);
+        $this->assertFalse($fixture->isTemplate());
+    }
 
-		$this->assertFalse($fixture->isTemplate());
-	}
+    public function testIsNotTemplateWithExtendsNameFlag($value='')
+    {
+        $fixture = new Fixture(self::USER, 'user (extends user_template)', array(), null);
+
+        $this->assertFalse($fixture->isTemplate());
+    }
 
 }

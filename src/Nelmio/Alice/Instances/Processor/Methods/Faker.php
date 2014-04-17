@@ -12,185 +12,188 @@
 namespace Nelmio\Alice\Instances\Processor\Methods;
 
 use Nelmio\Alice\Instances\Collection;
-use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
-class Faker implements MethodInterface {
+class Faker implements MethodInterface
+{
+    /**
+     * @var Collection
+     */
+    protected $objects;
 
-	/**
-	 * @var Collection
-	 */
-	protected $objects;
+    /**
+     * Custom faker providers to use with faker generator
+     *
+     * @var array
+     */
+    private $providers;
 
-	/**
-	 * Custom faker providers to use with faker generator
-	 *
-	 * @var array
-	 */
-	private $providers;
+    /**
+     * @var \Faker\Generator[]
+     */
+    private $generators;
 
-	/**
-	 * @var \Faker\Generator[]
-	 */
-	private $generators;
+    /**
+     * Default locale to use with faker
+     *
+     * @var string
+     */
+    private $defaultLocale;
 
-	/**
-	 * Default locale to use with faker
-	 *
-	 * @var string
-	 */
-	private $defaultLocale;
+    /**
+     * @var string
+     */
+    private $valueForCurrent;
 
-	/**
-	 * @var string
-	 */
-	private $valueForCurrent;
+    public function __construct(Collection $objects, array $providers, $locale = 'en_US')
+    {
+        $this->objects       = $objects;
+        $this->providers     = $providers;
+        $this->defaultLocale = $locale;
+    }
 
-	function __construct(Collection $objects, array $providers, $locale = 'en_US') {
-		$this->objects       = $objects;
-		$this->providers     = $providers;
-		$this->defaultLocale = $locale;
-	}
+    /**
+     * sets the value for <current()>
+     *
+     * @param string
+     */
+    public function setValueForCurrent($valueForCurrent)
+    {
+        $this->valueForCurrent = $valueForCurrent;
+    }
 
-	/**
-	 * sets the value for <current()>
-	 *
-	 * @param string
-	 */
-	public function setValueForCurrent($valueForCurrent)
-	{
-		$this->valueForCurrent = $valueForCurrent;
-	}
+    /**
+     * sets the providers that can be used
+     *
+     * @param array
+     */
+    public function setProviders(array $providers)
+    {
+        $this->providers = $providers;
+        $this->generators = array();
+    }
 
-	/**
-	 * sets the providers that can be used
-	 *
-	 * @param array
-	 */
-	public function setProviders(array $providers)
-	{
-		$this->providers = $providers;
-		$this->generators = array();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function canProcess(ProcessableInterface $processable)
+    {
+        return is_string($processable->getValue());
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canProcess(ProcessableInterface $processable)
-	{
-		return is_string($processable->getValue());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function process(ProcessableInterface $processable, array $variables)
+    {
+        $fakerRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)?\((?<args>(?:[^)]*|\)(?!>))*)\)>';
+    if ($processable->valueMatches('#^'.$fakerRegex.'$#i')) {
+        return $this->replacePlaceholder($processable->matches, $variables);
+    } else {
+                    // format placeholders inline
+            $that = $this;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function process(ProcessableInterface $processable, array $variables)
-	{
-		$fakerRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)?\((?<args>(?:[^)]*|\)(?!>))*)\)>';
-	if ($processable->valueMatches('#^'.$fakerRegex.'$#i')) {
-		return $this->replacePlaceholder($processable->matches, $variables);
-	} else {
-					// format placeholders inline
-			$that = $this;
-			return preg_replace_callback('#'.$fakerRegex.'#i', function ($matches) use ($that, $variables) {
-				return $that->replacePlaceholder($matches, $variables);
-			}, $processable->getValue());
-		}
-	}
+            return preg_replace_callback('#'.$fakerRegex.'#i', function ($matches) use ($that, $variables) {
+                return $that->replacePlaceholder($matches, $variables);
+            }, $processable->getValue());
+        }
+    }
 
-	/**
-	 * replaces a placeholder by the result of a ->fake call
-	 *
-	 * @param array $matches
-	 * @param array $variables
-	 * @return mixed
-	 */ 
-	public function replacePlaceholder($matches, array $variables) {
-		$args = isset($matches['args']) && '' !== $matches['args'] ? $matches['args'] : null;
-		
-		if (trim($matches['name']) == '') {
-			$matches['name'] = 'identity';
-		}
+    /**
+     * replaces a placeholder by the result of a ->fake call
+     *
+     * @param  array $matches
+     * @param  array $variables
+     * @return mixed
+     */
+    public function replacePlaceholder($matches, array $variables)
+    {
+        $args = isset($matches['args']) && '' !== $matches['args'] ? $matches['args'] : null;
 
-		if (!$args) {
-			return $this->fake($matches['name'], $matches['locale']);
-		}
+        if (trim($matches['name']) == '') {
+            $matches['name'] = 'identity';
+        }
 
-		// replace references to other variables in the same object
-		$args = preg_replace_callback('{\{?\$([a-z0-9_]+)\}?}i', function ($match) use ($variables) {
-			if (array_key_exists($match[1], $variables)) {
-				return '$variables['.var_export($match[1], true).']';
-			}
+        if (!$args) {
+            return $this->fake($matches['name'], $matches['locale']);
+        }
 
-			return $match[0];
-		}, $args);
+        // replace references to other variables in the same object
+        $args = preg_replace_callback('{\{?\$([a-z0-9_]+)\}?}i', function ($match) use ($variables) {
+            if (array_key_exists($match[1], $variables)) {
+                return '$variables['.var_export($match[1], true).']';
+            }
 
-		// replace references to other objects
-		$args = preg_replace_callback('{(?<string>".*?[^\\\\]")|(?:(?<multi>\d+)x )?(?<!\\\\)@(?<reference>[a-z0-9_.*]+)(?:\->(?<property>[a-z0-9_-]+))?}i', function ($match) {
-			
-			if (!empty($match['string'])) {
-				return $match['string'];
-			}
+            return $match[0];
+        }, $args);
 
-			$multi    = ('' !== $match['multi']) ? $match['multi'] : null;
-			$property = isset($match['property']) ? $match['property'] : null;
-			if (strpos($match['reference'], '*')) {
-				return '$this->objects->random(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
-			}
-			if (null !== $multi) {
-				throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$match['multi'].'x @user*", otherwise you would always get only one item.');
-			}
-			return '$this->objects->find(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
-		}, $args);
+        // replace references to other objects
+        $args = preg_replace_callback('{(?<string>".*?[^\\\\]")|(?:(?<multi>\d+)x )?(?<!\\\\)@(?<reference>[a-z0-9_.*]+)(?:\->(?<property>[a-z0-9_-]+))?}i', function ($match) {
 
-		$locale = var_export($matches['locale'], true);
-		$name = var_export($matches['name'], true);
+            if (!empty($match['string'])) {
+                return $match['string'];
+            }
 
-		return eval('return $this->fake(' . $name . ', ' . $locale . ', ' . $args . ');');
-	}
+            $multi    = ('' !== $match['multi']) ? $match['multi'] : null;
+            $property = isset($match['property']) ? $match['property'] : null;
+            if (strpos($match['reference'], '*')) {
+                return '$this->objects->random(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
+            }
+            if (null !== $multi) {
+                throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$match['multi'].'x @user*", otherwise you would always get only one item.');
+            }
 
-	/**
-	 * returns a fake value
-	 *
-	 * @param string $formatter
-	 * @param string $locale
-	 * @return mixed
-	 */
-	private function fake($formatter, $locale = null)
-	{
-		$args = array_slice(func_get_args(), 2);
+            return '$this->objects->find(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
+        }, $args);
 
-		if ($formatter == 'current') {
-			if ($this->valueForCurrent === null) {
-				throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges or enum');
-			}
+        $locale = var_export($matches['locale'], true);
+        $name = var_export($matches['name'], true);
 
-			return $this->valueForCurrent;
-		}
+        return eval('return $this->fake(' . $name . ', ' . $locale . ', ' . $args . ');');
+    }
 
-		return $this->getGenerator($locale)->format($formatter, $args);
-	}
+    /**
+     * returns a fake value
+     *
+     * @param  string $formatter
+     * @param  string $locale
+     * @return mixed
+     */
+    private function fake($formatter, $locale = null)
+    {
+        $args = array_slice(func_get_args(), 2);
 
-	/**
-	 * Get the generator for this locale
-	 *
-	 * @param string $locale the requested locale, defaults to constructor injected default
-	 *
-	 * @return \Faker\Generator the generator for the requested locale
-	 */
-	private function getGenerator($locale = null)
-	{
-		$locale = $locale ?: $this->defaultLocale;
+        if ($formatter == 'current') {
+            if ($this->valueForCurrent === null) {
+                throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges or enum');
+            }
 
-		if (!isset($this->generators[$locale])) {
-			$generator = \Faker\Factory::create($locale);
-			foreach ($this->providers as $provider) {
-				$generator->addProvider($provider);
-			}
-			$this->generators[$locale] = $generator;
-		}
+            return $this->valueForCurrent;
+        }
 
-		return $this->generators[$locale];
-	}
+        return $this->getGenerator($locale)->format($formatter, $args);
+    }
+
+    /**
+     * Get the generator for this locale
+     *
+     * @param string $locale the requested locale, defaults to constructor injected default
+     *
+     * @return \Faker\Generator the generator for the requested locale
+     */
+    private function getGenerator($locale = null)
+    {
+        $locale = $locale ?: $this->defaultLocale;
+
+        if (!isset($this->generators[$locale])) {
+            $generator = \Faker\Factory::create($locale);
+            foreach ($this->providers as $provider) {
+                $generator->addProvider($provider);
+            }
+            $this->generators[$locale] = $generator;
+        }
+
+        return $this->generators[$locale];
+    }
 
 }

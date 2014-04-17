@@ -15,73 +15,73 @@ use Symfony\Component\Form\Util\FormUtil;
 use Symfony\Component\PropertyAccess\StringUtil;
 
 use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\Instances\Populator\Methods\MethodInterface;
 use Nelmio\Alice\Util\TypeHintChecker;
 
-class ArrayAdd implements MethodInterface {
+class ArrayAdd implements MethodInterface
+{
+    /**
+     * @var TypeHintChecker
+     */
+    protected $typeHintChecker;
 
-	/**
-	 * @var TypeHintChecker
-	 */
-	protected $typeHintChecker;
+    public function __construct(TypeHintChecker $typeHintChecker)
+    {
+        $this->typeHintChecker = $typeHintChecker;
+    }
 
-	function __construct(TypeHintChecker $typeHintChecker) {
-		$this->typeHintChecker = $typeHintChecker;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function canSet(Fixture $fixture, $object, $property, $value)
+    {
+        return is_array($value) && $this->findAdderMethod($object, $property);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canSet(Fixture $fixture, $object, $property, $value)
-	{
-		return is_array($value) && $this->findAdderMethod($object, $property);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function set(Fixture $fixture, $object, $property, $value)
+    {
+        $method = $this->findAdderMethod($object, $property);
+        foreach ($value as $val) {
+            $val = $this->typeHintChecker->check($object, $method, $val);
+            $object->{$method}($val);
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function set(Fixture $fixture, $object, $property, $value)
-	{
-		$method = $this->findAdderMethod($object, $property);
-		foreach ($value as $val) {
-			$val = $this->typeHintChecker->check($object, $method, $val);
-			$object->{$method}($val);
-		}
-	}
+    /**
+     * finds the method used to append values to the named property
+     *
+     * @param mixed  $object
+     * @param string $property
+     */
+    private function findAdderMethod($object, $property)
+    {
+        if (method_exists($object, $method = 'add'.$property)) {
+            return $method;
+        }
 
-	/**
-	 * finds the method used to append values to the named property
-	 *
-	 * @param mixed $object
-	 * @param string $property
-	 */
-	private function findAdderMethod($object, $property)
-	{
-		if (method_exists($object, $method = 'add'.$property)) {
-			return $method;
-		}
+        if (class_exists('Symfony\Component\PropertyAccess\StringUtil') && method_exists('Symfony\Component\PropertyAccess\StringUtil', 'singularify')) {
+            foreach ((array) StringUtil::singularify($property) as $singularForm) {
+                if (method_exists($object, $method = 'add'.$singularForm)) {
+                    return $method;
+                }
+            }
+        } elseif (class_exists('Symfony\Component\Form\Util\FormUtil') && method_exists('Symfony\Component\Form\Util\FormUtil', 'singularify')) {
+            foreach ((array) FormUtil::singularify($property) as $singularForm) {
+                if (method_exists($object, $method = 'add'.$singularForm)) {
+                    return $method;
+                }
+            }
+        }
 
-		if (class_exists('Symfony\Component\PropertyAccess\StringUtil') && method_exists('Symfony\Component\PropertyAccess\StringUtil', 'singularify')) {
-			foreach ((array) StringUtil::singularify($property) as $singularForm) {
-				if (method_exists($object, $method = 'add'.$singularForm)) {
-					return $method;
-				}
-			}
-		} elseif (class_exists('Symfony\Component\Form\Util\FormUtil') && method_exists('Symfony\Component\Form\Util\FormUtil', 'singularify')) {
-			foreach ((array) FormUtil::singularify($property) as $singularForm) {
-				if (method_exists($object, $method = 'add'.$singularForm)) {
-					return $method;
-				}
-			}
-		}
+        if (method_exists($object, $method = 'add'.rtrim($property, 's'))) {
+            return $method;
+        }
 
-		if (method_exists($object, $method = 'add'.rtrim($property, 's'))) {
-			return $method;
-		}
-
-		if (substr($property, -3) === 'ies' && method_exists($object, $method = 'add'.substr($key, 0, -3).'y')) {
-			return $method;
-		}
-	}
+        if (substr($property, -3) === 'ies' && method_exists($object, $method = 'add'.substr($key, 0, -3).'y')) {
+            return $method;
+        }
+    }
 
 }

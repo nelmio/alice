@@ -13,22 +13,22 @@ namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
 
-interface MethodInterface {
+interface MethodInterface
+{
+    /**
+     * returns true if this method can instantiate the object described in the fixture
+     *
+     * @param Fixture
+     * @return boolean
+     */
+    public function canInstantiate(Fixture $fixture);
 
-	/**
-	 * returns true if this method can instantiate the object described in the fixture
-	 *
-	 * @param Fixture
-	 * @return boolean
-	 */
-	public function canInstantiate(Fixture $fixture);
-
-	/**
-	 * returns an empty instance of the class the fixture describes
-	 *
-	 * @param Fixture
-	 * @return mixed
-	 */
-	public function instantiate(Fixture $fixture);
+    /**
+     * returns an empty instance of the class the fixture describes
+     *
+     * @param Fixture
+     * @return mixed
+     */
+    public function instantiate(Fixture $fixture);
 
 }

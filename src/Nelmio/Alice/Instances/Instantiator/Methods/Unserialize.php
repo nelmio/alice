@@ -12,25 +12,24 @@
 namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
-class Unserialize implements MethodInterface {
+class Unserialize implements MethodInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function canInstantiate(Fixture $fixture)
+    {
+        return !$fixture->shouldUseConstructor() && version_compare(PHP_VERSION, '5.4', '<');
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canInstantiate(Fixture $fixture)
-	{
-		return !$fixture->shouldUseConstructor() && version_compare(PHP_VERSION, '5.4', '<');
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function instantiate(Fixture $fixture)
-	{
-		// unserialize hack for php <5.4
-		return unserialize(sprintf('O:%d:"%s":0:{}', strlen($fixture->getClass()), $fixture->getClass()));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function instantiate(Fixture $fixture)
+    {
+        // unserialize hack for php <5.4
+        return unserialize(sprintf('O:%d:"%s":0:{}', strlen($fixture->getClass()), $fixture->getClass()));
+    }
 
 }

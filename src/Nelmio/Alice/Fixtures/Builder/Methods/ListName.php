@@ -14,33 +14,33 @@ namespace Nelmio\Alice\Fixtures\Builder\Methods;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
 
-class ListName implements MethodInterface {
+class ListName implements MethodInterface
+{
+    private $matches = array();
 
-	private $matches = array();
+    /**
+     * {@inheritDoc}
+     */
+    public function canBuild($name)
+    {
+        return preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $this->matches);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function canBuild($name)
-	{
-		return preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $this->matches);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function build($class, $name, array $spec)
+    {
+        $fixtures = array();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function build($class, $name, array $spec)
-	{
-		$fixtures = array();
+        $enumItems = array_map('trim', explode(',', $this->matches[1]));
+        foreach ($enumItems as $itemName) {
+            $currentName = str_replace($this->matches[0], $itemName, $name);
+            $fixture = new Fixture($class, $currentName, $spec, $itemName);
+            $fixtures[] = $fixture;
+        }
 
-		$enumItems = array_map('trim', explode(',', $this->matches[1]));
-		foreach ($enumItems as $itemName) {
-			$currentName = str_replace($this->matches[0], $itemName, $name);
-			$fixture = new Fixture($class, $currentName, $spec, $itemName);
-			$fixtures[] = $fixture;
-		}
-
-		return $fixtures;
-	}
+        return $fixtures;
+    }
 
 }

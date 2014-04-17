@@ -13,23 +13,23 @@ namespace Nelmio\Alice\Instances\Processor\Methods;
 
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
-interface MethodInterface {
+interface MethodInterface
+{
+    /**
+     * returns true if this method can process the given value container
+     *
+     * @param ProcessableInterface
+     * @return boolean
+     */
+    public function canProcess(ProcessableInterface $processable);
 
-	/**
-	 * returns true if this method can process the given value container
-	 *
-	 * @param ProcessableInterface
-	 * @return boolean
-	 */
-	public function canProcess(ProcessableInterface $processable);
-
-	/**
-	 * returns the processed value
-	 *
-	 * @param ProcessableInterface
-	 * @param array
-	 * @return mixed
-	 */
-	public function process(ProcessableInterface $processable, array $variables);
+    /**
+     * returns the processed value
+     *
+     * @param ProcessableInterface
+     * @param array
+     * @return mixed
+     */
+    public function process(ProcessableInterface $processable, array $variables);
 
 }

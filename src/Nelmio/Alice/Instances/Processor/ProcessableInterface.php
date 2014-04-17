@@ -11,27 +11,27 @@
 
 namespace Nelmio\Alice\Instances\Processor;
 
-interface ProcessableInterface {
+interface ProcessableInterface
+{
+    /**
+     * @return string
+     **/
+    public function getValue();
 
-	/**
-	 * @return string
-	 **/
-	public function getValue();
+    /**
+     * tests whether this property's value matches the regex, and appends new matches to the matches array
+     *
+     * @param  string  $regexString
+     * @return boolean
+     */
+    public function valueMatches($regexString);
 
-	/**
-	 * tests whether this property's value matches the regex, and appends new matches to the matches array
-	 *
-	 * @param string $regexString
-	 * @return boolean
-	 */
-	public function valueMatches($regexString);
-
-	/**
-	 * allows us to access the list of matches from outside the property class
-	 *
-	 * @param string $name
-	 * @return string
-	 */
-	public function getMatch($name);
+    /**
+     * allows us to access the list of matches from outside the property class
+     *
+     * @param  string $name
+     * @return string
+     */
+    public function getMatch($name);
 
 }

@@ -45,372 +45,374 @@ use Nelmio\Alice\Util\TypeHintChecker;
  */
 class Base implements LoaderInterface
 {
-	/**
-	 * @var Collection
-	 */
-	protected $objects;
+    /**
+     * @var Collection
+     */
+    protected $objects;
 
-	/**
-	 * @var TypeHintChecker
-	 */
-	protected $typeHintChecker;
+    /**
+     * @var TypeHintChecker
+     */
+    protected $typeHintChecker;
 
-	/**
-	 * @var Builder
-	 */
-	protected $fixtureBuilder;
+    /**
+     * @var Builder
+     */
+    protected $fixtureBuilder;
 
-	/**
-	 * @var Faker
-	 */
-	protected $fakerProcessorMethod;
+    /**
+     * @var Faker
+     */
+    protected $fakerProcessorMethod;
 
-	/**
-	 * @var Instantiator
-	 */
-	protected $instantiator;
+    /**
+     * @var Instantiator
+     */
+    protected $instantiator;
 
-	/**
-	 * @var Populator
-	 */
-	protected $populator;
-	
-	/**
-	 * @var ORMInterface
-	 */
-	protected $manager;
+    /**
+     * @var Populator
+     */
+    protected $populator;
 
-	/**
-	 * @var callable|LoggerInterface
-	 */
-	private $logger;
+    /**
+     * @var ORMInterface
+     */
+    protected $manager;
 
-	/**
-	 * @param string $locale default locale to use with faker if none is
-	 *      specified in the expression
-	 * @param array $providers custom faker providers in addition to the default
-	 *      ones from faker
-	 * @param int $seed a seed to make sure faker generates data consistently across
-	 *      runs, set to null to disable
-	 */
-	public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
-	{
-		$this->objects         = new Collection;
-		$this->typeHintChecker = new TypeHintChecker;
+    /**
+     * @var callable|LoggerInterface
+     */
+    private $logger;
 
-		$allProviders = array_merge($this->getBuiltInProviders(), $providers);
+    /**
+     * @param string $locale    default locale to use with faker if none is
+     *                          specified in the expression
+     * @param array  $providers custom faker providers in addition to the default
+     *                          ones from faker
+     * @param int    $seed      a seed to make sure faker generates data consistently across
+     *                          runs, set to null to disable
+     */
+    public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
+    {
+        $this->objects         = new Collection;
+        $this->typeHintChecker = new TypeHintChecker;
 
-		$this->processor = new Processor\Processor(
-			$this->getBuiltInProcessors($allProviders, $locale, $this->objects)
-			);
+        $allProviders = array_merge($this->getBuiltInProviders(), $providers);
 
-		$this->builder = new Builder\Builder(
-			$this->getBuiltInBuilders()
-			);
+        $this->processor = new Processor\Processor(
+            $this->getBuiltInProcessors($allProviders, $locale, $this->objects)
+            );
 
-		$this->instantiator = new Instantiator\Instantiator(
-			$this->getBuiltInInstantiators($this->processor, $this->typeHintChecker), 
-			$this->processor
-			);
+        $this->builder = new Builder\Builder(
+            $this->getBuiltInBuilders()
+            );
 
-		$this->populator = new Populator\Populator(
-			$this->objects, 
-			$this->processor, 
-			$this->getBuiltInPopulators($this->typeHintChecker)
-			);
+        $this->instantiator = new Instantiator\Instantiator(
+            $this->getBuiltInInstantiators($this->processor, $this->typeHintChecker),
+            $this->processor
+            );
 
-		if (is_numeric($seed)) {
-			mt_srand($seed);
-		}
-	}
+        $this->populator = new Populator\Populator(
+            $this->objects,
+            $this->processor,
+            $this->getBuiltInPopulators($this->typeHintChecker)
+            );
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function load($dataOrFilename)
-	{
-		// ensure our data is loaded
-		$data = !is_array($dataOrFilename) ? $this->parseFile($dataOrFilename) : $dataOrFilename;
+        if (is_numeric($seed)) {
+            mt_srand($seed);
+        }
+    }
 
-		// create fixtures
-		$newFixtures = $this->buildFixtures($data);
+    /**
+     * {@inheritDoc}
+     */
+    public function load($dataOrFilename)
+    {
+        // ensure our data is loaded
+        $data = !is_array($dataOrFilename) ? $this->parseFile($dataOrFilename) : $dataOrFilename;
 
-		// instantiate fixtures
-		$this->instantiateFixtures($newFixtures);
+        // create fixtures
+        $newFixtures = $this->buildFixtures($data);
 
-		// populate objects
-		return $this->populateObjects($newFixtures);
-	}
+        // instantiate fixtures
+        $this->instantiateFixtures($newFixtures);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getReference($name, $property = null)
-	{
-		return $this->objects->find($name, $property);
-	}
+        // populate objects
+        return $this->populateObjects($newFixtures);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getReferences()
-	{
-		return $this->objects->toArray();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function getReference($name, $property = null)
+    {
+        return $this->objects->find($name, $property);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setProviders(array $providers)
-	{
-		$this->fakerProcessorMethod->setProviders($providers);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function getReferences()
+    {
+        return $this->objects->toArray();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setReferences(array $objects)
-	{
-		$this->objects->clear();
-		foreach ($objects as $name => $object) {
-			$this->objects->set($name, $object);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function setProviders(array $providers)
+    {
+        $this->fakerProcessorMethod->setProviders($providers);
+    }
 
-	/**
-	 * adds a processor for processing extensions
-	 *
-	 * @param Processor\Methods\MethodInterface $processor
-	 **/
-	public function addProcessor(Processor\Methods\MethodInterface $processor)
-	{
-		$this->processor->addProcessor($processor);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function setReferences(array $objects)
+    {
+        $this->objects->clear();
+        foreach ($objects as $name => $object) {
+            $this->objects->set($name, $object);
+        }
+    }
 
-	/**
-	 * adds a builder for fixture building extensions
-	 *
-	 * @param Builder\Methods\MethodInterface $builder
-	 **/
-	public function addBuilder(Builder\Methods\MethodInterface $builder)
-	{
-		$this->builder->addBuilder($builder);
-	}
+    /**
+     * adds a processor for processing extensions
+     *
+     * @param Processor\Methods\MethodInterface $processor
+     **/
+    public function addProcessor(Processor\Methods\MethodInterface $processor)
+    {
+        $this->processor->addProcessor($processor);
+    }
 
-	/**
-	 * adds an instantiator for instantiation extensions
-	 *
-	 * @param Instantiator\Methods\MethodInterface $instantiator
-	 **/
-	public function addInstantiator(Instantiator\Methods\MethodInterface $instantiator)
-	{
-		$this->instantiator->addInstantiator($instantiator);
-	}
+    /**
+     * adds a builder for fixture building extensions
+     *
+     * @param Builder\Methods\MethodInterface $builder
+     **/
+    public function addBuilder(Builder\Methods\MethodInterface $builder)
+    {
+        $this->builder->addBuilder($builder);
+    }
 
-	/**
-	 * adds a populator for population extensions
-	 *
-	 * @param Populator\Methods\MethodInterface $populator
-	 **/
-	public function addPopulator(Populator\Methods\MethodInterface $populator)
-	{
-		$this->populator->addPopulator($populator);
-	}
+    /**
+     * adds an instantiator for instantiation extensions
+     *
+     * @param Instantiator\Methods\MethodInterface $instantiator
+     **/
+    public function addInstantiator(Instantiator\Methods\MethodInterface $instantiator)
+    {
+        $this->instantiator->addInstantiator($instantiator);
+    }
 
-	/**
-	 * parses a file at the given filename
-	 *
-	 * @param string filename
-	 * @return array data
-	 */
-	protected function parseFile($filename)
-	{
-		$loader = $this;
-		$includeWrapper = function() use ($filename, $loader) {
-			ob_start();
-			$res = include $filename;
-			ob_end_clean();
+    /**
+     * adds a populator for population extensions
+     *
+     * @param Populator\Methods\MethodInterface $populator
+     **/
+    public function addPopulator(Populator\Methods\MethodInterface $populator)
+    {
+        $this->populator->addPopulator($populator);
+    }
 
-			return $res;
-		};
+    /**
+     * parses a file at the given filename
+     *
+     * @param string filename
+     * @return array data
+     */
+    protected function parseFile($filename)
+    {
+        $loader = $this;
+        $includeWrapper = function () use ($filename, $loader) {
+            ob_start();
+            $res = include $filename;
+            ob_end_clean();
 
-		$data = $includeWrapper();
-		if (!is_array($data)) {
-			throw new \UnexpectedValueException("Included file \"{$filename}\" must return an array of data");
-		}
-		return $data;
-	}
+            return $res;
+        };
 
-	/**
-	 * builds a collection of fixtures
-	 *
-	 * @param array $rawData
-	 * @return Collection
-	 */
-	protected function buildFixtures(array $rawData)
-	{
-		$fixtures = array();
+        $data = $includeWrapper();
+        if (!is_array($data)) {
+            throw new \UnexpectedValueException("Included file \"{$filename}\" must return an array of data");
+        }
 
-		foreach ($rawData as $class => $specs) {
-			$this->log('Loading '.$class);
-			foreach ($specs as $name => $spec) {
-				$fixtures = array_merge($fixtures, $this->builder->build($class, $name, $spec));
-			}
-		}
-		
-		return $fixtures;
-	}
+        return $data;
+    }
 
-	/**
-	 * creates an empty instance for each fixture, and adds it to our object collection
-	 *
-	 * @param array $fixtures
-	 */
-	protected function instantiateFixtures(array $fixtures)
-	{
-		foreach ($fixtures as $fixture) {
-			$this->objects->set(
-				$fixture->getName(), 
-				$this->instantiator->instantiate($fixture)
-				);
-		}
-	}
+    /**
+     * builds a collection of fixtures
+     *
+     * @param  array      $rawData
+     * @return Collection
+     */
+    protected function buildFixtures(array $rawData)
+    {
+        $fixtures = array();
 
-	/**
-	 * hydrates each instance described by fixtures and returns the final non-local list
-	 *
-	 * @param array $fixtures
-	 * @return array
-	 */
-	protected function populateObjects(array $fixtures)
-	{
-		$objects = array();
-		
-		foreach ($fixtures as $fixture) {
-			$this->objects->set('self', $this->objects->get($fixture->getName()));
-			$this->populator->populate($fixture);
-			$this->objects->remove('self');
-			
-			// add the object in the object store unless it's local
-			if (!$fixture->isLocal()) {
-				$objects[$fixture->getName()] = $this->getReference($fixture->getName());
-			}
-		}
+        foreach ($rawData as $class => $specs) {
+            $this->log('Loading '.$class);
+            foreach ($specs as $name => $spec) {
+                $fixtures = array_merge($fixtures, $this->builder->build($class, $name, $spec));
+            }
+        }
 
-		return $objects;
-	}
+        return $fixtures;
+    }
 
-	/**
-	 * public interface to set the ORM interface
-	 *
-	 * @param ORMInterface $manager
-	 */
-	public function setORM(ORMInterface $manager)
-	{
-		$this->manager = $manager;
-		$this->typeHintChecker->setORM($manager);
-	}
+    /**
+     * creates an empty instance for each fixture, and adds it to our object collection
+     *
+     * @param array $fixtures
+     */
+    protected function instantiateFixtures(array $fixtures)
+    {
+        foreach ($fixtures as $fixture) {
+            $this->objects->set(
+                $fixture->getName(),
+                $this->instantiator->instantiate($fixture)
+                );
+        }
+    }
 
-	/**
-	 * Set the logger callable to execute with the log() method.
-	 *
-	 * @param callable|LoggerInterface $logger
-	 */
-	public function setLogger($logger)
-	{
-		$this->logger = $logger;
-	}
+    /**
+     * hydrates each instance described by fixtures and returns the final non-local list
+     *
+     * @param  array $fixtures
+     * @return array
+     */
+    protected function populateObjects(array $fixtures)
+    {
+        $objects = array();
 
-	/**
-	* Logs a message using the logger.
-	*
-	* @param string $message
-	*/
-	public function log($message)
-	{
-		if ($this->logger instanceof LoggerInterface) {
-			$this->logger->debug($message);
-		} elseif ($logger = $this->logger) {
-			$logger($message);
-		}
-	}
+        foreach ($fixtures as $fixture) {
+            $this->objects->set('self', $this->objects->get($fixture->getName()));
+            $this->populator->populate($fixture);
+            $this->objects->remove('self');
 
-	/**
-	 * returns a list of all the default providers faker processing
-	 *
-	 * @return array
-	 */
-	private function getBuiltInProviders()
-	{
-		return array(new IdentityProvider());
-	}
+            // add the object in the object store unless it's local
+            if (!$fixture->isLocal()) {
+                $objects[$fixture->getName()] = $this->getReference($fixture->getName());
+            }
+        }
 
-	/**
-	 * returns a list of all the default processor methods
-	 *
-	 * @param array $providers - a list of all providers to build the processors with
-	 * @param string $locale
-	 * @param Collection $objects
-	 * @return array
-	 */
-	private function getBuiltInProcessors(array $providers, $locale, Collection $objects)
-	{
-		$this->fakerProcessorMethod = new Processor\Methods\Faker($objects, $providers, $locale);
-		return array(
-			new Processor\Methods\ArrayValue(),
-			new Processor\Methods\Conditional(),
-			new Processor\Methods\UnescapeAt(),
-			$this->fakerProcessorMethod,
-			new Processor\Methods\Reference($objects)
-			);
-	}
+        return $objects;
+    }
 
-	/**
-	 * returns a list of all the default builder methods
-	 *
-	 * @return array
-	 */
-	private function getBuiltInBuilders()
-	{
-		return array(
-			new Builder\Methods\RangeName(),
-			new Builder\Methods\ListName(),
-			new Builder\Methods\SimpleName()
-			);
-	}
+    /**
+     * public interface to set the ORM interface
+     *
+     * @param ORMInterface $manager
+     */
+    public function setORM(ORMInterface $manager)
+    {
+        $this->manager = $manager;
+        $this->typeHintChecker->setORM($manager);
+    }
 
-	/**
-	 * returns a list of all the default instantiator methods
-	 *
-	 * @param Processor\Processor $processor
-	 * @param TypeHintChecker $typeHintChecker
-	 * @return array
-	 */
-	private function getBuiltInInstantiators(Processor\Processor $processor, TypeHintChecker $typeHintChecker)
-	{
-		return array(
-			new Instantiator\Methods\Unserialize(),
-			new Instantiator\Methods\ReflectionWithoutConstructor(),
-			new Instantiator\Methods\ReflectionWithConstructor($processor, $typeHintChecker),
-			new Instantiator\Methods\EmptyConstructor(),
-			);
-	}
+    /**
+     * Set the logger callable to execute with the log() method.
+     *
+     * @param callable|LoggerInterface $logger
+     */
+    public function setLogger($logger)
+    {
+        $this->logger = $logger;
+    }
 
-	/**
-	 * returns a list of all the default populator methods
-	 *
-	 * @param TypeHintChecker $typeHintChecker
-	 * @return array
-	 */
-	private function getBuiltInPopulators(TypeHintChecker $typeHintChecker)
-	{
-		return array(
-			new Populator\Methods\ArrayAdd($typeHintChecker),
-			new Populator\Methods\Custom(),
-			new Populator\Methods\ArrayDirect($typeHintChecker),
-			new Populator\Methods\Direct($typeHintChecker),
-			new Populator\Methods\Property()
-			);
-	}
+    /**
+    * Logs a message using the logger.
+    *
+    * @param string $message
+    */
+    public function log($message)
+    {
+        if ($this->logger instanceof LoggerInterface) {
+            $this->logger->debug($message);
+        } elseif ($logger = $this->logger) {
+            $logger($message);
+        }
+    }
+
+    /**
+     * returns a list of all the default providers faker processing
+     *
+     * @return array
+     */
+    private function getBuiltInProviders()
+    {
+        return array(new IdentityProvider());
+    }
+
+    /**
+     * returns a list of all the default processor methods
+     *
+     * @param  array      $providers - a list of all providers to build the processors with
+     * @param  string     $locale
+     * @param  Collection $objects
+     * @return array
+     */
+    private function getBuiltInProcessors(array $providers, $locale, Collection $objects)
+    {
+        $this->fakerProcessorMethod = new Processor\Methods\Faker($objects, $providers, $locale);
+
+        return array(
+            new Processor\Methods\ArrayValue(),
+            new Processor\Methods\Conditional(),
+            new Processor\Methods\UnescapeAt(),
+            $this->fakerProcessorMethod,
+            new Processor\Methods\Reference($objects)
+            );
+    }
+
+    /**
+     * returns a list of all the default builder methods
+     *
+     * @return array
+     */
+    private function getBuiltInBuilders()
+    {
+        return array(
+            new Builder\Methods\RangeName(),
+            new Builder\Methods\ListName(),
+            new Builder\Methods\SimpleName()
+            );
+    }
+
+    /**
+     * returns a list of all the default instantiator methods
+     *
+     * @param  Processor\Processor $processor
+     * @param  TypeHintChecker     $typeHintChecker
+     * @return array
+     */
+    private function getBuiltInInstantiators(Processor\Processor $processor, TypeHintChecker $typeHintChecker)
+    {
+        return array(
+            new Instantiator\Methods\Unserialize(),
+            new Instantiator\Methods\ReflectionWithoutConstructor(),
+            new Instantiator\Methods\ReflectionWithConstructor($processor, $typeHintChecker),
+            new Instantiator\Methods\EmptyConstructor(),
+            );
+    }
+
+    /**
+     * returns a list of all the default populator methods
+     *
+     * @param  TypeHintChecker $typeHintChecker
+     * @return array
+     */
+    private function getBuiltInPopulators(TypeHintChecker $typeHintChecker)
+    {
+        return array(
+            new Populator\Methods\ArrayAdd($typeHintChecker),
+            new Populator\Methods\Custom(),
+            new Populator\Methods\ArrayDirect($typeHintChecker),
+            new Populator\Methods\Direct($typeHintChecker),
+            new Populator\Methods\Property()
+            );
+    }
 
 }
