@@ -46,6 +46,6 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheProcessor()
     {
-        $builder = new Processor([ 'CustomProcessor' ]);
+        $builder = new Processor(array('CustomProcessor'));
     }
 }

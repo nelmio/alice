@@ -47,6 +47,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheBuilder()
     {
-        $builder = new Builder([ 'CustomBuilder' ]);
+        $builder = new Builder(array('CustomBuilder'));
     }
 }

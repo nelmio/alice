@@ -51,6 +51,6 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheInstantiator()
     {
-        $instantiator = new Instantiator([ 'CustomInstantiator' ]);
+        $instantiator = new Instantiator(array('CustomInstantiator'));
     }
 }
