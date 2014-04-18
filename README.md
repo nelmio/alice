@@ -29,6 +29,7 @@ To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://g
   - [Multiple References](#multiple-references)
   - [Handling Unique Constraints](#handling-unique-constraints)
   - [Fixture Inheritance](#fixture-inheritance)
+  - [Including files](#including-files)
   - [Variables](#variables)
   - [Value Objects](#value-objects)
   - [Custom Faker Data Providers](#custom-faker-data-providers)
@@ -247,7 +248,7 @@ example might be personal data you don't want to share, to reflect this in
 our fixtures and be sure the site works and looks alright even when users
 don't enter a favorite number, we can make Alice fill it in *sometimes* using
 the `50%? value : empty value` notation. It's a bit like the ternary operator,
-and you can omit the empty value if null is ok as such: `%50? value`.
+and you can omit the empty value if null is ok as such: `50%? value`.
 
 Let's update the user definition with this new information:
 
@@ -440,8 +441,7 @@ Nelmio\Entity\User:
 ### Fixture inheritance ###
 
 Base fixtures, to be extended from, can be created to be able to *only* need
-to define less additional values in a set of common fixture definitions
-
+to define less additional values in a set of common fixture definitions.
 
 By declaring a fixture as a template using the `(template)` flag, Alice will set
 the instance as a template for that file. Templates instances are not persisted.
@@ -495,6 +495,41 @@ Nelmio\Entity\User:
         lastname: <lastName()>
         city: <city()>
 ```
+
+### Including files ###
+
+You may include other files from your fixtures using the top-level `include` key:
+
+```yaml
+include:
+    - relative/path/to/file.yml
+    - relative/path/to/another/file.yml
+Nelmio\Entity\User:
+    user1 (extends user, extends user_young):
+        name: <firstName()>
+        lastname: <lastName()>
+        city: <city()>
+```
+
+In relative/path/to/file.yml:
+
+```yaml
+Nelmio\Entity\User:
+    user (template):
+        username: <username()>
+        age: <numberBetween(1, 40)>
+```
+
+In relative/path/to/another/file.yml:
+
+```yaml
+Nelmio\Entity\User:
+    user_young (template):
+        age: <numberBetween(1, 20)>
+```
+
+All files are merged in one data set before generation, and the includer's content
+takes precedence over included files' fixtures in case of duplicate keys.
 
 ### Variables ###
 
