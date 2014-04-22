@@ -87,10 +87,19 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->loader->getReference('foo');
     }
 
-    public function testLoadInvalidFile()
+    public function testLoadUnparsableFile()
     {
         try {
             $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/complete.yml');
+        } catch (\UnexpectedValueException $e) {
+            $this->assertEquals("{$file} cannot be parsed - no parser exists that can handle it.", $e->getMessage());
+        }
+    }
+
+    public function testLoadInvalidFile()
+    {
+        try {
+            $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/invalid.php');
         } catch (\UnexpectedValueException $e) {
             $this->assertEquals('Included file "'.$file.'" must return an array of data', $e->getMessage());
         }

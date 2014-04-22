@@ -16,6 +16,7 @@ use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Fixtures\Builder;
 use Nelmio\Alice\Fixtures\Fixture;
+use Nelmio\Alice\Fixtures\Parser;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Populator;
@@ -56,9 +57,14 @@ class Base implements LoaderInterface
     protected $typeHintChecker;
 
     /**
+     * @var Parser
+     **/
+    protected $parser;
+
+    /**
      * @var Builder
      */
-    protected $fixtureBuilder;
+    protected $builder;
 
     /**
      * @var Faker
@@ -102,6 +108,10 @@ class Base implements LoaderInterface
 
         $this->processor = new Processor\Processor(
             $this->getBuiltInProcessors($allProviders, $locale, $this->objects)
+            );
+
+        $this->parser = new Parser\Parser(
+            $this->getBuiltInParsers()
             );
 
         $this->builder = new Builder\Builder(
@@ -225,21 +235,7 @@ class Base implements LoaderInterface
      */
     protected function parseFile($filename)
     {
-        $loader = $this;
-        $includeWrapper = function () use ($filename, $loader) {
-            ob_start();
-            $res = include $filename;
-            ob_end_clean();
-
-            return $res;
-        };
-
-        $data = $includeWrapper();
-        if (!is_array($data)) {
-            throw new \UnexpectedValueException("Included file \"{$filename}\" must return an array of data");
-        }
-
-        return $data;
+        return $this->parser->parse($filename);
     }
 
     /**
@@ -364,6 +360,18 @@ class Base implements LoaderInterface
             new Processor\Methods\UnescapeAt(),
             $this->fakerProcessorMethod,
             new Processor\Methods\Reference($objects)
+            );
+    }
+
+    /**
+     * returns a list of all the default parser methods
+     *
+     * @return array
+     */
+    private function getBuiltInParsers()
+    {
+        return array(
+            new Parser\Methods\Php($this)
             );
     }
 
