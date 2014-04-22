@@ -21,7 +21,7 @@ class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
         $definition = new PropertyDefinition('username (unique)', '<username()>');
 
         $this->assertEquals('username', $definition->getName());
-    }   
+    }
 
     public function testWillRegisterNameFlags()
     {

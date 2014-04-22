@@ -15,8 +15,8 @@ use UnexpectedValueException;
 
 use Nelmio\Alice\Fixtures\Parser\Methods\MethodInterface;
 
-class Php implements MethodInterface {
-
+class Php implements MethodInterface
+{
   /**
    * The context allows any kind of contextual information to be available in fixtures
    *
@@ -29,7 +29,8 @@ class Php implements MethodInterface {
    **/
   protected $extension = 'php';
 
-  function __construct($context = null) {
+  public function __construct($context = null)
+  {
     $this->context = $context;
   }
 

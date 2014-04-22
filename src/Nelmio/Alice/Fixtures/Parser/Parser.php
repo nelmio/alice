@@ -15,14 +15,14 @@ use UnexpectedValueException;
 
 use Nelmio\Alice\Fixtures\Parser\Methods\MethodInterface;
 
-class Parser {
-
+class Parser
+{
   /**
    * @var array
    **/
   private $parsers = array();
 
-  public function __construct(array $parsers) 
+  public function __construct(array $parsers)
   {
     foreach ($parsers as $method) {
       if (!($method instanceof MethodInterface)) {

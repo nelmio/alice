@@ -90,7 +90,7 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
     {
         $template = new Fixture(self::USER, 'user_full (template)', array('name' => 'John Doe', 'email' => 'john@doe.org'), null);
         $fixture = new Fixture(self::USER, 'user', array('email' => 'jane@doe.org'), null);
-        
+
         $fixture->extendTemplate($template);
         $properties = $fixture->getProperties();
         $this->assertEquals('John Doe', $properties['name']->getValue());
@@ -100,7 +100,7 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
     {
         $template = new Fixture(self::USER, 'user_full (template)', array('name' => 'John Doe', 'email' => 'john@doe.org'), null);
         $fixture = new Fixture(self::USER, 'user', array('email' => 'jane@doe.org'), null);
-        
+
         $fixture->extendTemplate($template);
         $properties = $fixture->getProperties();
         $this->assertEquals('jane@doe.org', $properties['email']->getValue());
@@ -190,7 +190,7 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
     {
         $setFixture = new Fixture(self::USER, 'user', array('__set' => 'setterFunc'), null);
         $noSetFixture = new Fixture(self::USER, 'user', array(), null);
-        
+
         $this->assertTrue($setFixture->hasCustomSetter());
         $this->assertFalse($noSetFixture->hasCustomSetter());
     }
