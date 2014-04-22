@@ -13,36 +13,14 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
 use UnexpectedValueException;
 
-use Nelmio\Alice\Fixtures\Parser\Methods\MethodInterface;
+use Nelmio\Alice\Fixtures\Parser\Methods\Base;
 
-class Php implements MethodInterface
+class Php extends Base
 {
-  /**
-   * The context allows any kind of contextual information to be available in fixtures
-   *
-   * @var mixed
-   **/
-  private $context;
-
   /**
    * @var string
    **/
   protected $extension = 'php';
-
-  public function __construct($context = null)
-  {
-    $this->context = $context;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function canParse($file)
-  {
-    // we add (\.php)? to the regex to allow extensions of this parser to first
-    // be compiled by php
-    return preg_match("/\.{$this->extension}(\.php)?$/", $file);
-  }
 
   /**
    * {@inheritDoc}
@@ -59,6 +37,7 @@ class Php implements MethodInterface
     };
 
     $data = $includeWrapper();
+
     if (!is_array($data)) {
       throw new UnexpectedValueException("Included file \"{$file}\" must return an array of data");
     }
