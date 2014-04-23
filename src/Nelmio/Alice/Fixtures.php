@@ -14,6 +14,8 @@ namespace Nelmio\Alice;
 use Doctrine\Common\Persistence\ObjectManager;
 use Psr\Log\LoggerInterface;
 
+use Nelmio\Alice\Fixtures\Loader;
+
 class Fixtures
 {
     private static $loaders = array();
@@ -79,14 +81,8 @@ class Fixtures
 
         $objects = array();
         foreach ($files as $file) {
-            if (is_string($file) && preg_match('{\.ya?ml(\.php)?$}', $file)) {
-                $loader = self::getLoader('Yaml', $options);
-            } elseif ((is_string($file) && preg_match('{\.php$}', $file)) || is_array($file)) {
-                $loader = self::getLoader('Base', $options);
-            } else {
-                throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
-            }
-
+            $loader = self::getLoader($options);
+            
             if (is_callable($options['logger']) || $options['logger'] instanceof LoggerInterface) {
                 $loader->setLogger($options['logger']);
             } elseif (null !== $options['logger']) {
@@ -132,7 +128,7 @@ class Fixtures
         }
     }
 
-    private static function generateLoaderKey($class, array $options)
+    private static function generateLoaderKey(array $options)
     {
         $providers = '';
         if (!empty($options['providers'])) {
@@ -154,8 +150,7 @@ class Fixtures
         }
 
         return sprintf(
-            '%s_%s_%s_%s',
-            $class,
+            '%s_%s_%s',
             (is_numeric($options['seed'])
              ? strval($options['seed'])
              : gettype($options['seed'])
@@ -168,15 +163,14 @@ class Fixtures
         );
     }
 
-    private static function getLoader($class, array $options)
+    private static function getLoader(array $options)
     {
-        // Generate an array key based not only on the loader's class - but also
-        // on the options, so that separate loaders will be created when we want
-        // to load several fixtures that use different custom providers.
-        $loaderKey = self::generateLoaderKey($class, $options);
+        // Generate an array key based on the options, so that separate loaders 
+        // will be created when we want to load several fixtures that use different 
+        // custom providers.
+        $loaderKey = self::generateLoaderKey($options);
         if (!isset(self::$loaders[$loaderKey])) {
-            $fqcn = 'Nelmio\Alice\Loader\\'.$class;
-            self::$loaders[$loaderKey] = new $fqcn($options['locale'], $options['providers'], $options['seed']);
+            self::$loaders[$loaderKey] = new Loader($options['locale'], $options['providers'], $options['seed']);
         }
 
         return self::$loaders[$loaderKey];

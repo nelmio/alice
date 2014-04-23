@@ -186,7 +186,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $prop->setAccessible(true);
         $loaders = $prop->getValue();
 
-        $this->assertEquals(12, count($loaders));
+        $this->assertEquals(10, count($loaders));
     }
 
     public function testThatExceptionIsThrownForInvalidProvider()
