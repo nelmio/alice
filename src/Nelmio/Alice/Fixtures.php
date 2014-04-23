@@ -82,7 +82,7 @@ class Fixtures
         $objects = array();
         foreach ($files as $file) {
             $loader = self::getLoader($options);
-            
+
             if (is_callable($options['logger']) || $options['logger'] instanceof LoggerInterface) {
                 $loader->setLogger($options['logger']);
             } elseif (null !== $options['logger']) {
@@ -165,8 +165,8 @@ class Fixtures
 
     private static function getLoader(array $options)
     {
-        // Generate an array key based on the options, so that separate loaders 
-        // will be created when we want to load several fixtures that use different 
+        // Generate an array key based on the options, so that separate loaders
+        // will be created when we want to load several fixtures that use different
         // custom providers.
         $loaderKey = self::generateLoaderKey($options);
         if (!isset(self::$loaders[$loaderKey])) {

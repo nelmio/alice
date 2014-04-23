@@ -15,6 +15,23 @@ use UnexpectedValueException;
 
 use Nelmio\Alice\Fixtures\Parser\Methods\Base;
 
+/**
+ * Each fixture has access to $context->fake() to generate data.
+ *
+ * The array format must follow this example:
+ *
+ *     array(
+ *         'Namespace\Class' => array(
+ *             'name' => array(
+ *                 'property' => 'value',
+ *                 'property2' => 'value',
+ *             ),
+ *             'name2' => array(
+ *                 [...]
+ *             ),
+ *         ),
+ *     )
+ */
 class Php extends Base
 {
   /**

@@ -16,6 +16,21 @@ use UnexpectedValueException;
 
 use Nelmio\Alice\Fixtures\Parser\Methods\Base;
 
+/**
+ * Parses data from a yaml file
+ *
+ * The yaml file can contain PHP which will be executed before it is parsed as yaml.
+ * PHP in the yaml file has access to $context->fake() to generate data
+ *
+ * The general format of the file must follow this example:
+ *
+ *     Namespace\Class:
+ *         name:
+ *             property: value
+ *             property2: value
+ *         name2:
+ *             [...]
+ */
 class Yaml extends Base
 {
   /**
@@ -50,7 +65,7 @@ class Yaml extends Base
     if (isset($data['include'])) {
       foreach ($data['include'] as $include) {
         $includeFile = dirname($filename) . DIRECTORY_SEPARATOR . $include;
-        $includeData = $this->parseFile($includeFile);
+        $includeData = $this->parse($includeFile);
         $data = $this->mergeIncludeData($data, $includeData);
       }
     }

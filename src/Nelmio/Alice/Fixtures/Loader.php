@@ -25,24 +25,7 @@ use Nelmio\Alice\Instances\Processor\Providers\IdentityProvider;
 use Nelmio\Alice\Util\TypeHintChecker;
 
 /**
- * Loads fixtures from an array or php file
- *
- * The php code if $data is a file has access to $loader->fake() to
- * generate data and must return an array of the format below.
- *
- * The array format must follow this example:
- *
- *     array(
- *         'Namespace\Class' => array(
- *             'name' => array(
- *                 'property' => 'value',
- *                 'property2' => 'value',
- *             ),
- *             'name2' => array(
- *                 [...]
- *             ),
- *         ),
- *     )
+ * Loads fixtures from an array or file
  */
 class Loader
 {
