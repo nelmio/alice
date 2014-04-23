@@ -181,6 +181,16 @@ class Loader
     }
 
     /**
+     * adds a parser for fixture parsing extensions
+     *
+     * @param Parser\Methods\MethodInterface $parser
+     **/
+    public function addParser(Parser\Methods\MethodInterface $parser)
+    {
+        $this->parser->addParser($parser);
+    }
+
+    /**
      * adds a builder for fixture building extensions
      *
      * @param Builder\Methods\MethodInterface $builder

@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Fixtures\Parser;
 
+use InvalidArgumentException;
 use UnexpectedValueException;
 
 use Nelmio\Alice\Fixtures\Parser\Methods\MethodInterface;
@@ -24,8 +25,8 @@ class Parser
 
   public function __construct(array $parsers)
   {
-    foreach ($parsers as $method) {
-      if (!($method instanceof MethodInterface)) {
+    foreach ($parsers as $parser) {
+      if (!($parser instanceof MethodInterface)) {
         throw new InvalidArgumentException("All parsers passed into Parser must implement MethodInterface.");
       }
     }
@@ -38,7 +39,7 @@ class Parser
    *
    * @param MethodInterface $parser
    **/
-  public function addBuilder(MethodInterface $parser)
+  public function addParser(MethodInterface $parser)
   {
     array_unshift($this->parsers, $parser);
   }
