@@ -1,3 +1,12 @@
+### 1.7.0 (2014-04-24)
+
+  * Added fixture inheritance with `(template)` and `(extends NAME)` flags
+  * Added support for including other yaml fixtures files using a top-level `include` array
+  * Added an `<identity()>` (aliased as `<()>` faker provider to just evaluate PHP expressions with variables
+  * Added `@self` reference which is the equivalent to `$this`
+  * Added support for passing references to faker providers
+  * Added support for HHVM and PHP 5.6
+
 ### 1.6.0 (2014-02-05)
 
   * The array of instances returned by load() now has the fixture name as key
