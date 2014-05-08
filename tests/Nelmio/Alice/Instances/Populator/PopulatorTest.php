@@ -21,15 +21,21 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
     /**
+    * @var Collection
+    */
+    protected $objects;
+
+    /**
      * @var Populator
      */
     protected $populator;
 
     protected function createPopulator(array $options = array())
     {
+        $objects = isset($options['objects']) ? $options['objects'] : new Collection;
         $defaults = array(
-            'objects' => new Collection,
-            'processor' => new Processor(array()),
+            'objects' => $objects,
+            'processor' => new Processor($objects, array()),
             'methods' => array()
         );
         $options = array_merge($defaults, $options);
@@ -55,6 +61,6 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateThePopulator()
     {
-        $populator = new Populator(new Collection, new Processor(array()), array('CustomPopulator'));
+        $populator = $this->createPopulator(array('methods'=>array('CustomPopulator')));
     }
 }

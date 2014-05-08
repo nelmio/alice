@@ -21,7 +21,12 @@ class Reference implements MethodInterface
      */
     protected $objects;
 
-    public function __construct(Collection $objects)
+    /**
+     * sets the object collection to handle referential calls
+     *
+     * @param Collection
+     */
+    public function setObjects(Collection $objects)
     {
         $this->objects = $objects;
     }

@@ -45,11 +45,20 @@ class Faker implements MethodInterface
      */
     private $valueForCurrent;
 
-    public function __construct(Collection $objects, array $providers, $locale = 'en_US')
+    public function __construct(array $providers, $locale = 'en_US')
     {
-        $this->objects       = $objects;
         $this->providers     = $providers;
         $this->defaultLocale = $locale;
+    }
+
+    /**
+     * sets the object collection to handle referential calls
+     *
+     * @param Collection
+     */
+    public function setObjects(Collection $objects)
+    {
+        $this->objects = $objects;
     }
 
     /**

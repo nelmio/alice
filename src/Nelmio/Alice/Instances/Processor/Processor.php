@@ -12,21 +12,28 @@
 namespace Nelmio\Alice\Instances\Processor;
 
 use InvalidArgumentException;
+use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
+use Nelmio\Alice\Util\SetterInjector;
 
 class Processor
 {
     /**
+     * @var Collection
+     */
+    private $objects;
+
+    /**
      * @var MethodInterface[]
      */
-    private $methods;
+    private $methods = array();
 
     /**
      * @var string
      */
     private $valueForCurrent;
 
-    public function __construct(array $methods)
+    public function __construct(Collection $objects, array $methods)
     {
         foreach ($methods as $method) {
             if (!($method instanceof MethodInterface)) {
@@ -34,12 +41,9 @@ class Processor
             }
         }
 
-        $this->methods = $methods;
-
-        foreach ($this->methods as $method) {
-            if (method_exists($method, 'setProcessor')) {
-                $method->setProcessor($this);
-            }
+        $this->objects = $objects;
+        foreach (array_reverse($methods) as $method) {
+            $this->addProcessor($method);
         }
     }
 
@@ -50,6 +54,8 @@ class Processor
      **/
     public function addProcessor(MethodInterface $processor)
     {
+        SetterInjector::inject($processor, 'setObjects', $this->objects);
+        SetterInjector::inject($processor, 'setProcessor', $this);
         array_unshift($this->methods, $processor);
     }
 

@@ -90,7 +90,8 @@ class Loader
         $allProviders = array_merge($this->getBuiltInProviders(), $providers);
 
         $this->processor = new Processor\Processor(
-            $this->getBuiltInProcessors($allProviders, $locale, $this->objects)
+            $this->objects,
+            $this->getBuiltInProcessors($allProviders, $locale)
             );
 
         $this->parser = new Parser\Parser(
@@ -340,19 +341,18 @@ class Loader
      *
      * @param  array      $providers - a list of all providers to build the processors with
      * @param  string     $locale
-     * @param  Collection $objects
      * @return array
      */
-    private function getBuiltInProcessors(array $providers, $locale, Collection $objects)
+    private function getBuiltInProcessors(array $providers, $locale)
     {
-        $this->fakerProcessorMethod = new Processor\Methods\Faker($objects, $providers, $locale);
+        $this->fakerProcessorMethod = new Processor\Methods\Faker($providers, $locale);
 
         return array(
             new Processor\Methods\ArrayValue(),
             new Processor\Methods\Conditional(),
             new Processor\Methods\UnescapeAt(),
             $this->fakerProcessorMethod,
-            new Processor\Methods\Reference($objects)
+            new Processor\Methods\Reference()
             );
     }
 
