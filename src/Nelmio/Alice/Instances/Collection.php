@@ -128,7 +128,7 @@ class Collection
      * @param  string  $property
      * @return mixed
      */
-    public function random($mask, $count=1, $property)
+    public function random($mask, $count=1, $property=null)
     {
         if ($count === 0) {
             return array();
