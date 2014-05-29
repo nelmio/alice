@@ -9,12 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Provider;
+namespace Nelmio\Alice\Event;
 
-class IdentityProvider
+use Symfony\Component\EventDispatcher\Event as BaseEvent;
+
+class Event extends BaseEvent
 {
-    public static function identity($val)
-    {
-        return $val;
-    }
+
 }

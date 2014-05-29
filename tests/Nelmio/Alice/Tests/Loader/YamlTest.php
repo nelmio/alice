@@ -9,17 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Loader;
+namespace Nelmio\Alice\Tests\Loader;
+
+use Nelmio\Alice\Loader\Yaml;
 
 class YamlTest extends \PHPUnit_Framework_TestCase
 {
     public function testIncludeFiles()
     {
-        $file = __DIR__ . '/../fixtures/include.yml';
-        $loader = new \Nelmio\Alice\Loader\Yaml();
+        $file = __DIR__ . '/../../fixtures/include.yml';
+        $loader = new Yaml();
+
         $reflMethod = new \ReflectionMethod($loader, 'parse');
         $reflMethod->setAccessible(true);
+
         $data = $reflMethod->invoke($loader, $file);
+
         $expectedData = array(
             'Nelmio\\Alice\\fixtures\\Product' =>
                 array(
@@ -68,7 +73,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
                         ),
                 ),
         );
+
         $this->assertEquals($expectedData, $data);
     }
-
 }

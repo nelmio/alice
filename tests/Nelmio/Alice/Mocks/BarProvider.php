@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Provider;
+namespace Nelmio\Alice\Mocks;
 
-class IdentityProvider
+class BarProvider extends \Faker\Provider\Base
 {
-    public static function identity($val)
+    public static function bar($str)
     {
-        return $val;
+        return 'bar' . $str;
     }
 }

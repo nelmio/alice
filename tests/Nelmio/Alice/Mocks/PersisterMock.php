@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\Mocks;
 
-class TestORM implements ORMinterface
+use Nelmio\Alice\Persister\PersisterInterface;
+
+class PersisterMock implements PersisterInterface
 {
     protected $objects;
 

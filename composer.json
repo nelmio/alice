@@ -13,7 +13,9 @@
     "require": {
         "php": ">=5.3",
         "fzaninotto/faker": "~1.0",
-        "symfony/yaml": "~2.0"
+        "symfony/yaml": "~2.0",
+        "symfony/event-dispatcher": "~2.2",
+        "psr/log": "~1.0"
     },
     "require-dev": {
         "doctrine/common": "~2.3",
@@ -25,7 +27,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.7.x-dev"
+            "dev-master": "2.1.x-dev"
         }
     }
 }

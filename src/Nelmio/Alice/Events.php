@@ -9,12 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Provider;
+namespace Nelmio\Alice;
 
-class IdentityProvider
+interface Events
 {
-    public static function identity($val)
-    {
-        return $val;
-    }
+    const PRE_PROCESS = 'alice.pre_process';
+    const POST_PROCESS = 'alice.post_process';
 }
