@@ -9,15 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ORM;
+namespace Nelmio\Alice\Persister;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Nelmio\Alice\ORMInterface;
 
 /**
  * The Doctrine persists the fixtures into an ObjectManager
  */
-class Doctrine implements ORMInterface
+class DoctrinePersister implements PersisterInterface
 {
     protected $om;
     protected $flush;

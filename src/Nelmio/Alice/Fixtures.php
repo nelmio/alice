@@ -11,20 +11,28 @@
 
 namespace Nelmio\Alice;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Nelmio\Alice\Event\PersistEvent;
+use Nelmio\Alice\Loader\LoaderInterface;
+use Nelmio\Alice\Loader\PersistenceAwareLoaderInterface;
+use Nelmio\Alice\Persister\PersisterInterface;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Fixtures
 {
     private static $loaders = array();
 
-    protected $container;
-    protected $defaultOptions;
-    protected $processors;
+    protected $persister;
+    protected $dispatcher;
 
-    public function __construct($container, array $defaultOptions = array(), array $processors = array())
+    protected $defaultOptions;
+
+    public function __construct(PersisterInterface $persister, EventDispatcherInterface $dispatcher, array $defaultOptions = array())
     {
-        $this->container = $container;
+        $this->persister = $persister;
+        $this->dispatcher = $dispatcher;
+
         $defaults = array(
             'locale' => 'en_US',
             'providers' => array(),
@@ -33,39 +41,31 @@ class Fixtures
             'persist_once' => false,
         );
         $this->defaultOptions = array_merge($defaults, $defaultOptions);
-        $this->processors = $processors;
     }
 
     /**
-     * Loads a fixture file into an object container
+     * @param string|array             $loadable   filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
+     * @param PersisterInterface       $persister
+     * @param EventDispatcherInterface $dispatcher
+     * @param array                    $options    Options when loading fixtures, available options:
+     *                                             - providers: an array of additional faker providers
+     *                                             - locale: the faker locale
+     *                                             - seed: a seed to make sure faker generates data consistently across runs, set to null to disable
+     *                                             - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
+     *                                             - persist_once: only persist objects once if multiple files are passsed
      *
-     * @param string|array $file      filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
-     * @param object       $container object container
-     * @param array        $options   available options:
-     *                                - providers: an array of additional faker providers
-     *                                - locale: the faker locale
-     *                                - seed: a seed to make sure faker generates data consistently across
-     *                                  runs, set to null to disable
-     *                                - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
-     *                                - persist_once: only persist objects once if multiple files are passsed
-     * @param array        $processors optional array of ProcessorInterface instances
+     * @return mixed
      */
-    public static function load($files, $container, array $options = array(), array $processors = array())
+    public static function load($loadable, PersisterInterface $persister, EventDispatcherInterface $dispatcher, array $options = array())
     {
-        $fixtures = new static($container, $options, $processors);
+        $fixtures = new static($persister, $dispatcher, $options);
 
-        return $fixtures->loadFiles($files);
+        return $fixtures->loadFiles($loadable);
     }
 
     public function loadFiles($files, array $options = array())
     {
         $options = array_merge($this->defaultOptions, $options);
-
-        if ($this->container instanceof ObjectManager) {
-            $persister = new ORM\Doctrine($this->container);
-        } else {
-            throw new \InvalidArgumentException('Unknown container type '.get_class($this->container));
-        }
 
         // glob strings to filenames
         if (!is_array($files)) {
@@ -79,57 +79,58 @@ class Fixtures
 
         $objects = array();
         foreach ($files as $file) {
-            if (is_string($file) && preg_match('{\.ya?ml(\.php)?$}', $file)) {
-                $loader = self::getLoader('Yaml', $options);
-            } elseif ((is_string($file) && preg_match('{\.php$}', $file)) || is_array($file)) {
-                $loader = self::getLoader('Base', $options);
-            } else {
-                throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
+            $loader = $this->getLoaderForFile($file, $options);
+
+            if ($loader instanceof PersistenceAwareLoaderInterface) {
+                $loader->setPersister($this->persister);
             }
 
-            if (is_callable($options['logger']) || $options['logger'] instanceof LoggerInterface) {
-                $loader->setLogger($options['logger']);
-            } elseif (null !== $options['logger']) {
-                throw new \RuntimeException('Logger must be callable or an instance of Psr\Log\LoggerInterface.');
-            }
-
-            $loader->setORM($persister);
             $set = $loader->load($file);
 
             if (!$options['persist_once']) {
-                $this->persist($persister, $set);
+                $this->persist($set);
             }
 
             $objects = array_merge($objects, $set);
         }
 
         if ($options['persist_once']) {
-            $this->persist($persister, $objects);
+            $this->persist($objects);
         }
 
         return $objects;
     }
 
-    public function addProcessor(ProcessorInterface $processor)
+    /**
+     * @param string $file
+     * @param array $options
+     *
+     * @return LoaderInterface
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function getLoaderForFile($file, array $options)
     {
-        $this->processors[] = $processor;
+        if (is_string($file) && preg_match('{\.ya?ml(\.php)?$}', $file)) {
+            $loader = self::getLoader('Yaml', $options);
+        } elseif ((is_string($file) && preg_match('{\.php$}', $file)) || is_array($file)) {
+            $loader = self::getLoader('Base', $options);
+        } else {
+            throw new \InvalidArgumentException('Unknown file/data type: '.gettype($file).' ('.json_encode($file).')');
+        }
+
+        return $loader;
     }
 
-    private function persist($persister, $objects)
+    private function persist($objects)
     {
-        foreach ($this->processors as $proc) {
-            foreach ($objects as $obj) {
-                $proc->preProcess($obj);
-            }
-        }
+        $prePersist = new PersistEvent($objects);
+        $this->dispatcher->dispatch(Events::PRE_PROCESS, $prePersist);
 
-        $persister->persist($objects);
+        $this->persister->persist($objects);
 
-        foreach ($this->processors as $proc) {
-            foreach ($objects as $obj) {
-                $proc->postProcess($obj);
-            }
-        }
+        $postPersist = new PersistEvent($objects);
+        $this->dispatcher->dispatch(Events::POST_PROCESS, $postPersist);
     }
 
     private static function generateLoaderKey($class, array $options)
@@ -168,6 +169,14 @@ class Fixtures
         );
     }
 
+    /**
+     * Returns a loader of the given class based on the given options.
+     *
+     * @param string $class
+     * @param array $options
+     *
+     * @return LoaderInterface
+     */
     private static function getLoader($class, array $options)
     {
         // Generate an array key based not only on the loader's class - but also
@@ -176,7 +185,13 @@ class Fixtures
         $loaderKey = self::generateLoaderKey($class, $options);
         if (!isset(self::$loaders[$loaderKey])) {
             $fqcn = 'Nelmio\Alice\Loader\\'.$class;
-            self::$loaders[$loaderKey] = new $fqcn($options['locale'], $options['providers'], $options['seed']);
+            $loader = new $fqcn($options['locale'], $options['providers'], $options['seed']);
+
+            if ($loader instanceof LoggerAwareInterface and $options['logger'] instanceof LoggerInterface) {
+                $loader->setLogger($options['logger']);
+            }
+
+            self::$loaders[$loaderKey] = $loader;
         }
 
         return self::$loaders[$loaderKey];

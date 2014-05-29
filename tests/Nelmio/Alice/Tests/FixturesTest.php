@@ -9,9 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\Tests;
 
 use Nelmio\Alice\fixtures\User;
+use Nelmio\Alice\Fixtures;
+use Nelmio\Alice\Mocks\FooProvider;
+use Nelmio\Alice\Persister\PersisterInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class FixturesTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,8 +25,8 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadLoadsYamlFilesAndDoctrineORM()
     {
-        $om = $this->getDoctrineManagerMock(14);
-        $objects = Fixtures::load(__DIR__.'/fixtures/complete.yml', $om, array('providers' => array($this)));
+        $persister = $this->getMockPersister(14);
+        $objects = Fixtures::load(__DIR__.'/../fixtures/complete.yml', $persister, $this->getMockDispatcher(), array('providers' => array($this)));
 
         $this->assertCount(14, $objects);
 
@@ -47,9 +51,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testThatNewLoaderIsCreatedForDifferingOptions()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $om->expects($this->any())
-            ->method('find')->will($this->returnValue(new User()));
+        $persister = $this->getMockPersister();
 
         $optionsBatch = array(
             // default options
@@ -59,7 +61,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 'locale'    => 'en_US',
                 'seed'      => 1,
                 'providers' => array(
-                    'Nelmio\Alice\FooProvider'
+                    'Nelmio\Alice\Mocks\FooProvider'
                 )
             ),
             // check that loader isn't created twice for the same options
@@ -67,7 +69,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 'locale'    => 'en_US',
                 'seed'      => 1,
                 'providers' => array(
-                    new \Nelmio\Alice\FooProvider()
+                    new FooProvider()
                 )
             ),
             // check that loader isn't created twice for the same options
@@ -76,7 +78,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 'seed'      => 1,
                 'providers' => array(
                     // this time we have the leading backslash
-                    '\Nelmio\Alice\FooProvider'
+                    '\Nelmio\Alice\Mocks\FooProvider'
                 )
             ),
             // check that a new loader will be created for the same options
@@ -85,7 +87,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 'locale'    => 'en_US',
                 'seed'      => 1,
                 'providers' => array(
-                    'Nelmio\Alice\FooProvider'
+                    'Nelmio\Alice\Mocks\FooProvider'
                 ),
                 'fixtures' => array(
                     self::USER => array(
@@ -106,22 +108,22 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 'locale'    => 'ja_JP',
                 'seed'      => 3,
                 'providers' => array(
-                    'Nelmio\Alice\BarProvider'
+                    'Nelmio\Alice\Mocks\BarProvider'
                 ),
             ),
             array(
                 'locale'    => 'ja_JP',
                 'seed'      => 3,
                 'providers' => array(
-                    'Nelmio\Alice\FooProvider',
-                    'Nelmio\Alice\BarProvider'
+                    'Nelmio\Alice\Mocks\FooProvider',
+                    'Nelmio\Alice\Mocks\BarProvider'
                 ),
             ),
             array(
                 'locale'    => 'ru_RU',
                 'seed'      => 1,
                 'providers' => array(
-                    'Nelmio\Alice\BarProvider'
+                    'Nelmio\Alice\Mocks\BarProvider'
                 )
             ),
             array(
@@ -155,35 +157,33 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 'locale'    => 'fr_FR',
                 'seed'      => null,
                 'providers' => array(
-                    'Nelmio\Alice\BarProvider'
+                    'Nelmio\Alice\Mocks\BarProvider'
                 )
             ),
             array(
                 'locale'    => 'fr_FR',
                 'seed'      => null,
                 'providers' => array(
-                    'Nelmio\Alice\FooProvider'
+                    'Nelmio\Alice\Mocks\FooProvider'
                 )
             ),
         );
 
         foreach ($optionsBatch as $item) {
-            $fixtures = isset($item['fixtures'])
-                        ? isset($item['fixtures'])
-                        : __DIR__.'/fixtures/complete.yml';
+            $fixtures = isset($item['fixtures']) ?: __DIR__.'/../fixtures/complete.yml';
+
             if (!isset($item['providers'])) {
                 $item['providers'] = array();
             }
+
             $item['providers'][] = $this;
-            Fixtures::load(
-                $fixtures,
-                $om,
-                $item
-            );
+
+            Fixtures::load($fixtures, $persister, $this->getMockDispatcher(), $item);
         }
 
         $prop = new \ReflectionProperty('\Nelmio\Alice\Fixtures', 'loaders');
         $prop->setAccessible(true);
+
         $loaders = $prop->getValue();
 
         $this->assertEquals(12, count($loaders));
@@ -191,21 +191,18 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testThatExceptionIsThrownForInvalidProvider()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $om->expects($this->any())
-            ->method('find')->will($this->returnValue(new User()));
-
         $this->setExpectedException(
             '\InvalidArgumentException',
             'The provider should be a string or an object, got array instead'
         );
 
         Fixtures::load(
-            __DIR__.'/fixtures/complete.yml',
-            $om,
+            __DIR__.'/../fixtures/complete.yml',
+            $this->getMockPersister(),
+            $this->getMockDispatcher(),
             array(
                 'providers' => array(
-                    'Nelmio\Alice\FooProvider',
+                    'Nelmio\Alice\Mocks\FooProvider',
                     array('foo'),
                     $this,
                 ),
@@ -215,24 +212,22 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadLoadsYamlFilesAsArray()
     {
-        $om = $this->getDoctrineManagerMock(14);
-        $objects = Fixtures::load(array(__DIR__.'/fixtures/complete.yml'), $om, array('providers' => array($this)));
+        $persister = $this->getMockPersister();
+        $objects = Fixtures::load(array(__DIR__.'/../fixtures/complete.yml'), $persister, $this->getMockDispatcher(), array('providers' => array($this)));
 
         $this->assertCount(14, $objects);
     }
 
     public function testLoadLoadsYamlFilesAsGlobString()
     {
-        $om = $this->getDoctrineManagerMock(14);
-        $objects = Fixtures::load(__DIR__.'/fixtures/complete.y*', $om, array('providers' => array($this)));
+        $persister = $this->getMockPersister();
+        $objects = Fixtures::load(__DIR__.'/../fixtures/complete.y*', $persister, $this->getMockDispatcher(), array('providers' => array($this)));
 
         $this->assertCount(14, $objects);
     }
 
     public function testLoadLoadsArrays()
     {
-        $om = $this->getDoctrineManagerMock(2);
-
         $objects = Fixtures::load(array(
             self::USER => array(
                 'user1' => array(
@@ -246,7 +241,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
 
-        ), $om);
+        ), $this->getMockPersister(), $this->getMockDispatcher());
 
         $this->assertCount(2, $objects);
 
@@ -258,9 +253,8 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadLoadsPHPfiles()
     {
-        $om = $this->getDoctrineManagerMock(2);
-
-        $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om);
+        $persister = $this->getMockPersister();
+        $objects = Fixtures::load(__DIR__.'/../fixtures/basic.php', $persister, $this->getMockDispatcher());
 
         $this->assertCount(2, $objects);
 
@@ -270,27 +264,15 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $user->favoriteNumber);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testLoadWithLogger()
-    {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-
-        $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om, array(
-            'logger' => 'not callable'
-        ));
-    }
-
     public function testMakesOnlyOneFlushWithPersistOnce()
     {
-        $om = $this->getDoctrineManagerMock(19);
         $objects = Fixtures::load(
             array(
-                __DIR__.'/fixtures/part_1.yml',
-                __DIR__.'/fixtures/part_2.yml',
+                __DIR__.'/../fixtures/part_1.yml',
+                __DIR__.'/../fixtures/part_2.yml',
             ),
-            $om,
+            $this->getMockPersister(),
+            $this->getMockDispatcher(),
             array(
                 'providers' => array($this),
                 'persist_once' => true
@@ -314,20 +296,36 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('stormtrooper15', $user->username);
     }
 
-    protected function getDoctrineManagerMock($objects = null)
+    /**
+     * @return PersisterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockPersister($persist = false)
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $persister = $this->getMockForAbstractClass('Nelmio\Alice\Persister\PersisterInterface');
 
-        $om->expects($objects ? $this->exactly($objects) : $this->any())
-            ->method('persist');
+        if ($persist) {
+            $persister
+                ->expects($this->once())
+                ->method('persist')
+            ;
+        }
 
-        $om->expects($this->once())
-            ->method('flush');
+        $persister
+            ->expects($this->any())
+            ->method('find')
+            ->will($this->returnValue(new User()))
+        ;
 
-        $om->expects($this->once())
-            ->method('find')->will($this->returnValue(new User()));
+        return $persister;
+    }
 
-        return $om;
+
+    /**
+     * @return EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockDispatcher()
+    {
+        return $this->getMockForAbstractClass('Symfony\Component\EventDispatcher\EventDispatcherInterface');
     }
 
     /**

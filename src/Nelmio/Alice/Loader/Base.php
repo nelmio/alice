@@ -11,12 +11,12 @@
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\Persister\PersisterInterface;
+use Nelmio\Alice\Provider\IdentityProvider;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Util\FormUtil;
 use Symfony\Component\PropertyAccess\StringUtil;
-use Psr\Log\LoggerInterface;
-use Nelmio\Alice\ORMInterface;
-use Nelmio\Alice\LoaderInterface;
-use Nelmio\Alice\Provider\IdentityProvider;
 
 /**
  * Loads fixtures from an array or php file
@@ -38,7 +38,7 @@ use Nelmio\Alice\Provider\IdentityProvider;
  *         ),
  *     )
  */
-class Base implements LoaderInterface
+class Base implements PersistenceAwareLoaderInterface, LoggerAwareInterface
 {
     /**
      * @var array
@@ -51,9 +51,9 @@ class Base implements LoaderInterface
     protected $templates = array();
 
     /**
-     * @var ORMInterface
+     * @var PersisterInterface
      */
-    protected $manager;
+    protected $persister;
 
     /**
      * @var \Faker\Generator[]
@@ -85,7 +85,7 @@ class Base implements LoaderInterface
     private $uniqueValues = array();
 
     /**
-     * @var callable|LoggerInterface
+     * @var LoggerInterface|null
      */
     private $logger;
 
@@ -498,15 +498,19 @@ class Base implements LoaderInterface
     }
 
     /**
-     * Checks if the value is typehinted with a class and if the current value can be coerced into that type
+     * Checks if the value is typehinted with a class and if the current value can be coerced into that type.
      *
-     * It can either convert to datetime or attempt to fetched from the db by id
+     * It can either convert to datetime or attempt to be retrieved from the persister.
      *
-     * @param  mixed   $obj    instance or class name
-     * @param  string  $method
-     * @param  string  $value
-     * @param  integer $pNum
+     * @param mixed $obj instance or class name
+     * @param string $method
+     * @param string $value
+     * @param integer $pNum
+     *
      * @return mixed
+     *
+     * @throws \LogicException If typehints are used, but no persister is set.
+     * @throws \UnexpectedValueException If a DateTime could not be created from the given value.
      */
     private function checkTypeHints($obj, $method, $value, $pNum = 0)
     {
@@ -536,10 +540,11 @@ class Base implements LoaderInterface
         }
 
         if ($hintedClass) {
-            if (!$this->manager) {
-                throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\ORMInterface object on this instance');
+            if (!$this->persister) {
+                throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\Persister\PersisterInterface object on this instance.');
             }
-            $value = $this->manager->find($hintedClass, $value);
+
+            $value = $this->persister->find($hintedClass, $value);
         }
 
         return $value;
@@ -693,6 +698,14 @@ class Base implements LoaderInterface
         return $res;
     }
 
+    /**
+     * Finds a method to add a related object.
+     *
+     * @param object $obj
+     * @param string $key
+     *
+     * @return null|string
+     */
     private function findAdderMethod($obj, $key)
     {
         if (method_exists($obj, $method = 'add'.$key)) {
@@ -705,7 +718,9 @@ class Base implements LoaderInterface
                     return $method;
                 }
             }
-        } elseif (class_exists('Symfony\Component\Form\Util\FormUtil') && method_exists('Symfony\Component\Form\Util\FormUtil', 'singularify')) {
+        }
+
+        if (class_exists('Symfony\Component\Form\Util\FormUtil') && method_exists('Symfony\Component\Form\Util\FormUtil', 'singularify')) {
             foreach ((array) FormUtil::singularify($key) as $singularForm) {
                 if (method_exists($obj, $method = 'add'.$singularForm)) {
                     return $method;
@@ -720,34 +735,35 @@ class Base implements LoaderInterface
         if (substr($key, -3) === 'ies' && method_exists($obj, $method = 'add'.substr($key, 0, -3).'y')) {
             return $method;
         }
-    }
 
-    public function setORM(ORMInterface $manager)
-    {
-        $this->manager = $manager;
+        return null;
     }
 
     /**
-     * Set the logger callable to execute with the log() method.
-     *
-     * @param callable|LoggerInterface $logger
+     * {@inheritdoc}
      */
-    public function setLogger($logger)
+    public function setPersister(PersisterInterface $persister = null)
+    {
+        $this->persister = $persister;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
-   /**
+    /**
      * Logs a message using the logger.
      *
      * @param string $message
      */
     public function log($message)
     {
-        if ($this->logger instanceof LoggerInterface) {
+        if ($this->logger) {
             $this->logger->debug($message);
-        } elseif ($logger = $this->logger) {
-            $logger($message);
         }
     }
 }

@@ -1,3 +1,10 @@
+### 2.0.0 (2014-XX-XX)
+
+  * Removed ability to pass `callable` for logging in favor of PSR-3 `LoggerInterface` only
+  * Added PersistEvent dispatched as `PRE_PROCESS` and `POST_PROCESS` event
+  * Added PersisterInterface replacing container, decoupling from Doctrine
+  * Added `PersistenceAwareLoaderInterface` reflecting a `LoaderInterface` capable of referencing related objects
+
 ### 1.7.0 (2014-04-24)
 
   * Added fixture inheritance with `(template)` and `(extends NAME)` flags

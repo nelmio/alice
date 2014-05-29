@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\Persister;
 
-interface ORMInterface
+interface PersisterInterface
 {
     /**
      * Loads a fixture file
@@ -23,8 +23,9 @@ interface ORMInterface
     /**
      * Finds an object by class and id
      *
-     * @param  string $class
-     * @param  int    $id
+     * @param string $class
+     * @param int    $id
+     *
      * @return mixed
      */
     public function find($class, $id);

@@ -9,30 +9,33 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\Loader;
 
 interface LoaderInterface
 {
     /**
-     * Loads a fixture file
+     * Loads a fixture file.
      *
      * @param string $file filename
+     *
+     * @return object[]
      */
     public function load($file);
 
     /**
-     * Returns a reference to a fixture by name
+     * Returns a reference to a fixture by name.
      *
-     * @param  string $name
-     * @param  string $property optionally return only a given property of the reference
+     * @param  string      $name
+     * @param  string|null $property optionally return only a given property of the reference
+     *
      * @return object
      */
     public function getReference($name, $property = null);
 
     /**
-     * Returns all references created by the loader
+     * Returns all references created by the loader.
      *
-     * @return array[object]
+     * @return object[]
      */
     public function getReferences();
 

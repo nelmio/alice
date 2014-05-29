@@ -9,11 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Loader;
+namespace Nelmio\Alice\Tests\Loader;
 
-use Nelmio\Alice\TestORM;
+use Nelmio\Alice\Mocks\PersisterMock;
 use Nelmio\Alice\Loader\Base;
 use Nelmio\Alice\fixtures\User;
+use Nelmio\Alice\Persister\PersisterInterface;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +22,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     const GROUP = 'Nelmio\Alice\fixtures\Group';
     const CONTACT = 'Nelmio\Alice\fixtures\Contact';
 
-    protected $orm;
+    /**
+     * @var PersisterInterface
+     */
+    protected $persister;
 
     /**
      * @var \Nelmio\Alice\Loader\Base
@@ -32,7 +36,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $loader = $this->createLoader($options);
 
-        return $loader->load($data, $this->orm);
+        return $loader->load($data, $this->persister);
     }
 
     protected function createLoader(array $options = array())
@@ -43,7 +47,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         );
         $options = array_merge($defaults, $options);
 
-        $this->orm = new TestORM;
+        $this->persister = new PersisterMock;
 
         return $this->loader = new Base($options['locale'], $options['providers']);
     }
@@ -73,7 +77,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Reference foo is not defined
      */
     public function testGetBadReference()
@@ -89,8 +93,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadInvalidFile()
     {
+        $file = __DIR__.'/../../fixtures/complete.yml';
+
         try {
-            $res = $this->createLoader()->load($file = __DIR__.'/../fixtures/complete.yml');
+            $this->createLoader()->load($file);
         } catch (\UnexpectedValueException $e) {
             $this->assertEquals('Included file "'.$file.'" must return an array of data', $e->getMessage());
         }

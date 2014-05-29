@@ -36,12 +36,15 @@ class Yaml extends Base
     public function load($file)
     {
         $data = $this->parse($file);
+
         return parent::load($data);
     }
 
     /**
      * @param string $file
+     *
      * @return array
+     *
      * @throws \UnexpectedValueException
      */
     private function parse($file)
@@ -77,6 +80,7 @@ class Yaml extends Base
     /**
      * @param array $data
      * @param string $file
+     *
      * @return mixed
      */
     private function processIncludes($data, $file)
@@ -97,6 +101,8 @@ class Yaml extends Base
     /**
      * @param array $data
      * @param array $includeData
+     *
+     * @return array
      */
     private function mergeIncludeData($data, $includeData)
     {
