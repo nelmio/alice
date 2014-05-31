@@ -49,10 +49,14 @@ class Yaml extends Base
         ob_start();
         $loader = $this;
 
+        if (!file_exists($file)) {
+            throw new \InvalidArgumentException('The file could not be found: '.$file);
+        }
+
         // isolates the file from current context variables and gives
         // it access to the $loader object to inline php blocks if needed
         $includeWrapper = function () use ($file, $loader) {
-            return include $file;
+            return require $file;
         };
         $data = $includeWrapper();
 

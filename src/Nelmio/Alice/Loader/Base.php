@@ -121,9 +121,12 @@ class Base implements LoaderInterface
             // $loader is defined to give access to $loader->fake() in the included file's context
             $loader = $this;
             $filename = $data;
+            if (!file_exists($filename)) {
+                throw new \InvalidArgumentException('The file could not be found: '.$filename);
+            }
             $includeWrapper = function () use ($filename, $loader) {
                 ob_start();
-                $res = include $filename;
+                $res = require $filename;
                 ob_end_clean();
 
                 return $res;
