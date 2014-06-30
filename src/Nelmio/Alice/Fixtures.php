@@ -18,8 +18,19 @@ class Fixtures
 {
     private static $loaders = array();
 
+    /**
+     * @var object
+     */
     protected $container;
+
+    /**
+     * @var array
+     */
     protected $defaultOptions;
+
+    /**
+     * @var ProcessorInterface[]
+     */
     protected $processors;
 
     public function __construct($container, array $defaultOptions = array(), array $processors = array())
@@ -39,7 +50,7 @@ class Fixtures
     /**
      * Loads a fixture file into an object container
      *
-     * @param string|array $file      filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
+     * @param string|array $files     filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
      * @param object       $container object container
      * @param array        $options   available options:
      *                                - providers: an array of additional faker providers
@@ -49,6 +60,8 @@ class Fixtures
      *                                - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
      *                                - persist_once: only persist objects once if multiple files are passsed
      * @param array        $processors optional array of ProcessorInterface instances
+     *
+     * @return array
      */
     public static function load($files, $container, array $options = array(), array $processors = array())
     {
@@ -110,7 +123,6 @@ class Fixtures
         if ($options['persist_once']) {
             $this->persist($persister, $objects);
         }
-
         return $objects;
     }
 
@@ -172,6 +184,11 @@ class Fixtures
         );
     }
 
+    /**
+     * @param $class
+     * @param array $options
+     * @return \Nelmio\Alice\Loader\Yaml|\Nelmio\Alice\Loader\Base
+     */
     private static function getLoader($class, array $options)
     {
         // Generate an array key based not only on the loader's class - but also
