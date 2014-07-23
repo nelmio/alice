@@ -20,6 +20,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     const USER = 'Nelmio\Alice\fixtures\User';
     const GROUP = 'Nelmio\Alice\fixtures\Group';
     const CONTACT = 'Nelmio\Alice\fixtures\Contact';
+    const TOPIC = 'Nelmio\Alice\fixtures\Topic';
+    const CATEGORY = 'Nelmio\Alice\fixtures\Category';
 
     protected $orm;
 
@@ -31,6 +33,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     protected function loadData(array $data, array $options = array())
     {
         $loader = $this->createLoader($options);
+
+        if (in_array('enableForwardReferences', $options) && $options['enableForwardReferences']) {
+            $loader->enableForwardReferences();
+        }
 
         return $loader->load($data, $this->orm);
     }
@@ -731,6 +737,104 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $user3);
 
         $this->assertEquals('foo"@test.com', $user3->username);
+    }
+
+    public function testBiDirectionalReferencingObjects()
+    {
+        $this->loadData(array(
+            self::CATEGORY => array(
+                'category1' => array(
+                    'description' => 'category 1',
+                    'lastTopic' => '@topic1',
+                ),
+            ),
+        ), array('enableForwardReferences' => true));
+
+        $this->assertCount(1, $this->loader->getIncompleteInstances());
+
+        $this->loader->load(array(
+            self::TOPIC => array(
+                'topic1' => array(
+                    'subject' => 'topic 1',
+                    'parentCategory' => '@category1',
+                ),
+            ),
+        ));
+
+        $this->assertCount(0, $this->loader->getIncompleteInstances());
+
+        $category1 = $this->loader->getReference('category1');
+        $topic1 = $this->loader->getReference('topic1');
+
+        $this->assertInstanceOf(self::CATEGORY, $category1);
+        $this->assertInstanceOf(self::TOPIC, $category1->lastTopic);
+        $this->assertEquals($topic1, $category1->lastTopic);
+
+        $this->assertInstanceOf(self::TOPIC, $topic1);
+        $this->assertInstanceOf(self::CATEGORY, $topic1->parentCategory);
+        $this->assertEquals($category1, $topic1->parentCategory);
+    }
+
+    public function testDeferredReference()
+    {
+        $res = $this->loadData(array(
+            self::CATEGORY => array(
+                'category' => array(
+                    'description' => 'category 1',
+                ),
+            ),
+        ));
+
+        $category = $this->loader->getReference('category');
+        $this->assertInstanceOf(self::CATEGORY, $category);
+        $this->assertEmpty($category->id);
+
+        $this->orm->persist($res);
+        $this->assertNotEmpty($category->id);
+
+        $res = $this->loader->load(array(
+            self::TOPIC => array(
+                'topic' => array(
+                    'subject' => 'Child Topic',
+                    'parentCategory' => '@category->id',
+                ),
+            ),
+        ));
+
+        $topic = $this->loader->getReference('topic');
+        $this->assertInstanceOf(self::TOPIC, $topic);
+        $this->assertNotEmpty($topic->parentCategory);
+    }
+
+    public function testDeferredReferenceSameFile()
+    {
+        $res = $this->loadData(array(
+            self::TOPIC => array(
+                'topicParent' => array(
+                    'subject' => 'Parent Topic',
+                ),
+                'topicChild' => array(
+                    'subject' => 'Child Topic',
+                    'parentTopicId' => '@topicParent->id',
+                ),
+            ),
+        ));
+
+        $topicParent = $this->loader->getReference('topicParent');
+        $this->assertInstanceOf(self::TOPIC, $topicParent);
+        $this->assertEmpty($topicParent->id);
+
+        $topicChild = $this->loader->getReference('topicChild');
+        $this->assertInstanceOf(self::TOPIC, $topicChild);
+        $this->assertEmpty($topicChild->parentTopicId);
+
+        $this->assertCount(1, $this->loader->getIncompleteInstances());
+
+        $this->orm->persist($res);
+
+        $this->loader->load();
+        $this->assertNotEmpty($topicParent->id);
+        $this->assertNotEmpty($topicChild->parentTopicId);
     }
 
     public function testLoadCreatesEnumsOfObjects()

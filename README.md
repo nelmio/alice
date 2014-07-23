@@ -92,6 +92,53 @@ $persister->persist($objects);
 > class instead. These PHP files must return an array containing the same
 > structure as the yaml files have.
 
+### Forward Referencing ###
+
+`Nelmio\Alice\Loader\Base` (and any loaders extended from it) supports
+the `enableForwardReferences()` method.  This enables caching of
+fixtures with unmet references so that they might be filled in on
+future calls to `load()`.
+
+Since an exception will no longer be thrown on unmet references, you
+will need to call `getIncompleteInstances()` at the end of your
+fixture loading run to see if you have any such fixtures.
+
+### Deferred Referencing ###
+
+If a fixture references a property of a fixture defined in the same
+file, instantiation of that object will be deferred until the referred
+to object has been persisted. (The assumption is that the data you are
+trying to reference is some sort of entity id).
+
+After the first persist you could then run `Base::load()` to process
+the incomplete instances to fill in the blanks and then you can
+persist them again.
+
+If you require a more stringent definition of what fields qualify you
+may override `Base::refersToPersistedId($reference, $property, $data)`
+
+#### Persisting of Incomplete Object Trees ####
+
+When using this feature you might get an error such as:
+
+```
+PHP Fatal error:  Uncaught exception 'Doctrine\ORM\ORMInvalidArgumentException' with message 'A new entity was found
+through the relationship Category#lastTopic' that was not configured to cascade persist operations for entity:
+Topic@000000007b4773eb0000000033768373. To solve this issue: Either explicitly call EntityManager#persist() on this
+unknown entity or configure cascade persist  this association in the mapping for example
+@ManyToOne(..,cascade={"persist"}). If you cannot find out which entity causes the problem implement
+Topic#__toString()' to get a clue.' in /www/vendor/doctrine/orm/lib/Doctrine/ORM/ORMInvalidArgumentException.php:59
+```
+
+This means that you are trying to persist a set of objects and one of
+them references an object that has unmet references.  This might
+happen if you are persisting the objects after every file load and one
+of them refers to something in a future file.  It is safe to catch
+this exception and move on, the instance with the unmet reference will
+be available under `getIncompleteInstances()` until it is finally
+filled, so you will know if something is awry at the end of your
+fixture loading process.
+
 ## Reference ##
 
 ### Creating Fixtures ###
