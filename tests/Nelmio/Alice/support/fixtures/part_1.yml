@@ -10,7 +10,7 @@ Nelmio\Alice\support\models\User:
         fullname: <firstName()> <lastName()>
         birthDate: 80%? <date> : 0000-00-00
         email: <email()>
-        favoriteNumber: 40%? <randomNumber(1, 99)>
+        favoriteNumber: 40%? <numberBetween(1, 99)>
 
     user_bare (template):
         username: <username()>
@@ -19,7 +19,7 @@ Nelmio\Alice\support\models\User:
         fullname: <firstName()> <lastName()>
         birthDate: 80%? <date> : 0000-00-00
         email: <email()>
-        favoriteNumber: 40%? <randomNumber(1, 99)>
+        favoriteNumber: 40%? <numberBetween(1, 99)>
     user11 (extends user_full):
         fullname: John Doe
     user{12..15} (extends user_bare):
