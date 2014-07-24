@@ -6,8 +6,11 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Nelmio",
-            "homepage": "http://nelm.io"
+            "name": "Jordi Boggiano",
+            "email": "j.boggiano@seld.be"
+        },
+        {
+            "name": "Tim Shelburne"
         }
     ],
     "require": {
@@ -21,11 +24,11 @@
         "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
-        "psr-0": { "Nelmio\\Alice\\": "src/" }
+        "psr-4": { "Nelmio\\Alice\\": "src/Nelmio/Alice" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

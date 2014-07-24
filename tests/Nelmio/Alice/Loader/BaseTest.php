@@ -1159,8 +1159,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user{0..9}' => array(
-                    'username(unique)' => '<randomNumber()>',
-                    'favoriteNumber (unique)' => array('<randomNumber()>', '<randomNumber()>'),
+                    'username(unique)' => '<numberBetween()>',
+                    'favoriteNumber (unique)' => array('<numberBetween()>', '<numberBetween()>'),
                 )
             )
         ));
@@ -1178,10 +1178,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'user{0..4}' => array(
-                    'username(unique)' => '<randomNumber()>'
+                    'username(unique)' => '<numberBetween()>'
                 ),
                 'user{5..9}' => array(
-                    'username (unique)' => '<randomNumber()>'
+                    'username (unique)' => '<numberBetween()>'
                 )
             )
         ));

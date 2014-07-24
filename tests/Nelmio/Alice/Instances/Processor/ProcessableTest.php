@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Instances\Processor;
 
-use Nelmio\Alice\Instances\Processor\Processable;
-
 class ProcessableTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -22,7 +20,7 @@ class ProcessableTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($processable->valueMatches('/username/'));
         $this->assertFalse($processable->valueMatches('/nomatch/'));
-    }   
+    }
 
     public function testGetMatchWillReturnTheMostRecentMatchIfItExists()
     {

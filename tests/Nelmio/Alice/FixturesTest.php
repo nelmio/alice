@@ -45,11 +45,24 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($lastGroup->contactPerson, $contact->getUser());
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testLoadFailsOnMissingFiles()
+    {
+        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objects = Fixtures::load(__DIR__.'/fixtures/missing_file.yml', $om, array('providers' => array($this)));
+    }
+
     public function testThatNewLoaderIsCreatedForDifferingOptions()
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $om->expects($this->any())
             ->method('find')->will($this->returnValue(new User()));
+
+        $prop = new \ReflectionProperty('\Nelmio\Alice\Fixtures', 'loaders');
+        $prop->setAccessible(true);
+        $prop->setValue(array());
 
         $optionsBatch = array(
             // default options
@@ -169,7 +182,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
         foreach ($optionsBatch as $item) {
             $fixtures = isset($item['fixtures'])
-                        ? isset($item['fixtures'])
+                        ? $item['fixtures']
                         : __DIR__.'/support/fixtures/complete.yml';
             if (!isset($item['providers'])) {
                 $item['providers'] = array();
@@ -182,8 +195,6 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $prop = new \ReflectionProperty('\Nelmio\Alice\Fixtures', 'loaders');
-        $prop->setAccessible(true);
         $loaders = $prop->getValue();
 
         $this->assertEquals(12, count($loaders));
