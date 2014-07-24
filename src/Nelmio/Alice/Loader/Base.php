@@ -505,10 +505,12 @@ class Base implements LoaderInterface
      *
      * It can either convert to datetime or attempt to fetched from the db by id
      *
-     * @param  mixed   $obj    instance or class name
-     * @param  string  $method
-     * @param  string  $value
-     * @param  integer $pNum
+     * @param  mixed  $obj instance or class name
+     * @param  string $method
+     * @param  string $value
+     * @param  int    $pNum
+     * @throws \LogicException
+     * @throws \UnexpectedValueException
      * @return mixed
      */
     private function checkTypeHints($obj, $method, $value, $pNum = 0)
@@ -611,7 +613,6 @@ class Base implements LoaderInterface
 
             // replace references to other objects
             $args = preg_replace_callback('{(?<string>".*?[^\\\\]")|(?:(?<multi>\d+)x )?(?<!\\\\)@(?<reference>[a-z0-9_.*]+)(?:\->(?<property>[a-z0-9_-]+))?}i', function ($match) use ($that, $args) {
-
                 if (!empty($match['string'])) {
                     return $match['string'];
                 }
@@ -634,15 +635,23 @@ class Base implements LoaderInterface
         };
 
         // format placeholders without preg_replace if there is only one to avoid __toString() being called
-        $placeHolderRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)?\((?<args>(?:[^)]*|\)(?!>))*)\)>';
-        if (preg_match('#^'.$placeHolderRegex.'$#i', $data, $matches)) {
-            $data = $replacePlaceholder($matches);
-        } else {
-            // format placeholders inline
-            $data = preg_replace_callback('#'.$placeHolderRegex.'#i', function ($matches) use ($replacePlaceholder) {
-                return $replacePlaceholder($matches);
-            }, $data);
-        }
+        $placeHolderRegex = '<((?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)?\((?<args>[^()]*|[^)]*\)[^>]*)\))>';
+        do {
+            if (is_string($data)) {
+                $matchedFlag = preg_match('#' . $placeHolderRegex . '#i', $data, $matches);
+            } else {
+                $matchedFlag = 0;
+            }
+
+            if ($matchedFlag && preg_match('#^'.$placeHolderRegex.'$#i', $data, $matches)) {
+                $data = $replacePlaceholder($matches);
+            } elseif ($matchedFlag) {
+                // format placeholders inline
+                $data = preg_replace_callback('#'.$placeHolderRegex.'#i', function ($matches) use ($replacePlaceholder) {
+                        return $replacePlaceholder($matches);
+                    }, $data);
+            }
+        } while ($matchedFlag);
 
         // process references
         if (is_string($data) && preg_match('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i', $data, $matches)) {

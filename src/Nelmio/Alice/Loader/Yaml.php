@@ -41,8 +41,9 @@ class Yaml extends Base
 
     /**
      * @param string $file
-     * @return array
      * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
+     * @return array
      */
     private function parse($file)
     {
@@ -65,7 +66,7 @@ class Yaml extends Base
             $yaml = ob_get_clean();
             $data = YamlParser::parse($yaml);
         } else {
-            // make sure to clean up if theres a failure
+            // make sure to clean up if there's a failure
             ob_end_clean();
         }
 
@@ -85,15 +86,16 @@ class Yaml extends Base
      */
     private function processIncludes($data, $file)
     {
+        $includeDataFull = array();
         if (isset($data['include'])) {
             foreach ($data['include'] as $include) {
                 $includeFile = dirname($file) . DIRECTORY_SEPARATOR . $include;
                 $includeData = $this->parse($includeFile);
-                $data = $this->mergeIncludeData($data, $includeData);
+                $includeDataFull = $this->mergeIncludeData($includeDataFull, $includeData);
             }
         }
-
         unset($data['include']);
+        $data = $this->mergeIncludeData($data, $includeDataFull);
 
         return $data;
     }
@@ -101,6 +103,8 @@ class Yaml extends Base
     /**
      * @param array $data
      * @param array $includeData
+     *
+     * @return array
      */
     private function mergeIncludeData($data, $includeData)
     {
