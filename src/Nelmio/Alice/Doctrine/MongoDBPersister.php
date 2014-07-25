@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ORM;
+namespace Nelmio\Alice\Doctrine;
 
-use Nelmio\Alice\ORMInterface;
+use Nelmio\Alice\Doctrine\MongoDBInterface;
 use Nelmio\Alice\Doctrine\BasePersister;
 
 /**
  * The Doctrine persists the fixtures into an ObjectManager
  */
-class Doctrine extends BasePersister implements ORMInterface
+class MongoDBPersister extends BasePersister implements MongoDBInterface
 {
 }

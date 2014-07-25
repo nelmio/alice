@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\Doctrine;
 
 use Nelmio\Alice\Doctrine\StorageInterface;
 
 /**
- * Relational Database Interface
+ * Interface for MongoDB
  */
-interface ORMInterface extends StorageInterface
+interface MongoDBInterface extends StorageInterface
 {
 }
