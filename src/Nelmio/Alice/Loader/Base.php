@@ -405,8 +405,8 @@ class Base implements LoaderInterface
             foreach (preg_split('{\s*,\s*}', $matches[2]) as $flag) {
                 $val = true;
                 if ($pos = strpos($flag, ':')) {
-                    $flag = trim(substr($flag, 0, $pos));
                     $val = trim(substr($flag, $pos+1));
+                    $flag = trim(substr($flag, 0, $pos));
                 }
                 $flags[$flag] = $val;
             }
