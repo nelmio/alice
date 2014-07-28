@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Loader;
 use Symfony\Component\Form\Util\FormUtil;
 use Symfony\Component\PropertyAccess\StringUtil;
 use Psr\Log\LoggerInterface;
-use Nelmio\Alice\ORMInterface;
+use Nelmio\Alice\PersisterInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Provider\IdentityProvider;
 
@@ -51,7 +51,7 @@ class Base implements LoaderInterface
     protected $templates = array();
 
     /**
-     * @var ORMInterface
+     * @var PersisterInterface
      */
     protected $manager;
 
@@ -540,7 +540,7 @@ class Base implements LoaderInterface
 
         if ($hintedClass) {
             if (!$this->manager) {
-                throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\ORMInterface object on this instance');
+                throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\PersisterInterface object on this instance');
             }
             $value = $this->manager->find($hintedClass, $value);
         }
@@ -725,7 +725,7 @@ class Base implements LoaderInterface
         }
     }
 
-    public function setORM(ORMInterface $manager)
+    public function setPersister(PersisterInterface $manager)
     {
         $this->manager = $manager;
     }

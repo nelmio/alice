@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice;
 
-interface ORMInterface
+interface PersisterInterface
 {
     /**
      * Loads a fixture file
