@@ -35,6 +35,7 @@ To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://g
   - [Custom Faker Data Providers](#custom-faker-data-providers)
   - [Custom Setter](#custom-setter)
   - [Complete Sample](#complete-sample)
+  - [Processors](#processors)
 
 ## Usage ##
 
@@ -688,6 +689,75 @@ Nelmio\Entity\Group:
 If you like to have a few specific users with specific data to write tests
 against of course you can define them above/below the ones using the randomized
 data. Combine it all as you see fit!
+
+### Processors ###
+
+Processors allow you to process objects before and/or after they are persisted. Processors
+must implement the `ProcessInterface`. 
+
+Here is an example where we may use this feature when using the FOSUserBundle:
+
+```php
+namespace Acme\DemoBundle\DataFixtures\ORM;
+
+use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\UserManager;
+use Nelmio\Alice\ProcessorInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+class UserProcessor implements ProcessorInterface
+{
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function preProcess($object)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function postProcess($object)
+    {
+        if (!($object instanceof UserInterface)) {
+            return;
+        }
+
+        /** @var UserManager $manager */
+        $manager = $this->container->get('fos_user.user_manager');
+        $manager->updateUser($object);
+
+        return $object;
+    }
+}
+```
+You can add a list of processors in the load method, e.g.
+
+```php
+$objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager, $options, $processors);
+```
+
+Or, you can ad them to your loader using the `addProcessor()` method, e.g.
+
+```php
+$loader = new \Nelmio\Alice\Loader\Yaml();
+$loader->addProcessor($processor);
+$objects = $loader->load(__DIR__.'/fixtures.yml');
+```
 
 ## License ##
 
