@@ -11,21 +11,21 @@
 
 namespace Nelmio\Alice\Util;
 
-use Nelmio\Alice\ORMInterface;
+use Nelmio\Alice\PersisterInterface;
 
 class TypeHintChecker
 {
     /**
-     * ORMInterface
+     * PersisterInterface
      */
     protected $manager;
 
     /**
-     * public interface to set the ORM interface
+     * public interface to set the Persister interface
      *
-     * @param ORMInterface $manager
+     * @param PersisterInterface $manager
      */
-    public function setORM(ORMInterface $manager)
+    public function setPersister(PersisterInterface $manager)
     {
         $this->manager = $manager;
     }
@@ -70,7 +70,7 @@ class TypeHintChecker
 
         if ($hintedClass) {
             if (!$this->manager) {
-                throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\ORMInterface object on this instance');
+                throw new \LogicException('To reference objects by id you must first set a Nelmio\Alice\PersisterInterface object on this instance');
             }
             $value = $this->manager->find($hintedClass, $value);
         }

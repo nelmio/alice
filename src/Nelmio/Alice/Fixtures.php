@@ -13,6 +13,7 @@ namespace Nelmio\Alice;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Psr\Log\LoggerInterface;
+use Nelmio\Alice\Persister\Doctrine as DoctrinePersister;
 
 class Fixtures
 {
@@ -62,7 +63,7 @@ class Fixtures
         $options = array_merge($this->defaultOptions, $options);
 
         if ($this->container instanceof ObjectManager) {
-            $persister = new ORM\Doctrine($this->container);
+            $persister = new DoctrinePersister($this->container);
         } else {
             throw new \InvalidArgumentException('Unknown container type '.get_class($this->container));
         }
@@ -97,7 +98,7 @@ class Fixtures
                 throw new \RuntimeException('Logger must be callable or an instance of Psr\Log\LoggerInterface.');
             }
 
-            $loader->setORM($persister);
+            $loader->setPersister($persister);
             $set = $loader->load($file);
 
             if (!$options['persist_once']) {

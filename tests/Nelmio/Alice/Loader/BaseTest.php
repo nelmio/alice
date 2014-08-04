@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Loader;
 
-use Nelmio\Alice\TestORM;
+use Nelmio\Alice\TestPersister;
 use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\extensions;
 
@@ -21,7 +21,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
-    protected $orm;
+    protected $persister;
 
     /**
      * @var \Nelmio\Alice\Loader\Base
@@ -32,7 +32,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     {
         $loader = $this->createLoader($options);
 
-        return $loader->load($data, $this->orm);
+        return $loader->load($data, $this->persister);
     }
 
     protected function createLoader(array $options = array())
@@ -43,7 +43,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         );
         $options = array_merge($defaults, $options);
 
-        $this->orm = new TestORM;
+        $this->persister = new TestPersister;
 
         return $this->loader = new Base($options['locale'], $options['providers']);
     }
