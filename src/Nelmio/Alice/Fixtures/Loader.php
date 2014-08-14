@@ -9,13 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Loader;
+namespace Nelmio\Alice\Fixtures;
 
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\Fixtures\Builder;
 use Nelmio\Alice\Fixtures\Fixture;
+use Nelmio\Alice\Fixtures\Parser;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Populator;
@@ -24,26 +25,9 @@ use Nelmio\Alice\Instances\Processor\Providers\IdentityProvider;
 use Nelmio\Alice\Util\TypeHintChecker;
 
 /**
- * Loads fixtures from an array or php file
- *
- * The php code if $data is a file has access to $loader->fake() to
- * generate data and must return an array of the format below.
- *
- * The array format must follow this example:
- *
- *     array(
- *         'Namespace\Class' => array(
- *             'name' => array(
- *                 'property' => 'value',
- *                 'property2' => 'value',
- *             ),
- *             'name2' => array(
- *                 [...]
- *             ),
- *         ),
- *     )
+ * Loads fixtures from an array or file
  */
-class Base implements LoaderInterface
+class Loader
 {
     /**
      * @var Collection
@@ -56,9 +40,14 @@ class Base implements LoaderInterface
     protected $typeHintChecker;
 
     /**
+     * @var Parser
+     **/
+    protected $parser;
+
+    /**
      * @var Builder
      */
-    protected $fixtureBuilder;
+    protected $builder;
 
     /**
      * @var Faker
@@ -101,7 +90,12 @@ class Base implements LoaderInterface
         $allProviders = array_merge($this->getBuiltInProviders(), $providers);
 
         $this->processor = new Processor\Processor(
-            $this->getBuiltInProcessors($allProviders, $locale, $this->objects)
+            $this->objects,
+            $this->getBuiltInProcessors($allProviders, $locale)
+            );
+
+        $this->parser = new Parser\Parser(
+            $this->getBuiltInParsers()
             );
 
         $this->builder = new Builder\Builder(
@@ -188,6 +182,16 @@ class Base implements LoaderInterface
     }
 
     /**
+     * adds a parser for fixture parsing extensions
+     *
+     * @param Parser\Methods\MethodInterface $parser
+     **/
+    public function addParser(Parser\Methods\MethodInterface $parser)
+    {
+        $this->parser->addParser($parser);
+    }
+
+    /**
      * adds a builder for fixture building extensions
      *
      * @param Builder\Methods\MethodInterface $builder
@@ -225,21 +229,7 @@ class Base implements LoaderInterface
      */
     protected function parseFile($filename)
     {
-        $loader = $this;
-        $includeWrapper = function () use ($filename, $loader) {
-            ob_start();
-            $res = include $filename;
-            ob_end_clean();
-
-            return $res;
-        };
-
-        $data = $includeWrapper();
-        if (!is_array($data)) {
-            throw new \UnexpectedValueException("Included file \"{$filename}\" must return an array of data");
-        }
-
-        return $data;
+        return $this->parser->parse($filename);
     }
 
     /**
@@ -351,19 +341,31 @@ class Base implements LoaderInterface
      *
      * @param  array      $providers - a list of all providers to build the processors with
      * @param  string     $locale
-     * @param  Collection $objects
      * @return array
      */
-    private function getBuiltInProcessors(array $providers, $locale, Collection $objects)
+    private function getBuiltInProcessors(array $providers, $locale)
     {
-        $this->fakerProcessorMethod = new Processor\Methods\Faker($objects, $providers, $locale);
+        $this->fakerProcessorMethod = new Processor\Methods\Faker($providers, $locale);
 
         return array(
             new Processor\Methods\ArrayValue(),
             new Processor\Methods\Conditional(),
             new Processor\Methods\UnescapeAt(),
             $this->fakerProcessorMethod,
-            new Processor\Methods\Reference($objects)
+            new Processor\Methods\Reference()
+            );
+    }
+
+    /**
+     * returns a list of all the default parser methods
+     *
+     * @return array
+     */
+    private function getBuiltInParsers()
+    {
+        return array(
+            new Parser\Methods\Php($this),
+            new Parser\Methods\Yaml($this)
             );
     }
 

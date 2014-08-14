@@ -9,13 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Loader;
+namespace Nelmio\Alice\Fixtures;
 
+use Nelmio\Alice\Fixtures\Loader;
 use Nelmio\Alice\TestORM;
 use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\extensions;
 
-class BaseTest extends \PHPUnit_Framework_TestCase
+class LoaderTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\support\models\User';
     const GROUP = 'Nelmio\Alice\support\models\Group';
@@ -24,7 +25,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     protected $orm;
 
     /**
-     * @var \Nelmio\Alice\Loader\Base
+     * @var \Nelmio\Alice\Fixtures\Loader
      */
     protected $loader;
 
@@ -45,7 +46,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
         $this->orm = new TestORM;
 
-        return $this->loader = new Base($options['locale'], $options['providers']);
+        return $this->loader = new Loader($options['locale'], $options['providers']);
     }
 
     public function testLoadCreatesInstances()
@@ -87,10 +88,19 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->loader->getReference('foo');
     }
 
+    public function testLoadUnparsableFile()
+    {
+        try {
+            $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/not-parsable');
+        } catch (\UnexpectedValueException $e) {
+            $this->assertEquals("{$file} cannot be parsed - no parser exists that can handle it.", $e->getMessage());
+        }
+    }
+
     public function testLoadInvalidFile()
     {
         try {
-            $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/complete.yml');
+            $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/invalid.php');
         } catch (\UnexpectedValueException $e) {
             $this->assertEquals('Included file "'.$file.'" must return an array of data', $e->getMessage());
         }
@@ -223,7 +233,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadParsesReferencesInFakerProviders()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
+        $loader = new Loader('en_US', array(new FakerProvider));
         $res = $loader->load(array(
             self::USER => array(
                 'bob' => array(
@@ -1110,7 +1120,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorCustomProviders()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
+        $loader = new Loader('en_US', array(new FakerProvider));
         $res = $loader->load(array(
             self::USER => array(
                 'user0' => array(
@@ -1124,7 +1134,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadCallsCustomMethodWithMultipleArgumentsAndCustomProviders()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
+        $loader = new Loader('en_US', array(new FakerProvider));
         $res = $loader->load(array(
             self::USER => array(
                 'user' => array(
@@ -1140,7 +1150,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadCallsConstructorWithHintedParams()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
+        $loader = new Loader('en_US', array(new FakerProvider));
         $res = $loader->load(array(
             self::USER => array(
                 'user' => array(
@@ -1155,7 +1165,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGeneratedValuesAreUnique()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
+        $loader = new Loader('en_US', array(new FakerProvider));
         $res = $loader->load(array(
             self::USER => array(
                 'user{0..9}' => array(
@@ -1174,7 +1184,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGeneratedValuesAreUniqueAcrossAClass()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
+        $loader = new Loader('en_US', array(new FakerProvider));
         $res = $loader->load(array(
             self::USER => array(
                 'user{0..4}' => array(
@@ -1196,7 +1206,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     public function testUniqueValuesException()
     {
-        $loader = new Base("en_US", array(new FakerProvider));
+        $loader = new Loader("en_US", array(new FakerProvider));
         $res = $loader->load(array(
             self::USER => array(
                 'user{0..1}' => array(
@@ -1280,7 +1290,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testNullVariable()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
+        $loader = new Loader('en_US', array(new FakerProvider));
         $loader->load(array(
             self::USER => array(
                 'user' => array(
@@ -1296,7 +1306,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testAtLiteral()
     {
-        $loader = new Base('en_US', array(new FakerProvider));
+        $loader = new Loader('en_US', array(new FakerProvider));
         $res = $loader->load(array(
             self::USER => array(
                 'user' => array(
@@ -1378,6 +1388,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::CONTACT, $res['contact']);
         $this->assertEquals('magicValue set by magic setter', $res['contact']->magicProp);
     }
+
 }
 
 class FakerProvider

@@ -11,10 +11,16 @@
 
 namespace Nelmio\Alice\Instances\Processor;
 
+use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\support\extensions\CustomProcessor;
 
 class ProcessorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Collection
+     */
+    protected $objects;
+
     /**
      * @var Processor
      */
@@ -23,11 +29,21 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function createProcessor(array $options = array())
     {
         $defaults = array(
+            'objects' => new Collection,
             'methods' => array()
         );
         $options = array_merge($defaults, $options);
 
-        return $this->processor = new Processor($options['methods']);
+        return $this->processor = new Processor($this->objects = $options['objects'], $options['methods']);
+    }
+
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage All methods passed into Processor must implement MethodInterface.
+     */
+    public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheProcessor()
+    {
+        $builder = new Processor(new Collection, array('CustomProcessor'));
     }
 
     public function testAddProcessor()
@@ -40,12 +56,17 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TEST MY CUSTOM PROCESSOR', $result);
     }
 
-    /**
-     * @expectedException        InvalidArgumentException
-     * @expectedExceptionMessage All methods passed into Processor must implement MethodInterface.
-     */
-    public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheProcessor()
+    public function testAddProcessorWillSetObjectsIfSetterExists()
     {
-        $builder = new Processor(array('CustomProcessor'));
+        $this->createProcessor();
+        $this->processor->addProcessor($custom = new CustomProcessor);
+        $this->assertEquals($this->objects, $custom->objects);
+    }
+
+    public function testAddProcessorWillSetTheProcessorIfSetterExists()
+    {
+        $this->createProcessor();
+        $this->processor->addProcessor($custom = new CustomProcessor);
+        $this->assertEquals($this->processor, $custom->processor);
     }
 }
