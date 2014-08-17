@@ -136,7 +136,7 @@ class Fixtures
         }
     }
 
-    private static function generateLoaderKey($class, array $options)
+    protected static function generateLoaderKey($class, array $options)
     {
         $providers = '';
         if (!empty($options['providers'])) {
@@ -172,7 +172,7 @@ class Fixtures
         );
     }
 
-    private static function getLoader($class, array $options)
+    protected static function getLoader($class, array $options)
     {
         // Generate an array key based not only on the loader's class - but also
         // on the options, so that separate loaders will be created when we want
