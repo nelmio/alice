@@ -158,4 +158,11 @@ class Collection
         return $res;
     }
 
+    /**
+     * Clears the collection, removing all elements.
+     */
+    public function clear()
+    {
+        $this->_instances = array();
+    }
 }
