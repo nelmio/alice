@@ -86,6 +86,14 @@ class Collection
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function clear()
+    {
+        $this->_instances = array();
+    }
+
+    /**
      * returns an object, or a property on that object if $property is not null
      *
      * @param  string $name
