@@ -41,12 +41,14 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $defaults = [
             'locale' => 'en_US',
             'providers' => [],
+            'seed' => 1,
+            'parameters' => []
         ];
         $options = array_merge($defaults, $options);
 
         $this->orm = new TestORM;
 
-        return $this->loader = new Loader($options['locale'], $options['providers']);
+        return $this->loader = new Loader($options['locale'], $options['providers'], $options['seed'], $options['parameters']);
     }
 
     public function testLoadCreatesInstances()
@@ -1437,14 +1439,34 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new Loader('en_US', [new FakerProvider]);
 
-        $res = $loader->load(__DIR__.'/../support/fixtures/nested_faker.php');
+        $res = $loader->load(__DIR__ . '/../support/fixtures/nested_faker.php');
 
         foreach (['user1', 'user2'] as $userKey) {
             $user = $res[$userKey];
-            $this->assertInstanceOf(self::USER, $user, $userKey.' should match');
-            $this->assertEquals('JOHN DOE', $user->username, $userKey.' should match');
-            $this->assertEquals('JOHN DOE', $user->fullname, $userKey.' should match');
+            $this->assertInstanceOf(self::USER, $user, $userKey . ' should match');
+            $this->assertEquals('JOHN DOE', $user->username, $userKey . ' should match');
+            $this->assertEquals('JOHN DOE', $user->fullname, $userKey . ' should match');
         }
+    }
+
+    public function testParametersAreReplaced()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user1' => array(
+                    'username' => '<{user_1_username}>_alice',
+                ),
+            ),
+        ), array(
+            'parameters' => array(
+                'user_1_username' => 'user'
+            )
+        ));
+
+        $this->assertCount(1, $res);
+        $user1 = $this->loader->getReference('user1');
+        $this->assertInstanceOf(self::USER, $user1);
+        $this->assertEquals('user_alice', $user1->username);
     }
 }
 

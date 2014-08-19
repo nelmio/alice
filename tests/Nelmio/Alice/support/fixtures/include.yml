@@ -2,6 +2,9 @@ include:
   - includes/product.yml
   - includes/file1.yml
 
+parameters:
+  ebay_domain_name: ebay.us
+
 Nelmio\Alice\fixtures\Product:
   product0:
     changed: y
@@ -13,4 +16,4 @@ Nelmio\Alice\fixtures\Product:
 
 Nelmio\Alice\fixtures\Shop:
   shop1:
-    domain: ebay.com
+    domain: <{ebay_domain_name}>

@@ -94,7 +94,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
                         ],
                     'shop1' =>
                         [
-                            'domain' => 'ebay.com',
+                            'domain' => '<{ebay_domain_name}>',
                         ],
                 ],
             'Nelmio\\Alice\\fixtures\\User' =>
