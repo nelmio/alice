@@ -1,0 +1,23 @@
+Nelmio\Alice\fixtures\User:
+    user0:
+        username: johnny
+        fullname: John Smith
+        birthDate: 1980-10-10
+        email: <email()>
+        favoriteNumber: 42
+    user1:
+        username: <username()>
+        fullname: <firstName()> <lastName()>
+        birthDate: 80%? <date> : 0000-00-00
+        email: <email()>
+        favoriteNumber: 40%? <randomNumber(1, 99)>
+
+Nelmio\Alice\fixtures\UserTest:
+    userTest0:
+        __construct: [@user0]
+    userTest1:
+        __construct: [@user1]
+
+Nelmio\Alice\fixtures\Contact:
+    contact0:
+        __construct: [@user*]

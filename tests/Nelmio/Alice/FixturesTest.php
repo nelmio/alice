@@ -325,6 +325,19 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('stormtrooper15', $user->username);
     }
 
+    public function testAmbiguousWildcardRef()
+    {
+        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $fixtures = __DIR__.'/fixtures/ambiguous-wildcard-ref.yml';
+
+        $exceptionMsg = <<<MSG
+Argument 1 passed to Nelmio\\Alice\\fixtures\\Contact::__construct() must be an instance of Nelmio\\Alice\\fixtures\\User, instance of Nelmio\\Alice\\fixtures\\UserTest given
+MSG;
+
+        $this->setExpectedException('PHPUnit_Framework_Error', $exceptionMsg);
+        Fixtures::load($fixtures, $om);
+    }
+
     protected function getDoctrineManagerMock($objects = null)
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
