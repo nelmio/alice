@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Fixtures;
 
+use Nelmio\Alice\Instances\Processor\Methods\Faker;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\LoaderInterface;
@@ -157,7 +158,7 @@ class Loader
      */
     public function setProviders(array $providers)
     {
-        $this->fakerProcessorMethod->setProviders($providers);
+        $this->fakerProcessorMethod->setProviders(array_merge($this->getBuiltInProviders(), $providers));
     }
 
     /**
@@ -416,5 +417,4 @@ class Loader
             new Populator\Methods\Property()
             );
     }
-
 }
