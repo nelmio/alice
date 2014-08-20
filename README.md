@@ -693,7 +693,7 @@ data. Combine it all as you see fit!
 ### Processors ###
 
 Processors allow you to process objects before and/or after they are persisted. Processors
-must implement the `ProcessInterface`. 
+must implement the `ProcessorInterface`. 
 
 Here is an example where we may use this feature when using the FOSUserBundle:
 
@@ -740,8 +740,6 @@ class UserProcessor implements ProcessorInterface
         /** @var UserManager $manager */
         $manager = $this->container->get('fos_user.user_manager');
         $manager->updateUser($object);
-
-        return $object;
     }
 }
 ```
