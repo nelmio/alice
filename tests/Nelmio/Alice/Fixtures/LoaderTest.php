@@ -118,6 +118,23 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($res['bob'], $references['bob']);
     }
 
+    public function testSetReferencesClearsAndSetsReferences()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'bob' => array(),
+                'jim' => array()
+            ),
+        ));
+
+        $this->loader->setReferences(array('bob' => new User));
+        $references = $this->loader->getReferences();
+
+        $this->assertNotSame($res['bob'], $references['bob']);
+        $this->assertNotContains($res['jim'], $references);
+        $this->assertCount(1, $references);
+    }
+
     public function testLoadAssignsDataToProperties()
     {
         $res = $this->loadData(array(
