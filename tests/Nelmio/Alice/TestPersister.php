@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice;
 
-class TestORM implements ORMinterface
+class TestPersister implements PersisterInterface
 {
     protected $objects;
 
