@@ -512,21 +512,6 @@ Nelmio\Entity\User:
         city: <city()>
 ```
 
-### Including files ###
-
-You may include other files from your fixtures using the top-level `include` key:
-
-```yaml
-include:
-    - relative/path/to/file.yml
-    - relative/path/to/another/file.yml
-Nelmio\Entity\User:
-    user1 (extends user, extends user_young):
-        name: <firstName()>
-        lastname: <lastName()>
-        city: <city()>
-```
-
 In relative/path/to/file.yml:
 
 ```yaml
