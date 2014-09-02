@@ -14,14 +14,14 @@ class User
 
     public function __construct($username = null, $email = null, \DateTime $birthDate = null)
     {
-        $this->username = $username;
+        $this->username = $username ?: 'tmp-username';
         $this->email = $email;
         $this->birthDate = $birthDate;
     }
 
     public static function create($username = null, $email = null, \DateTime $birthDate = null)
     {
-        return new static($username, $email, $birthDate);
+        return new static($username . '-from-create', $email, $birthDate);
     }
 
     public static function bogusCreate($username = null, $email = null, \DateTime $birthDate = null)

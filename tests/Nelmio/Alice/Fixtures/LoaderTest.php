@@ -1060,6 +1060,17 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testLoadCallsConstructorByDefault()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user' => array()
+            )
+        ));
+
+        $this->assertSame('tmp-username', $res['user']->username);
+    }
+
     public function testLoadCallsStaticConstructorIfProvided()
     {
         $res = $this->loadData(array(
@@ -1071,7 +1082,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertInstanceOf(self::USER, $res['user']);
-        $this->assertSame('alice', $res['user']->username);
+        $this->assertSame('alice-from-create', $res['user']->username);
     }
 
     /**
@@ -1359,13 +1370,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load(array(
             self::USER => array(
                 'spec dumped' => array(
-                    'username' => '<username()>'
+                    'email' => '<email()>'
                 ),
             ),
         ));
 
         $this->assertInstanceOf(self::USER, $res['spec dumped']);
-        $this->assertNull($res['spec dumped']->username);
+        $this->assertNull($res['spec dumped']->email);
     }
 
     public function testAddInstantiator()
