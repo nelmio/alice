@@ -1071,7 +1071,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertInstanceOf(self::USER, $res['user']);
-        $this->assertSame('alice', $res['user']->username);
+        $this->assertSame('alice-from-create', $res['user']->username);
     }
 
     /**

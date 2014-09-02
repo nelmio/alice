@@ -21,7 +21,7 @@ class User
 
     public static function create($username = null, $email = null, \DateTime $birthDate = null)
     {
-        return new static($username, $email, $birthDate);
+        return new static($username . '-from-create', $email, $birthDate);
     }
 
     public static function bogusCreate($username = null, $email = null, \DateTime $birthDate = null)
