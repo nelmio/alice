@@ -165,21 +165,21 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('1', '2', '3'), $fixture->getConstructorArgs());
     }
 
-    public function testShouldUserConstructorWillReturnFalseIfThereIsNoConstructorInTheSpec()
+    public function testShouldUseConstructorWillReturnTrueIfThereIsNoConstructorInTheSpec()
     {
         $fixture = new Fixture(self::USER, 'user', array(), null);
 
-        $this->assertFalse($fixture->shouldUseConstructor());
+        $this->assertTrue($fixture->shouldUseConstructor());
     }
 
-    public function testShouldUserConstructorWillReturnFalseIfTheConstructorSpecIsFalse()
+    public function testShouldUseConstructorWillReturnFalseIfTheConstructorSpecIsFalse()
     {
         $fixture = new Fixture(self::USER, 'user', array('__construct' => false), null);
 
         $this->assertFalse($fixture->shouldUseConstructor());
     }
 
-    public function testShouldUserConstructorWillReturnTrueIfTheConstructorSpecIsDefined()
+    public function testShouldUseConstructorWillReturnTrueIfTheConstructorSpecIsDefined()
     {
         $fixture = new Fixture(self::USER, 'user', array('__construct' => array('1', '2')), null);
 

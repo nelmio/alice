@@ -245,7 +245,7 @@ class Fixture
      */
     public function shouldUseConstructor()
     {
-        return !is_null($this->getConstructor()) && $this->getConstructor()->getValue();
+        return is_null($this->getConstructor()) || $this->getConstructor()->getValue();
     }
 
     /**
@@ -315,7 +315,7 @@ class Fixture
      */
     protected function addProperty($name, $value)
     {
-        $this->properties[$name] = new PropertyDefinition($name, $value);
+        return $this->properties[$name] = new PropertyDefinition($name, $value);
     }
 
     /**
@@ -336,6 +336,10 @@ class Fixture
     //
     protected function getConstructorComponents()
     {
+        if (is_null($this->getConstructor())) {
+            return array('method' => '__construct', 'args' => array());
+        }
+
         $constructorValue = $this->getConstructor()->getValue();
         if (!is_array($constructorValue)) {
             throw new \UnexpectedValueException("The __construct call in object '{$this}' must be defined as an array of arguments or false to bypass it");

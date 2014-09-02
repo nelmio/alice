@@ -14,7 +14,7 @@ class User
 
     public function __construct($username = null, $email = null, \DateTime $birthDate = null)
     {
-        $this->username = $username;
+        $this->username = $username ?: 'tmp-username';
         $this->email = $email;
         $this->birthDate = $birthDate;
     }

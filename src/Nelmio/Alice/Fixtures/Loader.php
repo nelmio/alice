@@ -340,8 +340,8 @@ class Loader
     /**
      * returns a list of all the default processor methods
      *
-     * @param  array      $providers - a list of all providers to build the processors with
-     * @param  string     $locale
+     * @param  array  $providers - a list of all providers to build the processors with
+     * @param  string $locale
      * @return array
      */
     private function getBuiltInProcessors(array $providers, $locale)

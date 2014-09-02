@@ -38,7 +38,9 @@ class ReflectionWithConstructor implements MethodInterface
      */
     public function canInstantiate(Fixture $fixture)
     {
-        return $fixture->shouldUseConstructor();
+        $refl = new \ReflectionMethod($fixture->getClass(), '__construct');
+
+        return $fixture->shouldUseConstructor() && $refl->getNumberOfRequiredParameters() <= count($fixture->getConstructorArgs());
     }
 
     /**

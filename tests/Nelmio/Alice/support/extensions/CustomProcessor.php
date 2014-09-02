@@ -21,7 +21,7 @@ class CustomProcessor implements ProcessorInterface
 
     public function canProcess(ProcessableInterface $processable)
     {
-        return $processable->valueMatches('/^uppercase processor:(?<uppercaseMe>[a-z\s]+?)$/');
+        return is_string($processable->getValue()) && $processable->valueMatches('/^uppercase processor:(?<uppercaseMe>[a-z\s]+?)$/');
     }
 
     /**
