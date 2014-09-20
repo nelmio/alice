@@ -1303,6 +1303,41 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $res['user']);
         $this->assertSame('@foo \\@foo \\@foo \\foo', $res['user']->username);
     }
+
+    public function testLoadCreatesCombinatoryListOfObjects()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user{1,2,3}_{a,b}' => array(
+                    'username' => 'alice',
+                ),
+            ),
+        ));
+
+        $this->assertCount(6, $res);
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user1_a'));
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user1_b'));
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user3_a'));
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user3_b'));
+    }
+
+    public function testLoadCreatesCombinatoryListOfObjectsWithProviderUse()
+    {
+        $res = $this->loadData(array(
+            self::USER => array(
+                'user{1,2,3}_{a,b}' => array(
+                    'username' => 'alice <current("0")> <current("1")>',
+                ),
+            ),
+        ));
+
+        $this->assertCount(6, $res);
+        $this->assertEquals('alice 1 a', $this->loader->getReference('user1_a')->username);
+        $this->assertEquals('alice 1 b', $this->loader->getReference('user1_b')->username);
+        $this->assertEquals('alice 3 a', $this->loader->getReference('user3_a')->username);
+        $this->assertEquals('alice 3 b', $this->loader->getReference('user3_b')->username);
+    }
+
 }
 
 class FakerProvider

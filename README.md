@@ -156,6 +156,22 @@ Nelmio\Entity\User:
         favoriteNumber: 42
 ```
 
+You can also create a combinatory list:
+
+```yaml
+Nelmio\Entity\User:
+    user{alice,bob}_type{a,b}
+        username: <current("0")>
+        fullname: <current("0")>
+        userType: <current("1")>
+        birthDate: 1980-10-10
+        email: <current("0")>@example.org
+        favoriteNumber: 42
+```
+
+Now it will generate four users, with names like useralice_typea, useralice_typeb.
+You can pass arguments to <current()> so you can use the values of {alice,bob} or {a,b} groups.
+
 To go further we can just randomize data.
 
 ### Faker Data ###
