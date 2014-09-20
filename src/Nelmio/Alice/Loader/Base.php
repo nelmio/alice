@@ -166,16 +166,12 @@ class Base implements LoaderInterface
                         $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
                         $this->currentValue = null;
                     }
-                } elseif (preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $match)) {
-                    $enumItems = array_map('trim', explode(',', $match[1]));
-                    foreach ($enumItems as $item) {
-                        $curSpec = $spec;
-                        $curName = str_replace($match[0], $item, $name);
-                        list($curName, $instanceFlags) = $this->parseFlags($curName);
-                        $this->currentValue = $item;
-                        $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
-                        $this->currentValue = null;
-                    }
+                } elseif (preg_match_all('#\{([^,]+(\s*,\s*[^,}]+)*)\}#', $name, $match)) {
+                    
+                    $depth = count($match[1]);
+                    $level = 1;
+                    $instances = array_merge($instances, $this->listMatch($name, $level, $depth, $match, $class, $classFlags, $spec));
+
                 } else {
                     list($name, $instanceFlags) = $this->parseFlags($name);
                     if (!empty($instanceFlags)) {
@@ -212,6 +208,31 @@ class Base implements LoaderInterface
         }
 
         return $objects;
+    }
+
+    protected function listMatch($name, $level, $depth, $match, $class, $classFlags, $spec, $current_item = array())
+    {
+        $match_key = $level - 1;
+        $enumItems = array_map('trim', explode(',', $match[1][$match_key]));
+
+        $instances = [];
+        foreach ($enumItems as $item) {
+            $curSpec = $spec;
+            $curName = str_replace($match[0][$match_key], $item, $name);
+
+            $cur_items = $current_item;
+            $cur_items[] = $item;
+
+            if ($level < $depth) {
+                $instances = array_merge($instances, $this->listMatch($curName, $level + 1, $depth, $match, $class, $classFlags, $spec, $cur_items));
+            } else {
+                list($curName, $instanceFlags) = $this->parseFlags($curName);
+                $this->currentValue = $item;
+                $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $cur_items);
+                $this->currentValue = null;
+            }
+        }
+        return $instances;
     }
 
     /**
@@ -264,6 +285,15 @@ class Base implements LoaderInterface
                 throw new \UnexpectedValueException('Cannot use <current()> out of fixtures ranges or enum');
             }
 
+            if (is_array($this->currentValue)) {
+                if (!$arg) {
+                    $arg = "0";
+                }
+                if (!array_key_exists($arg, $this->currentValue)) {
+                    throw new \UnexpectedValueException('The value of index ' . $arg . ' doesn\'t exists!');
+                }
+                return $this->currentValue[$arg];
+            }
             return $this->currentValue;
         }
 
