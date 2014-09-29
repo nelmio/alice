@@ -748,7 +748,7 @@ $objects = $loader->load(__DIR__.'/fixtures.yml');
 
 If you have any kind of relationship between tables (OneToMany, ManyToMany) and handle your data using `ArrayCollection` then you should set the related field as array in your fixtures:
 
-	UserBundle\Entity\User:
+	YourBundle\Entity\User:
 	    User{1..10}:
 	        username (unique): <firstNameMale()>
 	        email (unique): <companyEmail()>
