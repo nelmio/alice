@@ -824,27 +824,29 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->loader->getReference('user2')->fullname, 'testfullname');
     }
 
-    public function testTemplateCanExtendOtherTemplateObjects()
+    public function testTemplateCanExtendOtherTemplateObjectsCombinedWithRange()
     {
         $res = $this->loadData(array(
             self::USER => array(
-                'user (template)' => array(
+                'us{er,rr} (template)' => array(
                     'email'    => 'base@email.com'
                 ),
-                'user2 (template, extends user)' => array(
+                'user{1..2} (template, extends user)' => array(
                     'favoriteNumber'    => 2
                 ),
-                'user3 (extends user2)' => array(
+                '{user,uzer}3 (extends user2)' => array(
                     'fullname'    => 'testfullname'
                 ),
             ),
         ));
 
-        $this->assertCount(1, $res);
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user3'));
-        $this->assertSame($this->loader->getReference('user3')->email, 'base@email.com');
-        $this->assertSame($this->loader->getReference('user3')->favoriteNumber, 2);
-        $this->assertSame($this->loader->getReference('user3')->fullname, 'testfullname');
+        $this->assertCount(2, $res);
+        foreach (array('user3', 'uzer3') as $key) {
+            $this->assertInstanceOf(self::USER, $this->loader->getReference($key));
+            $this->assertSame($this->loader->getReference($key)->email, 'base@email.com');
+            $this->assertSame($this->loader->getReference($key)->favoriteNumber, 2);
+            $this->assertSame($this->loader->getReference($key)->fullname, 'testfullname');
+        }
     }
 
     public function testMultipleInheritanceInTemplates()
