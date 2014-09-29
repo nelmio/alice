@@ -324,6 +324,14 @@ class Loader
     }
 
     /**
+     * @return Processor\Methods\Faker
+     */
+    public function getFakerProcessorMethod()
+    {
+        return $this->fakerProcessorMethod;
+    }
+
+    /**
      * returns a list of all the default providers faker processing
      *
      * @return array
