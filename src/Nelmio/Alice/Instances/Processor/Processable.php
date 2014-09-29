@@ -61,5 +61,4 @@ class Processable implements ProcessableInterface
 
         return null;
     }
-
 }

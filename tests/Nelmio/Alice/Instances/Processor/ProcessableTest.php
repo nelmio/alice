@@ -33,5 +33,4 @@ class ProcessableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('username', $processable->getMatch('function'));
         $this->assertNull($processable->getMatch('nomatch'));
     }
-
 }

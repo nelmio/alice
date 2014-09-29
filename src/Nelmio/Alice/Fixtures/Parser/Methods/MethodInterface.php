@@ -28,5 +28,4 @@ interface MethodInterface
      * @return array
      */
     public function parse($file);
-
 }

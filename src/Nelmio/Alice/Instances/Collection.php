@@ -22,7 +22,7 @@ class Collection
      *
      * @var array
      */
-    private $_instances;
+    private $instances;
 
     /**
      * Initializes a new ArrayCollection.
@@ -31,7 +31,7 @@ class Collection
      */
     public function __construct(array $elements = array())
     {
-        $this->_instances = $elements;
+        $this->instances = $elements;
     }
 
     /**
@@ -39,7 +39,7 @@ class Collection
      */
     public function toArray()
     {
-        return $this->_instances;
+        return $this->instances;
     }
 
     /**
@@ -47,7 +47,7 @@ class Collection
      */
     public function containsKey($name)
     {
-        return isset($this->_instances[$name]) || array_key_exists($name, $this->_instances);
+        return isset($this->instances[$name]) || array_key_exists($name, $this->instances);
     }
 
     /**
@@ -55,8 +55,8 @@ class Collection
      */
     public function get($name)
     {
-        if (isset($this->_instances[$name])) {
-            return $this->_instances[$name];
+        if (isset($this->instances[$name])) {
+            return $this->instances[$name];
         }
 
         return null;
@@ -67,7 +67,7 @@ class Collection
      */
     public function set($name, $instance)
     {
-        $this->_instances[$name] = $instance;
+        $this->instances[$name] = $instance;
     }
 
     /**
@@ -75,9 +75,9 @@ class Collection
      */
     public function remove($name)
     {
-        if (isset($this->_instances[$name]) || array_key_exists($name, $this->_instances)) {
-            $removed = $this->_instances[$name];
-            unset($this->_instances[$name]);
+        if (isset($this->instances[$name]) || array_key_exists($name, $this->instances)) {
+            $removed = $this->instances[$name];
+            unset($this->instances[$name]);
 
             return $removed;
         }
@@ -135,7 +135,7 @@ class Collection
         }
 
         $availableObjects = array();
-        foreach ($this->_instances as $name => $instance) {
+        foreach ($this->instances as $name => $instance) {
             if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $name)) {
                 $availableObjects[] = $name;
             }
@@ -163,6 +163,6 @@ class Collection
      */
     public function clear()
     {
-        $this->_instances = array();
+        $this->instances = array();
     }
 }

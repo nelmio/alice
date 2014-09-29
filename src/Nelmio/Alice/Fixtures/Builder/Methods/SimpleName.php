@@ -12,8 +12,6 @@
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
-use Nelmio\Alice\Instances\Processor;
 
 class SimpleName implements MethodInterface
 {
@@ -32,5 +30,4 @@ class SimpleName implements MethodInterface
     {
         return array(new Fixture($class, $name, $spec, null));
     }
-
 }

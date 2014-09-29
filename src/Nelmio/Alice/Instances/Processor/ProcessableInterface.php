@@ -33,5 +33,4 @@ interface ProcessableInterface
      * @return string
      */
     public function getMatch($name);
-
 }

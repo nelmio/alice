@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-use Nelmio\Alice\Fixtures\PropertyDefinition;
 use Nelmio\Alice\Util\FlagParser;
 
 class Fixture
@@ -359,5 +358,4 @@ class Fixture
 
         return array('method' => '__construct', 'args' => $constructorValue);
     }
-
 }

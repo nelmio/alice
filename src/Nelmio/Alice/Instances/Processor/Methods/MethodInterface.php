@@ -31,5 +31,4 @@ interface MethodInterface
      * @return mixed
      */
     public function process(ProcessableInterface $processable, array $variables);
-
 }

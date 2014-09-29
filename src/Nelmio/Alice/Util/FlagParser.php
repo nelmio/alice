@@ -36,5 +36,4 @@ class FlagParser
 
         return array($key, $flags);
     }
-
 }

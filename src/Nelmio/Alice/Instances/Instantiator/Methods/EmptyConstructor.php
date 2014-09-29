@@ -34,5 +34,4 @@ class EmptyConstructor implements MethodInterface
 
         return new $class();
     }
-
 }

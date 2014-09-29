@@ -30,5 +30,4 @@ interface MethodInterface
      * @return mixed
      */
     public function instantiate(Fixture $fixture);
-
 }

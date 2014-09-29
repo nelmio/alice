@@ -83,5 +83,4 @@ class ArrayAdd implements MethodInterface
             return $method;
         }
     }
-
 }

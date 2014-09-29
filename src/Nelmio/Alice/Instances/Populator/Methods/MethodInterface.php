@@ -26,5 +26,4 @@ interface MethodInterface
      * @param mixed   $value
      */
     public function set(Fixture $fixture, $object, $property, $value);
-
 }

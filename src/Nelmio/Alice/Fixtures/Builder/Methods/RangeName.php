@@ -12,7 +12,6 @@
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
 
 class RangeName implements MethodInterface
 {
@@ -46,5 +45,4 @@ class RangeName implements MethodInterface
 
         return $fixtures;
     }
-
 }

@@ -34,5 +34,4 @@ class Custom implements MethodInterface
         $customSetter = $fixture->getCustomSetter()->getValue();
         $object->$customSetter($property, $value);
     }
-
 }

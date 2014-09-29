@@ -11,10 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
-use UnexpectedValueException;
-
-use Nelmio\Alice\Fixtures\Parser\Methods\Yaml;
-
 class YamlTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -112,5 +108,4 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expectedData, $data);
     }
-
 }

@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-use Nelmio\Alice\Fixtures\Fixture;
-
 class FixtureTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\support\models\User';
@@ -203,5 +201,4 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('setterFunc', $setFixture->getCustomSetter());
         $this->assertNull($noSetFixture->getCustomSetter());
     }
-
 }

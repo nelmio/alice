@@ -31,5 +31,4 @@ class Unserialize implements MethodInterface
         // unserialize hack for php <5.4
         return unserialize(sprintf('O:%d:"%s":0:{}', strlen($fixture->getClass()), $fixture->getClass()));
     }
-
 }

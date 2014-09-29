@@ -32,5 +32,4 @@ class UnescapeAt implements MethodInterface
 
         return preg_replace('{\\\\([@\\\\])}', '$1', $value);
     }
-
 }

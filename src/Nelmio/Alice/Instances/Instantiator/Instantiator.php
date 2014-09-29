@@ -66,5 +66,4 @@ class Instantiator
             return new $class();
         }
     }
-
 }

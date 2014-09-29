@@ -19,5 +19,4 @@ class CustomPopulator implements PopulatorInterface
     {
         return $object->$property = $value;
     }
-
 }

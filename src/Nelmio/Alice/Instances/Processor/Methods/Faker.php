@@ -204,5 +204,4 @@ class Faker implements MethodInterface
 
         return $this->generators[$locale];
     }
-
 }

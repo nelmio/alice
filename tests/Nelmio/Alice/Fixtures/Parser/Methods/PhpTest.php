@@ -13,8 +13,6 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
 use UnexpectedValueException;
 
-use Nelmio\Alice\Fixtures\Parser\Methods\Php;
-
 class PhpTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -58,5 +56,4 @@ class PhpTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals("Included file \"{$file}\" must return an array of data", $e->getMessage());
         }
     }
-
 }

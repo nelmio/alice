@@ -14,10 +14,6 @@ namespace Nelmio\Alice\Fixtures;
 use Nelmio\Alice\Instances\Processor\Methods\Faker;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
-use Nelmio\Alice\LoaderInterface;
-use Nelmio\Alice\Fixtures\Builder;
-use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\Fixtures\Parser;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Populator;
@@ -93,26 +89,26 @@ class Loader
         $this->processor = new Processor\Processor(
             $this->objects,
             $this->getBuiltInProcessors($allProviders, $locale)
-            );
+        );
 
         $this->parser = new Parser\Parser(
             $this->getBuiltInParsers()
-            );
+        );
 
         $this->builder = new Builder\Builder(
             $this->getBuiltInBuilders()
-            );
+        );
 
         $this->instantiator = new Instantiator\Instantiator(
             $this->getBuiltInInstantiators($this->processor, $this->typeHintChecker),
             $this->processor
-            );
+        );
 
         $this->populator = new Populator\Populator(
             $this->objects,
             $this->processor,
             $this->getBuiltInPopulators($this->typeHintChecker)
-            );
+        );
 
         if (is_numeric($seed)) {
             mt_srand($seed);
@@ -264,7 +260,7 @@ class Loader
             $this->objects->set(
                 $fixture->getName(),
                 $this->instantiator->instantiate($fixture)
-                );
+            );
         }
     }
 
@@ -353,8 +349,8 @@ class Loader
             new Processor\Methods\Conditional(),
             new Processor\Methods\UnescapeAt(),
             $this->fakerProcessorMethod,
-            new Processor\Methods\Reference()
-            );
+            new Processor\Methods\Reference(),
+        );
     }
 
     /**
@@ -366,8 +362,8 @@ class Loader
     {
         return array(
             new Parser\Methods\Php($this),
-            new Parser\Methods\Yaml($this)
-            );
+            new Parser\Methods\Yaml($this),
+        );
     }
 
     /**
@@ -380,8 +376,8 @@ class Loader
         return array(
             new Builder\Methods\RangeName(),
             new Builder\Methods\ListName(),
-            new Builder\Methods\SimpleName()
-            );
+            new Builder\Methods\SimpleName(),
+        );
     }
 
     /**
@@ -398,7 +394,7 @@ class Loader
             new Instantiator\Methods\ReflectionWithoutConstructor(),
             new Instantiator\Methods\ReflectionWithConstructor($processor, $typeHintChecker),
             new Instantiator\Methods\EmptyConstructor(),
-            );
+        );
     }
 
     /**
@@ -414,7 +410,7 @@ class Loader
             new Populator\Methods\Custom(),
             new Populator\Methods\ArrayDirect($typeHintChecker),
             new Populator\Methods\Direct($typeHintChecker),
-            new Populator\Methods\Property()
-            );
+            new Populator\Methods\Property(),
+        );
     }
 }

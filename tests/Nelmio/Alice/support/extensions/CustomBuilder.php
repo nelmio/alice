@@ -19,5 +19,4 @@ class CustomBuilder implements BuilderInterface
     {
         return array(new Fixture($class, $name, array(), null));
     }
-
 }

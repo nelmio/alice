@@ -61,5 +61,4 @@ class Direct implements MethodInterface
     {
         return "set{$property}";
     }
-
 }

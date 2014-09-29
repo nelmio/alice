@@ -31,5 +31,4 @@ class CustomProcessor implements ProcessorInterface
     {
         return strtoupper($processable->getMatch('uppercaseMe'));
     }
-
 }
