@@ -162,6 +162,10 @@ class Base implements LoaderInterface
                                 }
                             }
                         }
+                        if (isset($instanceFlags['template'])) {
+                            $this->templates[$curName] = $curSpec;
+                            continue;
+                        }
                         $this->currentValue = $i;
                         $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $i);
                         $this->currentValue = null;
@@ -181,6 +185,10 @@ class Base implements LoaderInterface
                                 }
                             }
                         }
+                        if (isset($instanceFlags['template'])) {
+                            $this->templates[$curName] = $curSpec;
+                            continue;
+                        }
                         $this->currentValue = $item;
                         $instances[$curName] = array($this->createInstance($class, $curName, $curSpec), $class, $curName, $curSpec, $classFlags, $instanceFlags, $item);
                         $this->currentValue = null;
@@ -190,7 +198,7 @@ class Base implements LoaderInterface
                     if (!empty($instanceFlags)) {
                         // Reverse flag order: check templates from last to first, so that last one wins
                         foreach (array_reverse(array_keys($instanceFlags)) as $flag) {
-                            if(preg_match('#^extends\s*(.+)$#', $flag, $match)) {
+                            if (preg_match('#^extends\s*(.+)$#', $flag, $match)) {
                                 $template = $this->getTemplate($match[1]);
                                 $spec = array_merge($template, $spec);
                             }
