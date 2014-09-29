@@ -1415,7 +1415,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::CONTACT, $res['contact']);
         $this->assertEquals('magicValue set by magic setter', $res['contact']->magicProp);
     }
-
 }
 
 class FakerProvider

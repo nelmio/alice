@@ -201,5 +201,4 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('setterFunc', $setFixture->getCustomSetter());
         $this->assertNull($noSetFixture->getCustomSetter());
     }
-
 }

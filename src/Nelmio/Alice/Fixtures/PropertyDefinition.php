@@ -86,5 +86,4 @@ class PropertyDefinition extends Processable
     {
         return $this->getValue();
     }
-
 }

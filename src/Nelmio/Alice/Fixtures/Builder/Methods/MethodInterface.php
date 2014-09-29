@@ -30,5 +30,4 @@ interface MethodInterface
      * @return array
      */
     public function build($class, $name, array $spec);
-
 }

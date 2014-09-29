@@ -38,5 +38,4 @@ class CustomParser extends Base
 
         return $result;
     }
-
 }

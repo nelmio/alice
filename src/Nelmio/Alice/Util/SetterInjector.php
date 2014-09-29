@@ -19,5 +19,4 @@ class SetterInjector
             $object->$setter($value);
         }
     }
-
 }

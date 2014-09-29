@@ -32,5 +32,4 @@ class ReflectionWithoutConstructor implements MethodInterface
 
         return $reflClass->newInstanceWithoutConstructor();
     }
-
 }

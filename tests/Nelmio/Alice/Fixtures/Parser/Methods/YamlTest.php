@@ -108,5 +108,4 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expectedData, $data);
     }
-
 }

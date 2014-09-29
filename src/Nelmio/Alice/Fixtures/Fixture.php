@@ -358,5 +358,4 @@ class Fixture
 
         return array('method' => '__construct', 'args' => $constructorValue);
     }
-
 }

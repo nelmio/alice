@@ -56,5 +56,4 @@ class PhpTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals("Included file \"{$file}\" must return an array of data", $e->getMessage());
         }
     }
-
 }

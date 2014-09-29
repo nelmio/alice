@@ -32,32 +32,31 @@ use UnexpectedValueException;
  */
 class Php extends Base
 {
-  /**
-   * @var string
-   **/
-  protected $extension = 'php';
+    /**
+     * @var string
+     **/
+    protected $extension = 'php';
 
-  /**
-   * {@inheritDoc}
-   */
-  public function parse($file)
-  {
-    $context = $this->context;
-    $includeWrapper = function () use ($file, $context) {
-      ob_start();
-      $res = include $file;
-      ob_end_clean();
+    /**
+     * {@inheritDoc}
+     */
+    public function parse($file)
+    {
+        $context = $this->context;
+        $includeWrapper = function () use ($file, $context) {
+            ob_start();
+            $res = include $file;
+            ob_end_clean();
 
-      return $res;
-    };
+            return $res;
+        };
 
-    $data = $includeWrapper();
+        $data = $includeWrapper();
 
-    if (!is_array($data)) {
-      throw new UnexpectedValueException("Included file \"{$file}\" must return an array of data");
+        if (!is_array($data)) {
+            throw new UnexpectedValueException("Included file \"{$file}\" must return an array of data");
+        }
+
+        return $data;
     }
-
-    return $data;
-  }
-
 }

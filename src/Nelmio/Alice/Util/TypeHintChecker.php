@@ -77,5 +77,4 @@ class TypeHintChecker
 
         return $value;
     }
-
 }

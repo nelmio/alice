@@ -32,5 +32,4 @@ class Property implements MethodInterface
         $refl->setAccessible(true);
         $refl->setValue($object, $value);
     }
-
 }

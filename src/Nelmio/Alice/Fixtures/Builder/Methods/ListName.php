@@ -41,5 +41,4 @@ class ListName implements MethodInterface
 
         return $fixtures;
     }
-
 }

@@ -71,5 +71,4 @@ class ReflectionWithConstructor implements MethodInterface
 
         return $instance;
     }
-
 }

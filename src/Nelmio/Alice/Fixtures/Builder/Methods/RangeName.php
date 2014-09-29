@@ -45,5 +45,4 @@ class RangeName implements MethodInterface
 
         return $fixtures;
     }
-
 }

@@ -30,5 +30,4 @@ class SimpleName implements MethodInterface
     {
         return array(new Fixture($class, $name, $spec, null));
     }
-
 }

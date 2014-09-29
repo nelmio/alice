@@ -70,5 +70,4 @@ class Conditional implements MethodInterface
 
         return $threshold > 0 && (mt_rand(0, 100) / 100) <= $threshold;
     }
-
 }

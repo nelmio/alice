@@ -23,5 +23,4 @@ class CustomInstantiator implements InstantiatorInterface
 
         return $newObj;
     }
-
 }

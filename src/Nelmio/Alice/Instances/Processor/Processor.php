@@ -85,5 +85,4 @@ class Processor
 
         return $value;
     }
-
 }

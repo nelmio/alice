@@ -44,5 +44,4 @@ class ArrayDirect implements MethodInterface
         }
         call_user_func_array(array($object, $property), $value);
     }
-
 }

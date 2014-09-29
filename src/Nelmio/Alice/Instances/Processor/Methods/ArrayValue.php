@@ -51,5 +51,4 @@ class ArrayValue implements MethodInterface
 
         return $values;
     }
-
 }

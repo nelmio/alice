@@ -22,72 +22,71 @@ use UnexpectedValueException;
  *
  * The general format of the file must follow this example:
  *
- *     Namespace\Class:
- *         name:
- *             property: value
- *             property2: value
- *         name2:
- *             [...]
+ *         Namespace\Class:
+ *                 name:
+ *                         property: value
+ *                         property2: value
+ *                 name2:
+ *                         [...]
  */
 class Yaml extends Base
 {
-  /**
-   * {@inheritDoc}
-   **/
-  protected $extension = 'ya?ml';
+    /**
+     * {@inheritDoc}
+     **/
+    protected $extension = 'ya?ml';
 
-  /**
-   * {@inheritDoc}
-   */
-  public function parse($file)
-  {
-    $yaml = $this->compilePhp($file);
-    $data = YamlParser::parse($yaml);
+    /**
+     * {@inheritDoc}
+     */
+    public function parse($file)
+    {
+        $yaml = $this->compilePhp($file);
+        $data = YamlParser::parse($yaml);
 
-    if (!is_array($data)) {
-      throw new UnexpectedValueException('Yaml files must parse to an array of data');
+        if (!is_array($data)) {
+            throw new UnexpectedValueException('Yaml files must parse to an array of data');
+        }
+
+        $data = $this->processIncludes($data, $file);
+
+        return $data;
     }
 
-    $data = $this->processIncludes($data, $file);
+    /**
+     * @param array $data
+     * @param string $filename
+     * @return mixed
+     */
+    private function processIncludes($data, $filename)
+    {
+        if (isset($data['include'])) {
+            foreach ($data['include'] as $include) {
+                $includeFile = dirname($filename) . DIRECTORY_SEPARATOR . $include;
+                $includeData = $this->parse($includeFile);
+                $data = $this->mergeIncludeData($data, $includeData);
+            }
+        }
 
-    return $data;
-  }
+        unset($data['include']);
 
-  /**
-   * @param array $data
-   * @param string $filename
-   * @return mixed
-   */
-  private function processIncludes($data, $filename)
-  {
-    if (isset($data['include'])) {
-      foreach ($data['include'] as $include) {
-        $includeFile = dirname($filename) . DIRECTORY_SEPARATOR . $include;
-        $includeData = $this->parse($includeFile);
-        $data = $this->mergeIncludeData($data, $includeData);
-      }
+        return $data;
     }
 
-    unset($data['include']);
+    /**
+     * @param array $data
+     * @param array $includeData
+     */
+    private function mergeIncludeData($data, $includeData)
+    {
+        foreach ($includeData as $class => $fixtures) {
+            if (isset($data[$class])) {
+                $data[$class] = array_merge($fixtures, $data[$class]);
+            } else {
+                $data[$class] = $fixtures;
+            }
+        }
 
-    return $data;
-  }
-
-  /**
-   * @param array $data
-   * @param array $includeData
-   */
-  private function mergeIncludeData($data, $includeData)
-  {
-    foreach ($includeData as $class => $fixtures) {
-      if (isset($data[$class])) {
-        $data[$class] = array_merge($fixtures, $data[$class]);
-      } else {
-        $data[$class] = $fixtures;
-      }
+        return $data;
     }
-
-    return $data;
-  }
-
 }

@@ -57,5 +57,4 @@ class Reference implements MethodInterface
 
         return $this->objects->find($processable->getMatch('reference'), $property);
     }
-
 }
