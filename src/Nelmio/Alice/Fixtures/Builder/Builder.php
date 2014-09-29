@@ -73,7 +73,7 @@ class Builder
                     }
                 }
 
-                foreach ($indexesToRemove as $index) {
+                foreach (array_reverse($indexesToRemove) as $index) {
                     array_splice($fixtures, $index, 1);
                 }
 
