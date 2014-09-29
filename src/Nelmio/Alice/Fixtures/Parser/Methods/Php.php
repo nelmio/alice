@@ -13,8 +13,6 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
 use UnexpectedValueException;
 
-use Nelmio\Alice\Fixtures\Parser\Methods\Base;
-
 /**
  * Each fixture has access to $context->fake() to generate data.
  *

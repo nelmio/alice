@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-use Nelmio\Alice\Fixtures\PropertyDefinition;
-
 class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
 {
 

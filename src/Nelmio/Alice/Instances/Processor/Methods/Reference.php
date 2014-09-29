@@ -49,13 +49,13 @@ class Reference implements MethodInterface
 
         if (strpos($processable->getMatch('reference'), '*')) {
             return $this->objects->random($processable->getMatch('reference'), $multi, $property);
-        } else {
-            if (null !== $multi) {
-                throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$processable->getMatch('multi').'x @user*", otherwise you would always get only one item.');
-            }
-
-            return $this->objects->find($processable->getMatch('reference'), $property);
         }
+
+        if (null !== $multi) {
+            throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$processable->getMatch('multi').'x @user*", otherwise you would always get only one item.');
+        }
+
+        return $this->objects->find($processable->getMatch('reference'), $property);
     }
 
 }

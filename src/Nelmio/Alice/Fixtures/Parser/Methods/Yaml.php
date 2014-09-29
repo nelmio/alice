@@ -14,8 +14,6 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 use Symfony\Component\Yaml\Yaml as YamlParser;
 use UnexpectedValueException;
 
-use Nelmio\Alice\Fixtures\Parser\Methods\Base;
-
 /**
  * Parses data from a yaml file
  *

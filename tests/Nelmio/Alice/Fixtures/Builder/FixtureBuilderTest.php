@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures\Builder;
 
-use Nelmio\Alice\Fixtures\Builder\Builder;
 use Nelmio\Alice\support\extensions\CustomBuilder;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase

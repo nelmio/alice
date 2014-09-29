@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures\Parser;
 
-use Nelmio\Alice\Fixtures\Parser\Parser;
 use Nelmio\Alice\support\extensions\CustomParser;
 
 class ParserTest extends \PHPUnit_Framework_TestCase

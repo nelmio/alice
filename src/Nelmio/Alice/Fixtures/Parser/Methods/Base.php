@@ -11,10 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
-use UnexpectedValueException;
-
-use Nelmio\Alice\Fixtures\Parser\Methods\MethodInterface;
-
 abstract class Base implements MethodInterface
 {
   /**

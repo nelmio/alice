@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-use Nelmio\Alice\Fixtures\Loader;
 use Nelmio\Alice\TestORM;
 use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\extensions;
