@@ -179,6 +179,13 @@ Nelmio\Entity\User:
 As you see in the last line, you can also pass arguments to those just as if
 you were calling a function.
 
+To pass Faker Data to another Faker provider, you can use the `$fake()` closure
+within faker calls. For example use `$fake('firstName', 'de_DE')` or
+`$fake('numberBetween', null, 1, 200)` to call Faker. Pass the provider to call
+followed by the locale (or null) and then the arguments to the provider.
+
+In plain PHP fixtures the `$fake` closure is also available.
+
 #### Localized Fake Data ####
 
 Faker can create localized data for adresses, phone numbers and so on. You can

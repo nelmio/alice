@@ -1415,6 +1415,20 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::CONTACT, $res['contact']);
         $this->assertEquals('magicValue set by magic setter', $res['contact']->magicProp);
     }
+
+    public function testCallFakerFromFakerCall()
+    {
+        $loader = new Loader('en_US', array(new FakerProvider));
+
+        $res = $loader->load(__DIR__.'/../support/fixtures/nested_faker.php');
+
+        foreach (array('user1', 'user2') as $userKey) {
+            $user = $res[$userKey];
+            $this->assertInstanceOf(self::USER, $user, $userKey.' should match');
+            $this->assertEquals('JOHN DOE', $user->username, $userKey.' should match');
+            $this->assertEquals('JOHN DOE', $user->fullname, $userKey.' should match');
+        }
+    }
 }
 
 class FakerProvider
@@ -1432,5 +1446,10 @@ class FakerProvider
     public function noop($str)
     {
         return $str;
+    }
+
+    public function upperCaseProvider($arg)
+    {
+        return strtoupper($arg);
     }
 }
