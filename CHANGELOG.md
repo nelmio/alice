@@ -1,3 +1,8 @@
+### 1.7.1 (2014-09-29)
+
+  * Fixed handling of non-existing files
+  * Fixed support for fixture inheritance combined with fixture ranges
+
 ### 1.7.0 (2014-04-24)
 
   * Added fixture inheritance with `(template)` and `(extends NAME)` flags
