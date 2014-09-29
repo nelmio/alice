@@ -36,6 +36,8 @@ To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://g
   - [Custom Setter](#custom-setter)
   - [Complete Sample](#complete-sample)
   - [Processors](#processors)
+  - [Parameters as array](#parameters-as-array)
+  - [Doctrine Class Table Inheritance Sample](#doctrine-class-table-inheritance-sample)
 
 ## Usage ##
 
@@ -741,6 +743,61 @@ $loader = new \Nelmio\Alice\Loader\Yaml();
 $loader->addProcessor($processor);
 $objects = $loader->load(__DIR__.'/fixtures.yml');
 ```
+
+## Parameters as array ##
+
+If you have any kind of relationship between tables (OneToMany, ManyToMany) and handle your data using `ArrayCollection` then you should set the related field as array in your fixtures:
+
+	UserBundle\Entity\User:
+	    User{1..10}:
+	        username (unique): <firstNameMale()>
+	        email (unique): <companyEmail()>
+	        enabled: <boolean(35)>
+	        plainPassword: <lexify>
+	        roles: <randomRoles()>
+	        groups: [@Group*] #notice here the inclusion of [] that will convert @Group* to an array
+
+## Doctrine Class Table Inheritance Sample ##
+
+If you have instead a `Doctrine Class Table Inheritance` behavior on your entities as for example:
+
+```php
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="person")
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({
+ *     "natural" = "NaturalPerson",
+ *     "legal" = "LegalPerson"
+ * })
+ */
+class Person {
+    ...
+}
+
+class NaturalPerson extends Person {
+    ...
+}
+
+class LegalPerson extends Person {
+    ...
+}
+```
+
+then your fixtures should be like this:
+
+	YourBundle\Entity\Person:
+	    person (template):
+	        ... #any Person field
+
+	YourBundle\Entity\NaturalPerson:
+	    Natural{1..25} (extends person):
+	        ... #any NaturalPerson field
+
+	YourBundle\Entity\LegalPerson:
+	    Legal{1..25} (extends person):
+	        ... #any LegalPerson field
 
 ## License ##
 
