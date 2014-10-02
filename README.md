@@ -733,6 +733,14 @@ You can add a list of processors in the load method, e.g.
 $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager, $options, $processors);
 ```
 
+Or, you can ad them to your loader using the `addProcessor()` method, e.g.
+
+```php
+$loader = new \Nelmio\Alice\Fixtures($objectManager, $options);
+$loader->addProcessor($processor);
+$objects = $loader->load(__DIR__.'/fixtures.yml');
+```
+
 ## License ##
 
 Released under the MIT License, see LICENSE.
