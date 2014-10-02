@@ -158,17 +158,27 @@ class Faker implements MethodInterface
         $locale = var_export($matches['locale'], true);
         $name = var_export($matches['name'], true);
 
+        // enable calls to $fake() to call faker from within faker calls
+        $that = $this;
+        $fake = function () use ($that) {
+            return call_user_func_array(array($that, 'fake'), func_get_args());
+        };
+
         return eval('return $this->fake(' . $name . ', ' . $locale . ', ' . $args . ');');
     }
 
     /**
-     * returns a fake value
+     * Returns a fake value
+     *
+     * This is made public so it is accessible by the $fake() callback in replacePlaceholder
+     * and the callback in Parser\Method\Base::createFakerClosure
      *
      * @param  string $formatter
      * @param  string $locale
+     * @private
      * @return mixed
      */
-    private function fake($formatter, $locale = null)
+    public function fake($formatter, $locale = null)
     {
         $args = array_slice(func_get_args(), 2);
 

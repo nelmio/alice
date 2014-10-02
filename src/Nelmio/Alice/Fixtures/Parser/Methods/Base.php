@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
+use Nelmio\Alice\Fixtures\Loader;
+
 abstract class Base implements MethodInterface
 {
     /**
@@ -56,11 +58,24 @@ abstract class Base implements MethodInterface
         $context = $this->context;
 
         ob_start();
-        $includeWrapper = function () use ($file, $context) {
+        $fake = $this->createFakerClosure();
+        $includeWrapper = function () use ($file, $context, $fake) {
             return include $file;
         };
         $data = $includeWrapper();
 
         return ob_get_clean();
+    }
+
+    protected function createFakerClosure()
+    {
+        if (!$this->context instanceof Loader) {
+            return;
+        }
+        $faker = $this->context->getFakerProcessorMethod();
+
+        return function () use ($faker) {
+            return call_user_func_array(array($faker, 'fake'), func_get_args());
+        };
     }
 }

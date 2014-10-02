@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 use UnexpectedValueException;
 
 /**
- * Each fixture has access to $context->fake() to generate data.
+ * Each fixture has access to $fake() to generate data.
  *
  * The array format must follow this example:
  *
@@ -43,7 +43,8 @@ class Php extends Base
     public function parse($file)
     {
         $context = $this->context;
-        $includeWrapper = function () use ($file, $context) {
+        $fake = $this->createFakerClosure();
+        $includeWrapper = function () use ($file, $context, $fake) {
             ob_start();
             $res = include $file;
             ob_end_clean();
