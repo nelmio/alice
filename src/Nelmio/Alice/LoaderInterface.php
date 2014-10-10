@@ -42,6 +42,11 @@ interface LoaderInterface
     public function setProviders(array $providers);
 
     /**
+     * @param object|array $provider Provider or array of providers
+     */
+    public function addProvider($provider);
+
+    /**
      * @param array $references
      */
     public function setReferences(array $references);

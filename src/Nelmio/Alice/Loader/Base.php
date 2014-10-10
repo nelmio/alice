@@ -299,6 +299,14 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
+    public function addProvider($provider)
+    {
+        $this->providers = array_merge($this->providers, is_array($provider) ? $provider : array($provider));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setReferences(array $references)
     {
         $this->references = $references;
