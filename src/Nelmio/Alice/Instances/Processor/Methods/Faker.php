@@ -83,6 +83,24 @@ class Faker implements MethodInterface
     }
 
     /**
+     * Adds one or more providers that can be used
+     *
+     * @param object|array $provider Provider or array of providers
+     */
+    public function addProvider($provider)
+    {
+        if (!is_array($provider)) {
+            $provider = array($provider);
+        }
+        foreach ($provider as $p) {
+            $this->providers[] = $p;
+            foreach ($this->generators as $generator) {
+                $generator->addProvider($p);
+            }
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function canProcess(ProcessableInterface $processable)

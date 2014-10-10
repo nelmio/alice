@@ -116,7 +116,9 @@ class Loader
     }
 
     /**
-     * {@inheritDoc}
+     * Loads a fixture file
+     *
+     * @param string|array $dataOrFilename data array or filename
      */
     public function load($dataOrFilename)
     {
@@ -134,7 +136,11 @@ class Loader
     }
 
     /**
-     * {@inheritDoc}
+     * Returns a reference to a fixture by name
+     *
+     * @param  string $name
+     * @param  string $property optionally return only a given property of the reference
+     * @return object
      */
     public function getReference($name, $property = null)
     {
@@ -142,7 +148,9 @@ class Loader
     }
 
     /**
-     * {@inheritDoc}
+     * Returns all references created by the loader
+     *
+     * @return array[object]
      */
     public function getReferences()
     {
@@ -150,7 +158,7 @@ class Loader
     }
 
     /**
-     * {@inheritDoc}
+     * @param array $providers
      */
     public function setProviders(array $providers)
     {
@@ -158,7 +166,15 @@ class Loader
     }
 
     /**
-     * {@inheritDoc}
+     * @param object|array $provider Provider or array of providers
+     */
+    public function addProvider($provider)
+    {
+        $this->fakerProcessorMethod->addProvider($provider);
+    }
+
+    /**
+     * @param array $references
      */
     public function setReferences(array $objects)
     {

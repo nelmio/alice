@@ -744,7 +744,7 @@ $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager,
 Or, you can ad them to your loader using the `addProcessor()` method, e.g.
 
 ```php
-$loader = new \Nelmio\Alice\Loader\Yaml();
+$loader = new \Nelmio\Alice\Fixtures($objectManager, $options);
 $loader->addProcessor($processor);
 $objects = $loader->load(__DIR__.'/fixtures.yml');
 ```

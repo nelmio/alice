@@ -1,3 +1,7 @@
+### 1.7.2 (2014-10-10)
+
+  * Fixed support for custom providers, using addProvider instead of setProviders lets you add single providers
+
 ### 1.7.1 (2014-09-29)
 
   * Fixed handling of non-existing files
