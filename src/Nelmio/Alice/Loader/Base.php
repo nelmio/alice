@@ -215,7 +215,7 @@ class Base implements LoaderInterface
         $match_key = $level - 1;
         $enumItems = array_map('trim', explode(',', $match[1][$match_key]));
 
-        $instances = [];
+        $instances = array();
         foreach ($enumItems as $item) {
             $curSpec = $spec;
             $curName = str_replace($match[0][$match_key], $item, $name);
