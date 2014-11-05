@@ -512,6 +512,8 @@ class Base implements LoaderInterface
                 $refl->setValue($instance, $generatedVal);
 
                 $variables[$key] = $generatedVal;
+            } elseif (method_exists($instance, '__call')) {
+                $instance->{'set'.$key}($generatedVal);
             } else {
                 throw new \UnexpectedValueException('Could not determine how to assign '.$key.' to a '.$class.' object');
             }
