@@ -435,6 +435,7 @@ class Loader
             new Populator\Methods\ArrayDirect($typeHintChecker),
             new Populator\Methods\Direct($typeHintChecker),
             new Populator\Methods\Property(),
+            new Populator\Methods\MagicCall(),
         );
     }
 }

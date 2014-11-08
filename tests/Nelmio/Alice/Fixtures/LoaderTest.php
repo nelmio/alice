@@ -18,6 +18,7 @@ use Nelmio\Alice\support\extensions;
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\support\models\User';
+    const MAGIC_USER = 'Nelmio\Alice\support\models\MagicUser';
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
@@ -174,6 +175,20 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $group = $res['a'];
 
         $this->assertEquals('group', $group->getSortName());
+    }
+
+    public function testLoadAssignsDataToMagicCall()
+    {
+        $res = $this->loadData(array(
+            self::MAGIC_USER => array(
+                'a' => array(
+                    'username' => 'bob'
+                ),
+            ),
+        ));
+        $user = $res['a'];
+
+        $this->assertEquals('bob set by __call', $user->getUsername());
     }
 
     public function testLoadAddsReferencesToAdders()
