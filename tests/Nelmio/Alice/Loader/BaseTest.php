@@ -17,9 +17,10 @@ use Nelmio\Alice\fixtures\User;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
-    const USER = 'Nelmio\Alice\fixtures\User';
-    const GROUP = 'Nelmio\Alice\fixtures\Group';
-    const CONTACT = 'Nelmio\Alice\fixtures\Contact';
+    const USER       = 'Nelmio\Alice\fixtures\User';
+    const MAGIC_USER = 'Nelmio\Alice\fixtures\MagicUser';
+    const GROUP      = 'Nelmio\Alice\fixtures\Group';
+    const CONTACT    = 'Nelmio\Alice\fixtures\Contact';
 
     protected $orm;
 
@@ -134,6 +135,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $group = $res['a'];
 
         $this->assertEquals('group', $group->getName());
+    }
+
+    public function testLoadAssignsDataToMagicCall()
+    {
+        $res = $this->loadData(array(
+            self::MAGIC_USER => array(
+                'a' => array(
+                    'username' => 'bob'
+                ),
+            ),
+        ));
+        $user = $res['a'];
+
+        $this->assertEquals('bob set by __call', $user->getUsername());
     }
 
     public function testLoadAssignsDataToNonPublicSetters()
