@@ -81,7 +81,7 @@ and make it work just as easily:
 
 ```php
 // load objects from a yaml file
-$loader = new \Nelmio\Alice\Loader\Yaml();
+$loader = new \Nelmio\Alice\Fixtures\Loader();
 $objects = $loader->load(__DIR__.'/fixtures.yml');
 
 // optionally persist them into the doctrine object manager
@@ -91,9 +91,9 @@ $persister = new \Nelmio\Alice\ORM\Doctrine($objectManager);
 $persister->persist($objects);
 ```
 
-> **Note**: To load plain PHP files, you can use the `\Nelmio\Alice\Loader\Base`
-> class instead. These PHP files must return an array containing the same
-> structure as the yaml files have.
+This loader maintains its list of built objects, so `load` can be called multiple times with different files if your fixture file starts growing unmanageably large.
+
+> **Note**: To load plain PHP files, the files must return an array containing the same structure as the yaml files have.
 
 ## Reference ##
 
