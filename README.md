@@ -748,7 +748,7 @@ Or, you can ad them to your loader using the `addProcessor()` method, e.g.
 ```php
 $loader = new \Nelmio\Alice\Fixtures($objectManager, $options);
 $loader->addProcessor($processor);
-$objects = $loader->load(__DIR__.'/fixtures.yml');
+$objects = $loader->loadFiles(__DIR__.'/fixtures.yml');
 ```
 
 ## License ##
