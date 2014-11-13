@@ -30,37 +30,24 @@ use Symfony\Component\Yaml\Yaml as YamlParser;
  */
 class Yaml extends Base
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function load($file)
-    {
-        $data = $this->parse($file);
-        return parent::load($data);
-    }
 
-    /**
-     * @param string $file
-     * @return array
-     * @throws \UnexpectedValueException
-     */
-    private function parse($file)
-    {
-        ob_start();
-        $loader = $this;
+    protected function includeFile($filename) {
+      if (!file_exists($filename)) {
+          throw new \InvalidArgumentException('The file could not be found: '.$filename);
+      }
 
-        if (!file_exists($file)) {
-            throw new \InvalidArgumentException('The file could not be found: '.$file);
-        }
+      // isolates the file from current context variables and gives
+      // it access to the $loader object to inline php blocks if needed
+      $loader = $this;
+      ob_start();
+      $includeWrapper = function () use ($filename, $loader) {
+        $res = require $filename;
+        return $res;
+      };
 
-        // isolates the file from current context variables and gives
-        // it access to the $loader object to inline php blocks if needed
-        $includeWrapper = function () use ($file, $loader) {
-            return require $file;
-        };
-        $data = $includeWrapper();
+      $data = $includeWrapper();
 
-        if (1 === $data) {
+      if (1 === $data) {
             // include didn't return data but included correctly, parse it as yaml
             $yaml = ob_get_clean();
             $data = YamlParser::parse($yaml);
@@ -69,49 +56,9 @@ class Yaml extends Base
             ob_end_clean();
         }
 
-        if (!is_array($data)) {
-            throw new \UnexpectedValueException('Yaml files must parse to an array of data');
-        }
-
-        $data = $this->processIncludes($data, $file);
-
-        return $data;
-    }
-
-    /**
-     * @param array $data
-     * @param string $file
-     * @return mixed
-     */
-    private function processIncludes($data, $file)
-    {
-        if (isset($data['include'])) {
-            foreach ($data['include'] as $include) {
-                $includeFile = dirname($file) . DIRECTORY_SEPARATOR . $include;
-                $includeData = $this->parse($includeFile);
-                $data = $this->mergeIncludeData($data, $includeData);
-            }
-        }
-
-        unset($data['include']);
-
-        return $data;
-    }
-
-    /**
-     * @param array $data
-     * @param array $includeData
-     */
-    private function mergeIncludeData($data, $includeData)
-    {
-        foreach ($includeData as $class => $fixtures) {
-            if (isset($data[$class])) {
-                $data[$class] = array_merge($fixtures, $data[$class]);
-            } else {
-                $data[$class] = $fixtures;
-            }
-        }
-
-        return $data;
+      if (!is_array($data)) {
+        throw new \UnexpectedValueException('Yaml files must parse to an array of data');
+      }
+      return $data;
     }
 }
