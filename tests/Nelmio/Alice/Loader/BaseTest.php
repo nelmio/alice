@@ -1320,6 +1320,28 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $res['user']);
         $this->assertSame('@foo \\@foo \\@foo \\foo', $res['user']->username);
     }
+
+    public function testIncludeFiles()
+    {
+
+        $file = __DIR__ . '/../fixtures/include.php';
+        $loader = new \Nelmio\Alice\Loader\Base();
+        $data = $loader->load($file);
+
+        $this->assertCount(6, $data);
+        $this->assertInstanceOf('Nelmio\Alice\fixtures\Product', $data['product0']);
+        $this->assertInstanceOf('Nelmio\Alice\fixtures\User', $data['product0']->user);
+
+        $this->assertInstanceOf('Nelmio\Alice\fixtures\Product', $data['product1']);
+        $this->assertInstanceOf('Nelmio\Alice\fixtures\Shop', $data['shop1']);
+        $this->assertInstanceOf('Nelmio\Alice\fixtures\Shop', $data['shop2']);
+
+        $this->assertInstanceOf('Nelmio\Alice\fixtures\User', $data['user0']);
+        $this->assertInstanceOf('Nelmio\Alice\fixtures\User', $data['user1']);
+
+        $this->assertSame($data['user1'], $data['product0']->user);
+        $this->assertSame($data['user0'], $data['product1']->user);
+    }
 }
 
 class FakerProvider
