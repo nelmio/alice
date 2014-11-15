@@ -118,10 +118,8 @@ class Faker implements MethodInterface
             return $this->replacePlaceholder($processable->matches, $variables);
         } else {
             // format placeholders inline
-            $that = $this;
-
-            return preg_replace_callback('#'.$fakerRegex.'#i', function ($matches) use ($that, $variables) {
-                return $that->replacePlaceholder($matches, $variables);
+            return preg_replace_callback('#'.$fakerRegex.'#i', function ($matches) use ($variables) {
+                return $this->replacePlaceholder($matches, $variables);
             }, $processable->getValue());
         }
     }
