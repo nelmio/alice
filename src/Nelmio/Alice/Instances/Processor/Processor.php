@@ -71,17 +71,23 @@ class Processor
     {
         $value = $valueOrProcessable instanceof ProcessableInterface ? $valueOrProcessable->getValue() : $valueOrProcessable;
 
-        if (!is_null($valueForCurrent)) { $this->valueForCurrent = $valueForCurrent; }
+        if (!is_null($valueForCurrent)) {
+            $this->valueForCurrent = $valueForCurrent;
+        }
 
         foreach ($this->methods as $method) {
             $processable = new Processable($value);
             if ($method->canProcess($processable)) {
-                if (method_exists($method, 'setValueForCurrent')) { $method->setValueForCurrent($this->valueForCurrent); }
+                if (method_exists($method, 'setValueForCurrent')) {
+                    $method->setValueForCurrent($this->valueForCurrent);
+                }
                 $value = $method->process($processable, $variables);
             }
         }
 
-        if (!is_null($valueForCurrent)) { $this->valueForCurrent = null; }
+        if (!is_null($valueForCurrent)) {
+            $this->valueForCurrent = null;
+        }
 
         return $value;
     }

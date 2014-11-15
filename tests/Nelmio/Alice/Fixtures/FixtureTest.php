@@ -66,7 +66,7 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($fixture->isTemplate());
     }
 
-    public function testIsNotTemplateWithExtendsNameFlag($value='')
+    public function testIsNotTemplateWithExtendsNameFlag($value = '')
     {
         $fixture = new Fixture(self::USER, 'user (extends user_template)', array(), null);
 

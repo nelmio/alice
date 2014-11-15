@@ -47,7 +47,7 @@ class Parser
     /**
      * parses the given file and returns an array of data
      *
-     * @param    string $file
+     * @param  string     $file
      * @return array|null
      */
     public function parse($file)

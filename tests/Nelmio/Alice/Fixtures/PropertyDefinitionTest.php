@@ -13,7 +13,6 @@ namespace Nelmio\Alice\Fixtures;
 
 class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testWillParseFlagsOutOfName()
     {
         $definition = new PropertyDefinition('username (unique)', '<username()>');

@@ -13,7 +13,6 @@ namespace Nelmio\Alice;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Psr\Log\LoggerInterface;
-
 use Nelmio\Alice\Fixtures\Loader;
 
 class Fixtures

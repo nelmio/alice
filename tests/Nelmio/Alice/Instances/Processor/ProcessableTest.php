@@ -13,7 +13,6 @@ namespace Nelmio\Alice\Instances\Processor;
 
 class ProcessableTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testValueMatchesWillReturnIfTheProcessablesValueMatchesAGivenRegex()
     {
         $processable = new Processable('<username()>');

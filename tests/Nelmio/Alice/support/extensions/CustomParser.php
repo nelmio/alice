@@ -24,15 +24,12 @@ class CustomParser extends Base
         $result[$class = array_shift($rows)] = array();
 
         foreach ($rows as $row) {
-
             $properties = explode(',', $row);
             $result[$class][$name = array_shift($properties)] = array();
 
             foreach ($properties as $property) {
-
                 $propertyPieces = explode(':', $property);
                 $result[$class][$name][$propertyPieces[0]] = $propertyPieces[1];
-
             }
         }
 

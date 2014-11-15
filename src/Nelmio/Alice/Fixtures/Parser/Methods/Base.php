@@ -50,7 +50,7 @@ abstract class Base implements MethodInterface
     /**
      * Returns a string of text after compiling all the PHP code in the fixture
      *
-     * @param string $file
+     * @param  string $file
      * @return string
      */
     protected function compilePhp($file)

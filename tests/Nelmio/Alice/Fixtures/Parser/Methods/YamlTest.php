@@ -13,7 +13,6 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
 class YamlTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var Yaml
      **/

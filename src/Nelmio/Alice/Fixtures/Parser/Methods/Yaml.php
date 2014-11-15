@@ -54,8 +54,8 @@ class Yaml extends Base
     }
 
     /**
-     * @param array $data
-     * @param string $filename
+     * @param  array  $data
+     * @param  string $filename
      * @return mixed
      */
     private function processIncludes($data, $filename)

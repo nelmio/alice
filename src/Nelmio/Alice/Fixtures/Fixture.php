@@ -104,7 +104,9 @@ class Fixture
      */
     public function extendTemplate(Fixture $template)
     {
-        if (!$template->isTemplate()) { throw new \InvalidArgumentException('Argument must be a template, not just a fixture.'); }
+        if (!$template->isTemplate()) {
+            throw new \InvalidArgumentException('Argument must be a template, not just a fixture.');
+        }
 
         foreach ($template->properties as $property) {
             if (!isset($this->spec[$property->getName()])) {

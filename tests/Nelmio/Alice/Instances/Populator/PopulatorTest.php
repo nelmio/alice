@@ -61,6 +61,6 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateThePopulator()
     {
-        $populator = $this->createPopulator(array('methods'=>array('CustomPopulator')));
+        $populator = $this->createPopulator(array('methods' => array('CustomPopulator')));
     }
 }
