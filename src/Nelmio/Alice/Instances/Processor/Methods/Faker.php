@@ -79,7 +79,7 @@ class Faker implements MethodInterface
     public function setProviders(array $providers)
     {
         $this->providers = $providers;
-        $this->generators = array();
+        $this->generators = [];
     }
 
     /**
@@ -90,7 +90,7 @@ class Faker implements MethodInterface
     public function addProvider($provider)
     {
         if (!is_array($provider)) {
-            $provider = array($provider);
+            $provider = [$provider];
         }
         foreach ($provider as $p) {
             $this->providers[] = $p;
@@ -179,7 +179,7 @@ class Faker implements MethodInterface
         // enable calls to $fake() to call faker from within faker calls
         $that = $this;
         $fake = function () use ($that) {
-            return call_user_func_array(array($that, 'fake'), func_get_args());
+            return call_user_func_array([$that, 'fake'], func_get_args());
         };
 
         return eval('return $this->fake(' . $name . ', ' . $locale . ', ' . $args . ');');

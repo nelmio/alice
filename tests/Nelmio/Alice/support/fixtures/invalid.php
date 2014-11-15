@@ -1,15 +1,15 @@
 <?php
 
-array(
-    'Nelmio\Alice\support\models\User' => array(
-        'user1' => array(
+[
+    'Nelmio\Alice\support\models\User' => [
+        'user1' => [
             'username' => 'johnny',
             'favoriteNumber' => 42,
-        ),
-    ),
-    'Nelmio\Alice\support\models\Group' => array(
-        'group1' => array(
+        ],
+    ],
+    'Nelmio\Alice\support\models\Group' => [
+        'group1' => [
             'owner' => 1
-        ),
-    ),
-);
+        ],
+    ],
+];

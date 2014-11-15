@@ -6,7 +6,7 @@ class Contact
 {
     private $user;
 
-    protected $magicProperties = array();
+    protected $magicProperties = [];
 
     public function __construct(User $user)
     {

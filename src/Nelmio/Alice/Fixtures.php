@@ -17,22 +17,22 @@ use Nelmio\Alice\Fixtures\Loader;
 
 class Fixtures
 {
-    private static $loaders = array();
+    private static $loaders = [];
 
     protected $container;
     protected $defaultOptions;
     protected $processors;
 
-    public function __construct($container, array $defaultOptions = array(), array $processors = array())
+    public function __construct($container, array $defaultOptions = [], array $processors = [])
     {
         $this->container = $container;
-        $defaults = array(
+        $defaults = [
             'locale' => 'en_US',
-            'providers' => array(),
+            'providers' => [],
             'seed' => 1,
             'logger' => null,
             'persist_once' => false,
-        );
+        ];
         $this->defaultOptions = array_merge($defaults, $defaultOptions);
         $this->processors = $processors;
     }
@@ -51,14 +51,14 @@ class Fixtures
      *                                 - persist_once: only persist objects once if multiple files are passsed
      * @param array        $processors optional array of ProcessorInterface instances
      */
-    public static function load($files, $container, array $options = array(), array $processors = array())
+    public static function load($files, $container, array $options = [], array $processors = [])
     {
         $fixtures = new static($container, $options, $processors);
 
         return $fixtures->loadFiles($files);
     }
 
-    public function loadFiles($files, array $options = array())
+    public function loadFiles($files, array $options = [])
     {
         $options = array_merge($this->defaultOptions, $options);
 
@@ -79,10 +79,10 @@ class Fixtures
 
         // wrap the data array in an array of one data array
         if (!is_string(current($files))) {
-            $files = array($files);
+            $files = [$files];
         }
 
-        $objects = array();
+        $objects = [];
         foreach ($files as $file) {
             $loader = self::getLoader($options);
 

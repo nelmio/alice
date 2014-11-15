@@ -53,7 +53,7 @@ class Fixture
     /**
      * @var array
      */
-    protected $setProperties = array();
+    protected $setProperties = [];
 
     /**
      * built a class representation of a fixture
@@ -73,7 +73,7 @@ class Fixture
         $this->spec            = $spec;
         $this->valueForCurrent = $valueForCurrent;
 
-        $this->properties = array();
+        $this->properties = [];
         foreach ($spec as $propertyName => $propertyValue) {
             $this->addProperty($propertyName, $propertyValue);
         }
@@ -338,7 +338,7 @@ class Fixture
     protected function getConstructorComponents()
     {
         if (is_null($this->getConstructor())) {
-            return array('method' => '__construct', 'args' => array());
+            return ['method' => '__construct', 'args' => []];
         }
 
         $constructorValue = $this->getConstructor()->getValue();
@@ -348,16 +348,16 @@ class Fixture
 
         list($method, $args) = each($constructorValue);
         if ($method !== 0) {
-            if (!is_callable(array($this->class, $method))) {
+            if (!is_callable([$this->class, $method])) {
                 throw new \UnexpectedValueException("Cannot call static method '{$method}' on class '{$this->class}' as a constructor for object '{$this}'");
             }
             if (!is_array($args)) {
                 throw new \UnexpectedValueException("The static '{$method}' call in object '{$this}' must be given an array");
             }
 
-            return array('method' => $method, 'args' => $args);
+            return ['method' => $method, 'args' => $args];
         }
 
-        return array('method' => '__construct', 'args' => $constructorValue);
+        return ['method' => '__construct', 'args' => $constructorValue];
     }
 }

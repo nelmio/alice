@@ -22,7 +22,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->parser = new Php(array('value' => 'test'));
+        $this->parser = new Php(['value' => 'test']);
     }
 
     public function testCanParseWillReturnTrueForPhpExtensions()
@@ -44,7 +44,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     public function testParseWillReturnAProperDataArray()
     {
         $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/parsers/phptest.php');
-        $this->assertEquals(array('contextual' => 'test', 'username' => '<username()>'), $data);
+        $this->assertEquals(['contextual' => 'test', 'username' => '<username()>'], $data);
     }
 
     public function testParseWillThrowIfTheFixtureDoesntReturnAnArray()

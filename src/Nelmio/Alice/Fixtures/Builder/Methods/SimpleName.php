@@ -28,6 +28,6 @@ class SimpleName implements MethodInterface
      */
     public function build($class, $name, array $spec)
     {
-        return array(new Fixture($class, $name, $spec, null));
+        return [new Fixture($class, $name, $spec, null)];
     }
 }

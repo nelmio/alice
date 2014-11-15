@@ -30,14 +30,14 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $populator;
 
-    protected function createPopulator(array $options = array())
+    protected function createPopulator(array $options = [])
     {
         $objects = isset($options['objects']) ? $options['objects'] : new Collection;
-        $defaults = array(
+        $defaults = [
             'objects' => $objects,
-            'processor' => new Processor($objects, array()),
-            'methods' => array()
-        );
+            'processor' => new Processor($objects, []),
+            'methods' => []
+        ];
         $options = array_merge($defaults, $options);
 
         return $this->populator = new Populator($options['objects'], $options['processor'], $options['methods']);
@@ -46,10 +46,10 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
     public function testAddPopulator()
     {
         $class = self::CONTACT;
-        $fixture = new Fixture($class, 'test', array( 'magicProp' => 'magicValue' ), null);
+        $fixture = new Fixture($class, 'test', [ 'magicProp' => 'magicValue' ], null);
         $object = new $class(new \Nelmio\Alice\support\models\User);
 
-        $this->createPopulator(array( 'objects' => new Collection(array( 'test' => $object )) ));
+        $this->createPopulator([ 'objects' => new Collection([ 'test' => $object ]) ]);
         $this->populator->addPopulator(new CustomPopulator);
         $this->populator->populate($fixture);
         $this->assertEquals('magicValue set by magic setter', $object->magicProp);
@@ -61,6 +61,6 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateThePopulator()
     {
-        $populator = $this->createPopulator(array('methods' => array('CustomPopulator')));
+        $populator = $this->createPopulator(['methods' => ['CustomPopulator']]);
     }
 }

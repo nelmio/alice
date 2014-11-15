@@ -21,7 +21,7 @@ class FlagParser
      */
     public static function parse($key)
     {
-        $flags = array();
+        $flags = [];
         if (preg_match('{^(.+?)\s*\((.+)\)$}', $key, $matches)) {
             foreach (preg_split('{\s*,\s*}', $matches[2]) as $flag) {
                 $flags[$flag] = true;
@@ -29,6 +29,6 @@ class FlagParser
             $key = $matches[1];
         }
 
-        return array($key, $flags);
+        return [$key, $flags];
     }
 }

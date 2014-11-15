@@ -17,6 +17,6 @@ class CustomBuilder implements BuilderInterface
      */
     public function build($class, $name, array $spec)
     {
-        return array(new Fixture($class, $name, array(), null));
+        return [new Fixture($class, $name, [], null)];
     }
 }

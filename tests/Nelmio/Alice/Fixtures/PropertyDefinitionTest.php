@@ -24,7 +24,7 @@ class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $definition = new PropertyDefinition('username (unique)', '<username()>');
 
-        $this->assertEquals(array('unique' => true), $definition->getNameFlags());
+        $this->assertEquals(['unique' => true], $definition->getNameFlags());
     }
 
     public function testRequiresUniqueWillReturnIfThePropertyIsFlaggedAsUnique()
@@ -38,7 +38,7 @@ class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function testIsBasicWillReturnFalseIfThePropertyIsAConstructor()
     {
-        $definition = new PropertyDefinition('__construct', array('1', '2'));
+        $definition = new PropertyDefinition('__construct', ['1', '2']);
 
         $this->assertFalse($definition->isBasic());
     }
@@ -59,7 +59,7 @@ class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function testIsConstructorWillReturnIfTheDefinitionIsTheConstructor()
     {
-        $constructorDef = new PropertyDefinition('__construct', array('1', '2'));
+        $constructorDef = new PropertyDefinition('__construct', ['1', '2']);
         $normalDef = new PropertyDefinition('username', '<username()>');
 
         $this->assertTrue($constructorDef->isConstructor());

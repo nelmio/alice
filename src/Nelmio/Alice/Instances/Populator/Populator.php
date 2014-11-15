@@ -33,7 +33,7 @@ class Populator
     /**
      * @var array
      */
-    private $uniqueValues = array();
+    private $uniqueValues = [];
 
     public function __construct(Collection $objects, Processor $processor, array $setters)
     {

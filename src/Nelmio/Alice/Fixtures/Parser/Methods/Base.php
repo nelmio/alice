@@ -75,7 +75,7 @@ abstract class Base implements MethodInterface
         $faker = $this->context->getFakerProcessorMethod();
 
         return function () use ($faker) {
-            return call_user_func_array(array($faker, 'fake'), func_get_args());
+            return call_user_func_array([$faker, 'fake'], func_get_args());
         };
     }
 }

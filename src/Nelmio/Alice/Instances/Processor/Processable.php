@@ -21,7 +21,7 @@ class Processable implements ProcessableInterface
     /**
      * @var array
      */
-    public $matches = array();
+    public $matches = [];
 
     public function __construct($value)
     {

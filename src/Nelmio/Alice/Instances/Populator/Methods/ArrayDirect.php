@@ -42,6 +42,6 @@ class ArrayDirect implements MethodInterface
         foreach ($value as $index => $param) {
             $value[$index] = $this->typeHintChecker->check($object, $property, $param, $index);
         }
-        call_user_func_array(array($object, $property), $value);
+        call_user_func_array([$object, $property], $value);
     }
 }

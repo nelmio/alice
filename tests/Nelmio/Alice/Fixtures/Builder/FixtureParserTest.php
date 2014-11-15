@@ -20,11 +20,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     protected $parser;
 
-    protected function createParser(array $options = array())
+    protected function createParser(array $options = [])
     {
-        $defaults = array(
-            'methods' => array()
-        );
+        $defaults = [
+            'methods' => []
+        ];
         $options = array_merge($defaults, $options);
 
         return $this->parser = new Parser($options['methods']);
@@ -36,12 +36,12 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->parser->addParser(new CustomParser);
         $data = $this->parser->parse(__DIR__.'/../../support/fixtures/parsers/csvtest.csv');
 
-        $expectedData = array(
-            'Nelmio\Alice\support\models\User' => array(
-                    'user{1..10}' => array('username' => '<username()>', 'email' => '<current>@test.org'),
-                    'user11' => array('username' => 'user11', 'email' => 'user11@test.org')
-                )
-            );
+        $expectedData = [
+            'Nelmio\Alice\support\models\User' => [
+                    'user{1..10}' => ['username' => '<username()>', 'email' => '<current>@test.org'],
+                    'user11' => ['username' => 'user11', 'email' => 'user11@test.org']
+                ]
+            ];
 
         $this->assertEquals($expectedData, $data);
     }
@@ -52,6 +52,6 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheParser()
     {
-        $parser = new Parser(array('CustomParser'));
+        $parser = new Parser(['CustomParser']);
     }
 }

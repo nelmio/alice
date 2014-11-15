@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3",
+        "php": ">=5.4",
         "fzaninotto/faker": "~1.0",
         "symfony/yaml": "~2.0"
     },

@@ -22,11 +22,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected $builder;
 
-    protected function createBuilder(array $options = array())
+    protected function createBuilder(array $options = [])
     {
-        $defaults = array(
-            'methods' => array()
-        );
+        $defaults = [
+            'methods' => []
+        ];
         $options = array_merge($defaults, $options);
 
         return $this->builder = new Builder($options['methods']);
@@ -36,7 +36,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->createBuilder();
         $this->builder->addBuilder(new CustomBuilder);
-        $fixtures = $this->builder->build(self::USER, 'spec dumped', array( 'thisShould' => 'be gone' ));
+        $fixtures = $this->builder->build(self::USER, 'spec dumped', [ 'thisShould' => 'be gone' ]);
         $this->assertEmpty($fixtures[0]->getProperties());
     }
 
@@ -46,6 +46,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheBuilder()
     {
-        $builder = new Builder(array('CustomBuilder'));
+        $builder = new Builder(['CustomBuilder']);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-return array(
+return [
 
     'contextual' => $context['value'],
 
     'username' => '<username()>'
 
-    );
+    ];

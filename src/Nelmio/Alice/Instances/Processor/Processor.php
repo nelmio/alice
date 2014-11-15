@@ -26,7 +26,7 @@ class Processor
     /**
      * @var MethodInterface[]
      */
-    private $methods = array();
+    private $methods = [];
 
     /**
      * @var string

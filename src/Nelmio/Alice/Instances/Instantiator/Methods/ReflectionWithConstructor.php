@@ -54,7 +54,7 @@ class ReflectionWithConstructor implements MethodInterface
 
         $reflClass = new \ReflectionClass($class);
 
-        $constructorArgs = $this->processor->process($constructorArgs, array(), $fixture->getValueForCurrent());
+        $constructorArgs = $this->processor->process($constructorArgs, [], $fixture->getValueForCurrent());
 
         foreach ($constructorArgs as $index => $value) {
             $constructorArgs[$index] = $this->typeHintChecker->check($class, $constructorMethod, $value, $index);
@@ -63,7 +63,7 @@ class ReflectionWithConstructor implements MethodInterface
         if ($constructorMethod === '__construct') {
             $instance = $reflClass->newInstanceArgs($constructorArgs);
         } else {
-            $instance = forward_static_call_array(array($class, $constructorMethod), $constructorArgs);
+            $instance = forward_static_call_array([$class, $constructorMethod], $constructorArgs);
             if (!($instance instanceof $class)) {
                 throw new \UnexpectedValueException("The static constructor '{$constructorMethod}' for object '{$fixture}' returned an object that is not an instance of '{$class}'");
             }

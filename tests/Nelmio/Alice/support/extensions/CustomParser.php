@@ -16,16 +16,16 @@ class CustomParser extends Base
      */
     public function parse($file)
     {
-        $result = array();
+        $result = [];
 
         $csv = $this->compilePhp($file);
 
         $rows = explode("\n", $csv);
-        $result[$class = array_shift($rows)] = array();
+        $result[$class = array_shift($rows)] = [];
 
         foreach ($rows as $row) {
             $properties = explode(',', $row);
-            $result[$class][$name = array_shift($properties)] = array();
+            $result[$class][$name = array_shift($properties)] = [];
 
             foreach ($properties as $property) {
                 $propertyPieces = explode(':', $property);

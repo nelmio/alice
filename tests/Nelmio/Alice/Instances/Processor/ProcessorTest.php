@@ -26,12 +26,12 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $processor;
 
-    protected function createProcessor(array $options = array())
+    protected function createProcessor(array $options = [])
     {
-        $defaults = array(
+        $defaults = [
             'objects' => new Collection,
-            'methods' => array()
-        );
+            'methods' => []
+        ];
         $options = array_merge($defaults, $options);
 
         return $this->processor = new Processor($this->objects = $options['objects'], $options['methods']);
@@ -43,7 +43,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheProcessor()
     {
-        $builder = new Processor(new Collection, array('CustomProcessor'));
+        $builder = new Processor(new Collection, ['CustomProcessor']);
     }
 
     public function testAddProcessor()
@@ -52,7 +52,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->createProcessor();
         $this->processor->addProcessor(new CustomProcessor);
-        $result = $this->processor->process($processable, array());
+        $result = $this->processor->process($processable, []);
         $this->assertEquals('TEST MY CUSTOM PROCESSOR', $result);
     }
 

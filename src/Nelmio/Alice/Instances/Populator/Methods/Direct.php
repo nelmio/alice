@@ -42,7 +42,7 @@ class Direct implements MethodInterface
         $setter = $this->setterFor($property);
         $value = $this->typeHintChecker->check($object, $setter, $value);
 
-        if (!is_callable(array($object, $setter))) {
+        if (!is_callable([$object, $setter])) {
             $refl = new \ReflectionMethod($object, $setter);
             $refl->setAccessible(true);
             $refl->invoke($object, $value);

@@ -23,11 +23,11 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $instantiator;
 
-    protected function createInstantiator(array $options = array())
+    protected function createInstantiator(array $options = [])
     {
-        $defaults = array(
-            'methods' => array()
-        );
+        $defaults = [
+            'methods' => []
+        ];
         $options = array_merge($defaults, $options);
 
         return $this->instantiator = new Instantiator($options['methods']);
@@ -36,7 +36,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testAddInstantiator()
     {
         $class = self::USER;
-        $fixture = new Fixture($class, 'referenced', array(), null);
+        $fixture = new Fixture($class, 'referenced', [], null);
 
         $this->createInstantiator();
         $this->instantiator->addInstantiator(new CustomInstantiator);
@@ -51,6 +51,6 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheInstantiator()
     {
-        $instantiator = new Instantiator(array('CustomInstantiator'));
+        $instantiator = new Instantiator(['CustomInstantiator']);
     }
 }

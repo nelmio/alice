@@ -51,7 +51,7 @@ class Conditional implements MethodInterface
         } elseif (!is_null($processable->getMatch('falseValue')) && '' !== $processable->getMatch('falseValue')) {
             return $this->processor->process($processable->getMatch('falseValue'), $variables);
         } else {
-            return is_array($trueValue) ? array() : null;
+            return is_array($trueValue) ? [] : null;
         }
     }
 

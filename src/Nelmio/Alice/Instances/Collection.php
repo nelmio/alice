@@ -29,7 +29,7 @@ class Collection
      *
      * @param array $elements
      */
-    public function __construct(array $elements = array())
+    public function __construct(array $elements = [])
     {
         $this->instances = $elements;
     }
@@ -107,7 +107,7 @@ class Collection
                 }
 
                 $getter = 'get'.ucfirst($property);
-                if (method_exists($object, $getter) && is_callable(array($object, $getter))) {
+                if (method_exists($object, $getter) && is_callable([$object, $getter])) {
                     return $object->$getter();
                 }
 
@@ -131,10 +131,10 @@ class Collection
     public function random($mask, $count = 1, $property = null)
     {
         if ($count === 0) {
-            return array();
+            return [];
         }
 
-        $availableObjects = array();
+        $availableObjects = [];
         foreach ($this->instances as $name => $instance) {
             if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $name)) {
                 $availableObjects[] = $name;
@@ -149,7 +149,7 @@ class Collection
             return $this->find($availableObjects[mt_rand(0, count($availableObjects) - 1)], $property);
         }
 
-        $res = array();
+        $res = [];
         while ($count-- && $availableObjects) {
             $ref = array_splice($availableObjects, mt_rand(0, count($availableObjects) - 1), 1);
             $res[] = $this->find(current($ref), $property);
@@ -163,6 +163,6 @@ class Collection
      */
     public function clear()
     {
-        $this->instances = array();
+        $this->instances = [];
     }
 }

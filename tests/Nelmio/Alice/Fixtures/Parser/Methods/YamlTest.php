@@ -20,7 +20,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->parser = new Yaml(array('value' => 'test'));
+        $this->parser = new Yaml(['value' => 'test']);
     }
 
     public function testCanParseWillReturnTrueForYamlExtensions()
@@ -50,18 +50,18 @@ class YamlTest extends \PHPUnit_Framework_TestCase
     {
         $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/parsers/yamltest.yml.php');
 
-        $this->assertEquals(array('contextual' => 'test', 'username' => '<username()>'), $data);
+        $this->assertEquals(['contextual' => 'test', 'username' => '<username()>'], $data);
     }
 
     public function testIncludeFiles()
     {
         $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/include.yml');
 
-        $expectedData = array(
+        $expectedData = [
             'Nelmio\\Alice\\fixtures\\Product' =>
-                array(
+                [
                     'product_base (template)' =>
-                        array(
+                        [
                             'status' => 'in_stock',
                             'site' => '<word()>',
                             'changed' => 'n',
@@ -73,38 +73,38 @@ class YamlTest extends \PHPUnit_Framework_TestCase
                             'amount' => 1,
                             'markDeleted' => '<word()>',
                             'paid' => 'y',
-                        ),
+                        ],
                     'product1' =>
-                        array(
+                        [
                             'amount' => 45,
                             'paid' => 'n',
                             'user' => '@user0',
-                        ),
+                        ],
                     'product0' =>
-                        array(
+                        [
                             'changed' => 'y',
                             'user' => '@user1',
-                        ),
-                ),
+                        ],
+                ],
             'Nelmio\\Alice\\fixtures\\Shop' =>
-                array(
+                [
                     'shop2' =>
-                        array(
+                        [
                             'domain' => 'amazon.com',
-                        ),
+                        ],
                     'shop1' =>
-                        array(
+                        [
                             'domain' => 'ebay.com',
-                        ),
-                ),
+                        ],
+                ],
             'Nelmio\\Alice\\fixtures\\User' =>
-                array(
+                [
                     'user_base (template)' =>
-                        array(
+                        [
                             'email' => '<email()>',
-                        ),
-                ),
-        );
+                        ],
+                ],
+        ];
         $this->assertEquals($expectedData, $data);
     }
 }

@@ -22,7 +22,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     public function testLoadLoadsYamlFilesAndDoctrineORM()
     {
         $om = $this->getDoctrineManagerMock(14);
-        $objects = Fixtures::load(__DIR__.'/support/fixtures/complete.yml', $om, array('providers' => array($this)));
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/complete.yml', $om, ['providers' => [$this]]);
 
         $this->assertCount(14, $objects);
 
@@ -51,7 +51,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     public function testLoadFailsOnMissingFiles()
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objects = Fixtures::load(__DIR__.'/fixtures/missing_file.yml', $om, array('providers' => array($this)));
+        $objects = Fixtures::load(__DIR__.'/fixtures/missing_file.yml', $om, ['providers' => [$this]]);
     }
 
     public function testThatNewLoaderIsCreatedForDifferingOptions()
@@ -62,130 +62,130 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
         $prop = new \ReflectionProperty('\Nelmio\Alice\Fixtures', 'loaders');
         $prop->setAccessible(true);
-        $prop->setValue(array());
+        $prop->setValue([]);
 
-        $optionsBatch = array(
+        $optionsBatch = [
             // default options
-            array(),
+            [],
             // full list
-            array(
+            [
                 'locale'    => 'en_US',
                 'seed'      => 1,
-                'providers' => array(
+                'providers' => [
                     'Nelmio\Alice\FooProvider'
-                )
-            ),
+                ]
+            ],
             // check that loader isn't created twice for the same options
-            array(
+            [
                 'locale'    => 'en_US',
                 'seed'      => 1,
-                'providers' => array(
+                'providers' => [
                     new \Nelmio\Alice\FooProvider()
-                )
-            ),
+                ]
+            ],
             // check that loader isn't created twice for the same options
-            array(
+            [
                 'locale'    => 'en_US',
                 'seed'      => 1,
-                'providers' => array(
+                'providers' => [
                     // this time we have the leading backslash
                     '\Nelmio\Alice\FooProvider'
-                )
-            ),
+                ]
+            ],
             // check that a new loader will be created for the same options
             // when the format of fixtures is different
-            array(
+            [
                 'locale'    => 'en_US',
                 'seed'      => 1,
-                'providers' => array(
+                'providers' => [
                     'Nelmio\Alice\FooProvider'
-                ),
-                'fixtures' => array(
-                    self::USER => array(
-                        'user1' => array(
+                ],
+                'fixtures' => [
+                    self::USER => [
+                        'user1' => [
                             'username' => 'johnny',
                             'favoriteNumber' => 42,
-                        ),
-                    ),
-                    self::GROUP => array(
-                        'group1' => array(
+                        ],
+                    ],
+                    self::GROUP => [
+                        'group1' => [
                             'owner' => 1
-                        ),
-                    ),
-                ),
-            ),
+                        ],
+                    ],
+                ],
+            ],
             // check various combinations of options (non-exhaustive)
-            array(
+            [
                 'locale'    => 'ja_JP',
                 'seed'      => 3,
-                'providers' => array(
+                'providers' => [
                     'Nelmio\Alice\BarProvider'
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'locale'    => 'ja_JP',
                 'seed'      => 3,
-                'providers' => array(
+                'providers' => [
                     'Nelmio\Alice\FooProvider',
                     'Nelmio\Alice\BarProvider'
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'locale'    => 'ru_RU',
                 'seed'      => 1,
-                'providers' => array(
+                'providers' => [
                     'Nelmio\Alice\BarProvider'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'locale'    => 'ru_RU',
                 'seed'      => 100,
-            ),
-            array(
+            ],
+            [
                 'locale'    => 'ru_RU',
                 'seed'      => null,
-            ),
-            array(
+            ],
+            [
                 'locale'    => 'de_DE',
-                'fixtures' => array(
-                    self::USER => array(
-                        'user1' => array(
+                'fixtures' => [
+                    self::USER => [
+                        'user1' => [
                             'username' => 'johnny',
                             'favoriteNumber' => 42,
-                        ),
-                    ),
-                    self::GROUP => array(
-                        'group1' => array(
+                        ],
+                    ],
+                    self::GROUP => [
+                        'group1' => [
                             'owner' => 1
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                        ],
+                    ],
+                ],
+            ],
+            [
                 'locale'    => 'de_DE',
-            ),
-            array(
+            ],
+            [
                 'locale'    => 'fr_FR',
                 'seed'      => null,
-                'providers' => array(
+                'providers' => [
                     'Nelmio\Alice\BarProvider'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'locale'    => 'fr_FR',
                 'seed'      => null,
-                'providers' => array(
+                'providers' => [
                     'Nelmio\Alice\FooProvider'
-                )
-            ),
-        );
+                ]
+            ],
+        ];
 
         foreach ($optionsBatch as $item) {
             $fixtures = isset($item['fixtures'])
                         ? $item['fixtures']
                         : __DIR__.'/support/fixtures/complete.yml';
             if (!isset($item['providers'])) {
-                $item['providers'] = array();
+                $item['providers'] = [];
             }
             $item['providers'][] = $this;
             Fixtures::load(
@@ -214,20 +214,20 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         Fixtures::load(
             __DIR__.'/support/fixtures/complete.yml',
             $om,
-            array(
-                'providers' => array(
+            [
+                'providers' => [
                     'Nelmio\Alice\FooProvider',
-                    array('foo'),
+                    ['foo'],
                     $this,
-                ),
-            )
+                ],
+            ]
         );
     }
 
     public function testLoadLoadsYamlFilesAsArray()
     {
         $om = $this->getDoctrineManagerMock(14);
-        $objects = Fixtures::load(array(__DIR__.'/support/fixtures/complete.yml'), $om, array('providers' => array($this)));
+        $objects = Fixtures::load([__DIR__.'/support/fixtures/complete.yml'], $om, ['providers' => [$this]]);
 
         $this->assertCount(14, $objects);
     }
@@ -235,7 +235,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     public function testLoadLoadsYamlFilesAsGlobString()
     {
         $om = $this->getDoctrineManagerMock(14);
-        $objects = Fixtures::load(__DIR__.'/support/fixtures/complete.y*', $om, array('providers' => array($this)));
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/complete.y*', $om, ['providers' => [$this]]);
 
         $this->assertCount(14, $objects);
     }
@@ -244,20 +244,20 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     {
         $om = $this->getDoctrineManagerMock(2);
 
-        $objects = Fixtures::load(array(
-            self::USER => array(
-                'user1' => array(
+        $objects = Fixtures::load([
+            self::USER => [
+                'user1' => [
                     'username' => 'johnny',
                     'favoriteNumber' => 42,
-                ),
-            ),
-            self::GROUP => array(
-                'group1' => array(
+                ],
+            ],
+            self::GROUP => [
+                'group1' => [
                     'owner' => 1
-                ),
-            ),
+                ],
+            ],
 
-        ), $om);
+        ], $om);
 
         $this->assertCount(2, $objects);
 
@@ -288,24 +288,24 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $objects = Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, array(
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, [
             'logger' => 'not callable'
-        ));
+        ]);
     }
 
     public function testMakesOnlyOneFlushWithPersistOnce()
     {
         $om = $this->getDoctrineManagerMock(19);
         $objects = Fixtures::load(
-            array(
+            [
                 __DIR__.'/support/fixtures/part_1.yml',
                 __DIR__.'/support/fixtures/part_2.yml',
-            ),
+            ],
             $om,
-            array(
-                'providers' => array($this),
+            [
+                'providers' => [$this],
                 'persist_once' => true
-            )
+            ]
         );
 
         $this->assertCount(19, $objects);

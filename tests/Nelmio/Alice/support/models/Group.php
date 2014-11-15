@@ -7,10 +7,10 @@ class Group
     private $name;
     private $sortName;
     private $owner;
-    private $members = array();
+    private $members = [];
     private $creationDate;
     private $contactEmail;
-    private $supportEmails = array();
+    private $supportEmails = [];
     public $contactPerson;
     public $contactPersonName;
 

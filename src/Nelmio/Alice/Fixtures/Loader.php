@@ -79,7 +79,7 @@ class Loader
      * @param int    $seed      a seed to make sure faker generates data consistently across
      *                          runs, set to null to disable
      */
-    public function __construct($locale = 'en_US', array $providers = array(), $seed = 1)
+    public function __construct($locale = 'en_US', array $providers = [], $seed = 1)
     {
         $this->objects         = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
@@ -253,7 +253,7 @@ class Loader
      */
     protected function buildFixtures(array $rawData)
     {
-        $fixtures = array();
+        $fixtures = [];
 
         foreach ($rawData as $class => $specs) {
             $this->log('Loading '.$class);
@@ -288,7 +288,7 @@ class Loader
      */
     protected function populateObjects(array $fixtures)
     {
-        $objects = array();
+        $objects = [];
 
         foreach ($fixtures as $fixture) {
             $this->objects->set('self', $this->objects->get($fixture->getName()));
@@ -354,7 +354,7 @@ class Loader
      */
     private function getBuiltInProviders()
     {
-        return array(new IdentityProvider());
+        return [new IdentityProvider()];
     }
 
     /**
@@ -368,13 +368,13 @@ class Loader
     {
         $this->fakerProcessorMethod = new Processor\Methods\Faker($providers, $locale);
 
-        return array(
+        return [
             new Processor\Methods\ArrayValue(),
             new Processor\Methods\Conditional(),
             new Processor\Methods\UnescapeAt(),
             $this->fakerProcessorMethod,
             new Processor\Methods\Reference(),
-        );
+        ];
     }
 
     /**
@@ -384,10 +384,10 @@ class Loader
      */
     private function getBuiltInParsers()
     {
-        return array(
+        return [
             new Parser\Methods\Php($this),
             new Parser\Methods\Yaml($this),
-        );
+        ];
     }
 
     /**
@@ -397,11 +397,11 @@ class Loader
      */
     private function getBuiltInBuilders()
     {
-        return array(
+        return [
             new Builder\Methods\RangeName(),
             new Builder\Methods\ListName(),
             new Builder\Methods\SimpleName(),
-        );
+        ];
     }
 
     /**
@@ -413,12 +413,12 @@ class Loader
      */
     private function getBuiltInInstantiators(Processor\Processor $processor, TypeHintChecker $typeHintChecker)
     {
-        return array(
+        return [
             new Instantiator\Methods\Unserialize(),
             new Instantiator\Methods\ReflectionWithoutConstructor(),
             new Instantiator\Methods\ReflectionWithConstructor($processor, $typeHintChecker),
             new Instantiator\Methods\EmptyConstructor(),
-        );
+        ];
     }
 
     /**
@@ -429,13 +429,13 @@ class Loader
      */
     private function getBuiltInPopulators(TypeHintChecker $typeHintChecker)
     {
-        return array(
+        return [
             new Populator\Methods\ArrayAdd($typeHintChecker),
             new Populator\Methods\Custom(),
             new Populator\Methods\ArrayDirect($typeHintChecker),
             new Populator\Methods\Direct($typeHintChecker),
             new Populator\Methods\Property(),
             new Populator\Methods\MagicCall(),
-        );
+        ];
     }
 }

@@ -15,7 +15,7 @@ use Nelmio\Alice\Fixtures\Fixture;
 
 class ListName implements MethodInterface
 {
-    private $matches = array();
+    private $matches = [];
 
     /**
      * {@inheritDoc}
@@ -30,7 +30,7 @@ class ListName implements MethodInterface
      */
     public function build($class, $name, array $spec)
     {
-        $fixtures = array();
+        $fixtures = [];
 
         $enumItems = array_map('trim', explode(',', $this->matches[1]));
         foreach ($enumItems as $itemName) {

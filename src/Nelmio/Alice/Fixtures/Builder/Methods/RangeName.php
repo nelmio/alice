@@ -15,7 +15,7 @@ use Nelmio\Alice\Fixtures\Fixture;
 
 class RangeName implements MethodInterface
 {
-    private $matches = array();
+    private $matches = [];
 
     /**
      * {@inheritDoc}
@@ -30,12 +30,12 @@ class RangeName implements MethodInterface
      */
     public function build($class, $name, array $spec)
     {
-        $fixtures = array();
+        $fixtures = [];
 
         $from = $this->matches[1];
         $to = empty($this->matches[2]) ? $this->matches[3] : $this->matches[3] - 1;
         if ($from > $to) {
-            list($to, $from) = array($from, $to);
+            list($to, $from) = [$from, $to];
         }
         for ($currentIndex = $from; $currentIndex <= $to; $currentIndex++) {
             $currentName = str_replace($this->matches[0], $currentIndex, $name);

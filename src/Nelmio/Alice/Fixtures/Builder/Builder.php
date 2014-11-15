@@ -35,7 +35,7 @@ class Builder
         }
 
         $this->methods = $methods;
-        $this->templates = array();
+        $this->templates = [];
     }
 
     /**
@@ -59,7 +59,7 @@ class Builder
             if ($method->canBuild($name)) {
                 $fixtures = $method->build($class, $name, $spec);
 
-                $indexesToRemove = array();
+                $indexesToRemove = [];
                 foreach ($fixtures as $index => $fixture) {
                     if ($fixture->hasExtensions()) {
                         foreach ($fixture->getExtensions() as $extension) {

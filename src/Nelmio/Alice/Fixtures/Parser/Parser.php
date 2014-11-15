@@ -21,7 +21,7 @@ class Parser
     /**
      * @var array
      **/
-    private $parsers = array();
+    private $parsers = [];
 
     public function __construct(array $parsers)
     {
