@@ -58,6 +58,8 @@ class Php extends Base
             throw new UnexpectedValueException("Included file \"{$file}\" must return an array of data");
         }
 
+        $data = $this->processIncludes($data, $file);
+
         return $data;
     }
 }
