@@ -258,11 +258,11 @@ class Loader
         foreach ($rawData as $class => $specs) {
             $this->log('Loading '.$class);
             foreach ($specs as $name => $spec) {
-                $fixtures = array_merge($fixtures, $this->builder->build($class, $name, $spec));
+                $fixtures[] = $this->builder->build($class, $name, $spec);
             }
         }
 
-        return $fixtures;
+        return call_user_func_array('array_merge', $fixtures);
     }
 
     /**
