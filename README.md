@@ -69,7 +69,7 @@ with the following keys:
 - providers: an array of additional Faker providers
 - seed: a seed to make sure Faker generates data consistently across runs, set
   to null to disable (defaults to 1)
-- logger: a callable or Psr\Log\LoggerInterface object that will receive progress
+- logger: a callable or `Psr\Log\LoggerInterface` object that will receive progress
   information during the loading of the fixtures
 - persist_once: only persist objects once if multiple files are passed, by default
   objects are persisted after each file
@@ -192,7 +192,7 @@ In plain PHP fixtures the `$fake` closure is also available.
 
 Faker can create localized data for adresses, phone numbers and so on. You can
 set the default locale to use by passing a `locale` value in the `$options`
-array of Fixtures::load.
+array of `Fixtures::load`.
 
 Additionally, you can mix locales by adding a locale prefix to the faker key,
 i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
@@ -272,7 +272,7 @@ Nelmio\Entity\User:
         favoriteNumber: 50%? <numberBetween(1, 200)>
 ```
 
-Now only half the user will have a number filled-in.
+Now only half of the users will have a number filled-in.
 
 ### References ###
 
@@ -376,7 +376,7 @@ Nelmio\Entity\Group:
 
 ### Multiple References ###
 
-If we want to also add group members, there are two ways to do this.
+If we also want to add group members, there are two ways to do this.
 One is to define an array of references to have a fixed set of members:
 
 ```yaml
@@ -390,7 +390,7 @@ Nelmio\Entity\Group:
         members: [@user2, @user3]
 ```
 
-The other, which is more interesting, is to define a reference with a wildcard,
+Another, which is more interesting, is to define a reference with a wildcard,
 and also tell Alice how many object you want:
 
 ```yaml
@@ -454,7 +454,7 @@ Base fixtures, to be extended from, can be created to be able to *only* need
 to define less additional values in a set of common fixture definitions.
 
 By declaring a fixture as a template using the `(template)` flag, Alice will set
-the instance as a template for that file. Templates instances are not persisted.
+the instance as a template for that file. Template instances are not persisted.
 
 Templates can also make use of inheritance themselves, by extending from other
 templates, allowing you to create, mix and match templates. For example:
@@ -486,11 +486,11 @@ Nelmio\Entity\User:
 
 Inheritance also allows to extend from several templates. The last declared `extends`
 will always override values from previous declared `extends` templates. However, 
-extensions properties will never override values set explicitly in the fixture spec 
+extension properties will never override values set explicitly in the fixture spec 
 itself.
 
 In the following example, the age from `user_young` will override the age from `user`
-in `user1`, while username will remain user1
+in `user1`, while username will remain `user1`:
 
 ```yaml
 Nelmio\Entity\User:
@@ -521,7 +521,7 @@ Nelmio\Entity\User:
         city: <city()>
 ```
 
-In relative/path/to/file.yml:
+In `relative/path/to/file.yml`:
 
 ```yaml
 Nelmio\Entity\User:
@@ -530,7 +530,7 @@ Nelmio\Entity\User:
         age: <numberBetween(1, 40)>
 ```
 
-In relative/path/to/another/file.yml:
+In `relative/path/to/another/file.yml`:
 
 ```yaml
 Nelmio\Entity\User:
@@ -743,7 +743,7 @@ You can add a list of processors in the load method, e.g.
 $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager, $options, $processors);
 ```
 
-Or, you can ad them to your loader using the `addProcessor()` method, e.g.
+Or, you can add them to your loader using the `addProcessor()` method, e.g.
 
 ```php
 $loader = new \Nelmio\Alice\Fixtures($objectManager, $options);
