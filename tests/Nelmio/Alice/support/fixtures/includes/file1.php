@@ -1,14 +1,14 @@
 <?php
-return array(
-  'include' => array(
+return [
+  'include' => [
     'file2.php'
-  ),
-  'Nelmio\Alice\fixtures\Shop' => array(
-    'shop1' => array(
+  ],
+  'Nelmio\Alice\fixtures\Shop' => [
+    'shop1' => [
       'domain' => '<word()>'
-    ),
-    'shop2' => array(
+    ],
+    'shop2' => [
       'domain' => 'amazon.com'
-    )
-  )
-);
+    ]
+  ]
+];

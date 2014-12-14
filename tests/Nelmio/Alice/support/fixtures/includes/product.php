@@ -1,7 +1,7 @@
 <?php
-return array(
-  'Nelmio\Alice\fixtures\Product' => array(
-    'product_base (template)' => array(
+return [
+  'Nelmio\Alice\fixtures\Product' => [
+    'product_base (template)' => [
       'status' => 'in_stock',
       'site' => '<word()>',
       'changed' => 'n',
@@ -13,6 +13,6 @@ return array(
       'amount' => '1',
       'markDeleted' => '<word()>',
       'paid' => 'y',
-    )
-  )
-);
+    ]
+  ]
+];

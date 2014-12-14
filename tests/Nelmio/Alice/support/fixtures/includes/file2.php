@@ -1,8 +1,8 @@
 <?php
-return array(
-  'Nelmio\Alice\fixtures\User' => array(
-    'user_base (template)' => array(
+return [
+  'Nelmio\Alice\fixtures\User' => [
+    'user_base (template)' => [
       'email' =>  '<email()>'
-    ),
-  )
-);
+    ],
+  ]
+];
