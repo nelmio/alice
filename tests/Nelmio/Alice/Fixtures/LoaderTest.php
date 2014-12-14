@@ -1451,17 +1451,17 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testParametersAreReplaced()
     {
-        $res = $this->loadData(array(
-            self::USER => array(
-                'user1' => array(
+        $res = $this->loadData([
+            self::USER => [
+                'user1' => [
                     'username' => '<{user_1_username}>_alice',
-                ),
-            ),
-        ), array(
-            'parameters' => array(
+                ],
+            ],
+        ], [
+            'parameters' => [
                 'user_1_username' => 'user'
-            )
-        ));
+            ]
+        ]);
 
         $this->assertCount(1, $res);
         $user1 = $this->loader->getReference('user1');

@@ -11,24 +11,19 @@
 
 namespace Nelmio\Alice\Instances\Processor\Methods;
 
-use Nelmio\Alice\Instances\Processor\Processor;
+use Nelmio\Alice\Fixtures\ParameterBag;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
 class Parameterized implements MethodInterface
 {
     /**
-     * @var Processor
+     * @var ParameterBag
      */
-    private $processor;
+    private $parameters;
 
-    /**
-     * sets the processor to handle recursive calls
-     *
-     * @param Processor $processor
-     */
-    public function setProcessor(Processor $processor)
+    public function __construct(ParameterBag $parameters)
     {
-        $this->processor = $processor;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -45,19 +40,17 @@ class Parameterized implements MethodInterface
     public function process(ProcessableInterface $processable, array $variables)
     {
         $value = $processable->getValue();
-        $parameterBag = $this->processor->getParameterBag();
 
-        return preg_replace_callback('#<\{([a-z0-9_\.-]+)\}>#i', function ($matches) use ($parameterBag) {
+        return preg_replace_callback('#<\{([a-z0-9_\.-]+)\}>#i', function ($matches) {
             $key = $matches[1];
-            if (!$parameterBag->has($key)) {
+            if (!$this->parameters->has($key)) {
                 throw new \UnexpectedValueException(sprintf(
                     'Parameter "%s" was not found',
                     $key
                 ));
             }
 
-            return $parameterBag->get($key);
+            return $this->parameters->get($key);
         }, $value);
     }
-
 }

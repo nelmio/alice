@@ -13,7 +13,6 @@ namespace Nelmio\Alice\Instances\Processor;
 
 use InvalidArgumentException;
 use Nelmio\Alice\Instances\Collection;
-use Nelmio\Alice\Fixtures\ParameterBag;
 use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Util\SetterInjector;
 
@@ -35,19 +34,11 @@ class Processor
     private $valueForCurrent;
 
     /**
-     * @var \Nelmio\Alice\Fixtures\ParameterBag
-     */
-    protected $parameterBag;
-
-    /**
      * @param Collection $objects
-     * @param array $methods
-     * @param ParameterBag $parameterBag
+     * @param array      $methods
      */
-    public function __construct(Collection $objects, array $methods, ParameterBag $parameterBag)
+    public function __construct(Collection $objects, array $methods)
     {
-        $this->parameterBag = $parameterBag;
-
         foreach ($methods as $method) {
             if (!($method instanceof MethodInterface)) {
                 throw new InvalidArgumentException("All methods passed into Processor must implement MethodInterface.");
@@ -103,13 +94,5 @@ class Processor
         }
 
         return $value;
-    }
-
-    /**
-     * @return ParameterBag
-     */
-    public function getParameterBag()
-    {
-        return $this->parameterBag;
     }
 }

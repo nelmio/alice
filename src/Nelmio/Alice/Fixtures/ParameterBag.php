@@ -21,13 +21,13 @@ class ParameterBag
     /**
      * @param array $parameters
      */
-    public function __construct(array $parameters = array())
+    public function __construct(array $parameters = [])
     {
         $this->parameters = $parameters;
     }
 
     /**
-     * @param string $key
+     * @param  string $key
      * @return bool
      */
     public function has($key)
@@ -36,7 +36,7 @@ class ParameterBag
     }
 
     /**
-     * @param string $key
+     * @param  string     $key
      * @return mixed|null
      */
     public function get($key)
@@ -45,11 +45,10 @@ class ParameterBag
     }
 
     /**
-     * @param string $key
      * @param mixed $value
      */
     public function set($key, $value)
     {
         $this->parameters[$key] = $value;
     }
-} 
+}

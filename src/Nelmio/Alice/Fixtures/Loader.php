@@ -86,7 +86,7 @@ class Loader
      *                           runs, set to null to disable
      * @param array  $parameters create loader with default parameters
      */
-    public function __construct($locale = 'en_US', array $providers = [], $seed = 1, array $parameters = array())
+    public function __construct($locale = 'en_US', array $providers = [], $seed = 1, array $parameters = [])
     {
         $this->objects         = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
@@ -96,8 +96,7 @@ class Loader
 
         $this->processor = new Processor\Processor(
             $this->objects,
-            $this->getBuiltInProcessors($allProviders, $locale),
-            $this->parameterBag
+            $this->getBuiltInProcessors($allProviders, $locale)
         );
 
         $this->parser = new Parser\Parser(
@@ -386,7 +385,7 @@ class Loader
         $this->fakerProcessorMethod = new Processor\Methods\Faker($providers, $locale);
 
         return [
-            new Processor\Methods\Parameterized(),
+            new Processor\Methods\Parameterized($this->parameterBag),
             new Processor\Methods\ArrayValue(),
             new Processor\Methods\Conditional(),
             new Processor\Methods\UnescapeAt(),

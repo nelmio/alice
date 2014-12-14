@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
+use Nelmio\Alice\Fixtures\Loader;
+
 class YamlTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -106,5 +108,22 @@ class YamlTest extends \PHPUnit_Framework_TestCase
                 ],
         ];
         $this->assertEquals($expectedData, $data);
+    }
+
+    public function testParametersNotReturnedInData()
+    {
+        $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/include.yml');
+
+        $this->assertFalse(isset($data['parameters']));
+    }
+
+    public function testParametersSetOnTheLoader()
+    {
+        $loader = new Loader;
+        $parser = new Yaml($loader);
+
+        $parser->parse(__DIR__.'/../../../support/fixtures/include.yml');
+
+        $this->assertEquals('ebay.us', $loader->getParameterBag()->get('ebay_domain_name'));
     }
 }
