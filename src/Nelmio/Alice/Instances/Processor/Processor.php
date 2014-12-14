@@ -33,6 +33,10 @@ class Processor
      */
     private $valueForCurrent;
 
+    /**
+     * @param Collection $objects
+     * @param array      $methods
+     */
     public function __construct(Collection $objects, array $methods)
     {
         foreach ($methods as $method) {

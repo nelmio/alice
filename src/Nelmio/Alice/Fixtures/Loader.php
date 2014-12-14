@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Fixtures;
 
 use Nelmio\Alice\Instances\Processor\Methods\Faker;
+use Nelmio\Alice\Fixtures\ParameterBag;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\ORMInterface;
 use Nelmio\Alice\Instances\Collection;
@@ -67,22 +68,29 @@ class Loader
     protected $manager;
 
     /**
+     * @var \Nelmio\Alice\Fixtures\ParameterBag
+     */
+    protected $parameterBag;
+
+    /**
      * @var callable|LoggerInterface
      */
     private $logger;
 
     /**
-     * @param string $locale    default locale to use with faker if none is
-     *                          specified in the expression
-     * @param array  $providers custom faker providers in addition to the default
-     *                          ones from faker
-     * @param int    $seed      a seed to make sure faker generates data consistently across
-     *                          runs, set to null to disable
+     * @param string $locale     default locale to use with faker if none is
+     *                           specified in the expression
+     * @param array  $providers  custom faker providers in addition to the default
+     *                           ones from faker
+     * @param int    $seed       a seed  to make sure faker generates data consistently across
+     *                           runs, set to null to disable
+     * @param array  $parameters create loader with default parameters
      */
-    public function __construct($locale = 'en_US', array $providers = [], $seed = 1)
+    public function __construct($locale = 'en_US', array $providers = [], $seed = 1, array $parameters = [])
     {
         $this->objects         = new Collection;
         $this->typeHintChecker = new TypeHintChecker;
+        $this->parameterBag    = new ParameterBag($parameters);
 
         $allProviders = array_merge($this->getBuiltInProviders(), $providers);
 
@@ -326,6 +334,14 @@ class Loader
     }
 
     /**
+     * @return ParameterBag
+     */
+    public function getParameterBag()
+    {
+        return $this->parameterBag;
+    }
+
+    /**
     * Logs a message using the logger.
     *
     * @param string $message
@@ -369,6 +385,7 @@ class Loader
         $this->fakerProcessorMethod = new Processor\Methods\Faker($providers, $locale);
 
         return [
+            new Processor\Methods\Parameterized($this->parameterBag),
             new Processor\Methods\ArrayValue(),
             new Processor\Methods\Conditional(),
             new Processor\Methods\UnescapeAt(),

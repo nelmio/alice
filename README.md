@@ -33,6 +33,7 @@ To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://g
   - [Fixture Inheritance](#fixture-inheritance)
   - [Including files](#including-files)
   - [Variables](#variables)
+  - [Parameters](#parameters)
   - [Value Objects](#value-objects)
   - [Custom Faker Data Providers](#custom-faker-data-providers)
   - [Custom Setter](#custom-setter)
@@ -566,6 +567,21 @@ Nelmio\Entity\Group:
 
 As you can see, we make sure that the update date is between the creation
 date and the current time, which ensure the data will look real enough.
+
+### Parameters ###
+
+When using the Yaml loader, you can also set global parameters that will be inserted everywhere those values are used to help with readability. For example:
+
+```yaml
+parameters:
+  ebay_domain_name: ebay.us
+
+Nelmio\Entity\Shop:
+  shop1:
+    domain: <{ebay_domain_name}>
+```
+
+Additionally, you can pass in a list of defined parameters as the last argument to the `Loader` class to prepare the initial set of values.
 
 ### Value Objects ###
 

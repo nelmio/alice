@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Instances\Populator;
 
+use Nelmio\Alice\Fixtures\ParameterBag;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Processor\Processor;
@@ -35,7 +36,7 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
         $objects = isset($options['objects']) ? $options['objects'] : new Collection;
         $defaults = [
             'objects' => $objects,
-            'processor' => new Processor($objects, []),
+            'processor' => new Processor($objects, [], new ParameterBag()),
             'methods' => []
         ];
         $options = array_merge($defaults, $options);
