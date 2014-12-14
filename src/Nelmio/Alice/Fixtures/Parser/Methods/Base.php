@@ -78,4 +78,41 @@ abstract class Base implements MethodInterface
             return call_user_func_array([$faker, 'fake'], func_get_args());
         };
     }
+
+    /**
+     * @param  array  $data
+     * @param  string $filename
+     * @return mixed
+     */
+    protected function processIncludes($data, $filename)
+    {
+        if (isset($data['include'])) {
+            foreach ($data['include'] as $include) {
+                $includeFile = dirname($filename) . DIRECTORY_SEPARATOR . $include;
+                $includeData = $this->parse($includeFile);
+                $data = $this->mergeIncludeData($data, $includeData);
+            }
+        }
+
+        unset($data['include']);
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     * @param array $includeData
+     */
+    protected function mergeIncludeData($data, $includeData)
+    {
+        foreach ($includeData as $class => $fixtures) {
+            if (isset($data[$class])) {
+                $data[$class] = array_merge($fixtures, $data[$class]);
+            } else {
+                $data[$class] = $fixtures;
+            }
+        }
+
+        return $data;
+    }
 }

@@ -55,4 +55,59 @@ class PhpTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals("Included file \"{$file}\" must return an array of data", $e->getMessage());
         }
     }
+
+    public function testIncludeFiles()
+    {
+        $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/include.php');
+
+        $expectedData = array(
+            'Nelmio\\Alice\\fixtures\\Product' =>
+                array(
+                    'product_base (template)' =>
+                        array(
+                            'status' => 'in_stock',
+                            'site' => '<word()>',
+                            'changed' => 'n',
+                            'locked' => '<word()>',
+                            'cancelled' => '<word()>',
+                            'canBuy' => 'y',
+                            'package' => 'n',
+                            'price' => '<randomFloat()>',
+                            'amount' => 1,
+                            'markDeleted' => '<word()>',
+                            'paid' => 'y',
+                        ),
+                    'product1' =>
+                        array(
+                            'amount' => 45,
+                            'paid' => 'n',
+                            'user' => '@user0',
+                        ),
+                    'product0' =>
+                        array(
+                            'changed' => 'y',
+                            'user' => '@user1',
+                        ),
+                ),
+            'Nelmio\\Alice\\fixtures\\Shop' =>
+                array(
+                    'shop2' =>
+                        array(
+                            'domain' => 'amazon.com',
+                        ),
+                    'shop1' =>
+                        array(
+                            'domain' => 'ebay.com',
+                        ),
+                ),
+            'Nelmio\\Alice\\fixtures\\User' =>
+                array(
+                    'user_base (template)' =>
+                        array(
+                            'email' => '<email()>',
+                        ),
+                ),
+        );
+        $this->assertEquals($expectedData, $data);
+    }
 }
