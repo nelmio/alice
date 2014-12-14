@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Instances\Processor;
 
 use Nelmio\Alice\Instances\Collection;
+use Nelmio\Alice\Fixtures\ParameterBag;
 use Nelmio\Alice\support\extensions\CustomProcessor;
 
 class ProcessorTest extends \PHPUnit_Framework_TestCase
@@ -34,7 +35,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         ];
         $options = array_merge($defaults, $options);
 
-        return $this->processor = new Processor($this->objects = $options['objects'], $options['methods']);
+        return $this->processor = new Processor($this->objects = $options['objects'], $options['methods'], new ParameterBag());
     }
 
     /**
@@ -43,7 +44,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheProcessor()
     {
-        $builder = new Processor(new Collection, ['CustomProcessor']);
+        $builder = new Processor(new Collection, ['CustomProcessor'], new ParameterBag());
     }
 
     public function testAddProcessor()
