@@ -115,30 +115,13 @@ class Base implements LoaderInterface
     /**
      * {@inheritDoc}
      */
-    public function load($data)
+    public function load($input)
     {
-        if (!is_array($data)) {
-            // $loader is defined to give access to $loader->fake() in the included file's context
-            $loader = $this;
-            $filename = $data;
-            if (!file_exists($filename)) {
-                throw new \InvalidArgumentException('The file could not be found: '.$filename);
-            }
-            $includeWrapper = function () use ($filename, $loader) {
-                ob_start();
-                $res = require $filename;
-                ob_end_clean();
-
-                return $res;
-            };
-            $data = $includeWrapper();
-            if (!is_array($data)) {
-                throw new \UnexpectedValueException('Included file "'.$filename.'" must return an array of data');
-            }
-        }
+        $data = is_array($input) ? $input : $this->parse($input);
 
         // create instances
         $instances = array();
+
         foreach ($data as $class => $specs) {
             $this->log('Loading '.$class);
             list($class, $classFlags) = $this->parseFlags($class);
@@ -229,6 +212,73 @@ class Base implements LoaderInterface
         }
 
         return $objects;
+    }
+
+    private function parse($file)
+    {
+        $data = $this->includeFile($file);
+
+        return $this->processIncludes($data, $file);
+    }
+
+    /**
+     * @param array $data
+     * @param string $file
+     * @return mixed
+     */
+    private function processIncludes($data, $file)
+    {
+        if (isset($data['include'])) {
+            foreach ($data['include'] as $include) {
+                $includeFile = dirname($file) . DIRECTORY_SEPARATOR . $include;
+                $includeData = $this->parse($includeFile);
+                $data = $this->mergeIncludeData($data, $includeData);
+            }
+        }
+
+        unset($data['include']);
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     * @param array $includeData
+     */
+    private function mergeIncludeData($data, $includeData)
+    {
+        foreach ($includeData as $class => $fixtures) {
+            if (isset($data[$class])) {
+                $data[$class] = array_merge($fixtures, $data[$class]);
+            } else {
+                $data[$class] = $fixtures;
+            }
+        }
+
+        return $data;
+    }
+
+    protected function includeFile($filename) {
+      if (!file_exists($filename)) {
+          throw new \InvalidArgumentException('The file could not be found: '.$filename);
+      }
+
+      // isolates the file from current context variables and gives
+      // it access to the $loader object to inline php blocks if needed
+      $loader = $this;
+      $includeWrapper = function () use ($filename, $loader) {
+        ob_start();
+        $res = require $filename;
+        ob_end_clean();
+
+        return $res;
+      };
+
+      $data = $includeWrapper();
+      if (!is_array($data)) {
+        throw new \UnexpectedValueException('Included file "'.$filename.'" must return an array of data');
+      }
+      return $data;
     }
 
     /**
