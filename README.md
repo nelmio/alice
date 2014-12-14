@@ -88,7 +88,7 @@ $objects = $loader->load(__DIR__.'/fixtures.yml');
 // optionally persist them into the doctrine object manager
 // you can also do that yourself or persist them in another way
 // if you do not use doctrine
-$persister = new \Nelmio\Alice\ORM\Doctrine($objectManager);
+$persister = new \Nelmio\Alice\Persister\Doctrine($objectManager);
 $persister->persist($objects);
 ```
 

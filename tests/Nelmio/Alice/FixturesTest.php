@@ -19,7 +19,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
-    public function testLoadLoadsYamlFilesAndDoctrineORM()
+    public function testLoadLoadsYamlFilesAndDoctrinePersister()
     {
         $om = $this->getDoctrineManagerMock(14);
         $objects = Fixtures::load(__DIR__.'/support/fixtures/complete.yml', $om, ['providers' => [$this]]);

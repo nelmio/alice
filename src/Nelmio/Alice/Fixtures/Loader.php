@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Fixtures;
 use Nelmio\Alice\Instances\Processor\Methods\Faker;
 use Nelmio\Alice\Fixtures\ParameterBag;
 use Psr\Log\LoggerInterface;
-use Nelmio\Alice\ORMInterface;
+use Nelmio\Alice\PersisterInterface;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Populator;
@@ -63,7 +63,7 @@ class Loader
     protected $populator;
 
     /**
-     * @var ORMInterface
+     * @var PersisterInterface
      */
     protected $manager;
 
@@ -313,14 +313,14 @@ class Loader
     }
 
     /**
-     * public interface to set the ORM interface
+     * public interface to set the Persister interface
      *
-     * @param ORMInterface $manager
+     * @param PersisterInterface $manager
      */
-    public function setORM(ORMInterface $manager)
+    public function setPersister(PersisterInterface $manager)
     {
         $this->manager = $manager;
-        $this->typeHintChecker->setORM($manager);
+        $this->typeHintChecker->setPersister($manager);
     }
 
     /**
