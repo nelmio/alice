@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Fixtures;
 
+use Nelmio\Alice\support\models\PrivateConstructorClass;
 use Nelmio\Alice\TestPersister;
 use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\extensions;
@@ -97,6 +98,14 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         } catch (\UnexpectedValueException $e) {
             $this->assertEquals("{$file} cannot be parsed - no parser exists that can handle it.", $e->getMessage());
         }
+    }
+
+    public function testCreatePrivateConstructorInstance()
+    {
+        $loader = new Loader('en_US', [new FakerProvider]);
+
+        $res = $loader->load($file = __DIR__.'/../support/fixtures/private_constructs.yml');
+        $this->assertTrue($res['test1'] instanceof PrivateConstructorClass);
     }
 
     public function testLoadInvalidFile()
