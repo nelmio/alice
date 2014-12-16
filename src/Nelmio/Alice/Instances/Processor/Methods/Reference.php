@@ -36,7 +36,7 @@ class Reference implements MethodInterface
      */
     public function canProcess(ProcessableInterface $processable)
     {
-        return is_string($processable->getValue()) && $processable->valueMatches('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?:\->(?<property>[a-z0-9_-]+))?$}i');
+        return is_string($processable->getValue()) && $processable->valueMatches('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?<sequence>\{(?P<from>\d+)\.\.(?P<to>\d+)\})?(?:\->(?<property>[a-z0-9_-]+))?$}i');
     }
 
     /**
@@ -46,9 +46,22 @@ class Reference implements MethodInterface
     {
         $multi = ('' !== $processable->getMatch('multi')) ? $processable->getMatch('multi') : null;
         $property = !is_null($processable->getMatch('property')) ? $processable->getMatch('property') : null;
+        $sequence = !is_null($processable->getMatch('sequence')) ? $processable->getMatch('sequence') : null;
 
-        if (strpos($processable->getMatch('reference'), '*')) {
-            return $this->objects->random($processable->getMatch('reference'), $multi, $property);
+        if (strpos($reference = $processable->getMatch('reference'), '*')) {
+            return $this->objects->random($reference, $multi, $property);
+        }
+
+        if ($sequence && $reference = $processable->getMatch('reference')) {
+            $from = $processable->getMatch('from');
+            $to = $processable->getMatch('to');
+
+            $set = [];
+            foreach (range($from, $to) as $id) {
+                $set[] = $this->objects->get($reference . $id);
+            }
+
+            return $set;
         }
 
         if (null !== $multi) {
