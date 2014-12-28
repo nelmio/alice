@@ -30,6 +30,6 @@ class UnescapeAt implements MethodInterface
     {
         $value = $processable->getValue();
 
-        return preg_replace('{\\\\([@\\\\])}', '$1', $value);
+        return str_replace('\\@', '@', $value);
     }
 }
