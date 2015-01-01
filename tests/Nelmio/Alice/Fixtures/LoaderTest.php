@@ -1355,14 +1355,25 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new Loader('en_US', [new FakerProvider]);
         $res = $loader->load([
             self::USER => [
+                'foo' => [
+                    'username' => 'Bob',
+                ],
                 'user' => [
-                    '__construct' => ['\\@<fooGenerator()> \\\\@foo \\\\\\@foo \\foo'],
+                    'username' => 'foo',
+                    'friends' => ['\\@<fooGenerator()>', '\\\\@foo', '\\\\\\@foo', '\\foo', '\\\\foo', '\\\\\\foo'],
                 ],
             ],
         ]);
 
         $this->assertInstanceOf(self::USER, $res['user']);
-        $this->assertSame('@foo \\@foo \\\\@foo \\foo', $res['user']->username);
+        $this->assertSame([
+            '@foo',
+            '\\@foo',
+            '\\\\@foo',
+            '\\foo',
+            '\\\\foo',
+            '\\\\\\foo'
+        ], $res['user']->friends);
     }
 
     public function testAddProcessor()
@@ -1474,6 +1485,12 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new Loader();
         $res = $loader->load(__DIR__ . '/../support/fixtures/backslashes.yml');
         $this->assertEquals('\\\\', $res['user0']->username);
+        $this->assertEquals([
+            $res['foo'],
+            '@foo',
+            '\\@foo',
+            '\\\\@foo',
+        ], $res['user0']->friends);
     }
 }
 

@@ -388,9 +388,9 @@ class Loader
             new Processor\Methods\Parameterized($this->parameterBag),
             new Processor\Methods\ArrayValue(),
             new Processor\Methods\Conditional(),
-            new Processor\Methods\UnescapeAt(),
             $this->fakerProcessorMethod,
             new Processor\Methods\Reference(),
+            new Processor\Methods\UnescapeAt(),
         ];
     }
 
