@@ -1,0 +1,4 @@
+Nelmio\Alice\support\models\PrivateConstructorClass:
+    test1:
+      alpha: "A"
+      beta: "B"
