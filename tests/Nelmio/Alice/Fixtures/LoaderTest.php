@@ -1362,7 +1362,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertInstanceOf(self::USER, $res['user']);
-        $this->assertSame('@foo \\@foo \\@foo \\foo', $res['user']->username);
+        $this->assertSame('@foo \\@foo \\\\@foo \\foo', $res['user']->username);
     }
 
     public function testAddProcessor()
@@ -1467,6 +1467,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $user1 = $this->loader->getReference('user1');
         $this->assertInstanceOf(self::USER, $user1);
         $this->assertEquals('user_alice', $user1->username);
+    }
+
+    public function testBackslashes()
+    {
+        $loader = new Loader();
+        $res = $loader->load(__DIR__ . '/../support/fixtures/backslashes.yml');
+        $this->assertEquals('\\\\', $res['user0']->username);
     }
 }
 
