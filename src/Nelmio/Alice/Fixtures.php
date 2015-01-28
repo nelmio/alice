@@ -41,7 +41,7 @@ class Fixtures
     /**
      * Loads a fixture file into an object container
      *
-     * @param string|array $file       filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
+     * @param string|array $files      filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
      * @param object       $container  object container
      * @param array        $options    available options:
      *                                 - providers: an array of additional faker providers
