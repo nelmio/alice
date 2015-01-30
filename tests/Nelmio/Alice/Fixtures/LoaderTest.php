@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Fixtures;
 
+use Nelmio\Alice\support\models\Group;
 use Nelmio\Alice\TestPersister;
 use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\extensions;
@@ -105,6 +106,18 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/invalid.php');
         } catch (\UnexpectedValueException $e) {
             $this->assertEquals('Included file "'.$file.'" must return an array of data', $e->getMessage());
+        }
+    }
+
+    public function testLoadSequencedItems()
+    {
+        $object = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/sequenced_items.yml');
+        $this->assertArrayHasKey('group1', $object);
+        $this->assertTrue($object['group1'] instanceof Group);
+        $counter = 1;
+        foreach ($object['group1']->getMembers() as $member) {
+            $this->assertEquals($member->uuid, $counter);
+            $counter++;
         }
     }
 
