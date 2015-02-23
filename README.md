@@ -414,6 +414,18 @@ You can also randomize the amount by combining it with faker data:
         members: <numberBetween(1, 10)>x @user*
 ```
 
+If the data needs to be static instead, you can use the same syntax as
+the one used for fixtures range.
+
+```yaml
+Nelmio\Entity\User:
+    # ...
+
+Nelmio\Entity\Group:
+    group{1..10}:
+        members: @user{1..10}
+```
+
 > **Note**: You do not need to define multi-references inside an array, since
 > they are automatically translated to an array of objects.
 
