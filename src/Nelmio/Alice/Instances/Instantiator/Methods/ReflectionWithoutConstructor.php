@@ -20,7 +20,9 @@ class ReflectionWithoutConstructor implements MethodInterface
      */
     public function canInstantiate(Fixture $fixture)
     {
-        return !$fixture->shouldUseConstructor() && !version_compare(PHP_VERSION, '5.4', '<');
+        $reflConstruct = new \ReflectionMethod($fixture->getClass(), '__construct');
+
+        return !$reflConstruct->isPublic() || (!$fixture->shouldUseConstructor() && !version_compare(PHP_VERSION, '5.4', '<'));
     }
 
     /**
