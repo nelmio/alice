@@ -252,6 +252,9 @@ Nelmio\Entity\User:
         __construct: false
 ```
 
+Note: If you are using a private constructor without any mandatory arguments you can omit the constructor altogether.
+Private constructors with mandatory arguments should use the static factory method described above.
+
 ### Optional Data ###
 
 Some fields do not have to be filled-in, like the `favoriteNumber` in this
