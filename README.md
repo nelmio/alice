@@ -201,12 +201,14 @@ i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
 #### Default Providers ####
 
 Alice includes a default identity provider, `<identity()>`, that
-simply returns whatever is passed to it.  This allows you among other
+simply returns whatever is passed to it. This allows you among other
 things to use a PHP expression while still benefitting from
-[variable replacement](#variables).
+[variable replacement](#variables). This is similar to an `eval()`
+call, allowing you to do things like math or similar, e.g.
+`<identity(1 + $favoriteNumber)>`.
 
-Some syntactic sugar is provided for this, `<($whatever)>` is an alias
-for `<identity($whatever)>`.
+Some syntactic sugar is provided for this as well, and `<($whatever)>`
+is an alias for `<identity($whatever)>`.
 
 ### Calling Methods ###
 
