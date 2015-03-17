@@ -94,6 +94,14 @@ $persister->persist($objects);
 
 This loader maintains its list of built objects, so `load` can be called multiple times with different files if your fixture file starts growing unmanageably large.
 
+Using the `Loader` class directly also allows you to add more customization to how your objects are instantiated, properties are set, and what kinds of files you can parse. The following methods are all available for these purposes:
+
+* `addParser`: Parsers handle new types of files
+* `addProcessor`: Processors handle new ways to generate properties
+* `addBuilder`: Builders handle the generation of fixtures themselves
+* `addInstantiator`: Instantiators handle creating instances
+* `addPopulator`: Populators handle setting properties on instances
+
 > **Note**: To load plain PHP files, the files must return an array containing the same structure as the yaml files have.
 
 ## Reference ##

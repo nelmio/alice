@@ -1,3 +1,19 @@
+### 2.0.0 (2015-03-17)
+
+  * Expanded public interface of the `Loader` class to support:
+    - Trivial parsing of new document types
+    - Custom instantiation methods
+    - Custom setting of properties
+    - Custom processing and fixture building
+  * Added support for using parameters with the following
+    ```
+    parameters:
+        foo: value
+
+    Acme\ClassName:
+        property: <{foo}>
+    ```
+
 ### 1.7.2 (2014-10-10)
 
   * Fixed support for custom providers, using addProvider instead of setProviders lets you add single providers
