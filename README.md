@@ -82,7 +82,7 @@ and make it work just as easily:
 
 ```php
 // load objects from a yaml file
-$loader = new \Nelmio\Alice\Fixtures\Loader();
+$loader = new \Nelmio\Alice\Loader\Yaml();
 $objects = $loader->load(__DIR__.'/fixtures.yml');
 
 // optionally persist them into the doctrine object manager
