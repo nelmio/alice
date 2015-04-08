@@ -672,6 +672,13 @@ class Base implements LoaderInterface
                 return $that->fake($matches['name'], $matches['locale']);
             }
 
+            // replace current() references
+            $args = preg_replace_callback('{\{?(current)\(\)\}?}i', function ($match) use ($that) {
+                $name = var_export($match[1], true);
+
+                return eval('return $that->fake(' . $name . ');');
+            }, $args);
+
             // replace references to other variables in the same object
             $args = preg_replace_callback('{\{?\$([a-z0-9_]+)\}?}i', function ($match) use ($variables) {
                 if (array_key_exists($match[1], $variables)) {
