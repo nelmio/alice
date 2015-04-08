@@ -21,7 +21,7 @@ interface ProcessorInterface
     public function preProcess($object);
 
     /**
-     * Processes an object before it is persisted to DB
+     * Processes an object after it is persisted to DB
      *
      * @param object $object instance to process
      */
