@@ -58,12 +58,10 @@ class Fixture
     /**
      * built a class representation of a fixture
      *
-     * @param string          $class
-     * @param string          $name
-     * @param array           $spec
-     * @param Processor       $processor
-     * @param TypeHintChecker $typeHintChecker
-     * @param string          $valueForCurrent - when <current()> is called, this value is used
+     * @param string $class
+     * @param string $name
+     * @param array  $spec
+     * @param string $valueForCurrent - when <current()> is called, this value is used
      */
     public function __construct($class, $name, array $spec, $valueForCurrent)
     {
