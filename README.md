@@ -722,15 +722,15 @@ data. Combine it all as you see fit!
 Processors allow you to process objects before and/or after they are persisted. Processors
 must implement the `ProcessorInterface`. 
 
-Here is an example where we may use this feature when using the FOSUserBundle:
+Here is an example where we may use this feature to make sure passwords are properly
+hashed on a `User`:
 
 ```php
 namespace Acme\DemoBundle\DataFixtures\ORM;
 
-use FOS\UserBundle\Model\UserInterface;
-use FOS\UserBundle\Model\UserManager;
 use Nelmio\Alice\ProcessorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use User;
 
 class UserProcessor implements ProcessorInterface
 {
@@ -760,13 +760,12 @@ class UserProcessor implements ProcessorInterface
      */
     public function postProcess($object)
     {
-        if (!($object instanceof UserInterface)) {
+        if (!($object instanceof User)) {
             return;
         }
 
-        /** @var UserManager $manager */
-        $manager = $this->container->get('fos_user.user_manager');
-        $manager->updateUser($object);
+        $hasher = $this->container->get('example_password_hasher');
+        $object->password = $hasher->hash($object->password);
     }
 }
 ```
