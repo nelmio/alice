@@ -784,6 +784,8 @@ $loader->addProcessor($processor);
 $objects = $loader->loadFiles(__DIR__.'/fixtures.yml');
 ```
 
+Note: by default, FOSUserBundle has a property `fos_user.use_listener` set to true which already does this job. So do not use a processor for that unless you have disabled this listener. For more information on it, check the [offical doc](https://github.com/FriendsOfSymfony/FOSUserBundle/blob/master/Resources/doc/user_manager.md).
+
 ## License ##
 
 Released under the MIT License, see LICENSE.
