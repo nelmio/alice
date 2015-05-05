@@ -191,7 +191,7 @@ In plain PHP fixtures the `$fake` closure is also available.
 
 #### Localized Fake Data ####
 
-Faker can create localized data for adresses, phone numbers and so on. You can
+Faker can create localized data for addresses, phone numbers and so on. You can
 set the default locale to use by passing a `locale` value in the `$options`
 array of `Fixtures::load`.
 
