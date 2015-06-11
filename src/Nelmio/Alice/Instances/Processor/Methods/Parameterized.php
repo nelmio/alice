@@ -50,7 +50,11 @@ class Parameterized implements MethodInterface
                 ));
             }
 
-            return $this->parameters->get($key);
+            if (is_array($value = $this->parameters->get($key))) {
+                return var_export($value, true);
+            }
+
+            return $value;
         }, $value);
     }
 }
