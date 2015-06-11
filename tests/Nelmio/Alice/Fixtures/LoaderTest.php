@@ -1502,6 +1502,38 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('user_alice', $user1->username);
     }
 
+    public function testArrayParametersAreReplaced()
+    {
+        $res = $this->loadData([
+            self::USER => [
+                'user{1..5}' => [
+                    'username' => '<randomElement(<{usernames}>)>',
+                ],
+            ],
+        ], [
+            'parameters' => [
+                'usernames' => $usernames = ['Alice', 'Bob', 'Ogi'],
+            ]
+        ]);
+
+        $this->assertCount(5, $res);
+        foreach ($this->loader->getReferences() as $user) {
+            $this->assertInstanceOf(self::USER, $user);
+            $this->assertContains($user->username, $usernames);
+        }
+    }
+
+    public function testYamlArrayParametersAreProperlyInterpreted()
+    {
+        $res = $this->createLoader()->load(__DIR__ . '/../support/fixtures/array_parameters.yml');
+
+        $this->assertCount(5, $res);
+        foreach ($this->loader->getReferences() as $user) {
+            $this->assertInstanceOf(self::USER, $user);
+            $this->assertContains($user->username, ['Alice', 'Bob', 'Ogi']);
+        }
+    }
+
     public function testBackslashes()
     {
         $loader = new Loader();
