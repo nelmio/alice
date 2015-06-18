@@ -193,7 +193,14 @@ you were calling a function.
 To pass Faker Data to another Faker provider, you can use the `$fake()` closure
 within faker calls. For example use `$fake('firstName', 'de_DE')` or
 `$fake('numberBetween', null, 1, 200)` to call Faker. Pass the provider to call
-followed by the locale (or null) and then the arguments to the provider.
+followed by the locale (or null) and then the arguments to the provider. Here
+is a detailed yaml example.
+
+```yaml
+Nelmio\Entity\User:
+    user{1..10}:
+        username: User<identity($fake('numberBetween', 1, 100) / 2 + 5)>
+```
 
 In plain PHP fixtures the `$fake` closure is also available.
 
@@ -511,8 +518,8 @@ Nelmio\Entity\User:
 ```
 
 Inheritance also allows to extend from several templates. The last declared `extends`
-will always override values from previous declared `extends` templates. However, 
-extension properties will never override values set explicitly in the fixture spec 
+will always override values from previous declared `extends` templates. However,
+extension properties will never override values set explicitly in the fixture spec
 itself.
 
 In the following example, the age from `user_young` will override the age from `user`
@@ -728,7 +735,7 @@ data. Combine it all as you see fit!
 ### Processors ###
 
 Processors allow you to process objects before and/or after they are persisted. Processors
-must implement the `ProcessorInterface`. 
+must implement the `ProcessorInterface`.
 
 Here is an example where we may use this feature to make sure passwords are properly
 hashed on a `User`:
