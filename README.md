@@ -13,7 +13,7 @@ This is installable via [Composer](https://getcomposer.org/) as [nelmio/alice](h
 
     composer require nelmio/alice
 
-To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://github.com/hautelook/AliceBundle) or [h4cc/alice-fixtures-bundle](https://github.com/h4cc/AliceFixturesBundle) package instead.
+To use it in Symfony2 you may want to use the [hautelook/alice-bundle](https://github.com/hautelook/AliceBundle), [h4cc/alice-fixtures-bundle](https://github.com/h4cc/AliceFixturesBundle) or [knplabs/rad-fixtures-load](https://github.com/KnpLabs/rad-fixtures-load) package instead.
 
 ## Table of Contents
 
