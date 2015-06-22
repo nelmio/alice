@@ -79,7 +79,7 @@ class ArrayAdd implements MethodInterface
             return $method;
         }
 
-        if (substr($property, -3) === 'ies' && method_exists($object, $method = 'add'.substr($key, 0, -3).'y')) {
+        if (substr($property, -3) === 'ies' && method_exists($object, $method = 'add'.substr($property, 0, -3).'y')) {
             return $method;
         }
     }
