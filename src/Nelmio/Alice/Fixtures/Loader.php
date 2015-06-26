@@ -257,7 +257,7 @@ class Loader
      * builds a collection of fixtures
      *
      * @param  array      $rawData
-     * @return Collection
+     * @return array
      */
     protected function buildFixtures(array $rawData)
     {
@@ -270,7 +270,7 @@ class Loader
             }
         }
 
-        return call_user_func_array('array_merge', $fixtures);
+        return $fixtures ? call_user_func_array('array_merge', $fixtures) : [];
     }
 
     /**
