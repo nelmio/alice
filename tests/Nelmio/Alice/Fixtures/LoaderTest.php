@@ -118,6 +118,12 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testLoadEmptyFile()
+    {
+        $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/empty.php');
+        $this->assertSame([], $res);
+    }
+
     public function testLoadSequencedItems()
     {
         $object = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/sequenced_items.yml');
