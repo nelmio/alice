@@ -20,7 +20,7 @@ class CustomParser extends Base
 
         $csv = $this->compilePhp($file);
 
-        $rows = explode("\n", $csv);
+        $rows = explode("\n", str_replace("\r\n", "\n", trim($csv, "\r\n")));
         $result[$class = array_shift($rows)] = [];
 
         foreach ($rows as $row) {
