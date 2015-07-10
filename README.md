@@ -640,50 +640,143 @@ Nelmio\Entity\Location:
 ### Custom Faker Data Providers ###
 
 Sometimes you need more than what Faker and Alice provide you natively, and
-there are two ways to solve the problem:
+there are three ways to solve the problem:
 
-1. Embed PHP code in the yaml file. It is included by the loader so you can
-   add arbitrary PHP as long as it outputs valid yaml. That said, this is like
-   PHP templates, it quickly ends up very messy if you do too much logic, so
-   it's best to extract logic out of the templates.
-2. Add a custom Faker Provider class. These are just classes that expose public
-   methods, all the public methods are available as `<method()>` in the Alice
-   fixture files. For example if you want a custom group name generator and you
-   use the standard Doctrine Fixtures package in a Symfony2 project, you could
-   do the following:
+#### Embed PHP code in the yaml file
 
-   ```php
-   <?php
+It is included by the loader so you can add arbitrary PHP as long as it outputs
+valid yaml. That said, this is like PHP templates, it quickly ends up very messy
+if you do too much logic, so it's best to extract logic out of the templates.
+  
+#### Public method in the [`Nelmio\Alice\Fixtures\Loader`](src/Nelmio/Alice/Fixtures/Loader.php)
 
-   namespace Acme\DemoBundle\DataFixtures\ORM;
+All the public methods are available as `<method()>` in the Alice fixture files.
+For example if you want a custom group name generator and you use the standard
+Doctrine Fixtures package in a Symfony2 project, you could do the following:
 
-   use Doctrine\Common\Persistence\ObjectManager;
-   use Doctrine\Common\DataFixtures\FixtureInterface;
-   use Nelmio\Alice\Fixtures;
+```php
+<?php
 
-   class LoadFixtureData implements FixtureInterface
+namespace AppBundle\DataFixtures\ORM;
+
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Nelmio\Alice\Fixtures;
+
+class LoadFixtureData implements FixtureInterface
+{
+   public function load(ObjectManager $om)
    {
-       public function load(ObjectManager $om)
-       {
-           // pass $this as an additional faker provider to make the "groupName"
-           // method available as a data provider
-           Fixtures::load(__DIR__.'/fixtures.yml', $om, array('providers' => array($this)));
-       }
-
-       public function groupName()
-       {
-           $names = array(
-               'Group A',
-               'Group B',
-               'Group C',
-           );
-
-           return $names[array_rand($names)];
-       }
+       // pass $this as an additional faker provider to make the "groupName"
+       // method available as a data provider
+       Fixtures::load(__DIR__.'/fixtures.yml', $om, array('providers' => array($this)));
    }
-   ```
 
-   That way you can now use `name: <groupName()>` to generate specific group names.
+   public function groupName()
+   {
+       $names = array(
+           'Group A',
+           'Group B',
+           'Group C',
+       );
+
+       return $names[array_rand($names)];
+   }
+}
+```
+
+That way you can now use `name: <groupName()>` to generate specific group names.
+   
+#### Add a custom [Faker Provider](https://github.com/fzaninotto/Faker/tree/master/src/Faker/Provider) class
+
+```php
+<?php
+
+namespace AppBundle\DataFixtures\ORM;
+
+use Faker\Provider\Base as BaseProvider;
+
+class JobProvider extends BaseProvider
+{
+   /**
+    * Sources: {@link http://siliconvalleyjobtitlegenerator.tumblr.com/}
+    *
+    * @var array List of job titles.
+    */
+   private $titleProvider = [
+       'firstname' => [
+           'Audience Recognition',
+           'Big Data',
+           'Bitcoin',
+           '...',
+           'Video Experience',
+           'Wearables',
+           'Webinar',
+       ],
+       'lastname' => [
+           'Advocate',
+           'Amplifier',
+           'Architect',
+           '...',
+           'Warlock',
+           'Watchman',
+           'Wizard',
+       ],
+       'fullname' => [
+           'Conductor of Datafication',
+           'Crowd-Funder-in-Residence',
+           'Quantified-Self-in-Residence',
+           '...',
+           'Tech-Svengali-in-Residence',
+           'Tech-Wizard-in-Residence',
+           'Thought-Leader-in-Residence',
+       ],
+   ];
+
+   /**
+    * Sources: {@link http://sos.uhrs.indiana.edu/Job_Code_Title_Abbreviation_List.htm}
+    *
+    * @var array List of job abbreviations.
+    */
+   private $abbreviationProvider = [
+       'ABATE',
+       'ACAD',
+       'ACCT',
+       '...',
+       'WCTR',
+       'WSTRN',
+       'WKR',
+   ];
+
+
+   /**
+    * @return string Random job title.
+    */
+   public function jobTitle()
+   {
+       $names = [
+           sprintf(
+               '%s %s',
+               self::randomElement($this->titleProvider['firstname']),
+               self::randomElement($this->titleProvider['lastname'])
+           ),
+           self::randomElement($this->titleProvider['fullname']),
+       ];
+       return self::randomElement($names);
+   }
+   /**
+    * @return string Random job abbreviation title
+    */
+   public function jobAbbreviation()
+   {
+       return self::randomElement($this->abbreviationProvider);
+   }
+}
+```
+
+You will need to inject a Faker generator instance, which you can get thanks to [`Nelmio\Alice\Instances\Processor\Methods\Faker`](src/Nelmio/Alice/Instances/Processor/Methods/Faker.php).
+
+Then, inject your provider to the [`Nelmio\Alice\Fixtures\Loader`](src/Nelmio/Alice/Fixtures/Loader.php).
 
 ### Custom Setter ###
 
