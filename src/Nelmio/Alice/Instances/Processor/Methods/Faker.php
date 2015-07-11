@@ -31,7 +31,7 @@ class Faker implements MethodInterface
     /**
      * @var \Faker\Generator[]
      */
-    private $generators;
+    private $generators = [];
 
     /**
      * Default locale to use with faker
@@ -54,7 +54,7 @@ class Faker implements MethodInterface
     /**
      * sets the object collection to handle referential calls
      *
-     * @param Collection
+     * @param Collection $objects
      */
     public function setObjects(Collection $objects)
     {
