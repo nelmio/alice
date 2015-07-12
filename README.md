@@ -574,6 +574,31 @@ Nelmio\Entity\User:
 All files are merged in one data set before generation, and the includer's content
 takes precedence over included files' fixtures in case of duplicate keys.
 
+#### with References ####
+
+Working with includes and references require some special setup.
+
+In `relative/path/to/another/users.yml`:
+
+```yaml
+Nelmio\Entity\User:
+    user:
+        age: '42'
+```
+
+The user can only be referenced by using an empty model. 
+```yaml
+include:
+    - relative/path/to/users.yml
+
+Nelmio\Entity\User:
+
+Nelmio\Entity\Group:
+    group1:
+        addUser: [@user->id]
+        role: 'admin'
+```
+
 ### Variables ###
 
 For some advanced use cases you sometimes need to reference one property
