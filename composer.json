@@ -27,6 +27,9 @@
     "autoload": {
         "psr-4": { "Nelmio\\Alice\\": "src/Nelmio/Alice" }
     },
+    "autoload-dev": {
+        "psr-4": { "Nelmio\\Alice\\": "tests/Nelmio/Alice" }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "2.0.x-dev"
