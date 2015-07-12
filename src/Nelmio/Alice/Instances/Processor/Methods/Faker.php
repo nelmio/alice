@@ -31,7 +31,7 @@ class Faker implements MethodInterface
     /**
      * @var \Faker\Generator[]
      */
-    private $generators;
+    private $generators = [];
 
     /**
      * Default locale to use with faker
