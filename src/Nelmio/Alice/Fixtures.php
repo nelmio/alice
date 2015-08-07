@@ -30,6 +30,7 @@ class Fixtures
         $defaults = [
             'locale' => 'en_US',
             'providers' => [],
+            'builders' => [],
             'seed' => 1,
             'logger' => null,
             'persist_once' => false,
@@ -175,6 +176,11 @@ class Fixtures
         $loaderKey = self::generateLoaderKey($options);
         if (!isset(self::$loaders[$loaderKey])) {
             self::$loaders[$loaderKey] = new Loader($options['locale'], $options['providers'], $options['seed']);
+            if ($options['builders']) {
+                foreach ($options['builders'] as $builder) {
+                    self::$loaders[$loaderKey]->addBuilder($builder);
+                }
+            }
         }
 
         return self::$loaders[$loaderKey];
