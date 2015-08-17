@@ -218,7 +218,7 @@ class JobProvider extends BaseProvider
 }
 ```
 
-You will need to inject a Faker generator instance, which you can get thanks to [`Nelmio\Alice\Instances\Processor\Methods\Faker`](src/Nelmio/Alice/Instances/Processor/Methods/Faker.php).
+You will need to inject a Faker generator instance, which you can get thanks to [`Nelmio\Alice\Instances\Processor\Methods\Faker`](../src/Nelmio/Alice/Instances/Processor/Methods/Faker.php).
 
 Then, inject your provider to the [`Nelmio\Alice\Fixtures\Loader`](../src/Nelmio/Alice/Fixtures/Loader.php) or when calling [`Nelmio\Alice\Fixtures::load()`](../src/Nelmio/Alice/Fixtures.php#L55).
 
