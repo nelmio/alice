@@ -50,7 +50,7 @@ class TypeHintChecker
         $reflection = new \ReflectionMethod($obj, $method);
         $params = $reflection->getParameters();
 
-        if (!$params[$pNum]->getClass()) {
+        if (!isset($params[$pNum]) || !$params[$pNum]->getClass()) {
             return $value;
         }
 
