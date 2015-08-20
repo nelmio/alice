@@ -11,21 +11,28 @@
 
 namespace Nelmio\Alice;
 
+/**
+ * The persister is the class responsible for persisting objects into the database.
+ *
+ * @author Jordi Boggiano <j.boggiano@seld.be>
+ * @author Robert Schönthal
+ */
 interface PersisterInterface
 {
     /**
-     * Loads a fixture file
+     * Persists objects to database.
      *
-     * @param array[object] $objects instance to persist in the DB
+     * @param object[] $objects
      */
     public function persist(array $objects);
 
     /**
-     * Finds an object by class and id
+     * Finds an object by class and id.
      *
      * @param  string $class
      * @param  int    $id
-     * @return mixed
+     *
+     * @return object|null null if object not found.
      */
     public function find($class, $id);
 }
