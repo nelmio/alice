@@ -84,6 +84,8 @@ For more information, refer to [the documentation](#table-of-contents).
   * [hautelook/AliceBundle](https://github.com/hautelook/AliceBundle)
   * [h4cc/AliceFixturesBundle](https://github.com/h4cc/AliceFixturesBundle)
   * [knplabs/rad-fixtures-load](https://github.com/KnpLabs/rad-fixtures-load)
+* Zend Framework 2:
+  * [ma-si/aist-alice-fixtures](https://github.com/ma-si/aist-alice-fixtures)
 
 
 ## License
