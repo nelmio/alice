@@ -109,20 +109,20 @@ use Nelmio\Alice\Fixtures;
 
 class LoadFixtureData implements FixtureInterface
 {
-   public function load(ObjectManager $om)
+   public function load(ObjectManager $manager)
    {
        // pass $this as an additional faker provider to make the "groupName"
        // method available as a data provider
-       Fixtures::load(__DIR__.'/fixtures.yml', $om, array('providers' => array($this)));
+       Fixtures::load(__DIR__.'/fixtures.yml', $manager, ['providers' => [$this]]);
    }
 
    public function groupName()
    {
-       $names = array(
+       $names = [
            'Group A',
            'Group B',
            'Group C',
-       );
+       ];
 
        return $names[array_rand($names)];
    }
