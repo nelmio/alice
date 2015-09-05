@@ -99,20 +99,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
                 'seed'      => 1,
                 'providers' => [
                     'Nelmio\Alice\FooProvider'
-                ],
-                'fixtures' => [
-                    self::USER => [
-                        'user1' => [
-                            'username' => 'johnny',
-                            'favoriteNumber' => 42,
-                        ],
-                    ],
-                    self::GROUP => [
-                        'group1' => [
-                            'owner' => 1
-                        ],
-                    ],
-                ],
+                ]
             ],
             // check various combinations of options (non-exhaustive)
             [
@@ -144,22 +131,6 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             [
                 'locale'    => 'ru_RU',
                 'seed'      => null,
-            ],
-            [
-                'locale'    => 'de_DE',
-                'fixtures' => [
-                    self::USER => [
-                        'user1' => [
-                            'username' => 'johnny',
-                            'favoriteNumber' => 42,
-                        ],
-                    ],
-                    self::GROUP => [
-                        'group1' => [
-                            'owner' => 1
-                        ],
-                    ],
-                ],
             ],
             [
                 'locale'    => 'de_DE',
@@ -288,9 +259,17 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $objects = Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, [
-            'logger' => 'not callable'
+        Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, [
+            'logger' => function () {}
         ]);
+
+        try {
+            Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, [
+                'logger' => 'not callable'
+            ]);
+        } catch (\RuntimeException $exception) {
+            // Expected result
+        }
     }
 
     public function testMakesOnlyOneFlushWithPersistOnce()

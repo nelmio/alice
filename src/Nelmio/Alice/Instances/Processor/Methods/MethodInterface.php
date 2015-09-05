@@ -16,7 +16,7 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 interface MethodInterface
 {
     /**
-     * returns true if this method can process the given value container
+     * returns true if this method can process the given value persister
      *
      * @param ProcessableInterface
      * @return boolean
