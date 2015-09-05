@@ -80,10 +80,12 @@ For more information, refer to [the documentation](#table-of-contents).
 
 ## Third-party libraries
 
-* Symfony2:
+* Symfony:
   * [hautelook/AliceBundle](https://github.com/hautelook/AliceBundle)
   * [h4cc/AliceFixturesBundle](https://github.com/h4cc/AliceFixturesBundle)
   * [knplabs/rad-fixtures-load](https://github.com/KnpLabs/rad-fixtures-load)
+* Nette
+  * [Zenify/DoctrineFixtures](https://github.com/Zenify/DoctrineFixtures)
 
 
 ## License
