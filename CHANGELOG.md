@@ -1,3 +1,9 @@
+### 2.1.0 (2015-09-06)
+
+  * Added support for array parameters
+  * Fixed bug handling addXXX setters
+  * Fixed bug handling functions without signature that use func_get_args() to retrieve parameters
+
 ### 2.0.0 (2015-03-17)
 
   * Expanded public interface of the `Loader` class to support:
