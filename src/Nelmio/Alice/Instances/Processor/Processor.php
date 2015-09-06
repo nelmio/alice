@@ -66,7 +66,7 @@ class Processor
     /**
      * processes a given value to return a value that can be set on the actual instance
      *
-     * @param  mixed  $valueOrProcessable - the original value (or value container) to be converted
+     * @param  mixed  $valueOrProcessable - the original value (or value persister) to be converted
      * @param  array  $variables
      * @param  string $valueForCurrent    - in the event a fixture will need to support <current()>, this value must be passed in at the top of the process loop
      * @return mixed

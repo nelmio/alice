@@ -12,62 +12,108 @@
 namespace Nelmio\Alice;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Nelmio\Alice\Persister\Doctrine;
 use Psr\Log\LoggerInterface;
 use Nelmio\Alice\Fixtures\Loader;
-use Nelmio\Alice\Persister\Doctrine as DoctrinePersister;
 
 class Fixtures
 {
+    /**
+     * @var Loader[]
+     */
     private static $loaders = [];
 
-    protected $container;
-    protected $defaultOptions;
-    protected $processors;
+    /**
+     * @var PersisterInterface
+     */
+    protected $persister;
 
-    public function __construct($container, array $defaultOptions = [], array $processors = [])
-    {
-        $this->container = $container;
-        $defaults = [
+    /**
+     * @var array
+     */
+    protected $defaultOptions = [
             'locale' => 'en_US',
             'providers' => [],
             'seed' => 1,
             'logger' => null,
             'persist_once' => false,
-        ];
-        $this->defaultOptions = array_merge($defaults, $defaultOptions);
+    ];
+
+    /**
+     * @var ProcessorInterface[]
+     */
+    protected $processors;
+
+    /**
+     * @param PersisterInterface $persister
+     * @param array              $defaultOptions
+     * @param array              $processors
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(PersisterInterface $persister, array $defaultOptions = [], array $processors = [])
+    {
+        $this->persister = $persister;
+
+        $this->validateOptions($defaultOptions);
+        $this->defaultOptions = array_merge($this->defaultOptions, $defaultOptions);
+
+        foreach ($processors as $processor) {
+            if (false === $processor instanceof ProcessorInterface) {
+                throw new \InvalidArgumentException(
+                    'Expected processor to implement Nelmio\Alice\Fixtures\ProcessorInterface.'
+                );
+            }
+        }
         $this->processors = $processors;
     }
 
     /**
-     * Loads a fixture file into an object container
+     * Loads a fixture file into an object persister.
      *
      * @param string|array $files      filename, glob mask (e.g. *.yml) or array of filenames to load data from, or data array
-     * @param object       $container  object container
+     * @param object       $persister  object persister
      * @param array        $options    available options:
      *                                 - providers: an array of additional faker providers
      *                                 - locale: the faker locale
      *                                 - seed: a seed to make sure faker generates data consistently across
      *                                 runs, set to null to disable
      *                                 - logger: a callable or Psr\Log\LoggerInterface object that will receive progress information
-     *                                 - persist_once: only persist objects once if multiple files are passsed
+     *                                 - persist_once: only persist objects once if multiple files are passed
      * @param array        $processors optional array of ProcessorInterface instances
      */
-    public static function load($files, $container, array $options = [], array $processors = [])
+    public static function load($files, $persister, array $options = [], array $processors = [])
     {
-        $fixtures = new static($container, $options, $processors);
+        $_persister = null;
+
+        switch (true) {
+            case $persister instanceof PersisterInterface:
+                $_persister = $persister;
+                break;
+
+            case $persister instanceof ObjectManager:
+                $_persister = new Doctrine($persister);
+                break;
+
+            default:
+                throw new \InvalidArgumentException('Unknown persister type '.get_class($persister));
+        }
+
+        $fixtures = new static($_persister, $options, $processors);
 
         return $fixtures->loadFiles($files);
     }
 
+    /**
+     * @param       $files
+     * @param array $options
+     *
+     * @return array
+     */
     public function loadFiles($files, array $options = [])
     {
+        $this->validateOptions($options);
         $options = array_merge($this->defaultOptions, $options);
-
-        if ($this->container instanceof ObjectManager) {
-            $persister = new DoctrinePersister($this->container);
-        } else {
-            throw new \InvalidArgumentException('Unknown container type '.get_class($this->container));
-        }
 
         // glob strings to filenames
         if (!is_array($files)) {
@@ -87,24 +133,18 @@ class Fixtures
         foreach ($files as $file) {
             $loader = self::getLoader($options);
 
-            if (is_callable($options['logger']) || $options['logger'] instanceof LoggerInterface) {
-                $loader->setLogger($options['logger']);
-            } elseif (null !== $options['logger']) {
-                throw new \RuntimeException('Logger must be callable or an instance of Psr\Log\LoggerInterface.');
-            }
-
-            $loader->setPersister($persister);
+            $loader->setPersister($this->persister);
             $set = $loader->load($file);
 
             if (!$options['persist_once']) {
-                $this->persist($persister, $set);
+                $this->persist($this->persister, $set);
             }
 
             $objects = array_merge($objects, $set);
         }
 
         if ($options['persist_once']) {
-            $this->persist($persister, $objects);
+            $this->persist($this->persister, $objects);
         }
 
         return $objects;
@@ -139,11 +179,6 @@ class Fixtures
             foreach ($options['providers'] as $item) {
                 if (is_object($item)) {
                     $item = get_class($item);
-                } elseif (!is_string($item)) {
-                    $msg = 'The provider should be a string or an object, got '
-                           . (is_scalar($item) ? $item : gettype($item))
-                            . ' instead';
-                    throw new \InvalidArgumentException($msg);
                 }
 
                 // turn all of the class names into fully-qualified ones
@@ -178,5 +213,58 @@ class Fixtures
         }
 
         return self::$loaders[$loaderKey];
+    }
+
+    /**
+     * Checks if the options are valid or not. If not throws an exception.
+     *
+     * @param array $options
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function validateOptions(array $options)
+    {
+        foreach (array_keys($options) as $key) {
+            if (false === array_key_exists($key, $this->defaultOptions)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Unknown key "%s", expected: %s',
+                    $key,
+                    implode(', ', array_keys($this->defaultOptions))
+                ));
+            }
+        }
+
+        if (isset($options['providers'])) {
+            $providers = $options['providers'];
+
+            if (false === is_array($providers)) {
+                throw new \InvalidArgumentException('Expected "providers" option value to be an array');
+            }
+
+            foreach ($providers as $provider) {
+                if (false === is_object($provider) && false === is_string($provider)) {
+                    throw new \InvalidArgumentException(sprintf(
+                        'The provider should be a string or an object, got %s instead',
+                        is_scalar($provider) ?$provider :gettype($provider)
+                    ));
+                }
+            }
+        }
+
+        if (isset($options['logger'])) {
+            $logger = $options['logger'];
+
+            if (false === is_callable($logger) && false === $logger instanceof LoggerInterface) {
+                throw new \InvalidArgumentException(
+                    'Expected "logger" option value to be a callable or to implement Psr\Log\LoggerInterface'
+                );
+            }
+        }
+
+        if (isset($options['persist_once'])) {
+            if (false === is_bool($options['persist_once'])) {
+                throw new \InvalidArgumentException('Expected "persist_once" option value value to be a boolean.');
+            }
+        }
     }
 }
