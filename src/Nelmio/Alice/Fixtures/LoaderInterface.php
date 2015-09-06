@@ -2,6 +2,8 @@
 
 namespace Nelmio\Alice\Fixtures;
 
+use Nelmio\Alice\PersisterInterface;
+
 /**
  * Loads fixtures from an array or file.
  *
@@ -17,4 +19,11 @@ interface LoaderInterface
      * @return array Objects loaded (not persisted).
      */
     public function load($dataOrFilename);
+
+    /**
+     * Sets the Persister interface
+     *
+     * @param PersisterInterface $manager
+     */
+    public function setPersister(PersisterInterface $manager);
 }

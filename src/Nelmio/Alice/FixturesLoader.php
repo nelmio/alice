@@ -92,13 +92,13 @@ class FixturesLoader
 
         $objects = [];
         foreach ($files as $file) {
-            $set = $this->loader->load($file);
+            $dataSet = $this->loader->load($file);
 
             if (false === $persist_once) {
-                $this->persist($set);
+                $this->persist($dataSet);
             }
 
-            $objects = array_merge($objects, $set);
+            $objects = array_merge($objects, $dataSet);
         }
 
         if (true === $persist_once) {
@@ -109,7 +109,7 @@ class FixturesLoader
     }
 
     /**
-     * Use the Fixture persister to persist objects and calling the processors.
+     * Uses the Fixture persister to persist objects and calling the processors.
      *
      * @param object[] $objects
      */

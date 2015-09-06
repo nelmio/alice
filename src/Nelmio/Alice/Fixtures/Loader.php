@@ -315,9 +315,7 @@ class Loader implements LoaderInterface
     }
 
     /**
-     * public interface to set the Persister interface
-     *
-     * @param PersisterInterface $manager
+     * {@inheritdoc}
      */
     public function setPersister(PersisterInterface $manager)
     {
