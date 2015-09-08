@@ -133,6 +133,10 @@ class Fixtures
         foreach ($files as $file) {
             $loader = self::getLoader($options);
 
+            if (isset($options['logger'])) {
+                $loader->setLogger($options['logger']);
+            }
+
             $loader->setPersister($this->persister);
             $set = $loader->load($file);
 
