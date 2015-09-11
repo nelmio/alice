@@ -2,6 +2,8 @@
 
 ## Creating Fixtures
 
+### YAML
+
 The most basic functionality of this library is to turn flat yaml files into
 objects. You can define many objects of different classes in one file as such:
 
@@ -28,6 +30,26 @@ Nelmio\Entity\Group:
 This works fine, but it is not very powerful and is completely static. You
 still have to do most of the work. Let's see how to make this more interesting.
 
+### PHP
+
+You can also specify fixtures in PHP by returing an array where each key with the following structure:
+
+```php
+<?php
+
+return [
+    'Nelmio\Alice\support\models\User' => [
+        'user1' => [
+            'username' => '<identity($fake("upperCaseProvider", null, "John Doe"))>',
+            'fullname' => '<upperCaseProvider("John Doe")>',
+        ],
+        'user2' => [
+            'username' => $fake('identity', null, $fake('upperCaseProvider', null, 'John Doe')),
+            'fullname' => $fake('upperCaseProvider', null, 'John Doe'),
+        ],
+    ],
+];
+```
 
 ## Fixture Ranges
 
