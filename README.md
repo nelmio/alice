@@ -86,6 +86,8 @@ For more information, refer to [the documentation](#table-of-contents).
   * [knplabs/rad-fixtures-load](https://github.com/KnpLabs/rad-fixtures-load)
 * Nette
   * [Zenify/DoctrineFixtures](https://github.com/Zenify/DoctrineFixtures)
+* Zend Framework 2:
+  * [ma-si/aist-alice-fixtures](https://github.com/ma-si/aist-alice-fixtures)
 
 
 ## License
