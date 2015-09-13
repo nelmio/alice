@@ -51,7 +51,7 @@ class Doctrine implements PersisterInterface
             $this->manager->persist($object);
         }
 
-        if (true === $this->flush) {
+        if ($this->flush) {
             $this->manager->flush();
         }
     }
