@@ -134,12 +134,12 @@ class Collection
             return [];
         }
 
-        $availableObjects = [];
-        foreach ($this->instances as $name => $instance) {
-            if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $name)) {
-                $availableObjects[] = $name;
-            }
-        }
+        $availableObjects = array_values(
+            preg_grep(
+                '{^'.str_replace('*', '.+', $mask).'$}',
+                array_keys($this->instances)
+            )
+        );
 
         if (!$availableObjects) {
             throw new \UnexpectedValueException('Instance mask "'.$mask.'" did not match any existing instance, make sure the object is created after its references');
