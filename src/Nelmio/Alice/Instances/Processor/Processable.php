@@ -61,4 +61,12 @@ class Processable implements ProcessableInterface
 
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMatches()
+    {
+        return $this->matches;
+    }
 }
