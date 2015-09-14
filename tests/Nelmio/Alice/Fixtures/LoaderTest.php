@@ -364,6 +364,20 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testLoadParsesZeroReferences()
+    {
+        $usernames = range('a', 'z');
+        $data = [];
+        foreach ($usernames as $key => $username) {
+            $data[self::USER]['user'.$key]['username'] = $username;
+        }
+        $data[self::GROUP]['a']['members'] = '0x @user*';
+        $this->loadData($data);
+
+        $group = $this->loader->getReference('a');
+        $this->assertCount(0, $group->getMembers());
+    }
+
     public function testLoadParsesSingleWildcardReferenceWithProperty()
     {
         $res = $this->loadData([

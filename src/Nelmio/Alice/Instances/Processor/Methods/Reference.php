@@ -24,7 +24,7 @@ class Reference implements MethodInterface
     /**
      * sets the object collection to handle referential calls
      *
-     * @param Collection
+     * @param Collection $objects
      */
     public function setObjects(Collection $objects)
     {
@@ -44,7 +44,7 @@ class Reference implements MethodInterface
      */
     public function process(ProcessableInterface $processable, array $variables)
     {
-        $multi = ('' !== $processable->getMatch('multi')) ? $processable->getMatch('multi') : null;
+        $multi = ('' !== $processable->getMatch('multi')) ? (int) $processable->getMatch('multi') : null;
         $property = !is_null($processable->getMatch('property')) ? $processable->getMatch('property') : null;
         $sequence = !is_null($processable->getMatch('sequence')) ? $processable->getMatch('sequence') : null;
 
