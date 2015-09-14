@@ -22,7 +22,7 @@ class RangeName implements MethodInterface
      */
     public function canBuild($name)
     {
-        return preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $this->matches);
+        return 1 === preg_match('#\{([0-9]+)\.\.(\.?)([0-9]+)\}#i', $name, $this->matches);
     }
 
     /**
