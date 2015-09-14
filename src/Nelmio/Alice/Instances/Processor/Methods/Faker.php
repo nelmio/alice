@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Instances\Processor\Methods;
 
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Processor\ProcessableInterface;
+use Faker\Factory;
 
 class Faker implements MethodInterface
 {
@@ -221,7 +222,7 @@ class Faker implements MethodInterface
         $locale = $locale ?: $this->defaultLocale;
 
         if (!isset($this->generators[$locale])) {
-            $generator = \Faker\Factory::create($locale);
+            $generator = Factory::create($locale);
             foreach ($this->providers as $provider) {
                 $generator->addProvider($provider);
             }

@@ -14,8 +14,8 @@ namespace Nelmio\Alice\Instances\Processor;
 interface ProcessableInterface
 {
     /**
-     * @return string
-     **/
+     * @return mixed
+     */
     public function getValue();
 
     /**

@@ -159,7 +159,7 @@ class Fixtures
         $this->processors[] = $processor;
     }
 
-    protected function persist($persister, $objects)
+    protected function persist(PersisterInterface $persister, $objects)
     {
         foreach ($this->processors as $proc) {
             foreach ($objects as $obj) {

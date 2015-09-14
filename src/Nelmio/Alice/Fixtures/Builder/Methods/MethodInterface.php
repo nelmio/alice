@@ -11,23 +11,25 @@
 
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
+use Nelmio\Alice\Fixtures\Fixture;
+
 interface MethodInterface
 {
     /**
      * tests whether this class can build an fixture with the given name
      *
-     * @param  string  $name
-     * @return boolean
+     * @param  string $name
+     * @return bool
      */
     public function canBuild($name);
 
     /**
      * builds an fixture from the given class, name, and spec
      *
-     * @param  string $class
-     * @param  string $name
-     * @param  array  $spec
-     * @return array
+     * @param  string    $class
+     * @param  string    $name
+     * @param  array     $spec
+     * @return Fixture[]
      */
     public function build($class, $name, array $spec);
 }

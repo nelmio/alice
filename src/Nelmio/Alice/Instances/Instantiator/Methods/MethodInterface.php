@@ -18,16 +18,16 @@ interface MethodInterface
     /**
      * returns true if this method can instantiate the object described in the fixture
      *
-     * @param Fixture
-     * @return boolean
+     * @param  Fixture $fixture
+     * @return bool
      */
     public function canInstantiate(Fixture $fixture);
 
     /**
      * returns an empty instance of the class the fixture describes
      *
-     * @param Fixture
-     * @return mixed
+     * @param  Fixture $fixture
+     * @return object
      */
     public function instantiate(Fixture $fixture);
 }

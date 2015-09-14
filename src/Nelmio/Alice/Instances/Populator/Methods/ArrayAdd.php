@@ -52,8 +52,9 @@ class ArrayAdd implements MethodInterface
     /**
      * finds the method used to append values to the named property
      *
-     * @param mixed  $object
-     * @param string $property
+     * @param  mixed  $object
+     * @param  string $property
+     * @return string Method name or null if adder method not detected
      */
     private function findAdderMethod($object, $property)
     {
