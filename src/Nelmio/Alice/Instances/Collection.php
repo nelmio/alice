@@ -111,13 +111,17 @@ class Collection
                     return $object->$getter();
                 }
 
-                throw new \UnexpectedValueException('Property '.$property.' is not defined for instance '.$name);
+                throw new \UnexpectedValueException(
+                    sprintf('Property %s is not defined for instance %s', $property, $name)
+                );
             }
 
             return $object;
         }
 
-        throw new \UnexpectedValueException('Instance '.$name.' is not defined');
+        throw new \UnexpectedValueException(
+            sprintf('Instance %s is not defined', $name)
+        );
     }
 
     /**
@@ -141,8 +145,13 @@ class Collection
             )
         );
 
-        if (!$availableObjects) {
-            throw new \UnexpectedValueException('Instance mask "'.$mask.'" did not match any existing instance, make sure the object is created after its references');
+        if (empty($availableObjects)) {
+            throw new \UnexpectedValueException(
+                sprintf(
+                    'Instance mask "%s" did not match any existing instance, make sure the object is created after its references',
+                    $mask
+                )
+            );
         }
 
         if (null === $count) {
