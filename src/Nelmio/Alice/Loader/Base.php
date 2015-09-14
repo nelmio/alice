@@ -751,12 +751,12 @@ class Base implements LoaderInterface
             return array();
         }
 
-        $availableRefs = array();
-        foreach ($this->references as $key => $val) {
-            if (preg_match('{^'.str_replace('*', '.+', $mask).'$}', $key)) {
-                $availableRefs[] = $key;
-            }
-        }
+        $availableRefs = array_values(
+            preg_grep(
+                '{^'.str_replace('*', '.+', $mask).'$}',
+                array_keys($this->references)
+            )
+        );
 
         if (!$availableRefs) {
             throw new \UnexpectedValueException('Reference mask "'.$mask.'" did not match any existing reference, make sure the object is created after its references');
