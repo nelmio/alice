@@ -11,9 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-use Nelmio\Alice\support\models\PrivateConstructorClass;
-use Nelmio\Alice\support\models\Group;
-use Nelmio\Alice\TestPersister;
 use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\extensions;
 
@@ -23,8 +20,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     const MAGIC_USER = 'Nelmio\Alice\support\models\MagicUser';
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
-
-    protected $persister;
+    const PRIVATE_CONSTRUCTOR_CLASS = 'Nelmio\Alice\support\models\PrivateConstructorClass';
 
     /**
      * @var \Nelmio\Alice\Fixtures\Loader
@@ -35,7 +31,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader = $this->createLoader($options);
 
-        return $loader->load($data, $this->persister);
+        return $loader->load($data);
     }
 
     protected function createLoader(array $options = [])
@@ -47,8 +43,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             'parameters' => []
         ];
         $options = array_merge($defaults, $options);
-
-        $this->persister = new TestPersister;
 
         return $this->loader = new Loader($options['locale'], $options['providers'], $options['seed'], $options['parameters']);
     }
@@ -83,7 +77,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBadReference()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'bob' => [],
             ],
@@ -94,11 +88,12 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadUnparsableFile()
     {
-        try {
-            $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/not-parsable');
-        } catch (\UnexpectedValueException $e) {
-            $this->assertEquals("{$file} cannot be parsed - no parser exists that can handle it.", $e->getMessage());
-        }
+        $file = __DIR__.'/../support/fixtures/not-parsable';
+        $this->setExpectedException(
+            '\UnexpectedValueException',
+            sprintf('%s cannot be parsed - no parser exists that can handle it.', $file)
+        );
+        $this->createLoader()->load($file);
     }
 
     public function testCreatePrivateConstructorInstance()
@@ -106,16 +101,17 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new Loader('en_US', [new FakerProvider]);
 
         $res = $loader->load($file = __DIR__.'/../support/fixtures/private_constructs.yml');
-        $this->assertTrue($res['test1'] instanceof PrivateConstructorClass);
+        $this->assertInstanceOf(self::PRIVATE_CONSTRUCTOR_CLASS, $res['test1']);
     }
 
     public function testLoadInvalidFile()
     {
-        try {
-            $res = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/invalid.php');
-        } catch (\UnexpectedValueException $e) {
-            $this->assertEquals('Included file "'.$file.'" must return an array of data', $e->getMessage());
-        }
+        $file = __DIR__.'/../support/fixtures/invalid.php';
+        $this->setExpectedException(
+            'UnexpectedValueException',
+            sprintf('Included file "%s" must return an array of data', $file)
+        );
+        $this->createLoader()->load($file);
     }
 
     public function testLoadEmptyFile()
@@ -128,7 +124,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $object = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/sequenced_items.yml');
         $this->assertArrayHasKey('group1', $object);
-        $this->assertTrue($object['group1'] instanceof Group);
+        $this->assertInstanceOf(self::GROUP, $object['group1']);
         $counter = 1;
         foreach ($object['group1']->getMembers() as $member) {
             $this->assertEquals($member->uuid, $counter);
@@ -315,7 +311,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadParsesPropertyReferencesDoesNotExist()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user1' => [
                     'username' => 'alice',
@@ -355,7 +351,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             $data[self::USER]['user'.$key]['username'] = $username;
         }
         $data[self::GROUP]['a']['members'] = '5x @user*';
-        $res = $this->loadData($data);
+        $this->loadData($data);
 
         $group = $this->loader->getReference('a');
         $this->assertCount(5, $group->getMembers());
@@ -406,7 +402,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             $data[self::USER]['user'.$key]['email'] = $email;
         }
         $data[self::GROUP]['a']['supportEmails'] = '5x @user*->email';
-        $res = $this->loadData($data);
+        $this->loadData($data);
 
         $group = $this->loader->getReference('a');
         $this->assertCount(5, $group->getSupportEmails());
@@ -421,7 +417,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadFailsMultiReferencesIfNoneMatch()
     {
-        $usernames = range('a', 'z');
         $data = [
             self::GROUP => [
                 'a' => [
@@ -429,7 +424,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
-        $res = $this->loadData($data);
+        $this->loadData($data);
     }
 
     public function testLoadParsesMultiReferencesAndOnlyPicksUniques()
@@ -453,7 +448,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadParsesOptionalValuesWithPercents()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user0' => [
                     'username' => '50%? name',
@@ -478,7 +473,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadParsesOptionalValuesWithFloats()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user0' => [
                     'username' => '0.5? name',
@@ -612,7 +607,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadParsesFakerDataUsesDefaultLocale()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user0' => [
                     'username' => '<siren()>',
@@ -974,7 +969,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testInheritedObjectDoesntExist()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user_base (template)' => [
                     'email'    => 'base@email.com'
@@ -1033,7 +1028,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testCurrentProviderFailsOutOfRanges()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user1' => [
                     'username' => '<current()>',
@@ -1048,7 +1043,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testArbitraryPropertyNamesFail()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user1' => [
                     'inexistent' => 'foo',
@@ -1063,7 +1058,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadFailsOnConstructorsWithRequiredArgs()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::CONTACT => [
                 'contact' => [
                     'user' => '@user',
@@ -1074,7 +1069,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadCanBypassConstructorsWithRequiredArgs()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user' => [
                     'username' => 'alice',
@@ -1098,7 +1093,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadCallsConstructorIfProvided()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user' => [
                     '__construct' => ['alice', 'alice@example.com'],
@@ -1151,7 +1146,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadFailsOnInvalidStaticConstructor()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user' => [
                     '__construct' => ['invalidMethod' => ['alice@example.com']],
@@ -1166,7 +1161,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadFailsOnScalarStaticConstructorArgs()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user' => [
                     '__construct' => ['create' => 'alice@example.com'],
@@ -1181,7 +1176,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadFailsIfStaticMethodDoesntReturnAnInstance()
     {
-        $res = $this->loadData([
+        $this->loadData([
             self::USER => [
                 'user' => [
                     '__construct' => ['bogusCreate' => ['alice@example.com']],
@@ -1295,7 +1290,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testUniqueValuesException()
     {
         $loader = new Loader("en_US", [new FakerProvider]);
-        $res = $loader->load([
+        $loader->load([
             self::USER => [
                 'user{0..1}' => [
                     'username(unique)' => '<fooGenerator()>'
@@ -1306,7 +1301,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testCurrentInConstructor()
     {
-        $res = $this->loadData([
+        $this->loadData([
                 self::USER => [
                     'user1' => [
                         '__construct' => ['alice', 'alice@example.com'],
