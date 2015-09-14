@@ -115,7 +115,7 @@ class Faker implements MethodInterface
     {
         $fakerRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)?\((?<args>(?:[^)]*|\)(?!>))*)\)>';
         if ($processable->valueMatches('#^'.$fakerRegex.'$#i')) {
-            return $this->replacePlaceholder($processable->matches, $variables);
+            return $this->replacePlaceholder($processable->getMatches(), $variables);
         } else {
             // format placeholders inline
             return preg_replace_callback('#'.$fakerRegex.'#i', function ($matches) use ($variables) {

@@ -33,4 +33,11 @@ interface ProcessableInterface
      * @return string
      */
     public function getMatch($name);
+
+    /**
+     * return all matches
+     *
+     * @return array|string[]
+     */
+    public function getMatches();
 }
