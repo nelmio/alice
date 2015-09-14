@@ -37,7 +37,7 @@ interface ProcessableInterface
     /**
      * return all matches
      *
-     * @return array|string[]
+     * @return string[]
      */
     public function getMatches();
 }
