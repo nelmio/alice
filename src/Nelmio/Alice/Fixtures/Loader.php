@@ -108,8 +108,7 @@ class Loader
         );
 
         $this->instantiator = new Instantiator\Instantiator(
-            $this->getBuiltInInstantiators($this->processor, $this->typeHintChecker),
-            $this->processor
+            $this->getBuiltInInstantiators($this->processor, $this->typeHintChecker)
         );
 
         $this->populator = new Populator\Populator(
