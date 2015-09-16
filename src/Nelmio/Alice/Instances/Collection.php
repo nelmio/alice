@@ -25,6 +25,17 @@ class Collection
     private $instances;
 
     /**
+     * Instance keys that match random mask
+     * [
+     *      mask => [keys matching mask],
+     *      mask2 => [keys matching mask2],
+     *      ...
+     * ]
+     * @var array
+     */
+    private $keysByMask = [];
+
+    /**
      * Initializes a new ArrayCollection.
      *
      * @param array $elements
@@ -125,6 +136,24 @@ class Collection
     }
 
     /**
+     * Get instance keys that match given mask
+     * @param string $mask
+     * @return string[]
+     */
+    protected function getKeysByMask($mask)
+    {
+        if (!isset($this->keysByMask[$mask])) {
+            $this->keysByMask[$mask] = array_values(
+                preg_grep(
+                    '{^'.str_replace('*', '.+', $mask).'$}',
+                    array_keys($this->instances)
+                )
+            );
+        }
+        return $this->keysByMask[$mask];
+    }
+
+    /**
      * returns a random object or objects from the collection, or a property on that object if $property is not null
      *
      * @param  string  $mask
@@ -138,12 +167,7 @@ class Collection
             return [];
         }
 
-        $availableObjects = array_values(
-            preg_grep(
-                '{^'.str_replace('*', '.+', $mask).'$}',
-                array_keys($this->instances)
-            )
-        );
+        $availableObjects = $this->getKeysByMask($mask);
 
         if (empty($availableObjects)) {
             throw new \UnexpectedValueException(
@@ -173,5 +197,6 @@ class Collection
     public function clear()
     {
         $this->instances = [];
+        $this->keysByMask = [];
     }
 }
