@@ -39,7 +39,7 @@ abstract class Base implements MethodInterface
     {
         // we add (\.php)? to the regex to allow extensions of this parser to first
         // be compiled by php
-        return preg_match("/\.{$this->extension}(\.php)?$/", $file) == 1;
+        return 1 === preg_match("/\\.{$this->extension}(\\.php)?$/", $file);
     }
 
     /**
