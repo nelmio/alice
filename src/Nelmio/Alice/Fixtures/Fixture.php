@@ -120,13 +120,19 @@ class Fixture
      */
     public function getExtensions()
     {
-        $extensions = array_filter(array_keys($this->nameFlags), function ($flag) {
-            return preg_match('#^extends\s*(.+)$#', $flag);
-        });
+        $extensions = array_filter(
+            array_keys($this->nameFlags),
+            function ($flag) {
+                return 1 === preg_match('#^extends\s*(.+)$#', $flag);
+            }
+        );
 
-        return array_map(function ($extension) {
-            return str_replace('extends ', '', $extension);
-        }, $extensions);
+        return array_map(
+            function ($extension) {
+                return str_replace('extends ', '', $extension);
+            },
+            $extensions
+        );
     }
 
     /**

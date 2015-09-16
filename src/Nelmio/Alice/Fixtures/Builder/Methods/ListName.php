@@ -15,6 +15,9 @@ use Nelmio\Alice\Fixtures\Fixture;
 
 class ListName implements MethodInterface
 {
+    /**
+     * @var string[]
+     */
     private $matches = [];
 
     /**
@@ -22,7 +25,7 @@ class ListName implements MethodInterface
      */
     public function canBuild($name)
     {
-        return preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $this->matches);
+        return 1 === preg_match('#\{([^,]+(\s*,\s*[^,]+)*)\}#', $name, $this->matches);
     }
 
     /**
