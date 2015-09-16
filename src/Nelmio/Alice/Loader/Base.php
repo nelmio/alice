@@ -48,6 +48,11 @@ class Base implements LoaderInterface
     /**
      * @var array
      */
+    protected $keysByMask = array();
+
+    /**
+     * @var array
+     */
     protected $templates = array();
 
     /**
@@ -360,6 +365,7 @@ class Base implements LoaderInterface
     public function setReferences(array $references)
     {
         $this->references = $references;
+        $this->keysByMask = array();
     }
 
     protected function createInstance($class, $name, array &$data)
@@ -745,18 +751,31 @@ class Base implements LoaderInterface
         return $data;
     }
 
+    /**
+     * Get instance keys that match given mask
+     * @param string $mask
+     * @return string[]
+     */
+    private function getKeysByMask($mask)
+    {
+        if (!isset($this->keysByMask[$mask])) {
+            $this->keysByMask[$mask] = array_values(
+                preg_grep(
+                    '{^'.str_replace('*', '.+', $mask).'$}',
+                    array_keys($this->references)
+                )
+            );
+        }
+        return $this->keysByMask[$mask];
+    }
+
     private function getRandomReferences($mask, $count = 1, $property = null)
     {
         if ($count === 0) {
             return array();
         }
 
-        $availableRefs = array_values(
-            preg_grep(
-                '{^'.str_replace('*', '.+', $mask).'$}',
-                array_keys($this->references)
-            )
-        );
+        $availableRefs = $this->getKeysByMask($mask);
 
         if (!$availableRefs) {
             throw new \UnexpectedValueException('Reference mask "'.$mask.'" did not match any existing reference, make sure the object is created after its references');
