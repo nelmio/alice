@@ -1,31 +1,31 @@
 # Processors
 
 Processors allow you to process objects before and/or after they are persisted. Processors
-must implement the `ProcessorInterface`.
+must implement the [`Nelmio\Alice\ProcessorInterface`](../src/Nelmio/Alice/ProcessorInterface.php).
 
 Here is an example where we may use this feature to make sure passwords are properly
 hashed on a `User`:
 
 ```php
-namespace Acme\DemoBundle\DataFixtures\ORM;
+namespace MyApp\DataFixtures\Processor;
 
 use Nelmio\Alice\ProcessorInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use MyApp\Hasher\PasswordHashInterface;
 use User;
 
 class UserProcessor implements ProcessorInterface
 {
     /**
-     * @var ContainerInterface
+     * @var PasswordHashInterface
      */
-    protected $container;
+    protected $passwordHasher;
 
     /**
-     * @param ContainerInterface $container
+     * @param PasswordHashInterface $passwordHasher
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(PasswordHashInterface $passwordHasher)
     {
-        $this->container = $container;
+        $this->passwordHasher = $passwordHasher;
     }
 
     /**
@@ -33,7 +33,6 @@ class UserProcessor implements ProcessorInterface
      */
     public function preProcess($object)
     {
-
     }
 
     /**
@@ -41,12 +40,11 @@ class UserProcessor implements ProcessorInterface
      */
     public function postProcess($object)
     {
-        if (!($object instanceof User)) {
+        if (false === $object instanceof User) {
             return;
         }
 
-        $hasher = $this->container->get('example_password_hasher');
-        $object->password = $hasher->hash($object->password);
+        $object->passwordHasher = $this->passwordHasher->hash($object->password);
     }
 }
 ```
@@ -56,7 +54,7 @@ You can add a list of processors in the load method, e.g.
 $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager, $options, $processors);
 ```
 
-Or, you can add them to your loader using the `addProcessor()` method, e.g.
+Or, you can add them to your loader using the `::addProcessor()` method, e.g.
 
 ```php
 $loader = new \Nelmio\Alice\Fixtures($objectManager, $options);
