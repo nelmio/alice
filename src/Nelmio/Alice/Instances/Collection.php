@@ -137,7 +137,7 @@ class Collection
 
     /**
      * Get instance keys that match given mask
-     * @param string $mask
+     * @param  string   $mask
      * @return string[]
      */
     protected function getKeysByMask($mask)
@@ -150,6 +150,7 @@ class Collection
                 )
             );
         }
+
         return $this->keysByMask[$mask];
     }
 
