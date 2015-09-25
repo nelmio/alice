@@ -30,7 +30,7 @@ class Builder
     {
         foreach ($methods as $method) {
             if (!($method instanceof MethodInterface)) {
-                throw new InvalidArgumentException("All methods passed into Builder must implement MethodInterface.");
+                throw new InvalidArgumentException('All methods passed into Builder must implement MethodInterface.');
             }
         }
 
@@ -39,7 +39,7 @@ class Builder
     }
 
     /**
-     * adds a builder for fixture building extensions
+     * adds a builder for fixture building extensions.
      *
      * @param MethodInterface $builder
      **/
@@ -49,7 +49,7 @@ class Builder
     }
 
     /**
-     * builds a single fixture from a "raw" definition
+     * builds a single fixture from a "raw" definition.
      *
      * @param array $rawData
      */
@@ -83,9 +83,10 @@ class Builder
     }
 
     /**
-     * returns the template with the given name
+     * returns the template with the given name.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return Fixture
      */
     protected function getTemplate($name)

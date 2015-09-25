@@ -16,7 +16,7 @@ use Nelmio\Alice\Fixtures\Fixture;
 class Unserialize implements MethodInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canInstantiate(Fixture $fixture)
     {
@@ -24,7 +24,7 @@ class Unserialize implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function instantiate(Fixture $fixture)
     {

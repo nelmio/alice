@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nelmio\Alice\Fixtures;
 
 use Nelmio\Alice\Instances\Processor\Processable;
@@ -40,9 +49,9 @@ class PropertyDefinition extends Processable
     }
 
     /**
-     * returns true if this property requires unique values
+     * returns true if this property requires unique values.
      *
-     * @return boolean
+     * @return bool
      **/
     public function requiresUnique()
     {
@@ -50,9 +59,9 @@ class PropertyDefinition extends Processable
     }
 
     /**
-     * returns true if this definition is for a property to be set on the instance
+     * returns true if this definition is for a property to be set on the instance.
      *
-     * @return boolean
+     * @return bool
      */
     public function isBasic()
     {
@@ -60,9 +69,9 @@ class PropertyDefinition extends Processable
     }
 
     /**
-     * returns true if this definition is the constructor
+     * returns true if this definition is the constructor.
      *
-     * @return boolean
+     * @return bool
      */
     public function isConstructor()
     {
@@ -70,9 +79,9 @@ class PropertyDefinition extends Processable
     }
 
     /**
-     * returns true if this definition is the custom setter
+     * returns true if this definition is the custom setter.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCustomSetter()
     {

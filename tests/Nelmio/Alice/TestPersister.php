@@ -26,12 +26,13 @@ class TestPersister implements PersisterInterface
     }
 
     /**
-     * @param  string $class
-     * @param  int    $id
+     * @param string $class
+     * @param int    $id
+     *
      * @return mixed
      */
     public function find($class, $id)
     {
-        return null;
+        return;
     }
 }

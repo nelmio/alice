@@ -13,7 +13,6 @@ namespace Nelmio\Alice\Instances\Populator\Methods;
 
 use Symfony\Component\Form\Util\FormUtil;
 use Symfony\Component\PropertyAccess\StringUtil;
-
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Util\TypeHintChecker;
 
@@ -30,7 +29,7 @@ class ArrayAdd implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
@@ -38,7 +37,7 @@ class ArrayAdd implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
@@ -50,7 +49,7 @@ class ArrayAdd implements MethodInterface
     }
 
     /**
-     * finds the method used to append values to the named property
+     * finds the method used to append values to the named property.
      *
      * @param mixed  $object
      * @param string $property

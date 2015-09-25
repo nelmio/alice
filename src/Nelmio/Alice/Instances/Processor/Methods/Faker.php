@@ -22,7 +22,7 @@ class Faker implements MethodInterface
     protected $objects;
 
     /**
-     * Custom faker providers to use with faker generator
+     * Custom faker providers to use with faker generator.
      *
      * @var array
      */
@@ -34,7 +34,7 @@ class Faker implements MethodInterface
     private $generators = [];
 
     /**
-     * Default locale to use with faker
+     * Default locale to use with faker.
      *
      * @var string
      */
@@ -47,12 +47,12 @@ class Faker implements MethodInterface
 
     public function __construct(array $providers, $locale = 'en_US')
     {
-        $this->providers     = $providers;
+        $this->providers = $providers;
         $this->defaultLocale = $locale;
     }
 
     /**
-     * sets the object collection to handle referential calls
+     * sets the object collection to handle referential calls.
      *
      * @param Collection $objects
      */
@@ -62,7 +62,7 @@ class Faker implements MethodInterface
     }
 
     /**
-     * sets the value for <current()>
+     * sets the value for <current()>.
      *
      * @param string
      */
@@ -72,7 +72,7 @@ class Faker implements MethodInterface
     }
 
     /**
-     * sets the providers that can be used
+     * sets the providers that can be used.
      *
      * @param array
      */
@@ -83,7 +83,7 @@ class Faker implements MethodInterface
     }
 
     /**
-     * Adds one or more providers that can be used
+     * Adds one or more providers that can be used.
      *
      * @param object|array $provider Provider or array of providers
      */
@@ -101,7 +101,7 @@ class Faker implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canProcess(ProcessableInterface $processable)
     {
@@ -109,7 +109,7 @@ class Faker implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ProcessableInterface $processable, array $variables)
     {
@@ -125,10 +125,11 @@ class Faker implements MethodInterface
     }
 
     /**
-     * replaces a placeholder by the result of a ->fake call
+     * replaces a placeholder by the result of a ->fake call.
      *
-     * @param  array $matches
-     * @param  array $variables
+     * @param array $matches
+     * @param array $variables
+     *
      * @return mixed
      */
     public function replacePlaceholder($matches, array $variables)
@@ -159,16 +160,16 @@ class Faker implements MethodInterface
                 return $match['string'];
             }
 
-            $multi    = ('' !== $match['multi']) ? $match['multi'] : null;
+            $multi = ('' !== $match['multi']) ? $match['multi'] : null;
             $property = isset($match['property']) ? $match['property'] : null;
             if (strpos($match['reference'], '*')) {
-                return '$this->objects->random(' . var_export($match['reference'], true) . ', ' . var_export($multi, true) . ', ' . var_export($property, true) . ')';
+                return '$this->objects->random('.var_export($match['reference'], true).', '.var_export($multi, true).', '.var_export($property, true).')';
             }
             if (null !== $multi) {
                 throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$match['multi'].'x @user*", otherwise you would always get only one item.');
             }
 
-            return '$this->objects->find(' . var_export($match['reference'], true) . ', ' . var_export($property, true) . ')';
+            return '$this->objects->find('.var_export($match['reference'], true).', '.var_export($property, true).')';
         }, $args);
 
         $locale = var_export($matches['locale'], true);
@@ -180,18 +181,19 @@ class Faker implements MethodInterface
             return call_user_func_array([$that, 'fake'], func_get_args());
         };
 
-        return eval('return $this->fake(' . $name . ', ' . $locale . ', ' . $args . ');');
+        return eval('return $this->fake('.$name.', '.$locale.', '.$args.');');
     }
 
     /**
-     * Returns a fake value
+     * Returns a fake value.
      *
      * This is made public so it is accessible by the $fake() callback in replacePlaceholder
      * and the callback in Parser\Method\Base::createFakerClosure
      *
-     * @param  string $formatter
-     * @param  string $locale
+     * @param string $formatter
+     * @param string $locale
      * @private
+     *
      * @return mixed
      */
     public function fake($formatter, $locale = null)
@@ -210,7 +212,7 @@ class Faker implements MethodInterface
     }
 
     /**
-     * Get the generator for this locale
+     * Get the generator for this locale.
      *
      * @param string $locale the requested locale, defaults to constructor injected default
      *

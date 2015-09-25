@@ -26,15 +26,15 @@ class Instantiator
     {
         foreach ($methods as $method) {
             if (!($method instanceof MethodInterface)) {
-                throw new InvalidArgumentException("All methods passed into Instantiator must implement MethodInterface.");
+                throw new InvalidArgumentException('All methods passed into Instantiator must implement MethodInterface.');
             }
         }
 
-        $this->methods   = $methods;
+        $this->methods = $methods;
     }
 
     /**
-     * adds an instantiator for instantiation extensions
+     * adds an instantiator for instantiation extensions.
      *
      * @param MethodInterface $instantiator
      **/
@@ -44,9 +44,10 @@ class Instantiator
     }
 
     /**
-     * creates and returns an instance of the described class in the fixture
+     * creates and returns an instance of the described class in the fixture.
      *
-     * @param  Fixture $fixture
+     * @param Fixture $fixture
+     *
      * @return mixed
      */
     public function instantiate(Fixture $fixture)

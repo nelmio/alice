@@ -14,9 +14,10 @@ namespace Nelmio\Alice\Util;
 class FlagParser
 {
     /**
-     * parse the given key into a name and flags
+     * parse the given key into a name and flags.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return array
      */
     public static function parse($key)

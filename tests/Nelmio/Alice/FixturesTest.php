@@ -69,85 +69,85 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             [],
             // full list
             [
-                'locale'    => 'en_US',
-                'seed'      => 1,
+                'locale' => 'en_US',
+                'seed' => 1,
                 'providers' => [
-                    'Nelmio\Alice\FooProvider'
-                ]
+                    'Nelmio\Alice\FooProvider',
+                ],
             ],
             // check that loader isn't created twice for the same options
             [
-                'locale'    => 'en_US',
-                'seed'      => 1,
+                'locale' => 'en_US',
+                'seed' => 1,
                 'providers' => [
-                    new \Nelmio\Alice\FooProvider()
-                ]
+                    new \Nelmio\Alice\FooProvider(),
+                ],
             ],
             // check that loader isn't created twice for the same options
             [
-                'locale'    => 'en_US',
-                'seed'      => 1,
+                'locale' => 'en_US',
+                'seed' => 1,
                 'providers' => [
                     // this time we have the leading backslash
-                    '\Nelmio\Alice\FooProvider'
-                ]
+                    '\Nelmio\Alice\FooProvider',
+                ],
             ],
             // check that a new loader will be created for the same options
             // when the format of fixtures is different
             [
-                'locale'    => 'en_US',
-                'seed'      => 1,
+                'locale' => 'en_US',
+                'seed' => 1,
                 'providers' => [
-                    'Nelmio\Alice\FooProvider'
-                ]
+                    'Nelmio\Alice\FooProvider',
+                ],
             ],
             // check various combinations of options (non-exhaustive)
             [
-                'locale'    => 'ja_JP',
-                'seed'      => 3,
+                'locale' => 'ja_JP',
+                'seed' => 3,
                 'providers' => [
-                    'Nelmio\Alice\BarProvider'
+                    'Nelmio\Alice\BarProvider',
                 ],
             ],
             [
-                'locale'    => 'ja_JP',
-                'seed'      => 3,
+                'locale' => 'ja_JP',
+                'seed' => 3,
                 'providers' => [
                     'Nelmio\Alice\FooProvider',
-                    'Nelmio\Alice\BarProvider'
+                    'Nelmio\Alice\BarProvider',
                 ],
             ],
             [
-                'locale'    => 'ru_RU',
-                'seed'      => 1,
+                'locale' => 'ru_RU',
+                'seed' => 1,
                 'providers' => [
-                    'Nelmio\Alice\BarProvider'
-                ]
+                    'Nelmio\Alice\BarProvider',
+                ],
             ],
             [
-                'locale'    => 'ru_RU',
-                'seed'      => 100,
+                'locale' => 'ru_RU',
+                'seed' => 100,
             ],
             [
-                'locale'    => 'ru_RU',
-                'seed'      => null,
+                'locale' => 'ru_RU',
+                'seed' => null,
             ],
             [
-                'locale'    => 'de_DE',
+                'locale' => 'de_DE',
             ],
             [
-                'locale'    => 'fr_FR',
-                'seed'      => null,
+                'locale' => 'fr_FR',
+                'seed' => null,
                 'providers' => [
-                    'Nelmio\Alice\BarProvider'
-                ]
+                    'Nelmio\Alice\BarProvider',
+                ],
             ],
             [
-                'locale'    => 'fr_FR',
-                'seed'      => null,
+                'locale' => 'fr_FR',
+                'seed' => null,
                 'providers' => [
-                    'Nelmio\Alice\FooProvider'
-                ]
+                    'Nelmio\Alice\FooProvider',
+                ],
             ],
         ];
 
@@ -224,7 +224,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             ],
             self::GROUP => [
                 'group1' => [
-                    'owner' => 1
+                    'owner' => 1,
                 ],
             ],
 
@@ -260,12 +260,12 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, [
-            'logger' => function () {}
+            'logger' => function () {},
         ]);
 
         try {
             Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, [
-                'logger' => 'not callable'
+                'logger' => 'not callable',
             ]);
         } catch (\RuntimeException $exception) {
             // Expected result
@@ -283,7 +283,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             $om,
             [
                 'providers' => [$this],
-                'persist_once' => true
+                'persist_once' => true,
             ]
         );
 
@@ -321,7 +321,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Custom provider for the complete.yml file
+     * Custom provider for the complete.yml file.
      */
     public function contactName($user)
     {

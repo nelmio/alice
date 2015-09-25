@@ -19,23 +19,25 @@ interface ProcessableInterface
     public function getValue();
 
     /**
-     * tests whether this property's value matches the regex, and appends new matches to the matches array
+     * tests whether this property's value matches the regex, and appends new matches to the matches array.
      *
-     * @param  string  $regexString
-     * @return boolean
+     * @param string $regexString
+     *
+     * @return bool
      */
     public function valueMatches($regexString);
 
     /**
-     * allows us to access the list of matches from outside the property class
+     * allows us to access the list of matches from outside the property class.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return string
      */
     public function getMatch($name);
 
     /**
-     * return all matches
+     * return all matches.
      *
      * @return string[]
      */

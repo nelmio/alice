@@ -30,7 +30,8 @@ class Collection
      *      mask => [keys matching mask],
      *      mask2 => [keys matching mask2],
      *      ...
-     * ]
+     * ].
+     *
      * @var array
      */
     private $keysByMask = [];
@@ -46,7 +47,7 @@ class Collection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toArray()
     {
@@ -54,7 +55,7 @@ class Collection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function containsKey($name)
     {
@@ -62,7 +63,7 @@ class Collection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function get($name)
     {
@@ -70,11 +71,11 @@ class Collection
             return $this->instances[$name];
         }
 
-        return null;
+        return;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function set($name, $instance)
     {
@@ -82,7 +83,7 @@ class Collection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function remove($name)
     {
@@ -93,14 +94,15 @@ class Collection
             return $removed;
         }
 
-        return null;
+        return;
     }
 
     /**
-     * returns an object, or a property on that object if $property is not null
+     * returns an object, or a property on that object if $property is not null.
      *
-     * @param  string $name
-     * @param  string $property
+     * @param string $name
+     * @param string $property
+     *
      * @return mixed
      */
     public function find($name, $property = null)
@@ -136,8 +138,10 @@ class Collection
     }
 
     /**
-     * Get instance keys that match given mask
+     * Get instance keys that match given mask.
+     *
      * @param string $mask
+     *
      * @return string[]
      */
     protected function getKeysByMask($mask)
@@ -150,15 +154,17 @@ class Collection
                 )
             );
         }
+
         return $this->keysByMask[$mask];
     }
 
     /**
-     * returns a random object or objects from the collection, or a property on that object if $property is not null
+     * returns a random object or objects from the collection, or a property on that object if $property is not null.
      *
-     * @param  string  $mask
-     * @param  integer $count
-     * @param  string  $property
+     * @param string $mask
+     * @param int    $count
+     * @param string $property
+     *
      * @return mixed
      */
     public function random($mask, $count = 1, $property = null)

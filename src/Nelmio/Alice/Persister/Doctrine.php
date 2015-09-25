@@ -15,7 +15,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Nelmio\Alice\PersisterInterface;
 
 /**
- * The Doctrine persists the fixtures into an ObjectManager
+ * The Doctrine persists the fixtures into an ObjectManager.
  */
 class Doctrine implements PersisterInterface
 {
@@ -29,7 +29,7 @@ class Doctrine implements PersisterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function persist(array $objects)
     {
@@ -43,14 +43,14 @@ class Doctrine implements PersisterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function find($class, $id)
     {
         $entity = $this->om->find($class, $id);
 
         if (!$entity) {
-            throw new \UnexpectedValueException('Entity with Id ' . $id . ' and Class ' . $class . ' not found');
+            throw new \UnexpectedValueException('Entity with Id '.$id.' and Class '.$class.' not found');
         }
 
         return $entity;

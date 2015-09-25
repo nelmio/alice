@@ -26,7 +26,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
     protected function createInstantiator(array $options = [])
     {
         $defaults = [
-            'methods' => []
+            'methods' => [],
         ];
         $options = array_merge($defaults, $options);
 
@@ -39,7 +39,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
         $fixture = new Fixture($class, 'referenced', [], null);
 
         $this->createInstantiator();
-        $this->instantiator->addInstantiator(new CustomInstantiator);
+        $this->instantiator->addInstantiator(new CustomInstantiator());
         $object = $this->instantiator->instantiate($fixture);
         $this->assertTrue($object instanceof $class);
         $this->assertFalse(is_null($object->uuid));

@@ -61,10 +61,8 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/include.php');
 
         $expectedData = [
-            'Nelmio\\Alice\\fixtures\\Product' =>
-                [
-                    'product_base (template)' =>
-                        [
+            'Nelmio\\Alice\\fixtures\\Product' => [
+                    'product_base (template)' => [
                             'status' => 'in_stock',
                             'site' => '<word()>',
                             'changed' => 'n',
@@ -77,33 +75,26 @@ class PhpTest extends \PHPUnit_Framework_TestCase
                             'markDeleted' => '<word()>',
                             'paid' => 'y',
                         ],
-                    'product1' =>
-                        [
+                    'product1' => [
                             'amount' => 45,
                             'paid' => 'n',
                             'user' => '@user0',
                         ],
-                    'product0' =>
-                        [
+                    'product0' => [
                             'changed' => 'y',
                             'user' => '@user1',
                         ],
                 ],
-            'Nelmio\\Alice\\fixtures\\Shop' =>
-                [
-                    'shop2' =>
-                        [
+            'Nelmio\\Alice\\fixtures\\Shop' => [
+                    'shop2' => [
                             'domain' => 'amazon.com',
                         ],
-                    'shop1' =>
-                        [
+                    'shop1' => [
                             'domain' => 'ebay.com',
                         ],
                 ],
-            'Nelmio\\Alice\\fixtures\\User' =>
-                [
-                    'user_base (template)' =>
-                        [
+            'Nelmio\\Alice\\fixtures\\User' => [
+                    'user_base (template)' => [
                             'email' => '<email()>',
                         ],
                 ],

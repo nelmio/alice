@@ -27,7 +27,7 @@ class Parameterized implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canProcess(ProcessableInterface $processable)
     {
@@ -35,7 +35,7 @@ class Parameterized implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ProcessableInterface $processable, array $variables)
     {

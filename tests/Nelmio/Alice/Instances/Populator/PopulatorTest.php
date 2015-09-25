@@ -25,8 +25,8 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
     const PLURAL = 'Nelmio\Alice\support\models\PluralProperties';
 
     /**
-    * @var Collection
-    */
+     * @var Collection
+     */
     protected $objects;
 
     /**
@@ -36,11 +36,11 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
 
     protected function createPopulator(array $options = [])
     {
-        $objects = isset($options['objects']) ? $options['objects'] : new Collection;
+        $objects = isset($options['objects']) ? $options['objects'] : new Collection();
         $defaults = [
             'objects' => $objects,
             'processor' => new Processor($objects, [], new ParameterBag()),
-            'methods' => []
+            'methods' => [],
         ];
         $options = array_merge($defaults, $options);
 
@@ -50,11 +50,11 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
     public function testAddPopulator()
     {
         $class = self::CONTACT;
-        $fixture = new Fixture($class, 'test', [ 'magicProp' => 'magicValue' ], null);
-        $object = new $class(new \Nelmio\Alice\support\models\User);
+        $fixture = new Fixture($class, 'test', ['magicProp' => 'magicValue'], null);
+        $object = new $class(new \Nelmio\Alice\support\models\User());
 
-        $this->createPopulator([ 'objects' => new Collection([ 'test' => $object ]) ]);
-        $this->populator->addPopulator(new CustomPopulator);
+        $this->createPopulator(['objects' => new Collection(['test' => $object])]);
+        $this->populator->addPopulator(new CustomPopulator());
         $this->populator->populate($fixture);
         $this->assertEquals('magicValue set by magic setter', $object->magicProp);
     }
@@ -74,10 +74,10 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
     public function testArrayAdd()
     {
         $class = self::PLURAL;
-        $fixture = new Fixture($class, 'test', [ 'fields' => ['a', 'b', 'c'], 'properties' => ['q', 'w', 'e'] ], null);
+        $fixture = new Fixture($class, 'test', ['fields' => ['a', 'b', 'c'], 'properties' => ['q', 'w', 'e']], null);
         $object = new $class();
 
-        $this->createPopulator([ 'objects' => new Collection([ 'test' => $object ]) ]);
+        $this->createPopulator(['objects' => new Collection(['test' => $object])]);
         $this->populator->addPopulator(new ArrayAdd(new TypeHintChecker()));
         $this->populator->populate($fixture);
 

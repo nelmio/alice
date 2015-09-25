@@ -23,7 +23,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     protected function createParser(array $options = [])
     {
         $defaults = [
-            'methods' => []
+            'methods' => [],
         ];
         $options = array_merge($defaults, $options);
 
@@ -33,14 +33,14 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     public function testAddParser()
     {
         $this->createParser();
-        $this->parser->addParser(new CustomParser);
+        $this->parser->addParser(new CustomParser());
         $data = $this->parser->parse(__DIR__.'/../../support/fixtures/parsers/csvtest.csv');
 
         $expectedData = [
             'Nelmio\Alice\support\models\User' => [
                     'user{1..10}' => ['username' => '<username()>', 'email' => '<current>@test.org'],
-                    'user11' => ['username' => 'user11', 'email' => 'user11@test.org']
-                ]
+                    'user11' => ['username' => 'user11', 'email' => 'user11@test.org'],
+                ],
             ];
 
         $this->assertEquals($expectedData, $data);

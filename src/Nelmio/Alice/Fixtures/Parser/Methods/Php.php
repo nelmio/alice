@@ -38,7 +38,7 @@ class Php extends Base
     protected $extension = 'php';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function parse($file)
     {

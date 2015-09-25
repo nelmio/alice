@@ -16,7 +16,7 @@ use Nelmio\Alice\Fixtures\Fixture;
 class MagicCall implements MethodInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
@@ -24,7 +24,7 @@ class MagicCall implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
@@ -33,9 +33,10 @@ class MagicCall implements MethodInterface
     }
 
     /**
-     * return the name of the setter for a given property
+     * return the name of the setter for a given property.
      *
-     * @param  string $property
+     * @param string $property
+     *
      * @return string
      */
     private function setterFor($property)

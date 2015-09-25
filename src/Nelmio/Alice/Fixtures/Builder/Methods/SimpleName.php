@@ -16,7 +16,7 @@ use Nelmio\Alice\Fixtures\Fixture;
 class SimpleName implements MethodInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canBuild($name)
     {
@@ -24,7 +24,7 @@ class SimpleName implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function build($class, $name, array $spec)
     {
