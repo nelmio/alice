@@ -1,14 +1,24 @@
 <?php
+
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 return [
   'include' => [
-    'file2.php'
+    'file2.php',
   ],
   'Nelmio\Alice\fixtures\Shop' => [
     'shop1' => [
-      'domain' => '<word()>'
+      'domain' => '<word()>',
     ],
     'shop2' => [
-      'domain' => 'amazon.com'
-    ]
-  ]
+      'domain' => 'amazon.com',
+    ],
+  ],
 ];

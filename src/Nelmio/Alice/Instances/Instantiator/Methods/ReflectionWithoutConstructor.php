@@ -16,7 +16,7 @@ use Nelmio\Alice\Fixtures\Fixture;
 class ReflectionWithoutConstructor implements MethodInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canInstantiate(Fixture $fixture)
     {
@@ -26,7 +26,7 @@ class ReflectionWithoutConstructor implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function instantiate(Fixture $fixture)
     {

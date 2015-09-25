@@ -27,7 +27,7 @@ class ArrayDirect implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
@@ -35,7 +35,7 @@ class ArrayDirect implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {

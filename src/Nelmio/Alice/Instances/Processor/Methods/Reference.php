@@ -22,7 +22,7 @@ class Reference implements MethodInterface
     protected $objects;
 
     /**
-     * sets the object collection to handle referential calls
+     * sets the object collection to handle referential calls.
      *
      * @param Collection $objects
      */
@@ -32,7 +32,7 @@ class Reference implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canProcess(ProcessableInterface $processable)
     {
@@ -40,7 +40,7 @@ class Reference implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ProcessableInterface $processable, array $variables)
     {
@@ -58,7 +58,7 @@ class Reference implements MethodInterface
 
             $set = [];
             foreach (range($from, $to) as $id) {
-                $set[] = $this->objects->get($reference . $id);
+                $set[] = $this->objects->get($reference.$id);
             }
 
             return $set;

@@ -16,7 +16,7 @@ use Symfony\Component\Yaml\Yaml as YamlParser;
 use UnexpectedValueException;
 
 /**
- * Parses data from a yaml file
+ * Parses data from a yaml file.
  *
  * The yaml file can contain PHP which will be executed before it is parsed as yaml.
  * PHP in the yaml file has access to $context->fake() to generate data
@@ -33,12 +33,12 @@ use UnexpectedValueException;
 class Yaml extends Base
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      **/
     protected $extension = 'ya?ml';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function parse($file)
     {
@@ -57,6 +57,7 @@ class Yaml extends Base
 
     /**
      * @param $data
+     *
      * @return mixed
      */
     private function processParameters($data)

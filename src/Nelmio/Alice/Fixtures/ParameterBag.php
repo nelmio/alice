@@ -27,7 +27,8 @@ class ParameterBag
     }
 
     /**
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     public function has($key)
@@ -36,7 +37,8 @@ class ParameterBag
     }
 
     /**
-     * @param  string     $key
+     * @param string $key
+     *
      * @return mixed|null
      */
     public function get($key)

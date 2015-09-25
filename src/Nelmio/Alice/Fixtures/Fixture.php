@@ -56,7 +56,7 @@ class Fixture
     protected $setProperties = [];
 
     /**
-     * built a class representation of a fixture
+     * built a class representation of a fixture.
      *
      * @param string $class
      * @param string $name
@@ -66,9 +66,9 @@ class Fixture
     public function __construct($class, $name, array $spec, $valueForCurrent)
     {
         list($this->class, $this->classFlags) = FlagParser::parse($class);
-        list($this->name, $this->nameFlags)   = FlagParser::parse($name);
+        list($this->name, $this->nameFlags) = FlagParser::parse($name);
 
-        $this->spec            = $spec;
+        $this->spec = $spec;
         $this->valueForCurrent = $valueForCurrent;
 
         $this->properties = [];
@@ -78,9 +78,9 @@ class Fixture
     }
 
     /**
-     * returns true when the fixture has either the local class or name flag
+     * returns true when the fixture has either the local class or name flag.
      *
-     * @return boolean
+     * @return bool
      */
     public function isLocal()
     {
@@ -88,7 +88,7 @@ class Fixture
     }
 
     /**
-     * returns true when the fixture has been flagged as a template
+     * returns true when the fixture has been flagged as a template.
      */
     public function isTemplate()
     {
@@ -96,7 +96,7 @@ class Fixture
     }
 
     /**
-     * extends this fixture by the given template
+     * extends this fixture by the given template.
      *
      * @param Fixture $template
      */
@@ -114,7 +114,7 @@ class Fixture
     }
 
     /**
-     * returns a list of templates to extend
+     * returns a list of templates to extend.
      *
      * @return array
      */
@@ -136,9 +136,9 @@ class Fixture
     }
 
     /**
-     * returns true if the fixture has extensions
+     * returns true if the fixture has extensions.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasExtensions()
     {
@@ -162,7 +162,7 @@ class Fixture
     }
 
     /**
-     * returns the list of properties with the complex properties (__construct, __set, etc) filtered out
+     * returns the list of properties with the complex properties (__construct, __set, etc) filtered out.
      *
      * @return array
      */
@@ -172,7 +172,7 @@ class Fixture
     }
 
     /**
-     * get the list of class flags on this fixture
+     * get the list of class flags on this fixture.
      *
      * @return array
      */
@@ -182,9 +182,9 @@ class Fixture
     }
 
     /**
-     * returns true if this fixture has the given class flag
+     * returns true if this fixture has the given class flag.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasClassFlag($flag)
     {
@@ -192,7 +192,7 @@ class Fixture
     }
 
     /**
-     * get the list of name flags on this fixture
+     * get the list of name flags on this fixture.
      *
      * @return array
      */
@@ -202,9 +202,9 @@ class Fixture
     }
 
     /**
-     * returns true if this fixture has the given name flag
+     * returns true if this fixture has the given name flag.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasNameFlag($flag)
     {
@@ -220,7 +220,7 @@ class Fixture
     }
 
     /**
-     * returns the name of the static method to use as the constructor
+     * returns the name of the static method to use as the constructor.
      *
      * @return string
      */
@@ -232,7 +232,7 @@ class Fixture
     }
 
     /**
-     * returns the list of arguments to pass to the constructor
+     * returns the list of arguments to pass to the constructor.
      *
      * @return array
      */
@@ -244,9 +244,9 @@ class Fixture
     }
 
     /**
-     * returns true when the __construct property has been specified in the spec
+     * returns true when the __construct property has been specified in the spec.
      *
-     * @return boolean
+     * @return bool
      */
     public function shouldUseConstructor()
     {
@@ -254,9 +254,9 @@ class Fixture
     }
 
     /**
-     * returns true when the __set property has been specified in the spec
+     * returns true when the __set property has been specified in the spec.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasCustomSetter()
     {
@@ -264,7 +264,7 @@ class Fixture
     }
 
     /**
-     * returns the name of the method to use as the custom setter
+     * returns the name of the method to use as the custom setter.
      *
      * @return string
      */
@@ -274,7 +274,7 @@ class Fixture
     }
 
     /**
-     * allows registering a set property value on the fixture itself
+     * allows registering a set property value on the fixture itself.
      *
      * @param string $property
      * @param mixed  $value
@@ -285,7 +285,7 @@ class Fixture
     }
 
     /**
-     * returns the value of a property that has been registered as set
+     * returns the value of a property that has been registered as set.
      *
      * @return mixed $value
      */
@@ -295,7 +295,7 @@ class Fixture
     }
 
     /**
-     * get a list of properties that have been registered as set
+     * get a list of properties that have been registered as set.
      *
      * @return array
      */
@@ -305,7 +305,7 @@ class Fixture
     }
 
     /**
-     * display the fixture as a string
+     * display the fixture as a string.
      */
     public function __toString()
     {
@@ -313,7 +313,7 @@ class Fixture
     }
 
     /**
-     * creates and adds a PropertyDefinition to the fixture with the given name and value
+     * creates and adds a PropertyDefinition to the fixture with the given name and value.
      *
      * @param string $name
      * @param mixed  $value
@@ -324,7 +324,7 @@ class Fixture
     }
 
     /**
-     * returns the constructor property
+     * returns the constructor property.
      *
      * @return PropertyDefinition
      */

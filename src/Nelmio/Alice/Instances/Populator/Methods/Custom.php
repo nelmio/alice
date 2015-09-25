@@ -16,7 +16,7 @@ use Nelmio\Alice\Fixtures\Fixture;
 class Custom implements MethodInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
@@ -24,12 +24,12 @@ class Custom implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
         if (!method_exists($object, $fixture->getCustomSetter())) {
-            throw new \RuntimeException('Setter ' . $fixture->getCustomSetter() . ' not found in object');
+            throw new \RuntimeException('Setter '.$fixture->getCustomSetter().' not found in object');
         }
         $customSetter = $fixture->getCustomSetter()->getValue();
         $object->$customSetter($property, $value);

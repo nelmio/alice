@@ -27,7 +27,7 @@ class Direct implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
@@ -35,7 +35,7 @@ class Direct implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
@@ -52,9 +52,10 @@ class Direct implements MethodInterface
     }
 
     /**
-     * return the name of the setter for a given property
+     * return the name of the setter for a given property.
      *
-     * @param  string $property
+     * @param string $property
+     *
      * @return string
      */
     private function setterFor($property)

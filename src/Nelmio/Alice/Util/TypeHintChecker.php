@@ -16,12 +16,12 @@ use Nelmio\Alice\PersisterInterface;
 class TypeHintChecker
 {
     /**
-     * PersisterInterface
+     * PersisterInterface.
      */
     protected $manager;
 
     /**
-     * public interface to set the Persister interface
+     * public interface to set the Persister interface.
      *
      * @param PersisterInterface $manager
      */
@@ -31,16 +31,17 @@ class TypeHintChecker
     }
 
     /**
-   * Checks if the value is typehinted with a class and if the current value can be coerced into that type
-   *
-   * It can either convert to datetime or attempt to fetched from the db by id
-   *
-   * @param  mixed   $obj    instance or class name
-   * @param  string  $method
-   * @param  string  $value
-   * @param  integer $pNum
-   * @return mixed
-   */
+     * Checks if the value is typehinted with a class and if the current value can be coerced into that type.
+     *
+     * It can either convert to datetime or attempt to fetched from the db by id
+     *
+     * @param mixed  $obj    instance or class name
+     * @param string $method
+     * @param string $value
+     * @param int    $pNum
+     *
+     * @return mixed
+     */
     public function check($obj, $method, $value, $pNum = 0)
     {
         if (!is_numeric($value) && !is_string($value)) {

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nelmio\Alice\support\models;
 
 class User
@@ -21,7 +30,7 @@ class User
 
     public static function create($username = null, $email = null, \DateTime $birthDate = null)
     {
-        return new static($username . '-from-create', $email, $birthDate);
+        return new static($username.'-from-create', $email, $birthDate);
     }
 
     public static function bogusCreate($username = null, $email = null, \DateTime $birthDate = null)
@@ -40,6 +49,6 @@ class User
 
     public function customSetter($key, $value)
     {
-        $this->$key = $value . ' set by custom setter';
+        $this->$key = $value.' set by custom setter';
     }
 }

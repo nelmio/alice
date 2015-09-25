@@ -18,7 +18,7 @@ class RangeName implements MethodInterface
     private $matches = [];
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canBuild($name)
     {
@@ -26,7 +26,7 @@ class RangeName implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function build($class, $name, array $spec)
     {
@@ -37,7 +37,7 @@ class RangeName implements MethodInterface
         if ($from > $to) {
             list($to, $from) = [$from, $to];
         }
-        for ($currentIndex = $from; $currentIndex <= $to; $currentIndex++) {
+        for ($currentIndex = $from; $currentIndex <= $to; ++$currentIndex) {
             $currentName = str_replace($this->matches[0], $currentIndex, $name);
             $fixture = new Fixture($class, $currentName, $spec, $currentIndex);
             $fixtures[] = $fixture;

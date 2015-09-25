@@ -29,12 +29,12 @@ class ReflectionWithConstructor implements MethodInterface
 
     public function __construct(Processor $processor, TypeHintChecker $typeHintChecker)
     {
-        $this->processor       = $processor;
+        $this->processor = $processor;
         $this->typeHintChecker = $typeHintChecker;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canInstantiate(Fixture $fixture)
     {
@@ -44,13 +44,13 @@ class ReflectionWithConstructor implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function instantiate(Fixture $fixture)
     {
-        $class             = $fixture->getClass();
+        $class = $fixture->getClass();
         $constructorMethod = $fixture->getConstructorMethod();
-        $constructorArgs   = $fixture->getConstructorArgs();
+        $constructorArgs = $fixture->getConstructorArgs();
 
         $reflClass = new \ReflectionClass($class);
 

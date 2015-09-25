@@ -29,7 +29,7 @@ class Processable implements ProcessableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getValue()
     {
@@ -37,7 +37,7 @@ class Processable implements ProcessableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function valueMatches($regexString)
     {
@@ -51,7 +51,7 @@ class Processable implements ProcessableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMatch($name)
     {
@@ -59,11 +59,11 @@ class Processable implements ProcessableInterface
             return $this->matches[$name];
         }
 
-        return null;
+        return;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMatches()
     {

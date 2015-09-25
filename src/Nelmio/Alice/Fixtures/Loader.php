@@ -23,7 +23,7 @@ use Nelmio\Alice\Instances\Processor\Providers\IdentityProvider;
 use Nelmio\Alice\Util\TypeHintChecker;
 
 /**
- * Loads fixtures from an array or file
+ * Loads fixtures from an array or file.
  */
 class Loader
 {
@@ -88,9 +88,9 @@ class Loader
      */
     public function __construct($locale = 'en_US', array $providers = [], $seed = 1, array $parameters = [])
     {
-        $this->objects         = new Collection;
-        $this->typeHintChecker = new TypeHintChecker;
-        $this->parameterBag    = new ParameterBag($parameters);
+        $this->objects = new Collection();
+        $this->typeHintChecker = new TypeHintChecker();
+        $this->parameterBag = new ParameterBag($parameters);
 
         $allProviders = array_merge($this->getBuiltInProviders(), $providers);
 
@@ -123,7 +123,7 @@ class Loader
     }
 
     /**
-     * Loads a fixture file
+     * Loads a fixture file.
      *
      * @param string|array $dataOrFilename data array or filename
      */
@@ -143,10 +143,11 @@ class Loader
     }
 
     /**
-     * Returns a reference to a fixture by name
+     * Returns a reference to a fixture by name.
      *
-     * @param  string $name
-     * @param  string $property optionally return only a given property of the reference
+     * @param string $name
+     * @param string $property optionally return only a given property of the reference
+     *
      * @return object
      */
     public function getReference($name, $property = null)
@@ -155,7 +156,7 @@ class Loader
     }
 
     /**
-     * Returns all references created by the loader
+     * Returns all references created by the loader.
      *
      * @return array[object]
      */
@@ -192,7 +193,7 @@ class Loader
     }
 
     /**
-     * adds a processor for processing extensions
+     * adds a processor for processing extensions.
      *
      * @param Processor\Methods\MethodInterface $processor
      **/
@@ -202,7 +203,7 @@ class Loader
     }
 
     /**
-     * adds a parser for fixture parsing extensions
+     * adds a parser for fixture parsing extensions.
      *
      * @param Parser\Methods\MethodInterface $parser
      **/
@@ -212,7 +213,7 @@ class Loader
     }
 
     /**
-     * adds a builder for fixture building extensions
+     * adds a builder for fixture building extensions.
      *
      * @param Builder\Methods\MethodInterface $builder
      **/
@@ -222,7 +223,7 @@ class Loader
     }
 
     /**
-     * adds an instantiator for instantiation extensions
+     * adds an instantiator for instantiation extensions.
      *
      * @param Instantiator\Methods\MethodInterface $instantiator
      **/
@@ -232,7 +233,7 @@ class Loader
     }
 
     /**
-     * adds a populator for population extensions
+     * adds a populator for population extensions.
      *
      * @param Populator\Methods\MethodInterface $populator
      **/
@@ -242,9 +243,10 @@ class Loader
     }
 
     /**
-     * parses a file at the given filename
+     * parses a file at the given filename.
      *
      * @param string filename
+     *
      * @return array data
      */
     protected function parseFile($filename)
@@ -253,9 +255,10 @@ class Loader
     }
 
     /**
-     * builds a collection of fixtures
+     * builds a collection of fixtures.
      *
-     * @param  array      $rawData
+     * @param array $rawData
+     *
      * @return array
      */
     protected function buildFixtures(array $rawData)
@@ -273,7 +276,7 @@ class Loader
     }
 
     /**
-     * creates an empty instance for each fixture, and adds it to our object collection
+     * creates an empty instance for each fixture, and adds it to our object collection.
      *
      * @param array $fixtures
      */
@@ -288,9 +291,10 @@ class Loader
     }
 
     /**
-     * hydrates each instance described by fixtures and returns the final non-local list
+     * hydrates each instance described by fixtures and returns the final non-local list.
      *
-     * @param  array $fixtures
+     * @param array $fixtures
+     *
      * @return array
      */
     protected function populateObjects(array $fixtures)
@@ -312,7 +316,7 @@ class Loader
     }
 
     /**
-     * public interface to set the Persister interface
+     * public interface to set the Persister interface.
      *
      * @param PersisterInterface $manager
      */
@@ -341,10 +345,10 @@ class Loader
     }
 
     /**
-    * Logs a message using the logger.
-    *
-    * @param string $message
-    */
+     * Logs a message using the logger.
+     *
+     * @param string $message
+     */
     public function log($message)
     {
         if ($this->logger instanceof LoggerInterface) {
@@ -363,7 +367,7 @@ class Loader
     }
 
     /**
-     * returns a list of all the default providers faker processing
+     * returns a list of all the default providers faker processing.
      *
      * @return array
      */
@@ -373,10 +377,11 @@ class Loader
     }
 
     /**
-     * returns a list of all the default processor methods
+     * returns a list of all the default processor methods.
      *
-     * @param  array  $providers - a list of all providers to build the processors with
-     * @param  string $locale
+     * @param array  $providers - a list of all providers to build the processors with
+     * @param string $locale
+     *
      * @return array
      */
     private function getBuiltInProcessors(array $providers, $locale)
@@ -394,7 +399,7 @@ class Loader
     }
 
     /**
-     * returns a list of all the default parser methods
+     * returns a list of all the default parser methods.
      *
      * @return array
      */
@@ -407,7 +412,7 @@ class Loader
     }
 
     /**
-     * returns a list of all the default builder methods
+     * returns a list of all the default builder methods.
      *
      * @return array
      */
@@ -421,10 +426,11 @@ class Loader
     }
 
     /**
-     * returns a list of all the default instantiator methods
+     * returns a list of all the default instantiator methods.
      *
-     * @param  Processor\Processor $processor
-     * @param  TypeHintChecker     $typeHintChecker
+     * @param Processor\Processor $processor
+     * @param TypeHintChecker     $typeHintChecker
+     *
      * @return array
      */
     private function getBuiltInInstantiators(Processor\Processor $processor, TypeHintChecker $typeHintChecker)
@@ -438,9 +444,10 @@ class Loader
     }
 
     /**
-     * returns a list of all the default populator methods
+     * returns a list of all the default populator methods.
      *
-     * @param  TypeHintChecker $typeHintChecker
+     * @param TypeHintChecker $typeHintChecker
+     *
      * @return array
      */
     private function getBuiltInPopulators(TypeHintChecker $typeHintChecker)

@@ -16,7 +16,7 @@ use Nelmio\Alice\Fixtures\Fixture;
 class EmptyConstructor implements MethodInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canInstantiate(Fixture $fixture)
     {
@@ -26,7 +26,7 @@ class EmptyConstructor implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function instantiate(Fixture $fixture)
     {

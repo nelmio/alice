@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nelmio\Alice\support\extensions;
 
 use Nelmio\Alice\Fixtures\Fixture;
@@ -13,7 +22,7 @@ class CustomInstantiator implements InstantiatorInterface
     }
 
     /**
-     * this custom instantiator dumps the given spec
+     * this custom instantiator dumps the given spec.
      */
     public function instantiate(Fixture $fixture)
     {

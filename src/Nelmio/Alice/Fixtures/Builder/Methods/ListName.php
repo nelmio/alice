@@ -21,7 +21,7 @@ class ListName implements MethodInterface
     private $matches = [];
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canBuild($name)
     {
@@ -29,7 +29,7 @@ class ListName implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function build($class, $name, array $spec)
     {

@@ -16,7 +16,7 @@ use Nelmio\Alice\Fixtures\Loader;
 abstract class Base implements MethodInterface
 {
     /**
-     * The context allows any kind of contextual information to be available in fixtures
+     * The context allows any kind of contextual information to be available in fixtures.
      *
      * @var mixed
      **/
@@ -33,7 +33,7 @@ abstract class Base implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canParse($file)
     {
@@ -43,14 +43,15 @@ abstract class Base implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     abstract public function parse($file);
 
     /**
-     * Returns a string of text after compiling all the PHP code in the fixture
+     * Returns a string of text after compiling all the PHP code in the fixture.
      *
-     * @param  string $file
+     * @param string $file
+     *
      * @return string
      */
     protected function compilePhp($file)
@@ -80,15 +81,16 @@ abstract class Base implements MethodInterface
     }
 
     /**
-     * @param  array  $data
-     * @param  string $filename
+     * @param array  $data
+     * @param string $filename
+     *
      * @return mixed
      */
     protected function processIncludes($data, $filename)
     {
         if (isset($data['include'])) {
             foreach ($data['include'] as $include) {
-                $includeFile = dirname($filename) . DIRECTORY_SEPARATOR . $include;
+                $includeFile = dirname($filename).DIRECTORY_SEPARATOR.$include;
                 $includeData = $this->parse($includeFile);
                 $data = $this->mergeIncludeData($data, $includeData);
             }

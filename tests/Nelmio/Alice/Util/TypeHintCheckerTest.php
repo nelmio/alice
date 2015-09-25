@@ -21,8 +21,8 @@ class TypeHintCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $persister = new TestPersister;
-        $this->typeHintChecker = new TypeHintChecker;
+        $persister = new TestPersister();
+        $this->typeHintChecker = new TypeHintChecker();
         $this->typeHintChecker->setPersister($persister);
     }
 

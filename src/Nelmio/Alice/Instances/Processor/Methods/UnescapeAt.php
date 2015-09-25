@@ -16,7 +16,7 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 class UnescapeAt implements MethodInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canProcess(ProcessableInterface $processable)
     {
@@ -24,7 +24,7 @@ class UnescapeAt implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ProcessableInterface $processable, array $variables)
     {

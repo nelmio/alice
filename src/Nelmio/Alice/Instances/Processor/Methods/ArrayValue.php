@@ -22,7 +22,7 @@ class ArrayValue implements MethodInterface
     private $processor;
 
     /**
-     * sets the processor to handle recursive calls
+     * sets the processor to handle recursive calls.
      *
      * @param Processor
      */
@@ -32,7 +32,7 @@ class ArrayValue implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function canProcess(ProcessableInterface $processable)
     {
@@ -40,7 +40,7 @@ class ArrayValue implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ProcessableInterface $processable, array $variables)
     {

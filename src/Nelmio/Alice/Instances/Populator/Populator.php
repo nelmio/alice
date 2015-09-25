@@ -21,8 +21,8 @@ use Nelmio\Alice\Instances\Processor\Processor;
 class Populator
 {
     /**
-    * @var Collection
-    */
+     * @var Collection
+     */
     protected $objects;
 
     /**
@@ -39,17 +39,17 @@ class Populator
     {
         foreach ($setters as $setter) {
             if (!($setter instanceof MethodInterface)) {
-                throw new InvalidArgumentException("All setters passed into Populator must implement MethodInterface.");
+                throw new InvalidArgumentException('All setters passed into Populator must implement MethodInterface.');
             }
         }
 
-        $this->objects   = $objects;
+        $this->objects = $objects;
         $this->processor = $processor;
-        $this->setters   = $setters;
+        $this->setters = $setters;
     }
 
     /**
-     * adds a populator for population extensions
+     * adds a populator for population extensions.
      *
      * @param MethodInterface $setter
      **/
@@ -59,14 +59,14 @@ class Populator
     }
 
     /**
-     * populate all the properties for the object described by the given fixture
+     * populate all the properties for the object described by the given fixture.
      *
      * @param Fixture $fixture
      */
     public function populate(Fixture $fixture)
     {
-        $class  = $fixture->getClass();
-        $name   = $fixture->getName();
+        $class = $fixture->getClass();
+        $name = $fixture->getName();
         $object = $this->objects->get($name);
 
         foreach ($fixture->getProperties() as $property) {
@@ -96,10 +96,11 @@ class Populator
     }
 
     /**
-     * ensures that the property generated for the given fixture is a unique property
+     * ensures that the property generated for the given fixture is a unique property.
      *
-     * @param  Fixture            $fixture
-     * @param  PropertyDefinition $property
+     * @param Fixture            $fixture
+     * @param PropertyDefinition $property
+     *
      * @return mixed
      */
     protected function generateUnique(Fixture $fixture, PropertyDefinition $property)
@@ -119,13 +120,13 @@ class Populator
             } else {
                 $valHash = $value;
             }
-        } while (--$i > 0 && isset($this->uniqueValues[$class . $key][$valHash]));
+        } while (--$i > 0 && isset($this->uniqueValues[$class.$key][$valHash]));
 
-        if (isset($this->uniqueValues[$class . $key][$valHash])) {
+        if (isset($this->uniqueValues[$class.$key][$valHash])) {
             throw new \RuntimeException("Couldn't generate random unique value for $class: $key in $uniqueTriesLimit tries.");
         }
 
-        $this->uniqueValues[$class . $key][$valHash] = true;
+        $this->uniqueValues[$class.$key][$valHash] = true;
 
         return $value;
     }

@@ -30,8 +30,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function createProcessor(array $options = [])
     {
         $defaults = [
-            'objects' => new Collection,
-            'methods' => []
+            'objects' => new Collection(),
+            'methods' => [],
         ];
         $options = array_merge($defaults, $options);
 
@@ -44,7 +44,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheProcessor()
     {
-        $builder = new Processor(new Collection, ['CustomProcessor'], new ParameterBag());
+        $builder = new Processor(new Collection(), ['CustomProcessor'], new ParameterBag());
     }
 
     public function testAddProcessor()
@@ -52,7 +52,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $processable = new Processable('uppercase processor:test my custom processor');
 
         $this->createProcessor();
-        $this->processor->addProcessor(new CustomProcessor);
+        $this->processor->addProcessor(new CustomProcessor());
         $result = $this->processor->process($processable, []);
         $this->assertEquals('TEST MY CUSTOM PROCESSOR', $result);
     }
@@ -60,14 +60,14 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testAddProcessorWillSetObjectsIfSetterExists()
     {
         $this->createProcessor();
-        $this->processor->addProcessor($custom = new CustomProcessor);
+        $this->processor->addProcessor($custom = new CustomProcessor());
         $this->assertEquals($this->objects, $custom->objects);
     }
 
     public function testAddProcessorWillSetTheProcessorIfSetterExists()
     {
         $this->createProcessor();
-        $this->processor->addProcessor($custom = new CustomProcessor);
+        $this->processor->addProcessor($custom = new CustomProcessor());
         $this->assertEquals($this->processor, $custom->processor);
     }
 }
