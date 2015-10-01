@@ -265,7 +265,7 @@ class Loader
         foreach ($rawData as $class => $specs) {
             $this->log('Loading '.$class);
             foreach ($specs as $name => $spec) {
-                $fixtures[] = $this->builder->build($class, $name, $spec);
+                $fixtures[] = $this->builder->build($class, $name, null !== $spec ? $spec : []);
             }
         }
 

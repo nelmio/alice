@@ -1561,6 +1561,24 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             '\\\\@foo',
         ], $res['user0']->friends);
     }
+
+    public function testDefaultInstance()
+    {
+        $res = $this->loadData([
+            self::USER => [
+                'user (template)' => [
+                    'email'    => 'base@email.com',
+                    'fullname' => 'testfullname'
+                ],
+                'user2 (extends user)' => null,
+            ],
+        ]);
+        $user = $res['user2'];
+
+        $this->assertInstanceOf(self::USER, $user);
+        $this->assertSame('base@email.com', $user->email);
+        $this->assertSame('testfullname', $user->fullname);
+    }
 }
 
 class FakerProvider
