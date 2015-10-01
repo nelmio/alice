@@ -255,7 +255,7 @@ class Loader
     /**
      * builds a collection of fixtures
      *
-     * @param  array      $rawData
+     * @param  array $rawData
      * @return array
      */
     protected function buildFixtures(array $rawData)

@@ -249,7 +249,7 @@ class Fixtures
                 if (false === is_object($provider) && false === is_string($provider)) {
                     throw new \InvalidArgumentException(sprintf(
                         'The provider should be a string or an object, got %s instead',
-                        is_scalar($provider) ?$provider :gettype($provider)
+                        is_scalar($provider) ? $provider : gettype($provider)
                     ));
                 }
             }

@@ -189,8 +189,8 @@ class Faker implements MethodInterface
      * This is made public so it is accessible by the $fake() callback in replacePlaceholder
      * and the callback in Parser\Method\Base::createFakerClosure
      *
-     * @param  string $formatter
-     * @param  string $locale
+     * @param string $formatter
+     * @param string $locale
      * @private
      * @return mixed
      */
