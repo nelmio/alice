@@ -20,7 +20,7 @@ class Property implements MethodInterface
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
-        return property_exists($object, $property);
+        return (bool) $this->findClass($object, $property);
     }
 
     /**
@@ -28,8 +28,23 @@ class Property implements MethodInterface
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
-        $refl = new \ReflectionProperty($object, $property);
+        $refl = new \ReflectionProperty($this->findClass($object, $property), $property);
         $refl->setAccessible(true);
         $refl->setValue($object, $value);
+    }
+
+    /**
+     * Find which class defines the property.
+     *
+     * @param mixed  $class
+     * @param string $property
+     */
+    private function findClass($class, $property)
+    {
+        do {
+            if (property_exists($class, $property)) {
+                return $class;
+            }
+        } while ($class = get_parent_class($class));
     }
 }

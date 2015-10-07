@@ -15,6 +15,7 @@ use Nelmio\Alice\Fixtures\ParameterBag;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Populator\Methods\ArrayAdd;
+use Nelmio\Alice\Instances\Populator\Methods\Property;
 use Nelmio\Alice\Instances\Processor\Processor;
 use Nelmio\Alice\support\extensions\CustomPopulator;
 use Nelmio\Alice\Util\TypeHintChecker;
@@ -83,5 +84,19 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['a', 'b', 'c'], $object->getFields());
         $this->assertEquals(['q', 'w', 'e'], $object->getProperties());
+    }
+
+    public function testSettingPrivatePropertiesDirectly()
+    {
+        $class = self::PLURAL;
+        $fixture = new Fixture($class, 'test', [ 'fields' => 'a', 'properties' => 'b' ], null);
+        $object = new $class();
+
+        $this->createPopulator([ 'objects' => new Collection([ 'test' => $object ]) ]);
+        $this->populator->addPopulator(new Property());
+        $this->populator->populate($fixture);
+
+        $this->assertEquals('a', $object->getFields());
+        $this->assertEquals('b', $object->getProperties());
     }
 }

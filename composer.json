@@ -22,7 +22,7 @@
     "require-dev": {
         "doctrine/common": "~2.3",
         "symfony/property-access": "~2.2",
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "~4.0.0"
     },
     "autoload": {
         "psr-4": { "Nelmio\\Alice\\": "src/Nelmio/Alice" }
