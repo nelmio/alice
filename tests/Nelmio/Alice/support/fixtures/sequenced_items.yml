@@ -3,7 +3,7 @@
         uuid: <current()>
         username: <username()>
         fullname: <firstName()> <lastName()>
-        birthDate: 80%? <date> : 0000-00-00
+        birthDate: '80%? <date> : 0000-00-00'
         email: <email()>
         favoriteNumber: 40%? <numberBetween(1, 99)>
 
@@ -12,5 +12,5 @@
 Nelmio\Alice\support\models\Group:
     group1:
         name: <company()>
-        members: @user{1..10}
-        owner: @user2
+        members: '@user{1..10}'
+        owner: '@user2'

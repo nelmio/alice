@@ -8,7 +8,7 @@ Nelmio\Alice\support\models\User:
     user{1..10}:
         username: <username()>
         fullname: <firstName()> <lastName()>
-        birthDate: 80%? <date> : 0000-00-00
+        birthDate: '80%? <date> : 0000-00-00'
         email: <email()>
         favoriteNumber: 40%? <numberBetween(1, 99)>
 
@@ -17,7 +17,7 @@ Nelmio\Alice\support\models\User:
         favoriteNumber: 127
     user_full (template, extends user_bare):
         fullname: <firstName()> <lastName()>
-        birthDate: 80%? <date> : 0000-00-00
+        birthDate: '80%? <date> : 0000-00-00'
         email: <email()>
         favoriteNumber: 40%? <numberBetween(1, 99)>
     user11 (extends user_full):
