@@ -77,7 +77,7 @@ Nelmio\Data\Geopoint (local):
 Nelmio\Entity\Location:
     loc{1..100}:
         name: <city()>
-        geopoint: @geo1
+        geopoint: '@geo1'
 ```
 
 
