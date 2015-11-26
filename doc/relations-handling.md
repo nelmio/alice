@@ -15,7 +15,7 @@ Nelmio\Entity\User:
 Nelmio\Entity\Group:
     group1:
         name: Admins
-        owner: @user1
+        owner: '@user1'
 ```
 
 Alice also allows you to directly reference objects' properties using the ```@name->property``` notation.
@@ -27,7 +27,7 @@ Nelmio\Entity\User:
 Nelmio\Entity\Group:
     group1:
         name: Admins
-        owner: @user1->username
+        owner: '@user1->username'
 ```
 
 To be able to use this feature, your entities have to match some requirements :
@@ -46,7 +46,7 @@ Nelmio\Entity\User:
 Nelmio\Entity\Group:
     group1:
         name: Admins
-        owner: @user1->id
+        owner: '@user1->id'
 ```
 
 If you want to create ten users and ten groups and have each user own one
@@ -59,7 +59,7 @@ Nelmio\Entity\User:
 
 Nelmio\Entity\Group:
     group{1..10}:
-        owner: @user<current()>
+        owner: '@user<current()>'
 ```
 
 If you would like a random user instead of a fixed one, you can define a
@@ -72,7 +72,7 @@ Nelmio\Entity\User:
 Nelmio\Entity\Group:
     group1:
         name: Admins
-        owner: @user*
+        owner: '@user*'
 ```
 
 It will then pick any object whose name matches `user*` where `*` can be any
@@ -113,8 +113,8 @@ Nelmio\Entity\User:
 Nelmio\Entity\Group:
     group1:
         name: Admins
-        owner: @user1
-        members: [@user2, @user3]
+        owner: '@user1'
+        members: ['@user2', '@user3']
 ```
 
 Another, which is more interesting, is to define a reference with a wildcard,
@@ -127,7 +127,7 @@ Nelmio\Entity\User:
 Nelmio\Entity\Group:
     group1:
         name: Admins
-        owner: @user1
+        owner: '@user1'
         members: 5x @user*
 ```
 
@@ -149,7 +149,7 @@ Nelmio\Entity\User:
 
 Nelmio\Entity\Group:
     group{1..10}:
-        members: @user{1..10}
+        members: '@user{1..10}'
 ```
 
 > **Note**: You do not need to define multi-references inside an array, since

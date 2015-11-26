@@ -4,4 +4,4 @@ Nelmio\Alice\support\models\User:
     user0:
         username: |-
             \\
-        friends: [@foo, \@foo, \\@foo, \\\@foo]
+        friends: ['@foo', \@foo, \\@foo, \\\@foo]
