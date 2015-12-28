@@ -18,6 +18,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\support\models\User';
     const MAGIC_USER = 'Nelmio\Alice\support\models\MagicUser';
+    const STATIC_USER = 'Nelmio\Alice\support\models\StaticUser';
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
     const PRIVATE_CONSTRUCTOR_CLASS = 'Nelmio\Alice\support\models\PrivateConstructorClass';
@@ -1129,15 +1130,16 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadCallsStaticConstructorIfProvided()
     {
         $res = $this->loadData([
-            self::USER => [
+            self::STATIC_USER => [
                 'user' => [
-                    '__construct' => ['create' => ['alice']],
+                    '__construct' => ['create' => ['alice@example.com']],
                 ],
             ],
         ]);
 
-        $this->assertInstanceOf(self::USER, $res['user']);
-        $this->assertSame('alice-from-create', $res['user']->username);
+        $this->assertInstanceOf(self::STATIC_USER, $res['user']);
+        $this->assertSame('alice', $res['user']->username);
+        $this->assertSame('alice@example.com', $res['user']->email);
     }
 
     /**
@@ -1177,9 +1179,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadFailsIfStaticMethodDoesntReturnAnInstance()
     {
         $this->loadData([
-            self::USER => [
+            self::STATIC_USER => [
                 'user' => [
-                    '__construct' => ['bogusCreate' => ['alice@example.com']],
+                    '__construct' => ['bogusCreate' => ['alice', 'alice@example.com']],
                 ],
             ],
         ]);
