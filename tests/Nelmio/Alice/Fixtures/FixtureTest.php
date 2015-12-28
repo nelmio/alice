@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Fixtures;
 class FixtureTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\support\models\User';
+    const STATIC_USER = 'Nelmio\Alice\support\models\StaticUser';
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
@@ -151,16 +152,16 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConstructorMethodWillReturnTheMethodName()
     {
-        $fixture = new Fixture(self::USER, 'user', ['__construct' => ['create' => ['1', '2', '3']]], null);
+        $fixture = new Fixture(self::STATIC_USER, 'user', ['__construct' => ['create' => ['alice@example.com']]], null);
 
         $this->assertEquals('create', $fixture->getConstructorMethod());
     }
 
     public function testGetConstructorArgsWillReturnTheArgumentsList()
     {
-        $fixture = new Fixture(self::USER, 'user', ['__construct' => ['create' => ['1', '2', '3']]], null);
+        $fixture = new Fixture(self::STATIC_USER, 'user', ['__construct' => ['create' => ['alice@example.com']]], null);
 
-        $this->assertEquals(['1', '2', '3'], $fixture->getConstructorArgs());
+        $this->assertEquals(['alice@example.com'], $fixture->getConstructorArgs());
     }
 
     public function testShouldUseConstructorWillReturnTrueIfThereIsNoConstructorInTheSpec()
