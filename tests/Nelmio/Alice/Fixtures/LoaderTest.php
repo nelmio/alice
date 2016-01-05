@@ -22,6 +22,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
     const PRIVATE_CONSTRUCTOR_CLASS = 'Nelmio\Alice\support\models\PrivateConstructorClass';
+    const NAMED_CONSTRUCTOR_CLASS = 'Nelmio\Alice\support\models\NamedConstructorClass';
 
     /**
      * @var \Nelmio\Alice\Fixtures\Loader
@@ -103,6 +104,20 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
         $res = $loader->load($file = __DIR__.'/../support/fixtures/private_constructs.yml');
         $this->assertInstanceOf(self::PRIVATE_CONSTRUCTOR_CLASS, $res['test1']);
+    }
+
+    public function testCreateNamedConstructorInstance()
+    {
+        $res = $this->loadData([
+            self::NAMED_CONSTRUCTOR_CLASS => [
+                'foo' => [
+                    '__construct' => ['withLambda' => ['λ']],
+                ],
+            ],
+        ]);
+
+        $this->assertInstanceOf(self::NAMED_CONSTRUCTOR_CLASS, $res['foo']);
+        $this->assertSame('λ', $res['foo']->lambda);
     }
 
     public function testLoadInvalidFile()
