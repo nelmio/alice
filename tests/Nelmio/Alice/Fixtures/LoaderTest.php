@@ -267,6 +267,26 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('alice', current($group->getMembers())->username);
     }
 
+    public function testLoadParsesReferencesInQuotes()
+    {
+        $res = $this->loadData([
+            self::USER => [
+                'user1' => [
+                    'username' => 'alice',
+                ],
+            ],
+            self::GROUP => [
+                'a' => [
+                    'members' => ['\'@user1\'']
+                ],
+            ],
+        ]);
+        $group = $res['a'];
+
+        $this->assertInstanceOf(self::USER, current($group->getMembers()));
+        $this->assertEquals('alice', current($group->getMembers())->username);
+    }
+
     public function testLoadParsesPropertyReferences()
     {
         $res = $this->loadData([

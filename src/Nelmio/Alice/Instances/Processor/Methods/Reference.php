@@ -36,7 +36,7 @@ class Reference implements MethodInterface
      */
     public function canProcess(ProcessableInterface $processable)
     {
-        return is_string($processable->getValue()) && $processable->valueMatches('{^(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?<sequence>\{(?P<from>\d+)\.\.(?P<to>\d+)\})?(?:\->(?<property>[a-z0-9_-]+))?$}i');
+        return is_string($processable->getValue()) && $processable->valueMatches('{^\'?(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?<sequence>\{(?P<from>\d+)\.\.(?P<to>\d+)\})?(?:\->(?<property>[a-z0-9_-]+))?\'?$}i');
     }
 
     /**
