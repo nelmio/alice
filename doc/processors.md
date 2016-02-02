@@ -44,7 +44,7 @@ class UserProcessor implements ProcessorInterface
             return;
         }
 
-        $object->passwordHasher = $this->passwordHasher->hash($object->password);
+        $object->password = $this->passwordHasher->hash($object->password);
     }
 }
 ```
