@@ -33,6 +33,11 @@ class UserProcessor implements ProcessorInterface
      */
     public function preProcess($object)
     {
+        if (false === $object instanceof User) {
+            return;
+        }
+
+        $object->password = $this->passwordHasher->hash($object->password);
     }
 
     /**
@@ -40,11 +45,6 @@ class UserProcessor implements ProcessorInterface
      */
     public function postProcess($object)
     {
-        if (false === $object instanceof User) {
-            return;
-        }
-
-        $object->password = $this->passwordHasher->hash($object->password);
     }
 }
 ```
