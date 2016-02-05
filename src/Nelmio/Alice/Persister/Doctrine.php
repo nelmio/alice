@@ -15,17 +15,31 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Nelmio\Alice\PersisterInterface;
 
 /**
- * The Doctrine persists the fixtures into an ObjectManager
+ * Adaptor for the ObjectManager to provide a Doctrine bridge.
+ *
+ * @author Jordi Boggiano <j.boggiano@seld.be>
+ * @author Robert Schönthal
  */
 class Doctrine implements PersisterInterface
 {
-    protected $om;
+    /**
+     * @var ObjectManager
+     */
+    protected $manager;
+
+    /**
+     * @var bool
+     */
     protected $flush;
 
-    public function __construct(ObjectManager $om, $doFlush = true)
+    /**
+     * @param ObjectManager $manager
+     * @param bool          $flush
+     */
+    public function __construct(ObjectManager $manager, $flush = true)
     {
-        $this->om = $om;
-        $this->flush = $doFlush;
+        $this->manager = $manager;
+        $this->flush = $flush;
     }
 
     /**
@@ -34,11 +48,11 @@ class Doctrine implements PersisterInterface
     public function persist(array $objects)
     {
         foreach ($objects as $object) {
-            $this->om->persist($object);
+            $this->manager->persist($object);
         }
 
         if ($this->flush) {
-            $this->om->flush();
+            $this->manager->flush();
         }
     }
 
@@ -47,12 +61,6 @@ class Doctrine implements PersisterInterface
      */
     public function find($class, $id)
     {
-        $entity = $this->om->find($class, $id);
-
-        if (!$entity) {
-            throw new \UnexpectedValueException('Entity with Id ' . $id . ' and Class ' . $class . ' not found');
-        }
-
-        return $entity;
+        return $this->manager->find($class, $id);
     }
 }
