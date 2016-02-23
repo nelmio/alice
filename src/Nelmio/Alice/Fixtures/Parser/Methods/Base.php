@@ -102,17 +102,20 @@ abstract class Base implements MethodInterface
     /**
      * @param array $data
      * @param array $includeData
+     * @return array
      */
     protected function mergeIncludeData($data, $includeData)
     {
-        foreach ($includeData as $class => $fixtures) {
-            if (isset($data[$class])) {
-                $data[$class] = array_merge($fixtures, $data[$class]);
+        $newData = $includeData;
+
+        foreach ($data as $class => $fixtures) {
+            if (isset($newData[$class])) {
+                $newData[$class] = array_merge($newData[$class], $fixtures);
             } else {
-                $data[$class] = $fixtures;
+                $newData[$class] = $fixtures;
             }
         }
 
-        return $data;
+        return $newData;
     }
 }
