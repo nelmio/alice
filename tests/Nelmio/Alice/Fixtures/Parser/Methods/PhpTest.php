@@ -134,7 +134,6 @@ class PhpTest extends \PHPUnit_Framework_TestCase
                 ],
         ];
 
-        $this->assertEquals($expectedData, $data);
-        $this->assertTrue($expectedData === $data);
+        $this->assertSame($expectedData, $data);
     }
 }
