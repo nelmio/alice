@@ -109,11 +109,8 @@ abstract class Base implements MethodInterface
         $newData = $includeData;
 
         foreach ($data as $class => $fixtures) {
-            if (isset($newData[$class])) {
-                $newData[$class] = array_merge($newData[$class], $fixtures);
-            } else {
-                $newData[$class] = $fixtures;
-            }
+            $newData[$class] = isset($newData[$class])
+                ? array_merge($newData[$class], $fixtures) : $newData[$class] = $fixtures;
         }
 
         return $newData;
