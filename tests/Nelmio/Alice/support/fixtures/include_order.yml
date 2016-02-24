@@ -1,0 +1,6 @@
+include:
+    - includes/foo.yml
+Bar:
+    bar:
+        id: 1
+        text: <@foo->text>
