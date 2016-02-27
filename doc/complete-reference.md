@@ -84,8 +84,28 @@ Nelmio\Entity\User:
         favoriteNumber: 42
 ```
 
-To go further we can just randomize data.
+You can refer to previous fixtures to get the same amount of fixtures.
+The current formatter is set to the referenced fixture.
 
+```yaml
+Nelmio\Entity\UserDetail:
+# reference by concrete id
+    user{@user1}:
+        username: <username()>
+        fullname: <firstname()> <lastname()>
+        birthDate: 1980-10-10
+        email: <current()>@example.org
+        favoriteNumber: 42
+# reference by a list of fixtures    
+    user{@user*}:
+        username: <username()>
+        fullname: <firstname()> <lastname()>
+        birthDate: 1980-10-10
+        email: <current()>@example.org
+        favoriteNumber: 42
+```
+
+To go further we can just randomize data.
 
 ## Calling Methods
 
