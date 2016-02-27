@@ -414,6 +414,7 @@ class Loader
     private function getBuiltInBuilders()
     {
         return [
+            new Builder\Methods\ReferenceRangeName($this->objects),
             new Builder\Methods\RangeName(),
             new Builder\Methods\ListName(),
             new Builder\Methods\SimpleName(),
