@@ -21,6 +21,7 @@ class Doctrine implements PersisterInterface
 {
     protected $om;
     protected $flush;
+    protected $persistableClasses;
 
     public function __construct(ObjectManager $om, $doFlush = true)
     {
@@ -33,8 +34,12 @@ class Doctrine implements PersisterInterface
      */
     public function persist(array $objects)
     {
+        $persistable = $this->getPersistableClasses();
+
         foreach ($objects as $object) {
-            $this->om->persist($object);
+            if (in_array(get_class($object), $persistable)) {
+                $this->om->persist($object);
+            }
         }
 
         if ($this->flush) {
@@ -54,5 +59,22 @@ class Doctrine implements PersisterInterface
         }
 
         return $entity;
+    }
+
+    private function getPersistableClasses()
+    {
+        if (!isset($this->persistableClasses)) {
+            $metadatas = $this->om->getMetadataFactory()->getAllMetadata();
+
+            foreach ($metadatas as $metadata) {
+                if (isset($metadata->isEmbeddedClass) && $metadata->isEmbeddedClass) {
+                    continue;
+                }
+
+                $this->persistableClasses[] = $metadata->getName();
+            }
+        }
+
+        return $this->persistableClasses;
     }
 }

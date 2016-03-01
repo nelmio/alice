@@ -57,8 +57,19 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     public function testThatNewLoaderIsCreatedForDifferingOptions()
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
         $om->expects($this->any())
             ->method('find')->will($this->returnValue(new User()));
+
+        $om->expects($this->any())
+            ->method('getMetadataFactory')
+            ->will($this->returnValue($metadataFactory));
+
+        $metadataFactory->expects($this->any())
+            ->method('getAllMetadata')
+            ->will($this->returnValue([$metadata, $metadata, $metadata]));
 
         $prop = new \ReflectionProperty('\Nelmio\Alice\Fixtures', 'loaders');
         $prop->setAccessible(true);
@@ -307,6 +318,30 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     protected function getDoctrineManagerMock($objects = null)
     {
         $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metadata1 = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata2 = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata3 = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $om->expects($this->once())
+            ->method('getMetadataFactory')
+            ->will($this->returnValue($metadataFactory));
+
+        $metadataFactory->expects($this->once())
+            ->method('getAllMetadata')
+            ->will($this->returnValue([$metadata1, $metadata2, $metadata3]));
+
+        $metadata1->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue(self::USER));
+
+        $metadata2->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue(self::CONTACT));
+
+        $metadata3->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue(self::GROUP));
 
         $om->expects($objects ? $this->exactly($objects) : $this->any())
             ->method('persist');
