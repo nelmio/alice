@@ -23,9 +23,9 @@ use Nelmio\Alice\Instances\Processor\Providers\IdentityProvider;
 use Nelmio\Alice\Util\TypeHintChecker;
 
 /**
- * Loads fixtures from an array or file
+ * Loads fixtures from an array or file.
  */
-class Loader
+class Loader implements LoaderInterface
 {
     /**
      * @var Collection
@@ -123,9 +123,11 @@ class Loader
     }
 
     /**
-     * Loads a fixture file
+     * Loads a fixture file.
      *
      * @param string|array $dataOrFilename data array or filename
+     *
+     * @return array Objects loaded (not persisted).
      */
     public function load($dataOrFilename)
     {
@@ -312,9 +314,7 @@ class Loader
     }
 
     /**
-     * public interface to set the Persister interface
-     *
-     * @param PersisterInterface $manager
+     * {@inheritdoc}
      */
     public function setPersister(PersisterInterface $manager)
     {
