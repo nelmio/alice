@@ -110,6 +110,32 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedData, $data);
     }
 
+    public function testIncludeFilesOrder()
+    {
+        $data = $this->parser->parse(__DIR__ . '/../../../support/fixtures/include_order.yml');
+
+        $expectedData = [
+            'Foo' =>
+                [
+                    'foo' =>
+                        [
+                            'id' => 1,
+                            'text' => '<word()>',
+                        ],
+                ],
+            'Bar' =>
+                [
+                    'bar' =>
+                        [
+                            'id' => 1,
+                            'text' => '<@foo->text>'
+                        ],
+                ],
+        ];
+
+        $this->assertSame($expectedData, $data);
+    }
+
     public function testParametersNotReturnedInData()
     {
         $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/include.yml');
