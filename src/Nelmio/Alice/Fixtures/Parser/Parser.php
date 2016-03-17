@@ -19,10 +19,15 @@ use Nelmio\Alice\Fixtures\Parser\Methods\MethodInterface;
 class Parser
 {
     /**
-     * @var array
-     **/
+     * @var MethodInterface[]
+     */
     private $parsers = [];
 
+    /**
+     * Parser constructor.
+     *
+     * @param MethodInterface[] $parsers
+     */
     public function __construct(array $parsers)
     {
         foreach ($parsers as $parser) {

@@ -18,10 +18,13 @@ use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 class Instantiator
 {
     /**
-     * @var array
+     * @var MethodInterface[]
      **/
     protected $methods;
 
+    /**
+     * @param MethodInterface[] $methods
+     */
     public function __construct(array $methods)
     {
         foreach ($methods as $method) {

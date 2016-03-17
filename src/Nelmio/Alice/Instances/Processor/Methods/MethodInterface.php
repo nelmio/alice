@@ -18,15 +18,15 @@ interface MethodInterface
     /**
      * returns true if this method can process the given value persister
      *
-     * @param ProcessableInterface
-     * @return boolean
+     * @param  ProcessableInterface $processable
+     * @return bool
      */
     public function canProcess(ProcessableInterface $processable);
 
     /**
      * returns the processed value
      *
-     * @param ProcessableInterface
+     * @param ProcessableInterface $processable
      * @param array
      * @return mixed
      */

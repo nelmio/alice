@@ -31,7 +31,7 @@ class Fixture
     protected $spec;
 
     /**
-     * @var array
+     * @var PropertyDefinition[]
      */
     protected $properties;
 
@@ -164,11 +164,16 @@ class Fixture
     /**
      * returns the list of properties with the complex properties (__construct, __set, etc) filtered out
      *
-     * @return array
+     * @return PropertyDefinition[]
      */
     public function getProperties()
     {
-        return array_filter($this->properties, function ($property) { return $property->isBasic(); });
+        return array_filter(
+            $this->properties,
+            function (PropertyDefinition $property) {
+                return $property->isBasic();
+            }
+        );
     }
 
     /**
@@ -184,7 +189,8 @@ class Fixture
     /**
      * returns true if this fixture has the given class flag
      *
-     * @return boolean
+     * @param  string $flag
+     * @return bool
      */
     public function hasClassFlag($flag)
     {
@@ -204,7 +210,8 @@ class Fixture
     /**
      * returns true if this fixture has the given name flag
      *
-     * @return boolean
+     * @param  string $flag
+     * @return bool
      */
     public function hasNameFlag($flag)
     {
@@ -266,7 +273,7 @@ class Fixture
     /**
      * returns the name of the method to use as the custom setter
      *
-     * @return string
+     * @return PropertyDefinition
      */
     public function getCustomSetter()
     {
@@ -287,7 +294,8 @@ class Fixture
     /**
      * returns the value of a property that has been registered as set
      *
-     * @return mixed $value
+     * @param  string $property
+     * @return mixed
      */
     public function getPropertyValue($property)
     {
@@ -315,8 +323,9 @@ class Fixture
     /**
      * creates and adds a PropertyDefinition to the fixture with the given name and value
      *
-     * @param string $name
-     * @param mixed  $value
+     * @param  string             $name
+     * @param  mixed              $value
+     * @return PropertyDefinition
      */
     protected function addProperty($name, $value)
     {

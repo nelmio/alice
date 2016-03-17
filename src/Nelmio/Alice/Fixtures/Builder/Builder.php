@@ -13,12 +13,13 @@ namespace Nelmio\Alice\Fixtures\Builder;
 
 use InvalidArgumentException;
 use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
+use Nelmio\Alice\Fixtures\Fixture;
 
 class Builder
 {
     /**
-     * @var array
-     **/
+     * @var MethodInterface[]
+     */
     protected $methods;
 
     /**
@@ -26,6 +27,9 @@ class Builder
      */
     protected $templates;
 
+    /**
+     * @param MethodInterface[] $methods
+     */
     public function __construct(array $methods)
     {
         foreach ($methods as $method) {
@@ -51,7 +55,10 @@ class Builder
     /**
      * builds a single fixture from a "raw" definition
      *
-     * @param array $rawData
+     * @param  string    $class
+     * @param  string    $name
+     * @param  array     $spec
+     * @return Fixture[]
      */
     public function build($class, $name, array $spec)
     {
