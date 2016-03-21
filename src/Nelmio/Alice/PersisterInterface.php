@@ -16,7 +16,7 @@ interface PersisterInterface
     /**
      * Loads a fixture file
      *
-     * @param array[object] $objects instance to persist in the DB
+     * @param object[] $objects instance to persist in the DB
      */
     public function persist(array $objects);
 
@@ -25,7 +25,7 @@ interface PersisterInterface
      *
      * @param  string $class
      * @param  int    $id
-     * @return mixed
+     * @return object
      */
     public function find($class, $id);
 }

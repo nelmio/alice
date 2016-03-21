@@ -67,6 +67,9 @@ abstract class Base implements MethodInterface
         return ob_get_clean();
     }
 
+    /**
+     * @return \Closure|void
+     */
     protected function createFakerClosure()
     {
         if (!$this->context instanceof Loader) {
@@ -100,8 +103,8 @@ abstract class Base implements MethodInterface
     }
 
     /**
-     * @param array $data
-     * @param array $includeData
+     * @param  array $data
+     * @param  array $includeData
      * @return array
      */
     protected function mergeIncludeData($data, $includeData)

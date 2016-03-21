@@ -45,7 +45,8 @@ class ParameterBag
     }
 
     /**
-     * @param mixed $value
+     * @param string $key
+     * @param mixed  $value
      */
     public function set($key, $value)
     {

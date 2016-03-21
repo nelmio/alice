@@ -24,7 +24,7 @@ class Conditional implements MethodInterface
     /**
      * sets the processor to handle recursive calls
      *
-     * @param Processor
+     * @param Processor $processor
      */
     public function setProcessor(Processor $processor)
     {
@@ -58,8 +58,8 @@ class Conditional implements MethodInterface
     /**
      * compares the threshold to a randomly generated value to determine whether
      *
-     * @param ProcessableInterface $processable
-     * @return
+     * @param  ProcessableInterface $processable
+     * @return bool
      */
     private function shouldReturnTrue(ProcessableInterface $processable)
     {

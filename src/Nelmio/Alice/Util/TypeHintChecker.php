@@ -16,7 +16,7 @@ use Nelmio\Alice\PersisterInterface;
 class TypeHintChecker
 {
     /**
-     * PersisterInterface
+     * @var PersisterInterface
      */
     protected $manager;
 
