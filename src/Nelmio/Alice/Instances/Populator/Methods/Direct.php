@@ -31,7 +31,7 @@ class Direct implements MethodInterface
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
-        return method_exists($object, $this->setterFor($property));
+        return method_exists($object, $this->setterFor($object, $property));
     }
 
     /**
@@ -39,7 +39,7 @@ class Direct implements MethodInterface
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
-        $setter = $this->setterFor($property);
+        $setter = $this->setterFor($object, $property);
         $value = $this->typeHintChecker->check($object, $setter, $value);
 
         if (!is_callable([$object, $setter])) {
@@ -54,11 +54,16 @@ class Direct implements MethodInterface
     /**
      * return the name of the setter for a given property
      *
+     * @param object|string $object
      * @param  string $property
      * @return string
      */
-    private function setterFor($property)
+    private function setterFor($object, $property)
     {
-        return "set{$property}";
+        if (method_exists($object, 'set' . $property)) {
+            return 'set' . $property;
+        } else {
+            return 'set' . str_replace('_', '', $property);
+        }
     }
 }
