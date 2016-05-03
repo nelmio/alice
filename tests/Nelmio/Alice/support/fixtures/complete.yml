@@ -4,7 +4,7 @@ Nelmio\Alice\support\models\User:
         fullname: John Smith
         birthDate: 1980-10-10
         email: <email()>
-        favoriteNumber: 42
+        favoriteNumber: <current()>
     user{1..10}:
         username: <username()>
         fullname: <firstName()> <lastName()>

@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <h2 id="Nelmio\Alice\Fixtures\Builder\BuilderTest">
+      Nelmio\Alice\Fixtures\Builder\Builder
+    </h2>
+    <ul>
+      <li>Add builder
+      </li>
+      <li>Only method interfaces can be used to instantiate the builder
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Fixtures\Parser\ParserTest">
+      Nelmio\Alice\Fixtures\Parser\Parser
+    </h2>
+    <ul>
+      <li>Add parser
+      </li>
+      <li>Only method interfaces can be used to instantiate the parser
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Fixtures\FixtureTest">
+      Nelmio\Alice\Fixtures\Fixture
+    </h2>
+    <ul>
+      <li>Will parse flags out of the class
+      </li>
+      <li>Will parse flags out of the name
+      </li>
+      <li>Is local with local class flag
+      </li>
+      <li>Is local with local name flag
+      </li>
+      <li>Is not local with neither class nor name flag
+      </li>
+      <li>Is template with template name flag
+      </li>
+      <li>Is not template without template name flag
+      </li>
+      <li>Is not template with extends name flag
+      </li>
+      <li>Extend template requires that the argument is a template
+      </li>
+      <li>Extend template will map unset properties on the fixture
+      </li>
+      <li>Extend template will not map set properties on the fixture
+      </li>
+      <li>Get extensions returns a list of all template names the fixture extends
+      </li>
+      <li>Has extensions is false when no extensions exist
+      </li>
+      <li>Has extensions is true when extensions exist
+      </li>
+      <li>Get properties will return only basic value properties
+      </li>
+      <li>Has class flag will return if class f lag exists
+      </li>
+      <li>Has name flag will return if name f lag exists
+      </li>
+      <li>Get constructor method will return the method name
+      </li>
+      <li>Get constructor args will return the arguments list
+      </li>
+      <li>Should use constructor will return true if there is no constructor in the spec
+      </li>
+      <li>Should use constructor will return false if the constructor spec is false
+      </li>
+      <li>Should use constructor will return true if the constructor spec is defined
+      </li>
+      <li>Has customer setter will return if the spec defines a custom setter
+      </li>
+      <li>Get custom setter will return the custom setter value
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Fixtures\LoaderTest">
+      Nelmio\Alice\Fixtures\Loader
+    </h2>
+    <ul>
+      <li>Load creates instances
+      </li>
+      <li>Get reference
+      </li>
+      <li>Get bad reference
+      </li>
+      <li>Load unparsable file
+      </li>
+      <li>Create private constructor instance
+      </li>
+      <li>Load invalid file
+      </li>
+      <li>Load empty file
+      </li>
+      <li>Load sequenced items
+      </li>
+      <li>Get references
+      </li>
+      <li>Set references clears and sets references
+      </li>
+      <li>Load assigns data to properties
+      </li>
+      <li>Load assigns data to setters
+      </li>
+      <li>Load assigns data to non public setters
+      </li>
+      <li>Load assigns data to magic call
+      </li>
+      <li>Load adds references to adders
+      </li>
+      <li>Load parses references
+      </li>
+      <li>Load parses property references
+      </li>
+      <li>Load parses property references getter
+      </li>
+      <li>Load parses references in faker providers
+      </li>
+      <li>Load parses property references does not exist
+      </li>
+      <li>Load parses single wildcard reference
+      </li>
+      <li>Load parses multi references
+      </li>
+      <li>Load parses single wildcard reference with property
+      </li>
+      <li>Load parses multi references with property
+      </li>
+      <li>Load fails multi references if none match
+      </li>
+      <li>Load parses multi references and only picks uniques
+      </li>
+      <li>Load parses optional values with percents
+      </li>
+      <li>Load parses optional values with floats
+      </li>
+      <li>Load coerces dates for date time hints
+      </li>
+      <li>Load parses faker data
+      </li>
+      <li>Load parses faker data multiple
+      </li>
+      <li>Load parses faker data with args
+      </li>
+      <li>Load parses faker data with php args
+      </li>
+      <li>Load parses variables
+      </li>
+      <li>Load parses faker data with locale
+      </li>
+      <li>Load parses faker data uses default locale
+      </li>
+      <li>Load creates inclusive ranges of objects
+      </li>
+      <li>Load creates exclusive ranges of objects
+      </li>
+      <li>Load swaps ranges
+      </li>
+      <li>Self referencing object
+      </li>
+      <li>Self reference
+      </li>
+      <li>Identity provider
+      </li>
+      <li>Default identity provider sugar
+      </li>
+      <li>Passing reference to provider
+      </li>
+      <li>Skipping references in strings
+      </li>
+      <li>Load creates enums of objects
+      </li>
+      <li>Local objects are not returned
+      </li>
+      <li>Template objects are not returned
+      </li>
+      <li>Template can extend other template objects combined with range
+      </li>
+      <li>Multiple inheritance in templates
+      </li>
+      <li>Multiple inheritance in instance
+      </li>
+      <li>Inherited object doesnt exist
+      </li>
+      <li>Objects override templates
+      </li>
+      <li>Objects inherit providers
+      </li>
+      <li>Current provider fails out of ranges
+      </li>
+      <li>Arbitrary property names fail
+      </li>
+      <li>Load fails on constructors with required args
+      </li>
+      <li>Load can bypass constructors with required args
+      </li>
+      <li>Load calls constructor if provided
+      </li>
+      <li>Load calls constructor by default
+      </li>
+      <li>Load calls static constructor if provided
+      </li>
+      <li>Load fails on invalid static constructor
+      </li>
+      <li>Load fails on scalar static constructor args
+      </li>
+      <li>Load fails if static method doesnt return an instance
+      </li>
+      <li>Load calls custom method after ctor
+      </li>
+      <li>Constructor custom providers
+      </li>
+      <li>Load calls custom method with multiple arguments and custom providers
+      </li>
+      <li>Load calls constructor with hinted params
+      </li>
+      <li>Generated values are unique
+      </li>
+      <li>Generated values are unique across a class
+      </li>
+      <li>Unique values exception
+      </li>
+      <li>Current in constructor
+      </li>
+      <li>Custom set function
+      </li>
+      <li>Custom nonexistant set function
+      </li>
+      <li>Null variable
+      </li>
+      <li>At literal
+      </li>
+      <li>Add processor
+      </li>
+      <li>Add builder
+      </li>
+      <li>Add instantiator
+      </li>
+      <li>Add populator
+      </li>
+      <li>Call faker from faker call
+      </li>
+      <li>Parameters are replaced
+      </li>
+      <li>Array parameters are replaced
+      </li>
+      <li>Yaml array parameters are properly interpreted
+      </li>
+      <li>Backslashes
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Fixtures\Parser\Methods\PhpTest">
+      Nelmio\Alice\Fixtures\Parser\Methods\Php
+    </h2>
+    <ul>
+      <li>Can parse will return true for php extensions
+      </li>
+      <li>Can parse will return false for non php extensions
+      </li>
+      <li>Parse will execute with a set context
+      </li>
+      <li>Parse will return a proper data array
+      </li>
+      <li>Parse will throw if the fixture doesnt return an array
+      </li>
+      <li>Include files
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Fixtures\Parser\Methods\YamlTest">
+      Nelmio\Alice\Fixtures\Parser\Methods\Yaml
+    </h2>
+    <ul>
+      <li>Can parse will return true for yaml extensions
+      </li>
+      <li>Can parse will return true for yaml extensions with php context
+      </li>
+      <li>Can parse will return false for non yaml extensions
+      </li>
+      <li>Parse will execute with a set context
+      </li>
+      <li>Parse will return a proper data array
+      </li>
+      <li>Include files
+      </li>
+      <li>Parameters not returned in data
+      </li>
+      <li>Parameters set on the loader
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Fixtures\PropertyDefinitionTest">
+      Nelmio\Alice\Fixtures\PropertyDefinition
+    </h2>
+    <ul>
+      <li>Will parse flags out of name
+      </li>
+      <li>Will register name flags
+      </li>
+      <li>Requires unique will return if the property is flagged as unique
+      </li>
+      <li>Is basic will return false if the property is a constructor
+      </li>
+      <li>Is basic will return false if the property is a setter
+      </li>
+      <li>Is basic will return true if the definition represents a value
+      </li>
+      <li>Is constructor will return if the definition is the constructor
+      </li>
+      <li>Is custom setter will return if the definition is a custom setter
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\FixturesTest">
+      Nelmio\Alice\Fixtures
+    </h2>
+    <ul>
+      <li>Load loads yaml files and doctrine persister
+      </li>
+      <li>Load fails on missing files
+      </li>
+      <li>That new loader is created for differing options
+      </li>
+      <li>That exception is thrown for invalid provider
+      </li>
+      <li>Load loads yaml files as array
+      </li>
+      <li>Load loads yaml files as glob string
+      </li>
+      <li>Load loads arrays
+      </li>
+      <li>Load loads p h pfiles
+      </li>
+      <li>Load with logger
+      </li>
+      <li>Makes only one flush with persist once
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Instances\Instantiator\InstantiatorTest">
+      Nelmio\Alice\Instances\Instantiator\Instantiator
+    </h2>
+    <ul>
+      <li>Add instantiator
+      </li>
+      <li>Only method interfaces can be used to instantiate the instantiator
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Instances\Populator\PopulatorTest">
+      Nelmio\Alice\Instances\Populator\Populator
+    </h2>
+    <ul>
+      <li>Add populator
+      </li>
+      <li>Only method interfaces can be used to instantiate the populator
+      </li>
+      <li>Array add
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Instances\Processor\Methods\FakerTest">
+      Nelmio\Alice\Instances\Processor\Methods\Faker
+    </h2>
+    <ul>
+      <li>Add provider
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Instances\Processor\ProcessableTest">
+      Nelmio\Alice\Instances\Processor\Processable
+    </h2>
+    <ul>
+      <li>Value matches will return if the processables value matches a given regex
+      </li>
+      <li>Get match will return the most recent match if it exists
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Instances\Processor\ProcessorTest">
+      Nelmio\Alice\Instances\Processor\Processor
+    </h2>
+    <ul>
+      <li>Only method interfaces can be used to instantiate the processor
+      </li>
+      <li>Add processor
+      </li>
+      <li>Add processor will set objects if setter exists
+      </li>
+      <li>Add processor will set the processor if setter exists
+      </li>
+    </ul>
+    <h2 id="Nelmio\Alice\Util\TypeHintCheckerTest">
+      Nelmio\Alice\Util\TypeHintChecker
+    </h2>
+    <ul>
+      <li>Accept variable length argument list
+      </li>
+    </ul>
+  </body>
+</html>
