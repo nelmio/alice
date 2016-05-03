@@ -1,6 +1,7 @@
 ### 2.x (WIP)
 
   * Added support for snake_case properties (#323)
+  * Deprecate usage of the the range operator with more than two dots (#329)
 
 ### 2.1.2 (2015-12-10)
 
