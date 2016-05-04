@@ -29,7 +29,7 @@ install:
   - if [ "hhvm" != "$TRAVIS_PHP_VERSION" ]; then
         phpenv config-rm xdebug.ini;
     fi;
-  - composer self-updateg
+  - composer self-update
   - if [ "$SYMFONY_VERSION" != "" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}";
     fi;
