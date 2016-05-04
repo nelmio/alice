@@ -43,7 +43,7 @@ class RangeName implements MethodInterface
         $fixtures = [];
 
         $from = $this->matches[1];
-        $to = $this->matches[2] - 1;
+        $to = $this->matches[2];
         if ($from > $to) {
             list($to, $from) = [$from, $to];
         }
