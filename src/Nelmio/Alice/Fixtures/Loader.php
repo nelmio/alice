@@ -112,9 +112,6 @@ class Loader
             $this->getBuiltInBuilders()
         );
 
-//        $this->instantiator = new Instantiator\Instantiator(
-//            $this->getBuiltInInstantiators($this->processor, $this->typeHintChecker)
-//        );
         $this->instantiator = $this->getBuiltInInstantiator($this->processor, $this->typeHintChecker);
 
         $this->populator = new Populator\Populator(
@@ -228,16 +225,6 @@ class Loader
     public function addBuilder(Builder\Methods\MethodInterface $builder)
     {
         $this->builder->addBuilder($builder);
-    }
-
-    /**
-     * adds an instantiator for instantiation extensions
-     *
-     * @param Instantiator\Methods\MethodInterface $instantiator
-     **/
-    public function addInstantiator(Instantiator\Methods\MethodInterface $instantiator)
-    {
-        $this->instantiator->addInstantiator($instantiator);
     }
 
     /**
@@ -436,23 +423,6 @@ class Loader
             new Instantiator\Chainable\ReflectionWithoutConstructorInstantiator(),
             new Instantiator\Chainable\ReflectionWithConstructorInstantiator($processor, $typeHintChecker)
         ]);
-    }
-
-    /**
-     * returns a list of all the default instantiator methods
-     *
-     * @param  Processor\Processor $processor
-     * @param  TypeHintChecker     $typeHintChecker
-     * @return array
-     */
-    private function getBuiltInInstantiators(Processor\Processor $processor, TypeHintChecker $typeHintChecker)
-    {
-        return [
-            new Instantiator\Methods\Unserialize(),
-            new Instantiator\Methods\ReflectionWithoutConstructor(),
-            new Instantiator\Methods\ReflectionWithConstructor($processor, $typeHintChecker),
-            new Instantiator\Methods\EmptyConstructor(),
-        ];
     }
 
     /**

@@ -41,7 +41,7 @@ final class EmptyConstructorInstantiator implements ChainableInstantiatorInterfa
             return (
                 $reflectionMethod->isPublic()
                 && 0 === $reflectionMethod->getNumberOfRequiredParameters()
-                && 0 === $fixture->getConstructorArgs()
+                && 0 === count($fixture->getConstructorArgs())
             );
         } catch (\ReflectionException $exception) {
             if (1 === preg_match('/(?:Method )(.+)(?: does not exist)/', $exception->getMessage())) {
