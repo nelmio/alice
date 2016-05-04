@@ -40,29 +40,6 @@ final class ReflectionWithConstructorInstantiator implements ChainableInstantiat
      */
     public function instantiate(Fixture $fixture)
     {
-//        $class             = $fixture->getClass();
-//        $constructorMethod = $fixture->getConstructorMethod();
-//        $constructorArgs   = $fixture->getConstructorArgs();
-//
-//        $reflClass = new \ReflectionClass($class);
-//
-//        $constructorArgs = $this->processor->process($constructorArgs, [], $fixture->getValueForCurrent());
-//
-//        foreach ($constructorArgs as $index => $value) {
-//            $constructorArgs[$index] = $this->typeHintChecker->check($class, $constructorMethod, $value, $index);
-//        }
-//
-//        if ($constructorMethod === '__construct') {
-//            $instance = $reflClass->newInstanceArgs($constructorArgs);
-//        } else {
-//            $instance = forward_static_call_array([$class, $constructorMethod], $constructorArgs);
-//            if (!($instance instanceof $class)) {
-//                throw new \UnexpectedValueException("The static constructor '{$constructorMethod}' for object '{$fixture}' returned an object that is not an instance of '{$class}'");
-//            }
-//        }
-//
-//        return $instance;
-
         $className = $fixture->getClass();
         $constructorMethod = $fixture->getConstructorMethod();
 
@@ -95,10 +72,6 @@ final class ReflectionWithConstructorInstantiator implements ChainableInstantiat
      */
     public function canInstantiate(Fixture $fixture): bool
     {
-//        $refl = new \ReflectionMethod($fixture->getClass(), $fixture->getConstructorMethod());
-//
-//        return $fixture->shouldUseConstructor() && $refl->getNumberOfRequiredParameters() <= count($fixture->getConstructorArgs());
-
         try {
             $reflectionMethod = new \ReflectionMethod($fixture->getClass(), $fixture->getConstructorMethod());
 

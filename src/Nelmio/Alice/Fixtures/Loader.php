@@ -11,9 +11,9 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-use Doctrine\Instantiator\InstantiatorInterface;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
+use Nelmio\Alice\Instances\InstantiatorInterface;
 use Nelmio\Alice\Instances\Populator;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Instances\Processor\Methods\Faker;
