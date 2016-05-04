@@ -22,17 +22,18 @@ class RangeName implements MethodInterface
      */
     public function canBuild($name)
     {
-        if (1 === preg_match('/\{([0-9]+)\.{3,}([0-9]+)\}/', $name, $this->matches)) {
+        if (1 === preg_match('/\{([0-9]+)(\.{3})([0-9]+)\}/', $name, $this->matches)) {
             @trigger_error(
                 'Ranged name should follow the pattern "name{X..Y}". Using "name{X...Y} instead is now deprecated and '
-                .'will be removed in 3.0',
+                .'will be removed in 3.0. Please mind the change of behavior: "user{0..10}" is creating 11 users '
+                .'whereas "user{0...10}" is creating 10',
                 E_USER_DEPRECATED
             );
 
             return true;
         }
 
-        return 1 === preg_match('/\{([0-9]+)\.{2,}([0-9]+)\}/', $name, $this->matches);
+        return 1 === preg_match('/\{([0-9]+)(\.{2,})([0-9]+)\}/', $name, $this->matches);
     }
 
     /**
@@ -43,7 +44,7 @@ class RangeName implements MethodInterface
         $fixtures = [];
 
         $from = $this->matches[1];
-        $to = $this->matches[2];
+        $to = 2 === strlen($this->matches[2]) ? $this->matches[3] : $this->matches[3] - 1;
         if ($from > $to) {
             list($to, $from) = [$from, $to];
         }

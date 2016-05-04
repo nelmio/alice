@@ -677,9 +677,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertCount(11, $res);
+        $this->assertCount(10, $res);
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user0'));
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user10'));
+        $this->assertInstanceOf(self::USER, $this->loader->getReference('user9'));
     }
 
     public function testLoadSwapsRanges()
