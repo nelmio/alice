@@ -11,10 +11,9 @@
 
 namespace Nelmio\Alice\Exception\Instantiator;
 
-/**
- * @author Théo FIDRY <theo.fidry@gmail.com>
- */
-class RuntimeException extends \RuntimeException implements ExceptionInterface
+use Nelmio\Alice\Throwable\InstantiatorThrowable;
+
+class RuntimeException extends \RuntimeException implements InstantiatorThrowable
 {
 
 }

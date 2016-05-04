@@ -11,23 +11,18 @@
 
 namespace PhpUnit;
 
-use PHPUnit_Framework_TestCase as PhpUnit;
-
-/**
- * @author Théo FIDRY <theo.fidry@gmail.com>
- */
-final class Assert extends \PHPUnit_Framework_TestCase
+final class PhpUnit extends \PHPUnit_Framework_TestCase
 {
     public static function assertIsA(string $expected, string $actual)
     {
         $reflectionClass = new \ReflectionClass($actual);
         $instance = $reflectionClass->newInstanceWithoutConstructor();
 
-        PhpUnit::assertInstanceOf($expected, $instance);
+        \PHPUnit_Framework_TestCase::assertInstanceOf($expected, $instance);
     }
 
     public static function assertErrorMessageIs(string $expected, \Throwable $actual)
     {
-        PhpUnit::assertEquals($expected, $actual->getMessage());
+        \PHPUnit_Framework_TestCase::assertEquals($expected, $actual->getMessage());
     }
 }

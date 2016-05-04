@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Instances\Instantiator\Chainable;
 
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Instantiator\ChainableInstantiatorInterface;
-use PhpUnit\Assert;
+use PhpUnit\PhpUnit;
 
 /**
  * @covers Nelmio\Alice\Instances\Instantiator\Chainable\EmptyConstructorInstantiator
@@ -34,7 +34,7 @@ class EmptyConstructorInstantiatorInterfaceTest extends \PHPUnit_Framework_TestC
 
     public function test_is_a_chainable_instantiator()
     {
-        Assert::assertIsA(ChainableInstantiatorInterface::class, EmptyConstructorInstantiator::class);
+        PhpUnit::assertIsA(ChainableInstantiatorInterface::class, EmptyConstructorInstantiator::class);
     }
 
     /**

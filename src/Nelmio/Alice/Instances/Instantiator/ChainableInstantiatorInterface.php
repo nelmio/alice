@@ -14,9 +14,6 @@ namespace Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\InstantiatorInterface;
 
-/**
- * @author Théo FIDRY <theo.fidry@gmail.com>
- */
 interface ChainableInstantiatorInterface extends InstantiatorInterface
 {
     /**

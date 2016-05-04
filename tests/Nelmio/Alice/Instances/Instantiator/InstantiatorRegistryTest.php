@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Instances\Instantiator;
 
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\InstantiatorInterface;
-use PhpUnit\Assert;
+use PhpUnit\PhpUnit;
 use Prophecy\Argument;
 
 /**
@@ -25,7 +25,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
 {
     public function test_is_an_instantiator()
     {
-        Assert::assertIsA(InstantiatorInterface::class, InstantiatorRegistry::class);
+        PhpUnit::assertIsA(InstantiatorInterface::class, InstantiatorRegistry::class);
     }
 
     public function test_accept_chainable_instantiators()
@@ -43,7 +43,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
         try {
             new InstantiatorRegistry([new \stdClass()]);
         } catch (\InvalidArgumentException $exception) {
-            Assert::assertErrorMessageIs(
+            PhpUnit::assertErrorMessageIs(
                 'Expected instantiators to be "Nelmio\Alice\Instances\Instantiator\ChainableInstantiatorInterface" objects. One of '
                 .'the instantiator was "stdClass" instead.',
                 $exception
@@ -53,7 +53,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
         try {
             new InstantiatorRegistry([10]);
         } catch (\InvalidArgumentException $exception) {
-            Assert::assertErrorMessageIs(
+            PhpUnit::assertErrorMessageIs(
                 'Expected instantiators to be "Nelmio\Alice\Instances\Instantiator\ChainableInstantiatorInterface" objects. One of '
                 .'the instantiator was "10" instead.',
                 $exception

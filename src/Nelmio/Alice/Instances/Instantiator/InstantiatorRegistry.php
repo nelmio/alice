@@ -15,9 +15,6 @@ use Nelmio\Alice\Exception\Instantiator\RuntimeException;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\InstantiatorInterface;
 
-/**
- * @author Théo FIDRY <theo.fidry@gmail.com>
- */
 final class InstantiatorRegistry implements InstantiatorInterface
 {
     /**

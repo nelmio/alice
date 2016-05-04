@@ -9,11 +9,8 @@
  *  file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Exception\Instantiator;
+namespace Nelmio\Alice\Throwable;
 
-/**
- * @author Théo FIDRY <theo.fidry@gmail.com>
- */
-interface ExceptionInterface extends \Throwable
+interface InstantiatorThrowable extends \Throwable
 {
 }

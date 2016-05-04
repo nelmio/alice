@@ -11,12 +11,9 @@
 
 namespace Nelmio\Alice\Instances;
 
-use Nelmio\Alice\Exception\Instantiator\ExceptionInterface;
 use Nelmio\Alice\Fixtures\Fixture;
+use Nelmio\Alice\Throwable\InstantiatorThrowable;
 
-/**
- * @author Théo FIDRY <theo.fidry@gmail.com>
- */
 interface InstantiatorInterface
 {
     /**
@@ -24,7 +21,7 @@ interface InstantiatorInterface
      *
      * @param  Fixture $fixture
      *
-     * @throws ExceptionInterface
+     * @throws InstantiatorThrowable
      *
      * @return mixed
      */
