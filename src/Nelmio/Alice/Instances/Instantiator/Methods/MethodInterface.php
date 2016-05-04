@@ -13,10 +13,6 @@ namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
 
-/**
- * @deprecated Should use Nelmio\Alice\Instances\Instantiator\ChainableInstantiatorInterface instead. Will be removed
- *             in 3.0
- */
 interface MethodInterface
 {
     /**

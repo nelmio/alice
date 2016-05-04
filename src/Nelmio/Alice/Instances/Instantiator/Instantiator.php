@@ -15,9 +15,6 @@ use InvalidArgumentException;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
-/**
- * @deprecated Should typehint Nelmio\Alice\InstantiatorInterface. Will be removed in 3.0
- */
 class Instantiator
 {
     /**

@@ -15,5 +15,4 @@ use Nelmio\Alice\Throwable\InstantiatorThrowable;
 
 class RuntimeException extends \RuntimeException implements InstantiatorThrowable
 {
-
 }
