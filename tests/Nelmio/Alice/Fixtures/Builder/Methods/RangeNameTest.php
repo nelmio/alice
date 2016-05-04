@@ -91,6 +91,12 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
                     $specs,
                     '1'
                 ),
+                new Fixture(
+                    $class,
+                    'user_2',
+                    $specs,
+                    '2'
+                ),
             ]
         ];
 
@@ -111,6 +117,12 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
                     $specs,
                     '1'
                 ),
+                new Fixture(
+                    $class,
+                    'user_2 (template)',
+                    $specs,
+                    '2'
+                ),
             ]
         ];
 
@@ -130,6 +142,12 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
                     'user_1 (extends something)',
                     $specs,
                     '1'
+                ),
+                new Fixture(
+                    $class,
+                    'user_2 (extends something)',
+                    $specs,
+                    '2'
                 ),
             ]
         ];
