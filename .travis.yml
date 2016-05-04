@@ -2,6 +2,10 @@ sudo: false
 
 language: php
 
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+
 php:
   - 5.4
   - 5.5
@@ -10,6 +14,7 @@ php:
   - hhvm
 
 matrix:
+  fast_finish: true
   include:
     - php: 5.5
       env: SYMFONY_VERSION='2.3.*'
@@ -20,9 +25,15 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION='3.0.*'
 
-before_install:
+install:
+  - if [ "hhvm" != "$TRAVIS_PHP_VERSION" ]; then
+        phpenv config-rm xdebug.ini;
+    fi;
+  - phpenv config-rm xdebug.ini
   - composer self-update
-  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"; fi;
+  - if [ "$SYMFONY_VERSION" != "" ]; then
+        composer require --no-update "symfony/symfony:${SYMFONY_VERSION}";
+    fi;
 
 before_script:
   - composer install --prefer-source
