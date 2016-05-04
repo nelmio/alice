@@ -342,12 +342,16 @@ class Fixture
         return isset($this->properties['__construct']) ? $this->properties['__construct'] : null;
     }
 
-    //
-    // Sequential arrays call the constructor, hashes call a static method
-    //
-    // array('foo', 'bar') => new $fixture->getClass()('foo', 'bar')
-    // array('foo' => array('bar')) => $fixture->getClass()::foo('bar')
-    //
+    /**
+     * Sequential arrays call the constructor, hashes call a static method
+     *
+     * array('foo', 'bar') => new $fixture->getClass()('foo', 'bar')
+     * array('foo' => array('bar')) => $fixture->getClass()::foo('bar')
+     *
+     * @throws \UnexpectedValueException
+     * 
+     * @return array
+     */
     protected function getConstructorComponents()
     {
         if (is_null($this->getConstructor())) {

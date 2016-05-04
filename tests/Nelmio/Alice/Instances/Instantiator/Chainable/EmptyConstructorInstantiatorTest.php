@@ -3,24 +3,30 @@
 /*
  * This file is part of the Alice package.
  *  
- * (c) Nelmio <hello@nelm.io>
+ *  (c) Nelmio <hello@nelm.io>
  *  
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 namespace Nelmio\Alice\Instances\Instantiator\Chainable;
 
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Instantiator\ChainableInstantiatorInterface;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithDefaultConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithExplicitDefaultConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithNamedConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithOptionalAndRequiredParameterInConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithOptionalParameterInConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithPrivateConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithProtectedConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithRequiredParameterInConstructor;
 use PhpUnit\PhpUnit;
 
 /**
  * @covers Nelmio\Alice\Instances\Instantiator\Chainable\EmptyConstructorInstantiator
- *
- * @author Théo FIDRY <theo.fidry@gmail.com>
  */
-class EmptyConstructorInstantiatorInterfaceTest extends \PHPUnit_Framework_TestCase
+class EmptyConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var EmptyConstructorInstantiator
@@ -47,17 +53,25 @@ class EmptyConstructorInstantiatorInterfaceTest extends \PHPUnit_Framework_TestC
         $this->assertEquals($expected, $actual);
     }
 
+    public function test_instantiate_fixture()
+    {
+        $fixture = $this->createFixtureForClass(\stdClass::class);
+        $actual = $this->instantiator->instantiate($fixture);
+
+        $this->assertInstanceOf(\stdClass::class, $actual);
+
+        $fixture = $this->createFixtureForClass(DummyWithDefaultConstructor::class);
+        $actual = $this->instantiator->instantiate($fixture);
+
+        $this->assertInstanceOf(DummyWithDefaultConstructor::class, $actual);
+    }
+
     public function provideFixtures()
     {
         $returned = [];
 
         $returned['default constructor'] = [
             $this->createFixtureForClass(DummyWithDefaultConstructor::class),
-            true,
-        ];
-
-        $returned['private constructor'] = [
-            $this->createFixtureForClass(DummyWithPrivateConstructor::class),
             true,
         ];
 
@@ -69,6 +83,31 @@ class EmptyConstructorInstantiatorInterfaceTest extends \PHPUnit_Framework_TestC
         $returned['constructor with optional parameter'] = [
             $this->createFixtureForClass(DummyWithOptionalParameterInConstructor::class),
             true,
+        ];
+
+
+        $returned['private constructor'] = [
+            $this->createFixtureForClass(DummyWithPrivateConstructor::class),
+            false,
+        ];
+
+        $returned['protected constructor'] = [
+            $this->createFixtureForClass(DummyWithProtectedConstructor::class),
+            false,
+        ];
+
+        $returned['named constructor'] = [
+            new Fixture(
+                DummyWithNamedConstructor::class,
+                'dummy',
+                [
+                    '__construct' => [
+                        'namedConstruct' => [],
+                    ],
+                ],
+                null
+            ),
+            false,
         ];
 
         $returned['constructor with required parameter'] = [
@@ -84,60 +123,8 @@ class EmptyConstructorInstantiatorInterfaceTest extends \PHPUnit_Framework_TestC
         return $returned;
     }
 
-    public function test_instantiate_fixture()
-    {
-        $fixture = $this->createFixtureForClass(\stdClass::class);
-        $actual = $this->instantiator->instantiate($fixture);
-
-        $this->assertInstanceOf(\stdClass::class, $actual);
-
-        $fixture = $this->createFixtureForClass(DummyWithDefaultConstructor::class);
-        $actual = $this->instantiator->instantiate($fixture);
-
-        $this->assertInstanceOf(DummyWithDefaultConstructor::class, $actual);
-    }
-
     private function createFixtureForClass(string $class): Fixture
     {
         return new Fixture($class, 'dummy', [], null);
-    }
-}
-
-class DummyWithDefaultConstructor
-{
-}
-
-class DummyWithPrivateConstructor
-{
-    private function __construct()
-    {
-    }
-}
-
-class DummyWithExplicitDefaultConstructor
-{
-    public function __construct()
-    {
-    }
-}
-
-class DummyWithOptionalParameterInConstructor
-{
-    public function __construct($optionalParam = 10)
-    {
-    }
-}
-
-class DummyWithRequiredParameterInConstructor
-{
-    public function __construct($requiredParam)
-    {
-    }
-}
-
-class DummyWithOptionalAndRequiredParameterInConstructor
-{
-    public function __construct($requiredParam, $optionalParam = 10)
-    {
     }
 }

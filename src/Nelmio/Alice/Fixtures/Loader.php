@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Fixtures;
 
+use Doctrine\Instantiator\InstantiatorInterface;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Populator;
@@ -57,7 +58,7 @@ class Loader
     protected $fakerProcessorMethod;
 
     /**
-     * @var Instantiator\Instantiator
+     * @var InstantiatorInterface
      */
     protected $instantiator;
 
@@ -111,9 +112,10 @@ class Loader
             $this->getBuiltInBuilders()
         );
 
-        $this->instantiator = new Instantiator\Instantiator(
-            $this->getBuiltInInstantiators($this->processor, $this->typeHintChecker)
-        );
+//        $this->instantiator = new Instantiator\Instantiator(
+//            $this->getBuiltInInstantiators($this->processor, $this->typeHintChecker)
+//        );
+        $this->instantiator = $this->getBuiltInInstantiator($this->processor, $this->typeHintChecker);
 
         $this->populator = new Populator\Populator(
             $this->objects,
@@ -425,6 +427,15 @@ class Loader
             new Builder\Methods\ListName(),
             new Builder\Methods\SimpleName(),
         ];
+    }
+
+    private function getBuiltInInstantiator(Processor\Processor $processor, TypeHintChecker $typeHintChecker): Instantiator\InstantiatorRegistry
+    {
+        return new Instantiator\InstantiatorRegistry([
+            new Instantiator\Chainable\EmptyConstructorInstantiator(),
+            new Instantiator\Chainable\ReflectionWithoutConstructorInstantiator(),
+            new Instantiator\Chainable\ReflectionWithConstructorInstantiator($processor, $typeHintChecker)
+        ]);
     }
 
     /**

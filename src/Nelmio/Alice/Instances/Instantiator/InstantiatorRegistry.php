@@ -33,7 +33,7 @@ final class InstantiatorRegistry implements InstantiatorInterface
             if (!($instantiator instanceof ChainableInstantiatorInterface)) {
                 throw new \InvalidArgumentException(
                     sprintf(
-                        'Expected instantiators to be "%s" objects. One of the instantiator was "%s" instead.',
+                        'Expected instantiators to be "%s" objects. Instantiator "%s" is not.',
                         ChainableInstantiatorInterface::class,
                         is_object($instantiator) ? get_class($instantiator) : $instantiator
                     )

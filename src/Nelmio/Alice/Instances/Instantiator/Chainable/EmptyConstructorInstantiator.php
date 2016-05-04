@@ -21,9 +21,9 @@ final class EmptyConstructorInstantiator implements ChainableInstantiatorInterfa
      */
     public function instantiate(Fixture $fixture)
     {
-        $class = $fixture->getClass();
+        $className = $fixture->getClass();
 
-        return new $class();
+        return new $className();
     }
 
     /**
@@ -32,12 +32,26 @@ final class EmptyConstructorInstantiator implements ChainableInstantiatorInterfa
     public function canInstantiate(Fixture $fixture): bool
     {
         try {
+            if ('__construct' !== $fixture->getConstructorMethod()) {
+                return false;
+            }
+
             $reflectionMethod = new \ReflectionMethod($fixture->getClass(), '__construct');
 
-            return 0 === $reflectionMethod->getNumberOfRequiredParameters();
+            return (
+                $reflectionMethod->isPublic()
+                && 0 === $reflectionMethod->getNumberOfRequiredParameters()
+                && 0 === $fixture->getConstructorArgs()
+            );
         } catch (\ReflectionException $exception) {
-            // thrown when __construct does not exist, i.e. is default constructor
-            return true;
+            if (1 === preg_match('/(?:Method )(.+)(?: does not exist)/', $exception->getMessage())) {
+                // thrown when __construct does not exist, i.e. is default constructor
+                return true;
+            }
+
+            return false;
+        } catch (\Exception $exception) {
+            return false;
         }
     }
 }

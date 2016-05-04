@@ -44,8 +44,8 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
             new InstantiatorRegistry([new \stdClass()]);
         } catch (\InvalidArgumentException $exception) {
             PhpUnit::assertErrorMessageIs(
-                'Expected instantiators to be "Nelmio\Alice\Instances\Instantiator\ChainableInstantiatorInterface" objects. One of '
-                .'the instantiator was "stdClass" instead.',
+                'Expected instantiators to be "Nelmio\Alice\Instances\Instantiator\ChainableInstantiatorInterface" '.
+                'objects. Instantiator "stdClass" is not.',
                 $exception
             );
         }
@@ -54,8 +54,8 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
             new InstantiatorRegistry([10]);
         } catch (\InvalidArgumentException $exception) {
             PhpUnit::assertErrorMessageIs(
-                'Expected instantiators to be "Nelmio\Alice\Instances\Instantiator\ChainableInstantiatorInterface" objects. One of '
-                .'the instantiator was "10" instead.',
+                'Expected instantiators to be "Nelmio\Alice\Instances\Instantiator\ChainableInstantiatorInterface" '.
+                'objects. Instantiator "10" is not.',
                 $exception
             );
         }
