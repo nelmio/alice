@@ -10,6 +10,7 @@ php:
   - hhvm
 
 matrix:
+  fast_finish: true
   include:
     - php: 5.5
       env: SYMFONY_VERSION='2.3.*'
