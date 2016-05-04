@@ -9,10 +9,8 @@
  *  file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Exception\Fixtures\Builder;
+namespace Nelmio\Alice\Fixtures\Flag;
 
-use Nelmio\Alice\Throwable\Fixtures\BuilderThrowable;
-
-class LogicException extends \LogicException implements BuilderThrowable
+interface FlagInterface
 {
 }

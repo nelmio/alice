@@ -9,8 +9,8 @@
  *  file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Throwable\Fixtures;
+namespace Nelmio\Alice\Throwable\Fixtures\Definition;
 
-interface BuilderThowable extends \Throwable
+interface DefinitionBuilderThrowable extends \Throwable
 {
 }

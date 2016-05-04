@@ -9,19 +9,19 @@
  *  file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Fixtures\Builder\Chainable;
+namespace Nelmio\Alice\Fixtures\Definition\Builder\Chainable;
 
-use Nelmio\Alice\Fixtures\Builder\ChainableBuilderInterface;
-use Nelmio\Alice\Fixtures\FixtureBuilder;
+use Nelmio\Alice\Fixtures\Definition\Builder\ChainableDefinitionBuilderInterface;
+use Nelmio\Alice\Fixtures\Definition\UnresolvedFixtureDefinition;
 
-final class SimpleNameBuilder implements ChainableBuilderInterface
+final class SimpleNameBuilder implements ChainableDefinitionBuilderInterface
 {
     /**
      * @inheritdoc
      */
     public function build(string $className, string $name, array $specs): array
     {
-        return [new FixtureBuilder($className, $name, $specs, $name)];
+        return [new UnresolvedFixtureDefinition($className, $name, $specs, $name)];
     }
 
     /**

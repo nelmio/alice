@@ -9,33 +9,38 @@
  *  file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Fixtures;
+namespace Nelmio\Alice\Fixtures\Flag;
 
-final class Flags
+final class FlagBag
 {
-    /** @private */
-    const LOCAL_FLAG = 'local';
-    /** @private */
-    const TEMPLATE_FLAG = 'template';
+    /**
+     * @var bool
+     */
+    private $isATemplate;
 
     /**
-     * @var array
+     * @var string[]
      */
-    private $flags = [];
+    private $extends = [];
 
+    /**
+     * @param string[] $flags
+     *
+     * @example
+     *  $flags = [
+     *      'template',
+     *      '
+     *  ]
+     */
     public function __construct(array $flags)
     {
         foreach ($flags as $flag) {
             switch (true) {
-                case self::LOCAL_FLAG === $flag:
-                    $this->flags[self::LOCAL_FLAG] = true;
-                    break;
-
                 case self::TEMPLATE_FLAG === $flag:
                     $this->flags[self::TEMPLATE_FLAG] = true;
                     break;
 
-                case default:
+                default:
                     echo '';
             }
 
@@ -44,6 +49,11 @@ final class Flags
 
     public function isLocal(): bool
     {
-        return true;
+        return isset($this->flags[self::LOCAL_FLAG]);
+    }
+
+    public function isTemplate(): bool
+    {
+        //TODO
     }
 }

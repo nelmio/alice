@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *
  *  (c) Nelmio <hello@nelm.io>
@@ -9,14 +9,14 @@
  *  file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Fixtures\Builder\Chainable;
+namespace Nelmio\Alice\Fixtures\Definition\Builder\Chainable;
 
 use Nelmio\Alice\Exception\Fixtures\Builder\LogicException;
-use Nelmio\Alice\Fixtures\Builder\ChainableBuilderInterface;
-use Nelmio\Alice\Fixtures\RangedFixtureBuilder;
+use Nelmio\Alice\Fixtures\Definition\Builder\ChainableDefinitionBuilderInterface;
+use Nelmio\Alice\Fixtures\Definition\UnresolvedRangedFixtureDefinition;
 use Nelmio\Alice\Fixtures\RangeName;
 
-final class RangeNameBuilder implements ChainableBuilderInterface
+final class RangeNameBuilder implements ChainableDefinitionBuilderInterface
 {
     /**
      * @inheritdoc
@@ -27,9 +27,11 @@ final class RangeNameBuilder implements ChainableBuilderInterface
 
         $fixtures = [];
         for ($currentIndex = $range->getFrom(); $currentIndex <= $range->getTo(); $currentIndex++) {
-            $fixtures[] = new RangedFixtureBuilder(
+            $fixtureName = sprintf("%s%s", $range->getName(), $currentIndex);
+
+            $fixtures[] = new UnresolvedRangedFixtureDefinition(
                 $className,
-                $range->getName(),
+                $fixtureName,
                 $specs,
                 $name,
                 (string) $currentIndex
@@ -44,7 +46,7 @@ final class RangeNameBuilder implements ChainableBuilderInterface
      */
     public function canBuild(string $name, array &$matches = []): bool
     {
-        return 1 === preg_match('/(.*)\{([0-9]+)(?:\.{2,})([0-9]+)\}/', $name, $matches);
+        return 1 === preg_match('/(.*)\{([0-9]+)(?:\.{2})([0-9]+)\}/', $name, $matches);
     }
 
     /**

@@ -9,14 +9,14 @@
  *  file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Fixtures\Builder\Chainable;
+namespace Nelmio\Alice\Fixtures\Definition\Builder\Chainable;
 
 use Nelmio\Alice\Exception\Fixtures\Builder\LogicException;
-use Nelmio\Alice\Fixtures\Builder\ChainableBuilderInterface;
+use Nelmio\Alice\Fixtures\Definition\Builder\ChainableDefinitionBuilderInterface;
+use Nelmio\Alice\Fixtures\Definition\UnresolvedRangedFixtureDefinition;
 use Nelmio\Alice\Fixtures\ListName;
-use Nelmio\Alice\Fixtures\RangedFixtureBuilder;
 
-final class ListNameBuilder implements ChainableBuilderInterface
+final class ListNameBuilder implements ChainableDefinitionBuilderInterface
 {
     /**
      * @inheritdoc
@@ -27,7 +27,7 @@ final class ListNameBuilder implements ChainableBuilderInterface
 
         $fixtures = [];
         foreach ($names as $listName) {
-            $fixtures[] = new RangedFixtureBuilder(
+            $fixtures[] = new UnresolvedRangedFixtureDefinition(
                 $className,
                 $listName->getName(),
                 $specs,

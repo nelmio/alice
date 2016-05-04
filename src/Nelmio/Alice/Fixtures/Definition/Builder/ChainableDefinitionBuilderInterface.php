@@ -9,11 +9,11 @@
  *  file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Fixtures\Builder;
+namespace Nelmio\Alice\Fixtures\Definition\Builder;
 
-use Nelmio\Alice\Fixtures\BuilderInterface;
+use Nelmio\Alice\Fixtures\Definition\DefinitionBuilderInterface;
 
-interface ChainableBuilderInterface extends BuilderInterface
+interface ChainableDefinitionBuilderInterface extends DefinitionBuilderInterface
 {
     /**
      * @param  string $name

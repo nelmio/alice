@@ -11,38 +11,17 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-use Nelmio\Alice\Throwable\Fixtures\BuilderThowable;
+use Nelmio\Alice\Fixtures\Definition\UnresolvedFixtureDefinition;
+use Nelmio\Alice\Throwable\Fixtures\BuilderThrowable;
 
 interface BuilderInterface
 {
     /**
-     * Builds a fixture definition.
+     * @param  UnresolvedFixtureDefinition[] $definitions
      *
-     * @param  string $className FQCN
-     * @param  string $name
-     * @param  array  $specs
-     *
-     * @example
-     *  with:
-     *
-     * ```yaml
-     *  Nelmio\Alice\support\models\User:
-     *      user{1..10}:
-     *          username: <username()>
-     *          fullname: <firstName()> <lastName()>
-     * ```
-     *
-     *  you will have:
-     *  $className: 'Nelmio\Alice\support\models\User'
-     *  $name: 'user{1..10}'
-     *  $spec: [
-     *      'username' => '<username()>'
-     *      'fullname' => '<firstName()> <lastName()>'
-     *  ]
-     *
-     * @throws BuilderThowable
+     * @throws BuilderThrowable
      *
      * @return Fixture[]
      */
-    public function build(string $className, string $name, array $specs): array;
+    public function build(array $definitions): array;
 }

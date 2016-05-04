@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Fixtures\Builder\Chainable;
 
 use Nelmio\Alice\Fixtures\Builder\ChainableBuilderInterface;
-use Nelmio\Alice\Fixtures\Fixture;
+use Nelmio\Alice\Fixtures\RangedFixtureDefinition;
 use PhpUnit\Assert;
 
 /**
@@ -77,23 +77,26 @@ class ListNameBuilderTest extends \PHPUnit_Framework_TestCase
             'user_{alice, bob, foo bar}',
             $specs,
             [
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
                     'user_alice',
                     $specs,
-                    'user_alice'
+                    'user_{alice, bob, foo bar}',
+                    'alice'
                 ),
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
                     'user_bob',
                     $specs,
-                    'user_bob'
+                    'user_{alice, bob, foo bar}',
+                    'bob'
                 ),
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
                     'user_foo bar',
                     $specs,
-                    'user_foo bar'
+                    'user_{alice, bob, foo bar}',
+                    'foo bar'
                 ),
             ]
         ];
@@ -103,17 +106,19 @@ class ListNameBuilderTest extends \PHPUnit_Framework_TestCase
             'user_{alice, bob} (template)',
             $specs,
             [
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
-                    'user_alice (template)',
+                    'user_alice',
                     $specs,
-                    'user_alice'
+                    'user_{alice, bob} (template)',
+                    'alice'
                 ),
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
-                    'user_bob (template)',
+                    'user_bob',
                     $specs,
-                    'user_bob'
+                    'user_{alice, bob} (template)',
+                    'bob'
                 ),
             ]
         ];
@@ -123,17 +128,19 @@ class ListNameBuilderTest extends \PHPUnit_Framework_TestCase
             'user_{alice, bob} (extends something)',
             $specs,
             [
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
-                    'user_alice (extends something)',
+                    'user_alice',
                     $specs,
-                    'user_alice'
+                    'user_{alice, bob} (extends something)',
+                    'alice'
                 ),
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
-                    'user_bob (extends something)',
+                    'user_bob',
                     $specs,
-                    'user_bob'
+                    'user_{alice, bob} (extends something)',
+                    'bob'
                 ),
             ]
         ];
@@ -143,11 +150,12 @@ class ListNameBuilderTest extends \PHPUnit_Framework_TestCase
             'user_{alice} (template, extends something)',
             $specs,
             [
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
-                    'user_alice (template, extends something)',
+                    'user_alice',
                     $specs,
-                    'user_alice'
+                    'user_{alice} (template, extends something)',
+                    'alice'
                 ),
             ]
         ];
@@ -157,17 +165,19 @@ class ListNameBuilderTest extends \PHPUnit_Framework_TestCase
             'user_{alice    ,    bob    } (extends something)',
             $specs,
             [
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
-                    'user_alice (extends something)',
+                    'user_alice',
                     $specs,
-                    'user_alice'
+                    'user_{alice    ,    bob    } (extends something)',
+                    'alice'
                 ),
-                new Fixture(
+                new RangedFixtureDefinition(
                     $class,
-                    'user_bob (extends something)',
+                    'user_bob',
                     $specs,
-                    'user_bob'
+                    'user_{alice    ,    bob    } (extends something)',
+                    'bob'
                 ),
             ]
         ];
