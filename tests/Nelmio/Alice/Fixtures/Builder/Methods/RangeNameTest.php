@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the Alice package.
  *
  *  (c) Nelmio <hello@nelm.io>
@@ -29,7 +30,7 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
 
     public function test_is_a_builder_method()
     {
-        $this->assertInstanceOf(MethodInterface::class, $this->method);
+        $this->assertInstanceOf('Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface', $this->method);
     }
 
     /**
@@ -68,10 +69,12 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
 
     public function provideData()
     {
+        $return = [];
+
         $class = 'Dummy';
         $specs= [];
 
-        yield [
+        $return['nominal'] = [
             $class,
             'user_{0..2}',
             $specs,
@@ -91,7 +94,7 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        yield [
+        $return['with template'] = [
             $class,
             'user_{0..2} (template)',
             $specs,
@@ -111,7 +114,7 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        yield [
+        $return['with extends'] = [
             $class,
             'user_{0..2} (extends something)',
             $specs,
@@ -130,5 +133,7 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
                 ),
             ]
         ];
+
+        return $return;
     }
 }
