@@ -22,7 +22,14 @@ class ReflectionWithoutConstructor implements MethodInterface
     {
         $reflConstruct = new \ReflectionMethod($fixture->getClass(), '__construct');
 
-        return (!$reflConstruct->isPublic() && '__construct' === $fixture->getConstructorMethod()) || (!$fixture->shouldUseConstructor() && !version_compare(PHP_VERSION, '5.4', '<'));
+        if (! $fixture->shouldUseConstructor()) {
+            return true;
+        }
+
+        return (
+            !$reflConstruct->isPublic()
+            && '__construct' === $fixture->getConstructorMethod()
+        );
     }
 
     /**
