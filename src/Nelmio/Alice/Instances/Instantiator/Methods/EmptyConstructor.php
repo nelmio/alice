@@ -20,9 +20,28 @@ class EmptyConstructor implements MethodInterface
      */
     public function canInstantiate(Fixture $fixture)
     {
-        $refl = new \ReflectionMethod($fixture->getClass(), '__construct');
+        try {
+            if ('__construct' !== $fixture->getConstructorMethod()) {
+                return false;
+            }
 
-        return $refl->getNumberOfRequiredParameters() === 0;
+            $reflectionMethod = new \ReflectionMethod($fixture->getClass(), '__construct');
+
+            return (
+                $reflectionMethod->isPublic()
+                && 0 === $reflectionMethod->getNumberOfRequiredParameters()
+                && 0 === count($fixture->getConstructorArgs())
+            );
+        } catch (\ReflectionException $exception) {
+            if (1 === preg_match('/(?:Method )(.+)(?: does not exist)/', $exception->getMessage())) {
+                // thrown when __construct does not exist, i.e. is default constructor
+                return true;
+            }
+
+            return false;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 
     /**

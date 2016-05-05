@@ -20,16 +20,23 @@ class ReflectionWithoutConstructor implements MethodInterface
      */
     public function canInstantiate(Fixture $fixture)
     {
-        $reflConstruct = new \ReflectionMethod($fixture->getClass(), '__construct');
-
-        if (! $fixture->shouldUseConstructor()) {
+        if (!$fixture->shouldUseConstructor()) {
             return true;
         }
 
-        return (
-            !$reflConstruct->isPublic()
-            && '__construct' === $fixture->getConstructorMethod()
-        );
+        try {
+            $reflectionMethod = new \ReflectionMethod($fixture->getClass(), '__construct');
+
+            return (
+                false === $reflectionMethod->isPublic()
+                && '__construct' === $fixture->getConstructorMethod()
+            );
+        } catch (\ReflectionException $exception) {
+            // thrown when __construct does not exist, i.e. is default constructor
+            return false;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 
     /**
