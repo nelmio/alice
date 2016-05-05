@@ -5,8 +5,11 @@ namespace Nelmio\Alice\Fixtures\Builder\Methods;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Collection;
 
-class ReferenceRangeName implements MethodInterface
+final class ReferenceRangeName implements MethodInterface
 {
+    /**
+     * @var array $matches
+     */
     private $matches = [];
 
     /**
