@@ -1,4 +1,4 @@
-Alice - Expressive fixtures generator [![Build Status](https://secure.travis-ci.org/nelmio/alice.png?branch=master)](http://travis-ci.org/nelmio/alice)
+Alice - Expressive fixtures generator [![Build Status](https://travis-ci.org/nelmio/alice.svg?branch=1.x)](https://travis-ci.org/nelmio/alice)
 =====================================
 
 Alice allows you to create a ton of fixtures/fake data for use while
@@ -6,6 +6,8 @@ developing or testing your project. It gives you a few essential tools to
 make it very easy to generate complex data with constraints in a readable
 and easy to edit way, so that everyone on your team can tweak the fixtures
 if needed.
+
+**[UNMAINTAINED]**: alice v1 is no longer supported although PR may still be considered.
 
 ## Installation ##
 
