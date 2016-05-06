@@ -1,4 +1,4 @@
-Alice - Expressive fixtures generator [![Build Status](https://secure.travis-ci.org/nelmio/alice.png?branch=master)](http://travis-ci.org/nelmio/alice)
+Alice - Expressive fixtures generator [![Build Status](https://travis-ci.org/nelmio/alice.svg?branch=master)](https://travis-ci.org/nelmio/alice)
 =====================================
 
 Relying on [fzaninotto/Faker](https://github.com/fzaninotto/Faker), Alice
