@@ -59,6 +59,7 @@ class Php extends Base
         }
 
         $data = $this->processIncludes($data, $file);
+        $data = $this->processParameters($data);
 
         return $data;
     }

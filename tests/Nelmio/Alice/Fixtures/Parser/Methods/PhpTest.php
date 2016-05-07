@@ -11,7 +11,9 @@
 
 namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
+use Nelmio\Alice\Fixtures\Loader;
 use Nelmio\Alice\Fixtures\Parser\Methods\Php as PhpParser;
+use Prophecy\Argument;
 
 class PhpTest extends \PHPUnit_Framework_TestCase
 {
@@ -182,6 +184,58 @@ class PhpTest extends \PHPUnit_Framework_TestCase
             ],
             $data
         );
+    }
+
+    public function testLoadParameters()
+    {
+        $parameterBagProphecy = $this->prophesize('Nelmio\Alice\Fixtures\ParameterBag');
+        $parameterBagProphecy->set('foo', 'bar')->shouldBeCalled();
+
+        $loaderProphecy = $this->prophesize('Nelmio\Alice\Fixtures\Loader');
+        $loaderProphecy->getFakerProcessorMethod()->shouldBeCalled();
+        $loaderProphecy->getParameterBag()->willReturn($parameterBagProphecy->reveal());
+        /* @var Loader $loader */
+        $loader = $loaderProphecy->reveal();
+
+        $parser = new PhpParser($loader);
+        $parser->parse(self::$dir.'/file_with_parameters.php');
+
+        $loaderProphecy->getParameterBag()->shouldHaveBeenCalledTimes(1);
+        $parameterBagProphecy->set(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testLoadParametersOfIncludedFiles()
+    {
+        $parameterBagProphecy = $this->prophesize('Nelmio\Alice\Fixtures\ParameterBag');
+
+        $actual = ['foo' => null];
+        $parameterBagProphecy
+            ->set('foo', 'boo')
+            ->will(function($args) use (&$actual) {
+                $actual['foo'] = $args[1];
+            })
+        ;
+        $parameterBagProphecy->set('ping', 'pong')->shouldBeCalled();
+        $parameterBagProphecy
+            ->set('foo', 'bar')
+            ->will(function($args) use (&$actual) {
+                $actual['foo'] = $args[1];
+            })
+        ;
+
+        $loaderProphecy = $this->prophesize('Nelmio\Alice\Fixtures\Loader');
+        $loaderProphecy->getFakerProcessorMethod()->shouldBeCalled();
+        $loaderProphecy->getParameterBag()->willReturn($parameterBagProphecy->reveal());
+        /* @var Loader $loader */
+        $loader = $loaderProphecy->reveal();
+
+        $parser = new PhpParser($loader);
+        $parser->parse(self::$dir.'/include_parameters/main1.php');
+
+        $this->assertEquals('bar', $actual['foo']);
+
+        $loaderProphecy->getParameterBag()->shouldHaveBeenCalledTimes(2);
+        $parameterBagProphecy->set(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
     public function provideFiles()

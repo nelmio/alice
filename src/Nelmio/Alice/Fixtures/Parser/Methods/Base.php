@@ -114,6 +114,33 @@ abstract class Base implements MethodInterface
      * @param array $data        Parsed file data
      * @param array $includeData Parsed file data to merge
      *
+     * @param array $data
+     *
+     * @return mixed
+     */
+    protected function processParameters(array $data)
+    {
+        if (isset($data['parameters']) && $this->context instanceof Loader) {
+            /* @var Loader $loader */
+            $loader = $this->context;
+
+            $parameterBag = $loader->getParameterBag();
+            foreach ($data['parameters'] as $name => $value) {
+                $parameterBag->set($name, $value);
+            }
+        }
+
+        unset($data['parameters']);
+
+        return $data;
+    }
+
+    /**
+     * Merges a parsed file data with another. If some data overlaps, the existent data is kept.
+     *
+     * @param array $data        Parsed file data
+     * @param array $includeData Parsed file data to merge
+     *
      * @return array
      */
     protected function mergeIncludeData($data, $includeData)
