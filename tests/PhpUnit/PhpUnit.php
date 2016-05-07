@@ -19,10 +19,7 @@ final class PhpUnit extends \PHPUnit_Framework_TestCase
      */
     public static function assertIsA($expected, $actual)
     {
-        $reflectionClass = new \ReflectionClass($actual);
-        $instance = $reflectionClass->newInstanceWithoutConstructor();
-
-        \PHPUnit_Framework_TestCase::assertInstanceOf($expected, $instance);
+        \PHPUnit_Framework_TestCase::assertTrue(is_a($actual, $expected, true));
     }
 
     /**
