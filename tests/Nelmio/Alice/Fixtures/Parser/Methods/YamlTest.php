@@ -12,144 +12,237 @@
 namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
 use Nelmio\Alice\Fixtures\Loader;
+use Nelmio\Alice\Fixtures\Parser\Methods\Yaml as YamlParser;
+use Prophecy\Argument;
 
 class YamlTest extends \PHPUnit_Framework_TestCase
 {
+    private static $dir;
+
     /**
-     * @var Yaml
-     **/
+     * @var YamlParser
+     */
     private $parser;
+
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+
+        self::$dir = __DIR__.'/../Files/Yaml';
+    }
+
+    public static function tearDownAfterClass()
+    {
+        self::$dir = null;
+
+        parent::tearDownAfterClass();
+    }
+
 
     public function setUp()
     {
-        $this->parser = new Yaml(['value' => 'test']);
+        $this->parser = new YamlParser();
     }
 
-    public function testCanParseWillReturnTrueForYamlExtensions()
+    public function test_is_a_parser_method()
     {
-        $this->assertTrue($this->parser->canParse('test.yaml'));
-        $this->assertTrue($this->parser->canParse('test.yml'));
+        $this->assertTrue(
+            is_a(
+                'Nelmio\Alice\Fixtures\Parser\Methods\Yaml',
+                'Nelmio\Alice\Fixtures\Parser\Methods\MethodInterface',
+                true
+            )
+        );
     }
 
-    public function testCanParseWillReturnTrueForYamlExtensionsWithPhpContext()
+    /**
+     * @dataProvider provideFiles
+     */
+    public function test_can_parse_yaml_files($file, $expected)
     {
-        $this->assertTrue($this->parser->canParse('test.yaml.php'));
+        $actual = $this->parser->canParse($file);
+
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testCanParseWillReturnFalseForNonYamlExtensions()
+    public function test_parse_returns_a_yaml_array()
     {
-        $this->assertFalse($this->parser->canParse('test.xml'));
+        $data = $this->parser->parse(self::$dir.'/regular_file.yml');
+
+        $this->assertSame(
+            [
+                'username' => '<username()>',
+            ],
+            $data
+        );
     }
 
-    public function testParseWillExecuteWithASetContext()
+    public function test_can_parse_a_context_to_parsed_files()
     {
-        $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/parsers/yamltest.yml.php');
+        $parser = new YamlParser(['value' => 'test']);
+        $data = $parser->parse(self::$dir.'/contextual_file.yml.php');
 
-        $this->assertEquals('test', $data['contextual']);
+        $this->assertSame(
+            [
+                'contextual' => 'test',
+                'username' => '<username()>',
+            ],
+            $data
+        );
     }
 
-    public function testParseWillReturnAProperDataArray()
+    public function test_include_files()
     {
-        $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/parsers/yamltest.yml.php');
+        $data = $this->parser->parse(self::$dir.'/include/main.yml');
 
-        $this->assertEquals(['contextual' => 'test', 'username' => '<username()>'], $data);
-    }
-
-    public function testIncludeFiles()
-    {
-        $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/include.yml');
-
-        $expectedData = [
-            'Nelmio\\Alice\\fixtures\\Product' =>
-                [
-                    'product_base (template)' =>
-                        [
-                            'status' => 'in_stock',
-                            'site' => '<word()>',
-                            'changed' => 'n',
-                            'locked' => '<word()>',
-                            'cancelled' => '<word()>',
-                            'canBuy' => 'y',
-                            'package' => 'n',
-                            'price' => '<randomFloat()>',
-                            'amount' => 1,
-                            'markDeleted' => '<word()>',
-                            'paid' => 'y',
-                        ],
-                    'product1' =>
-                        [
-                            'amount' => 45,
-                            'paid' => 'n',
-                            'user' => '@user0',
-                        ],
-                    'product0' =>
-                        [
-                            'changed' => 'y',
-                            'user' => '@user1',
-                        ],
+        $this->assertSame(
+            [
+                'Nelmio\Alice\Entity\Product' => [
+                    'product_base (template)' => [
+                        'status' => 'in_stock',
+                    ],
+                    'product1 (extends product_base)' => [
+                        'amount' => 45,
+                    ]
                 ],
-            'Nelmio\\Alice\\fixtures\\Shop' =>
-                [
-                    'shop2' =>
-                        [
-                            'domain' => 'amazon.com',
-                        ],
-                    'shop1' =>
-                        [
-                            'domain' => '<{ebay_domain_name}>',
-                        ],
+                'Nelmio\Alice\Entity\Shop' => [
+                    'shop' => [
+                        'status' => 'none',
+                    ],
                 ],
-            'Nelmio\\Alice\\fixtures\\User' =>
-                [
-                    'user_base (template)' =>
-                        [
-                            'email' => '<email()>',
-                        ],
-                ],
-        ];
-        $this->assertEquals($expectedData, $data);
+            ],
+            $data
+        );
     }
 
-    public function testIncludeFilesOrder()
+    public function test_included_files_are_parsed_before_parsed_file()
     {
-        $data = $this->parser->parse(__DIR__ . '/../../../support/fixtures/include_order.yml');
+        $data = $this->parser->parse(self::$dir.'/include_order/main.yml');
 
-        $expectedData = [
-            'Foo' =>
-                [
-                    'foo' =>
-                        [
-                            'id' => 1,
-                            'text' => '<word()>',
-                        ],
+        $this->assertSame(
+            [
+                'Bar' => [
+                    'bar' => [
+                        'id' => 100,
+                        'text' => '<word()>',
+                    ],
                 ],
-            'Bar' =>
-                [
-                    'bar' =>
-                        [
-                            'id' => 1,
-                            'text' => '<@foo->text>'
-                        ],
+                'Foo' => [
+                    'foo' => [
+                        'id' => 200,
+                        'text' => '<word()>',
+                    ],
                 ],
-        ];
-
-        $this->assertSame($expectedData, $data);
+                'Main' => [
+                    'main' => [
+                        'id' => 300,
+                        'text' => '<word()>',
+                    ],
+                ],
+            ],
+            $data
+        );
     }
 
-    public function testParametersNotReturnedInData()
+    public function test_last_fixture_declared_is_kept()
     {
-        $data = $this->parser->parse(__DIR__.'/../../../support/fixtures/include.yml');
+        $data = $this->parser->parse(self::$dir.'/include_overlap/main.yml');
+
+        $this->assertSame(
+            [
+                'Nelmio\Alice\Entity\Product' => [
+                    'product0' => [
+                        'value' => 'second',
+                    ],
+                ],
+            ],
+            $data
+        );
+    }
+
+    public function test_dont_return_parameters_when_no_parameter_is_declared()
+    {
+        $data = $this->parser->parse(self::$dir.'/regular_file.yml');
 
         $this->assertFalse(isset($data['parameters']));
     }
 
-    public function testParametersSetOnTheLoader()
+    public function test_load_parameters()
     {
-        $loader = new Loader;
-        $parser = new Yaml($loader);
+        $parameterBagProphecy = $this->prophesize('Nelmio\Alice\Fixtures\ParameterBag');
+        $parameterBagProphecy->set('foo', 'bar')->shouldBeCalled();
 
-        $parser->parse(__DIR__.'/../../../support/fixtures/include.yml');
+        $loaderProphecy = $this->prophesize('Nelmio\Alice\Fixtures\Loader');
+        $loaderProphecy->getFakerProcessorMethod()->shouldBeCalled();
+        $loaderProphecy->getParameterBag()->willReturn($parameterBagProphecy->reveal());
+        /* @var Loader $loader */
+        $loader = $loaderProphecy->reveal();
 
-        $this->assertEquals('ebay.us', $loader->getParameterBag()->get('ebay_domain_name'));
+        $parser = new YamlParser($loader);
+        $parser->parse(self::$dir.'/file_with_parameters.yml');
+
+        $loaderProphecy->getParameterBag()->shouldHaveBeenCalledTimes(1);
+        $parameterBagProphecy->set(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function test_load_parameters_of_included_files()
+    {
+        $parameterBagProphecy = $this->prophesize('Nelmio\Alice\Fixtures\ParameterBag');
+
+        $actual = ['foo' => null];
+        $parameterBagProphecy
+            ->set('foo', 'boo')
+            ->will(function($args) use (&$actual) {
+                $actual['foo'] = $args[1];
+            })
+        ;
+        $parameterBagProphecy->set('ping', 'pong')->shouldBeCalled();
+        $parameterBagProphecy
+            ->set('foo', 'bar')
+            ->will(function($args) use (&$actual) {
+                $actual['foo'] = $args[1];
+            })
+        ;
+
+        $loaderProphecy = $this->prophesize('Nelmio\Alice\Fixtures\Loader');
+        $loaderProphecy->getFakerProcessorMethod()->shouldBeCalled();
+        $loaderProphecy->getParameterBag()->willReturn($parameterBagProphecy->reveal());
+        /* @var Loader $loader */
+        $loader = $loaderProphecy->reveal();
+
+        $parser = new YamlParser($loader);
+        $parser->parse(self::$dir.'/include_parameters/main1.yml');
+
+        $this->assertEquals('bar', $actual['foo']);
+
+        $loaderProphecy->getParameterBag()->shouldHaveBeenCalledTimes(2);
+        $parameterBagProphecy->set(Argument::cetera())->shouldHaveBeenCalledTimes(3);
+    }
+
+    public function provideFiles()
+    {
+        return [
+            'YAML file' => [
+                'test.yml',
+                true,
+            ],
+            'YAML with another extension' => [
+                'test.yaml',
+                true,
+            ],
+            'relative YAML file' => [
+                './../test.yml',
+                true,
+            ],
+
+            'php file' => [
+                'test.php',
+                false,
+            ],
+            'xml file' => [
+                'test.xml',
+                false,
+            ],
+        ];
     }
 }

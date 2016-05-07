@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
-use UnexpectedValueException;
-
 /**
  * Each fixture has access to $fake() to generate data.
  *
@@ -39,6 +37,8 @@ class Php extends Base
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \UnexpectedValueException
      */
     public function parse($file)
     {
@@ -55,7 +55,7 @@ class Php extends Base
         $data = $includeWrapper();
 
         if (!is_array($data)) {
-            throw new UnexpectedValueException("Included file \"{$file}\" must return an array of data");
+            throw new \UnexpectedValueException("Included file \"{$file}\" must return an array of data");
         }
 
         $data = $this->processIncludes($data, $file);
