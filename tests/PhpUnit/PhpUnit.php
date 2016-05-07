@@ -13,7 +13,11 @@ namespace PhpUnit;
 
 final class PhpUnit extends \PHPUnit_Framework_TestCase
 {
-    public static function assertIsA(string $expected, string $actual)
+    /**
+     * @param string $expected FQCN
+     * @param string $actual   FQCN
+     */
+    public static function assertIsA($expected, $actual)
     {
         $reflectionClass = new \ReflectionClass($actual);
         $instance = $reflectionClass->newInstanceWithoutConstructor();
@@ -21,7 +25,11 @@ final class PhpUnit extends \PHPUnit_Framework_TestCase
         \PHPUnit_Framework_TestCase::assertInstanceOf($expected, $instance);
     }
 
-    public static function assertErrorMessageIs(string $expected, \Throwable $actual)
+    /**
+     * @param string     $expected
+     * @param \Exception $actual
+     */
+    public static function assertErrorMessageIs($expected, \Exception $actual)
     {
         \PHPUnit_Framework_TestCase::assertEquals($expected, $actual->getMessage());
     }
