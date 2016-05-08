@@ -1,0 +1,3 @@
+Nelmio\Alice\support\models\User:
+    user0:
+        fullname: John Doe
