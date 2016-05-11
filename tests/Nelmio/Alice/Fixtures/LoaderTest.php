@@ -1178,8 +1178,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage
+     * @expectedException \Nelmio\Alice\Exception\Instantiator\RuntimeException
      */
     public function testLoadFailsOnInvalidStaticConstructor()
     {
@@ -1193,8 +1192,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage
+     * @expectedException \Nelmio\Alice\Exception\Instantiator\RuntimeException
      */
     public function testLoadFailsOnScalarStaticConstructorArgs()
     {
@@ -1480,22 +1478,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(self::USER, $res['spec dumped']);
         $this->assertNull($res['spec dumped']->email);
-    }
-
-    public function testAddInstantiator()
-    {
-        $loader = $this->createLoader();
-        $loader->addInstantiator(new extensions\CustomInstantiator);
-        $res = $loader->load([
-            self::USER => [
-                'user' => [
-                    'username' => '<username()>'
-                ],
-            ],
-        ]);
-
-        $this->assertInstanceOf(self::USER, $res['user']);
-        $this->assertNotNull($res['user']->uuid);
     }
 
     public function testAddPopulator()

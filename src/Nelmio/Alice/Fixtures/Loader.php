@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Fixtures;
 
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
+use Nelmio\Alice\Instances\InstantiatorInterface;
 use Nelmio\Alice\Instances\Populator;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Instances\Processor\Methods\Faker;
@@ -57,7 +58,7 @@ class Loader
     protected $fakerProcessorMethod;
 
     /**
-     * @var Instantiator\Instantiator
+     * @var InstantiatorInterface
      */
     protected $instantiator;
 
@@ -111,9 +112,7 @@ class Loader
             $this->getBuiltInBuilders()
         );
 
-        $this->instantiator = new Instantiator\Instantiator(
-            $this->getBuiltInInstantiators($this->processor, $this->typeHintChecker)
-        );
+        $this->instantiator = $this->getBuiltInInstantiator($this->processor, $this->typeHintChecker);
 
         $this->populator = new Populator\Populator(
             $this->objects,
@@ -226,16 +225,6 @@ class Loader
     public function addBuilder(Builder\Methods\MethodInterface $builder)
     {
         $this->builder->addBuilder($builder);
-    }
-
-    /**
-     * adds an instantiator for instantiation extensions
-     *
-     * @param Instantiator\Methods\MethodInterface $instantiator
-     **/
-    public function addInstantiator(Instantiator\Methods\MethodInterface $instantiator)
-    {
-        $this->instantiator->addInstantiator($instantiator);
     }
 
     /**
@@ -427,21 +416,13 @@ class Loader
         ];
     }
 
-    /**
-     * returns a list of all the default instantiator methods
-     *
-     * @param  Processor\Processor $processor
-     * @param  TypeHintChecker     $typeHintChecker
-     * @return array
-     */
-    private function getBuiltInInstantiators(Processor\Processor $processor, TypeHintChecker $typeHintChecker)
+    private function getBuiltInInstantiator(Processor\Processor $processor, TypeHintChecker $typeHintChecker): Instantiator\InstantiatorRegistry
     {
-        return [
-            new Instantiator\Methods\Unserialize(),
-            new Instantiator\Methods\ReflectionWithoutConstructor(),
-            new Instantiator\Methods\ReflectionWithConstructor($processor, $typeHintChecker),
-            new Instantiator\Methods\EmptyConstructor(),
-        ];
+        return new Instantiator\InstantiatorRegistry([
+            new Instantiator\Chainable\EmptyConstructorInstantiator(),
+            new Instantiator\Chainable\ReflectionWithoutConstructorInstantiator(),
+            new Instantiator\Chainable\ReflectionWithConstructorInstantiator($processor, $typeHintChecker)
+        ]);
     }
 
     /**
