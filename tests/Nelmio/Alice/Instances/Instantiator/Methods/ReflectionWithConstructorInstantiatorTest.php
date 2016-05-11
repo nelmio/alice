@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
-use PhpUnit\PhpUnit;
-
 /**
  * @covers Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithConstructor
  */
@@ -20,9 +18,12 @@ class ReflectionWithConstructorInstantiatorTest extends \PHPUnit_Framework_TestC
 {
     public function test_is_an_instantiator_method()
     {
-        PhpUnit::assertIsA(
-            'Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface',
-            'Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithConstructor'
+        $this->assertTrue(
+            is_a(
+                'Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithConstructor',
+                'Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface',
+                true
+            )
         );
     }
 }
