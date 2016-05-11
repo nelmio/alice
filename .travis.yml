@@ -11,6 +11,7 @@ php:
   - 5.5
   - 5.6
   - 7.0
+  - nightly
   - hhvm
 
 matrix:
@@ -24,17 +25,16 @@ matrix:
       env: SYMFONY_VERSION='2.8.*'
     - php: 5.6
       env: SYMFONY_VERSION='3.0.*'
+  allow_failures:
+    - php: nightly
 
 install:
   - if [ "hhvm" != "$TRAVIS_PHP_VERSION" ]; then
         phpenv config-rm xdebug.ini;
     fi;
-  - composer self-update
   - if [ "$SYMFONY_VERSION" != "" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}";
     fi;
-
-before_script:
-  - composer install --prefer-source
+  - composer install --prefer-dist
 
 script: vendor/bin/phpunit
