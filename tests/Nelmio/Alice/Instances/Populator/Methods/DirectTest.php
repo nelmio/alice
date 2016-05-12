@@ -1,8 +1,28 @@
 <?php
+
+/*
+ * This file is part of the Alice package.
+ *  
+ * (c) Nelmio <hello@nelm.io>
+ *  
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nelmio\Alice\Instances\Populator\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\support\models\User;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\CompositeCamelCaseDummy;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\CompositeMixedCaseDummy;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\CompositeSnakeCase1Dummy;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\CompositeSnakeCase2Dummy;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\CompositeSnakeCase3Dummy;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\PrivateDummy;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\ProtectedDummy;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\PublicDummy;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\SimpleCamelCaseDummy;
+use Nelmio\Alice\Instances\Populator\Fixtures\Direct\SimpleSnakeCaseDummy;
+use Nelmio\Alice\Util\TypeHintChecker;
 use Prophecy\Argument;
 
 /**
@@ -20,76 +40,234 @@ class DirectTest extends \PHPUnit_Framework_TestCase
      */
     private $direct;
 
-    /**
-     * @var User
-     */
-    private $user;
-
     protected function setUp()
     {
-        $this->user      = new User();
-        $this->fixture   = $this->prophesize('Nelmio\Alice\Fixtures\Fixture')->reveal();
-        $typeHintChecker = $this->prophesize('Nelmio\Alice\Util\TypeHintChecker');
-        $this->direct    = new Direct($typeHintChecker->reveal());
+        $fixtureProphecy = $this->prophesize('Nelmio\Alice\Fixtures\Fixture');
+        $fixtureProphecy->isLocal()->shouldNotBeCalled();
+        $this->fixture = $fixtureProphecy->reveal();
+        
+        $typeHintCheckerProphecy = $this->prophesize('Nelmio\Alice\Util\TypeHintChecker');
+        $typeHintCheckerProphecy->check(Argument::cetera())->willReturnArgument(2);
+        /** @var TypeHintChecker $typeHintChecker */
+        $typeHintChecker = $typeHintCheckerProphecy->reveal();
 
-        $typeHintChecker
-            ->check(Argument::any(), Argument::any(), Argument::any())
-            ->willReturnArgument(2);
+        $this->direct = new Direct($typeHintChecker);
     }
 
     /**
-     * @return array<{bool, string}>
+     * @dataProvider provideProperties
      */
-    public function canSetProvider()
+    public function testCanSet($property, $model, $expected)
+    {
+        $actual = $this->direct->canSet($this->fixture, $model, $property, null);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testSetPropertyViaSetter()
+    {
+        $property = 'name';
+        $name = 'John Doe';
+
+        $typeHintCheckerProphecy = $this->prophesize('Nelmio\Alice\Util\TypeHintChecker');
+        $typeHintCheckerProphecy->check(Argument::cetera())->willReturnArgument(2);
+        /** @var TypeHintChecker $typeHintChecker */
+        $typeHintChecker = $typeHintCheckerProphecy->reveal();
+
+        $direct = new Direct($typeHintChecker);
+
+        $modelProphecy = $this->prophesize('Nelmio\Alice\Instances\Populator\Fixtures\Direct\PublicDummy');
+        $modelProphecy->setName($name)->shouldBeCalled();
+        /** @var PublicDummy $model */
+        $model = $modelProphecy->reveal();
+
+        $direct->set($this->fixture, $model, $property, $name);
+
+        $typeHintCheckerProphecy->check(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $modelProphecy->setName(Argument::any())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
+     * @dataProvider provideModelsToSet
+     */
+    public function testSetProperty($model, $property, $value, $expectedProperty)
+    {
+        $this->direct->set($this->fixture, $model, $property, $value);
+
+        self::assertEquals($value, $model->$expectedProperty);
+    }
+
+    public function provideProperties()
     {
         return [
-            [false, 'uuid'],            // No setter, property exists
-            [true, 'family_name'],      // setFamilyName exists
-            [false, 'non-existing'],    // No setter, property does not exist
-            [true, 'familyname'],       // setFamilyName exists
-            [true, 'favoriteNumber'],   // setFavoriteNumber exists
-            [true, 'favoritenumber'],   // methods are case insensitive in PHP
-            [true, 'favORite_Number'],  // methods are case insensitive in PHP, and snake case is supported
-            [true, 'display_name'],     // when there are two methods, BC is preserved.
+            'simple property with camelCase setter' => [
+                'name',
+                new SimpleCamelCaseDummy(),
+                true,
+            ],
+            'simple property with snake_case setter' => [
+                'name',
+                new SimpleSnakeCaseDummy(),
+                true,
+            ],
+
+            'composite camelCase property with camelCase setter' => [
+                'fullName',
+                new CompositeCamelCaseDummy(),
+                true,
+            ],
+            'composite snake_case property with camelCase setter' => [
+                'full_name',
+                new CompositeCamelCaseDummy(),
+                true,
+            ],
+
+            'composite camelCase property with snake_case1 setter' => [
+                'fullName',
+                new CompositeSnakeCase1Dummy(),
+                false,
+            ],
+            'composite snake_case property with snake_case1 setter' => [
+                'full_name',
+                new CompositeSnakeCase1Dummy(),
+                true,
+            ],
+
+            'composite camelCase property with snake_case2 setter' => [
+                'fullName',
+                new CompositeSnakeCase2Dummy(),
+                false,
+            ],
+            'composite snake_case property with snake_case2 setter' => [
+                'full_name',
+                new CompositeSnakeCase2Dummy(),
+                true,
+            ],
+
+            'composite camelCase property with snake_case3 setter' => [
+                'fullName',
+                new CompositeSnakeCase3Dummy(),
+                true,
+            ],
+            'composite snake_case property with snake_case3 setter' => [
+                'full_name',
+                new CompositeSnakeCase3Dummy(),
+                true,
+            ],
+
+            'composite camelCase property with mixed setter (BC preserved)' => [
+                'fullName',
+                new CompositeMixedCaseDummy(),
+                true,
+            ],
+            'composite snake_case property with mixed setter (BC preserved)' => [
+                'full_name',
+                new CompositeMixedCaseDummy(),
+                true,
+            ],
+
+            'no setter' => [
+                'propertyWithoutAccessor',
+                new SimpleCamelCaseDummy(),
+                false,
+            ],
         ];
-    }
-
-    /**
-     * @dataProvider canSetProvider
-     * @param bool $expected
-     * @param string $property
-     */
-    public function testCanSet($expected, $property)
-    {
-
-        self::assertSame($expected, $this->direct->canSet($this->fixture, $this->user, $property, null));
     }
 
     /**
      * @return array<{string, string, mixed}>
      */
-    public function setProvider()
+    public function provideModelsToSet()
     {
-        return [
-            ['username',     'username', 'alice'],
-            ['user_name',    'username', 'bill'],
-            ['UsEr_N_a_m_e', 'username', 'tweedle-dee'],
-            ['family_name',  'family_name', 'Dee'],
-            ['familyname',   'family_name', 'Dum'],
-            ['familyName',   'family_name', 'Wonderland'],
-            ['display_name', 'display_name', 'Hatter'],
-        ];
-    }
+        $value = 'John Doe';
 
-    /**
-     * @dataProvider setProvider
-     * @param $expectedProperty
-     * @param $fixtureProperty
-     * @param $value
-     */
-    public function testSet($fixtureProperty, $expectedProperty, $value)
-    {
-        $this->direct->set($this->fixture, $this->user, $fixtureProperty, $value);
-        self::assertSame($value, $this->user->$expectedProperty);
+        return [
+            'simple property with camelCase setter' => [
+                new SimpleCamelCaseDummy(),
+                'name',
+                $value,
+                'name',
+            ],
+            'simple property with snake_case setter' => [
+                new SimpleSnakeCaseDummy(),
+                'name',
+                $value,
+                'name',
+            ],
+
+            'composite camelCase property with camelCase setter' => [
+                new CompositeCamelCaseDummy(),
+                'fullName',
+                $value,
+                'fullName',
+            ],
+            'composite snake_case property with camelCase setter' => [
+                new CompositeCamelCaseDummy(),
+                'full_name',
+                $value,
+                'fullName',
+            ],
+
+            'composite snake_case property with snake_case1 setter' => [
+                new CompositeSnakeCase1Dummy(),
+                'full_name',
+                $value,
+                'full_name',
+            ],
+
+            'composite snake_case property with snake_case2 setter' => [
+                new CompositeSnakeCase2Dummy(),
+                'full_name',
+                $value,
+                'full_name',
+            ],
+
+            'composite camelCase property with snake_case3 setter' => [
+                new CompositeSnakeCase3Dummy(),
+                'fullName',
+                $value,
+                'full_name',
+            ],
+            'composite snake_case property with snake_case3 setter' => [
+                new CompositeSnakeCase3Dummy(),
+                'full_name',
+                $value,
+                'full_name',
+            ],
+
+            'composite camelCase property with mixed setter (BC preserved)' => [
+                new CompositeMixedCaseDummy(),
+                'fullName',
+                $value,
+                'fullname',
+            ],
+            'composite snake_case property with mixed setter (BC preserved)' => [
+                new CompositeMixedCaseDummy(),
+                'full_name',
+                $value,
+                'fullname',
+            ],
+
+            'public setter' => [
+                new PublicDummy(),
+                'name',
+                $value,
+                'name',
+            ],
+
+            'protected setter' => [
+                new ProtectedDummy(),
+                'name',
+                $value,
+                'name',
+            ],
+
+            'private setter' => [
+                new PrivateDummy(),
+                'name',
+                $value,
+                'name',
+            ],
+        ];
     }
 }

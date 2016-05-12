@@ -31,7 +31,7 @@ class Direct implements MethodInterface
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
-        return method_exists($object, $this->setterFor($object, $property));
+        return method_exists($object, $this->getPropertySetter($object, $property));
     }
 
     /**
@@ -39,31 +39,45 @@ class Direct implements MethodInterface
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
-        $setter = $this->setterFor($object, $property);
+        $setter = $this->getPropertySetter($object, $property);
         $value = $this->typeHintChecker->check($object, $setter, $value);
 
         if (!is_callable([$object, $setter])) {
+            // Protected or private method
             $refl = new \ReflectionMethod($object, $setter);
             $refl->setAccessible(true);
             $refl->invoke($object, $value);
-        } else {
-            $object->{$setter}($value);
+
+            return;
         }
+
+        $object->{$setter}($value);
     }
 
     /**
-     * return the name of the setter for a given property
+     * Returns the name of the setter for a given property.
      *
      * @param object|string $object
-     * @param  string $property
+     * @param string        $property
+     *
      * @return string
      */
-    private function setterFor($object, $property)
+    private function getPropertySetter($object, $property)
     {
-        if (method_exists($object, 'set' . $property)) {
-            return 'set' . $property;
-        } else {
-            return 'set' . str_replace('_', '', $property);
+        $normalizedProperty = str_replace('_', '', $property);
+        $setters = [
+            "set{$normalizedProperty}" => true,
+            "set{$property}" => true,
+            "set_{$property}" => true,
+            "set_{$normalizedProperty}" => true,
+        ];
+
+        foreach ($setters as $setter => $void) {
+            if (method_exists($object, $setter)) {
+                return $setter;
+            }
         }
+
+        return '';
     }
 }
