@@ -145,7 +145,7 @@ class Collection
         if (!isset($this->keysByMask[$mask])) {
             $this->keysByMask[$mask] = array_values(
                 preg_grep(
-                    '{^'.str_replace('*', '.+', $mask).'$}',
+                    '{^'.str_replace('\\*', '.+', preg_quote($mask)).'$}',
                     array_keys($this->instances)
                 )
             );
