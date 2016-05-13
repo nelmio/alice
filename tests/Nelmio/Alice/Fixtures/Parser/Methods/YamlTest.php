@@ -44,7 +44,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         $this->parser = new YamlParser();
     }
 
-    public function test_is_a_parser_method()
+    public function testIsAParserMethod()
     {
         $this->assertTrue(
             is_a(
@@ -58,14 +58,14 @@ class YamlTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideFiles
      */
-    public function test_can_parse_yaml_files($file, $expected)
+    public function testCanParseYamlFiles($file, $expected)
     {
         $actual = $this->parser->canParse($file);
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_parse_returns_a_yaml_array()
+    public function testParseReturnsAYamlArray()
     {
         $data = $this->parser->parse(self::$dir.'/regular_file.yml');
 
@@ -77,7 +77,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_can_parse_a_context_to_parsed_files()
+    public function testCanParseAContextToParsedFiles()
     {
         $parser = new YamlParser(['value' => 'test']);
         $data = $parser->parse(self::$dir.'/contextual_file.yml.php');
@@ -91,7 +91,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_include_files()
+    public function testIncludeFiles()
     {
         $data = $this->parser->parse(self::$dir.'/include/main.yml');
 
@@ -115,7 +115,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_included_files_are_parsed_before_parsed_file()
+    public function testIncludedFilesAreParsedBeforeParsedFile()
     {
         $data = $this->parser->parse(self::$dir.'/include_order/main.yml');
 
@@ -144,7 +144,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_last_fixture_declared_is_kept()
+    public function testLastFixtureDeclaredIsKept()
     {
         $data = $this->parser->parse(self::$dir.'/include_overlap/main.yml');
 
@@ -160,14 +160,14 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_dont_return_parameters_when_no_parameter_is_declared()
+    public function testDontReturnParametersWhenNoParameterIsDeclared()
     {
         $data = $this->parser->parse(self::$dir.'/regular_file.yml');
 
         $this->assertFalse(isset($data['parameters']));
     }
 
-    public function test_load_parameters()
+    public function testLoadParameters()
     {
         $parameterBagProphecy = $this->prophesize('Nelmio\Alice\Fixtures\ParameterBag');
         $parameterBagProphecy->set('foo', 'bar')->shouldBeCalled();
@@ -185,7 +185,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         $parameterBagProphecy->set(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function test_load_parameters_of_included_files()
+    public function testLoadParametersOfIncludedFiles()
     {
         $parameterBagProphecy = $this->prophesize('Nelmio\Alice\Fixtures\ParameterBag');
 

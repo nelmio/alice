@@ -42,7 +42,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         $this->parser = new PhpParser();
     }
 
-    public function test_is_a_parser_method()
+    public function testIsAParserMethod()
     {
         $this->assertTrue(
             is_a(
@@ -56,14 +56,14 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideFiles
      */
-    public function test_can_parse_php_files($file, $expected)
+    public function testCanParsePhpFiles($file, $expected)
     {
         $actual = $this->parser->canParse($file);
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_parse_returns_a_php_array()
+    public function testParseReturnsAPhpArray()
     {
         $data = $this->parser->parse(self::$dir.'/regular_file.php');
 
@@ -75,7 +75,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_can_parse_a_context_to_parsed_files()
+    public function testCanParseAContextToParsedFiles()
     {
         $parser = new PhpParser(['value' => 'test']);
         $data = $parser->parse(self::$dir.'/contextual_file.php');
@@ -89,7 +89,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_throw_exception_if_file_doesnt_return_array()
+    public function testThrowExceptionIfFileDoesntReturnArray()
     {
         $file = self::$dir.'/no_return.php';
         try {
@@ -115,7 +115,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function test_include_files()
+    public function testIncludeFiles()
     {
         $data = $this->parser->parse(self::$dir.'/include/main.php');
 
@@ -139,7 +139,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_included_files_are_parsed_before_parsed_file()
+    public function testIncludedFilesAreParsedBeforeParsedFile()
     {
         $data = $this->parser->parse(self::$dir.'/include_order/main.php');
 
@@ -168,7 +168,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_last_fixture_declared_is_kept()
+    public function testLastFixtureDeclaredIsKept()
     {
         $data = $this->parser->parse(self::$dir.'/include_overlap/main.php');
 
