@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Instances;
 
 /**
- * All methods except #find and #random are copied from Doctrine\Common\Collections\ArrayCollection,
+ * All methods except #find and #random are copied from {@see Doctrine\Common\Collections\ArrayCollection},
  * to avoid a hard dependency. See ArrayCollection for attribution.
  */
 class Collection
@@ -20,7 +20,7 @@ class Collection
     /**
      * An array containing the entries of this collection.
      *
-     * @var array
+     * @var object[]
      */
     private $instances;
 
@@ -31,6 +31,7 @@ class Collection
      *      mask2 => [keys matching mask2],
      *      ...
      * ]
+     *
      * @var array
      */
     private $keysByMask = [];
@@ -38,7 +39,7 @@ class Collection
     /**
      * Initializes a new ArrayCollection.
      *
-     * @param array $elements
+     * @param object[] $elements
      */
     public function __construct(array $elements = [])
     {
@@ -97,47 +98,51 @@ class Collection
     }
 
     /**
-     * returns an object, or a property on that object if $property is not null
+     * Returns an object, or a property on that object if $property is not null
      *
-     * @param  string $name
-     * @param  string $property
-     * @return mixed
+     * @param string      $name
+     * @param string|null $property
+     *
+     * @throws \UnexpectedValueException
+     *
+     * @return object
      */
     public function find($name, $property = null)
     {
-        if ($this->containsKey($name)) {
-            $object = $this->get($name);
+        if (false === $this->containsKey($name)) {
+            throw new \UnexpectedValueException(
+                sprintf('Instance %s is not defined', $name)
+            );
+        }
+        $object = $this->get($name);
 
-            if ($property !== null) {
-                if (property_exists($object, $property)) {
-                    $prop = new \ReflectionProperty($object, $property);
-
-                    if ($prop->isPublic()) {
-                        return $object->{$property};
-                    }
-                }
-
-                $getter = 'get'.ucfirst($property);
-                if (method_exists($object, $getter) && is_callable([$object, $getter])) {
-                    return $object->$getter();
-                }
-
-                throw new \UnexpectedValueException(
-                    sprintf('Property %s is not defined for instance %s', $property, $name)
-                );
-            }
-
+        if (null === $property) {
             return $object;
         }
 
+        if (property_exists($object, $property)) {
+            $prop = new \ReflectionProperty($object, $property);
+
+            if ($prop->isPublic()) {
+                return $object->{$property};
+            }
+        }
+
+        $getter = 'get'.ucfirst($property);
+        if (method_exists($object, $getter) && is_callable([$object, $getter])) {
+            return $object->$getter();
+        }
+
         throw new \UnexpectedValueException(
-            sprintf('Instance %s is not defined', $name)
+            sprintf('Property %s is not defined for instance %s', $property, $name)
         );
     }
 
     /**
-     * Get instance keys that match given mask
-     * @param  string   $mask
+     * Gets instance keys that match given mask.
+     *
+     * @param string $mask
+     *
      * @return string[]
      */
     protected function getKeysByMask($mask)
@@ -145,7 +150,10 @@ class Collection
         if (!isset($this->keysByMask[$mask])) {
             $this->keysByMask[$mask] = array_values(
                 preg_grep(
-                    '{^'.str_replace('\\*', '.+', preg_quote($mask)).'$}',
+                    sprintf(
+                        '/^%s$/',
+                        str_replace('\\*', '.+', preg_quote($mask))
+                    ),
                     array_keys($this->instances)
                 )
             );
@@ -155,11 +163,12 @@ class Collection
     }
 
     /**
-     * returns a random object or objects from the collection, or a property on that object if $property is not null
+     * Returns a random object or objects from the collection, or a property on that object if $property is not null.
      *
-     * @param  string  $mask
-     * @param  integer $count
-     * @param  string  $property
+     * @param string      $mask
+     * @param integer     $count
+     * @param string|null $property
+     *
      * @return mixed
      */
     public function random($mask, $count = 1, $property = null)
@@ -167,7 +176,6 @@ class Collection
         if ($count === 0) {
             return [];
         }
-
         $availableObjects = $this->getKeysByMask($mask);
 
         if (empty($availableObjects)) {

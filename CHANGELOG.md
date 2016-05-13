@@ -2,6 +2,7 @@
 
   * Added support for snake_case properties (#323)
   * Deprecate usage of the the range operator with more than two dots (#329)
+  * Added support for dots in reference names (#312)
 
 ### 2.1.2 (2015-12-10)
 
