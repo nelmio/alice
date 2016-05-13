@@ -47,6 +47,12 @@ final class ReferenceRangeName implements MethodInterface
         if ($referenceAll) {
             $keys = $this->objects->getKeysByMask($referenceName.".+");
 
+            if (count($keys) === 0) {
+                throw new \UnexpectedValueException(
+                    sprintf('No instances for %s defined!', $this->matches[1])
+                );
+            }
+
             foreach ($keys as $currentIndex => $key) {
                 $instance = $this->objects->find($key);
                 $currentName = str_replace($this->matches[0], $key, $name);

@@ -34,6 +34,21 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \UnexpectedValueException
+     */
+    public function loadFixturesByReferenceSameFixtureNotFound()
+    {
+        $managerMock = $this->getDoctrineManagerMock(null);
+
+        $files = [
+            __DIR__ . '/support/fixtures/reference_range_3.yml',
+        ];
+
+        Fixtures::load($files, $managerMock, [ 'providers' => [ $this ] ]);
+    }
+
+    /**
+     * @test
      */
     public function loadFixturesByReference()
     {
