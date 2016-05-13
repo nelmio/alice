@@ -28,7 +28,7 @@ class ReflectionWithoutConstructorInstantiatorTest extends \PHPUnit_Framework_Te
         $this->instantiator = new ReflectionWithoutConstructor();
     }
 
-    public function test_is_an_instantiator_method()
+    public function testIsAnInstantiatorMethod()
     {
         $this->assertTrue(
             is_a(
@@ -42,14 +42,14 @@ class ReflectionWithoutConstructorInstantiatorTest extends \PHPUnit_Framework_Te
     /**
      * @dataProvider provideFixtures
      */
-    public function test_can_instantiate_object_with_default_constructor(Fixture $fixture, $expected)
+    public function testCanInstantiateObjectWithDefaultConstructor(Fixture $fixture, $expected)
     {
         $actual = $this->instantiator->canInstantiate($fixture);
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_instantiate_fixture()
+    public function testInstantiateFixture()
     {
         $class = 'stdClass';
         $fixture = $this->createFixtureForClass($class);

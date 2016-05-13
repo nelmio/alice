@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Instances\Instantiator\Methods;
  */
 class ReflectionWithConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
 {
-    public function test_is_an_instantiator_method()
+    public function testIsAnInstantiatorMethod()
     {
         $this->assertTrue(
             is_a(
