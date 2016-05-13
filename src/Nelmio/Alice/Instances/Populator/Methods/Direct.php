@@ -31,7 +31,7 @@ class Direct implements MethodInterface
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
-        return method_exists($object, $this->getPropertySetter($object, $property));
+        return method_exists($object, $this->setterFor($property));
     }
 
     /**
@@ -39,45 +39,26 @@ class Direct implements MethodInterface
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
-        $setter = $this->getPropertySetter($object, $property);
+        $setter = $this->setterFor($property);
         $value = $this->typeHintChecker->check($object, $setter, $value);
 
         if (!is_callable([$object, $setter])) {
-            // Protected or private method
             $refl = new \ReflectionMethod($object, $setter);
             $refl->setAccessible(true);
             $refl->invoke($object, $value);
-
-            return;
+        } else {
+            $object->{$setter}($value);
         }
-
-        $object->{$setter}($value);
     }
 
     /**
-     * Returns the name of the setter for a given property.
+     * return the name of the setter for a given property
      *
-     * @param object|string $object
-     * @param string        $property
-     *
+     * @param  string $property
      * @return string
      */
-    private function getPropertySetter($object, $property)
+    private function setterFor($property)
     {
-        $normalizedProperty = str_replace('_', '', $property);
-        $setters = [
-            "set{$normalizedProperty}" => true,
-            "set{$property}" => true,
-            "set_{$property}" => true,
-            "set_{$normalizedProperty}" => true,
-        ];
-
-        foreach ($setters as $setter => $void) {
-            if (method_exists($object, $setter)) {
-                return $setter;
-            }
-        }
-
-        return '';
+        return "set{$property}";
     }
 }

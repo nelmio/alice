@@ -1,7 +1,3 @@
-### 2.x (WIP)
-
-  * Added support for snake_case properties (#323)
-
 ### 2.1.2 (2015-12-10)
 
   * Bug fix - private properties were populatable directly on the instance, but not private properties of parent classes. Although this is an antipattern, if we're allowing it for the instance we should allow it up the chain.
