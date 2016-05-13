@@ -14,18 +14,19 @@ namespace Nelmio\Alice;
 interface PersisterInterface
 {
     /**
-     * Loads a fixture file
+     * Persists objects into the database.
      *
-     * @param object[] $objects instance to persist in the DB
+     * @param object[] $objects
      */
     public function persist(array $objects);
 
     /**
-     * Finds an object by class and id
+     * Finds an object by class and id.
      *
-     * @param  string $class
-     * @param  int    $id
-     * @return object
+     * @param string $class
+     * @param int    $id
+     *
+     * @return object|null
      */
     public function find($class, $id);
 }
