@@ -219,6 +219,23 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('group', $group->getSortName());
     }
 
+    public function testSnakeCaseProperty()
+    {
+        $res = $this->loadData([
+            self::USER => [
+                'user0' => [
+                    'familyName' => 'Wonderland',
+                    'display_name' => 'Hatter',
+                ],
+            ],
+        ]);
+        /** @var User $user */
+        $user = $res['user0'];
+
+        $this->assertEquals('Wonderland', $user->family_name);
+        $this->assertEquals('Mad Hatter', $user->display_name);
+    }
+
     public function testLoadAssignsDataToMagicCall()
     {
         $res = $this->loadData([
