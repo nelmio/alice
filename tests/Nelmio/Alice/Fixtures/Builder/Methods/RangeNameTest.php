@@ -28,7 +28,7 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
         $this->method = new RangeName();
     }
 
-    public function test_is_a_builder_method()
+    public function testIsABuilderMethod()
     {
         $this->assertInstanceOf('Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface', $this->method);
     }
@@ -36,7 +36,7 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideFixtureSet
      */
-    public function test_can_build_fixture($name, $expected)
+    public function testCanBuildFixture($name, $expected)
     {
         $this->assertEquals($expected, $this->method->canBuild($name));
     }
@@ -44,9 +44,8 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideLegacyFixtureSet
      * @group legacy
-     * @TODO: remove legacy group once https://github.com/symfony/symfony/issues/18755 is sorted
      */
-    public function test_legacy_can_build_fixture($name, $expected)
+    public function testCanBuildFixtureWithLegacySyntax($name, $expected)
     {
         $this->assertEquals($expected, $this->method->canBuild($name));
     }
@@ -54,7 +53,7 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideData
      */
-    public function test_build_fixture($class, $name, $specs, $expected)
+    public function testBuildFixture($class, $name, $specs, $expected)
     {
         $this->assertTrue($this->method->canBuild($name));
         $actual = $this->method->build($class, $name, $specs);
@@ -65,9 +64,8 @@ class RangeNameTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideLegacyData
      * @group legacy
-     * @TODO: remove legacy group once https://github.com/symfony/symfony/issues/18755 is sorted
      */
-    public function test_legacy_build_fixture($class, $name, $specs, $expected)
+    public function testBuildFixtureWithLegacySyntax($class, $name, $specs, $expected)
     {
         $this->assertTrue($this->method->canBuild($name));
         $actual = $this->method->build($class, $name, $specs);
