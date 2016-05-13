@@ -18,7 +18,6 @@ final class ReferenceRangeName implements MethodInterface
     private $objects;
 
     /**
-     * ReferenceRangeName constructor.
      * @param \Nelmio\Alice\Instances\Collection $objects
      */
     public function __construct(Collection $objects)
@@ -41,29 +40,32 @@ final class ReferenceRangeName implements MethodInterface
     {
         $fixtures = [];
 
+        // could be 'car1' from engine_{@car1}
         $referenceName = $this->matches[1];
-        $referenceAll = $this->matches[2] == '*';
+        $referenceAll = '*' === $this->matches[2];
 
-        if($referenceAll) {
+        if ($referenceAll) {
             $keys = $this->objects->getKeysByMask($referenceName.".+");
-            foreach($keys as $currentIndex => $key) {
+
+            foreach ($keys as $currentIndex => $key) {
                 $instance = $this->objects->find($key);
                 $currentName = str_replace($this->matches[0], $key, $name);
-                $fixture = new Fixture($class, $currentName, $spec, $instance);
-                $fixtures[] = $fixture;
+
+                $fixtures[] = new Fixture($class, $currentName, $spec, $instance);
             }
+
+            return $fixtures;
         }
-        else {
-            $currentValue = $this->objects->get($this->matches[1]);
-            if(is_null($currentValue)) {
-                throw new \UnexpectedValueException(
-                    sprintf('Instance %s is not defined!', $this->matches[1])
-                );
-            }
-            $currentName = str_replace($this->matches[0], $referenceName, $name);
-            $fixture = new Fixture($class, $currentName, $spec, $currentValue);
-            $fixtures[] = $fixture;
+
+        $currentValue = $this->objects->get($this->matches[1]);
+        if (is_null($currentValue)) {
+            throw new \UnexpectedValueException(
+                sprintf('Instance %s is not defined!', $this->matches[1])
+            );
         }
+        $currentName = str_replace($this->matches[0], $referenceName, $name);
+
+        $fixtures[] = new Fixture($class, $currentName, $spec, $currentValue);
 
         return $fixtures;
     }

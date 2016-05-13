@@ -17,34 +17,36 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
-
-    public function testLoadFixturesByReferenceNotFound()
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    public function loadFixturesByReferenceNotFound()
     {
-        $om = $this->getDoctrineManagerMock(null);
+        $managerMock = $this->getDoctrineManagerMock(null);
 
         $files = [
             __DIR__ . '/support/fixtures/reference_range_2.yml',
         ];
-        try {
-            Fixtures::load($files, $om, [ 'providers' => [ $this ] ]);
-        } catch (\UnexpectedValueException $e) {
-            //expected result
-        }
 
+        Fixtures::load($files, $managerMock, [ 'providers' => [ $this ] ]);
     }
 
-    public function testLoadFixturesByReference()
+    /**
+     * @test
+     */
+    public function loadFixturesByReference()
     {
-        $om = $this->getDoctrineManagerMock(7);
+        $managerMock = $this->getDoctrineManagerMock(7);
 
-        $om->expects($this->exactly(2))
+        $managerMock->expects($this->exactly(2))
             ->method('flush');
 
         $files = [
             __DIR__ . '/support/fixtures/reference_range_1.yml',
             __DIR__ . '/support/fixtures/reference_range_2.yml',
         ];
-        $objects = Fixtures::load($files, $om, [ 'providers' => [ $this ] ]);
+        $objects = Fixtures::load($files, $managerMock, [ 'providers' => [ $this ] ]);
 
         $this->assertCount(7, $objects);
 
@@ -67,17 +69,21 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::GROUP, $groupReferenceList3);
         $this->assertInstanceOf(self::USER, $groupReferenceList3->getOwner());
         $this->assertEquals($objects['user3'], $groupReferenceList3->getOwner());
-
     }
 
+    /**
+     * @param array|null $objects
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getDoctrineManagerMock($objects = null)
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $managerMock = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $om->expects($objects ? $this->exactly($objects) : $this->any())
+        $managerMock->expects($objects ? $this->exactly($objects) : $this->any())
             ->method('persist');
 
-        return $om;
+        return $managerMock;
     }
 
 }
