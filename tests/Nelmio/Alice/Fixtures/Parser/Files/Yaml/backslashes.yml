@@ -2,6 +2,10 @@ Nelmio\Alice\support\models\User:
     foo:
         username: |
             hello
+    bar:
+        username: |
+            hello
+        friends: []
     user0:
         username: |
             hello

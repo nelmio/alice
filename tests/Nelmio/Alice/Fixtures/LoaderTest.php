@@ -1679,8 +1679,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new Loader();
         $res = $loader->load(__DIR__.'/../support/fixtures/backslashes.yml');
 
+        $this->assertEquals('\\\\', $res['foo']->username);
         $this->assertEquals('\\\\', $res['user0']->username);
-        $this->assertEquals(
+        $this->assertSame(
             [
                 $res['foo'],
                 '@foo',
