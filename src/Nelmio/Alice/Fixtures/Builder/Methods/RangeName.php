@@ -22,7 +22,7 @@ class RangeName implements MethodInterface
      */
     public function canBuild($name)
     {
-        if (1 === preg_match('/\{([0-9]+)(\.{3,})([0-9]+)\}/', $name, $this->matches)) {
+        if (1 === preg_match('/\{([0-9]+)(\.{3,})([0-9]+)\}/i', $name, $this->matches)) {
             @trigger_error(
                 'Ranged name should follow the pattern "name{X..Y}". Using "name{X...Y} or with more dots instead is '
                 .'now deprecated and will be removed in 3.0. Please mind the change of behavior: "user{0..10}" is '
@@ -33,7 +33,7 @@ class RangeName implements MethodInterface
             return true;
         }
 
-        return 1 === preg_match('/\{([0-9]+)(\.{2,})([0-9]+)\}/', $name, $this->matches);
+        return 1 === preg_match('/\{([0-9]+)(\.{2,})([0-9]+)\}/i', $name, $this->matches);
     }
 
     /**
