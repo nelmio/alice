@@ -9,11 +9,12 @@ cache:
 php:
   - '7.0'
   - nightly
-  - hhvm
 
 matrix:
   fast_finish: true
   include:
+    - php: hhvm
+      env: COMPOSER_FLAGS='--ignore-platform-reqs'
     - php: '7.0'
       env: SYMFONY_VERSION='2.3.*'
     - php: '7.0'
@@ -32,6 +33,6 @@ install:
   - if [ "$SYMFONY_VERSION" != "" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}";
     fi;
-  - composer install --prefer-dist
+  - composer install --prefer-dist $COMPOSER_FLAGS
 
 script: vendor/bin/phpunit
