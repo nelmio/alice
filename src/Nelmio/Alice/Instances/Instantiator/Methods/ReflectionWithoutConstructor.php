@@ -31,9 +31,6 @@ class ReflectionWithoutConstructor implements MethodInterface
                 false === $reflectionMethod->isPublic()
                 && '__construct' === $fixture->getConstructorMethod()
             );
-        } catch (\ReflectionException $exception) {
-            // thrown when __construct does not exist, i.e. is default constructor
-            return false;
         } catch (\Exception $exception) {
             return false;
         }

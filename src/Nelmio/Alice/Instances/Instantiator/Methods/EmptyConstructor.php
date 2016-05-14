@@ -33,12 +33,8 @@ class EmptyConstructor implements MethodInterface
                 && 0 === count($fixture->getConstructorArgs())
             );
         } catch (\ReflectionException $exception) {
-            if (1 === preg_match('/(?:Method )(.+)(?: does not exist)/', $exception->getMessage())) {
-                // thrown when __construct does not exist, i.e. is default constructor
-                return true;
-            }
-
-            return false;
+            // thrown when __construct does not exist, i.e. is default constructor
+            return 1 === preg_match('/(?:Method )(.+)(?: does not exist)/', $exception->getMessage());
         } catch (\Exception $exception) {
             return false;
         }
