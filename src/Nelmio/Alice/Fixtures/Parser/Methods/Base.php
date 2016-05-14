@@ -16,17 +16,20 @@ use Nelmio\Alice\Fixtures\Loader;
 abstract class Base implements MethodInterface
 {
     /**
-     * The context allows any kind of contextual information to be available in fixtures
+     * The context allows any kind of contextual information to be available in fixtures.
      *
      * @var mixed
      **/
     protected $context;
 
     /**
-     * @var string
+     * @var string e.g. php, yaml, etc.
      **/
     protected $extension = null;
 
+    /**
+     * @param null $context Allows any kind of contextual information to be available in fixtures.
+     */
     public function __construct($context = null)
     {
         $this->context = $context;
@@ -50,7 +53,8 @@ abstract class Base implements MethodInterface
     /**
      * Returns a string of text after compiling all the PHP code in the fixture
      *
-     * @param  string $file
+     * @param string $file
+     *
      * @return string
      */
     protected function compilePhp($file)
@@ -62,18 +66,18 @@ abstract class Base implements MethodInterface
         $includeWrapper = function () use ($file, $context, $fake) {
             return include $file;
         };
-        $data = $includeWrapper();
+        $includeWrapper();
 
         return ob_get_clean();
     }
 
     /**
-     * @return \Closure|void
+     * @return \Closure|null
      */
     protected function createFakerClosure()
     {
         if (!$this->context instanceof Loader) {
-            return;
+            return null;
         }
         $faker = $this->context->getFakerProcessorMethod();
 
@@ -83,8 +87,9 @@ abstract class Base implements MethodInterface
     }
 
     /**
-     * @param  array  $data
-     * @param  string $filename
+     * @param array  $data
+     * @param string $filename
+     *
      * @return mixed
      */
     protected function processIncludes($data, $filename)
@@ -93,6 +98,7 @@ abstract class Base implements MethodInterface
             foreach ($data['include'] as $include) {
                 $includeFile = dirname($filename) . DIRECTORY_SEPARATOR . $include;
                 $includeData = $this->parse($includeFile);
+
                 $data = $this->mergeIncludeData($data, $includeData);
             }
         }
@@ -103,17 +109,29 @@ abstract class Base implements MethodInterface
     }
 
     /**
-     * @param  array $data
-     * @param  array $includeData
+     * Merges a parsed file data with another. If some data overlaps, the existent data is kept.
+     *
+     * @param array $data        Parsed file data
+     * @param array $includeData Parsed file data to merge
+     *
      * @return array
      */
     protected function mergeIncludeData($data, $includeData)
     {
-        $newData = $includeData;
+        if (false === is_array($data)) {
+            return $includeData;
+        }
 
+        if (false === is_array($includeData)) {
+            return $data;
+        }
+
+        $newData = $includeData;
         foreach ($data as $class => $fixtures) {
-            $newData[$class] = isset($newData[$class])
-                ? array_merge($newData[$class], $fixtures) : $newData[$class] = $fixtures;
+            $newData[$class] = isset($newData[$class]) && is_array($newData[$class])
+                ? array_merge($newData[$class], $fixtures)
+                : $fixtures
+            ;
         }
 
         return $newData;
