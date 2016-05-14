@@ -109,10 +109,7 @@ abstract class Base implements MethodInterface
     }
 
     /**
-     * Merges a parsed file data with another. If some data overlaps, the existent data is kept.
-     *
-     * @param array $data        Parsed file data
-     * @param array $includeData Parsed file data to merge
+     * Merges a parsed file parameters with another. If some data overlaps, the existent data is kept.
      *
      * @param array $data
      *
