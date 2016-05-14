@@ -499,6 +499,33 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $group->getMembers());
     }
 
+    public function testLoadObjectsWithDotsInTheirReferences()
+    {
+        $res = $this->loadData([
+            self::USER => [
+                'user.alice' => [
+                    'username' => 'alice',
+                ],
+                'user.alias.alice_alias' => [
+                    'username' => '@user.alice->username',
+                ],
+                'user.deep_alias' => [
+                    'username' => '@user.alias.alice_alias->username',
+                ],
+            ]
+        ]);
+
+        $this->assertCount(3, $res);
+
+        $this->assertInstanceOf(self::USER, $res['user.alice']);
+        $this->assertInstanceOf(self::USER, $res['user.alias.alice_alias']);
+        $this->assertInstanceOf(self::USER, $res['user.deep_alias']);
+
+        $this->assertEquals('alice', $res['user.alice']->username);
+        $this->assertEquals($res['user.alice']->username, $res['user.alias.alice_alias']->username);
+        $this->assertEquals($res['user.alias.alice_alias']->username, $res['user.deep_alias']->username);
+    }
+
     public function testLoadParsesOptionalValuesWithPercents()
     {
         $this->loadData([
@@ -688,7 +715,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $res = $this->loadData([
             self::USER => [
-                'user{0...10}' => [
+                'user{0..9}' => [
                     'username' => 'alice',
                 ],
             ],
@@ -1595,6 +1622,17 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testYamlArrayParametersAreProperlyInterpreted()
     {
         $res = $this->createLoader()->load(__DIR__ . '/../support/fixtures/array_parameters.yml');
+
+        $this->assertCount(5, $res);
+        foreach ($this->loader->getReferences() as $user) {
+            $this->assertInstanceOf(self::USER, $user);
+            $this->assertContains($user->username, ['Alice', 'Bob', 'Ogi']);
+        }
+    }
+
+    public function testPhpArrayParametersAreProperlyInterpreted()
+    {
+        $res = $this->createLoader()->load(__DIR__ . '/../support/fixtures/array_parameters.php');
 
         $this->assertCount(5, $res);
         foreach ($this->loader->getReferences() as $user) {

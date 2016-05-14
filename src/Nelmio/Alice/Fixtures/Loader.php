@@ -229,7 +229,7 @@ class Loader
     }
 
     /**
-     * adds an instantiator for instantiation extensions
+     * Adds an instantiator for instantiation extensions.
      *
      * @param Instantiator\Methods\MethodInterface $instantiator
      **/
@@ -428,16 +428,16 @@ class Loader
     }
 
     /**
-     * returns a list of all the default instantiator methods
+     * Returns a list of all the default instantiator methods.
      *
-     * @param  Processor\Processor $processor
-     * @param  TypeHintChecker     $typeHintChecker
-     * @return array
+     * @param Processor\Processor $processor
+     * @param TypeHintChecker     $typeHintChecker
+     *
+     * @return Instantiator\Methods\MethodInterface[]
      */
     private function getBuiltInInstantiators(Processor\Processor $processor, TypeHintChecker $typeHintChecker)
     {
         return [
-            new Instantiator\Methods\Unserialize(),
             new Instantiator\Methods\ReflectionWithoutConstructor(),
             new Instantiator\Methods\ReflectionWithConstructor($processor, $typeHintChecker),
             new Instantiator\Methods\EmptyConstructor(),

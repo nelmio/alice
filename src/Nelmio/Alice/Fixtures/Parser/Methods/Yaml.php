@@ -13,7 +13,6 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
 use Nelmio\Alice\Fixtures\Loader;
 use Symfony\Component\Yaml\Yaml as YamlParser;
-use UnexpectedValueException;
 
 /**
  * Parses data from a yaml file
@@ -39,6 +38,8 @@ class Yaml extends Base
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \UnexpectedValueException
      */
     public function parse($file)
     {
@@ -46,29 +47,11 @@ class Yaml extends Base
         $data = YamlParser::parse($yaml);
 
         if (!is_array($data)) {
-            throw new UnexpectedValueException('Yaml files must parse to an array of data');
+            throw new \UnexpectedValueException('Yaml files must parse to an array of data');
         }
 
         $data = $this->processIncludes($data, $file);
         $data = $this->processParameters($data);
-
-        return $data;
-    }
-
-    /**
-     * @param $data
-     * @return mixed
-     */
-    private function processParameters($data)
-    {
-        if (isset($data['parameters']) && $this->context instanceof Loader) {
-            $parameterBag = $this->context->getParameterBag();
-            foreach ($data['parameters'] as $name => $value) {
-                $parameterBag->set($name, $value);
-            }
-        }
-
-        unset($data['parameters']);
 
         return $data;
     }

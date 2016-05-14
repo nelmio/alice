@@ -29,18 +29,23 @@ class ReflectionWithConstructor implements MethodInterface
 
     public function __construct(Processor $processor, TypeHintChecker $typeHintChecker)
     {
-        $this->processor       = $processor;
+        $this->processor = $processor;
         $this->typeHintChecker = $typeHintChecker;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * Can instantiate only if the constructor method should be used and enough arguments for it are being passed.
      */
     public function canInstantiate(Fixture $fixture)
     {
         $refl = new \ReflectionMethod($fixture->getClass(), $fixture->getConstructorMethod());
 
-        return $fixture->shouldUseConstructor() && $refl->getNumberOfRequiredParameters() <= count($fixture->getConstructorArgs());
+        return (
+            $fixture->shouldUseConstructor()
+            && $refl->getNumberOfRequiredParameters() <= count($fixture->getConstructorArgs())
+        );
     }
 
     /**
@@ -48,27 +53,55 @@ class ReflectionWithConstructor implements MethodInterface
      */
     public function instantiate(Fixture $fixture)
     {
-        $class             = $fixture->getClass();
+        $class = $fixture->getClass();
         $constructorMethod = $fixture->getConstructorMethod();
-        $constructorArgs   = $fixture->getConstructorArgs();
-
-        $reflClass = new \ReflectionClass($class);
-
-        $constructorArgs = $this->processor->process($constructorArgs, [], $fixture->getValueForCurrent());
-
-        foreach ($constructorArgs as $index => $value) {
-            $constructorArgs[$index] = $this->typeHintChecker->check($class, $constructorMethod, $value, $index);
-        }
+        $constructorArgs = $this->resolveConstructorArguments($fixture);
 
         if ($constructorMethod === '__construct') {
-            $instance = $reflClass->newInstanceArgs($constructorArgs);
-        } else {
-            $instance = forward_static_call_array([$class, $constructorMethod], $constructorArgs);
-            if (!($instance instanceof $class)) {
-                throw new \UnexpectedValueException("The static constructor '{$constructorMethod}' for object '{$fixture}' returned an object that is not an instance of '{$class}'");
-            }
+            $reflectionClass = new \ReflectionClass($class);
+
+            return $reflectionClass->newInstanceArgs($constructorArgs);
+        }
+
+        $instance = forward_static_call_array([$class, $constructorMethod], $constructorArgs);
+        if (!($instance instanceof $class)) {
+            throw new \UnexpectedValueException(
+                sprintf(
+                    'Expected the static constructor "%s" for the fixture "%s" to return an instance of "%s". Got "%s" '
+                    .'instead',
+                    $constructorMethod,
+                    $fixture->getName(),
+                    $class,
+                    is_object($instance) ? get_class($instance) : $instance
+                )
+            );
         }
 
         return $instance;
+    }
+
+    /**
+     * @param Fixture $fixture
+     *
+     * @return array Resolved constructor arguments
+     */
+    private function resolveConstructorArguments(Fixture $fixture)
+    {
+        $constructorArguments = $this->processor->process(
+            $fixture->getConstructorArgs(),
+            [],
+            $fixture->getValueForCurrent()
+        );
+
+        foreach ($constructorArguments as $index => $value) {
+            $constructorArguments[$index] = $this->typeHintChecker->check(
+                $fixture->getClass(),
+                $fixture->getConstructorMethod(),
+                $value,
+                $index
+            );
+        }
+
+        return $constructorArguments;
     }
 }

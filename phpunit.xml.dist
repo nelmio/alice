@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-    backupGlobals               = "false"
-    backupStaticAttributes      = "false"
-    colors                      = "true"
-    convertErrorsToExceptions   = "true"
-    convertNoticesToExceptions  = "true"
-    convertWarningsToExceptions = "true"
-    processIsolation            = "false"
-    stopOnFailure               = "false"
-    syntaxCheck                 = "false"
-    bootstrap                   = "vendor/autoload.php">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.2/phpunit.xsd"
+         backupGlobals="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
 
     <testsuites>
         <testsuite name="Fixtures Test Suite">
@@ -22,4 +17,8 @@
             <directory>src</directory>
         </whitelist>
     </filter>
+
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0" />
+    </php>
 </phpunit>
