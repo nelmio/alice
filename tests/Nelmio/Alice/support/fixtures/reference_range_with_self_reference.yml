@@ -1,0 +1,6 @@
+Nelmio\Alice\support\models\Group:
+    group_{@group*}:
+        name: <company()>
+        members: '@user{1..3}'
+        owner: <current()>
+        creationDate: <dateTime()>

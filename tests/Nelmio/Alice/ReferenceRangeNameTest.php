@@ -15,13 +15,12 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\support\models\User';
     const GROUP = 'Nelmio\Alice\support\models\Group';
-    const CONTACT = 'Nelmio\Alice\support\models\Contact';
+    const TASK = 'Nelmio\Alice\support\models\Task';
 
     /**
-     * @test
      * @expectedException \UnexpectedValueException
      */
-    public function loadFixturesByReferenceNotFound()
+    public function testThrowExceptionWhenReferencesAreNotFound()
     {
         $managerMock = $this->getDoctrineManagerMock(null);
 
@@ -33,37 +32,37 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @expectedException \UnexpectedValueException
      */
-    public function loadFixturesByReferenceSameFixtureNotFound()
+    public function testThrowExceptionWhenSelfReferencesAreNotFound()
     {
         $managerMock = $this->getDoctrineManagerMock(null);
 
         $files = [
-            __DIR__ . '/support/fixtures/reference_range_3.yml',
+            __DIR__ . '/support/fixtures/reference_range_with_self_reference.yml',
         ];
 
         Fixtures::load($files, $managerMock, [ 'providers' => [ $this ] ]);
     }
 
     /**
-     * @test
+     *
      */
-    public function loadFixturesByReference()
+    public function testLoadFixturesByReference()
     {
-        $managerMock = $this->getDoctrineManagerMock(7);
+        $managerMock = $this->getDoctrineManagerMock(11);
 
-        $managerMock->expects($this->exactly(2))
+        $managerMock->expects($this->exactly(3))
             ->method('flush');
 
         $files = [
             __DIR__ . '/support/fixtures/reference_range_1.yml',
             __DIR__ . '/support/fixtures/reference_range_2.yml',
+            __DIR__ . '/support/fixtures/reference_range_3.yml',
         ];
         $objects = Fixtures::load($files, $managerMock, [ 'providers' => [ $this ] ]);
 
-        $this->assertCount(7, $objects);
+        $this->assertCount(11, $objects);
 
         $groupReference = $objects['group_1_user1'];
         $this->assertInstanceOf(self::GROUP, $groupReference);
@@ -84,6 +83,42 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::GROUP, $groupReferenceList3);
         $this->assertInstanceOf(self::USER, $groupReferenceList3->getOwner());
         $this->assertEquals($objects['user3'], $groupReferenceList3->getOwner());
+
+        $taskGroupUser1 = $objects['task_1_group_1_user1'];
+        $this->assertInstanceOf(self::TASK, $taskGroupUser1);
+
+        $taskList1 = $objects['task_list_group_list_user1'];
+        $this->assertInstanceOf(self::TASK, $taskList1);
+    }
+
+    /**
+     *
+     */
+    public function testLoadFixturesByReferenceWithRangeList()
+    {
+        $managerMock = $this->getDoctrineManagerMock(5);
+
+        $managerMock->expects($this->exactly(2))
+            ->method('flush');
+
+        $files = [
+            __DIR__ . '/support/fixtures/reference_range_with_range_list_1.yml',
+            __DIR__ . '/support/fixtures/reference_range_with_range_list_2.yml',
+        ];
+        $objects = Fixtures::load($files, $managerMock, [ 'providers' => [ $this ] ]);
+
+        $this->assertCount(5, $objects);
+
+        $groupReferenceUserAlice = $objects['group_user_alice'];
+        $this->assertInstanceOf(self::GROUP, $groupReferenceUserAlice);
+        $this->assertInstanceOf(self::USER, $groupReferenceUserAlice->getOwner());
+        $this->assertEquals($objects['user_alice'], $groupReferenceUserAlice->getOwner());
+
+        $groupReferenceUserBob = $objects['group_user_bob'];
+        $this->assertInstanceOf(self::GROUP, $groupReferenceUserBob);
+        $this->assertInstanceOf(self::USER, $groupReferenceUserBob->getOwner());
+        $this->assertEquals($objects['user_bob'], $groupReferenceUserBob->getOwner());
+
     }
 
     /**
