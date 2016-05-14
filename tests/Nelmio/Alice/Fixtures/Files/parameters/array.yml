@@ -3,4 +3,4 @@ parameters:
 
 Nelmio\Alice\support\models\User:
     user{1..5}:
-        username: <randomElement(<{usernames}>)>
+        username: '<randomElement(<{usernames}>)>'

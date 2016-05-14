@@ -539,6 +539,22 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($res['user.alice']->username, $res['user.alias.alice_alias']->username);
         $this->assertEquals($res['user.alias.alice_alias']->username, $res['user.deep_alias']->username);
     }
+    /**
+     * @dataProvider provideSpecialCharactersData
+     */
+    public function testLoadObjectsWithSpecialCharactersInTheirReferences($data, $keys)
+    {
+        $res = $this->loadData($data);
+
+        $this->assertCount(3, $res);
+        foreach ($keys as $key) {
+            $this->assertInstanceOf(self::USER, $res[$key]);
+        }
+
+        $this->assertEquals('alice', $res[$keys[0]]->username);
+        $this->assertEquals($res[$keys[0]]->username, $res[$keys[1]]->username);
+        $this->assertEquals($res[$keys[1]]->username, $res[$keys[2]]->username);
+    }
 
     public function testLoadParsesOptionalValuesWithPercents()
     {
@@ -1605,56 +1621,20 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testParametersAreReplaced()
+    public function testSimpleParametersLoading()
     {
-        $res = $this->loadData(
-            [
-                self::USER => [
-                    'user1' => [
-                        'username' => '<{user_1_username}>_alice',
-                    ],
-                ],
-            ],
-            [
-                'parameters' => [
-                    'user_1_username' => 'user',
-                ],
-            ]
-        );
+        $res = $this->createLoader()->load(__DIR__ . '/Files/parameters/simple.yml');
 
         $this->assertCount(1, $res);
-        $user1 = $this->loader->getReference('user1');
-        $this->assertInstanceOf(self::USER, $user1);
-        $this->assertEquals('user_alice', $user1->username);
+
+        $user = $res['alice'];
+        $this->assertInstanceOf(self::USER, $user);
+        $this->assertEquals('Alice', $user->username);
     }
 
-    public function testArrayParametersAreReplaced()
+    public function testArrayParametersLoading()
     {
-        $res = $this->loadData(
-            [
-                self::USER => [
-                    'user{1..5}' => [
-                        'username' => '<randomElement(<{usernames}>)>',
-                    ],
-                ],
-            ],
-            [
-                'parameters' => [
-                    'usernames' => $usernames = ['Alice', 'Bob', 'Ogi'],
-                ],
-            ]
-        );
-
-        $this->assertCount(5, $res);
-        foreach ($this->loader->getReferences() as $user) {
-            $this->assertInstanceOf(self::USER, $user);
-            $this->assertContains($user->username, $usernames);
-        }
-    }
-
-    public function testYamlArrayParametersAreProperlyInterpreted()
-    {
-        $res = $this->createLoader()->load(__DIR__.'/../support/fixtures/array_parameters.yml');
+        $res = $this->createLoader()->load(__DIR__ . '/Files/parameters/array.yml');
 
         $this->assertCount(5, $res);
         foreach ($this->loader->getReferences() as $user) {
@@ -1663,15 +1643,32 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testPhpArrayParametersAreProperlyInterpreted()
+    public function testCompositeParametersLoading()
     {
-        $res = $this->createLoader()->load(__DIR__.'/../support/fixtures/array_parameters.php');
+        $this->markTestSkipped('Parameters cannot be composite yet.');
+        $res = $this->createLoader()->load(__DIR__ . '/Files/parameters/composite.yml');
 
-        $this->assertCount(5, $res);
-        foreach ($this->loader->getReferences() as $user) {
-            $this->assertInstanceOf(self::USER, $user);
-            $this->assertContains($user->username, ['Alice', 'Bob', 'Ogi']);
-        }
+        $this->assertCount(1, $res);
+
+        $user = $res['user0'];
+        $this->assertInstanceOf(self::USER, $user);
+        $this->assertEquals('Nan Bat!', $user->username);
+    }
+
+    public function testDynamicParametersLoading()
+    {
+        $this->markTestSkipped('Parameters cannot be dynamic yet.');
+        $res = $this->createLoader()->load(__DIR__ . '/Files/parameters/dynamic.yml');
+
+        $this->assertCount(2, $res);
+
+        $alice = $res['user_alice'];
+        $this->assertInstanceOf(self::USER, $alice);
+        $this->assertEquals('Alice', $alice->username);
+
+        $bob = $res['user_bob'];
+        $this->assertInstanceOf(self::USER, $bob);
+        $this->assertEquals('Bob', $bob->username);
     }
 
     public function testBackslashes()
@@ -1679,7 +1676,8 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new Loader();
         $res = $loader->load(__DIR__.'/../support/fixtures/backslashes.yml');
 
-        $this->assertEquals('\\\\', $res['foo']->username);
+        $this->assertEquals('Bob', $res['foo']->username);
+
         $this->assertEquals('\\\\', $res['user0']->username);
         $this->assertSame(
             [
@@ -1727,7 +1725,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
                     'user_alias' => [
                         'username' => '@user_alice->username',
                     ],
-                    'user_aalias' => [
+                    'user_deep_alias' => [
                         'username' => '@user_alias->username',
                     ],
                 ]
@@ -1735,28 +1733,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             'keys' => [
                 'user_alice',
                 'user_alias',
-                'user_aalias',
-            ],
-        ];
-
-        $return['with dashs'] = [
-            'data' => [
-                self::USER => [
-                    'user-alice' => [
-                        'username' => 'alice',
-                    ],
-                    'user-alias.alice-alias' => [
-                        'username' => '@user-alice->username',
-                    ],
-                    'user-deep-alias' => [
-                        'username' => '@user-alias.alice-alias->username',
-                    ],
-                ]
-            ],
-            'keys' => [
-                'user-alice',
-                'user-alias.alice-alias',
-                'user-deep-alias',
+                'user_deep_alias',
             ],
         ];
 
@@ -1802,24 +1779,24 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $return['with dash chevron'] = [
+        $return['with chinese characters'] = [
             'data' => [
                 self::USER => [
-                    'user->alice' => [
+                    '汉字' => [
                         'username' => 'alice',
                     ],
-                    'user->alias->alice_alias' => [
-                        'username' => '@{user->alice}->username',
+                    '汉字汉' => [
+                        'username' => '@汉字->username',
                     ],
-                    'user->deep_alias' => [
-                        'username' => '@{user->alias->alice_alias}->username',
+                    '汉字汉字' => [
+                        'username' => '@汉字汉->username',
                     ],
                 ]
             ],
             'keys' => [
-                'user->alice',
-                'user->alias->alice_alias',
-                'user->deep_alias',
+                '汉字',
+                '汉字汉',
+                '汉字汉字',
             ],
         ];
 

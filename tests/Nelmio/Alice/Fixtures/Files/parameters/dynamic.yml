@@ -1,0 +1,7 @@
+parameters:
+    username_alice: Alice
+    username_bob: Bob
+
+Nelmio\Alice\support\models\User:
+    user_{alice, bob}:
+        username: '<{username_<current()>}>'

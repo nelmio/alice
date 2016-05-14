@@ -1,0 +1,6 @@
+parameters:
+    username: Alice
+
+Nelmio\Alice\support\models\User:
+    alice:
+        username: '<{username}>'

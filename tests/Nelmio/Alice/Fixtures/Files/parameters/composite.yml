@@ -1,0 +1,8 @@
+parameters:
+    key1: NaN
+    key2: Bat
+    composite: '<{key1}> <{key2>!'
+
+Nelmio\Alice\support\models\User:
+    user0:
+        username: '<{composite}>'

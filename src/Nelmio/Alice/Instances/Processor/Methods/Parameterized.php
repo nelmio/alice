@@ -16,6 +16,8 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
 class Parameterized implements MethodInterface
 {
+    private static $regex = '/<\{(?<parameter>.*)\}>/i';
+
     /**
      * @var ParameterBag
      */
@@ -31,25 +33,35 @@ class Parameterized implements MethodInterface
      */
     public function canProcess(ProcessableInterface $processable)
     {
-        return is_string($processable->getValue());
+        $value = $processable->getValue();
+
+        return
+            is_string($value)
+            && 1 === preg_match(static::$regex, $value)
+        ;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \UnexpectedValueException
      */
     public function process(ProcessableInterface $processable, array $variables)
     {
         $value = $processable->getValue();
 
         return preg_replace_callback(
-            '#<\{([a-z0-9_\.-]+)\}>#i',
+            static::$regex,
             function ($matches) {
-                $key = $matches[1];
-                if (!$this->parameters->has($key)) {
-                    throw new \UnexpectedValueException(sprintf(
-                        'Parameter "%s" was not found',
-                        $key
-                    ));
+                $key = $matches['parameter'];
+
+                if (false === $this->parameters->has($key)) {
+                    throw new \UnexpectedValueException(
+                        sprintf(
+                            'Parameter "%s" was not found',
+                            $key
+                        )
+                    );
                 }
 
                 if (is_array($value = $this->parameters->get($key))) {
