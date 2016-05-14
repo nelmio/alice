@@ -1710,6 +1710,121 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('base@email.com', $user->email);
         $this->assertSame('testfullname', $user->fullname);
     }
+
+    /**
+     * Always return the same structure, see the first sample.
+     */
+    public function provideSpecialCharactersData()
+    {
+        $return = [];
+
+        $return['with underscores'] = [
+            'data' => [
+                self::USER => [
+                    'user_alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user_alias' => [
+                        'username' => '@user_alice->username',
+                    ],
+                    'user_aalias' => [
+                        'username' => '@user_alias->username',
+                    ],
+                ]
+            ],
+            'keys' => [
+                'user_alice',
+                'user_alias',
+                'user_aalias',
+            ],
+        ];
+
+        $return['with dashs'] = [
+            'data' => [
+                self::USER => [
+                    'user-alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user-alias.alice-alias' => [
+                        'username' => '@user-alice->username',
+                    ],
+                    'user-deep-alias' => [
+                        'username' => '@user-alias.alice-alias->username',
+                    ],
+                ]
+            ],
+            'keys' => [
+                'user-alice',
+                'user-alias.alice-alias',
+                'user-deep-alias',
+            ],
+        ];
+
+        $return['with dots'] = [
+            'data' => [
+                self::USER => [
+                    'user.alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user.alias.alice_alias' => [
+                        'username' => '@user.alice->username',
+                    ],
+                    'user.deep_alias' => [
+                        'username' => '@user.alias.alice_alias->username',
+                    ],
+                ]
+            ],
+            'keys' => [
+                'user.alice',
+                'user.alias.alice_alias',
+                'user.deep_alias',
+            ],
+        ];
+
+        $return['with slashes'] = [
+            'data' => [
+                self::USER => [
+                    'user/alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user/alias/alice_alias' => [
+                        'username' => '@user/alice->username',
+                    ],
+                    'user/deep_alias' => [
+                        'username' => '@user/alias/alice_alias->username',
+                    ],
+                ]
+            ],
+            'keys' => [
+                'user/alice',
+                'user/alias/alice_alias',
+                'user/deep_alias',
+            ],
+        ];
+
+        $return['with dash chevron'] = [
+            'data' => [
+                self::USER => [
+                    'user->alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user->alias->alice_alias' => [
+                        'username' => '@{user->alice}->username',
+                    ],
+                    'user->deep_alias' => [
+                        'username' => '@{user->alias->alice_alias}->username',
+                    ],
+                ]
+            ],
+            'keys' => [
+                'user->alice',
+                'user->alias->alice_alias',
+                'user->deep_alias',
+            ],
+        ];
+
+        return $return;
+    }
 }
 
 class FakerProvider

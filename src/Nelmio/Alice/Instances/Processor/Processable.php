@@ -42,9 +42,9 @@ class Processable implements ProcessableInterface
     /**
      * {@inheritDoc}
      */
-    public function valueMatches($regexString)
+    public function valueMatches($regex)
     {
-        if (preg_match($regexString, $this->value, $matches)) {
+        if (preg_match($regex, $this->value, $matches)) {
             $this->matches = array_merge($this->matches, $matches);
 
             return true;

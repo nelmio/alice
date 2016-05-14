@@ -13,6 +13,7 @@ class User
     public $favoriteNumber;
     public $friends;
     public $family_name;
+    public $行;
 
     public function __construct($username = null, $email = null, \DateTime $birthDate = null)
     {

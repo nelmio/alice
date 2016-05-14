@@ -1,12 +1,7 @@
 Nelmio\Alice\support\models\User:
     foo:
-        username: |
-            hello
+        username: Bob
     user0:
-        username: |
-            hello
-        friends:
-            - '@foo'
-            - \@foo
-            - \\@foo
-            - \\\@foo
+        username: |-
+            \\
+        friends: ['@foo', \@foo, \\@foo, \\\@foo]
