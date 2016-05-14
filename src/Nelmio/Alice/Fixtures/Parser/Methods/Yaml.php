@@ -55,26 +55,4 @@ class Yaml extends Base
 
         return $data;
     }
-
-    /**
-     * @param array $data
-     *
-     * @return mixed
-     */
-    private function processParameters(array $data)
-    {
-        if (isset($data['parameters']) && $this->context instanceof Loader) {
-            /* @var Loader $loader */
-            $loader = $this->context;
-
-            $parameterBag = $loader->getParameterBag();
-            foreach ($data['parameters'] as $name => $value) {
-                $parameterBag->set($name, $value);
-            }
-        }
-
-        unset($data['parameters']);
-
-        return $data;
-    }
 }

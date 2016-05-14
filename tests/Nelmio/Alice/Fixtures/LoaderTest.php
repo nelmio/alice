@@ -1630,6 +1630,17 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testPhpArrayParametersAreProperlyInterpreted()
+    {
+        $res = $this->createLoader()->load(__DIR__ . '/../support/fixtures/array_parameters.php');
+
+        $this->assertCount(5, $res);
+        foreach ($this->loader->getReferences() as $user) {
+            $this->assertInstanceOf(self::USER, $user);
+            $this->assertContains($user->username, ['Alice', 'Bob', 'Ogi']);
+        }
+    }
+
     public function testBackslashes()
     {
         $loader = new Loader();
