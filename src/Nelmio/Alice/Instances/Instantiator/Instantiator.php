@@ -11,10 +11,12 @@
 
 namespace Nelmio\Alice\Instances\Instantiator;
 
-use InvalidArgumentException;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
+/**
+ * The instantiator is responsible for creating an object defined by its fixture.
+ */
 class Instantiator
 {
     /**
@@ -24,20 +26,24 @@ class Instantiator
 
     /**
      * @param MethodInterface[] $methods
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(array $methods)
     {
         foreach ($methods as $method) {
             if (!($method instanceof MethodInterface)) {
-                throw new InvalidArgumentException("All methods passed into Instantiator must implement MethodInterface.");
+                throw new \InvalidArgumentException(
+                    'All methods passed into Instantiator must implement MethodInterface.'
+                );
             }
         }
 
-        $this->methods   = $methods;
+        $this->methods = $methods;
     }
 
     /**
-     * adds an instantiator for instantiation extensions
+     * Adds an instantiator for instantiation extensions.
      *
      * @param MethodInterface $instantiator
      **/
@@ -47,10 +53,13 @@ class Instantiator
     }
 
     /**
-     * creates and returns an instance of the described class in the fixture
+     * Creates and returns an instance of the described class in the fixture.
      *
-     * @param  Fixture $fixture
-     * @return mixed
+     * @param Fixture $fixture
+     *
+     * @throws \RuntimeException
+     *
+     * @return object Object described by the fixture (not populated yet)
      */
     public function instantiate(Fixture $fixture)
     {
@@ -61,8 +70,10 @@ class Instantiator
                 }
             }
 
-      // exception otherwise
-            throw new \RuntimeException("You must specify a __construct method with its arguments in object '{$fixture}' since class '{$fixture->getClass()}' has mandatory constructor arguments");
+            throw new \RuntimeException(
+                "You must specify a __construct method with its arguments in object '{$fixture}' since class "
+                ."'{$fixture->getClass()}' has mandatory constructor arguments"
+            );
         } catch (\ReflectionException $exception) {
             $class = $fixture->getClass();
 
