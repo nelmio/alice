@@ -1,6 +1,11 @@
+### 3.0.0 (WIP)
+
 ### 2.x (WIP)
 
   * Added support for snake_case properties (#323)
+  * Deprecate usage of the the range operator with more than two dots (#329)
+  * Added support for dots in reference names (#312)
+  * Added support for Fixture parameters in PHP File (#341)
 
 ### 2.1.2 (2015-12-10)
 

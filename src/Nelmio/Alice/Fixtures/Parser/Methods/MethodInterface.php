@@ -14,17 +14,19 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 interface MethodInterface
 {
     /**
-     * tests whether this class can parse the given file
+     * Tests whether this class can parse the given file.
      *
-     * @param  string  $file
+     * @param string $file File path
+     *
      * @return boolean
      */
     public function canParse($file);
 
     /**
-     * parses the file and converts it into a php array
+     * Parses the file and converts it into a php array.
      *
-     * @param  string $file
+     * @param string $file File path
+     *
      * @return array
      */
     public function parse($file);
