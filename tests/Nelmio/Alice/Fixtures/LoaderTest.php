@@ -688,7 +688,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $res = $this->loadData([
             self::USER => [
-                'user{0...10}' => [
+                'user{0..9}' => [
                     'username' => 'alice',
                 ],
             ],
