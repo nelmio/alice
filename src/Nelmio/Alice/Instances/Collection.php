@@ -98,7 +98,7 @@ class Collection
     }
 
     /**
-     * Returns an object, or a property on that object if $property is not null
+     * Returns an object, or a property on that object if $property is not null.
      *
      * @param string      $name
      * @param string|null $property
