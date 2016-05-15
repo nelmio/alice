@@ -21,6 +21,8 @@ use Prophecy\Argument;
  */
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
+    use BuilderProviderTrait;
+
     const USER = 'Nelmio\Alice\support\models\User';
 
     /**
@@ -170,36 +172,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             $this->assertNull($actual);
         }
         $this->assertEquals($expected, $actual, null, 0.0, 10, true);
-    }
-
-    public  function provideSimpleFixtures()
-    {
-        return Reference::getSimpleFixtures();
-    }
-
-    public function provideListFixtures()
-    {
-        return Reference::getListFixtures();
-    }
-
-    public function provideMalformedListFixtures()
-    {
-        return Reference::getMalformedListFixtures();
-    }
-
-    public function provideSegmentFixtures()
-    {
-        return Reference::getSegmentFixtures();
-    }
-
-    public function provideDeprecatedSegmentFixtures()
-    {
-        return Reference::getDeprecatedSegmentFixtures();
-    }
-
-    public function provideMalformedSegmentFixtures()
-    {
-        return Reference::getMalformedSegmentFixtures();
     }
 }
 

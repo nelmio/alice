@@ -192,14 +192,6 @@ final class Reference
                         FixtureFactory::create('user_1 (dummy_flag)', '1'),
                     ],
                 ],
-                'with negative values' => [
-                    'user_{-1...2}',
-                    null,
-                ],
-                'with inverted negative values' => [
-                    'user_{2...-1}',
-                    null,
-                ],
                 'with inverted values' => [
                     'user_{2...0}',
                     [
@@ -227,6 +219,14 @@ final class Reference
                 ],
                 'with inverted negative value' => [
                     'user_{2..-1}',
+                    null,
+                ],
+                'with negative values' => [
+                    'user_{-1...2}',
+                    null,
+                ],
+                'with inverted negative values' => [
+                    'user_{2...-1}',
                     null,
                 ],
             ],

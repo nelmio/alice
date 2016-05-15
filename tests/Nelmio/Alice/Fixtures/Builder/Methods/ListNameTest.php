@@ -11,140 +11,115 @@
 
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
-use Nelmio\Alice\Fixtures\Fixture;
-
 /**
  * @covers Nelmio\Alice\Fixtures\Builder\Methods\ListName
  */
-class ListNameTest extends \PHPUnit_Framework_TestCase
+class ListNameTest extends MethodTestCase
 {
-    /**
-     * @var ListName
-     */
-    private $method;
-
     public function setUp()
     {
         $this->method = new ListName();
     }
 
-    public function testIsABuilderMethod()
+    /**
+     * @dataProvider provideSimpleFixtures
+     */
+    public function testCanBuildSimpleFixtures($name)
     {
-        $this->assertInstanceOf('Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface', $this->method);
+        $this->assertCannotBuild($name);
     }
 
     /**
-     * @dataProvider provideFixtureSet
+     * @dataProvider provideListFixtures
      */
-    public function testCanBuildFixture($name, $expected)
+    public function testCanBuildListFixtures($name)
     {
-        $actual = $this->method->canBuild($name);
-
-        $this->assertEquals($expected, $actual);
+        $this->assertCanBuild($name);
     }
 
     /**
-     * @dataProvider provideData
+     * @dataProvider provideMalformedListFixtures
+     * @group legacy
      */
-    public function testBuildFixture($class, $name, $specs, $expected)
+    public function testCanBuildMalformedListFixtures($name)
     {
-        $this->assertTrue($this->method->canBuild($name));
-        $actual = $this->method->build($class, $name, $specs);
-
-        $this->assertEquals($expected, $actual, null, 0.0, 10, true);
+        $this->assertCanBuild($name);
     }
 
-    public function provideFixtureSet()
+    /**
+     * @dataProvider provideSegmentFixtures
+     */
+    public function testCanBuildSegmentFixtures($name)
     {
-        return [
-            'nominal' => ['user_{alice, bob}', true],
-            'nominal with extend flag' => ['user_{alice, bob} (extends something)', true],
-            'nominal with template flag' => ['user_{alice, bob} (template)', true],
-            'nominal with extend and template flags' => ['user_{alice, bob} (extends something, template)', true],
-            'with invalid member name in list' => ['user_{_, _}', true],
-
-            'with spaces at the beginning' => ['user_{  alice, bob}', false],
-            'with spaces before comma' => ['user_{alice  , bob}', false],
-            'with spaces after comma' => ['user_{alice,   bob}', false],
-            'with spaces before ending curly brace' => ['user_{alice, bob  }', false],
-            'with one comma at the end' => ['user_{alice, bob,}', false],
-            'with one comma at the beginning' => ['user_{, alice, bob}', false],
-
-            'without curly braces' => ['user0', false],
-
-            'with only one dot' => ['user_{alice, bob}', false],
-            'with no upper bound' => ['user_{0..}', false],
-            'with only one member' => ['user_{alice}', false],
-        ];
+        $this->assertCannotBuild($name);
     }
 
-    public function provideData()
+    /**
+     * @dataProvider provideDeprecatedSegmentFixtures
+     * @group legacy
+     */
+    public function testCanBuildDeprecatedSegmentFixtures($name)
     {
-        $return = [];
+        $this->assertCannotBuild($name);
+    }
 
-        $class = 'Dummy';
-        $specs= [];
+    /**
+     * @dataProvider provideMalformedSegmentFixtures
+     * @group legacy
+     */
+    public function testCanBuildMalformedSegmentFixtures($name)
+    {
+        $this->assertCannotBuild($name);
+    }
 
-        $return['nominal'] = [
-            $class,
-            'user_{alice, bob}',
-            $specs,
-            [
-                new Fixture(
-                    $class,
-                    'user_alice',
-                    $specs,
-                    'alice'
-                ),
-                new Fixture(
-                    $class,
-                    'user_bob',
-                    $specs,
-                    'bob'
-                ),
-            ]
-        ];
+    /**
+     * @dataProvider provideSimpleFixtures
+     */
+    public function testBuildSimpleFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
+    }
 
-        $return['with template'] = [
-            $class,
-            'user_{alice, bob} (template)',
-            $specs,
-            [
-                new Fixture(
-                    $class,
-                    'user_alice (template)',
-                    $specs,
-                    'alice'
-                ),
-                new Fixture(
-                    $class,
-                    'user_bob (template)',
-                    $specs,
-                    'bob'
-                ),
-            ]
-        ];
+    /**
+     * @dataProvider provideListFixtures
+     */
+    public function testBuildListFixtures($name, $expected)
+    {
+        $this->assertBuiltResultIsTheSame($name, $expected);
+    }
 
-        $return['with special characters'] = [
-            $class,
-            'user_{., /}',
-            $specs,
-            [
-                new Fixture(
-                    $class,
-                    'user_.',
-                    $specs,
-                    '.'
-                ),
-                new Fixture(
-                    $class,
-                    'user_/',
-                    $specs,
-                    '/'
-                ),
-            ]
-        ];
+    /**
+     * @dataProvider provideMalformedListFixtures
+     * @group legacy
+     */
+    public function testBuildMalformedListFixtures($name, $expected)
+    {
+        $this->assertBuiltResultIsTheSame($name, $expected);
+    }
 
-        return $return;
+    /**
+     * @dataProvider provideSegmentFixtures
+     */
+    public function testBuildSegmentFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
+    }
+
+    /**
+     * @dataProvider provideDeprecatedSegmentFixtures
+     * @group legacy
+     */
+    public function testBuildDeprecatedSegmentFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
+    }
+
+    /**
+     * @dataProvider provideMalformedSegmentFixtures
+     * @group legacy
+     */
+    public function testBuildMalformedSegmentFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
     }
 }

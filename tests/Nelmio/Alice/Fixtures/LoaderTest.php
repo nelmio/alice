@@ -927,20 +927,26 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $res = $this->loadData([
             self::USER => [
-                'user_{alice, bob, foo bar}' => [
+                'user_{alice, bob, foo, bar}' => [
                     'username' => '<current()>',
                     'email' => '<current()>@gmail.com',
                 ],
             ],
         ]);
 
-        $this->assertCount(3, $res);
+        $this->assertCount(4, $res);
+
         $this->assertInstanceOf(self::USER, $res['user_alice']);
         $this->assertEquals('alice', $res['user_alice']->username);
+
         $this->assertInstanceOf(self::USER, $res['user_bob']);
         $this->assertEquals('bob', $res['user_bob']->username);
-        $this->assertInstanceOf(self::USER, $res['user_foo bar']);
-        $this->assertEquals('foo bar', $res['user_foo bar']->username);
+
+        $this->assertInstanceOf(self::USER, $res['user_foo']);
+        $this->assertEquals('foo', $res['user_foo']->username);
+
+        $this->assertInstanceOf(self::USER, $res['user_bar']);
+        $this->assertEquals('bar', $res['user_bar']->username);
     }
 
     public function testLocalObjectsAreNotReturned()
@@ -992,14 +998,14 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $res = $this->loadData([
             self::USER => [
-                'us{er,rr} (template)' => [
-                    'email' => 'base@email.com',
+                'us{er, rr} (template)' => [
+                    'email' => 'base@email.com'
                 ],
                 'user{1..2} (template, extends user)' => [
-                    'favoriteNumber' => 2,
+                    'favoriteNumber' => 2
                 ],
-                '{user,uzer}3 (extends user2)' => [
-                    'fullname' => 'testfullname',
+                '{user, uzer}3 (extends user2)' => [
+                    'fullname' => 'testfullname'
                 ],
             ],
         ]);
@@ -1007,6 +1013,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $res);
         foreach (['user3', 'uzer3'] as $key) {
             $this->assertInstanceOf(self::USER, $this->loader->getReference($key));
+
             $this->assertSame($this->loader->getReference($key)->email, 'base@email.com');
             $this->assertSame($this->loader->getReference($key)->favoriteNumber, 2);
             $this->assertSame($this->loader->getReference($key)->fullname, 'testfullname');
