@@ -202,4 +202,60 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('setterFunc', $setFixture->getCustomSetter());
         $this->assertNull($noSetFixture->getCustomSetter());
     }
+
+    /**
+     * @dataProvider provideValidNames
+     */
+    public function testValidNamesValidation($name)
+    {
+        $fixture = new Fixture(self::USER, $name, [], null);
+        $this->assertEquals($name, $fixture->getName());
+    }
+
+    /**
+     * @dataProvider provideInvalidNames
+     * @group legacy
+     */
+    public function testNamesValidation($name)
+    {
+        $fixture = new Fixture(self::USER, $name, [], null);
+        $this->assertEquals($name, $fixture->getName());
+    }
+
+    public function provideValidNames()
+    {
+        return [
+            ['u'],
+            ['À'],
+            ['u.'],
+            ['.u'],
+            ['u_'],
+            ['_u'],
+            ['u/'],
+            ['/u'],
+            ['u0'],
+            ['0u'],
+        ];
+    }
+
+    public function provideInvalidNames()
+    {
+        return [
+            [''],
+            [' '],
+            ['.'],
+            ['_'],
+            ['/.'],
+            ['0'],
+            ['10'],
+            ['user-name'],
+            ['user{1..3}'],
+            ['user{alice, bob}'],
+            ['user*'],
+            ['User'],
+            ['us er'],
+            ['user""'],
+            ['user\'\''],
+        ];
+    }
 }

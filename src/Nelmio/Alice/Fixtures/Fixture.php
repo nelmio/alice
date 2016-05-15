@@ -56,19 +56,19 @@ class Fixture
     protected $setProperties = [];
 
     /**
-     * built a class representation of a fixture
-     *
-     * @param string $class
-     * @param string $name
-     * @param array  $spec
-     * @param string $valueForCurrent - when <current()> is called, this value is used
+     * @param string      $class
+     * @param string      $name
+     * @param array       $spec
+     * @param string|null $valueForCurrent - when <current()> is called, this value is used
      */
     public function __construct($class, $name, array $spec, $valueForCurrent)
     {
         list($this->class, $this->classFlags) = FlagParser::parse($class);
-        list($this->name, $this->nameFlags)   = FlagParser::parse($name);
+        list($this->name, $this->nameFlags) = FlagParser::parse($name);
 
-        $this->spec            = $spec;
+        $this->checkName($name);
+
+        $this->spec = $spec;
         $this->valueForCurrent = $valueForCurrent;
 
         $this->properties = [];
@@ -372,5 +372,38 @@ class Fixture
         }
 
         return ['method' => '__construct', 'args' => $constructorValue];
+    }
+
+    private function checkName($name)
+    {
+        $lowerCaseName = strtolower($name);
+        if ($lowerCaseName !== $name) {
+            @trigger_error(
+                'Fixture references should be lowercase. Case insensitiveness is not guaranteed to work and is '
+                .'deprecated since 2.2.0. Will be removed in 3.0',
+                E_USER_DEPRECATED
+            );
+        }
+
+        if (1 === strlen($name) && 1 !== preg_match('/\p{L}/', $name)) {
+            @trigger_error(
+                sprintf(
+                    'Fixture references 1 character long should be composed of a letter. Found "%s" instead. This is '
+                    .'is deprecated since 2.2.0 and will be removed in 3.0',
+                    $name
+                ),
+                E_USER_DEPRECATED
+            );
+        } elseif (1 !== preg_match('/[\p{L}\d\._\/]+/', $name)) {
+            @trigger_error(
+                sprintf(
+                    'Fixture references should only be composed of letters, digits, periods ("."), underscores ("_") '
+                    .' and slashes ("/"). The usage of other characters is deprecated since 2.2.0 and will no longer be'
+                    .'supported in 3.0',
+                    $name
+                ),
+                E_USER_DEPRECATED
+            );
+        }
     }
 }

@@ -54,18 +54,6 @@ class ListNameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, null, 0.0, 10, true);
     }
 
-    /**
-     * @dataProvider provideLegacyData
-     * @group legacy
-     */
-    public function testBuildFixtureWithLegacySyntax($class, $name, $specs, $expected)
-    {
-        $this->assertTrue($this->method->canBuild($name));
-        $actual = $this->method->build($class, $name, $specs);
-
-        $this->assertEquals($expected, $actual, null, 0.0, 10, true);
-    }
-
     public function provideFixtureSet()
     {
         return [
@@ -73,6 +61,7 @@ class ListNameTest extends \PHPUnit_Framework_TestCase
             'nominal with extend flag' => ['user_{alice, bob} (extends something)', true],
             'nominal with template flag' => ['user_{alice, bob} (template)', true],
             'nominal with extend and template flags' => ['user_{alice, bob} (extends something, template)', true],
+            'with invalid member name in list' => ['user_{_, _}', true],
 
             'with spaces at the beginning' => ['user_{  alice, bob}', false],
             'with spaces before comma' => ['user_{alice  , bob}', false],
@@ -85,6 +74,7 @@ class ListNameTest extends \PHPUnit_Framework_TestCase
 
             'with only one dot' => ['user_{alice, bob}', false],
             'with no upper bound' => ['user_{0..}', false],
+            'with only one member' => ['user_{alice}', false],
         ];
     }
 
@@ -97,128 +87,60 @@ class ListNameTest extends \PHPUnit_Framework_TestCase
 
         $return['nominal'] = [
             $class,
-            'user_{0..2}',
+            'user_{alice, bob}',
             $specs,
             [
                 new Fixture(
                     $class,
-                    'user_0',
+                    'user_alice',
                     $specs,
-                    '0'
+                    'alice'
                 ),
                 new Fixture(
                     $class,
-                    'user_1',
+                    'user_bob',
                     $specs,
-                    '1'
-                ),
-                new Fixture(
-                    $class,
-                    'user_2',
-                    $specs,
-                    '2'
+                    'bob'
                 ),
             ]
         ];
 
         $return['with template'] = [
             $class,
-            'user_{0..2} (template)',
+            'user_{alice, bob} (template)',
             $specs,
             [
                 new Fixture(
                     $class,
-                    'user_0 (template)',
+                    'user_alice (template)',
                     $specs,
-                    '0'
+                    'alice'
                 ),
                 new Fixture(
                     $class,
-                    'user_1 (template)',
+                    'user_bob (template)',
                     $specs,
-                    '1'
-                ),
-                new Fixture(
-                    $class,
-                    'user_2 (template)',
-                    $specs,
-                    '2'
+                    'bob'
                 ),
             ]
         ];
 
-        $return['with extends'] = [
+        $return['with special characters'] = [
             $class,
-            'user_{0..2} (extends something)',
+            'user_{., /}',
             $specs,
             [
                 new Fixture(
                     $class,
-                    'user_0 (extends something)',
+                    'user_.',
                     $specs,
-                    '0'
+                    '.'
                 ),
                 new Fixture(
                     $class,
-                    'user_1 (extends something)',
+                    'user_/',
                     $specs,
-                    '1'
-                ),
-                new Fixture(
-                    $class,
-                    'user_2 (extends something)',
-                    $specs,
-                    '2'
-                ),
-            ]
-        ];
-
-        return $return;
-    }
-
-    public function provideLegacyData()
-    {
-        $return = [];
-
-        $class = 'Dummy';
-        $specs= [];
-
-        $return['with 3 dots'] = [
-            $class,
-            'user_{0...2}',
-            $specs,
-            [
-                new Fixture(
-                    $class,
-                    'user_0',
-                    $specs,
-                    '0'
-                ),
-                new Fixture(
-                    $class,
-                    'user_1',
-                    $specs,
-                    '1'
-                ),
-            ]
-        ];
-
-        $return['with more than 3 dots'] = [
-            $class,
-            'user_{0....2}',
-            $specs,
-            [
-                new Fixture(
-                    $class,
-                    'user_0',
-                    $specs,
-                    '0'
-                ),
-                new Fixture(
-                    $class,
-                    'user_1',
-                    $specs,
-                    '1'
+                    '/'
                 ),
             ]
         ];

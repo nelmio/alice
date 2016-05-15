@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures\Builder;
 
-use InvalidArgumentException;
 use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
 use Nelmio\Alice\Fixtures\Fixture;
 
@@ -34,7 +33,7 @@ class Builder
     {
         foreach ($methods as $method) {
             if (!($method instanceof MethodInterface)) {
-                throw new InvalidArgumentException("All methods passed into Builder must implement MethodInterface.");
+                throw new \InvalidArgumentException("All methods passed into Builder must implement MethodInterface.");
             }
         }
 
@@ -43,7 +42,7 @@ class Builder
     }
 
     /**
-     * adds a builder for fixture building extensions
+     * Adds a builder for fixture building extensions.
      *
      * @param MethodInterface $builder
      **/
@@ -53,12 +52,13 @@ class Builder
     }
 
     /**
-     * builds a single fixture from a "raw" definition
+     * Builds fixtures from a "raw" definition
      *
-     * @param  string    $class
-     * @param  string    $name
-     * @param  array     $spec
-     * @return Fixture[]
+     * @param  string $class
+     * @param  string $name
+     * @param  array  $spec
+     *
+     * @return Fixture[]|null
      */
     public function build($class, $name, array $spec)
     {
@@ -87,6 +87,16 @@ class Builder
                 return $fixtures;
             }
         }
+
+        @trigger_error(
+            sprintf(
+                'Fixture with the name "%s" and the class "%s" could not be build. In such cases, null is returned.'
+                .' As of 2.2.0, this behaviour is deprecated and an exception will be thrown in 3.0 instead.'
+            ),
+            E_USER_DEPRECATED
+        );
+
+        return null;
     }
 
     /**
