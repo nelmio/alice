@@ -67,6 +67,7 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
         $groupReference = $objects['group_1_user1'];
         $this->assertInstanceOf(self::GROUP, $groupReference);
         $this->assertInstanceOf(self::USER, $groupReference->getOwner());
+        $this->assertEquals($objects['user1'], $groupReference->getOwner());
         $this->assertCount(3, $groupReference->getMembers());
 
         $groupReferenceList1 = $objects['group_list_user1'];
