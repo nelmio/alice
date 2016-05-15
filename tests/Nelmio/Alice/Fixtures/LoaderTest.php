@@ -711,6 +711,42 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user9')->friends[0]);
     }
 
+    public function testCurrentReference()
+    {
+        $this->loadData(array(
+            self::GROUP => array(
+                'group{1..2}' => array(
+                    'name' => 'foo<current()>'
+                ),
+            ),
+            self::USER => array(
+                'user{1..2}' => array(
+                    'favoriteNumber' => '@group<current()>',
+                ),
+                'user{3..4}' => array(
+                    'favoriteNumber' => '@group<identity(current() - 2)>',
+                ),
+            ),
+        ));
+
+        $this->assertSame(
+            $this->loader->getReference('group1'),
+            $this->loader->getReference('user1')->favoriteNumber
+        );
+        $this->assertSame(
+            $this->loader->getReference('group2'),
+            $this->loader->getReference('user2')->favoriteNumber
+        );
+        $this->assertSame(
+            $this->loader->getReference('group1'),
+            $this->loader->getReference('user3')->favoriteNumber
+        );
+        $this->assertSame(
+            $this->loader->getReference('group2'),
+            $this->loader->getReference('user4')->favoriteNumber
+        );
+    }
+
     public function testSelfReference()
     {
         $res = $this->loadData([
