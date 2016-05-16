@@ -108,7 +108,12 @@ class Fixture
 
         foreach ($template->properties as $property) {
             if (!isset($this->spec[$property->getName()])) {
-                $this->addProperty($property->getName(), $property->getValue());
+                $name = $property->getName();
+                if ($property->requiresUnique()) {
+                    $name .= ' (unique)';
+                }
+
+                $this->addProperty($name, $property->getValue());
             }
         }
     }
