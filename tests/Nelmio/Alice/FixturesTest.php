@@ -25,7 +25,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
 
-        $objectManagerMixock->expects($this->any())
+        $objectManagerMock->expects($this->any())
             ->method('getMetadataFactory')
             ->will($this->returnValue($metadataFactory));
 
