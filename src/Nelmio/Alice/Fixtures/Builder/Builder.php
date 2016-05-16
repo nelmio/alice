@@ -69,7 +69,8 @@ class Builder
                 $indexesToRemove = [];
                 foreach ($fixtures as $index => $fixture) {
                     if ($fixture->hasExtensions()) {
-                        foreach ($fixture->getExtensions() as $extension) {
+                        $extentions = array_reverse($fixture->getExtensions());
+                        foreach ($extentions as $extension) {
                             $fixture->extendTemplate($this->getTemplate($extension));
                         }
                     }

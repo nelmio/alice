@@ -1,13 +1,13 @@
 ### 2.x (WIP)
 
   * Drop support for PHP 5.4 and 5.5 (#414)
-  * Added support for snake_case properties (#323)
-  * Deprecated usage of the the range operator with more than two dots (#329)
-  * Added support for dots in reference names (#312)
-  * Added support for Fixture parameters in PHP File (#341)
-  * Deprecated usage of custom context in Parsers (#342)
+  * Add support for snake_case properties (#323)
+  * Deprecate usage of the the range operator with more than two dots (#329)
+  * Add support for dots in reference names (#312)
+  * Add support for Fixture parameters in PHP File (#341)
+  * Deprecate usage of custom context in Parsers (#342)
   * Fix singularify deprecation warnings and optimize method detection (#407)
-  * Fixed various bugs in #355:
+  * Fix various bugs in #355:
       - `user_{alice, bob,}` previously was building a reference named `user_{alice, bob,}`. Now builds that as a list, i.e. result in `user_alice` and `user_bob`. A deprecation warning is also thrown to warn the user that the list is poorly formatted and an exception will be thrown in v3.
       - `user_{, alice, bob}`: same as previous case.
       - `user_{0..2}`: value for `<current()>` were respectively `'0'`, `1`, `2`; Now are all strings as states the phpdoc. Changed in #339.
@@ -18,6 +18,7 @@
       - `user_{2..}`: was generating a fixture named `user_{2..}`; Now doesn't generate any.
       - `user_{-1..2}`: was generating a fixture named `user_-1..2`; Now doesn't generate any. Same goes for all ranges containing a negative number
       - Deprecate the silent failing occurring when a fixture could not be built by the builder: current returns `null`, will throw an exception in the future.
+  * Fix unique flag usage with templates (#359)
 
 ### 2.1.2 (2015-12-10)
 

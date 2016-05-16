@@ -73,7 +73,9 @@ class Fixture
 
         $this->properties = [];
         foreach ($spec as $propertyName => $propertyValue) {
-            $this->addProperty($propertyName, $propertyValue);
+            $this->addPropertyDefinition(
+                new PropertyDefinition($propertyName, $propertyValue)
+            );
         }
     }
 
@@ -105,8 +107,8 @@ class Fixture
         }
 
         foreach ($template->properties as $property) {
-            if (!isset($this->spec[$property->getName()])) {
-                $this->addProperty($property->getName(), $property->getValue());
+            if (!$this->hasProperty($property->getName())) {
+                $this->addPropertyDefinition($property);
             }
         }
     }
@@ -153,6 +155,22 @@ class Fixture
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasProperty($name)
+    {
+        foreach ($this->properties as $property) {
+            if ($property->getName() === $name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -301,10 +319,19 @@ class Fixture
      * @param mixed  $value
      *
      * @return PropertyDefinition
+     *
+     * @deprecated Has been deprecated since 2.2.0. Use ::addPropertyDefinition() instead.
      */
     protected function addProperty($name, $value)
     {
-        return $this->properties[$name] = new PropertyDefinition($name, $value);
+        $property = new PropertyDefinition($name, $value);
+
+        return $this->properties[$property->getName()] = $property;
+    }
+
+    private function addPropertyDefinition(PropertyDefinition $property)
+    {
+        $this->properties[$property->getName()] = $property;
     }
 
     /**
