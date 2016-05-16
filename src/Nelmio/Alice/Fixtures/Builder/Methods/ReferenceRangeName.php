@@ -73,7 +73,7 @@ final class ReferenceRangeName implements MethodInterface
     {
         $fixtures = [];
 
-        $keys = $this->objects->getKeysByMask($referenceName . ".+");
+        $keys = $this->objects->getKeysByMask($referenceName . "*");
 
         if (0 === count($keys)) {
             throw new \UnexpectedValueException(
