@@ -50,10 +50,7 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadFixturesByReference()
     {
-        $managerMock = $this->getDoctrineManagerMock(11);
-
-        $managerMock->expects($this->exactly(3))
-            ->method('flush');
+        $managerMock = $this->getDoctrineManagerMock();
 
         $files = [
             __DIR__ . '/support/fixtures/reference_range_1.yml',
@@ -97,10 +94,7 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadFixturesByReferenceWithRangeList()
     {
-        $managerMock = $this->getDoctrineManagerMock(5);
-
-        $managerMock->expects($this->exactly(2))
-            ->method('flush');
+        $managerMock = $this->getDoctrineManagerMock();
 
         $files = [
             __DIR__ . '/support/fixtures/reference_range_with_range_list_1.yml',
@@ -123,16 +117,22 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array|null $objects
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getDoctrineManagerMock($objects = null)
+    protected function getDoctrineManagerMock()
     {
         $managerMock = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $metadataFactoryMock = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metadataMock = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
 
-        $managerMock->expects($objects ? $this->exactly($objects) : $this->any())
-            ->method('persist');
+        $managerMock->method('getMetadataFactory')
+            ->will($this->returnValue($metadataFactoryMock));
+
+        $metadataFactoryMock->method('getAllMetadata')
+            ->will($this->returnValue([$metadataMock]));
+
+        $managerMock->method('flush');
+        $managerMock->method('persist');
 
         return $managerMock;
     }
