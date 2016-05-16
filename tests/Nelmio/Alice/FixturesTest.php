@@ -25,7 +25,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
         $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
 
-        $objectManagerMock->expects($this->any())
+        $objectManagerMixock->expects($this->any())
             ->method('getMetadataFactory')
             ->will($this->returnValue($metadataFactory));
 
@@ -42,8 +42,6 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             $this->assertFalse(in_array($object->username, $names), sprintf('duplicate value %s', $object->username));
             $names[] = $object->username;
         }
-
-
     }
 
     public function testLoadLoadsYamlFilesAndDoctrinePersister()
