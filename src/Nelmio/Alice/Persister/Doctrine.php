@@ -15,16 +15,32 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Nelmio\Alice\PersisterInterface;
 
 /**
- * The Doctrine persists the fixtures into an ObjectManager
+ * Bridge for Doctrine ObjectManager.
  */
 class Doctrine implements PersisterInterface
 {
+    /**
+     * @var ObjectManager
+     */
     protected $om;
+
+    /**
+     * @var bool
+     */
     protected $flush;
 
-    public function __construct(ObjectManager $om, $doFlush = true)
+    /**
+     * @var string[]
+     */
+    protected $persistableClasses;
+
+    /**
+     * @param ObjectManager $objectManager
+     * @param bool          $doFlush
+     */
+    public function __construct(ObjectManager $objectManager, $doFlush = true)
     {
-        $this->om = $om;
+        $this->om = $objectManager;
         $this->flush = $doFlush;
     }
 
@@ -33,8 +49,12 @@ class Doctrine implements PersisterInterface
      */
     public function persist(array $objects)
     {
+        $persistable = $this->getPersistableClasses();
+
         foreach ($objects as $object) {
-            $this->om->persist($object);
+            if (in_array(get_class($object), $persistable)) {
+                $this->om->persist($object);
+            }
         }
 
         if ($this->flush) {
@@ -50,9 +70,29 @@ class Doctrine implements PersisterInterface
         $entity = $this->om->find($class, $id);
 
         if (!$entity) {
-            throw new \UnexpectedValueException('Entity with Id ' . $id . ' and Class ' . $class . ' not found');
+            throw new \UnexpectedValueException("Entity with ID {$id} and class {$class} not found");
         }
 
         return $entity;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getPersistableClasses()
+    {
+        if (!isset($this->persistableClasses)) {
+            $metadatas = $this->om->getMetadataFactory()->getAllMetadata();
+
+            foreach ($metadatas as $metadata) {
+                if (isset($metadata->isEmbeddedClass) && $metadata->isEmbeddedClass) {
+                    continue;
+                }
+
+                $this->persistableClasses[] = $metadata->getName();
+            }
+        }
+
+        return $this->persistableClasses;
     }
 }

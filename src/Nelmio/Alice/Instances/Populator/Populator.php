@@ -31,10 +31,20 @@ class Populator
     protected $processor;
 
     /**
+     * @var Methods\MethodInterface[]
+     */
+    protected $setters;
+
+    /**
      * @var array
      */
     private $uniqueValues = [];
 
+    /**
+     * @param Collection        $objects
+     * @param Processor         $processor
+     * @param MethodInterface[] $setters
+     */
     public function __construct(Collection $objects, Processor $processor, array $setters)
     {
         foreach ($setters as $setter) {

@@ -16,18 +16,21 @@ use Nelmio\Alice\Fixtures\Fixture;
 interface MethodInterface
 {
     /**
-     * returns true if this method can instantiate the object described in the fixture
+     * Returns true if this method can instantiate the object described in the fixture.
      *
-     * @param Fixture
-     * @return boolean
+     * @param Fixture $fixture
+     *
+     * @return bool
      */
     public function canInstantiate(Fixture $fixture);
 
     /**
-     * returns an empty instance of the class the fixture describes
+     * Returns an empty instance of the class the fixture describes. This method should be called only if
+     * ::canInstantiate() returns true.
      *
-     * @param Fixture
-     * @return mixed
+     * @param Fixture $fixture
+     *
+     * @return object
      */
     public function instantiate(Fixture $fixture);
 }

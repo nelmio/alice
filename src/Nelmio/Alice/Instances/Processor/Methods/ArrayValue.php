@@ -24,7 +24,7 @@ class ArrayValue implements MethodInterface
     /**
      * sets the processor to handle recursive calls
      *
-     * @param Processor
+     * @param Processor $processor
      */
     public function setProcessor(Processor $processor)
     {
@@ -44,6 +44,7 @@ class ArrayValue implements MethodInterface
      */
     public function process(ProcessableInterface $processable, array $variables)
     {
+        /* @var array $values */
         $values = $processable->getValue();
         foreach ($values as $key => $value) {
             $values[$key] = $this->processor->process($value, $variables);

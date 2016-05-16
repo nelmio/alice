@@ -11,16 +11,15 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-use Nelmio\Alice\Instances\Processor\Methods\Faker;
-use Nelmio\Alice\Fixtures\ParameterBag;
-use Psr\Log\LoggerInterface;
-use Nelmio\Alice\PersisterInterface;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Populator;
 use Nelmio\Alice\Instances\Processor;
+use Nelmio\Alice\Instances\Processor\Methods\Faker;
 use Nelmio\Alice\Instances\Processor\Providers\IdentityProvider;
+use Nelmio\Alice\PersisterInterface;
 use Nelmio\Alice\Util\TypeHintChecker;
+use Psr\Log\LoggerInterface;
 
 /**
  * Loads fixtures from an array or file
@@ -38,12 +37,17 @@ class Loader
     protected $typeHintChecker;
 
     /**
-     * @var Parser
+     * @var Processor\Processor
+     */
+    protected $processor;
+
+    /**
+     * @var Parser\Parser
      **/
     protected $parser;
 
     /**
-     * @var Builder
+     * @var Builder\Builder
      */
     protected $builder;
 
@@ -53,12 +57,12 @@ class Loader
     protected $fakerProcessorMethod;
 
     /**
-     * @var Instantiator
+     * @var Instantiator\Instantiator
      */
     protected $instantiator;
 
     /**
-     * @var Populator
+     * @var Populator\Populator
      */
     protected $populator;
 
@@ -68,7 +72,7 @@ class Loader
     protected $manager;
 
     /**
-     * @var \Nelmio\Alice\Fixtures\ParameterBag
+     * @var ParameterBag
      */
     protected $parameterBag;
 
@@ -125,7 +129,8 @@ class Loader
     /**
      * Loads a fixture file
      *
-     * @param string|array $dataOrFilename data array or filename
+     * @param  string|array $dataOrFilename data array or filename
+     * @return object[]
      */
     public function load($dataOrFilename)
     {
@@ -157,7 +162,7 @@ class Loader
     /**
      * Returns all references created by the loader
      *
-     * @return array[object]
+     * @return object[]
      */
     public function getReferences()
     {
@@ -181,12 +186,14 @@ class Loader
     }
 
     /**
-     * @param array $references
+     * References are objects which the loader is aware of while loading fixtures.
+     *
+     * @param object[] $references Array of object where the key is the name of the reference
      */
-    public function setReferences(array $objects)
+    public function setReferences(array $references)
     {
         $this->objects->clear();
-        foreach ($objects as $name => $object) {
+        foreach ($references as $name => $object) {
             $this->objects->set($name, $object);
         }
     }
@@ -222,7 +229,7 @@ class Loader
     }
 
     /**
-     * adds an instantiator for instantiation extensions
+     * Adds an instantiator for instantiation extensions.
      *
      * @param Instantiator\Methods\MethodInterface $instantiator
      **/
@@ -244,8 +251,8 @@ class Loader
     /**
      * parses a file at the given filename
      *
-     * @param string filename
-     * @return array data
+     * @param  string $filename
+     * @return array  data
      */
     protected function parseFile($filename)
     {
@@ -255,8 +262,8 @@ class Loader
     /**
      * builds a collection of fixtures
      *
-     * @param  array $rawData
-     * @return array
+     * @param  array     $rawData
+     * @return Fixture[]
      */
     protected function buildFixtures(array $rawData)
     {
@@ -275,7 +282,7 @@ class Loader
     /**
      * creates an empty instance for each fixture, and adds it to our object collection
      *
-     * @param array $fixtures
+     * @param Fixture[] $fixtures
      */
     protected function instantiateFixtures(array $fixtures)
     {
@@ -290,8 +297,8 @@ class Loader
     /**
      * hydrates each instance described by fixtures and returns the final non-local list
      *
-     * @param  array $fixtures
-     * @return array
+     * @param  Fixture[] $fixtures
+     * @return object[]  List of object created
      */
     protected function populateObjects(array $fixtures)
     {
@@ -422,16 +429,16 @@ class Loader
     }
 
     /**
-     * returns a list of all the default instantiator methods
+     * Returns a list of all the default instantiator methods.
      *
-     * @param  Processor\Processor $processor
-     * @param  TypeHintChecker     $typeHintChecker
-     * @return array
+     * @param Processor\Processor $processor
+     * @param TypeHintChecker     $typeHintChecker
+     *
+     * @return Instantiator\Methods\MethodInterface[]
      */
     private function getBuiltInInstantiators(Processor\Processor $processor, TypeHintChecker $typeHintChecker)
     {
         return [
-            new Instantiator\Methods\Unserialize(),
             new Instantiator\Methods\ReflectionWithoutConstructor(),
             new Instantiator\Methods\ReflectionWithConstructor($processor, $typeHintChecker),
             new Instantiator\Methods\EmptyConstructor(),

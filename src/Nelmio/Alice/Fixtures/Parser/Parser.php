@@ -11,23 +11,25 @@
 
 namespace Nelmio\Alice\Fixtures\Parser;
 
-use InvalidArgumentException;
-use UnexpectedValueException;
-
 use Nelmio\Alice\Fixtures\Parser\Methods\MethodInterface;
 
 class Parser
 {
     /**
-     * @var array
-     **/
+     * @var MethodInterface[]
+     */
     private $parsers = [];
 
+    /**
+     * @param MethodInterface[] $parsers
+     *
+     * @throws \InvalidArgumentException
+     */
     public function __construct(array $parsers)
     {
         foreach ($parsers as $parser) {
             if (!($parser instanceof MethodInterface)) {
-                throw new InvalidArgumentException("All parsers passed into Parser must implement MethodInterface.");
+                throw new \InvalidArgumentException("All parsers passed into Parser must implement MethodInterface.");
             }
         }
 
@@ -35,7 +37,7 @@ class Parser
     }
 
     /**
-     * adds a parser for parsing files
+     * Adds a parser for parsing files.
      *
      * @param MethodInterface $parser
      **/
@@ -45,9 +47,12 @@ class Parser
     }
 
     /**
-     * parses the given file and returns an array of data
+     * Parses the given file and returns an array of data.
      *
-     * @param  string     $file
+     * @param string $file File path
+     *
+     * @throws \UnexpectedValueException
+     *
      * @return array|null
      */
     public function parse($file)
@@ -58,6 +63,6 @@ class Parser
             }
         }
 
-        throw new UnexpectedValueException("{$file} cannot be parsed - no parser exists that can handle it.");
+        throw new \UnexpectedValueException("{$file} cannot be parsed - no parser exists that can handle it.");
     }
 }
