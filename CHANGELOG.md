@@ -7,6 +7,16 @@
   * Added support for Fixture parameters in PHP File (#341)
   * Deprecated usage of custom context in Parsers (#342)
   * Fix singularify deprecation warnings and optimize method detection (#407)
+  * Fixed various bugs in #355:
+      - `user_{alice, bob,}` previously was building a reference named `user_{alice, bob,}`. Now builds that as a list, i.e. result in `user_alice` and `user_bob`. A deprecation warning is also thrown to warn the user that the list is poorly formatted and an exception will be thrown in v3.
+      - `user_{, alice, bob}`: same as previous case.
+      - `user_{0..2}`: value for `<current()>` were respectively `'0'`, `1`, `2`; Now are all strings as states the phpdoc. Changed in #339.
+      - `user_{0....2}`: was generating only one fixture named `user_{0....2}`; Now is equivalent to `user_{0...2}`
+      - `user_{2...0}`: as reported in #358 was generating 4 fixtures... Now is equivalent to `0...2` which result in `user_0`, `user_1` and `user_2`
+      - `user_{2...2}`: was generating two fixtures `user_1` and `user_3`; Now doesn't build any (the segment is `[2;2[` so contains no element)
+      - `user_{0.2}`: was generating a fixture named `user_{0.2}`; Now doesn't generate any.
+      - `user_{2..}`: was generating a fixture named `user_{2..}`; Now doesn't generate any.
+      - `user_{-1..2}`: was generating a fixture named `user_-1..2`; Now doesn't generate any. Same goes for all ranges containing a negative number
 
 ### 2.1.2 (2015-12-10)
 

@@ -379,8 +379,8 @@ class Fixture
         $lowerCaseName = strtolower($name);
         if ($lowerCaseName !== $name) {
             @trigger_error(
-                'Fixture references should be lowercase. Case insensitiveness is not guaranteed to work and is '
-                .'deprecated since 2.2.0. Will be removed in 3.0',
+                'Fixture references should be lowercase. Case insensitive is not guaranteed to work with references and'
+                .' is deprecated since 2.2.0. Will be removed in 3.0',
                 E_USER_DEPRECATED
             );
         }

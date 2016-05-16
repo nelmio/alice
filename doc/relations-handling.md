@@ -18,9 +18,10 @@ Nelmio\Entity\Group:
         owner: '@user1'
 ```
 
-**Warning:** References (e.g. here `group1`) should always be lowercase and not containing any of the following special
-characters: `{`, `}`, `-`, `>`, `'`. They all are reserved characters, they may be used but will have a special meaning
- (for [ranged fixtures](complete-reference.md#fixture-ranges) for example).
+**Warning:** References (e.g. here `group1`) should always be lowercase and only be composed
+of letters, digits, periods (`.`), underscores (`_`) and slashes (`/`). Other characters such
+as `{`, `}`, `(`, `)` are still allowed but hold a special meaning (e.g. for
+[ranged fixtures](complete-reference.md#fixture-ranges)).
 
 Alice also allows you to directly reference objects' properties using the ```@name->property``` notation.
 
