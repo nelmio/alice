@@ -24,6 +24,7 @@ matrix:
     - php: '7.0'
       env: SYMFONY_VERSION='3.0.*'
   allow_failures:
+    - php: hhvm
     - php: nightly
 
 install:
