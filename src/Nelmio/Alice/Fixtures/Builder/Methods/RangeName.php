@@ -25,8 +25,8 @@ class RangeName implements MethodInterface
         if (1 === preg_match('/\{([0-9]+)(\.{3,})([0-9]+)\}/i', $name, $this->matches)) {
             @trigger_error(
                 'Ranged name should follow the pattern "name{X..Y}". Using "name{X...Y} or with more dots instead is '
-                .'now deprecated and will be removed in 3.0. Please mind the change of behavior: "user{0..10}" is '
-                .'creating 11 users whereas "user{0...10}" is creating 10',
+                .'deprecated since 2.2.0 and will be removed in 3.0. Please mind the change of behavior: "user{0..10}"'
+                .'is creating 11 users whereas "user{0...10}" is creating 10',
                 E_USER_DEPRECATED
             );
 
