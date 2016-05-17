@@ -77,6 +77,9 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @group legacy
+     */
     public function testCanParseAContextToParsedFiles()
     {
         $parser = new PhpParser(['value' => 'test']);
