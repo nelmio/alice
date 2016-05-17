@@ -39,8 +39,40 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
         $names = [];
         foreach($objects as $object) {
+            $this->assertNotNull($object->fullname, 'fullname should not be null');
             $this->assertFalse(in_array($object->username, $names), sprintf('duplicate value %s', $object->username));
             $names[] = $object->username;
+        }
+    }
+    public function testLoadUniqueFromMoreThanOneTemplateFixtures()
+    {
+        $objectManagerMock = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $objectManagerMock->expects($this->any())
+            ->method('getMetadataFactory')
+            ->will($this->returnValue($metadataFactory));
+
+        $metadataFactory->expects($this->any())
+            ->method('getAllMetadata')
+            ->will($this->returnValue([$metadata, $metadata, $metadata]));
+
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/unique_with_more_templates.yml', $objectManagerMock, ['providers' => [$this]]);
+
+        $this->assertCount(26, $objects);
+
+        $usernames = [];
+        $fullnames = [];
+
+        foreach($objects as $object) {
+
+            $this->assertContains($object->email, ['A','B','C','D','E','F']);
+            $this->assertFalse(in_array($object->username, $usernames), sprintf('duplicate username value %s', $object->username));
+            $this->assertFalse(in_array($object->fullname, $fullnames), sprintf('duplicate fullname value %s', $object->fullname));
+
+            $usernames[] = $object->username;
+            $fullnames[] = $object->fullname;
         }
     }
 
