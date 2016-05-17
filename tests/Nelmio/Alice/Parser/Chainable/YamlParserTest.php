@@ -134,7 +134,7 @@ EOF;
 
         $this->assertSame(
             [
-                'Nelmio\Alice\support\models\User' => [
+                'Nelmio\Alice\Model\User' => [
                     'user0' => [
                         'fullname' => 'John Doe',
                     ],

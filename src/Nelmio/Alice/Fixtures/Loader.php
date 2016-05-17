@@ -17,9 +17,15 @@ use Nelmio\Alice\Instances\Populator;
 use Nelmio\Alice\Instances\Processor;
 use Nelmio\Alice\Instances\Processor\Methods\Faker;
 use Nelmio\Alice\Instances\Processor\Providers\IdentityProvider;
+use Nelmio\Alice\Parser\Chainable\PhpParser;
+use Nelmio\Alice\Parser\Chainable\YamlParser;
+use Nelmio\Alice\Parser\ParserRegistry;
+use Nelmio\Alice\Parser\RuntimeCacheParser;
+use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\PersisterInterface;
 use Nelmio\Alice\Util\TypeHintChecker;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
  * Loads fixtures from an array or file
@@ -103,9 +109,7 @@ class Loader
             $this->getBuiltInProcessors($allProviders, $locale)
         );
 
-        $this->parser = new Parser\Parser(
-            $this->getBuiltInParsers()
-        );
+        $this->parser = $this->getBuiltInParser();
 
         $this->builder = new Builder\Builder(
             $this->getBuiltInBuilders()
@@ -206,16 +210,6 @@ class Loader
     public function addProcessor(Processor\Methods\MethodInterface $processor)
     {
         $this->processor->addProcessor($processor);
-    }
-
-    /**
-     * adds a parser for fixture parsing extensions
-     *
-     * @param Parser\Methods\MethodInterface $parser
-     **/
-    public function addParser(Parser\Methods\MethodInterface $parser)
-    {
-        $this->parser->addParser($parser);
     }
 
     /**
@@ -400,17 +394,14 @@ class Loader
         ];
     }
 
-    /**
-     * returns a list of all the default parser methods
-     *
-     * @return array
-     */
-    private function getBuiltInParsers()
+    private function getBuiltInParser(): ParserInterface
     {
-        return [
-            new Parser\Methods\Php($this),
-            new Parser\Methods\Yaml($this),
-        ];
+        $parserRegistry = new ParserRegistry([
+            new YamlParser(new SymfonyYamlParser()),
+            new PhpParser(),
+        ]);
+
+        return new RuntimeCacheParser($parserRegistry);
     }
 
     /**
