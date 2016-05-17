@@ -36,4 +36,4 @@ install:
     fi;
   - composer install --prefer-dist $COMPOSER_FLAGS
 
-script: vendor/bin/phpunit --testdox --verbose
+script: phpdbg -qrr vendor/bin/phpunit --testdox --verbose
