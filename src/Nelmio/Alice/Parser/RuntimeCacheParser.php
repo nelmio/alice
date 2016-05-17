@@ -41,21 +41,13 @@ final class RuntimeCacheParser implements ParserInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @throws InvalidArgumentException
      */
     public function parse(string $file): array
     {
-        $data = $this->parseFile($file);
-        
-        if (isset($data['include'])) {
-            return $this->processInclude($file, $data);
-        }
-        
-        return $data;
-    }
-    
-    private function parseFile(string $file): array
-    {
+        $cacheResult = true;
         $realPath = realpath($file);
 
         // If realpath() returns false, $realPath is safely casted into an integer (i.e. an array key)
@@ -67,15 +59,30 @@ final class RuntimeCacheParser implements ParserInterface
         // This doesn't mean the file is impossible to parse, hence it is passed to the decorated
         // parser without caching the result.
         if (false === $realPath) {
-            return $this->parser->parse($file);
+            $cacheResult = false;
+            $realPath = $file;
         }
 
         $data = $this->parser->parse($realPath);
-        $this->cache[$realPath] = $data;
+        if (array_key_exists('include', $data)) {
+            $data = $this->processInclude($file, $data);
+        }
+
+        if ($cacheResult) {
+            $this->cache[$realPath] = $data;
+        }
 
         return $data;
     }
-    
+
+    /**
+     * @param string $file File loaded
+     * @param array  $data Parse result of the loaded file
+     *
+     * @throws InvalidArgumentException
+     * 
+     * @return array
+     */
     private function processInclude(string $file, array $data): array
     {
         $include = $data['include'];
@@ -101,7 +108,7 @@ final class RuntimeCacheParser implements ParserInterface
                 throw new InvalidArgumentException(
                     sprintf(
                         'Expected elements of include statement to be file names. Got %s instead in file "%s".',
-                        gettype($include),
+                        gettype($includeFile),
                         $file
                     )
                 );
@@ -127,6 +134,8 @@ final class RuntimeCacheParser implements ParserInterface
     }
 
     /**
+     * Resolves the path of the file to include.
+     * 
      * @param string $file
      * @param string $includeFile Non empty string
      *

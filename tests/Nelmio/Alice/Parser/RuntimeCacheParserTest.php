@@ -171,6 +171,105 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         $decoratedParserProphecy->parse('file3.yml')->shouldHaveBeenCalledTimes(1);
     }
 
+    public function testIncludeStatementCanBeNull()
+    {
+        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $parsedMainFileContent = [
+            'include' => null,
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+        $expected = [
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy->parse($mainFile)->willReturn($parsedMainFileContent);
+        /* @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $parser = new RuntimeCacheParser($decoratedParser);
+        $actual = $parser->parse($mainFile);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessageRegExp  /^Expected include statement to be either null or an array of files to include\. Got string instead in file ".+\/main\.yml"\.$/
+     */
+    public function testIfNotNullIncludeStatementMustBeAnArray()
+    {
+        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $parsedMainFileContent = [
+            'include' => 'stringValue',
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy->parse($mainFile)->willReturn($parsedMainFileContent);
+        /* @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $parser = new RuntimeCacheParser($decoratedParser);
+        $parser->parse($mainFile);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessageRegExp  /^Expected elements of include statement to be file names\. Got boolean instead in file ".+\/main\.yml"\.$/
+     */
+    public function testIncludedFilesMustBeStrings()
+    {
+        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $parsedMainFileContent = [
+            'include' => [
+                false,
+            ],
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy->parse($mainFile)->willReturn($parsedMainFileContent);
+        /* @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $parser = new RuntimeCacheParser($decoratedParser);
+        $parser->parse($mainFile);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessageRegExp  /^Expected elements of include statement to be file names\. Got empty string instead in file ".+\/main\.yml"\.$/
+     */
+    public function testIncludedFilesMustBeNonEmptyStrings()
+    {
+        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $parsedMainFileContent = [
+            'include' => [
+                '',
+            ],
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy->parse($mainFile)->willReturn($parsedMainFileContent);
+        /* @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $parser = new RuntimeCacheParser($decoratedParser);
+        $parser->parse($mainFile);
+    }
+
     public function provideParsableFile()
     {
         return [
