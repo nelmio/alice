@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Parser;
 
 /**
- * @covers Nelmio\Alice\Parser\DataMerger
+ * @covers Nelmio\Alice\Parser\IncludeDataMerger
  */
 class IncludeDataMergerTest extends \PHPUnit_Framework_TestCase
 {
