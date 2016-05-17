@@ -1,5 +1,7 @@
 ### 3.0.0 (WIP)
 
+  * Added new parser system (#361)
+
 ### 2.x (WIP)
 
   * Added support for snake_case properties (#323)

@@ -60,7 +60,7 @@ final class ParserRegistry implements ParserInterface
 
         throw new RuntimeException(
             sprintf(
-                'No parser supporting the file "%s" found',
+                'No suitable parser found for the file "%s".',
                 $file
             )
         );

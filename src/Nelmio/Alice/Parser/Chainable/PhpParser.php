@@ -26,7 +26,7 @@ final class PhpParser implements ChainableParserInterface
     public function parse(string $file): array
     {
         if (false === file_exists($file)) {
-            throw new InvalidArgumentException(sprintf('File "%s" could not be found.', $file));
+            throw new InvalidArgumentException(sprintf('The file "%s" could not be found.', $file));
         }
 
         $data = include($file);
@@ -47,6 +47,6 @@ final class PhpParser implements ChainableParserInterface
             return false;
         }
 
-        return 1 === preg_match('/.{1,}\.php[3457]?$/i', $file);
+        return 1 === preg_match('/.+\.php[7]?$/i', $file);
     }
 }

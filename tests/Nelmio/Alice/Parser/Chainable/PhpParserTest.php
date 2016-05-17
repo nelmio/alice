@@ -11,18 +11,17 @@
 
 namespace Nelmio\Alice\Parser\Chainable;
 
-use Nelmio\Alice\Exception\Parser\InvalidArgumentException;
-use Nelmio\Alice\Exception\Parser\ParseException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
+use Nelmio\Alice\Parser\FileListProviderTrait;
 use Prophecy\Argument;
-use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
-use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
  * @covers Nelmio\Alice\Parser\Chainable\PhpParser
  */
 class PhpParserTest extends \PHPUnit_Framework_TestCase
 {
+    use FileListProviderTrait;
+    
     private static $dir;
 
     /**
@@ -49,31 +48,52 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
         $this->parser = new PhpParser();
     }
 
-    public function test_is_a_chainable_parser()
+    public function testIsAChainableParser()
     {
         $this->assertTrue(is_a(PhpParser::class, ChainableParserInterface::class, true));
     }
 
     /**
-     * @dataProvider provideFiles
+     * @dataProvider providePhpList
      */
-    public function test_can_parse_yaml_files(string $file, bool $expected)
+    public function testCanParsePhpFiles(string $file, array $expectedParsers)
     {
         $actual = $this->parser->canParse($file);
-
+        $expected = (in_array(get_class($this->parser), $expectedParsers));
+        
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_throw_exception_if_file_does_not_exist()
+    /**
+     * @dataProvider provideYamlList
+     */
+    public function testCannotParseYamlFiles(string $file)
     {
-        $this->setExpectedException(
-            InvalidArgumentException::class,
-            'File "/nowhere.php" could not be found.'
-        );
+        $actual = $this->parser->canParse($file);
+
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * @dataProvider provideUnsupportedList
+     */
+    public function testCannotParseUnsupportedFiles(string $file)
+    {
+        $actual = $this->parser->canParse($file);
+
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessage The file "/nowhere.php" could not be found.
+     */
+    public function testThrowExceptionIfFileDoesNotExist()
+    {
         $this->parser->parse('/nowhere.php');
     }
 
-    public function test_parse_regular_file()
+    public function testParseRegularFile()
     {
         $actual = $this->parser->parse(self::$dir.'/basic.php');
 
@@ -89,53 +109,28 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_parse_empty_file()
+    public function testParseEmptyFile()
     {
         $actual = $this->parser->parse(self::$dir.'/empty.php');
 
         $this->assertSame([], $actual);
     }
 
-    public function test_throw_exception_if_no_array_returned_in_parsed_file()
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessageRegExp /^The file ".+\/no_return\.php" must return a PHP array\.$/
+     */
+    public function testThrowExceptionIfNoArrayReturnedInParsedFile()
     {
-        $file = self::$dir.'/no_return.php';
-        $this->setExpectedException(
-            InvalidArgumentException::class,
-            sprintf('The file "%s" must return a PHP array.', $file)
-        );
-
-        $this->parser->parse($file);
+        $this->parser->parse(self::$dir.'/no_return.php');
     }
 
-    public function test_throw_exception_if_wrong_value_returned_in_parsed_file()
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessageRegExp /^The file ".+\/wrong_return\.php" must return a PHP array\.$/
+     */
+    public function testThrowExceptionIfWrongValueReturnedInParsedFile()
     {
-        $file = self::$dir.'/wrong_return.php';
-        $this->setExpectedException(
-            InvalidArgumentException::class,
-            sprintf('The file "%s" must return a PHP array.', $file)
-        );
-
-        $this->parser->parse($file);
-    }
-
-    public function provideFiles()
-    {
-        return [
-            ['dummy.php', true],
-            ['dummy.yml.php', true],
-
-            ['https://example.com/dummy.yml', false],
-
-            ['dummy', false],
-            ['dummy/', false],
-            ['dummy.yml', false],
-            ['dummy.yaml', false],
-            ['dummy.YML', false],
-            ['dummy.YAML', false],
-            ['dummy.php.yml', false],
-            ['dummy.xml', false],
-            ['dummy.csv', false],
-
-        ];
+        $this->parser->parse(self::$dir.'/wrong_return.php');
     }
 }

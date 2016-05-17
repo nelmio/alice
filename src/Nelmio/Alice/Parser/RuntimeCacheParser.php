@@ -11,26 +11,33 @@
 
 namespace Nelmio\Alice\Parser;
 
+use Nelmio\Alice\Exception\Parser\InvalidArgumentException;
 use Nelmio\Alice\ParserInterface;
 
 /**
- * Decorates a parser to cache the result.
+ * Decorates a parser to cache the result and process includes.
  */
 final class RuntimeCacheParser implements ParserInterface
 {
-    /**
-     * @var ParserInterface[]
-     */
-    private $parser;
-
     /**
      * @var array[] Keys are real path of cached files and the values the resulting array
      */
     private $cache = [];
 
+    /**
+     * @var IncludeDataMerger
+     */
+    private $includeMerger;
+
+    /**
+     * @var ParserInterface[]
+     */
+    private $parser;
+
     public function __construct(ParserInterface $parser)
     {
         $this->parser = $parser;
+        $this->includeMerger = new IncludeDataMerger();
     }
 
     /**
@@ -38,9 +45,20 @@ final class RuntimeCacheParser implements ParserInterface
      */
     public function parse(string $file): array
     {
+        $data = $this->parseFile($file);
+        
+        if (isset($data['include'])) {
+            return $this->processInclude($file, $data);
+        }
+        
+        return $data;
+    }
+    
+    private function parseFile(string $file): array
+    {
         $realPath = realpath($file);
 
-        // If realpath() returns false, $realPath is safely casted into an integer
+        // If realpath() returns false, $realPath is safely casted into an integer (i.e. an array key)
         if (isset($this->cache[$realPath])) {
             return $this->cache[$realPath];
         }
@@ -56,5 +74,70 @@ final class RuntimeCacheParser implements ParserInterface
         $this->cache[$realPath] = $data;
 
         return $data;
+    }
+    
+    private function processInclude(string $file, array $data): array
+    {
+        $include = $data['include'];
+        unset($data['include']);
+        
+        if (null === $include) {
+            return $data;
+        }
+
+        if (false === is_array($include)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Expected include statement to be either null or an array of files to include. Got %s instead in '
+                    .'file "%s".',
+                    gettype($include),
+                    $file
+                )
+            );
+        }
+
+        foreach ($include as $includeFile) {
+            if (false === is_string($includeFile)) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Expected elements of include statement to be file names. Got %s instead in file "%s".',
+                        gettype($include),
+                        $file
+                    )
+                );
+            }
+
+            if (0 === strlen($includeFile)) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Expected elements of include statement to be file names. Got empty string instead in file '
+                        .'"%s".',
+                        $file
+                    )
+                );
+            }
+
+            $includeFilePath = $this->getIncludeFilePath($file, $includeFile);
+            $includeData = $this->parse($includeFilePath);
+            
+            $data = $this->includeMerger->mergeInclude($data, $includeData);
+        }
+        
+        return $data;
+    }
+
+    /**
+     * @param string $file
+     * @param string $includeFile Non empty string
+     *
+     * @return string
+     */
+    private function getIncludeFilePath(string $file, string $includeFile): string
+    {
+        if ('/' === $includeFile[0]) {
+            return $includeFile;
+        }
+
+        return dirname($file).DIRECTORY_SEPARATOR.$includeFile;
     }
 }

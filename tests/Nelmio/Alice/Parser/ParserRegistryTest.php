@@ -19,12 +19,12 @@ use Prophecy\Argument;
  */
 class ParserRegistryTest extends \PHPUnit_Framework_TestCase
 {
-    public function test_is_a_parser()
+    public function testIsAParser()
     {
         $this->assertTrue(is_a(ParserRegistry::class, ParserInterface::class, true));
     }
 
-    public function test_accept_chainable_parsers()
+    public function testAcceptChainableParsers()
     {
         $parserProphecy = $this->prophesize(ChainableParserInterface::class);
         $parserProphecy->canParse(Argument::any())->shouldNotBeCalled();
@@ -34,20 +34,17 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
         new ParserRegistry([$parser]);
     }
 
-    public function test_throw_exception_if_invalid_parser_is_passed()
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Expected parsers to be "Nelmio\Alice\Parser\ChainableParserInterface" objects. Parser
+     *                           "stdClass" is not.
+     */
+    public function testThrowExceptionIfInvalidParserIsPassed()
     {
-        try {
-            new ParserRegistry([new \stdClass()]);
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
-                'Expected parsers to be "Nelmio\Alice\Parser\ChainableParserInterface" objects. Parser "stdClass"'
-                .' is not.',
-                $exception->getMessage()
-            );
-        }
+        new ParserRegistry([new \stdClass()]);
     }
 
-    public function test_iterate_over_every_parsers_and_use_the_first_valid_one()
+    public function testIterateOverEveryParsersAndUseTheFirstValidOne()
     {
         $file = 'dummy.php';
         $expected = [new \stdClass()];
@@ -80,5 +77,15 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
         $parser1Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $parser2Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $parser2Prophecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\RuntimeException
+     * @expectedExceptionMessage No suitable parser found for the file "dummy.php".
+     */
+    public function testThrowExceptionIfNoSuitableParserIsFound()
+    {
+        $registry = new ParserRegistry([]);
+        $registry->parse('dummy.php');
     }
 }

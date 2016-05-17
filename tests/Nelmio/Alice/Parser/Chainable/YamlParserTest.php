@@ -11,9 +11,8 @@
 
 namespace Nelmio\Alice\Parser\Chainable;
 
-use Nelmio\Alice\Exception\Parser\InvalidArgumentException;
-use Nelmio\Alice\Exception\Parser\ParseException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
+use Nelmio\Alice\Parser\FileListProviderTrait;
 use Prophecy\Argument;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
@@ -23,6 +22,8 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  */
 class YamlParserTest extends \PHPUnit_Framework_TestCase
 {
+    use FileListProviderTrait;
+
     private static $dir;
 
     /**
@@ -54,35 +55,56 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
         $this->parser = new YamlParser($symfonyYamlParser);
     }
 
-    public function test_is_a_chainable_parser()
+    public function testIsAChainableParser()
     {
         $this->assertTrue(is_a(YamlParser::class, ChainableParserInterface::class, true));
     }
 
     /**
-     * @dataProvider provideFiles
+     * @dataProvider providePhpList
      */
-    public function test_can_parse_yaml_files(string $file, bool $expected)
+    public function testCannotParsePhpFiles(string $file)
     {
         $actual = $this->parser->canParse($file);
+
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * @dataProvider provideYamlList
+     */
+    public function testCanParseYamlFiles(string $file, array $expectedParsers)
+    {
+        $actual = $this->parser->canParse($file);
+        $expected = (in_array(get_class($this->parser), $expectedParsers));
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_throw_exception_if_file_does_not_exist()
+    /**
+     * @dataProvider provideUnsupportedList
+     */
+    public function testCannotParseUnsupportedFiles(string $file)
     {
-        $this->setExpectedException(
-            InvalidArgumentException::class,
-            'File "/nowhere.yml" could not be found.'
-        );
+        $actual = $this->parser->canParse($file);
+
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessage File "/nowhere.yml" could not be found.
+     */
+    public function testThrowExceptionIfFileDoesNotExist()
+    {
         $this->parser->parse('/nowhere.yml');
     }
 
-    public function test_use_symfony_parser_to_parse_file()
+    public function testUseSymfonyParserToParseFile()
     {
         $file = self::$dir.'/basic.yml';
         $fileContent = <<<'EOF'
-Nelmio\Alice\support\models\User:
+Nelmio\Alice\Model\User:
     user0:
         fullname: John Doe
 
@@ -103,7 +125,7 @@ EOF;
         $symfonyYamlParserProphecy->parse(Argument::any())->shouldBeCalledTimes(1);
     }
 
-    public function test_parse_regular_file()
+    public function testParseRegularFile()
     {
         $symfonyParser = new SymfonyYamlParser();
 
@@ -122,7 +144,7 @@ EOF;
         );
     }
 
-    public function test_parse_empty_file()
+    public function testParseEmptyFile()
     {
         $symfonyParser = new SymfonyYamlParser();
 
@@ -132,14 +154,13 @@ EOF;
         $this->assertSame([], $actual);
     }
 
-    public function test_throw_exception_if_file_not_parsable()
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\ParseException
+     * @expectedExceptionMessageRegExp /^The file ".+\/basic\.yml" does not contain valid YAML\.$/
+     */
+    public function testThrowExceptionIfFileNotParsable()
     {
         $file = self::$dir.'/basic.yml';
-        $this->setExpectedException(
-            ParseException::class,
-            'The file "/Users/Theo/Sites/GitHub/Alice/alice/tests/Nelmio/Alice/Parser/Chainable/../File/Yaml/basic.yml"'
-            .' does not contain valid YAML.'
-        );
 
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
         $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(SymfonyParseException::class);
@@ -150,13 +171,13 @@ EOF;
         $parser->parse($file);
     }
 
-    public function test_throw_exception_on_unexpected_parse_error()
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\ParseException
+     * @expectedExceptionMessageRegExp /^Could not parse the file ".+\/basic\.yml"\.$/
+     */
+    public function testThrowExceptionOnUnexpectedParseError()
     {
         $file = self::$dir.'/basic.yml';
-        $this->setExpectedException(
-            ParseException::class,
-            'Could not parse the file "/Users/Theo/Sites/GitHub/Alice/alice/tests/Nelmio/Alice/Parser/Chainable/../File/Yaml/basic.yml".'
-        );
 
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
         $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(\Error::class);
@@ -165,25 +186,5 @@ EOF;
 
         $parser = new YamlParser($symfonyYamlParser);
         $parser->parse($file);
-    }
-
-    public function provideFiles()
-    {
-        return [
-            ['dummy.yml', true],
-            ['dummy.yaml', true],
-            ['dummy.YML', true],
-            ['dummy.YAML', true],
-            ['dummy.php.yml', true],
-
-            ['https://example.com/dummy.yml', false],
-
-            ['dummy', false],
-            ['dummy/', false],
-            ['dummy.php', false],
-            ['dummy.xml', false],
-            ['dummy.csv', false],
-            ['dummy.yml.php', false],
-        ];
     }
 }

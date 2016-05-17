@@ -16,7 +16,7 @@ use Nelmio\Alice\Throwable\ParseThrowable;
 interface ParserInterface
 {
     /**
-     * Parses the given file and returns an array of data
+     * Parses the given file and returns an array of data.
      *
      * @param string $file File path
      *
