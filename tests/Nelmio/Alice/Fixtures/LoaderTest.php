@@ -1007,10 +1007,10 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $res);
         $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
-        $this->assertSame($this->loader->getReference('user')->email, 'favorite@email.com');
-        $this->assertSame($this->loader->getReference('user')->favoriteNumber, 2);
-        $this->assertSame($this->loader->getReference('user')->fullname, 'myfullname');
-        $this->assertSame($this->loader->getReference('user')->friends, 'myfriends');
+        $this->assertSame('favorite@email.com', $this->loader->getReference('user')->email);
+        $this->assertSame(2, $this->loader->getReference('user')->favoriteNumber);
+        $this->assertSame('myfullname', $this->loader->getReference('user')->fullname);
+        $this->assertSame('myfriends', $this->loader->getReference('user')->friends);
     }
 
     public function testMultipleInheritanceInInstance()
