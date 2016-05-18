@@ -44,6 +44,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             $names[] = $object->username;
         }
     }
+
     public function testLoadUniqueFromMoreThanOneTemplateFixtures()
     {
         $objectManagerMock = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
@@ -58,7 +59,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
             ->method('getAllMetadata')
             ->will($this->returnValue([$metadata, $metadata, $metadata]));
 
-        $objects = Fixtures::load(__DIR__.'/support/fixtures/unique_with_more_templates.yml', $objectManagerMock, ['providers' => [$this]]);
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/unique_with_more_templates.yml', $objectManagerMock, ['providers' => [$this], 'seed' => 2]);
 
         $this->assertCount(26, $objects);
 
