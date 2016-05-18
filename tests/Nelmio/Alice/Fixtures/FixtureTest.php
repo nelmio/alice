@@ -109,7 +109,7 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
     {
         $fixture = new Fixture(self::USER, 'user (extends user_name, extends user_email)', [], null);
 
-        $this->assertEquals(['user_name', 'user_email'], $fixture->getExtensions());
+        $this->assertEquals(['user_email', 'user_name'], $fixture->getExtensions());
     }
 
     public function testHasExtensionsIsFalseWhenNoExtensionsExist()
