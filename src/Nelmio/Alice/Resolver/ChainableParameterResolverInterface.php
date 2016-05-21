@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Resolver;
 
 use Nelmio\Alice\Parameter;
 
-interface ChainableParameterValueResolverInterface extends ParameterValueResolverInterface
+interface ChainableParameterResolverInterface extends ParameterResolverInterface
 {
     public function canResolve(Parameter $parameter): bool;
 }

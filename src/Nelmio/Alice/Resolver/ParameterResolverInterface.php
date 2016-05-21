@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Resolver;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 
-interface ParameterValueResolverInterface
+interface ParameterResolverInterface
 {
     /**
      * Resolves a parameter value.

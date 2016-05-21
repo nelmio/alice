@@ -13,9 +13,9 @@ namespace Nelmio\Alice\Resolver\Parameter;
 
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\ChainableParameterValueResolverInterface;
+use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
 
-final class SimpleParameterResolver implements ChainableParameterValueResolverInterface
+final class SimpleParameterResolver implements ChainableParameterResolverInterface
 {
     /**
      * @inheritdoc

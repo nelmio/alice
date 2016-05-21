@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Resolver;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Resolver\Parameter\ArrayParameterResolver;
 use Nelmio\Alice\Resolver\Parameter\ParameterResolverDecorator;
-use Nelmio\Alice\Resolver\Parameter\ParameterValueResolverRegistry;
+use Nelmio\Alice\Resolver\Parameter\ParameterResolverRegistry;
 use Nelmio\Alice\Resolver\Parameter\RecursiveParameterResolver;
 use Nelmio\Alice\Resolver\Parameter\SimpleParameterResolver;
 use Nelmio\Alice\Resolver\Parameter\StringParameterResolver;
@@ -32,7 +32,7 @@ class ParameterResolverFunctionalTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $registry = new ParameterValueResolverRegistry([
+        $registry = new ParameterResolverRegistry([
             new SimpleParameterResolver(),
             new ArrayParameterResolver(),
             new RecursiveParameterResolver(new StringParameterResolver()),

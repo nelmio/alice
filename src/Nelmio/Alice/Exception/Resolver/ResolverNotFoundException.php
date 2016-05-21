@@ -11,22 +11,9 @@
 
 namespace Nelmio\Alice\Exception\Resolver;
 
+use Nelmio\Alice\Exception\ParameterNotFoundException as RootParameterNotFoundException;
 use Nelmio\Alice\Throwable\ResolveThrowable;
 
-class ResolverNotFoundException extends \RuntimeException implements ResolveThrowable
+class ResolverNotFoundException extends RootParameterNotFoundException implements ResolveThrowable
 {
-    /**
-     * @param string $key Paramater key
-     *
-     * @return self
-     */
-    public static function create(string $key)
-    {
-        return new static(
-            sprintf(
-                'Not suitable resolver found for the parameter "%s".',
-                $key
-            )
-        );
-    }
 }

@@ -11,7 +11,12 @@
 
 namespace Nelmio\Alice\Resolver;
 
-interface ParameterValueResolverAwareInterface
+interface ParameterResolverAwareInterface
 {
-    public function setResolver(ParameterValueResolverInterface $resolver);
+    /**
+     * @param ParameterResolverInterface $resolver
+     *
+     * @return self
+     */
+    public function withResolver(ParameterResolverInterface $resolver);
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -11,29 +11,28 @@
 
 namespace Nelmio\Alice\Resolver\Parameter;
 
-use Nelmio\Alice\Exception\ParameterNotFoundException;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\ChainableParameterValueResolverInterface;
-use Nelmio\Alice\Resolver\ParameterValueResolverAwareInterface;
-use Nelmio\Alice\Resolver\ParameterValueResolverInterface;
+use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
+use Nelmio\Alice\Resolver\ParameterResolverAwareInterface;
+use Nelmio\Alice\Resolver\ParameterResolverInterface;
 
-final class RecursiveParameterResolver implements ChainableParameterValueResolverInterface, ParameterValueResolverAwareInterface
+final class RecursiveParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
     /**
-     * @var ChainableParameterValueResolverInterface
+     * @var ChainableParameterResolverInterface
      */
     private $resolver;
 
-    public function __construct(ChainableParameterValueResolverInterface $decoratedResolver)
+    public function __construct(ChainableParameterResolverInterface $decoratedResolver)
     {
         $this->resolver = $decoratedResolver;
     }
 
-    public function setResolver(ParameterValueResolverInterface $resolver)
+    public function withResolver(ParameterResolverInterface $resolver)
     {
-        if ($this->resolver instanceof ParameterValueResolverAwareInterface) {
-            $this->resolver->setResolver($resolver);
+        if ($this->resolver instanceof ParameterResolverAwareInterface) {
+            $this->resolver->withResolver($resolver);
         }
     }
 

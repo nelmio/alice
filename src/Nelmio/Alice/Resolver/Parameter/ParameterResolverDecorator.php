@@ -14,16 +14,16 @@ namespace Nelmio\Alice\Resolver\Parameter;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\ParameterBagResolverInterface;
-use Nelmio\Alice\Resolver\ParameterValueResolverInterface;
+use Nelmio\Alice\Resolver\ParameterResolverInterface;
 
 final class ParameterResolverDecorator implements ParameterBagResolverInterface
 {
     /**
-     * @var ParameterValueResolverInterface
+     * @var ParameterResolverInterface
      */
     private $resolver;
 
-    public function __construct(ParameterValueResolverInterface $decoratedResolver)
+    public function __construct(ParameterResolverInterface $decoratedResolver)
     {
         $this->resolver = $decoratedResolver;
     }

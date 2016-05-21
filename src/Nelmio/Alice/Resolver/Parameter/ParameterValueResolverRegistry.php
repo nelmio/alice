@@ -14,35 +14,35 @@ namespace Nelmio\Alice\Resolver\Parameter;
 use Nelmio\Alice\Exception\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\ParameterValueResolverAwareInterface;
-use Nelmio\Alice\Resolver\ParameterValueResolverInterface;
+use Nelmio\Alice\Resolver\ParameterResolverAwareInterface;
+use Nelmio\Alice\Resolver\ParameterResolverInterface;
 
-final class ParameterValueResolverRegistry implements ParameterValueResolverInterface
+final class ParameterResolverRegistry implements ParameterResolverInterface
 {
     /**
-     * @var ParameterValueResolverInterface[]
+     * @var ParameterResolverInterface[]
      */
     private $resolvers;
 
     /**
-     * @param ParameterValueResolverInterface[] $resolvers
+     * @param ParameterResolverInterface[] $resolvers
      *
      * @throws \InvalidArgumentException
      */
     public function __construct(array $resolvers)
     {
         foreach ($resolvers as $resolver) {
-            if ($resolver instanceof ParameterValueResolverAwareInterface) {
-                $resolver->setResolver($this);
+            if ($resolver instanceof ParameterResolverAwareInterface) {
+                $resolver->withResolver($this);
                 
                 continue;
             }
             
-            if (false === $resolver instanceof ParameterValueResolverInterface) {
+            if (false === $resolver instanceof ParameterResolverInterface) {
                 throw new \InvalidArgumentException(
                     sprintf(
                         'Expected resolvers to be "%s" objects. Resolver "%s" is not.',
-                        ParameterValueResolverInterface::class,
+                        ParameterResolverInterface::class,
                         is_object($resolver)? get_class($resolver) : $resolver
                     )
                 );

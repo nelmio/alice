@@ -54,6 +54,10 @@ final class Parameter
      */
     public function getValue()
     {
+        if (is_object($this->value)) {
+            return clone $this->value;
+        }
+        
         return $this->value;
     }
 }

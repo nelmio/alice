@@ -14,23 +14,26 @@ namespace Nelmio\Alice\Resolver\Parameter;
 use Nelmio\Alice\Exception\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\ChainableParameterValueResolverInterface;
-use Nelmio\Alice\Resolver\ParameterValueResolverAwareInterface;
-use Nelmio\Alice\Resolver\ParameterValueResolverInterface;
+use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
+use Nelmio\Alice\Resolver\ParameterResolverAwareInterface;
+use Nelmio\Alice\Resolver\ParameterResolverInterface;
 
-final class ArrayParameterResolver implements ChainableParameterValueResolverInterface, ParameterValueResolverAwareInterface
+final class ArrayParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
     /**
-     * @var ParameterValueResolverInterface|null
+     * @var ParameterResolverInterface|null
      */
     private $resolver;
 
     /**
      * @inheritdoc
      */
-    public function setResolver(ParameterValueResolverInterface $resolver)
+    public function withResolver(ParameterResolverInterface $resolver): self
     {
-        $this->resolver = $resolver;
+        $clone = clone $this;
+        $clone->resolver = $resolver;
+
+        return $clone;
     }
 
     /**
@@ -58,9 +61,10 @@ final class ArrayParameterResolver implements ChainableParameterValueResolverInt
         if (null === $this->resolver) {
             throw new ResolverNotFoundException(
                 sprintf(
-                    'Resolver "%s" must have a resolver set before having the method "%s" called.',
+                    'Resolver "%s" must have a resolver set before having the method "%s::%s()" called.',
                     __CLASS__,
-                    __METHOD__
+                    (new \ReflectionObject($this))->getShortName(),
+                    __FUNCTION__
                 )
             );
         }

@@ -14,21 +14,21 @@ namespace Nelmio\Alice\Resolver\Parameter;
 use Nelmio\Alice\Exception\Resolver\ParameterNotFoundException;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\ChainableParameterValueResolverInterface;
-use Nelmio\Alice\Resolver\ParameterValueResolverAwareInterface;
-use Nelmio\Alice\Resolver\ParameterValueResolverInterface;
+use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
+use Nelmio\Alice\Resolver\ParameterResolverAwareInterface;
+use Nelmio\Alice\Resolver\ParameterResolverInterface;
 
-final class StringParameterResolver implements ChainableParameterValueResolverInterface, ParameterValueResolverAwareInterface
+final class StringParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
     const PATTERN = '/<{(?<parameter>[^<{]+?)}>/';
     const SINGLE_PARAMETER_PATTERN = '/^<{(?<parameter>(?(?=\{)^[\>]|.)+)}>$/';
 
     /**
-     * @var ParameterValueResolverInterface|null
+     * @var ParameterResolverInterface|null
      */
     private $resolver;
 
-    public function setResolver(ParameterValueResolverInterface $resolver)
+    public function withResolver(ParameterResolverInterface $resolver)
     {
         $this->resolver = $resolver;
     }
