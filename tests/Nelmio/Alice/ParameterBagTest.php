@@ -16,7 +16,7 @@ namespace Nelmio\Alice;
  */
 class ParameterBagTest extends \PHPUnit_Framework_TestCase
 {
-    public function test_create_parameters_bag()
+    public function testCreateAndConsumeParametersBag()
     {
         $parameters = [
             'foo' => 'bar',
@@ -38,36 +38,37 @@ class ParameterBagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\ParameterNotFound
-     * @expectedExceptionMessage No parameter with the key "foo" found.
+     * @expectedException \Nelmio\Alice\Exception\ParameterNotFoundException
+     * @expectedExceptionMessage Could not find the parameter "foo".
      */
-    public function test_throw_exception_when_parameter_not_found()
+    public function testThrowExceptionWhenParameterNotFound()
     {
-        $bag = new ParameterBag([]);
+        $bag = new ParameterBag();
         $bag->get('foo');
     }
 
-    public function test_bag_is_immutable()
+    public function testBagIsImmutable()
     {
         $bag = new ParameterBag(['foo' => 'bar']);
         $bagClone = clone $bag;
-        $newBag = $bag->with(['ping' => 'pong']);
+        $newBag = $bag->with(new Parameter('ping', 'pong'));
 
         $this->assertEquals($bagClone, $bag);
+        $this->assertNotEquals($newBag, $bag);
         $this->assertNotSame($newBag, $bag);
+
+        $anotherBag = $bag->without('foo');
+        $this->assertNotSame($anotherBag, $bag);
     }
 
-    public function test_adding_parameters_does_not_override_existing_ones()
+    public function testAddingParametersDoesNotOverrideExistingOnes()
     {
-        $bag = (new ParameterBag([]))
-            ->with([
+        $bag = (new ParameterBag([
                 'foo' => 'bar',
                 'ping' => 'pong',
-            ])
-            ->with([
-                'ping' => 'boo',
-                'he' => 'ho',
-            ])
+            ]))
+            ->with(new Parameter('ping', 'boo'))
+            ->with(new Parameter('he', 'ho'))
         ;
 
         $this->assertEquals('bar', $bag->get('foo'));
@@ -75,6 +76,47 @@ class ParameterBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('ho', $bag->get('he'));
 
         $this->assertBagSize(3, $bag);
+    }
+
+    public function testIsTraversable()
+    {
+        $params = [
+            'foo' => 'bar',
+            'ping' => 'pong',
+        ];
+
+        $bag = new ParameterBag($params);
+
+        $traversed = [];
+        foreach ($bag as $key => $param) {
+            $traversed[$key] = $param;
+        }
+
+        $this->assertSame($params, $traversed);
+    }
+    
+    public function testIsCountable()
+    {
+        $bag = new ParameterBag();
+        $this->assertEquals(0, count($bag));
+        
+        $bag = $bag
+            ->with(new Parameter('foo', 'bar'))
+            ->with(new Parameter('ping', 'pong'))
+        ;
+        $this->assertEquals(2, count($bag));
+    }
+
+    public function testCanRemoveElements()
+    {
+        $bag = new ParameterBag(['foo' => 'bar']);
+        $this->assertTrue($bag->has('foo'));
+
+        $bag = $bag->without('foo');
+        $this->assertFalse($bag->has('foo'));
+
+        $bag->without('foo');
+        $this->assertTrue(true);
     }
 
     private function assertBagSize(int $size, ParameterBag $bag)

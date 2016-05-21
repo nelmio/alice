@@ -12,9 +12,10 @@
 namespace Nelmio\Alice\Resolver\Parameter;
 
 use Nelmio\Alice\Exception\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\ParameterResolverInterface;
-use Nelmio\Alice\Throwable\ParseThrowable;
+use Nelmio\Alice\Resolver\ParameterValueResolverAwareInterface;
+use Nelmio\Alice\Resolver\ParameterValueResolverInterface;
 
 final class ParameterValueResolverRegistry implements ParameterValueResolverInterface
 {
@@ -54,51 +55,21 @@ final class ParameterValueResolverRegistry implements ParameterValueResolverInte
     /**
      * {@inheritdoc}
      *
-     * @param ParameterBag      $unresolvedParameters
-     * @param ParameterBag|null $injectedParameters
-     * @param array             $resolving
-     *
-     * @return ParameterBag
+     * @throws ResolverNotFoundException
      */
     public function resolve(
+        Parameter $parameter,
         ParameterBag $unresolvedParameters,
-        ParameterBag $injectedParameters = null,
-        ResolvingCounter $resolving = null
+        ParameterBag $injectedParameters,
+        ResolvingContext $context = null
     ): ParameterBag
     {
-        $resolvedParameters = $injectedParameters;
-        foreach ($unresolvedParameters as $key => $value) {
-            if ($injectedParameters->has($key)) {
-                continue;
-            }
-            
-            $resolving = ResolvingCounter::createFrom($resolving)->with($key);
-            $value = $this->resolveValue($key, $value, $injectedParameters, $resolving);
-
-            $resolvedParameters = $resolvedParameters->with($key, $value);
-        }
-
-        return $resolvedParameters;
-    }
-
-    /**
-     * @param string           $key
-     * @param mixed            $value
-     * @param ResolvingCounter $resolving
-     *
-     * @throws ResolverNotFoundException
-     * @throws ParseThrowable
-     *
-     * @return ParameterBag
-     */
-    public function resolveValue(string $key, $value, ParameterBag $injectedParameters, ResolvingCounter $resolving)
-    {
         foreach ($this->resolvers as $resolver) {
-            if ($resolver->canResolve($value)) {
-                return $resolver->resolve($value, $injectedParameters, $resolving);
+            if ($resolver->canResolve($parameter)) {
+                return $resolver->resolve($parameter, $unresolvedParameters, $injectedParameters, $context);
             }
         }
-
-        throw ResolverNotFoundException::create($key);
+        
+        throw ResolverNotFoundException::create($parameter->getKey());
     }
 }

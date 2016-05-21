@@ -13,15 +13,14 @@ namespace Nelmio\Alice\Exception\Resolver;
 
 use Nelmio\Alice\Throwable\ResolveThrowable;
 
-class CircularReferenceException extends \RuntimeException implements ResolveThrowable
+class ParameterNotFoundException extends \UnexpectedValueException implements ResolveThrowable
 {
-    public static function createForParameter(string $key, array $resolving)
+    public static function create(string $key)
     {
         return new static(
             sprintf(
-                'Circular reference detected for the parameter "%s" while resolving [%s].',
-                $key,
-                implode('", "', array_keys($resolving))
+                'Could not find the parameter "%s".',
+                $key
             )
         );
     }

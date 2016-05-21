@@ -11,9 +11,9 @@
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Exception\ParameterNotFound;
+use Nelmio\Alice\Exception\ParameterNotFoundException;
 
-final class ParameterBag implements \IteratorAggregate
+final class ParameterBag implements \IteratorAggregate, \Countable
 {
     /**
      * @var mixed[]
@@ -30,20 +30,29 @@ final class ParameterBag implements \IteratorAggregate
 
     /**
      * Returns a new instance which will include the passed parameter. If a parameter with that key already exist, it
-     * will NOT be overridden.
+     * WILL NOT be overridden.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param Parameter $parameter
      *
      * @return self
      */
-    public function with(string $key, $value): self
+    public function with(Parameter $parameter): self
     {
+        $key = $parameter->getKey();
+
         $clone = clone $this;
         if (false === $clone->has($key)) {
-            $clone->parameters[$key] = $value;
+            $clone->parameters[$key] = $parameter->getValue();
         }
 
+        return $clone;
+    }
+    
+    public function without(string $key): self
+    {
+        $clone = clone $this;
+        unset($clone->parameters[$key]);
+        
         return $clone;
     }
 
@@ -55,7 +64,7 @@ final class ParameterBag implements \IteratorAggregate
     /**
      * @param string $key
      *
-     * @throws ParameterNotFound
+     * @throws ParameterNotFoundException
      *
      * @return mixed
      */
@@ -65,7 +74,7 @@ final class ParameterBag implements \IteratorAggregate
             return $this->parameters[$key];
         }
 
-        throw ParameterNotFound::create($key);
+        throw ParameterNotFoundException::create($key);
     }
 
     /**
@@ -73,6 +82,14 @@ final class ParameterBag implements \IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this);
+        return new \ArrayIterator($this->parameters);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function count()
+    {
+        return count($this->parameters);
     }
 }
