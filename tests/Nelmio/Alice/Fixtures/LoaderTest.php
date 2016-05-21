@@ -89,7 +89,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\RuntimeException
+     * @expectedException \Nelmio\Alice\Exception\Parser\ParserNotFoundException
      */
     public function testLoadUnparsableFile()
     {

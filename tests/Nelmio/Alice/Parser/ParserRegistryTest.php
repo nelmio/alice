@@ -36,8 +36,8 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected parsers to be "Nelmio\Alice\Parser\ChainableParserInterface" objects. Parser
-     *                           "stdClass" is not.
+     * @expectedExceptionMessage Expected parsers to be "Nelmio\Alice\Parser\ChainableParserInterface" objects. Got
+     *                           "stdClass" instead.
      */
     public function testThrowExceptionIfInvalidParserIsPassed()
     {
@@ -80,7 +80,7 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\RuntimeException
+     * @expectedException \Nelmio\Alice\Exception\Parser\ParserNotFoundException
      * @expectedExceptionMessage No suitable parser found for the file "dummy.php".
      */
     public function testThrowExceptionIfNoSuitableParserIsFound()

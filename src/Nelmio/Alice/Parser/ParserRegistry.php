@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Parser;
 
-use Nelmio\Alice\Exception\Parser\RuntimeException;
+use Nelmio\Alice\Exception\Parser\ParserNotFoundException;
 use Nelmio\Alice\ParserInterface;
 
 final class ParserRegistry implements ParserInterface
@@ -32,7 +32,7 @@ final class ParserRegistry implements ParserInterface
             if (false === $parser instanceof ChainableParserInterface) {
                 throw new \InvalidArgumentException(
                     sprintf(
-                        'Expected parsers to be "%s" objects. Parser "%s" is not.',
+                        'Expected parsers to be "%s" objects. Got "%s" instead.',
                         ChainableParserInterface::class,
                         is_object($parser) ? get_class($parser) : $parser
                     )
@@ -48,7 +48,7 @@ final class ParserRegistry implements ParserInterface
      *
      * {@inheritdoc}
      *
-     * @throws RuntimeException When no parser is found.
+     * @throws ParserNotFoundException When no parser is found.
      */
     public function parse(string $file): array
     {
@@ -58,7 +58,7 @@ final class ParserRegistry implements ParserInterface
             }
         }
 
-        throw new RuntimeException(
+        throw new ParserNotFoundException(
             sprintf(
                 'No suitable parser found for the file "%s".',
                 $file

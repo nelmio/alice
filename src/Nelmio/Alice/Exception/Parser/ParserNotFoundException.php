@@ -13,6 +13,6 @@ namespace Nelmio\Alice\Exception\Parser;
 
 use Nelmio\Alice\Throwable\ParseThrowable;
 
-class RuntimeException extends \RuntimeException implements ParseThrowable
+class ParserNotFoundException extends \RuntimeException implements ParseThrowable
 {
 }
