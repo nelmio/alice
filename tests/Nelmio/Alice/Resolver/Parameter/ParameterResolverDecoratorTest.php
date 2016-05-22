@@ -27,7 +27,17 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(ParameterResolverDecorator::class, ParameterBagResolverInterface::class, true));
     }
 
-    public function testDecorateResolverToResolveParameterBag()
+    public function testIsDeepClonable()
+    {
+        $resolver = new ParameterResolverDecorator(new DummyParameterResolverInterface());
+        $newResolver = clone $resolver;
+
+        $this->assertInstanceOf(ParameterResolverDecorator::class, $newResolver);
+        $this->assertNotSame($newResolver, $resolver);
+        $this->assertNotSameInjectedResolver($newResolver, $resolver);
+    }
+    
+    public function testDecoratesResolverToResolveParameterBag()
     {
         $unresolvedParameters = new ParameterBag([
             'foo' => 'unresolved(bar)',
@@ -79,7 +89,29 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
         $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testResolveBagWithInjectedParameters()
+    public function testDoesNotResolveAlreadyResolvedParameters()
+    {
+        $unresolvedParameters = new ParameterBag([
+            'foo' => 'unresolved(bar)',
+            'ping' => 'unresolved(pong)',
+        ]);
+        $resolvedParameters = new ParameterBag([
+            'foo' => 'bar',
+            'ping' => 'pong',
+        ]);
+
+        $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
+        $injectedResolverProphecy->resolve(Argument::cetera())->shouldNotBeCalled();
+        /* @var ParameterResolverInterface $injectedResolver */
+        $injectedResolver = $injectedResolverProphecy->reveal();
+
+        $resolver = new ParameterResolverDecorator($injectedResolver);
+        $result = $resolver->resolve($unresolvedParameters, $resolvedParameters);
+
+        $this->assertEquals($resolvedParameters, $result);
+    }
+
+    public function testResolvesBagWithInjectedParameters()
     {
         $unresolvedParameters = new ParameterBag([
             'foo' => 'unresolved(bar)',
@@ -134,5 +166,22 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
             ]),
             $result
         );
+    }
+
+    private function assertNotSameInjectedResolver(ParameterResolverDecorator $firstResolver, ParameterResolverDecorator $secondResolver)
+    {
+        $this->assertNotSame(
+            $this->getInjectedResolver($firstResolver),
+            $this->getInjectedResolver($secondResolver)
+        );
+    }
+
+    private function getInjectedResolver(ParameterResolverDecorator $resolver): ParameterResolverInterface
+    {
+        $resolverReflectionObject = new \ReflectionObject($resolver);
+        $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');
+        $resolverPropertyReflection->setAccessible(true);
+
+        return $resolverPropertyReflection->getValue($resolver);
     }
 }

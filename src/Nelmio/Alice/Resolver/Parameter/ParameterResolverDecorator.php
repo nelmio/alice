@@ -61,4 +61,9 @@ final class ParameterResolverDecorator implements ParameterBagResolverInterface
 
         return $resolvedParameters;
     }
+
+    public function __clone()
+    {
+        $this->resolver = clone $this->resolver;
+    }
 }

@@ -80,4 +80,9 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
 
         return $this->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context, $currentResult);
     }
+
+    public function __clone()
+    {
+        $this->resolver = clone $this->resolver;
+    }
 }

@@ -58,6 +58,16 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($resolver, $newResolver);
         $this->assertNotSameDecoratedResolver($resolver, $newResolver);
     }
+
+    public function testIsDeepClonable()
+    {
+        $resolver = new RecursiveParameterResolver(new ImmutableDummyChainableResolverAwareResolver());
+        $newResolver = clone $resolver;
+
+        $this->assertInstanceOf(RecursiveParameterResolver::class, $newResolver);
+        $this->assertNotSame($newResolver, $resolver);
+        $this->assertNotSameInjectedResolver($newResolver, $resolver);
+    }
     
     public function testUseDecoratedResolverToKnowWhichParameterItCanResolve()
     {
@@ -116,6 +126,26 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $actual);
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
+    }
+
+    /**
+     * @dataProvider provideContexts
+     */
+    public function testAlwaysPassContextWhenResolving(ResolvingContext $context = null)
+    {
+        $parameter = new Parameter('foo', null);
+
+        $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
+        $decoratedResolverProphecy
+            ->resolve(Argument::any(), Argument::any(), Argument::any(), $context)
+            ->willReturn(new ParameterBag(['foo' => null]))
+        ;
+        /* @var ChainableParameterResolverInterface $decoratedResolver */
+        $decoratedResolver = $decoratedResolverProphecy->reveal();
+
+        $resolver = new RecursiveParameterResolver($decoratedResolver);
+        $resolver->resolve($parameter, new ParameterBag(), new ParameterBag(), $context);
+
     }
 
     /**
@@ -183,6 +213,21 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(4);
     }
 
+    public function provideContexts()
+    {
+        return [
+            'no context' => [
+                null,
+            ],
+            'empty context' => [
+                new ResolvingContext(),
+            ],
+            'context with random value' => [
+                (new ResolvingContext())->with('name'),
+            ],
+        ];
+    }
+
     private function assertNotSameDecoratedResolver(RecursiveParameterResolver $firstResolver, RecursiveParameterResolver $secondResolver)
     {
         $this->assertNotSame(
@@ -192,6 +237,23 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     private function getDecoratedResolver(RecursiveParameterResolver $resolver): ChainableParameterResolverInterface
+    {
+        $resolverReflectionObject = new \ReflectionObject($resolver);
+        $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');
+        $resolverPropertyReflection->setAccessible(true);
+
+        return $resolverPropertyReflection->getValue($resolver);
+    }
+
+    private function assertNotSameInjectedResolver(RecursiveParameterResolver $firstResolver, RecursiveParameterResolver $secondResolver)
+    {
+        $this->assertNotSame(
+            $this->getInjectedResolver($firstResolver),
+            $this->getInjectedResolver($secondResolver)
+        );
+    }
+
+    private function getInjectedResolver(RecursiveParameterResolver $resolver): ParameterResolverInterface
     {
         $resolverReflectionObject = new \ReflectionObject($resolver);
         $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');

@@ -76,4 +76,9 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
             )
         );
     }
+
+    public function __clone()
+    {
+        throw new \DomainException();
+    }
 }

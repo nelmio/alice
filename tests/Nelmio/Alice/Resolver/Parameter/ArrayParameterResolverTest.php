@@ -47,6 +47,22 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ArrayParameterResolver::class, $newResolver);
         $this->assertNotSame($resolver, $newResolver);
     }
+
+    public function testIsDeepClonable()
+    {
+        $resolver = new ArrayParameterResolver();
+        $newResolver = clone $resolver;
+
+        $this->assertInstanceOf(ArrayParameterResolver::class, $newResolver);
+        $this->assertNotSame($newResolver, $resolver);
+
+        $resolver = (new ArrayParameterResolver())->withResolver(new DummyParameterResolverInterface());
+        $newResolver = clone $resolver;
+
+        $this->assertInstanceOf(ArrayParameterResolver::class, $newResolver);
+        $this->assertNotSame($newResolver, $resolver);
+        $this->assertNotSameInjectedResolver($newResolver, $resolver);
+    }
     
     public function testCanResolveOnlyArrayValues()
     {
@@ -94,7 +110,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
                 new Parameter('0', $val1),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context->with('array_param')
             )
             ->willReturn(
                 new ParameterBag([
@@ -107,7 +123,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
                 new Parameter('1', $val2),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context->with('array_param')
             )
             ->willReturn(
                 new ParameterBag([
@@ -172,7 +188,10 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testIfNoContextIsPassedOneIsCreated()
+    /**
+     * @dataProvider provideContexts
+     */
+    public function testEnsureAValidContextIsAlwaysPassedToTheInjectedResolver(ResolvingContext $context = null, ResolvingContext $expected)
     {
         $array = [
             $val1 = new \stdClass(),
@@ -190,7 +209,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
                 new Parameter('0', $val1),
                 $unresolvedParameters,
                 $resolvedParameters,
-                new ResolvingContext('array_param')
+                $expected
             )
             ->willReturn(
                 new ParameterBag([
@@ -203,7 +222,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
                 new Parameter('1', $val2),
                 $unresolvedParameters,
                 $resolvedParameters,
-                new ResolvingContext('array_param')
+                $expected
             )
             ->willReturn(
                 new ParameterBag([
@@ -215,7 +234,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
         $injectedResolver = $injectedResolverProphecy->reveal();
 
         $resolver = (new ArrayParameterResolver())->withResolver($injectedResolver);
-        $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
+        $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
         $this->assertEquals(
             new ParameterBag([
@@ -226,6 +245,40 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
             ]),
             $result
         );
-        $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
+    }
+
+    public function provideContexts()
+    {
+        return [
+            'no context' => [
+                null,
+                new ResolvingContext('array_param'),
+            ],
+            'context that does not contain the parameter being resolved' => [
+                new ResolvingContext('unrelated'),
+                (new ResolvingContext('unrelated'))->with('array_param'),
+            ],
+            'context that contains the parameter being resolved' => [
+                (new ResolvingContext('unrelated'))->with('array_param'),
+                (new ResolvingContext('unrelated'))->with('array_param'),
+            ],
+        ];
+    }
+
+    private function assertNotSameInjectedResolver(ArrayParameterResolver $firstResolver, ArrayParameterResolver $secondResolver)
+    {
+        $this->assertNotSame(
+            $this->getInjectedResolver($firstResolver),
+            $this->getInjectedResolver($secondResolver)
+        );
+    }
+
+    private function getInjectedResolver(ArrayParameterResolver $resolver): ParameterResolverInterface
+    {
+        $resolverReflectionObject = new \ReflectionObject($resolver);
+        $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');
+        $resolverPropertyReflection->setAccessible(true);
+
+        return $resolverPropertyReflection->getValue($resolver);
     }
 }

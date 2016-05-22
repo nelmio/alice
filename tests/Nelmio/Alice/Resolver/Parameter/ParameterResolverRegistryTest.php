@@ -53,6 +53,15 @@ class ParameterResolverRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        $registry = new ParameterResolverRegistry([]);
+        clone $registry;
+    }
+
+    /**
      * @expectedException \TypeError
      * @expectedExceptionMessage Expected resolvers to be "Nelmio\Alice\Resolver\ParameterResolverInterface" objects. Got
      *                           "stdClass" instead.

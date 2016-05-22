@@ -48,7 +48,10 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
     /**
      * {@inheritdoc}
      *
-     * @param bool|int|float $parameter
+     * @param string $parameter
+     * 
+     * @throws ParameterNotFoundException
+     * @throws ResolverNotFoundException
      */
     public function resolve(
         Parameter $parameter,
@@ -81,6 +84,14 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         return $result->with($parameter->withValue($value));
     }
 
+    /**
+     * Creates a context if one is not present and make sure the context contains the parameter being resolved.
+     * 
+     * @param Parameter             $parameter
+     * @param ResolvingContext|null $context
+     *
+     * @return ResolvingContext
+     */
     private function getContext(Parameter $parameter, ResolvingContext $context = null): ResolvingContext
     {
         $key = $parameter->getKey();
@@ -103,9 +114,10 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
      * @param ParameterBag     $resolvedParameters
      * @param ResolvingContext $context
      *
-     * @return array|mixed|ParameterBag
      * @throws ParameterNotFoundException
-     * @throws \Nelmio\Alice\Exception\Resolver\CircularReferenceException
+     * @throws ResolverNotFoundException
+     * 
+     * @return ParameterBag
      */
     private function resolveStringKey(
         Parameter $parameter,
@@ -147,5 +159,12 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
             $resolvedParameters,
             $context
         );
+    }
+
+    public function __clone()
+    {
+        if (null !== $this->resolver) {
+            $this->resolver = clone $this->resolver;
+        }
     }
 }

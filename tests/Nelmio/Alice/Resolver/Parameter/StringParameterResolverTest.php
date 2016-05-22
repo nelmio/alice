@@ -48,6 +48,22 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(StringParameterResolver::class, $newResolver);
         $this->assertNotSame($resolver, $newResolver);
     }
+
+    public function testIsDeepClonable()
+    {
+        $resolver = new StringParameterResolver();
+        $newResolver = clone $resolver;
+
+        $this->assertInstanceOf(StringParameterResolver::class, $newResolver);
+        $this->assertNotSame($newResolver, $resolver);
+
+        $resolver = (new StringParameterResolver())->withResolver(new DummyParameterResolverInterface());
+        $newResolver = clone $resolver;
+
+        $this->assertInstanceOf(StringParameterResolver::class, $newResolver);
+        $this->assertNotSame($newResolver, $resolver);
+        $this->assertNotSameInjectedResolver($newResolver, $resolver);
+    }
     
     public function testCanResolveOnlyStringValues()
     {
@@ -252,5 +268,22 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new StringParameterResolver();
         $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
+    }
+
+    private function assertNotSameInjectedResolver(StringParameterResolver $firstResolver, StringParameterResolver $secondResolver)
+    {
+        $this->assertNotSame(
+            $this->getInjectedResolver($firstResolver),
+            $this->getInjectedResolver($secondResolver)
+        );
+    }
+
+    private function getInjectedResolver(StringParameterResolver $resolver): ParameterResolverInterface
+    {
+        $resolverReflectionObject = new \ReflectionObject($resolver);
+        $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');
+        $resolverPropertyReflection->setAccessible(true);
+
+        return $resolverPropertyReflection->getValue($resolver);
     }
 }
