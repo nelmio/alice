@@ -86,6 +86,7 @@ For more information, refer to [the documentation](#table-of-contents).
 
 * Symfony:
   * [hautelook/AliceBundle](https://github.com/hautelook/AliceBundle)
+  * [Tutorial: Using Alice in Symfony](https://knpuniversity.com/screencast/symfony-doctrine/fixtures-alice)
   * [h4cc/AliceFixturesBundle](https://github.com/h4cc/AliceFixturesBundle)
   * [knplabs/rad-fixtures-load](https://github.com/KnpLabs/rad-fixtures-load)
 * Nette
