@@ -32,6 +32,15 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        $parser = new RuntimeCacheParser(new ParserRegistry([]));
+        clone $parser;
+    }
+
+    /**
      * @dataProvider provideParsableFile
      */
     public function testCanParseFile(string $file)

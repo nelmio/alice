@@ -53,4 +53,9 @@ final class ParserRegistry implements ParserInterface
             )
         );
     }
+
+    public function __clone()
+    {
+        throw new \DomainException('Is not clonable');
+    }
 }

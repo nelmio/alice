@@ -149,4 +149,9 @@ final class RuntimeCacheParser implements ParserInterface
 
         return dirname($file).DIRECTORY_SEPARATOR.$includeFile;
     }
+
+    public function __clone()
+    {
+        throw new \DomainException('Is not clonable');
+    }
 }

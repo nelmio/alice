@@ -61,6 +61,14 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone $this->parser;
+    }
+
+    /**
      * @dataProvider providePhpList
      */
     public function testCannotParsePhpFiles(string $file)

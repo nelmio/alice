@@ -42,6 +42,15 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
         new ParserRegistry([new \stdClass()]);
     }
 
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        $parser = new ParserRegistry([]);
+        clone $parser;
+    }
+
     public function testIterateOverEveryParsersAndUseTheFirstValidOne()
     {
         $file = 'dummy.php';

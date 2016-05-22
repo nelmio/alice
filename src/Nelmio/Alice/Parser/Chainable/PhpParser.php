@@ -49,4 +49,9 @@ final class PhpParser implements ChainableParserInterface
 
         return 1 === preg_match('/.+\.php[7]?$/i', $file);
     }
+
+    public function __clone()
+    {
+        throw new \DomainException('Is not clonable');
+    }
 }

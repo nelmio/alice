@@ -73,4 +73,9 @@ final class YamlParser implements ChainableParserInterface
 
         return 1 === preg_match('/.{1,}\.ya?ml$/i', $file);
     }
+
+    public function __clone()
+    {
+        throw new \DomainException('Is not clonable');
+    }
 }

@@ -54,6 +54,14 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone $this->parser;
+    }
+
+    /**
      * @dataProvider providePhpList
      */
     public function testCanParsePhpFiles(string $file, array $expectedParsers)
