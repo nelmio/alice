@@ -69,6 +69,10 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
             );
         }
 
+        if (null === $context) {
+            $context = new ResolvingContext($unresolvedArrayParameter->getKey());
+        }
+
         $resolvedArray = [];
         $resolvedParameterBag = new ParameterBag();
         /* @var array $unresolvedArray */

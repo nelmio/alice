@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Resolver\Parameter;
 
 use Nelmio\Alice\Exception\Resolver\ParameterNotFoundException;
+use Nelmio\Alice\Exception\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
@@ -30,7 +31,10 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
 
     public function withResolver(ParameterResolverInterface $resolver)
     {
-        $this->resolver = $resolver;
+        $clone = clone $this;
+        $clone->resolver = $resolver;
+        
+        return $clone;
     }
 
     /**
@@ -53,14 +57,15 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         ResolvingContext $context = null
     ): ParameterBag
     {
+        $context = $this->getContext($parameter, $context);
+
         $self = $this;
         $result = new ParameterBag();
         $value = preg_replace_callback(
             self::PATTERN,
             function ($match) use ($self, $context, $unresolvedParameters, $resolvedParameters, $parameter, &$result) {
                 $key = $match['parameter'];
-                $context = $context->with($key);
-                
+
                 $resolvedBag = $self->resolveStringKey($parameter, $key, $unresolvedParameters, $resolvedParameters, $context);
 
                 $resolvedKey = $resolvedBag->get($key);
@@ -74,6 +79,21 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         );
 
         return $result->with($parameter->withValue($value));
+    }
+
+    private function getContext(Parameter $parameter, ResolvingContext $context = null): ResolvingContext
+    {
+        $key = $parameter->getKey();
+
+        if (null === $context) {
+            $context = new ResolvingContext($key);
+        }
+
+        if (false === $context->has($key)) {
+            $context = $context->with($key);
+        }
+
+        return $context;
     }
 
     /**
@@ -112,6 +132,15 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         $context->checkForCircularReference($key);
         $context = $context->with($key);
 
+        if (null === $this->resolver) {
+            throw new ResolverNotFoundException(
+                sprintf(
+                    'No resolver found to resolve parameter "%s".',
+                    $key
+                )
+            );
+        }
+        
         return $this->resolver->resolve(
             new Parameter($key, $unresolvedParameters->get($key)),
             $unresolvedParameters,

@@ -37,8 +37,7 @@ final class ParameterResolverDecorator implements ParameterBagResolverInterface
      */
     public function resolve(
         ParameterBag $unresolvedParameters,
-        ParameterBag $injectedParameters = null,
-        ResolvingContext $context = null
+        ParameterBag $injectedParameters = null
     ): ParameterBag
     {
         $resolvedParameters = (null === $injectedParameters) ? new ParameterBag() : $injectedParameters;

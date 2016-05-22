@@ -1,0 +1,230 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Nelmio\Alice\Resolver\Parameter;
+
+use Nelmio\Alice\Parameter;
+use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
+use Nelmio\Alice\Resolver\ParameterResolverAwareInterface;
+use Nelmio\Alice\Resolver\ParameterResolverInterface;
+use Prophecy\Argument;
+
+/**
+ * @covers Nelmio\Alice\Resolver\Parameter\RecursiveParameterResolver
+ */
+class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
+{
+    public function testIsAChainableParameterResolver()
+    {
+        $this->assertTrue(is_a(RecursiveParameterResolver::class, ChainableParameterResolverInterface::class, true));
+    }
+
+    public function testIsAParameterResolverAwareResolver()
+    {
+        $this->assertTrue(is_a(RecursiveParameterResolver::class, ParameterResolverAwareInterface::class, true));
+    }
+
+    public function testIsImmutable()
+    {
+        $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
+        $injectedResolverProphecy->resolve(Argument::cetera())->shouldNotBeCalled();
+        /* @var ParameterResolverInterface $injectedResolver */
+        $injectedResolver = $injectedResolverProphecy->reveal();
+
+        $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
+        $decoratedResolverProphecy->resolve(Argument::cetera())->shouldNotBeCalled();
+        /* @var ChainableParameterResolverInterface $decoratedResolver */
+        $decoratedResolver = $decoratedResolverProphecy->reveal();
+
+        $resolver = new RecursiveParameterResolver($decoratedResolver);
+        $newResolver = $resolver->withResolver($injectedResolver);
+
+        $this->assertInstanceOf(RecursiveParameterResolver::class, $newResolver);
+        $this->assertNotSame($resolver, $newResolver);
+
+        $resolver = new RecursiveParameterResolver(new ImmutableDummyChainableResolverAwareResolver());
+        $newResolver = $resolver->withResolver($injectedResolver);
+
+        $this->assertInstanceOf(RecursiveParameterResolver::class, $newResolver);
+        $this->assertNotSame($resolver, $newResolver);
+        $this->assertNotSameDecoratedResolver($resolver, $newResolver);
+    }
+    
+    public function testUseDecoratedResolverToKnowWhichParameterItCanResolve()
+    {
+        $parameter1 = new Parameter('foo', null);
+        $parameter2 = new Parameter('bar', null);
+        
+        $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
+        $decoratedResolverProphecy->canResolve($parameter1)->willReturn(false);
+        $decoratedResolverProphecy->canResolve($parameter2)->willReturn(true);
+        /* @var ChainableParameterResolverInterface $decoratedResolver */
+        $decoratedResolver = $decoratedResolverProphecy->reveal();
+
+        $resolver = new RecursiveParameterResolver($decoratedResolver);
+        
+        $this->assertFalse($resolver->canResolve($parameter1));
+        $this->assertTrue($resolver->canResolve($parameter2));
+        
+        $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(2);
+    }
+
+    /**
+     * @testdox Resolves the given parameter two times with the decorated resolver. If the two results are identical, return this result.
+     */
+    public function testResolveWithNoChange()
+    {
+        $parameter = new Parameter('foo', null);
+        $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
+        $resolvedParameters = new ParameterBag(['place' => 'Wonderlands']);
+        $context = new ResolvingContext('foo');
+        $expected = new ParameterBag(['foo' => 'bar']);
+
+        $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
+        $decoratedResolverProphecy
+            ->resolve(
+                $parameter,
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn($expected)
+        ;
+        $decoratedResolverProphecy
+            ->resolve(
+                new Parameter('foo', 'bar'),
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn($expected)
+        ;
+        /* @var ChainableParameterResolverInterface $decoratedResolver */
+        $decoratedResolver = $decoratedResolverProphecy->reveal();
+
+        $resolver = new RecursiveParameterResolver($decoratedResolver);
+        $actual = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
+
+        $this->assertEquals($expected, $actual);
+        $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
+    }
+
+    /**
+     * @testdox Resolves the given parameter two times with the decorated resolver. If the two results are identical, return this result.
+     */
+    public function testResolveWithChange()
+    {
+        $parameter = new Parameter('foo', null);
+        $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
+        $resolvedParameters = new ParameterBag(['place' => 'Wonderlands']);
+        $context = new ResolvingContext('foo');
+
+        $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
+        $decoratedResolverProphecy
+            ->resolve(
+                $parameter,
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn(
+                new ParameterBag(['foo' => 'result1'])
+            )
+        ;
+        $decoratedResolverProphecy
+            ->resolve(
+                new Parameter('foo', 'result1'),
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn(
+                new ParameterBag(['foo' => 'result2'])
+            )
+        ;
+        $decoratedResolverProphecy
+            ->resolve(
+                new Parameter('foo', 'result2'),
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn(
+                new ParameterBag(['foo' => 'result3'])
+            )
+        ;
+        $decoratedResolverProphecy
+            ->resolve(
+                new Parameter('foo', 'result3'),
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn(
+                $expected = new ParameterBag(['foo' => 'result3'])
+            )
+        ;
+        /* @var ChainableParameterResolverInterface $decoratedResolver */
+        $decoratedResolver = $decoratedResolverProphecy->reveal();
+
+        $resolver = new RecursiveParameterResolver($decoratedResolver);
+        $actual = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
+
+        $this->assertEquals($expected, $actual);
+        $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(4);
+    }
+
+    private function assertNotSameDecoratedResolver(RecursiveParameterResolver $firstResolver, RecursiveParameterResolver $secondResolver)
+    {
+        $this->assertNotSame(
+            $this->getDecoratedResolver($firstResolver),
+            $this->getDecoratedResolver($secondResolver)
+        );
+    }
+
+    private function getDecoratedResolver(RecursiveParameterResolver $resolver): ChainableParameterResolverInterface
+    {
+        $resolverReflectionObject = new \ReflectionObject($resolver);
+        $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');
+        $resolverPropertyReflection->setAccessible(true);
+
+        return $resolverPropertyReflection->getValue($resolver);
+    }
+}
+
+final class ImmutableDummyChainableResolverAwareResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
+{
+    public $resolver;
+
+    public function canResolve(Parameter $parameter): bool
+    {
+        throw new \BadMethodCallException();
+    }
+
+    public function withResolver(ParameterResolverInterface $resolver)
+    {
+        $clone = clone $this;
+        $clone->resolver = $resolver;
+
+        return $clone;
+    }
+
+    public function resolve(
+        Parameter $parameter,
+        ParameterBag $unresolvedParameters,
+        ParameterBag $resolvedParameters
+    ): ParameterBag
+    {
+        throw new \BadMethodCallException();
+    }
+}
+

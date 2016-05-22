@@ -31,9 +31,12 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
 
     public function withResolver(ParameterResolverInterface $resolver)
     {
-        if ($this->resolver instanceof ParameterResolverAwareInterface) {
-            $this->resolver->withResolver($resolver);
+        $clone = clone $this;
+        if ($clone->resolver instanceof ParameterResolverAwareInterface) {
+            $clone->resolver = $clone->resolver->withResolver($resolver);
         }
+        
+        return $clone;
     }
 
     /**

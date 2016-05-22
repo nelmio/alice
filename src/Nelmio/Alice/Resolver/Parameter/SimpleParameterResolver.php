@@ -24,7 +24,7 @@ final class SimpleParameterResolver implements ChainableParameterResolverInterfa
     {
         $value = $parameter->getValue();
         
-        return is_bool($value) || is_numeric($value) || is_object($value);
+        return null === $value || is_bool($value) || is_numeric($value) || is_object($value);
     }
 
     /**

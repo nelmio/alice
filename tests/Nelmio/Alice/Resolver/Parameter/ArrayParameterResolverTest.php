@@ -44,7 +44,23 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $newResolver = $resolver->withResolver($injectedResolver);
 
+        $this->assertInstanceOf(ArrayParameterResolver::class, $newResolver);
         $this->assertNotSame($resolver, $newResolver);
+    }
+    
+    public function testCanResolveOnlyArrayValues()
+    {
+        $resolver = new ArrayParameterResolver();
+        $parameter = new Parameter('foo', null);
+        
+        $this->assertTrue($resolver->canResolve($parameter->withValue([])));
+
+        $this->assertFalse($resolver->canResolve($parameter->withValue(null)));
+        $this->assertFalse($resolver->canResolve($parameter->withValue(10)));
+        $this->assertFalse($resolver->canResolve($parameter->withValue(.75)));
+        $this->assertFalse($resolver->canResolve($parameter->withValue('string')));
+        $this->assertFalse($resolver->canResolve($parameter->withValue(new \stdClass())));
+        $this->assertFalse($resolver->canResolve($parameter->withValue(function () {})));
     }
 
     /**
@@ -74,12 +90,30 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
         $injectedResolverProphecy
-            ->resolve(new Parameter('0', $val1), $unresolvedParameters, $resolvedParameters, $context)
-            ->willReturn(new ParameterBag(['0' => 'val1']))
+            ->resolve(
+                new Parameter('0', $val1),
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn(
+                new ParameterBag([
+                    '0' => 'val1'
+                ])
+            )
         ;
         $injectedResolverProphecy
-            ->resolve(new Parameter('1', $val2), $unresolvedParameters, $resolvedParameters, $context)
-            ->willReturn(new ParameterBag(['1' => 'val2']))
+            ->resolve(
+                new Parameter('1', $val2),
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn(
+                new ParameterBag([
+                    '1' => 'val2'
+                ])
+            )
         ;
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
@@ -136,5 +170,62 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
             ]),
             $result
         );
+    }
+
+    public function testIfNoContextIsPassedOneIsCreated()
+    {
+        $array = [
+            $val1 = new \stdClass(),
+            $val2 = function () {},
+        ];
+
+        $parameter = new Parameter('array_param', $array);
+
+        $unresolvedParameters = new ParameterBag(['name' => 'unresolvedParams']);
+        $resolvedParameters = new ParameterBag(['name' => 'resolvedParams']);
+
+        $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
+        $injectedResolverProphecy
+            ->resolve(
+                new Parameter('0', $val1),
+                $unresolvedParameters,
+                $resolvedParameters,
+                new ResolvingContext('array_param')
+            )
+            ->willReturn(
+                new ParameterBag([
+                    '0' => 'val1'
+                ])
+            )
+        ;
+        $injectedResolverProphecy
+            ->resolve(
+                new Parameter('1', $val2),
+                $unresolvedParameters,
+                $resolvedParameters,
+                new ResolvingContext('array_param')
+            )
+            ->willReturn(
+                new ParameterBag([
+                    '1' => 'val2'
+                ])
+            )
+        ;
+        /* @var ParameterResolverInterface $injectedResolver */
+        $injectedResolver = $injectedResolverProphecy->reveal();
+
+        $resolver = (new ArrayParameterResolver())->withResolver($injectedResolver);
+        $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
+
+        $this->assertEquals(
+            new ParameterBag([
+                'array_param' => [
+                    '0' => 'val1',
+                    '1' => 'val2',
+                ],
+            ]),
+            $result
+        );
+        $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 }

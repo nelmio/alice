@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Resolver\Parameter;
 use Nelmio\Alice\Exception\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Resolver\ParameterResolverInterface;
 
@@ -25,27 +26,25 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
     private $resolvers;
 
     /**
-     * @param ParameterResolverInterface[] $resolvers
+     * @param ChainableParameterResolverInterface[] $resolvers
      *
-     * @throws \InvalidArgumentException
+     * @throws \TypeError
      */
     public function __construct(array $resolvers)
     {
-        foreach ($resolvers as $resolver) {
-            if ($resolver instanceof ParameterResolverAwareInterface) {
-                $resolver->withResolver($this);
-                
-                continue;
-            }
-            
-            if (false === $resolver instanceof ParameterResolverInterface) {
-                throw new \InvalidArgumentException(
+        foreach ($resolvers as $index => $resolver) {
+            if (false === $resolver instanceof ChainableParameterResolverInterface) {
+                throw new \TypeError(
                     sprintf(
-                        'Expected resolvers to be "%s" objects. Resolver "%s" is not.',
+                        'Expected resolvers to be "%s" objects. Got "%s" instead.',
                         ParameterResolverInterface::class,
                         is_object($resolver)? get_class($resolver) : $resolver
                     )
                 );
+            }
+
+            if ($resolver instanceof ParameterResolverAwareInterface) {
+                $resolvers[$index] = $resolver->withResolver($this);
             }
         }
 
@@ -70,6 +69,11 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
             }
         }
         
-        throw ResolverNotFoundException::create($parameter->getKey());
+        throw new ResolverNotFoundException(
+            sprintf(
+                'No suitable resolver found for the parameter "%s".',
+                $parameter->getKey()
+            )
+        );
     }
 }

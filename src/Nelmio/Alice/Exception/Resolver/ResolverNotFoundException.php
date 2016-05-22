@@ -11,9 +11,8 @@
 
 namespace Nelmio\Alice\Exception\Resolver;
 
-use Nelmio\Alice\Exception\ParameterNotFoundException as RootParameterNotFoundException;
 use Nelmio\Alice\Throwable\ResolveThrowable;
 
-class ResolverNotFoundException extends RootParameterNotFoundException implements ResolveThrowable
+class ResolverNotFoundException extends \UnexpectedValueException implements ResolveThrowable
 {
 }

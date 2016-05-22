@@ -29,15 +29,13 @@ final class ResolvingContext
     }
 
     /**
-     * Returns the passed instance if is not null otherwise create a fresh new instance.
-     * 
      * @param ResolvingContext|null $resolving
      *
-     * @return ResolvingContext
+     * @return self
      */
-    public static function createFrom(self $resolving = null)
+    public static function createFrom(self $resolving = null): self
     {
-        return null === $resolving ? new self() : $resolving;
+        return null === $resolving ? new self() : clone $resolving;
     }
     
     public function has(string $key): bool
@@ -65,7 +63,7 @@ final class ResolvingContext
      */
     public function checkForCircularReference(string $key)
     {
-        if (false === $this->has($key) || 1 < $this->resolving[$key]) {
+        if (true === $this->has($key) && 1 < $this->resolving[$key]) {
             throw CircularReferenceException::createForParameter($key, $this->resolving);
         }
     }

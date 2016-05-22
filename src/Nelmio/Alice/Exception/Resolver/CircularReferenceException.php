@@ -19,7 +19,7 @@ class CircularReferenceException extends \RuntimeException implements ResolveThr
     {
         return new static(
             sprintf(
-                'Circular reference detected for the parameter "%s" while resolving [%s].',
+                'Circular reference detected for the parameter "%s" while resolving ["%s"].',
                 $key,
                 implode('", "', array_keys($resolving))
             )
