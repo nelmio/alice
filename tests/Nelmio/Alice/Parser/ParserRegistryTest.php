@@ -35,9 +35,7 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected parsers to be "Nelmio\Alice\Parser\ChainableParserInterface" objects. Got
-     *                           "stdClass" instead.
+     * @expectedException \TypeError
      */
     public function testThrowExceptionIfInvalidParserIsPassed()
     {

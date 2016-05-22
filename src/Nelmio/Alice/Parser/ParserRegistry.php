@@ -24,23 +24,11 @@ final class ParserRegistry implements ParserInterface
     /**
      * @param ChainableParserInterface[] $parsers
      *
-     * @throws \InvalidArgumentException When invalid parser is passed.
+     * @throws \TypeError When invalid parser is passed.
      */
     public function __construct(array $parsers)
     {
-        foreach ($parsers as $parser) {
-            if (false === $parser instanceof ChainableParserInterface) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'Expected parsers to be "%s" objects. Got "%s" instead.',
-                        ChainableParserInterface::class,
-                        is_object($parser) ? get_class($parser) : $parser
-                    )
-                );
-            }
-        }
-
-        $this->parsers = $parsers;
+        $this->parsers = (function (ChainableParserInterface ...$parsers) { return $parsers; })(...$parsers);
     }
 
     /**
