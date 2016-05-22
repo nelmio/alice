@@ -12,7 +12,7 @@
 namespace Nelmio\Alice;
 
 /**
- * Represents a parameter, resolved or not.
+ * Value object representing a parameter. The parameter may or not be already resolved.
  */
 final class Parameter
 {
@@ -59,5 +59,12 @@ final class Parameter
         }
         
         return $this->value;
+    }
+
+    public function __clone()
+    {
+        if (is_object($this->value)) {
+            $this->value = clone $this->value;
+        }
     }
 }

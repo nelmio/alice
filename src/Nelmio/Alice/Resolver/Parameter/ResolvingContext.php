@@ -29,13 +29,22 @@ final class ResolvingContext
     }
 
     /**
+     * Creates a new instance from the given one and ensure it has the given key. If the key is already present, will
+     * not increment the counter (unlike the ::with() method).
+     * 
      * @param ResolvingContext|null $resolving
+     * @param string                $key
      *
-     * @return self
+     * @return ResolvingContext|static
      */
-    public static function createFrom(self $resolving = null): self
+    public static function createFrom(self $resolving = null, string $key): self
     {
-        return null === $resolving ? new self() : clone $resolving;
+        $instance = null === $resolving ? new self() : clone $resolving;
+        if (false === $instance->has($key)) {
+            $instance = $instance->with($key);
+        }
+        
+        return $instance;
     }
     
     public function has(string $key): bool

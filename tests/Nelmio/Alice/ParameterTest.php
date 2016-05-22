@@ -44,6 +44,29 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('rab', $newParam->getValue());
     }
 
+    public function testIsDeepClonable()
+    {
+        $parameter = new Parameter('foo', null);
+        $newParameter = clone $parameter;
+
+        $this->assertInstanceOf(Parameter::class, $newParameter);
+        $this->assertNotSame($parameter, $newParameter);
+
+        $parameter = new Parameter('foo', new \stdClass());
+        $newParameter = clone $parameter;
+
+        $this->assertInstanceOf(Parameter::class, $newParameter);
+        $this->assertNotSame($parameter, $newParameter);
+        $this->assertNotSameValue($parameter, $newParameter);
+
+        $parameter = new Parameter('foo', function () {});
+        $newParameter = clone $parameter;
+
+        $this->assertInstanceOf(Parameter::class, $newParameter);
+        $this->assertNotSame($parameter, $newParameter);
+        $this->assertNotSameValue($parameter, $newParameter);
+    }
+
     public function provideValues()
     {
         return [
@@ -56,5 +79,22 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
             'closure' => [function () {}],
             'array' => [[new \stdClass()]],
         ];
+    }
+
+    private function assertNotSameValue(Parameter $firstParameter, Parameter $secondParameter)
+    {
+        $this->assertNotSame(
+            $this->getValue($firstParameter),
+            $this->getValue($secondParameter)
+        );
+    }
+
+    private function getValue(Parameter $parameter)
+    {
+        $reflectionObject = new \ReflectionObject($parameter);
+        $propertyReflection = $reflectionObject->getProperty('value');
+        $propertyReflection->setAccessible(true);
+
+        return $propertyReflection->getValue($parameter);
     }
 }

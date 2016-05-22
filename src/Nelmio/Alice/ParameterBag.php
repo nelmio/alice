@@ -13,6 +13,9 @@ namespace Nelmio\Alice;
 
 use Nelmio\Alice\Exception\ParameterNotFoundException;
 
+/**
+ * Value object containing a list of parameters.
+ */
 final class ParameterBag implements \IteratorAggregate, \Countable
 {
     /**

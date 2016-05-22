@@ -60,7 +60,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         ResolvingContext $context = null
     ): ParameterBag
     {
-        $context = $this->getContext($parameter, $context);
+        $context = ResolvingContext::createFrom($context, $parameter->getKey());
 
         $self = $this;
         $result = new ParameterBag();
@@ -82,29 +82,6 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         );
 
         return $result->with($parameter->withValue($value));
-    }
-
-    /**
-     * Creates a context if one is not present and make sure the context contains the parameter being resolved.
-     * 
-     * @param Parameter             $parameter
-     * @param ResolvingContext|null $context
-     *
-     * @return ResolvingContext
-     */
-    private function getContext(Parameter $parameter, ResolvingContext $context = null): ResolvingContext
-    {
-        $key = $parameter->getKey();
-
-        if (null === $context) {
-            $context = new ResolvingContext($key);
-        }
-
-        if (false === $context->has($key)) {
-            $context = $context->with($key);
-        }
-
-        return $context;
     }
 
     /**

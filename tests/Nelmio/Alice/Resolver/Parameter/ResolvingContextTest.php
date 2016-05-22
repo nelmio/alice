@@ -38,14 +38,44 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
 
     public function testFactoryMethod()
     {
-        $context = ResolvingContext::createFrom();
-        $this->assertFalse($context->has('foo'));
+        $context = ResolvingContext::createFrom(null, 'foo');
+        $this->assertTrue($context->has('foo'));
 
-        $newContext = ResolvingContext::createFrom($context->with('foo'));
-        $this->assertFalse($context->has('foo'));
+        $newContext = ResolvingContext::createFrom($context->with('bar'), 'ping');
+        $this->assertFalse($context->has('bar'));
+        $this->assertFalse($context->has('ping'));
         $this->assertTrue($newContext->has('foo'));
-
+        $this->assertTrue($newContext->has('bar'));
+        $this->assertTrue($newContext->has('ping'));
         $this->assertNotSame($newContext, $context);
+
+        $newContext = ResolvingContext::createFrom($context, 'bar');
+        $this->assertFalse($context->has('bar'));
+        $this->assertTrue($newContext->has('foo'));
+        $this->assertTrue($newContext->has('bar'));
+        $this->assertNotSame($newContext, $context);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Resolver\CircularReferenceException
+     */
+    public function testFactoryMethodCannotTriggerCircularReference()
+    {
+        $context = new ResolvingContext('foo');
+        $context->checkForCircularReference('foo');
+        $this->assertTrue(true, 'Did not expect exception to be thrown.');
+
+        $context = ResolvingContext::createFrom($context, 'foo');
+        $context->checkForCircularReference('foo');
+        $this->assertTrue(true, 'Did not expect exception to be thrown.');
+
+        $context = ResolvingContext::createFrom($context, 'foo');
+        $context->checkForCircularReference('foo');
+        $this->assertTrue(true, 'Did not expect exception to be thrown.');
+
+        $context = $context->with('foo');
+        $context->checkForCircularReference('foo');
+        $this->fail('Expected exception to be thrown.');
     }
 
     /**

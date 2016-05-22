@@ -69,7 +69,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
             );
         }
 
-        $context = $this->getContext($unresolvedArrayParameter, $context);
+        $context = ResolvingContext::createFrom($context, $unresolvedArrayParameter->getKey());
 
         $resolvedArray = [];
         $resolvedParameterBag = new ParameterBag();
@@ -94,29 +94,6 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
         $resolvedParameterBag = $resolvedParameterBag->with($unresolvedArrayParameter->withValue($resolvedArray));
         
         return $resolvedParameterBag;
-    }
-
-    /**
-     * Creates a context if one is not present and make sure the context contains the parameter being resolved.
-     *
-     * @param Parameter             $parameter
-     * @param ResolvingContext|null $context
-     *
-     * @return ResolvingContext
-     */
-    private function getContext(Parameter $parameter, ResolvingContext $context = null): ResolvingContext
-    {
-        $key = $parameter->getKey();
-
-        if (null === $context) {
-            $context = new ResolvingContext($key);
-        }
-
-        if (false === $context->has($key)) {
-            $context = $context->with($key);
-        }
-
-        return $context;
     }
 
     public function __clone()
