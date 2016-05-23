@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
+use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
@@ -42,6 +43,26 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
         clone $processor;
     }
 
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessage Could not find any include statement in the file "dummy.php".
+     */
+    public function testThrowExceptionIfNoIncludeStatementFound()
+    {
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
+        /* @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
+        $fileLocatorProphecy->locate(Argument::any())->shouldNotBeCalled();
+        /* @var FileLocatorInterface $fileLocator */
+        $fileLocator = $fileLocatorProphecy->reveal();
+
+        $processor = new DefaultIncludeProcessor($fileLocator);
+        $processor->process($parser, 'dummy.php', []);
+    }
+
     public function testIncludeStatementCanBeNull()
     {
         $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
@@ -62,7 +83,12 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
         /* @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
-        $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
+        $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
+        $fileLocatorProphecy->locate(Argument::any())->shouldNotBeCalled();
+        /* @var FileLocatorInterface $fileLocator */
+        $fileLocator = $fileLocatorProphecy->reveal();
+
+        $processor = new DefaultIncludeProcessor($fileLocator);
 
         $actual = $processor->process($parser, $mainFile, $parsedMainFileContent);
 

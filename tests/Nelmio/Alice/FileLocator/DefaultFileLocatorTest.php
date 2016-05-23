@@ -16,7 +16,7 @@ use Nelmio\Alice\FileLocatorInterface;
 /**
  * @covers Nelmio\Alice\FileLocator\DefaultFileLocator
  */
-class FileLocatorTest extends \PHPUnit_Framework_TestCase
+class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var DefaultFileLocator
@@ -52,20 +52,29 @@ class FileLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             __FILE__,
-            $this->locator->locate('FileLocatorTest.php', __DIR__)
+            $this->locator->locate('DefaultFileLocatorTest.php', __DIR__)
         );
 
         $this->assertEquals(
             __FILE__,
-            $this->locator->locate(__DIR__.DIRECTORY_SEPARATOR.'FileLocatorTest.php')
+            $this->locator->locate(__DIR__.DIRECTORY_SEPARATOR.'DefaultFileLocatorTest.php')
         );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage An empty file name is not valid to be located.
+     */
+    public function testThrowExceptionIfEmptyFileNamePassed()
+    {
+        $this->locator->locate('');
     }
 
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /The file "(.+?)foobar.xml" does not exist\./
      */
-    public function testThrowsAnExceptionIfTheFileDoesNotExists()
+    public function testThrowExceptionIfTheFileDoesNotExists()
     {
         $this->locator->locate('foobar.xml', __DIR__);
     }
@@ -74,7 +83,7 @@ class FileLocatorTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /The file "(.+?)foobar.xml" does not exist\./
      */
-    public function testLocateThrowsAnExceptionIfTheFileDoesNotExistsInAbsolutePath()
+    public function testLocateThrowExceptionIfTheFileDoesNotExistsInAbsolutePath()
     {
         $this->locator->locate(__DIR__.'/Fixtures/foobar.xml');
     }
@@ -83,9 +92,9 @@ class FileLocatorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['/foo.xml'],
+            ['\\server\\foo.xml'],
             ['c:\\\\foo.xml'],
             ['c:/foo.xml'],
-            ['\\server\\foo.xml'],
             ['https://server/foo.xml'],
             ['phar://server/foo.xml'],
         ];
