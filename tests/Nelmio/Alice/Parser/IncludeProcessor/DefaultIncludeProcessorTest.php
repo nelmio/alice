@@ -1,0 +1,226 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Nelmio\Alice\Parser\IncludeProcessor;
+
+use Nelmio\Alice\FileLocator\DefaultFileLocator;
+use Nelmio\Alice\FileLocatorInterface;
+use Nelmio\Alice\Parser\IncludeProcessorInterface;
+use Nelmio\Alice\ParserInterface;
+use Prophecy\Argument;
+
+/**
+ * @covers Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
+ */
+class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
+{
+    private static $dir;
+
+    public function setUp()
+    {
+        self::$dir = __DIR__.'/../File/Cache';
+    }
+
+    public function testIsAnIncludeProcessor()
+    {
+        $this->assertTrue(is_a(DefaultIncludeProcessor::class, IncludeProcessorInterface::class, true));
+    }
+
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
+        clone $processor;
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessage Could not find any include statement in the file "dummy.php".
+     */
+    public function testThrowExceptionIfNoIncludeStatementFound()
+    {
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
+        /* @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
+        $fileLocatorProphecy->locate(Argument::any())->shouldNotBeCalled();
+        /* @var FileLocatorInterface $fileLocator */
+        $fileLocator = $fileLocatorProphecy->reveal();
+
+        $processor = new DefaultIncludeProcessor($fileLocator);
+        $processor->process($parser, 'dummy.php', []);
+    }
+
+    public function testIncludeStatementCanBeNull()
+    {
+        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $parsedMainFileContent = [
+            'include' => null,
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+        $expected = [
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
+        /* @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
+        $fileLocatorProphecy->locate(Argument::any())->shouldNotBeCalled();
+        /* @var FileLocatorInterface $fileLocator */
+        $fileLocator = $fileLocatorProphecy->reveal();
+
+        $processor = new DefaultIncludeProcessor($fileLocator);
+
+        $actual = $processor->process($parser, $mainFile, $parsedMainFileContent);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessageRegExp  /^Expected include statement to be either null or an array of files to include\. Got string instead in file ".+\/main\.yml"\.$/
+     */
+    public function testIfNotNullIncludeStatementMustBeAnArray()
+    {
+        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $parsedMainFileContent = [
+            'include' => 'stringValue',
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
+        /* @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
+
+        $processor->process($parser, $mainFile, $parsedMainFileContent);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessageRegExp  /^Expected elements of include statement to be file names\. Got boolean instead in file ".+\/main\.yml"\.$/
+     */
+    public function testIncludedFilesMustBeStrings()
+    {
+        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $parsedMainFileContent = [
+            'include' => [
+                false,
+            ],
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
+        /* @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
+
+        $processor->process($parser, $mainFile, $parsedMainFileContent);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedExceptionMessageRegExp  /^Expected elements of include statement to be file names\. Got empty string instead in file ".+\/main\.yml"\.$/
+     */
+    public function testIncludedFilesMustBeNonEmptyStrings()
+    {
+        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $parsedMainFileContent = [
+            'include' => [
+                '',
+            ],
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
+        /* @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
+
+        $processor->process($parser, $mainFile, $parsedMainFileContent);
+    }
+
+    public function testProcessIncludeFiles()
+    {
+        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $parsedMainFileContent = [
+            'include' => [
+                'file1.yml',
+                'another_level/file2.yml',
+            ],
+            'Nelmio\Alice\Model\User' => [
+                'user_main' => [],
+            ],
+        ];
+        $parsedFile1Content = [
+            'Nelmio\Alice\Model\User' => [
+                'user_file1' => [],
+            ],
+        ];
+        $parsedFile2Content = [
+            'include' => [
+                self::$dir.'/file3.yml',
+            ],
+            'Nelmio\Alice\Model\User' => [
+                'user_file2' => [],
+            ],
+        ];
+        $parsedFile3Content = [
+            'Nelmio\Alice\Model\User' => [
+                'user_file3' => [],
+            ],
+        ];
+        $expected = [
+            'Nelmio\Alice\Model\User' => [
+                'user_file3' => [],
+                'user_file2' => [],
+                'user_file1' => [],
+                'user_main' => [],
+            ],
+        ];
+
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse($mainFile)->willReturn($parsedMainFileContent);
+        $parserProphecy->parse(Argument::containingString('file1.yml'))->willReturn($parsedFile1Content);
+        $parserProphecy->parse(Argument::containingString('file2.yml'))->willReturn($parsedFile2Content);
+        $parserProphecy->parse(Argument::containingString('file3.yml'))->willReturn($parsedFile3Content);
+        /* @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
+        $actual = $processor->process($parser, $mainFile, $parsedMainFileContent);
+
+        $this->assertSame($expected, $actual);
+    }
+}
