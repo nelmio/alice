@@ -7,12 +7,13 @@ cache:
     - "$HOME/.composer/cache"
 
 php:
-  - '7.0'
   - nightly
 
 matrix:
   fast_finish: true
   include:
+    - php: '7.0'
+      env: COVERAGE='true'
     - php: hhvm
       env: COMPOSER_FLAGS='--ignore-platform-reqs'
     - php: '7.0'
@@ -31,13 +32,17 @@ install:
   - |
     if [ "hhvm" != "$TRAVIS_PHP_VERSION" ]; then
         phpenv config-rm xdebug.ini;
-    else
-        hhvm -v hhvm.enable_hip_hop_syntax=true;
     fi;
   - |
-    if [ "$SYMFONY_VERSION" != "" ]; then
+    if [ "" != "$SYMFONY_VERSION" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}";
     fi;
   - composer install --prefer-dist $COMPOSER_FLAGS
 
-script: phpdbg -qrr vendor/bin/phpunit --testdox --verbose
+script:
+  - |
+    if [ -n "$COVERAGE" ]; then
+        phpdbg -qrr vendor/bin/phpunit --testdox --verbose
+    else
+        vendor/bin/phpunit --testdox --verbose;
+    fi;
