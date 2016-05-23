@@ -28,10 +28,14 @@ matrix:
     - php: nightly
 
 install:
-  - if [ "hhvm" != "$TRAVIS_PHP_VERSION" ]; then
+  - |
+    if [ "hhvm" != "$TRAVIS_PHP_VERSION" ]; then
         phpenv config-rm xdebug.ini;
+    else
+        hhvm -v hhvm.enable_hip_hop_syntax=true;
     fi;
-  - if [ "$SYMFONY_VERSION" != "" ]; then
+  - |
+    if [ "$SYMFONY_VERSION" != "" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}";
     fi;
   - composer install --prefer-dist $COMPOSER_FLAGS
