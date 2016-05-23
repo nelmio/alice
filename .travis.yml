@@ -31,7 +31,7 @@ install:
     if [ "hhvm" != "$TRAVIS_PHP_VERSION" ]; then
         phpenv config-rm xdebug.ini;
     else
-        echo 'hhvm.enable_hip_hop_syntax = true' > travis.hhvm.ini;
+        hhvm -v hhvm.enable_hip_hop_syntax=true;
     fi;
   - |
     if [ "$SYMFONY_VERSION" != "" ]; then
