@@ -16,6 +16,8 @@ use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
 
 /**
  * The instantiator is responsible for creating an object defined by its fixture.
+ *
+ * @deprecated Should typehint Nelmio\Alice\InstantiatorInterface. Will be removed in 3.0
  */
 class Instantiator
 {
