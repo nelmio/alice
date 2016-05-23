@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Fixtures;
 
+use Nelmio\Alice\FileLocator\DefaultFileLocator;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Populator;
@@ -19,6 +20,7 @@ use Nelmio\Alice\Instances\Processor\Methods\Faker;
 use Nelmio\Alice\Instances\Processor\Providers\IdentityProvider;
 use Nelmio\Alice\Parser\Chainable\PhpParser;
 use Nelmio\Alice\Parser\Chainable\YamlParser;
+use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
 use Nelmio\Alice\Parser\ParserRegistry;
 use Nelmio\Alice\Parser\RuntimeCacheParser;
 use Nelmio\Alice\ParserInterface;
@@ -401,7 +403,7 @@ class Loader
             new PhpParser(),
         ]);
 
-        return new RuntimeCacheParser($parserRegistry);
+        return new RuntimeCacheParser($parserRegistry, new DefaultIncludeProcessor(new DefaultFileLocator()));
     }
 
     /**
