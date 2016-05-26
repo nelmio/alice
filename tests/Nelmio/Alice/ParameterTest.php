@@ -16,6 +16,11 @@ namespace Nelmio\Alice;
  */
 class ParameterTest extends \PHPUnit_Framework_TestCase
 {
+    public function testCreateInvalidParameter()
+    {
+        $this->markTestIncomplete('TODO');
+    }
+    
     /**
      * @dataProvider provideValues
      */

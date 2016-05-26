@@ -1,0 +1,60 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Nelmio\Alice\Fixture;
+
+final class PropertyDefinition
+{
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var mixed
+     */
+    private $value;
+
+    /**
+     * @var bool
+     */
+    private $requiresUnique;
+
+    public function __construct(string $name, $value, bool $requiresUnique = false)
+    {
+        $this->name = $name;
+        $this->value = $value;
+        $this->requiresUnique = $requiresUnique;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return (is_object($this->value))? clone $this->value : $this->value;
+    }
+
+    /**
+     * returns true if this property requires unique values
+     *
+     * @return boolean
+     **/
+    public function requiresUnique()
+    {
+        return $this->requiresUnique;
+    }
+}

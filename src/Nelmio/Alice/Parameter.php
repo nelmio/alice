@@ -29,9 +29,21 @@ final class Parameter
     /**
      * @param string $key
      * @param mixed  $value
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(string $key, $value)
     {
+        if (1 !== preg_match('/[\p{L}\d\._\/]+/', $key)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Invalid parameter key "%s". A parameter key can only be composed of letters, digits, periods, '
+                    .'underscores and slahes.',
+                    $key
+                )
+            );
+        }
+
         $this->key = $key;
         $this->value = $value;
     }

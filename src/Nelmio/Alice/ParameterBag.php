@@ -25,9 +25,23 @@ final class ParameterBag implements \IteratorAggregate, \Countable
 
     /**
      * @param mixed[] $parameters Keys/values pair of parameters
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(array $parameters = [])
     {
+        foreach ($parameters as $parameter => $value) {
+            if (1 !== preg_match('/[\p{L}\d\._\/]+/', $parameter)) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Invalid parameter key "%s". A parameter key can only be composed of letters, digits, periods, '
+                        .'underscores and slahes.',
+                        $parameter
+                    )
+                );
+            }
+        }
+        
         $this->parameters = $parameters;
     }
 
