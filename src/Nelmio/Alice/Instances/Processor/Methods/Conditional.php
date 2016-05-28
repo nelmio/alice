@@ -48,11 +48,13 @@ class Conditional implements MethodInterface
 
         if ($this->shouldReturnTrue($processable)) {
             return $trueValue;
-        } elseif (!is_null($processable->getMatch('falseValue')) && '' !== $processable->getMatch('falseValue')) {
-            return $this->processor->process($processable->getMatch('falseValue'), $variables);
-        } else {
-            return is_array($trueValue) ? [] : null;
         }
+        
+        if (!is_null($processable->getMatch('falseValue')) && '' !== $processable->getMatch('falseValue')) {
+            return $this->processor->process($processable->getMatch('falseValue'), $variables);
+        }
+        
+        return is_array($trueValue) ? [] : null;
     }
 
     /**
