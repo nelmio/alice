@@ -22,7 +22,7 @@ class ArrayValue implements MethodInterface
     private $processor;
 
     /**
-     * sets the processor to handle recursive calls
+     * Sets the processor to handle recursive calls.
      *
      * @param Processor $processor
      */
