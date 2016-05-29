@@ -190,6 +190,22 @@ class ParameterResolverFunctionalTest extends \PHPUnit_Framework_TestCase
             ])
         ];
 
+        $return['composite stringified reference'] = [
+            new ParameterBag([
+                'param1' => '<{param2}> <{param4}>',
+                'param2' => '<{param3}>',
+                'param3' => false,
+                'param4' => -.89,
+            ]),
+            null,
+            new ParameterBag([
+                'param1' => ' -0.89',
+                'param2' => false,
+                'param3' => false,
+                'param4' => -.89,
+            ])
+        ];
+
         $return['nested parameters'] = [
             new ParameterBag([
                 'param1' => '<{param<{param2}>}>',
