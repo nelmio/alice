@@ -128,6 +128,72 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
+    public function testResolveIncludesAllResults()
+    {
+        $parameter = new Parameter('foo', null);
+        $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
+        $resolvedParameters = new ParameterBag(['place' => 'Wonderlands']);
+        $context = new ResolvingContext('foo');
+
+        $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
+        $decoratedResolverProphecy
+            ->resolve(
+                $parameter,
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn(
+                new ParameterBag([
+                    'foo' => 'first result',
+                    'another_param1' => 'val1',
+                ])
+            )
+        ;
+        $decoratedResolverProphecy
+            ->resolve(
+                new Parameter('foo', 'first result'),
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn(
+                new ParameterBag([
+                    'foo' => 'second result',
+                    'another_param2' => 'val2', // 'another_param1' has already been resolved so is not return in the result set!
+                ])
+            )
+        ;
+        $decoratedResolverProphecy
+            ->resolve(
+                new Parameter('foo', 'second result'),
+                $unresolvedParameters,
+                $resolvedParameters,
+                $context
+            )
+            ->willReturn(
+                new ParameterBag([
+                    'foo' => 'second result',   // same as previous
+                ])
+            )
+        ;
+        /* @var ChainableParameterResolverInterface $decoratedResolver */
+        $decoratedResolver = $decoratedResolverProphecy->reveal();
+
+        $resolver = new RecursiveParameterResolver($decoratedResolver);
+        $actual = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
+
+        $this->assertEquals(
+            new ParameterBag([
+                'foo' => 'second result',
+                'another_param1' => 'val1',
+                'another_param2' => 'val2',
+            ]),
+            $actual
+        );
+        $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(3);
+    }
+
     /**
      * @dataProvider provideContexts
      */
