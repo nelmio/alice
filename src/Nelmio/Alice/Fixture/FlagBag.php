@@ -61,7 +61,7 @@ final class FlagBag implements \IteratorAggregate, \Countable
 
         return $clone;
     }
-    
+
     public function getKey(): string
     {
         return $this->key;

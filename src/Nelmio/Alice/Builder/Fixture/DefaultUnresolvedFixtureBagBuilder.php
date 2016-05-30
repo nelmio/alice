@@ -40,7 +40,7 @@ final class DefaultUnresolvedFixtureBagBuilder implements UnresolvedFixtureBagBu
         $bag = new UnresolvedFixtureBag();
         foreach ($fixtures as $className => $fixtureData) {
             foreach ($fixtureData as $reference => $specs) {
-                $fixtures = $this->buildFixture($bag, $this->builder, $className, $reference, $specs);
+                $bag = $this->buildFixture($bag, $className, $reference, $specs);
             }
         }
         
@@ -49,7 +49,6 @@ final class DefaultUnresolvedFixtureBagBuilder implements UnresolvedFixtureBagBu
     
     private function buildFixture(
         UnresolvedFixtureBag $fixtures,
-        UnresolvedFixtureBuilderInterface $builder,
         string $className,
         string $reference,
         array $specs
@@ -59,7 +58,7 @@ final class DefaultUnresolvedFixtureBagBuilder implements UnresolvedFixtureBagBu
         $referenceFlags = $this->flagParser->parse($reference);
         $flags = $classNameFlags->mergeWith($referenceFlags);
         
-        $result = $builder->build($classNameFlags->getKey(), $referenceFlags->getKey(), $specs, $flags);
+        $result = $this->builder->build($fixtures, $classNameFlags->getKey(), $referenceFlags->getKey(), $specs, $flags);
         foreach ($result as $fixture) {
             $fixtures = $fixtures->with($fixture);
         }

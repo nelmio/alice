@@ -39,7 +39,20 @@ final class SpecificationBag
         $this->properties = $properties;
         $this->calls = $calls;
     }
-    
+
+    /**
+     * Creates a new instance to which the given specs have been merged. In case of conflicts, the existing values are
+     * overridden.
+     * 
+     * @param self $specs
+     *
+     * @return self
+     */
+    public function mergeWith(self $specs): self
+    {
+        //TODO
+    }
+
     public function __clone()
     {
         if (null !== $this->constructor) {

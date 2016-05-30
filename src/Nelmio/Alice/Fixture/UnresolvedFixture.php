@@ -9,54 +9,64 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\Fixture;
 
-use Nelmio\Alice\Fixture\FlagBag;
-use Nelmio\Alice\Fixture\SpecificationBag;
+use Nelmio\Alice\UnresolvedFixtureInterface;
 
-final class UnresolvedFixture
+final class UnresolvedFixture implements UnresolvedFixtureInterface
 {
+    /**
+     * @var string
+     */
+    private $reference;
+
     /**
      * @var string
      */
     private $className;
 
     /**
-     * @var string
-     */
-    private $flags;
-
-    /**
      * @var array
      */
     private $specs;
 
-    public function __construct(string $reference, string $className, SpecificationBag $specs, FlagBag $flags)
+    public function __construct(string $reference, string $className, SpecificationBag $specs)
     {
         $this->className = $className;
-        $this->name = $reference;
+        $this->reference = $reference;
         $this->specs = $specs;
-        $this->flags = $flags;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getReference(): string
     {
-        return $this->name;
+        return $this->reference;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getClassName(): string
     {
         return $this->className;
     }
 
-    public function getFlags(): FlagBag
-    {
-        return clone $this->flags;
-    }
-
+    /**
+     * @inheritdoc
+     */
     public function getSpecs(): SpecificationBag
     {
         return clone $this->specs;
+    }
+    
+    public function withSpecs(SpecificationBag $specs): self
+    {
+        $clone = clone $this;
+        $clone->specs = $specs;
+        
+        return $clone;
     }
     
     public function __clone()

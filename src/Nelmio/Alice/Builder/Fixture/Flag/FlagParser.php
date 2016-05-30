@@ -2,15 +2,16 @@
 
 /*
  * This file is part of the Alice package.
- *
+ *  
  * (c) Nelmio <hello@nelm.io>
- *
+ *  
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Builder\Fixture;
+namespace Nelmio\Alice\Builder\Fixture\Flag;
 
+use Nelmio\Alice\Builder\Fixture\FlagParserInterface;
 use Nelmio\Alice\Fixture\Flag\ExtendFlag;
 use Nelmio\Alice\Fixture\Flag\TemplateFlag;
 use Nelmio\Alice\Fixture\FlagBag;
