@@ -67,18 +67,31 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
         }
         $previousParameterValue = $previousResult->get($parameter->getKey());
 
-        $currentResult = $this->resolver->resolve(
+        $newResult = $this->resolver->resolve(
             $parameter->withValue($previousParameterValue),
             $unresolvedParameters,
             $resolvedParameters,
             $context
         );
-        $currentParameterValue = $currentResult->get($parameter->getKey());
-        if ($previousParameterValue === $currentParameterValue) {
-            return $currentResult;
+        $newParameterValue = $newResult->get($parameter->getKey());
+        $result = $this->mergeResults($previousResult, $newResult);
+
+        if ($previousParameterValue === $newParameterValue) {
+            return $result;
         }
 
-        return $this->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context, $currentResult);
+        return $this->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context, $result);
+    }
+
+    private function mergeResults(ParameterBag $previous, ParameterBag $new): ParameterBag
+    {
+        foreach ($previous as $key => $value) {
+            $new = $new->with(
+                new Parameter($key, $value)
+            );
+        }
+
+        return $new;
     }
 
     public function __clone()
