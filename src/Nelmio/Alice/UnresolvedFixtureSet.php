@@ -29,6 +29,16 @@ final class UnresolvedFixtureSet
         $this->fixtures = $fixtures;
     }
 
+    public function getFixtures(): UnresolvedFixtureBag
+    {
+        return clone $this->fixtures;
+    }
+
+    public function getParameters(): ParameterBag
+    {
+        return clone $this->parameters;
+    }
+
     public function __clone()
     {
         throw new \DomainException('Is not clonable.');
