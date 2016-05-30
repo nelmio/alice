@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Instances\Processor;
 
-use InvalidArgumentException;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Processor\Methods\MethodInterface;
 use Nelmio\Alice\Util\SetterInjector;
@@ -36,12 +35,14 @@ class Processor
     /**
      * @param Collection $objects
      * @param array      $methods
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(Collection $objects, array $methods)
     {
         foreach ($methods as $method) {
             if (!($method instanceof MethodInterface)) {
-                throw new InvalidArgumentException("All methods passed into Processor must implement MethodInterface.");
+                throw new \InvalidArgumentException("All methods passed into Processor must implement MethodInterface.");
             }
         }
 
@@ -52,7 +53,7 @@ class Processor
     }
 
     /**
-     * adds a processor for processing extensions
+     * Adds a processor for processing extensions.
      *
      * @param MethodInterface $processor
      **/
@@ -64,11 +65,13 @@ class Processor
     }
 
     /**
-     * processes a given value to return a value that can be set on the actual instance
+     * Processes a given value to return a value that can be set on the actual instance.
      *
-     * @param  mixed  $valueOrProcessable - the original value (or value persister) to be converted
-     * @param  array  $variables
-     * @param  string $valueForCurrent    - in the event a fixture will need to support <current()>, this value must be passed in at the top of the process loop
+     * @param mixed  $valueOrProcessable The original value (or value persister) to be converted
+     * @param array  $variables
+     * @param string $valueForCurrent    In the event a fixture will need to support <current()>, this value must be
+     *                                   passed in at the top of the process loop
+     *
      * @return mixed
      */
     public function process($valueOrProcessable, array $variables, $valueForCurrent = null)
