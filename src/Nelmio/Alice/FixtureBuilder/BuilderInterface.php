@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\FixtureBuilder;
 
-use Nelmio\Alice\BareFixtureSet;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
 interface DenormalizerInterface
