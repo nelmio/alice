@@ -9,13 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\FixtureBuilder;
+namespace Nelmio\Alice;
 
 /**
- * Minimalist version of {@see Nelmio\Alice\FixtureSet} containing only the loaded parameters and fixtures, i.e. does
- * not includes the injected parameters and objects.
+ * A fixture is a value object representing an object to be built.
  */
-final class BareFixtureSet
+interface FixtureInterface
 {
     //TODO
 }
