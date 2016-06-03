@@ -9,12 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\Throwable;
 
-/**
- * Value objects containing the loaded parameters, fixtures and the injected parameters, objects.
- */
-final class FixtureSet
+interface DenormalizationThrowable extends BuildThrowable
 {
-    //TODO
 }

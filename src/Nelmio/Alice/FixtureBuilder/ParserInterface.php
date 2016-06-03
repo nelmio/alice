@@ -9,13 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\FixtureBuilder;
 
 use Nelmio\Alice\Throwable\ParseThrowable;
 
-/**
- * @deprecated to be replaced by Nelmio\Alice\FixtureBuilder\ParserInterface
- */
 interface ParserInterface
 {
     /**
