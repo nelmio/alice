@@ -11,6 +11,6 @@
 
 namespace Nelmio\Alice\Throwable;
 
-interface ParseThrowable extends \Throwable
+interface ParseThrowable extends BuildThrowable
 {
 }

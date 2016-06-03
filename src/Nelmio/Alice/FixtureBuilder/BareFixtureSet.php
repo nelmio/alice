@@ -12,9 +12,10 @@
 namespace Nelmio\Alice;
 
 /**
- * Value objects containing the loaded parameters, fixtures and the injected parameters, objects.
+ * Minimalist version of {@see Nelmio\Alice\FixtureSet} containing only the loaded parameters and fixtures, i.e. does
+ * not includes the injected parameters and objects.
  */
-final class FixtureSet
+final class BareFixtureSet
 {
     //TODO
 }
