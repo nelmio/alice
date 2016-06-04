@@ -11,11 +11,14 @@
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\LoaderInterface;
+use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
+use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
@@ -89,7 +92,7 @@ class SimpleLoaderTest extends \PHPUnit_Framework_TestCase
             'dummy0' => new \stdClass(),
         ];
 
-        $fixtureSet = new FixtureSet();
+        $fixtureSet = new FixtureSet(new ParameterBag(), new ParameterBag(), new FixtureBag(), new ObjectBag());
         $objectSet = new ObjectSet();
 
         $fixtureBuilderProphecy = $this->prophesize(FixtureBuilderInterface::class);

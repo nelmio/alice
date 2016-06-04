@@ -14,7 +14,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
 
-final class SimpleParameterBagBuilder implements ParameterBagDenormalizerInterface
+final class SimpleParameterBagDenormalizer implements ParameterBagDenormalizerInterface
 {
     /**
      * {@inheritdoc}
@@ -25,20 +25,21 @@ final class SimpleParameterBagBuilder implements ParameterBagDenormalizerInterfa
      */
     public function denormalize(array $data): ParameterBag
     {
-        if (false === array_key_exists('parameters', $data)) {
+        if (false === array_key_exists('parameters', $data)
+            || null === $fixturesParameters = $data['parameters']
+        ) {
             return new ParameterBag();
         }
 
-        $parameters = $data['parameters'];
-        if (false === is_array($parameters)) {
+        if (false === is_array($fixturesParameters)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Expected parameters to be an array. Got "%s" instead.',
-                    is_object($parameters) ? get_class($parameters) : gettype($parameters)
+                    is_object($fixturesParameters) ? get_class($fixturesParameters) : gettype($fixturesParameters)
                 )
             );
         }
 
-        return new ParameterBag($parameters);
+        return new ParameterBag($fixturesParameters);
     }
 }

@@ -16,7 +16,7 @@ use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
-final class SimpleBuilder implements DenormalizerInterface
+final class SimpleDenormalizer implements DenormalizerInterface
 {
     use NotClonableTrait;
     
