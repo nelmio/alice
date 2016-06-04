@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser;
+namespace Nelmio\Alice\FixtureBuilder\Parser;
 
-use Nelmio\Alice\Parser\Chainable\PhpParser;
-use Nelmio\Alice\Parser\Chainable\YamlParser;
+use Nelmio\Alice\FixtureBuilder\Parser\Chainable\PhpParser;
+use Nelmio\Alice\FixtureBuilder\Parser\Chainable\YamlParser;
 
 /**
  * List a list of file names for Parsers. The list is flagged to be able to easily extract some parts of it. This class

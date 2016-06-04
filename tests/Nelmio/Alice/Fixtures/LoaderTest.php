@@ -94,7 +94,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\ParserNotFoundException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParserNotFoundException
      */
     public function testLoadUnparsableFile()
     {
@@ -125,7 +125,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\InvalidArgumentException
      */
     public function testLoadInvalidFile()
     {

@@ -9,10 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser;
+namespace Nelmio\Alice\FixtureBuilder\Parser;
 
-use Nelmio\Alice\Exception\Parser\InvalidArgumentException;
-use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\ParserInterface;
 use Nelmio\Alice\Throwable\ParseThrowable;
 
 interface IncludeProcessorInterface
@@ -25,7 +24,6 @@ interface IncludeProcessorInterface
      * @param string          $file   File from which the data comes from.
      * @param array           $data   Parse result of the loaded file.
      *
-     * @throws InvalidArgumentException
      * @throws ParseThrowable
      *
      * @return array

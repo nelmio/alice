@@ -2,22 +2,24 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser\IncludeProcessor;
+namespace Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor;
 
-use Nelmio\Alice\Exception\Parser\InvalidArgumentException;
 use Nelmio\Alice\FileLocatorInterface;
-use Nelmio\Alice\Parser\IncludeProcessorInterface;
-use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessorInterface;
+use Nelmio\Alice\FixtureBuilder\ParserInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class DefaultIncludeProcessor implements IncludeProcessorInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var IncludeDataMerger
      */
@@ -33,14 +35,14 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
         $this->fileLocator = $fileLocator;
         $this->dataMerger = new IncludeDataMerger();
     }
-    
+
     /**
      * @inheritdoc
      */
     public function process(ParserInterface $parser, string $file, array $data): array
     {
         if (false === array_key_exists('include', $data)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 sprintf(
                     'Could not find any include statement in the file "%s".',
                     $file
@@ -56,7 +58,7 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
         }
 
         if (false === is_array($include)) {
-            throw new InvalidArgumentException(
+            throw new \TypeError(
                 sprintf(
                     'Expected include statement to be either null or an array of files to include. Got %s instead in '
                     .'file "%s".',
@@ -68,7 +70,7 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
 
         foreach ($include as $includeFile) {
             if (false === is_string($includeFile)) {
-                throw new InvalidArgumentException(
+                throw new \TypeError(
                     sprintf(
                         'Expected elements of include statement to be file names. Got %s instead in file "%s".',
                         gettype($includeFile),
@@ -78,7 +80,7 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
             }
 
             if (0 === strlen($includeFile)) {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     sprintf(
                         'Expected elements of include statement to be file names. Got empty string instead in file '
                         .'"%s".',
@@ -97,10 +99,5 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
         }
 
         return $data;
-    }
-
-    public function __clone()
-    {
-        throw new \DomainException('Is not clonable');
     }
 }

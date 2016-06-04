@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser;
+namespace Nelmio\Alice\FixtureBuilder\Parser;
 
-use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\ParserInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Parser\ParserRegistry
+ * @covers Nelmio\Alice\FixtureBuilder\Parser\ParserRegistry
  */
 class ParserRegistryTest extends \PHPUnit_Framework_TestCase
 {
@@ -87,7 +87,7 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\ParserNotFoundException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParserNotFoundException
      * @expectedExceptionMessage No suitable parser found for the file "dummy.php".
      */
     public function testThrowExceptionIfNoSuitableParserIsFound()

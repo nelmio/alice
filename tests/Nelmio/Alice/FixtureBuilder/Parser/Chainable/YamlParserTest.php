@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser\Chainable;
+namespace Nelmio\Alice\FixtureBuilder\Parser\Chainable;
 
-use Nelmio\Alice\Parser\ChainableParserInterface;
-use Nelmio\Alice\Parser\FileListProviderTrait;
+use Nelmio\Alice\FixtureBuilder\Parser\ChainableParserInterface;
+use Nelmio\Alice\FixtureBuilder\Parser\FileListProviderTrait;
 use Prophecy\Argument;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
- * @covers Nelmio\Alice\Parser\Chainable\YamlParser
+ * @covers Nelmio\Alice\FixtureBuilder\Parser\Chainable\YamlParser
  */
 class YamlParserTest extends \PHPUnit_Framework_TestCase
 {
@@ -100,7 +100,7 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage File "/nowhere.yml" could not be found.
      */
     public function testThrowExceptionIfFileDoesNotExist()
@@ -163,7 +163,7 @@ EOF;
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\ParseException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException
      * @expectedExceptionMessageRegExp /^The file ".+\/basic\.yml" does not contain valid YAML\.$/
      */
     public function testThrowExceptionIfFileNotParsable()
@@ -180,15 +180,15 @@ EOF;
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\ParseException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException
      * @expectedExceptionMessageRegExp /^Could not parse the file ".+\/basic\.yml"\.$/
      */
-    public function testThrowExceptionOnUnexpectedParseError()
+    public function testThrowExceptionOnUnexpectedParseException()
     {
         $file = self::$dir.'/basic.yml';
 
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
-        $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(\Error::class);
+        $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(\Exception::class);
         /* @var SymfonyYamlParser $symfonyYamlParser */
         $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
 
