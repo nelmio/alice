@@ -37,13 +37,7 @@ final class SimpleDenormalizer implements DenormalizerInterface
     }
 
     /**
-     * Denormalizes the parsed data into a comprehensive collection of fixtures.
-     *
-     * @param array $data PHP data coming from the parser
-     *
-     * @throws DenormalizationThrowable
-     *
-     * @return BareFixtureSet Contains the loaded parameters and fixtures.
+     * @inheritdoc
      */
     public function denormalize(array $data): BareFixtureSet
     {
