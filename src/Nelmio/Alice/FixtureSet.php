@@ -16,5 +16,37 @@ namespace Nelmio\Alice;
  */
 final class FixtureSet
 {
-    //TODO
+    use NotClonableTrait;
+    
+    /**
+     * @var ParameterBag
+     */
+    private $loadedParameters;
+    
+    /**
+     * @var ParameterBag
+     */
+    private $injectedParameters;
+    
+    /**
+     * @var FixtureBag
+     */
+    private $fixtures;
+    
+    /**
+     * @var ObjectBag
+     */
+    private $injectedObjects;
+
+    public function __construct(
+        ParameterBag $loadedParameters,
+        ParameterBag $injectedParameters,
+        FixtureBag $fixtures,
+        ObjectBag $injectedObjects
+    ) {
+        $this->loadedParameters = $loadedParameters;
+        $this->injectedParameters = $injectedParameters;
+        $this->fixtures = $fixtures;
+        $this->injectedObjects = $injectedObjects;
+    }
 }

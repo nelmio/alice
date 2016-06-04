@@ -1,6 +1,7 @@
 ### 3.0.0 (WIP)
 
-  * Added new parser system (#361)
+  * Added new parser system with support for cache (#361)
+  * Add new parameter resolver system with support for dynamic and composite keys (#366)
 
 ### 2.x (WIP)
 
