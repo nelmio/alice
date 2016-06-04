@@ -12,11 +12,8 @@
 namespace Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor;
 
 use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessorInterface;
-use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\ParserInterface;
 
-/**
- * @author Théo FIDRY <theo.fidry@gmail.com>
- */
 final class FakeIncludeProcessor implements IncludeProcessorInterface
 {
     public function process(ParserInterface $parser, string $file, array $data): array

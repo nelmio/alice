@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Parser;
 
-use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\ParserInterface;
 use Prophecy\Argument;
 
 /**

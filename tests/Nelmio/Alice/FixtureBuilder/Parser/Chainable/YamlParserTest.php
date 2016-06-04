@@ -100,7 +100,7 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage File "/nowhere.yml" could not be found.
      */
     public function testThrowExceptionIfFileDoesNotExist()
@@ -183,12 +183,12 @@ EOF;
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException
      * @expectedExceptionMessageRegExp /^Could not parse the file ".+\/basic\.yml"\.$/
      */
-    public function testThrowExceptionOnUnexpectedParseError()
+    public function testThrowExceptionOnUnexpectedParseException()
     {
         $file = self::$dir.'/basic.yml';
 
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
-        $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(\Error::class);
+        $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(\Exception::class);
         /* @var SymfonyYamlParser $symfonyYamlParser */
         $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
 

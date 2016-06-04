@@ -14,7 +14,7 @@ namespace Nelmio\Alice\FixtureBuilder\Parser;
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
 use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\DefaultIncludeProcessor;
 use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\FakeIncludeProcessor;
-use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\ParserInterface;
 use Prophecy\Argument;
 
 /**

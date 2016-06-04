@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Fixtures;
 
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
+use Nelmio\Alice\FixtureBuilder\ParserInterface;
 use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Instances\Instantiator;
 use Nelmio\Alice\Instances\Populator;
@@ -23,7 +24,6 @@ use Nelmio\Alice\FixtureBuilder\Parser\Chainable\YamlParser;
 use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\DefaultIncludeProcessor;
 use Nelmio\Alice\FixtureBuilder\Parser\ParserRegistry;
 use Nelmio\Alice\FixtureBuilder\Parser\RuntimeCacheParser;
-use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\PersisterInterface;
 use Nelmio\Alice\Util\TypeHintChecker;
 use Psr\Log\LoggerInterface;
