@@ -19,6 +19,11 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
 
+    public function setUp()
+    {
+        $this->markTestIncomplete('TODO');
+    }
+
     public function testLoadLoadsYamlFilesAndDoctrinePersister()
     {
         $om = $this->getDoctrineManagerMock(14);
