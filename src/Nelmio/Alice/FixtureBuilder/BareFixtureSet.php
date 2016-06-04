@@ -11,11 +11,41 @@
 
 namespace Nelmio\Alice\FixtureBuilder;
 
+use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\ParameterBag;
+
 /**
  * Minimalist version of {@see Nelmio\Alice\FixtureSet} containing only the loaded parameters and fixtures, i.e. does
  * not includes the injected parameters and objects.
  */
 final class BareFixtureSet
 {
-    //TODO
+    use NotClonableTrait;
+    
+    /**
+     * @var ParameterBag
+     */
+    private $parameters;
+    
+    /**
+     * @var FixtureBag
+     */
+    private $fixtures;
+
+    public function __construct(ParameterBag $parameters, FixtureBag $fixtures)
+    {
+        $this->parameters = $parameters;
+        $this->fixtures = $fixtures;
+    }
+    
+    public function getParameters(): ParameterBag
+    {
+        return clone $this->parameters;
+    }
+    
+    public function getFixtures(): FixtureBag
+    {
+        return clone $this->fixtures;
+    }
 }

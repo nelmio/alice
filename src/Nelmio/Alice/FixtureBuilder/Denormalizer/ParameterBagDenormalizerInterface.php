@@ -9,20 +9,23 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\FixtureBuilder;
+namespace Nelmio\Alice\FixtureBuilder\Denormalizer;
 
+use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
-interface DenormalizerInterface
+interface ParameterBagDenormalizerInterface
 {
     /**
-     * Denormalizes the parsed data parsed into a comprehensive collection of fixtures.
+     * More specific version of {@see Nelmio\Alice\FixtureBuilder\BuilderInterface}.
+     *
+     * Denormalizes the parsed data or a subset of it parsed into a list of parameters.
      *
      * @param array $data PHP data coming from the parser
      *
      * @throws DenormalizationThrowable
      *                        
-     * @return BareFixtureSet Contains the loaded parameters and fixtures.
+     * @return ParameterBag
      */
-    public function denormalize(array $data): BareFixtureSet;
+    public function denormalize(array $data): ParameterBag;
 }
