@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser;
+namespace Nelmio\Alice\FixtureBuilder\Parser;
 
-use Nelmio\Alice\Exception\Parser\InvalidArgumentException;
-use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\ParserInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 /**
  * Decorates a parser to cache the result and process includes. Includes are being processed in this parser to be able
@@ -20,6 +20,8 @@ use Nelmio\Alice\ParserInterface;
  */
 final class RuntimeCacheParser implements ParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var array[] Keys are real path of cached files and the values the resulting array
      */
@@ -29,7 +31,7 @@ final class RuntimeCacheParser implements ParserInterface
      * @var ParserInterface[]
      */
     private $parser;
-    
+
     /**
      * @var IncludeProcessorInterface
      */
@@ -42,9 +44,7 @@ final class RuntimeCacheParser implements ParserInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws InvalidArgumentException
+     * @inheritdoc
      */
     public function parse(string $file): array
     {
@@ -74,10 +74,5 @@ final class RuntimeCacheParser implements ParserInterface
         }
 
         return $data;
-    }
-
-    public function __clone()
-    {
-        throw new \DomainException('Is not clonable');
     }
 }

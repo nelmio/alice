@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Exception\Parser;
+namespace Nelmio\Alice\Exception\FixtureBuilder\Parser;
 
 use Nelmio\Alice\Throwable\ParseThrowable;
 

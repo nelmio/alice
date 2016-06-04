@@ -9,19 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser\Chainable;
+namespace Nelmio\Alice\FixtureBuilder\Parser\Chainable;
 
-use Nelmio\Alice\Parser\ChainableParserInterface;
-use Nelmio\Alice\Parser\FileListProviderTrait;
+use Nelmio\Alice\FixtureBuilder\Parser\ChainableParserInterface;
+use Nelmio\Alice\FixtureBuilder\Parser\FileListProviderTrait;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Parser\Chainable\PhpParser
+ * @covers Nelmio\Alice\FixtureBuilder\Parser\Chainable\PhpParser
  */
 class PhpParserTest extends \PHPUnit_Framework_TestCase
 {
     use FileListProviderTrait;
-    
+
     private static $dir;
 
     /**
@@ -68,7 +68,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     {
         $actual = $this->parser->canParse($file);
         $expected = (in_array(get_class($this->parser), $expectedParsers));
-        
+
         $this->assertEquals($expected, $actual);
     }
 
@@ -93,7 +93,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\InvalidArgumentException
      * @expectedExceptionMessage The file "/nowhere.php" could not be found.
      */
     public function testThrowExceptionIfFileDoesNotExist()
@@ -125,7 +125,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\InvalidArgumentException
      * @expectedExceptionMessageRegExp /^The file ".+\/no_return\.php" must return a PHP array\.$/
      */
     public function testThrowExceptionIfNoArrayReturnedInParsedFile()
@@ -134,7 +134,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\InvalidArgumentException
      * @expectedExceptionMessageRegExp /^The file ".+\/wrong_return\.php" must return a PHP array\.$/
      */
     public function testThrowExceptionIfWrongValueReturnedInParsedFile()

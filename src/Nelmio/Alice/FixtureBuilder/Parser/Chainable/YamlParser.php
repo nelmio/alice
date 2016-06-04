@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser\Chainable;
+namespace Nelmio\Alice\FixtureBuilder\Parser\Chainable;
 
-use Nelmio\Alice\Exception\Parser\InvalidArgumentException;
-use Nelmio\Alice\Exception\Parser\ParseException;
-use Nelmio\Alice\Parser\ChainableParserInterface;
+use Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException;
+use Nelmio\Alice\FixtureBuilder\Parser\ChainableParserInterface;
+use Nelmio\Alice\NotClonableTrait;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 final class YamlParser implements ChainableParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var SymfonyYamlParser
      */
@@ -39,7 +41,7 @@ final class YamlParser implements ChainableParserInterface
     public function parse(string $file): array
     {
         if (false === file_exists($file)) {
-            throw new InvalidArgumentException(sprintf('File "%s" could not be found.', $file));
+            throw new \InvalidArgumentException(sprintf('File "%s" could not be found.', $file));
         }
 
         try {
@@ -53,7 +55,7 @@ final class YamlParser implements ChainableParserInterface
                 0,
                 $exception
             );
-        } catch (\Throwable $error) {
+        } catch (\Exception $error) {
             throw new ParseException(
                 sprintf('Could not parse the file "%s".', $file),
                 0,
@@ -72,10 +74,5 @@ final class YamlParser implements ChainableParserInterface
         }
 
         return 1 === preg_match('/.{1,}\.ya?ml$/i', $file);
-    }
-
-    public function __clone()
-    {
-        throw new \DomainException('Is not clonable');
     }
 }

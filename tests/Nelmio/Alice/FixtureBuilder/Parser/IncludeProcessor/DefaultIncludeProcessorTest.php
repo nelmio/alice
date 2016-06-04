@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser\IncludeProcessor;
+namespace Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor;
 
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
 use Nelmio\Alice\FileLocatorInterface;
-use Nelmio\Alice\Parser\IncludeProcessorInterface;
+use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
+ * @covers Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\DefaultIncludeProcessor
  */
 class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +44,7 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\InvalidArgumentException
      * @expectedExceptionMessage Could not find any include statement in the file "dummy.php".
      */
     public function testThrowExceptionIfNoIncludeStatementFound()
@@ -96,7 +96,7 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\InvalidArgumentException
      * @expectedExceptionMessageRegExp  /^Expected include statement to be either null or an array of files to include\. Got string instead in file ".+\/main\.yml"\.$/
      */
     public function testIfNotNullIncludeStatementMustBeAnArray()
@@ -120,7 +120,7 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\InvalidArgumentException
      * @expectedExceptionMessageRegExp  /^Expected elements of include statement to be file names\. Got boolean instead in file ".+\/main\.yml"\.$/
      */
     public function testIncludedFilesMustBeStrings()
@@ -146,7 +146,7 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\InvalidArgumentException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\InvalidArgumentException
      * @expectedExceptionMessageRegExp  /^Expected elements of include statement to be file names\. Got empty string instead in file ".+\/main\.yml"\.$/
      */
     public function testIncludedFilesMustBeNonEmptyStrings()

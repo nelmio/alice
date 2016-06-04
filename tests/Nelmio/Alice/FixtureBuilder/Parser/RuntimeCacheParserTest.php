@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser;
+namespace Nelmio\Alice\FixtureBuilder\Parser;
 
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
-use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
-use Nelmio\Alice\Parser\IncludeProcessor\FakeIncludeProcessor;
+use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\DefaultIncludeProcessor;
+use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\FakeIncludeProcessor;
 use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Parser\RuntimeCacheParser
+ * @covers Nelmio\Alice\FixtureBuilder\Parser\RuntimeCacheParser
  */
 class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
 {

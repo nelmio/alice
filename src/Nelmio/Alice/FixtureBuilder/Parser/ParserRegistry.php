@@ -9,13 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser;
+namespace Nelmio\Alice\FixtureBuilder\Parser;
 
-use Nelmio\Alice\Exception\Parser\ParserNotFoundException;
-use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\Exception\FixtureBuilder\Parser\ParserNotFoundException;
+use Nelmio\Alice\FixtureBuilder\ParserInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class ParserRegistry implements ParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ChainableParserInterface[]
      */
@@ -23,8 +26,6 @@ final class ParserRegistry implements ParserInterface
 
     /**
      * @param ChainableParserInterface[] $parsers
-     *
-     * @throws \TypeError When invalid parser is passed.
      */
     public function __construct(array $parsers)
     {
@@ -52,10 +53,5 @@ final class ParserRegistry implements ParserInterface
                 $file
             )
         );
-    }
-
-    public function __clone()
-    {
-        throw new \DomainException('Is not clonable');
     }
 }

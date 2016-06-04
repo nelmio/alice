@@ -9,10 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Parser\Chainable;
+namespace Nelmio\Alice\FixtureBuilder\Parser\Chainable;
 
-use Nelmio\Alice\Exception\Parser\InvalidArgumentException;
-use Nelmio\Alice\Parser\ChainableParserInterface;
+use Nelmio\Alice\FixtureBuilder\Parser\ChainableParserInterface;
 
 final class PhpParser implements ChainableParserInterface
 {
@@ -20,19 +19,17 @@ final class PhpParser implements ChainableParserInterface
      * {@inheritDoc}
      *
      * @param string $file Local PHP file
-     *
-     * @throws InvalidArgumentException
      */
     public function parse(string $file): array
     {
         if (false === file_exists($file)) {
-            throw new InvalidArgumentException(sprintf('The file "%s" could not be found.', $file));
+            throw new \InvalidArgumentException(sprintf('The file "%s" could not be found.', $file));
         }
 
         $data = include($file);
 
         if (false === is_array($data)) {
-            throw new InvalidArgumentException(sprintf('The file "%s" must return a PHP array.', $file));
+            throw new \InvalidArgumentException(sprintf('The file "%s" must return a PHP array.', $file));
         }
 
         return $data;
@@ -48,10 +45,5 @@ final class PhpParser implements ChainableParserInterface
         }
 
         return 1 === preg_match('/.+\.php[7]?$/i', $file);
-    }
-
-    public function __clone()
-    {
-        throw new \DomainException('Is not clonable');
     }
 }
