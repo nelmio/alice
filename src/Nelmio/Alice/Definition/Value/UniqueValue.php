@@ -12,9 +12,12 @@
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class UniqueValue implements ValueInterface
 {
+    use NotClonableTrait;
+    
     /**
      * @var string
      */

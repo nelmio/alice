@@ -12,39 +12,31 @@
 namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Definition\ValueInterface;
 
-/**
- * Minimalist implementation.
- */
-final class SimpleMethodCall implements MethodCallInterface
+final class DummyMethodCall implements MethodCallInterface
 {
     /**
      * @var string
      */
-    private $method;
+    private $toString;
 
     /**
-     * @var array
+     * @var string
      */
-    private $arguments;
+    private $token;
 
-    /**
-     * @param string                   $method
-     * @param ValueInterface[]|mixed[] $arguments
-     */
-    public function __construct(string $method, array $arguments)
+    public function __construct(string $toString)
     {
-        $this->method = $method;
-        $this->arguments = $arguments;
+        $this->token = uniqid();
+        $this->toString = $toString;
     }
-
+    
     /**
      * @inheritdoc
      */
     public function getCaller()
     {
-        return null;
+        throw new \BadMethodCallException();
     }
 
     /**
@@ -52,15 +44,15 @@ final class SimpleMethodCall implements MethodCallInterface
      */
     public function getMethod(): string
     {
-        return $this->method;
+        throw new \BadMethodCallException();
     }
 
     /**
      * @inheritdoc
      */
-    public function getArguments(): array 
+    public function getArguments(): array
     {
-        return $this->arguments;
+        throw new \BadMethodCallException();
     }
 
     /**
@@ -68,6 +60,6 @@ final class SimpleMethodCall implements MethodCallInterface
      */
     public function __toString(): string
     {
-        return $this->method;
+        return $this->toString;
     }
 }

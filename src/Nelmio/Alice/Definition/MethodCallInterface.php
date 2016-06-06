@@ -31,4 +31,6 @@ interface MethodCallInterface
      * @return ValueInterface[]|mixed[]
      */
     public function getArguments(): array;
+    
+    public function __toString(): string;
 }

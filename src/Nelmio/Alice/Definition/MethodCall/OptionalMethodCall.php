@@ -67,4 +67,12 @@ final class OptionalMethodCall implements MethodCallInterface
     {
         return $this->flag->getPercentage();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return $this->methodCall->__toString();
+    }
 }

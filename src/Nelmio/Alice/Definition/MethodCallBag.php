@@ -16,12 +16,12 @@ final class MethodCallBag
     /**
      * @var MethodCallInterface[]
      */
-    private $properties = [];
+    private $methodCalls = [];
 
     public function with(MethodCallInterface $methodCall): self
     {
         $clone = clone $this;
-        $clone->properties[$methodCall->getMethod()] = $methodCall;
+        $clone->methodCalls[$methodCall->__toString()] = $methodCall;
         
         return $clone;
     }

@@ -36,6 +36,11 @@ final class MethodCallWithReference implements MethodCallInterface
     private $arguments;
 
     /**
+     * @var string
+     */
+    private $stringValue;
+
+    /**
      * @param ServiceReferenceInterface $caller
      * @param string                    $method
      * @param ValueInterface[]|mixed[]  $arguments
@@ -45,6 +50,7 @@ final class MethodCallWithReference implements MethodCallInterface
         $this->caller = $caller;
         $this->method = $method;
         $this->arguments = $arguments;
+        $this->stringValue = $caller->getReference().$method;
     }
 
     /**
@@ -69,5 +75,13 @@ final class MethodCallWithReference implements MethodCallInterface
     public function getArguments(): array 
     {
         return $this->arguments;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return $this->stringValue;
     }
 }

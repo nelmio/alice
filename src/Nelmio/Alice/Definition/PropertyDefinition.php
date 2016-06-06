@@ -11,11 +11,15 @@
 
 namespace Nelmio\Alice\Definition;
 
+use Nelmio\Alice\NotClonableTrait;
+
 /**
  * Value object representing a fixture property.
  */
 final class PropertyDefinition
 {
+    use NotClonableTrait;
+    
     /**
      * @var string
      */
