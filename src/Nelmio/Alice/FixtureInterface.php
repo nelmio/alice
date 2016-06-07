@@ -33,4 +33,13 @@ interface FixtureInterface
     public function getClassName(): string;
 
     public function getSpecs(): SpecificationBag;
+
+    /**
+     * Creates a new instance with the given specs.
+     * 
+     * @param SpecificationBag $specs
+     *
+     * @return static
+     */
+    public function withSpecs(SpecificationBag $specs);
 }

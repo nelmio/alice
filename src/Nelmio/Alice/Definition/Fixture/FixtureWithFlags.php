@@ -11,18 +11,17 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\SpecificationBag;
 
 /**
  * Decorates a fixture to add it flags.
  */
 final class FixtureWithFlags implements FixtureInterface
 {
-    use NotClonableTrait;
-    
     /**
-     * @var SimpleFixture
+     * @var FixtureInterface
      */
     private $fixture;
 
@@ -31,7 +30,7 @@ final class FixtureWithFlags implements FixtureInterface
      */
     private $flags;
 
-    public function __construct(SimpleFixture $fixture, FlagBag $flags)
+    public function __construct(FixtureInterface $fixture, FlagBag $flags)
     {
         $this->fixture = $fixture;
         $this->flags = $flags;
@@ -66,9 +65,12 @@ final class FixtureWithFlags implements FixtureInterface
      */
     public function getSpecs(): SpecificationBag
     {
-        return $this->fixture->getSpecs();
+        return clone $this->fixture->getSpecs();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function withSpecs(SpecificationBag $specs): self
     {
         $clone = clone $this;
@@ -79,6 +81,12 @@ final class FixtureWithFlags implements FixtureInterface
     
     public function getFlags(): FlagBag
     {
-        return $this->flags;
+        return clone $this->flags;
+    }
+    
+    public function __clone()
+    {
+        $this->fixture = clone $this->fixture;
+        $this->flags = clone $this->flags;
     }
 }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Definition\Fixture;
+namespace Nelmio\Alice\Definition;
 
 /**
  * A flag is used to pass contextual data to the fixture, e.g. to specify that a fixture is a template or extend a

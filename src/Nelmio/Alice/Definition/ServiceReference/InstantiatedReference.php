@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\ServiceReference;
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 
 /**
- * Value object to point to refer to a service. For example, 
+ * Value object to point to refer to a service, e.g. 'nelmio.alice.user_factory'
  */
 final class InstantiatedReference implements ServiceReferenceInterface
 {

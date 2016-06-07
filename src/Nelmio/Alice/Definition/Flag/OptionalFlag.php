@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Definition\Flag;
 
-use Nelmio\Alice\Definition\Fixture\FlagInterface;
+use Nelmio\Alice\Definition\FlagInterface;
 
 final class OptionalFlag implements FlagInterface
 {
@@ -27,8 +27,10 @@ final class OptionalFlag implements FlagInterface
     {
         if ($percentage < 1 || $percentage > 99) {
             throw new \InvalidArgumentException(
-                'Expected optional flag to be an integer element of ]0;100[. Got "%d" instead.',
-                $percentage
+                sprintf(
+                    'Expected optional flag to be an integer element of ]0;100[. Got "%d" instead.',
+                    $percentage
+                )
             );
         }
 

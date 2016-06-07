@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -13,7 +13,8 @@ namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 
 /**
  * Helper to easily manipulate flags related to templates.
@@ -22,36 +23,35 @@ use Nelmio\Alice\NotClonableTrait;
  */
 final class Templating
 {
-    use NotClonableTrait;
-    
     /**
      * @var bool
      */
-    private $isAtemplate = false;
+    private $isATemplate = false;
 
     /**
-     * @var string[]
+     * @var FixtureReference[]
      */
     private $extends = [];
 
-    public function __construct(string $className, FlagBag $flags)
+    public function __construct(FlagBag $flags)
     {
         foreach ($flags as $flag) {
             if ($flag instanceof TemplateFlag) {
-                $this->isAtemplate = true;
+                $this->isATemplate = true;
 
                 continue;
             }
 
             if ($flag instanceof ExtendFlag) {
-                $this->extends[] = $className.$flag->getExtendedFixture();
+                // Potential flag duplication is handled at the flagbag level
+                $this->extends[] = $flag->getExtendedFixture();
             }
         }
     }
 
     public function isATemplate(): bool
     {
-        return null !== $this->isAtemplate;
+        return $this->isATemplate;
     }
 
     public function extendsFixtures(): bool
@@ -60,7 +60,7 @@ final class Templating
     }
 
     /**
-     * @return string[] List of the full references of the extended fixtures.
+     * @return FixtureReference[] List of the full references of the extended fixtures.
      */
     public function getExtendedFixtures(): array
     {

@@ -16,7 +16,7 @@ use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 /**
  * @covers Nelmio\Alice\Definition\MethodCallBag
  */
-class PropertyDefinitionBagTest extends \PHPUnit_Framework_TestCase
+class MethodCallBagTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \ReflectionProperty

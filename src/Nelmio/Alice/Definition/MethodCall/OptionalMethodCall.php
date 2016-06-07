@@ -13,9 +13,12 @@ namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\MethodCallInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class OptionalMethodCall implements MethodCallInterface
 {
+    use NotClonableTrait;
+    
     /**
      * @var MethodCallInterface
      */

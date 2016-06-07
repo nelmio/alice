@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Definition\Flag;
 
-use Nelmio\Alice\Definition\Fixture\FlagInterface;
+use Nelmio\Alice\Definition\FlagInterface;
 
 final class TemplateFlag implements FlagInterface
 {

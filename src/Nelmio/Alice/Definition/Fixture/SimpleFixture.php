@@ -12,15 +12,13 @@
 namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\SpecificationBag;
 
 /**
  * Minimalist implementation of a fixture.
  */
 final class SimpleFixture implements FixtureInterface
 {
-    use NotClonableTrait;
-
     /**
      * @var string
      */
@@ -81,11 +79,19 @@ final class SimpleFixture implements FixtureInterface
         return clone $this->specs;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function withSpecs(SpecificationBag $specs): self
     {
         $clone = clone $this;
         $clone->specs = $specs;
         
         return $clone;
+    }
+    
+    public function __clone()
+    {
+        $this->specs = clone $this->specs;
     }
 }

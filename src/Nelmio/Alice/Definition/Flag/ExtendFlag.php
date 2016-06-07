@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -11,10 +11,14 @@
 
 namespace Nelmio\Alice\Definition\Flag;
 
-use Nelmio\Alice\Definition\Fixture\FlagInterface;
+use Nelmio\Alice\Definition\FlagInterface;
+use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use Nelmio\Alice\NotClonableTrait;
 
 final class ExtendFlag implements FlagInterface
 {
+    use NotClonableTrait;
+    
     /**
      * @var string
      */
@@ -26,20 +30,20 @@ final class ExtendFlag implements FlagInterface
     private $stringValue;
 
     /**
-     * @param string $extendedFixture Reference of the extended fixture.
+     * @param FixtureReference $extendedFixture Reference of the extended fixture.
      *                                
      * @example
      *  For (extends user0), $extendedFixture is 'user0'
      */
-    public function __construct(string $extendedFixture)
+    public function __construct(FixtureReference $extendedFixture)
     {
         $this->extendedFixture = $extendedFixture;
-        $this->stringValue = 'extends '.$extendedFixture;
+        $this->stringValue = 'extends '.$extendedFixture->getReference();
     }
 
-    public function getExtendedFixture(): string
+    public function getExtendedFixture(): FixtureReference
     {
-        return $this->extendedFixture;
+        return clone $this->extendedFixture;
     }
 
     /**

@@ -11,16 +11,15 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\SpecificationBag;
 
 /**
  * Decorates FixtureWithFlags to provide helpers regarding templates related flags.
  */
 final class TemplatingFixture implements FixtureInterface
 {
-    use NotClonableTrait;
-    
     /**
      * @var FixtureWithFlags
      */
@@ -34,7 +33,7 @@ final class TemplatingFixture implements FixtureInterface
     public function __construct(FixtureWithFlags $fixture)
     {
         $this->fixture = $fixture;
-        $this->templating = new Templating($fixture->getClassName(), $fixture->getFlags());
+        $this->templating = new Templating($fixture->getFlags());
     }
 
     /**
@@ -69,6 +68,9 @@ final class TemplatingFixture implements FixtureInterface
         return $this->fixture->getSpecs();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function withSpecs(SpecificationBag $specs): self
     {
         $clone = clone $this;
@@ -88,10 +90,16 @@ final class TemplatingFixture implements FixtureInterface
     }
 
     /**
-     * @return string[] List of fixture ids that the fixture extends.
+     * @return FixtureReference[] List of fixture ids that the fixture extends.
      */
     public function getExtendedFixtures(): array
     {
         return $this->templating->getExtendedFixtures();
+    }
+    
+    public function __clone()
+    {
+        $this->fixture = clone $this->fixture;
+        $this->templating = clone $this->templating;
     }
 }

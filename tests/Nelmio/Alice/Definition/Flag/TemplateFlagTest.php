@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Fixture\Flag;
+namespace Nelmio\Alice\Definition\Flag;
 
-use Nelmio\Alice\Fixture\FlagInterface;
+use Nelmio\Alice\Definition\FlagInterface;
 
 /**
- * @covers Nelmio\Alice\Fixture\Flag\TemplateFlag
+ * @covers Nelmio\Alice\Definition\Flag\TemplateFlag
  */
 class TemplateFlagTest extends \PHPUnit_Framework_TestCase
 {

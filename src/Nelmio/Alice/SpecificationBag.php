@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -11,6 +11,10 @@
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\Definition\MethodCallBag;
+use Nelmio\Alice\Definition\MethodCallInterface;
+use Nelmio\Alice\Definition\PropertyDefinitionBag;
+
 /**
  * Value object containing all the elements necessary to define how the object described by the fixture must be
  * instantiated, populated and initialized.
@@ -18,7 +22,7 @@ namespace Nelmio\Alice;
 final class SpecificationBag
 {
     /**
-     * @var MethodCallDefinition|null
+     * @var MethodCallInterface|null
      */
     private $constructor;
     
@@ -28,19 +32,19 @@ final class SpecificationBag
     private $properties;
     
     /**
-     * @var MethodCallDefinition
+     * @var MethodCallBag
      */
     private $calls;
 
     /**
-     * @param MethodCallDefinition|null $constructor
+     * @param MethodCallInterface|null $constructor
      * @param PropertyDefinitionBag     $properties
-     * @param MethodCallDefinitionBag   $calls
+     * @param MethodCallBag   $calls
      */
     public function __construct(
-        MethodCallDefinition $constructor = null,
+        MethodCallInterface $constructor = null,
         PropertyDefinitionBag $properties,
-        MethodCallDefinitionBag $calls
+        MethodCallBag $calls
     ) {
         $this->constructor = $constructor;
         $this->properties = $properties;

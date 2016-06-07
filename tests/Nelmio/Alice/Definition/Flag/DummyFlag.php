@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Alice package.
  *  
@@ -13,13 +12,10 @@ namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
 
-final class UniqueFlag implements FlagInterface
+class DummyFlag implements FlagInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function __toString(): string
     {
-        return 'unique';
+        return 'dummy_flag';
     }
 }

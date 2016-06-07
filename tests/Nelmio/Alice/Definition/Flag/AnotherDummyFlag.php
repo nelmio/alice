@@ -13,13 +13,10 @@ namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
 
-final class UniqueFlag implements FlagInterface
+class AnotherDummyFlag implements FlagInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function __toString(): string
     {
-        return 'unique';
+        return 'another_dummy_flag';
     }
 }
