@@ -16,6 +16,9 @@ use Nelmio\Alice\Definition\ServiceReferenceInterface;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * Represents a method call for which the caller has been specified.
+ */
 final class MethodCallWithReference implements MethodCallInterface
 {
     use NotClonableTrait;

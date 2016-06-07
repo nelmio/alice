@@ -37,11 +37,8 @@ final class SpecificationBag
      * @param PropertyBag              $properties
      * @param MethodCallBag            $calls
      */
-    public function __construct(
-        MethodCallInterface $constructor = null,
-        PropertyBag $properties,
-        MethodCallBag $calls
-    ) {
+    public function __construct(MethodCallInterface $constructor = null, PropertyBag $properties, MethodCallBag $calls)
+    {
         $this->constructor = $constructor;
         $this->properties = $properties;
         $this->calls = $calls;
