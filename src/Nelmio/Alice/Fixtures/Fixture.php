@@ -321,7 +321,7 @@ class Fixture
     }
 
     /**
-     * creates and adds a PropertyDefinition to the fixture with the given name and value
+     * creates and adds a Property to the fixture with the given name and value
      *
      * @param  string             $name
      * @param  mixed              $value

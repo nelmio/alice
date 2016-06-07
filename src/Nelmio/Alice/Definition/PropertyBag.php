@@ -11,18 +11,18 @@
 
 namespace Nelmio\Alice\Definition;
 
-final class MethodCallBag
+final class PropertyBag
 {
     /**
-     * @var MethodCallInterface[]
+     * @var Property[]
      */
-    private $methodCalls = [];
+    private $properties = [];
 
-    public function with(MethodCallInterface $methodCall): self
+    public function with(Property $property): self
     {
         $clone = clone $this;
-        $clone->methodCalls[$methodCall->__toString()] = $methodCall;
-
+        $clone->properties[$property->getName()] = $property;
+        
         return $clone;
     }
 
@@ -30,17 +30,17 @@ final class MethodCallBag
      * Creates a new instance to which the given properties have been merged. In case of conflicts, the existing values
      * are overridden.
      *
-     * @param self $methodCallsBag
+     * @param PropertyBag $propertyBag
      *
-     * @return self
+     * @return PropertyBag
      */
-    public function mergeWith(self $methodCallsBag): self
+    public function mergeWith(self $propertyBag): self
     {
         $clone = clone $this;
-        foreach ($methodCallsBag->methodCalls as $stringValue => $methodCall) {
-            $clone->methodCalls[$stringValue] = $methodCall;
+        foreach ($propertyBag->properties as $name => $property) {
+            $clone->properties[$name] = $property;
         }
-
+        
         return $clone;
     }
 }

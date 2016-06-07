@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Definition;
 
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
+use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 
 /**
  * @covers Nelmio\Alice\Definition\MethodCallBag
@@ -69,6 +70,50 @@ class MethodCallBagTest extends \PHPUnit_Framework_TestCase
                 'mc2' => $methodCall3,
             ],
             $this->propRefl->getValue($bag3)
+        );
+    }
+
+    public function testMergeTwoBags()
+    {
+        $callA1 = new SimpleMethodCall('setUsername', []);
+        $callA2 = new SimpleMethodCall('setOwner', []);
+
+        $callB1 = new SimpleMethodCall('setUsername', []);
+        $callB2 = new SimpleMethodCall('setMail', []);
+
+        $bagA = (new MethodCallBag())
+            ->with($callA1)
+            ->with($callA2)
+        ;
+        $bagB = (new MethodCallBag())
+            ->with($callB1)
+            ->with($callB2)
+        ;
+
+        $bag = $bagA->mergeWith($bagB);
+
+        $this->assertInstanceOf(MethodCallBag::class, $bag);
+        $this->assertSame(
+            [
+                'setUsername' => $callA1,
+                'setOwner' => $callA2,
+            ],
+            $this->propRefl->getValue($bagA)
+        );
+        $this->assertSame(
+            [
+                'setUsername' => $callB1,
+                'setMail' => $callB2,
+            ],
+            $this->propRefl->getValue($bagB)
+        );
+        $this->assertSame(
+            [
+                'setUsername' => $callB1,
+                'setOwner' => $callA2,
+                'setMail' => $callB2,
+            ],
+            $this->propRefl->getValue($bag)
         );
     }
 }

@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\SpecificationBag;
+use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * Decorates FixtureWithFlags to provide helpers regarding templates related flags.

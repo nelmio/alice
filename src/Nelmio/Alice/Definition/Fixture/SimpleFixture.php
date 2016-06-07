@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\SpecificationBag;
+use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * Minimalist implementation of a fixture.

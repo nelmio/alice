@@ -12,9 +12,9 @@
 namespace Nelmio\Alice\Definition;
 
 /**
- * @covers Nelmio\Alice\Definition\PropertyDefinition
+ * @covers Nelmio\Alice\Definition\Property
  */
-class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
+class PropertyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideValues
@@ -23,7 +23,7 @@ class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         $property = 'username';
 
-        $definition = new PropertyDefinition($property, $value);
+        $definition = new Property($property, $value);
 
         $this->assertEquals($property, $definition->getName());
         $this->assertEquals($value, $definition->getValue());
@@ -34,7 +34,7 @@ class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
         $property = 'username';
         $value = new \stdClass();
 
-        $definition = new PropertyDefinition($property, $value);
+        $definition = new Property($property, $value);
 
         $this->assertNotSame($definition->getValue(), $definition->getValue());
     }
@@ -44,7 +44,7 @@ class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $definition = new PropertyDefinition('username', null);
+        $definition = new Property('username', null);
         clone $definition;
     }
 

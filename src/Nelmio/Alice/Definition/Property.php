@@ -16,7 +16,7 @@ use Nelmio\Alice\NotClonableTrait;
 /**
  * Value object representing a fixture property.
  */
-final class PropertyDefinition
+final class Property
 {
     use NotClonableTrait;
     

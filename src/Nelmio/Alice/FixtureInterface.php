@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\Definition\SpecificationBag;
+
 /**
  * A fixture is a value object representing an object to be built.
  */

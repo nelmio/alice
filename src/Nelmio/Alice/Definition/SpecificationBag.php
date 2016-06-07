@@ -9,11 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
-
-use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Definition\PropertyDefinitionBag;
+namespace Nelmio\Alice\Definition;
 
 /**
  * Value object containing all the elements necessary to define how the object described by the fixture must be
@@ -27,7 +23,7 @@ final class SpecificationBag
     private $constructor;
     
     /**
-     * @var PropertyDefinitionBag
+     * @var PropertyBag
      */
     private $properties;
     
@@ -38,17 +34,35 @@ final class SpecificationBag
 
     /**
      * @param MethodCallInterface|null $constructor
-     * @param PropertyDefinitionBag     $properties
-     * @param MethodCallBag   $calls
+     * @param PropertyBag              $properties
+     * @param MethodCallBag            $calls
      */
     public function __construct(
         MethodCallInterface $constructor = null,
-        PropertyDefinitionBag $properties,
+        PropertyBag $properties,
         MethodCallBag $calls
     ) {
         $this->constructor = $constructor;
         $this->properties = $properties;
         $this->calls = $calls;
+    }
+
+    /**
+     * @return MethodCallInterface|null
+     */
+    public function getConstructor()
+    {
+        return (null === $this->constructor) ? null : clone $this->constructor;
+    }
+    
+    public function getProperties(): PropertyBag
+    {
+        return clone $this->properties;
+    }
+    
+    public function getMethodCalls(): MethodCallBag
+    {
+        return clone $this->calls;
     }
 
     /**
@@ -61,7 +75,15 @@ final class SpecificationBag
      */
     public function mergeWith(self $specs): self
     {
-        //TODO
+        $clone = clone $this;
+        if (null !== $specs->constructor) {
+            $clone->constructor = $specs->constructor;
+        }
+        
+        $clone->properties = $this->properties->mergeWith($specs->properties);
+        $clone->calls = $this->calls->mergeWith($specs->calls);
+
+        return $clone;
     }
 
     public function __clone()

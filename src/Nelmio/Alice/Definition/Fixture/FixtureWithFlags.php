@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\SpecificationBag;
+use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * Decorates a fixture to add it flags.

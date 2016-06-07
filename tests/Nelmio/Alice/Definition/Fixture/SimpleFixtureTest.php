@@ -13,9 +13,9 @@ namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\PropertyDefinitionBag;
+use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\SpecificationBag;
+use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * @covers Nelmio\Alice\Definition\Fixture\SimpleFixture
@@ -31,7 +31,7 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
     {
         $reference = 'user0';
         $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyDefinitionBag(), new MethodCallBag());
+        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
 
         $fixture = new SimpleFixture($reference, $className, $specs);
 
@@ -45,7 +45,7 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
     {
         $reference = 'user0';
         $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyDefinitionBag(), new MethodCallBag());
+        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
 
         $fixture = new SimpleFixture($reference, $className, $specs);
 
@@ -56,7 +56,7 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
     {
         $reference = 'user0';
         $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyDefinitionBag(), new MethodCallBag());
+        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
 
         $fixture = new SimpleFixture($reference, $className, $specs);
         $clone = clone $fixture;
@@ -69,8 +69,8 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
     {
         $reference = 'user0';
         $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyDefinitionBag(), new MethodCallBag());
-        $newSpecs = new SpecificationBag(new DummyMethodCall('dummy'), new PropertyDefinitionBag(), new MethodCallBag());
+        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
+        $newSpecs = new SpecificationBag(new DummyMethodCall('dummy'), new PropertyBag(), new MethodCallBag());
 
         $fixture = new SimpleFixture($reference, $className, $specs);
         $newFixture = $fixture->withSpecs($newSpecs);

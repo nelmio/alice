@@ -14,9 +14,9 @@ namespace Nelmio\Alice\Definition\Fixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\PropertyDefinitionBag;
+use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\SpecificationBag;
+use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * @covers Nelmio\Alice\Definition\Fixture\FixtureWithFlags
@@ -33,7 +33,7 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $id = 'Nelmio\Entity\User#user0';
         $reference = 'user0';
         $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyDefinitionBag(), new MethodCallBag());
+        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
 
         $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
         $decoratedFixtureProphecy->getId()->willReturn($id);
@@ -61,7 +61,7 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
 
     public function testIsImmutable()
     {
-        $specs = new SpecificationBag(null, new PropertyDefinitionBag(), new MethodCallBag());
+        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
 
         $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
         $decoratedFixtureProphecy->getSpecs()->willReturn($specs);
@@ -91,8 +91,8 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
 
     public function testImmutableMutators()
     {
-        $specs = new SpecificationBag(null, new PropertyDefinitionBag(), new MethodCallBag());
-        $newSpecs = new SpecificationBag(new DummyMethodCall('dummy'), new PropertyDefinitionBag(), new MethodCallBag());
+        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
+        $newSpecs = new SpecificationBag(new DummyMethodCall('dummy'), new PropertyBag(), new MethodCallBag());
 
         $newDecoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
         $newDecoratedFixtureProphecy->getSpecs()->willReturn($newSpecs);
