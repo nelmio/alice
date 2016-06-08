@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Generator;
 
-use Nelmio\Alice\SpecificationBag;
+use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 interface SpecsResolverInterface
