@@ -1,0 +1,39 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *  
+ * (c) Nelmio <hello@nelm.io>
+ *  
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable;
+
+use Nelmio\Alice\Definition\Flag\OptionalFlag;
+use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface;
+
+final class OptionalFlagParser implements ChainableFlagParserInterface
+{
+    /**
+     * @inheritdoc
+     */
+    public function canParse(string $element, array &$matches = []): bool
+    {
+        return 1 === preg_match('/^(?<percentage>\d+)\%\?$/', $element, $matches);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function parse(string $element): FlagBag
+    {
+        $matches = [];
+        $this->canParse($element, $matches);
+        $percentage = (int) $matches['percentage'];
+        
+        return (new FlagBag(''))->with(new OptionalFlag($percentage));
+    }
+}
