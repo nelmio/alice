@@ -13,6 +13,13 @@ namespace Nelmio\Alice\Loader;
 
 
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ExtendFlagParser;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\OptionalFlagParser;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\TemplateFlagParser;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\UniqueFlagParser;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureBuilder\Parser\Chainable\PhpParser;
 use Nelmio\Alice\FixtureBuilder\Parser\Chainable\YamlParser;
 use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\DefaultIncludeProcessor;
@@ -61,13 +68,25 @@ final class NativeLoader implements LoaderInterface
         //TODO
     }
 
-    private function getBuiltInParser(): ParserInterface
+    public function getBuiltInParser(): ParserInterface
     {
-        $parserRegistry = new ParserRegistry([
+        $registry = new ParserRegistry([
             new YamlParser(new SymfonyYamlParser()),
             new PhpParser(),
         ]);
 
-        return new RuntimeCacheParser($parserRegistry, new DefaultIncludeProcessor(new DefaultFileLocator()));
+        return new RuntimeCacheParser($registry, new DefaultIncludeProcessor(new DefaultFileLocator()));
+    }
+    
+    public function getBuiltInFlagParser(): FlagParserInterface
+    {
+        $registry = new FlagParserRegistry([
+            new ExtendFlagParser(),
+            new OptionalFlagParser(),
+            new TemplateFlagParser(),
+            new UniqueFlagParser(),
+        ]);
+        
+        return new ElementFlagParser($registry);
     }
 }

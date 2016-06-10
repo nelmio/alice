@@ -61,8 +61,9 @@ final class FlagBag implements \IteratorAggregate, \Countable
     public function mergeWith(self $flags): self
     {
         $clone = clone $this;
-        foreach ($flags as $flag) {
-            $clone = $clone->with($flag);
+        foreach ($flags as $stringFlag => $flag) {
+            /** @var FlagInterface $flag */
+            $clone->flags[$flag->__toString()] = $flag;
         }
 
         return $clone;
