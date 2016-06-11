@@ -24,7 +24,7 @@ final class StaticReference implements ServiceReferenceInterface
     private $reference;
 
     /**
-     * @param string $reference 
+     * @param string $reference
      */
     public function __construct(string $reference)
     {

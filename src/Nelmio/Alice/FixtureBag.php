@@ -17,4 +17,13 @@ namespace Nelmio\Alice;
 final class FixtureBag
 {
     //TODO
+    public function mergeWith(self $denormalize): self
+    {
+        //TODO
+    }
+
+    public function with(FixtureInterface $fixture): self
+    {
+        //TODO
+    }
 }
