@@ -60,9 +60,9 @@ final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
      */
     public function denormalize(FixtureBag $builtFixtures, string $className, string $reference, array $specs, FlagBag $flags): FixtureBag
     {
-        foreach ($this->denormalizers as $builder) {
-            if ($builder->canDenormalize($reference)) {
-                return $builder->denormalize($builtFixtures, $className, $reference, $specs, $flags);
+        foreach ($this->denormalizers as $denormalizer) {
+            if ($denormalizer->canDenormalize($reference)) {
+                return $denormalizer->denormalize($builtFixtures, $className, $reference, $specs, $flags);
             }
         }
 

@@ -20,7 +20,6 @@ use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
 class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInterface
 {
@@ -45,9 +44,13 @@ class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInte
         $this->propertyDenormalizer = new PropertyDenormalizer();
         $this->callsDenormalizer = new CallsDenormalizer();
     }
-    
+
     /**
-     * @param array $unparsedSpecs
+     * @param FixtureInterface    $scope
+     * @param FlagParserInterface $parser
+     * @param array               $unparsedSpecs
+     *
+     * @return SpecificationBag
      *
      * @example
      *  $unrparsedSpecs = [
@@ -58,10 +61,6 @@ class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInte
      *      ],
      *      'username' => 'bob',
      *  ]
-     *
-     * @throws DenormalizationThrowable
-     *
-     * @return SpecificationBag
      */
     public final function denormalizer(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedSpecs): SpecificationBag
     {
@@ -70,22 +69,33 @@ class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInte
         $calls = new MethodCallBag();
 
         foreach ($unparsedSpecs as $unparsedPropertyName => $value) {
-            $flags = $parser->parse($unparsedPropertyName);
-            $propertyName = $flags->getKey();
-
-            if ('__construct' === $propertyName && null !== $propertyName) {
-                $constructor = $this->denormalizeConstructor($scope, $parser, $value, $flags);
+            if ('__construct' === $unparsedPropertyName && null !== $unparsedPropertyName) {
+                $constructor = $this->denormalizeConstructor($scope, $parser, $value);
 
                 continue;
             }
 
-            if ('__calls' === $propertyName) {
-                foreach ($value as $unparsedMethod => $unparsedArguments) {
-                    $calls = $this->denormalizeCall($scope, $parser, $unparsedMethod, $unparsedArguments, $flags);
+            if ('__calls' === $unparsedPropertyName) {
+                foreach ($value as $methodCall) {
+                    if (false === is_array($methodCall)) {
+                        throw new \TypeError(
+                            sprintf(
+                                'Expected method call value to be an array, got "%s" instead.',
+                                gettype($methodCall)
+                            )
+                        );
+                    }
+                    $unparsedMethod = key($methodCall);
+                    $calls = $calls->with(
+                        $this->denormalizeCall($scope, $parser, $unparsedMethod, $methodCall[$unparsedMethod])
+                    );
                 }
 
                 continue;
             }
+
+            $flags = $parser->parse($unparsedPropertyName);
+            $propertyName = $flags->getKey();
 
             $properties = $properties->with(
                 $this->denormalizeProperty($scope, $propertyName, $value, $flags)
@@ -95,18 +105,18 @@ class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInte
         return new SpecificationBag($constructor, $properties, $calls);
     }
 
-    protected function denormalizeConstructor(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedConstructor, FlagBag $flags): MethodCallInterface
+    protected function denormalizeConstructor(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedConstructor): MethodCallInterface
     {
-        $this->constructorDenormalizer->denormalize($scope, $parser, $unparsedConstructor, $flags);
+        return $this->constructorDenormalizer->denormalize($scope, $parser, $unparsedConstructor);
     }
 
-    protected function denormalizeCall(FixtureInterface $scope, FlagParserInterface $parser, string $unparsedMethod, string $unparsedArguments, FlagBag $flags): MethodCallBag
+    protected function denormalizeCall(FixtureInterface $scope, FlagParserInterface $parser, string $unparsedMethod, array $unparsedArguments): MethodCallInterface
     {
-        $this->callsDenormalizer->denormalize($scope, $parser, $unparsedMethod, $unparsedArguments);
+        return $this->callsDenormalizer->denormalize($scope, $parser, $unparsedMethod, $unparsedArguments);
     }
 
     protected function denormalizeProperty(FixtureInterface $scope, string $name, $value, FlagBag $flags): Property
     {
-        $this->propertyDenormalizer->denormalize($scope, $name, $value, $flags);
+        return $this->propertyDenormalizer->denormalize($scope, $name, $value, $flags);
     }
 }

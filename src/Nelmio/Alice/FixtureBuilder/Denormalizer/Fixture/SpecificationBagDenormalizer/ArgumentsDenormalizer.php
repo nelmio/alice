@@ -25,28 +25,6 @@ use Nelmio\Alice\FixtureInterface;
 class ArgumentsDenormalizer
 {
     /**
-     * @var PropertyDenormalizer
-     */
-    private $propertyDenormalizer;
-
-    /**
-     * @var ConstructorDenormalizer
-     */
-    private $constructorDenormalizer;
-
-    /**
-     * @var CallsDenormalizer
-     */
-    private $callsDenormalizer;
-
-    public function __construct()
-    {
-        $this->constructorDenormalizer = new ConstructorDenormalizer();
-        $this->propertyDenormalizer = new PropertyDenormalizer();
-        $this->callsDenormalizer = new CallsDenormalizer();
-    }
-
-    /**
      * Denormalizes an array of arguments.
      *
      * @param FixtureInterface    $scope
@@ -76,7 +54,7 @@ class ArgumentsDenormalizer
     {
         $arguments = [];
         foreach ($unparsedArguments as $unparsedIndex => $argument) {
-            $argumentFlags = $parser->parse($unparsedIndex);
+            $argumentFlags = (is_string($unparsedIndex)) ? $parser->parse($unparsedIndex) : null;
             $arguments[] = $this->handleArgumentFlags($scope, $argumentFlags, $argument);
         }
 
@@ -85,13 +63,17 @@ class ArgumentsDenormalizer
 
     /**
      * @param FixtureInterface $scope See SpecificationsDenormalizerInterface::denormalize()
-     * @param FlagBag          $flags
-     * @param mixed                 $argument
+     * @param FlagBag|null     $flags
+     * @param mixed            $argument
      *
      * @return mixed|FlagInterface
      */
-    protected function handleArgumentFlags(FixtureInterface $scope, FlagBag $flags, $argument)
+    protected function handleArgumentFlags(FixtureInterface $scope, FlagBag $flags = null, $argument)
     {
+        if (null === $flags) {
+            return $argument;
+        }
+
         if ($this->requiresUnique($flags)) {
             $uniqueId = uniqid($scope->getId());
             

@@ -20,7 +20,6 @@ use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FakeFixtureDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\FakeSpecificationBagDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;

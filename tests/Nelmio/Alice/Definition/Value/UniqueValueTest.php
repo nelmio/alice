@@ -39,13 +39,18 @@ class UniqueValueTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($definition->getValue(), $definition->getValue());
     }
 
-    /**
-     * @expectedException \DomainException
-     */
-    public function testIsNotClonable()
+    public function testIsDeepClonable()
     {
         $definition = new UniqueValue('dummy', null);
-        clone $definition;
+        $clone = clone $definition;
+        $this->assertEquals($clone, $definition);
+        $this->assertNotSame($clone, $definition);
+
+        $value = new \stdClass();
+        $definition = new UniqueValue('dummy', $value);
+        $clone = clone $definition;
+        $this->assertEquals($clone, $definition);
+        $this->assertNotSame($clone->getValue(), $value);
     }
 
     public function provideValues()

@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
-use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
@@ -31,33 +30,39 @@ final class ConstructorDenormalizer
     {
         $this->argumentDenormalizer = new ArgumentsDenormalizer();
     }
-    
+
     /**
-     * @TODO
-     * 
+     * Denormalizes a constructor.
+     *
      * @param FixtureInterface    $scope
      * @param FlagParserInterface $parser
-     * @param                     $unparsedConstructor
-     * @param FlagBag                    $flags
+     * @param array               $unparsedConstructor
      *
-     * @return MethodCallInterface|null
+     * @return MethodCallInterface
+     *
+     * @example
+     *  example1:
+     *  $unparsedConstructor = [
+     *      '<latitude()>',
+     *      '<longitude()>',
+     *  ],
+     *
+     *  example2:
+     *  $unparsedConstructor = [
+     *      create => [
+     *          '0 (unique) => '<latitude()>',
+     *          1 => '<longitude()>',
+     *      ]
+     *  ],
      */
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedConstructor,
-        FlagBag $flags
+        array $unparsedConstructor
     ): MethodCallInterface
     {
         $firstKey = key($unparsedConstructor);
         if (is_int($firstKey) || count($unparsedConstructor) > 1) {
-            return new SimpleMethodCall(
-                '__construct',
-                $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
-            );
-        }
-
-        if (false !== strpos($firstKey, '(')) {
             return new SimpleMethodCall(
                 '__construct',
                 $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
@@ -78,19 +83,24 @@ final class ConstructorDenormalizer
      */
     private function getCallerReference(FixtureInterface $scope, string $method): array 
     {
-        if (false !== strpos($method, '::')) {
+        if (false === strpos($method, '::')) {
             return [new StaticReference($scope->getClassName()), $method];
         }
         
         $explodedMethod = explode('::', $method);
-        if (2 > count($explodedMethod)) {
-            throw new \InvalidArgumentException('TODO');
+        if (2 < count($explodedMethod)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Invalid constructor method "%s".',
+                    $method
+                )
+            );
         }
 
         list($caller, $method) = $explodedMethod;
 
         if (0 === strpos($caller, '@')) {
-            return [new InstantiatedReference(substr($method, 1)), $method];
+            return [new InstantiatedReference(substr($caller, 1)), $method];
         }
         
         return [new StaticReference($caller), $method];
