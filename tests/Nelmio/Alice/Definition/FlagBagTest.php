@@ -46,7 +46,7 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $mergedBag = $newFlags->mergeWith($anotherBag);
 
         $this->assertInstanceOf(FlagBag::class, $mergedBag);
-        $this->assertEquals('user0', $mergedBag->getKey());
+        $this->assertEquals('user0', $mergedBag->getKey(), 'Expected original key to be kept.');
         $this->assertCount(2, $mergedBag);
     }
 

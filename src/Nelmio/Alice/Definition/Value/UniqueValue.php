@@ -12,12 +12,9 @@
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\NotClonableTrait;
 
 final class UniqueValue implements ValueInterface
 {
-    use NotClonableTrait;
-    
     /**
      * @var string
      */
@@ -29,7 +26,7 @@ final class UniqueValue implements ValueInterface
     private $value;
 
     /**
-     * @param string $id    Unique accross a fixture set, is used to generate unique values.
+     * @param string $id Unique across a fixture set, is used to generate unique values.
      * @param mixed  $value
      */
     public function __construct(string $id, $value)

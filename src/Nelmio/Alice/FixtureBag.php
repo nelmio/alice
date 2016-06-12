@@ -14,7 +14,45 @@ namespace Nelmio\Alice;
 /**
  * Value object containing a list of fixtures.
  */
-final class FixtureBag
+final class FixtureBag implements \IteratorAggregate
 {
-    //TODO
+    /**
+     * @var FixtureInterface[]
+     */
+    private $fixtures = [];
+
+    /**
+     * Creates a new instance which will have the given fixture. If a fixture of that id already existed, it will be
+     * overridden.
+     *
+     * @param FixtureInterface $fixture
+     *
+     * @return self
+     */
+    public function with(FixtureInterface $fixture): self
+    {
+        $clone = clone $this;
+        $clone->fixtures[$fixture->getId()] = $fixture;
+        
+        return $clone;
+    }
+
+    public function mergeWith(self $newFixtures): self
+    {
+        $clone = clone $this;
+        foreach ($newFixtures as $fixture) {
+            /** @var FixtureInterface $fixture */
+            $clone->fixtures[$fixture->getId()] = $fixture;
+        }
+
+        return $clone;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator(array_values($this->fixtures));
+    }
 }

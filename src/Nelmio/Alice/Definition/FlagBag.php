@@ -53,6 +53,8 @@ final class FlagBag implements \IteratorAggregate, \Countable
     /**
      * Creates a new instance with the two bags merged together. If some flags overlaps, the existing one are
      * overridden.
+     * 
+     * The original key is kept.
      *
      * @param self $flags
      *
