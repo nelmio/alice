@@ -26,6 +26,16 @@ final class RangeNameDenormalizer implements ChainableFixtureDenormalizerInterfa
     private $denormalizer;
 
     /**
+     * @var string Unique token
+     */
+    private $token;
+
+    public function __construct()
+    {
+        $this->token = uniqid(__CLASS__);
+    }
+
+    /**
      * @inheritdoc
      */
     public function with(FixtureDenormalizerInterface $denormalizer): self
@@ -41,7 +51,7 @@ final class RangeNameDenormalizer implements ChainableFixtureDenormalizerInterfa
      */
     public function canDenormalize(string $name, array &$matches = []): bool
     {
-        return 1 === preg_match('/(.*)\{([0-9]+)(?:\.{2})([0-9]+)\}/', $name, $matches);
+        return 1 === preg_match('/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+))\}/', $name, $matches);
     }
 
     /**
@@ -63,12 +73,12 @@ final class RangeNameDenormalizer implements ChainableFixtureDenormalizerInterfa
             );
         }
 
-        $range = $this->getRange($reference);
+        $range = $this->getRanges($reference);
         for ($currentIndex = $range->getFrom(); $currentIndex <= $range->getTo(); $currentIndex++) {
-            $fixtureName = sprintf("%s%s", $range->getName(), $currentIndex);
+            $reference = str_replace($this->token, $currentIndex, $range->getName());
 
             $builtFixtures = $builtFixtures->mergeWith(
-                $this->denormalizer->denormalize($builtFixtures, $className, $fixtureName, $specs, $flags)
+                $this->denormalizer->denormalize($builtFixtures, $className, $reference, $specs, $flags)
             );
         }
 
@@ -81,25 +91,20 @@ final class RangeNameDenormalizer implements ChainableFixtureDenormalizerInterfa
      *
      * @return RangeName
      */
-    private function getRange(string $name): RangeName
+    private function getRanges(string $name): RangeName
     {
         $matches = [];
         if (false === $this->canDenormalize($name, $matches)) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'As a chainable builder, "%s" should be called only if "::canBuild() returns true. Got false instead.',
+                    'As a chainable denormalizer, "%s" should be called only if "::canDenormalize() returns true. Got false instead.',
                     __METHOD__
                 )
             );
         }
-        $from = $matches[2];
-        $to = $matches[3];
+        $reference = str_replace(sprintf('{%s}', $matches['range']), $this->token, $name);
 
-        if ($from > $to) {
-            list($from, $to) = [$to, $from];
-        }
-
-        return new RangeName($matches[1], $from, $to);
+        return new RangeName($reference, $matches['from'], $matches['to']);
     }
 
     public function __clone()

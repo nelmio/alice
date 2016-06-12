@@ -13,6 +13,13 @@ namespace Nelmio\Alice\Loader;
 
 
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SimpleFixtureBagDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ExtendFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\OptionalFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\TemplateFlagParser;
@@ -20,12 +27,16 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\UniqueFlagPars
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer;
+use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Parser\Chainable\PhpParser;
 use Nelmio\Alice\FixtureBuilder\Parser\Chainable\YamlParser;
 use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\DefaultIncludeProcessor;
 use Nelmio\Alice\FixtureBuilder\Parser\ParserRegistry;
 use Nelmio\Alice\FixtureBuilder\Parser\RuntimeCacheParser;
 use Nelmio\Alice\FixtureBuilder\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\LoaderInterface;
@@ -77,7 +88,23 @@ final class NativeLoader implements LoaderInterface
 
         return new RuntimeCacheParser($registry, new DefaultIncludeProcessor(new DefaultFileLocator()));
     }
-    
+
+    public function getBuiltInBuilder(): FixtureBuilderInterface
+    {
+        return new SimpleBuilder(
+            $this->getBuiltInParser(),
+            $this->getBuiltInDenormalizer()
+        );
+    }
+
+    public function getBuiltInDenormalizer(): DenormalizerInterface
+    {
+        return new SimpleDenormalizer(
+            new SimpleParameterBagDenormalizer(),
+            $this->getBuiltInFixtureBagDenormalizer()
+        );
+    }
+
     public function getBuiltInFlagParser(): FlagParserInterface
     {
         $registry = new FlagParserRegistry([
@@ -86,7 +113,29 @@ final class NativeLoader implements LoaderInterface
             new TemplateFlagParser(),
             new UniqueFlagParser(),
         ]);
-        
+
         return new ElementFlagParser($registry);
+    }
+
+    public function getBuiltInFixtureBagDenormalizer(): FixtureBagDenormalizerInterface
+    {
+        return new SimpleFixtureBagDenormalizer(
+            $this->getBuiltInFixtureDenormalizer(),
+            $this->getBuiltInFlagParser()
+        );
+    }
+
+    public function getBuiltInFixtureDenormalizer(): FixtureDenormalizerInterface
+    {
+        return new FixtureDenormalizerRegistry(
+            $this->getBuiltInFlagParser(),
+            [
+                new \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer(
+                    new SimpleSpecificationsDenormalizer()
+                ),
+                new ListNameDenormalizer(),
+                new RangeNameDenormalizer(),
+            ]
+        );
     }
 }

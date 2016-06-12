@@ -74,7 +74,7 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
         }
         
         $referenceFlags = $this->flagParser->parse($unparsedReference);
-        $reference = $flags->getKey();
+        $reference = $referenceFlags->getKey();
         
         $fixture = new SimpleFixture(
             $reference,
@@ -103,5 +103,6 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
         if (null !== $this->flagParser) {
             $this->flagParser = clone $this->flagParser;
         }
+        $this->specsDenormalizer = clone $this->specsDenormalizer;
     }
 }

@@ -40,7 +40,7 @@ final class ListNameDenormalizer implements ChainableFixtureDenormalizerInterfac
      */
     public function canDenormalize(string $reference, array &$matches = []): bool
     {
-        return 1 === preg_match('/(?<prefix>.+)(\{(?<list>[^,]+(?:\s*,\s*[^,]+)*)\})(?:.*)/', $reference, $matches);
+        return 1 === preg_match('/.+(\{(?<list>[^,]+(?:\s*,\s*[^,]+)*)\})(?:.*)/', $reference, $matches);
     }
 
     /**
@@ -80,22 +80,23 @@ final class ListNameDenormalizer implements ChainableFixtureDenormalizerInterfac
      * @return string[]
      *
      * @example
-     *  'user_{alice, bob} (template)' => [
-     *      'user_alice (template)',
-     *      'user_bob (template)',
+     *  'user_{alice, bob}' => [
+     *      'user_alice',
+     *      'user_bob',
      *  ]
      */
     private function getReferences(string $reference): array
     {
-        if (false === $this->canDenormalize($reference, $matches = [])) {
+        $matches = [];
+        if (false === $this->canDenormalize($reference, $matches)) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'As a chainable builder, "%s" should be called only if "::canBuild() returns true. Got false instead.',
+                    'As a chainable denormalizer, "%s" should be called only if "::canDenormalize() returns true. Got false instead.',
                     __METHOD__
                 )
             );
         }
-        $listElements = str_split('/\s*,\s*/', $matches['list']);
+        $listElements = preg_split('/\s*,\s*/', $matches['list']);
 
         $references = [];
         foreach ($listElements as $element) {
@@ -107,5 +108,12 @@ final class ListNameDenormalizer implements ChainableFixtureDenormalizerInterfac
         }
 
         return $references;
+    }
+
+    public function __clone()
+    {
+        if (null !== $this->denormalizer) {
+            $this->denormalizer = clone $this->denormalizer;
+        }
     }
 }
