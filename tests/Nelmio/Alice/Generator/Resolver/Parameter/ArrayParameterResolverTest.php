@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
-use Nelmio\Alice\Resolver\ParameterResolverAwareInterface;
-use Nelmio\Alice\Resolver\ParameterResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Resolver\Parameter\ArrayParameterResolver
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\ArrayParameterResolver
  */
 class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,7 +81,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Resolver "Nelmio\Alice\Resolver\Parameter\ArrayParameterResolver" must have a resolver
+     * @expectedExceptionMessage Resolver "Nelmio\Alice\Generator\Resolver\Parameter\ArrayParameterResolver" must have a resolver
      *                           set before having the method "ArrayParameterResolver::resolve()" called.
      */
     public function testRequiresInjectedResolverToResolverAParameter()

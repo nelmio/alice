@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Resolver;
+namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;

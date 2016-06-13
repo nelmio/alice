@@ -19,6 +19,7 @@ final class SimpleObject implements ObjectInterface
      * @var string
      */
     private $reference;
+
     /**
      * @var object
      */

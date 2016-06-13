@@ -39,12 +39,19 @@ use Nelmio\Alice\FixtureBuilder\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
+use Nelmio\Alice\Generator\Resolver\Parameter\ArrayParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverDecorator;
+use Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry;
+use Nelmio\Alice\Generator\Resolver\Parameter\RecursiveParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\StringParameterResolver;
 use Nelmio\Alice\Generator\ResolverInterface;
 use Nelmio\Alice\Generator\SimpleGenerator;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectSet;
+use Nelmio\Alice\ParameterBagResolverInterface;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
@@ -151,9 +158,22 @@ final class NativeLoader implements LoaderInterface
 
     public function getBuiltInResolver(): ResolverInterface
     {
+        //TODO
+    }
+
+    public function getBuiltInParameterResolver(): ParameterBagResolverInterface
+    {
+        $registry = new ParameterResolverRegistry([
+            new SimpleParameterResolver(),
+            new ArrayParameterResolver(),
+            new RecursiveParameterResolver(new StringParameterResolver()),
+        ]);
+
+        return new ParameterResolverDecorator($registry);
     }
 
     public function getBuiltInObjectResolver(): ObjectGeneratorInterface
     {
+        //TODO
     }
 }
