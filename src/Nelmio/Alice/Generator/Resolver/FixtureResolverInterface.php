@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Throwable;
+namespace Nelmio\Alice\Generator\Resolver;
 
-interface ResolutionThrowable extends GenerationThrowable
+interface FixtureResolverInterface
 {
+    //TODO
 }

@@ -38,8 +38,12 @@ use Nelmio\Alice\FixtureBuilder\Parser\RuntimeCacheParser;
 use Nelmio\Alice\FixtureBuilder\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
 use Nelmio\Alice\FixtureBuilderInterface;
+use Nelmio\Alice\Generator\ObjectGeneratorInterface;
+use Nelmio\Alice\Generator\ResolverInterface;
+use Nelmio\Alice\Generator\SimpleGenerator;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\LoaderInterface;
+use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectSet;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
@@ -49,6 +53,8 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  */
 final class NativeLoader implements LoaderInterface
 {
+    use NotClonableTrait;
+    
     /**
      * @var FixtureBuilderInterface
      */
@@ -61,7 +67,8 @@ final class NativeLoader implements LoaderInterface
 
     public function __construct()
     {
-        //TODO
+        $this->builder = $this->getBuiltInBuilder();
+//        $this->generator = $this->getBuiltInGenerator();
     }
 
     /**
@@ -72,11 +79,6 @@ final class NativeLoader implements LoaderInterface
         $fixtureSet = $this->builder->build($file, $parameters, $objects);
 
         return $this->generator->generate($fixtureSet);
-    }
-
-    public function __clone()
-    {
-        //TODO
     }
 
     public function getBuiltInParser(): ParserInterface
@@ -137,5 +139,21 @@ final class NativeLoader implements LoaderInterface
                 new RangeNameDenormalizer(),
             ]
         );
+    }
+
+    public function getBuiltInGenerator(): GeneratorInterface
+    {
+        return new SimpleGenerator(
+            $this->getBuiltInResolver(),
+            $this->getBuiltInObjectResolver()
+        );
+    }
+
+    public function getBuiltInResolver(): ResolverInterface
+    {
+    }
+
+    public function getBuiltInObjectResolver(): ObjectGeneratorInterface
+    {
     }
 }

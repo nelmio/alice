@@ -16,5 +16,16 @@ namespace Nelmio\Alice;
  */
 interface ObjectInterface
 {
-    //TODO
+    /**
+     * @return string
+     *
+     * @example
+     *  'user0'
+     */
+    public function getReference(): string;
+
+    /**
+     * @return \object
+     */
+    public function getInstance();
 }
