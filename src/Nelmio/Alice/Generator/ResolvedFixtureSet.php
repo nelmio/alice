@@ -11,6 +11,11 @@
 
 namespace Nelmio\Alice\Generator;
 
+use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\ParameterBag;
+
 /**
  * Another version {@see Nelmio\Alice\FixtureSet} where loaded parameters have been resolved and injected parameters
  * have been merged in the process; And the fixtures flags have been resolved (i.e. fixtures no longer have flags
@@ -18,5 +23,45 @@ namespace Nelmio\Alice\Generator;
  */
 final class ResolvedFixtureSet
 {
-    //TODO
+    use NotClonableTrait;
+
+    /**
+     * @var ParameterBag
+     */
+    private $parameters;
+
+    /**
+     * @var FixtureBag
+     */
+    private $fixtures;
+
+    /**
+     * @var ObjectBag
+     */
+    private $objects;
+
+    public function __construct(
+        ParameterBag $parameters,
+        FixtureBag $fixtures,
+        ObjectBag $injectedObjects
+    ) {
+        $this->parameters = $parameters;
+        $this->fixtures = $fixtures;
+        $this->objects = $injectedObjects;
+    }
+
+    public function getParameters(): ParameterBag
+    {
+        return clone $this->parameters;
+    }
+
+    public function getFixtures(): FixtureBag
+    {
+        return clone $this->fixtures;
+    }
+
+    public function getObjects(): ObjectBag
+    {
+        return clone $this->objects;
+    }
 }

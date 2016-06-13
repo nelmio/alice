@@ -9,17 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\Generator\Resolver;
 
-/**
- * An object is an instance with a reference.
- */
-interface ObjectInterface
+interface FixtureResolverInterface
 {
-    public function getReference(): string;
 
-    /**
-     * @return \object
-     */
-    public function getInstance();
 }
