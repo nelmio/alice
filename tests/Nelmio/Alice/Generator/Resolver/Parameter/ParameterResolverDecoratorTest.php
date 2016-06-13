@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\ParameterBagResolverInterface;
-use Nelmio\Alice\Resolver\ParameterResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Resolver\Parameter\ParameterResolverDecorator
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverDecorator
  */
 class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
 {

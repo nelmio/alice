@@ -9,19 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Resolver;
+namespace Nelmio\Alice\Generator\Resolver;
 
+use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\Parameter\ArrayParameterResolver;
-use Nelmio\Alice\Resolver\Parameter\ParameterResolverDecorator;
-use Nelmio\Alice\Resolver\Parameter\ParameterResolverRegistry;
-use Nelmio\Alice\Resolver\Parameter\RecursiveParameterResolver;
-use Nelmio\Alice\Resolver\Parameter\SimpleParameterResolver;
-use Nelmio\Alice\Resolver\Parameter\StringParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverDecorator;
 
 /**
  * @coversNothing
- * @TODO: refactor this test later on to use the resolver used by the loader instead of the manual one used here
  */
 class ParameterResolverFunctionalTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,13 +27,7 @@ class ParameterResolverFunctionalTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $registry = new ParameterResolverRegistry([
-            new SimpleParameterResolver(),
-            new ArrayParameterResolver(),
-            new RecursiveParameterResolver(new StringParameterResolver()),
-        ]);
-        
-        $this->resolver = new ParameterResolverDecorator($registry);
+        $this->resolver = (new NativeLoader())->getBuiltInParameterResolver();
     }
 
     /**

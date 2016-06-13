@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\ParameterResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
 /**
  * To be used for clone tests only.

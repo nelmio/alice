@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
-use Nelmio\Alice\Resolver\ParameterResolverAwareInterface;
-use Nelmio\Alice\Resolver\ParameterResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Resolver\Parameter\ParameterResolverRegistry
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry
  */
 class ParameterResolverRegistryTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,7 +63,7 @@ class ParameterResolverRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \TypeError
-     * @expectedExceptionMessage Expected resolvers to be "Nelmio\Alice\Resolver\ParameterResolverInterface" objects. Got
+     * @expectedExceptionMessage Expected resolvers to be "Nelmio\Alice\Generator\Resolver\ParameterResolverInterface" objects. Got
      *                           "stdClass" instead.
      */
     public function testThrowExceptionIfInvalidParserIsPassed()

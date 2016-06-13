@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Exception\Resolver\CircularReferenceException;
 

@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Resolver\ChainableParameterResolverInterface;
-use Nelmio\Alice\Resolver\ParameterResolverAwareInterface;
-use Nelmio\Alice\Resolver\ParameterResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Resolver\Parameter\RecursiveParameterResolver
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\RecursiveParameterResolver
  */
 class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
 {

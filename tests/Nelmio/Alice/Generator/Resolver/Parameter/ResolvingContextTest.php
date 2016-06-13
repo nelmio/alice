@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 /**
- * @covers Nelmio\Alice\Resolver\Parameter\ResolvingContext
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\ResolvingContext
  */
 class ResolvingContextTest extends \PHPUnit_Framework_TestCase
 {
