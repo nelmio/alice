@@ -13,5 +13,5 @@ namespace Nelmio\Alice\Generator\Resolver;
 
 interface FixtureResolverInterface
 {
-
+    //TODO
 }

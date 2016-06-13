@@ -11,6 +11,6 @@
 
 namespace Nelmio\Alice\Throwable;
 
-interface ResolutionThrowable extends BuildThrowable
+interface ResolutionThrowable extends GenerationThrowable
 {
 }

@@ -15,7 +15,6 @@ use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectSet;
-use Nelmio\Alice\Throwable\GenerationThrowable;
 
 final class SimpleGenerator implements GeneratorInterface
 {
@@ -38,13 +37,7 @@ final class SimpleGenerator implements GeneratorInterface
     }
 
     /**
-     * Generates a list of parameters and objects from the given set of data.
-     *
-     * @param FixtureSet $fixtureSet
-     *
-     * @throws GenerationThrowable
-     *
-     * @return ObjectSet Contains the parameters and objects built from the loaded and injected ones.
+     * @inheritdoc
      */
     public function generate(FixtureSet $fixtureSet): ObjectSet
     {

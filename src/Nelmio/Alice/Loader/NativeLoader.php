@@ -68,7 +68,7 @@ final class NativeLoader implements LoaderInterface
     public function __construct()
     {
         $this->builder = $this->getBuiltInBuilder();
-        $this->generator = $this->getBuiltInGenerator();
+//        $this->generator = $this->getBuiltInGenerator();
     }
 
     /**
