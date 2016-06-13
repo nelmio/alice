@@ -19,11 +19,11 @@ interface ResolverInterface
     /**
      * Resolves the loaded parameters and merge the injected ones with them and also resolves the fixture flags.
      * 
-     * @param FixtureSet $unresolvedFixtures
+     * @param FixtureSet $fixtureSet
      *
      * @throws ResolutionThrowable
      * 
      * @return ResolvedFixtureSet
      */
-    public function resolve(FixtureSet $unresolvedFixtures): ResolvedFixtureSet;
+    public function resolve(FixtureSet $fixtureSet): ResolvedFixtureSet;
 }
