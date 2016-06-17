@@ -92,7 +92,7 @@ final class TemplatingFixture implements FixtureInterface
     /**
      * @return FixtureReference[] List of fixture ids that the fixture extends.
      */
-    public function getExtendedFixtures(): array
+    public function getExtendedFixturesReferences(): array
     {
         return $this->templating->getExtendedFixtures();
     }
