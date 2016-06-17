@@ -11,11 +11,15 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\ParameterBagResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
+/**
+ * Decorates a simple parameter resolver to resolve a bag.
+ */
 final class ParameterResolverDecorator implements ParameterBagResolverInterface
 {
     /**
@@ -31,7 +35,7 @@ final class ParameterResolverDecorator implements ParameterBagResolverInterface
     /**
      * {@inheritdoc}
      *
-     * @param ResolvingContext $context
+     * @param \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext $context
      *
      * @return ParameterBag
      */
@@ -46,7 +50,8 @@ final class ParameterResolverDecorator implements ParameterBagResolverInterface
                 continue;
             }
             
-            $context = new ResolvingContext($key);
+            $context = new ParameterResolvingContext($key);
+            //TODO: parameter resolver should return $resolvedParameters + $resolvedValues
             $resolvedValues = $this->resolver->resolve(
                 new Parameter($key, $value),
                 $unresolvedParameters,

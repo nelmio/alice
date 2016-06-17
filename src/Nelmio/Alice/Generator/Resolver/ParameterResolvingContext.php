@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Exception\Resolver\CircularReferenceException;
 
 /**
  * Counter to keep track of the parameters being resolved and detect circular references.
  */
-final class ResolvingContext
+final class ParameterResolvingContext
 {
     /**
      * @var array
@@ -31,11 +31,11 @@ final class ResolvingContext
     /**
      * Creates a new instance from the given one and ensure it has the given key. If the key is already present, will
      * not increment the counter (unlike the ::with() method).
-     * 
-     * @param ResolvingContext|null $resolving
-     * @param string                $key
      *
-     * @return ResolvingContext|static
+     * @param self|null $resolving
+     * @param string    $key
+     *
+     * @return self
      */
     public static function createFrom(self $resolving = null, string $key): self
     {
@@ -43,10 +43,10 @@ final class ResolvingContext
         if (false === $instance->has($key)) {
             $instance = $instance->with($key);
         }
-        
+
         return $instance;
     }
-    
+
     public function has(string $key): bool
     {
         return array_key_exists($key, $this->resolving);
@@ -55,7 +55,7 @@ final class ResolvingContext
     /**
      * @param string $key Parameter key
      *
-     * @return ResolvingContext
+     * @return self
      */
     public function with(string $key): self
     {
