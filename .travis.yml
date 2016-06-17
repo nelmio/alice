@@ -44,5 +44,5 @@ script:
     if [ -n "$COVERAGE" ]; then
         phpdbg -qrr vendor/bin/phpunit --testdox --verbose
     else
-        vendor/bin/phpunit --testdox --verbose;
+        vendor/bin/phpunit;
     fi;
