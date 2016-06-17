@@ -16,18 +16,18 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Exception\FixtureNotFoundException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 
 final class TemplateFixtureResolver
 {
     /**
      * Resolves a given fixture. The resolution of a fixture may result in the resolution of several fixtures.
      *
-     * @param FixtureInterface          $fixture Fixture to resolve
-     * @param FixtureBag                $unresolvedFixtures
-     * @param FixtureBag                $resolvedFixtures
+     * @param FixtureInterface $fixture Fixture to resolve
+     * @param FixtureBag       $unresolvedFixtures
+     * @param FixtureBag       $resolvedFixtures
      *
-     * @param ParameterResolvingContext $context
+     * @param ResolvingContext $context
      *
      * @return FixtureBag
      */
@@ -35,7 +35,7 @@ final class TemplateFixtureResolver
         TemplatingFixture $fixture,
         FixtureBag $unresolvedFixtures,
         TemplatingFixtureBag $resolvedFixtures,
-        ParameterResolvingContext $context
+        ResolvingContext $context
     ): TemplatingFixtureBag
     {
         $context->checkForCircularReference($fixture->getId());
@@ -58,18 +58,21 @@ final class TemplateFixtureResolver
                 $specs = $specs->mergeWith($extendedFixture->getSpecs());
             }
 
-            $fixture = $fixture->withSpecs($specs);
+            $fixture = $fixture
+                ->withSpecs($specs)
+                ->getStrippedFixture()
+            ;
         }
-        $resolvedFixtures->with($fixture);
+        $resolvedFixtures = $resolvedFixtures->with($fixture);
 
         return $resolvedFixtures;
     }
 
     /**
-     * @param FixtureReference[]                     $fixturesReferences
-     * @param FixtureBag                             $unresolvedFixtures
-     * @param TemplatingFixture|TemplatingFixtureBag $resolvedFixtures
-     * @param ParameterResolvingContext       $context
+     * @param FixtureReference[]   $fixturesReferences
+     * @param FixtureBag           $unresolvedFixtures
+     * @param TemplatingFixtureBag $resolvedFixtures
+     * @param ResolvingContext     $context
      *
      * @throws FixtureNotFoundException
      *
@@ -78,13 +81,13 @@ final class TemplateFixtureResolver
     private function resolveExtendedFixtures(
         array $fixturesReferences,
         FixtureBag $unresolvedFixtures,
-        TemplatingFixture $resolvedFixtures,
-        ParameterResolvingContext $context
+        TemplatingFixtureBag $resolvedFixtures,
+        ResolvingContext $context
     ): array
     {
         $fixtures = new FixtureBag();
         foreach ($fixturesReferences as $reference) {
-            $id = $reference->getId();
+            $id = $reference->getReference();
             $context = $context->with($id);
 
             if (false === $unresolvedFixtures->has($id)) {

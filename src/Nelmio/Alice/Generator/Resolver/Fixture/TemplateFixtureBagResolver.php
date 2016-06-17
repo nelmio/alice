@@ -15,13 +15,13 @@ use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Resolver\FixtureBagResolverInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\NotClonableTrait;
 
 /**
- * Decorates a simple fixture resolver to resolve a bag.
+ * Decorates a simple fixture resolver to resolve templates fixtures.
  */
-final class TemplateFixtureResolverDecorator implements FixtureBagResolverInterface
+final class TemplateFixtureBagResolver implements FixtureBagResolverInterface
 {
     use NotClonableTrait;
 
@@ -30,9 +30,9 @@ final class TemplateFixtureResolverDecorator implements FixtureBagResolverInterf
      */
     private $resolver;
 
-    public function __construct(TemplateFixtureResolver $resolver)
+    public function __construct()
     {
-        $this->resolver = $resolver;
+        $this->resolver = new TemplateFixtureResolver();
     }
 
     /**
@@ -51,9 +51,11 @@ final class TemplateFixtureResolverDecorator implements FixtureBagResolverInterf
 
             if (false === $fixture instanceof TemplatingFixture) {
                 $resolvedFixtures = $resolvedFixtures->with($fixture);
+
+                continue;
             }
 
-            $context = new ParameterResolvingContext($id);
+            $context = new ResolvingContext($id);
             $resolvedFixtures = $this->resolver->resolve(
                 $fixture,
                 $unresolvedFixtures,
