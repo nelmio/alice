@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\Exception\FixtureNotFoundException;
+
 /**
  * @covers Nelmio\Alice\FixtureBag
  */
@@ -29,7 +31,31 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
         $this->propRefl = $propRelf;
     }
 
-    public function testMutableAccessors()
+    public function testAccessors()
+    {
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $fixtureProphecy->getId()->willReturn('foo');
+        /** @var FixtureInterface $fixture */
+        $fixture = $fixtureProphecy->reveal();
+
+        $bag = (new FixtureBag())->with($fixture);
+
+        $this->assertTrue($bag->has('foo'));
+        $this->assertFalse($bag->has('bar'));
+
+        $this->assertEquals($fixture, $bag->get('foo'));
+        try {
+            $bag->get('bar');
+            $this->fail('Expected exception to be thrown.');
+        } catch (FixtureNotFoundException $exception) {
+            $this->assertEquals(
+                'Could not find the fixture "bar".',
+                $exception->getMessage()
+            );
+        }
+    }
+
+    public function testMutatorsAreImmutable()
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
         $fixtureProphecy->getId()->willReturn('foo');
@@ -53,7 +79,7 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
         $fixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testAddingSameFixtureOverridesOldValue()
+    public function testAddingSameFixtureOverridesTheOldEntry()
     {
         $fixtureProphecy1 = $this->prophesize(FixtureInterface::class);
         $fixtureProphecy1->getId()->willReturn('foo');

@@ -62,6 +62,7 @@ class FixtureReferenceTest extends \PHPUnit_Framework_TestCase
 
         try {
             $definition->createAbsoluteFrom($fixture);
+            $this->fail('Expected exception to be thrown.');
         } catch (\BadMethodCallException $exception) {
             $this->assertEquals(
                 'Attempted to make the reference "Nelmio\Entity\User#user_base" absolute from the fixture of ID '

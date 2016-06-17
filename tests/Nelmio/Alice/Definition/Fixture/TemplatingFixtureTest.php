@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
@@ -103,7 +104,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($fixture, $clone);
     }
 
-    public function testImmutableMutators()
+    public function testMutatorsAreImmutable()
     {
         $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
         $newSpecs = new SpecificationBag(new DummyMethodCall('dummy'), new PropertyBag(), new MethodCallBag());
@@ -130,5 +131,43 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($specs, $fixture->getSpecs());
         $this->assertEquals($newSpecs, $newFixture->getSpecs());
+    }
+
+    public function testStripTemplateOfFlags()
+    {
+        $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $decoratedFixtureProphecy->getId()->shouldNotBeCalled();
+        /** @var FixtureInterface $decoratedFixture */
+        $decoratedFixture = $decoratedFixtureProphecy->reveal();
+
+        $flags = new FlagBag('user0');
+
+        $fixture = new FixtureWithFlags($decoratedFixture, $flags);
+        $templatingFixture = new TemplatingFixture($fixture);
+
+        $strippedFixtures = $templatingFixture->getStrippedFixture();
+
+        $this->assertEquals(
+            new FixtureWithFlags($fixture, new FlagBag('user0')),
+            $strippedFixtures
+        );
+
+        $flags = (new FlagBag('user0'))
+            ->with(new TemplateFlag())
+            ->with(new ElementFlag('dummy_flag'))
+        ;
+        $fixture = new FixtureWithFlags($decoratedFixture, $flags);
+        $templatingFixture = new TemplatingFixture($fixture);
+
+        $strippedFixtures = $templatingFixture->getStrippedFixture();
+
+        $this->assertEquals(
+            new FixtureWithFlags(
+                $fixture,
+                (new FlagBag('user0'))
+                    ->with(new ElementFlag('dummy_flag'))
+            ),
+            $strippedFixtures
+        );
     }
 }
