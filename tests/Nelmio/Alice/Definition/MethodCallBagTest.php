@@ -33,16 +33,14 @@ class MethodCallBagTest extends \PHPUnit_Framework_TestCase
         $this->propRefl = $propRefl;
     }
 
-    public function testImmutableMutator()
+    public function testMutatorsAreImmutable()
     {
         $methodCall1 = new DummyMethodCall('mc1');
         $methodCall2 = new DummyMethodCall('mc2');
-        $methodCall3 = new DummyMethodCall('mc2');
 
         $bag = new MethodCallBag();
         $bag1 = $bag->with($methodCall1);
         $bag2 = $bag1->with($methodCall2);
-        $bag3 = $bag2->with($methodCall3);
 
         $this->assertInstanceOf(MethodCallBag::class, $bag1);
         $this->assertNotSame($bag, $bag1);
@@ -53,26 +51,48 @@ class MethodCallBagTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame(
             [
-                'mc1' => $methodCall1,
+                $methodCall1,
             ],
             $this->propRefl->getValue($bag1)
         );
         $this->assertSame(
             [
-                'mc1' => $methodCall1,
-                'mc2' => $methodCall2,
+                $methodCall1,
+                $methodCall2,
             ],
             $this->propRefl->getValue($bag2)
         );
+    }
+
+    /**
+     * @testdox When calls overlaps, they are stacked
+     */
+    public function testStackCalls()
+    {
+        $methodCall1 = new DummyMethodCall('mc1');
+        $methodCall2 = new DummyMethodCall('mc1');
+
+        $bag1 = (new MethodCallBag())->with($methodCall1);
+        $bag2 = $bag1->with($methodCall2);
+
         $this->assertSame(
             [
-                'mc1' => $methodCall1,
-                'mc2' => $methodCall3,
+                $methodCall1,
             ],
-            $this->propRefl->getValue($bag3)
+            $this->propRefl->getValue($bag1)
+        );
+        $this->assertSame(
+            [
+                $methodCall1,
+                $methodCall2,
+            ],
+            $this->propRefl->getValue($bag2)
         );
     }
 
+    /**
+     * @testdox Can merge two bags. When calls overlaps, they are stacked.
+     */
     public function testMergeTwoBags()
     {
         $callA1 = new SimpleMethodCall('setUsername', []);
@@ -95,23 +115,24 @@ class MethodCallBagTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(MethodCallBag::class, $bag);
         $this->assertSame(
             [
-                'setUsername' => $callA1,
-                'setOwner' => $callA2,
+                $callA1,
+                $callA2,
             ],
             $this->propRefl->getValue($bagA)
         );
         $this->assertSame(
             [
-                'setUsername' => $callB1,
-                'setMail' => $callB2,
+                $callB1,
+                $callB2,
             ],
             $this->propRefl->getValue($bagB)
         );
         $this->assertSame(
             [
-                'setUsername' => $callB1,
-                'setOwner' => $callA2,
-                'setMail' => $callB2,
+                $callB1,
+                $callB2,
+                $callA1,
+                $callA2,
             ],
             $this->propRefl->getValue($bag)
         );

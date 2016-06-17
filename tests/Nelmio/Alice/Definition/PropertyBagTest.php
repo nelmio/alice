@@ -30,7 +30,7 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
         $this->propRefl = $propRefl;
     }
 
-    public function testImmutableMutator()
+    public function testMutatorsAreImmutable()
     {
         $property = new Property('username', 'alice');
 
@@ -43,12 +43,15 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['username' => $property], $this->propRefl->getValue($newBag));
     }
 
+    /**
+     * @testdox Can merge two bags. When properties overlaps, the existing ones are kept.
+     */
     public function testMergeTwoBags()
     {
         $propertyA1 = new Property('username', 'alice');
         $propertyA2 = new Property('owner', 'bob');
 
-        $propertyB1 = new Property('username', 'mad');
+        $propertyB1 = new Property('username', 'mad');  // overlapping value
         $propertyB2 = new Property('mail', 'bob@ex.com');
 
         $bagA = (new PropertyBag())
@@ -79,9 +82,9 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame(
             [
-                'username' => $propertyB1,
-                'owner' => $propertyA2,
+                'username' => $propertyA1,
                 'mail' => $propertyB2,
+                'owner' => $propertyA2,
             ],
             $this->propRefl->getValue($bag)
         );

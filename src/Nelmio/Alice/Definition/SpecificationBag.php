@@ -64,7 +64,7 @@ final class SpecificationBag
 
     /**
      * Creates a new instance to which the given specs have been merged. In case of conflicts, the existing values are
-     * overridden.
+     * kept.
      * 
      * @param self $specs
      *
@@ -73,7 +73,7 @@ final class SpecificationBag
     public function mergeWith(self $specs): self
     {
         $clone = clone $this;
-        if (null !== $specs->constructor) {
+        if (null === $clone->constructor) {
             $clone->constructor = $specs->constructor;
         }
         
