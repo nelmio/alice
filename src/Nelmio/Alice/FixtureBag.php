@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\Exception\FixtureNotFoundException;
+
 /**
  * Value object containing a list of fixtures.
  */
@@ -46,6 +48,32 @@ final class FixtureBag implements \IteratorAggregate
         }
 
         return $clone;
+    }
+
+    /**
+     * @param string $id Fixture ID.
+     *
+     * @return bool
+     */
+    public function has(string $id): bool
+    {
+        return array_key_exists($id, $this->fixtures);
+    }
+
+    /**
+     * @param string $id Fixture ID.
+     *
+     * @throws FixtureNotFoundException
+     *
+     * @return FixtureInterface
+     */
+    public function get(string $id): FixtureInterface
+    {
+        if ($this->has($id)) {
+            return $this->fixtures[$id];
+        }
+
+        throw FixtureNotFoundException::create($id);
     }
 
     /**

@@ -11,6 +11,9 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use Nelmio\Alice\Definition\Flag\ExtendFlag;
+use Nelmio\Alice\Definition\Flag\TemplateFlag;
+use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
@@ -77,6 +80,24 @@ final class TemplatingFixture implements FixtureInterface
         $clone->fixture = $this->fixture->withSpecs($specs);
         
         return $clone;
+    }
+
+    /**
+     * Gets the decorated fixture stripped of its templating flags.
+     *
+     * @return FixtureWithFlags
+     */
+    public function getStrippedFixture(): FixtureWithFlags
+    {
+        $fixtureFlags = $this->fixture->getFlags();
+        $newflags = new FlagBag($fixtureFlags->getKey());
+        foreach ($fixtureFlags as $flag) {
+            if (false === $flag instanceof TemplateFlag && false === $flag instanceof ExtendFlag) {
+                $newflags = $newflags->with($flag);
+            }
+        }
+
+        return new FixtureWithFlags($this->fixture, $newflags);
     }
 
     public function isATemplate(): bool

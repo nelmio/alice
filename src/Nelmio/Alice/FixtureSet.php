@@ -49,4 +49,24 @@ final class FixtureSet
         $this->fixtures = $fixtures;
         $this->injectedObjects = $injectedObjects;
     }
+
+    public function getLoadedParameters(): ParameterBag
+    {
+        return clone $this->loadedParameters;
+    }
+
+    public function getInjectedParameters(): ParameterBag
+    {
+        return clone $this->injectedParameters;
+    }
+
+    public function getFixtures(): FixtureBag
+    {
+        return clone $this->fixtures;
+    }
+
+    public function getObjects(): ObjectBag
+    {
+        return clone $this->injectedObjects;
+    }
 }
