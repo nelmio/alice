@@ -28,7 +28,7 @@ final class PropertyBag
 
     /**
      * Creates a new instance to which the given properties have been merged. In case of conflicts, the existing values
-     * are overridden.
+     * are kept.
      *
      * @param PropertyBag $propertyBag
      *
@@ -36,8 +36,8 @@ final class PropertyBag
      */
     public function mergeWith(self $propertyBag): self
     {
-        $clone = clone $this;
-        foreach ($propertyBag->properties as $name => $property) {
+        $clone = clone $propertyBag;
+        foreach ($this->properties as $name => $property) {
             $clone->properties[$name] = $property;
         }
         

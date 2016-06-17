@@ -21,14 +21,14 @@ final class MethodCallBag
     public function with(MethodCallInterface $methodCall): self
     {
         $clone = clone $this;
-        $clone->methodCalls[$methodCall->__toString()] = $methodCall;
+        $clone->methodCalls[] = $methodCall;
 
         return $clone;
     }
 
     /**
      * Creates a new instance to which the given properties have been merged. In case of conflicts, the existing values
-     * are overridden.
+     * are kept.
      *
      * @param self $methodCallsBag
      *
@@ -36,9 +36,9 @@ final class MethodCallBag
      */
     public function mergeWith(self $methodCallsBag): self
     {
-        $clone = clone $this;
-        foreach ($methodCallsBag->methodCalls as $stringValue => $methodCall) {
-            $clone->methodCalls[$stringValue] = $methodCall;
+        $clone = clone $methodCallsBag;
+        foreach ($this->methodCalls as $methodCall) {
+            $clone->methodCalls[] = $methodCall;
         }
 
         return $clone;
