@@ -33,8 +33,9 @@ final class Templating
      */
     private $extends = [];
 
-    public function __construct(FlagBag $flags)
+    public function __construct(FixtureWithFlags $fixture)
     {
+        $flags = $fixture->getFlags();
         foreach ($flags as $flag) {
             if ($flag instanceof TemplateFlag) {
                 $this->isATemplate = true;
@@ -44,7 +45,7 @@ final class Templating
 
             if ($flag instanceof ExtendFlag) {
                 // Potential flag duplication is handled at the flagbag level
-                $this->extends[] = $flag->getExtendedFixture();
+                $this->extends[] = $flag->getExtendedFixture()->createAbsoluteFrom($fixture);
             }
         }
     }

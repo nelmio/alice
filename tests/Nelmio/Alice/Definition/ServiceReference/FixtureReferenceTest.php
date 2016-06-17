@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Definition\ServiceReference;
 
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
+use Nelmio\Alice\FixtureInterface;
 
 /**
  * @covers Nelmio\Alice\Definition\ServiceReference\FixtureReference
@@ -25,9 +26,50 @@ class FixtureReferenceTest extends \PHPUnit_Framework_TestCase
     
     public function testAccessors()
     {
-        $reference = 'Nelmio\Alice\User#user_base';
+        $reference = 'Nelmio\Entity\User#user_base';
         $definition = new FixtureReference($reference);
         
         $this->assertEquals($reference, $definition->getReference());
+    }
+
+    public function testCreateAbsoluteReference()
+    {
+        $reference = 'user_base';
+        $definition = new FixtureReference($reference);
+
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $fixtureProphecy->getClassName()->willReturn('Nelmio\Entity\User');
+        /** @var FixtureInterface $fixture */
+        $fixture = $fixtureProphecy->reveal();
+
+        $absoluteDefinition = $definition->createAbsoluteFrom($fixture);
+
+        $this->assertEquals($reference, $definition->getReference());
+        $this->assertEquals('Nelmio\Entity\User#user_base', $absoluteDefinition->getReference());
+
+        $fixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testCreateAbsoluteReferenceFromAbsoluteReference()
+    {
+        $reference = 'Nelmio\Entity\User#user_base';
+        $definition = new FixtureReference($reference);
+
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $fixtureProphecy->getId()->willReturn('Nelmio\Entity\User#user0');
+        /** @var FixtureInterface $fixture */
+        $fixture = $fixtureProphecy->reveal();
+
+        try {
+            $definition->createAbsoluteFrom($fixture);
+        } catch (\BadMethodCallException $exception) {
+            $this->assertEquals(
+                'Attempted to make the reference "Nelmio\Entity\User#user_base" absolute from the fixture of ID '
+                .'"Nelmio\Entity\User#user0", however the reference is already absolute.',
+                $exception->getMessage()
+            );
+        }
+
+        $fixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
     }
 }

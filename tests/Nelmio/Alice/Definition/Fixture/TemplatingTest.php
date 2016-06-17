@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use Nelmio\Alice\FixtureInterface;
 
 /**
  * @covers Nelmio\Alice\Definition\Fixture\Templating
@@ -24,9 +25,9 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideFlags
      */
-    public function testDetectTemplateFlags(FlagBag $flags, bool $isATemplate, bool $extendsFixtures, array $extendedFixtures)
+    public function testDetectTemplateFlags(FixtureWithFlags $fixture, bool $isATemplate, bool $extendsFixtures, array $extendedFixtures)
     {
-        $templating = new Templating($flags);
+        $templating = new Templating($fixture);
         $this->assertEquals($isATemplate, $templating->isATemplate());
         $this->assertEquals($extendsFixtures, $templating->extendsFixtures());
         $this->assertEquals($extendedFixtures, $templating->getExtendedFixtures());
@@ -38,7 +39,7 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
         $emptyFlagBag = new FlagBag('user0');
 
         yield 'empty flagbag' => [
-            $emptyFlagBag,
+            $this->createFixtureWithFlags($emptyFlagBag),
             false,
             false,
             [],
@@ -47,43 +48,51 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
         $templateFlagBag = $emptyFlagBag->with(new TemplateFlag());
 
         yield 'flagbag with template' => [
-            $templateFlagBag,
+            $this->createFixtureWithFlags($templateFlagBag),
             true,
             false,
             [],
         ];
 
-        $reference1 = new FixtureReference('Nelmio\Alice\User#user_base0');
-        $reference2 = new FixtureReference('Nelmio\Alice\User#user_base1');
         $extendsFlagBag = $emptyFlagBag
-            ->with(new ExtendFlag($reference1))
-            ->with(new ExtendFlag($reference2))
+            ->with(new ExtendFlag(new FixtureReference('user_base0')))
+            ->with(new ExtendFlag(new FixtureReference('user_base1')))
         ;
 
         yield 'flagbag with extends' => [
-            $extendsFlagBag,
+            $this->createFixtureWithFlags($extendsFlagBag),
             false,
             true,
             [
-                $reference1,
-                $reference2,
+                new FixtureReference('Nelmio\Entity\User#user_base0'),
+                new FixtureReference('Nelmio\Entity\User#user_base1'),
             ],
         ];
 
         $templateAndExtendsFlagBag = $emptyFlagBag
             ->with(new TemplateFlag())
-            ->with(new ExtendFlag($reference1))
-            ->with(new ExtendFlag($reference2))
+            ->with(new ExtendFlag(new FixtureReference('user_base0')))
+            ->with(new ExtendFlag(new FixtureReference('user_base1')))
         ;
 
         yield 'flagbag with template and extends' => [
-            $templateAndExtendsFlagBag,
+            $this->createFixtureWithFlags($templateAndExtendsFlagBag),
             true,
             true,
             [
-                $reference1,
-                $reference2,
+                new FixtureReference('Nelmio\Entity\User#user_base0'),
+                new FixtureReference('Nelmio\Entity\User#user_base1'),
             ],
         ];
+    }
+
+    private function createFixtureWithFlags(FlagBag $flags): FixtureWithFlags
+    {
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $fixtureProphecy->getClassName()->willReturn('Nelmio\Entity\User');
+        /** @var FixtureInterface $fixture */
+        $fixture = $fixtureProphecy->reveal();
+
+        return new FixtureWithFlags($fixture, $flags);
     }
 }
