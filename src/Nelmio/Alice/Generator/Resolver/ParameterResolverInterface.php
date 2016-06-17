@@ -13,12 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Throwable\ResolutionThrowable;
 
-/**
- * More specific version of {@see Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface} to resolve a specific
- * parameter.
- */
 interface ParameterResolverInterface
 {
     /**
@@ -27,8 +22,6 @@ interface ParameterResolverInterface
      * @param Parameter    $parameter Unresolved parameter
      * @param ParameterBag $unresolvedParameters
      * @param ParameterBag $resolvedParameters
-     *
-     * @throws ResolutionThrowable
      *
      * @return ParameterBag Contains all the resolved parameters (as parameter are dynamics, resolving 1 parameter may
      *                      result in resolving several other parameters).

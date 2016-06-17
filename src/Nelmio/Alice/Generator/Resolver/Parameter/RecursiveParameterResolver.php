@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -57,7 +57,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        ParameterResolvingContext $context = null,
+        ResolvingContext $context = null,
         ParameterBag $previousResult = null
     ): ParameterBag
     {

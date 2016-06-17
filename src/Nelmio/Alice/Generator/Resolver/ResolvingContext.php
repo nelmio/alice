@@ -16,7 +16,7 @@ use Nelmio\Alice\Exception\Resolver\CircularReferenceException;
 /**
  * Counter to keep track of the parameters being resolved and detect circular references.
  */
-final class ParameterResolvingContext
+final class ResolvingContext
 {
     /**
      * @var array
@@ -32,8 +32,8 @@ final class ParameterResolvingContext
      * Creates a new instance from the given one and ensure it has the given key. If the key is already present, will
      * not increment the counter (unlike the ::with() method).
      *
-     * @param self|null $resolving
-     * @param string    $key
+     * @param ResolvingContext|null $resolving
+     * @param string                $key
      *
      * @return self
      */

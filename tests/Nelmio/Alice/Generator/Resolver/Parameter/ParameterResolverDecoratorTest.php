@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
@@ -51,7 +51,7 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
                 new Parameter('foo', 'unresolved(bar)'),
                 $unresolvedParameters,
                 new ParameterBag(),
-                new ParameterResolvingContext('foo')
+                new ResolvingContext('foo')
             )
             ->willReturn(
                 $firstResolveResult = new ParameterBag([
@@ -65,7 +65,7 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
                 new Parameter('ping', 'unresolved(pong)'),
                 $unresolvedParameters,
                 $firstResolveResult,
-                new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('ping')
+                new ResolvingContext('ping')
             )
             ->willReturn(
                 new ParameterBag([
@@ -128,7 +128,7 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
                 new Parameter('foo', 'unresolved(bar)'),
                 $unresolvedParameters,
                 $injectedParameters,
-                new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('foo')
+                new ResolvingContext('foo')
             )
             ->willReturn(
                 new ParameterBag([
@@ -145,7 +145,7 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
                     'other_param' => 'oï',
                     'foo' => 'bar',
                 ]),
-                new ParameterResolvingContext('ping')
+                new ResolvingContext('ping')
             )
             ->willReturn(
                 new ParameterBag([

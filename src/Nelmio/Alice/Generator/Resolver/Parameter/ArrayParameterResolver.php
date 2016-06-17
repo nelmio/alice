@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Exception\Resolver\ResolverNotFoundException;
-use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -56,7 +56,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
         Parameter $unresolvedArrayParameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        ParameterResolvingContext $context = null
+        ResolvingContext $context = null
     ): ParameterBag
     {
         if (null === $this->resolver) {
@@ -70,7 +70,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
             );
         }
 
-        $context = \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext::createFrom($context, $unresolvedArrayParameter->getKey());
+        $context = ResolvingContext::createFrom($context, $unresolvedArrayParameter->getKey());
 
         $resolvedArray = [];
         $resolvedParameterBag = new ParameterBag();

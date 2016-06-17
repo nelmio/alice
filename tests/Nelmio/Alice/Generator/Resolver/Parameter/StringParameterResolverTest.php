@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Exception\Resolver\ParameterNotFoundException;
-use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -192,7 +192,7 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
                 new Parameter('bar', 'unresolved(bar)'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                (new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('foo'))->with('bar')
+                (new \Nelmio\Alice\Generator\Resolver\ResolvingContext('foo'))->with('bar')
             )
             ->willReturn(
                 new ParameterBag([
@@ -220,7 +220,7 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
             'bar' => 'unresolved(bar)',
         ]);
         $resolvedParameters = new ParameterBag();
-        $context = new ParameterResolvingContext('ping');
+        $context = new ResolvingContext('ping');
         $expected = new ParameterBag([
             'bar' => 'Mad Hatter',
             'foo' => 'Mad Hatter',

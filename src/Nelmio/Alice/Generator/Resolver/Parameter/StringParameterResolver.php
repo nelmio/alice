@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Exception\Resolver\ParameterNotFoundException;
 use Nelmio\Alice\Exception\Resolver\ResolverNotFoundException;
-use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -58,10 +58,10 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext $context = null
+        ResolvingContext $context = null
     ): ParameterBag
     {
-        $context = \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext::createFrom($context, $parameter->getKey());
+        $context = ResolvingContext::createFrom($context, $parameter->getKey());
 
         $self = $this;
         $result = new ParameterBag();
@@ -86,11 +86,11 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
     }
 
     /**
-     * @param Parameter                                                  $parameter Parameter being resolved
-     * @param string                                                     $key       Key of the parameter that need to be resolved to resolve $parameter
-     * @param ParameterBag                                               $unresolvedParameters
-     * @param ParameterBag                                               $resolvedParameters
-     * @param \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext $context
+     * @param Parameter        $parameter Parameter being resolved
+     * @param string           $key       Key of the parameter that need to be resolved to resolve $parameter
+     * @param ParameterBag     $unresolvedParameters
+     * @param ParameterBag     $resolvedParameters
+     * @param ResolvingContext $context
      *
      * @throws ParameterNotFoundException
      * @throws ResolverNotFoundException
@@ -102,7 +102,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         string $key,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext $context
+        ResolvingContext $context
     ): ParameterBag
     {
         if ($resolvedParameters->has($key)) {

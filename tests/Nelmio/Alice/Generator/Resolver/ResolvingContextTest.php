@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Generator\Resolver;
 
-use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
-
 /**
  * @covers Nelmio\Alice\Generator\Resolver\ResolvingContext
  */
@@ -20,19 +18,19 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
 {
     public function testAccessors()
     {
-        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext();
+        $context = new ResolvingContext();
         $this->assertFalse($context->has('foo'));
 
-        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('foo');
+        $context = new ResolvingContext('foo');
         $this->assertTrue($context->has('foo'));
     }
 
     public function testImmutableMutators()
     {
-        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext();
+        $context = new ResolvingContext();
         $newContext = $context->with('foo');
 
-        $this->assertInstanceOf(\Nelmio\Alice\Generator\Resolver\ParameterResolvingContext::class, $newContext);
+        $this->assertInstanceOf(ResolvingContext::class, $newContext);
         $this->assertNotSame($newContext, $context);
         $this->assertFalse($context->has('foo'));
         $this->assertTrue($newContext->has('foo'));
@@ -40,10 +38,10 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
 
     public function testFactoryMethod()
     {
-        $context = ParameterResolvingContext::createFrom(null, 'foo');
+        $context = ResolvingContext::createFrom(null, 'foo');
         $this->assertTrue($context->has('foo'));
 
-        $newContext = ParameterResolvingContext::createFrom($context->with('bar'), 'ping');
+        $newContext = ResolvingContext::createFrom($context->with('bar'), 'ping');
         $this->assertFalse($context->has('bar'));
         $this->assertFalse($context->has('ping'));
         $this->assertTrue($newContext->has('foo'));
@@ -51,7 +49,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($newContext->has('ping'));
         $this->assertNotSame($newContext, $context);
 
-        $newContext = \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext::createFrom($context, 'bar');
+        $newContext = ResolvingContext::createFrom($context, 'bar');
         $this->assertFalse($context->has('bar'));
         $this->assertTrue($newContext->has('foo'));
         $this->assertTrue($newContext->has('bar'));
@@ -63,15 +61,15 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactoryMethodCannotTriggerCircularReference()
     {
-        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('foo');
+        $context = new ResolvingContext('foo');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
-        $context = ParameterResolvingContext::createFrom($context, 'foo');
+        $context = ResolvingContext::createFrom($context, 'foo');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
-        $context = \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext::createFrom($context, 'foo');
+        $context = ResolvingContext::createFrom($context, 'foo');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
@@ -86,7 +84,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckForCircularReferences()
     {
-        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('bar');
+        $context = new ResolvingContext('bar');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
@@ -105,7 +103,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckForCircularReferencesWithInitializedConstructor()
     {
-        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('foo');
+        $context = new ResolvingContext('foo');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 

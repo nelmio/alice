@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use Nelmio\Alice\Generator\Resolver\ParameterResolvingContext;
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -103,7 +103,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $unresolvedParameters = new ParameterBag(['name' => 'unresolvedParams']);
         $resolvedParameters = new ParameterBag(['name' => 'resolvedParams']);
-        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext();
+        $context = new ResolvingContext();
 
         $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
         $injectedResolverProphecy
@@ -160,7 +160,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $unresolvedParameters = new ParameterBag(['name' => 'unresolvedParams']);
         $resolvedParameters = new ParameterBag(['name' => 'resolvedParams']);
-        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext();
+        $context = new ResolvingContext();
 
         $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
         $injectedResolverProphecy
@@ -192,7 +192,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideContexts
      */
-    public function testEnsureAValidContextIsAlwaysPassedToTheInjectedResolver(\Nelmio\Alice\Generator\Resolver\ParameterResolvingContext $context = null, \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext $expected)
+    public function testEnsureAValidContextIsAlwaysPassedToTheInjectedResolver(ResolvingContext $context = null, ResolvingContext $expected)
     {
         $array = [
             $val1 = new \stdClass(),
@@ -253,15 +253,15 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
         return [
             'no context' => [
                 null,
-                new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('array_param'),
+                new ResolvingContext('array_param'),
             ],
             'context that does not contain the parameter being resolved' => [
-                new ParameterResolvingContext('unrelated'),
-                (new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('unrelated'))->with('array_param'),
+                new ResolvingContext('unrelated'),
+                (new ResolvingContext('unrelated'))->with('array_param'),
             ],
             'context that contains the parameter being resolved' => [
-                (new ParameterResolvingContext('unrelated'))->with('array_param'),
-                (new ParameterResolvingContext('unrelated'))->with('array_param'),
+                (new ResolvingContext('unrelated'))->with('array_param'),
+                (new ResolvingContext('unrelated'))->with('array_param'),
             ],
         ];
     }
