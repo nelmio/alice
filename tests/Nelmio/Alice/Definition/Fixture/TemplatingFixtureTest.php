@@ -46,7 +46,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         /** @var FixtureInterface $decoratedFixture */
         $decoratedFixture = $decoratedFixtureProphecy->reveal();
 
-        $extendedFixtureReference = new FixtureReference('Nelmio\User\Alice#user_base');
+        $extendedFixtureReference = new FixtureReference('user_base');
         $flag1 = new TemplateFlag();
         $flag2 = new ExtendFlag($extendedFixtureReference);
 
@@ -64,11 +64,11 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($specs, $fixture->getSpecs());
         $this->assertTrue($fixture->isATemplate());
         $this->assertTrue($fixture->extendsFixtures());
-        $this->assertEquals([$extendedFixtureReference], $fixture->getExtendedFixturesReferences());
+        $this->assertEquals([new FixtureReference('Nelmio\Entity\User#user_base')], $fixture->getExtendedFixturesReferences());
 
         $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
         $decoratedFixtureProphecy->getReference()->shouldHaveBeenCalledTimes(1);
-        $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
+        $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(2);
         $decoratedFixtureProphecy->getSpecs()->shouldHaveBeenCalledTimes(1);
     }
 

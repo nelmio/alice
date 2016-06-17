@@ -33,7 +33,7 @@ final class TemplatingFixture implements FixtureInterface
     public function __construct(FixtureWithFlags $fixture)
     {
         $this->fixture = $fixture;
-        $this->templating = new Templating($fixture->getFlags());
+        $this->templating = new Templating($fixture);
     }
 
     /**
