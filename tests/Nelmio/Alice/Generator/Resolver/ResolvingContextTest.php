@@ -18,19 +18,19 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
 {
     public function testAccessors()
     {
-        $context = new ResolvingContext();
+        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext();
         $this->assertFalse($context->has('foo'));
 
-        $context = new ResolvingContext('foo');
+        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('foo');
         $this->assertTrue($context->has('foo'));
     }
 
     public function testImmutableMutators()
     {
-        $context = new ResolvingContext();
+        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext();
         $newContext = $context->with('foo');
 
-        $this->assertInstanceOf(ResolvingContext::class, $newContext);
+        $this->assertInstanceOf(\Nelmio\Alice\Generator\Resolver\ParameterResolvingContext::class, $newContext);
         $this->assertNotSame($newContext, $context);
         $this->assertFalse($context->has('foo'));
         $this->assertTrue($newContext->has('foo'));
@@ -38,10 +38,10 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
 
     public function testFactoryMethod()
     {
-        $context = ResolvingContext::createFrom(null, 'foo');
+        $context = ParameterResolvingContext::createFrom(null, 'foo');
         $this->assertTrue($context->has('foo'));
 
-        $newContext = ResolvingContext::createFrom($context->with('bar'), 'ping');
+        $newContext = ParameterResolvingContext::createFrom($context->with('bar'), 'ping');
         $this->assertFalse($context->has('bar'));
         $this->assertFalse($context->has('ping'));
         $this->assertTrue($newContext->has('foo'));
@@ -49,7 +49,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($newContext->has('ping'));
         $this->assertNotSame($newContext, $context);
 
-        $newContext = ResolvingContext::createFrom($context, 'bar');
+        $newContext = \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext::createFrom($context, 'bar');
         $this->assertFalse($context->has('bar'));
         $this->assertTrue($newContext->has('foo'));
         $this->assertTrue($newContext->has('bar'));
@@ -61,15 +61,15 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactoryMethodCannotTriggerCircularReference()
     {
-        $context = new ResolvingContext('foo');
+        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('foo');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
-        $context = ResolvingContext::createFrom($context, 'foo');
+        $context = ParameterResolvingContext::createFrom($context, 'foo');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
-        $context = ResolvingContext::createFrom($context, 'foo');
+        $context = \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext::createFrom($context, 'foo');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
@@ -84,7 +84,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckForCircularReferences()
     {
-        $context = new ResolvingContext('bar');
+        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('bar');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
@@ -103,7 +103,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckForCircularReferencesWithInitializedConstructor()
     {
-        $context = new ResolvingContext('foo');
+        $context = new \Nelmio\Alice\Generator\Resolver\ParameterResolvingContext('foo');
         $context->checkForCircularReference('foo');
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 

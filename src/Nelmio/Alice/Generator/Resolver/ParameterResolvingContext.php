@@ -16,7 +16,7 @@ use Nelmio\Alice\Exception\Resolver\CircularReferenceException;
 /**
  * Counter to keep track of the parameters being resolved and detect circular references.
  */
-final class ResolvingContext
+final class ParameterResolvingContext
 {
     /**
      * @var array
