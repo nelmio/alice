@@ -32,8 +32,8 @@ final class ResolvingContext
      * Creates a new instance from the given one and ensure it has the given key. If the key is already present, will
      * not increment the counter (unlike the ::with() method).
      *
-     * @param ResolvingContext|null $resolving
-     * @param string                $key
+     * @param self|null $resolving
+     * @param string    $key
      *
      * @return self
      */

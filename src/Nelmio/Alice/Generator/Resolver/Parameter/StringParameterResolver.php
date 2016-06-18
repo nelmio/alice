@@ -94,7 +94,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
      *
      * @throws ParameterNotFoundException
      * @throws ResolverNotFoundException
-     * 
+     *
      * @return ParameterBag
      */
     private function resolveStringKey(
