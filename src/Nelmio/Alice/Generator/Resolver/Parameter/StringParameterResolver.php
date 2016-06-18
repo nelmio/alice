@@ -64,25 +64,18 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         $context = ResolvingContext::createFrom($context, $parameter->getKey());
 
         $self = $this;
-        $result = new ParameterBag();
         $value = preg_replace_callback(
             self::PATTERN,
-            function ($match) use ($self, $context, $unresolvedParameters, $resolvedParameters, $parameter, &$result) {
+            function ($match) use ($self, $context, $unresolvedParameters, &$resolvedParameters, $parameter) {
                 $key = $match['parameter'];
+                $resolvedParameters = $self->resolveStringKey($parameter, $key, $unresolvedParameters, $resolvedParameters, $context);
 
-                $resolvedBag = $self->resolveStringKey($parameter, $key, $unresolvedParameters, $resolvedParameters, $context);
-
-                $resolvedKey = $resolvedBag->get($key);
-                foreach ($resolvedBag as $paramKey => $paramValue) {
-                    $result = $result->with(new Parameter($paramKey, $paramValue));
-                }
-
-                return $resolvedKey;
+                return $resolvedParameters->get($key);
             },
             $parameter->getValue()
         );
 
-        return $result->with($parameter->withValue($value));
+        return $resolvedParameters->with($parameter->withValue($value));
     }
 
     /**
@@ -106,7 +99,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
     ): ParameterBag
     {
         if ($resolvedParameters->has($key)) {
-            return new ParameterBag([$key => $resolvedParameters->get($key)]);
+            return $resolvedParameters;
         }
 
         if (false === $unresolvedParameters->has($key)) {

@@ -73,28 +73,25 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
         $context = ResolvingContext::createFrom($context, $unresolvedArrayParameter->getKey());
 
         $resolvedArray = [];
-        $resolvedParameterBag = new ParameterBag();
         /* @var array $unresolvedArray */
         $unresolvedArray = $unresolvedArrayParameter->getValue();
         foreach ($unresolvedArray as $index => $unresolvedValue) {
             // Iterate over all the values of the array to resolve each of them
-            $resolvedValueBag = $this->resolver->resolve(
+            $resolvedParameters = $this->resolver->resolve(
                 new Parameter($index, $unresolvedValue),
                 $unresolvedParameters,
                 $resolvedParameters,
                 $context
             );
 
-            $resolvedArray[$index] = $resolvedValueBag->get($index);
-            $resolvedValueBag = $resolvedValueBag->without($index);
-            
-            foreach ($resolvedValueBag as $key => $value) {
-                $resolvedParameterBag = $resolvedParameterBag->with(new Parameter($key, $value));
-            }
+            $resolvedArray[$index] = $resolvedParameters->get($index);
+            $resolvedParameters = $resolvedParameters->without($index);
         }
-        $resolvedParameterBag = $resolvedParameterBag->with($unresolvedArrayParameter->withValue($resolvedArray));
+        $resolvedParameters = $resolvedParameters->with(
+            $unresolvedArrayParameter->withValue($resolvedArray)
+        );
         
-        return $resolvedParameterBag;
+        return $resolvedParameters;
     }
 
     public function __clone()

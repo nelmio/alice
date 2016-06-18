@@ -20,7 +20,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 /**
  * Decorates a simple parameter resolver to resolve a bag.
  */
-final class ParameterResolverDecorator implements ParameterBagResolverInterface
+final class ParameterBagResolver implements ParameterBagResolverInterface
 {
     /**
      * @var ParameterResolverInterface
@@ -51,17 +51,12 @@ final class ParameterResolverDecorator implements ParameterBagResolverInterface
             }
             
             $context = new ResolvingContext($key);
-            //TODO: parameter resolver should return $resolvedParameters + $resolvedValues
-            $resolvedValues = $this->resolver->resolve(
+            $resolvedParameters = $this->resolver->resolve(
                 new Parameter($key, $value),
                 $unresolvedParameters,
                 $resolvedParameters,
                 $context
             );
-
-            foreach ($resolvedValues as $keyOfResolvedValue => $resolvedValue) {
-                $resolvedParameters = $resolvedParameters->with(new Parameter($keyOfResolvedValue, $resolvedValue));
-            }
         }
 
         return $resolvedParameters;

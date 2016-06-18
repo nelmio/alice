@@ -34,6 +34,6 @@ final class SimpleParameterResolver implements ChainableParameterResolverInterfa
      */
     public function resolve(Parameter $parameter, ParameterBag $unresolvedParameters, ParameterBag $resolvedParameters): ParameterBag
     {
-        return (new ParameterBag())->with($parameter);
+        return $resolvedParameters->with($parameter);
     }
 }
