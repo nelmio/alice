@@ -115,7 +115,8 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(
                 new ParameterBag([
-                    '0' => 'val1'
+                    'name' => 'resolvedParams',
+                    '0' => 'val1',
                 ])
             )
         ;
@@ -128,7 +129,8 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(
                 new ParameterBag([
-                    '1' => 'val2'
+                    'name' => 'resolvedParams',
+                    '1' => 'val2',
                 ])
             )
         ;
@@ -140,6 +142,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new ParameterBag([
+                'name' => 'resolvedParams',
                 'array_param' => [
                     '0' => 'val1',
                     '1' => 'val2',
@@ -214,7 +217,8 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(
                 new ParameterBag([
-                    '0' => 'val1'
+                    'name' => 'resolvedParams',
+                    '0' => 'val1',
                 ])
             )
         ;
@@ -227,7 +231,8 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(
                 new ParameterBag([
-                    '1' => 'val2'
+                    'name' => 'resolvedParams',
+                    '1' => 'val2',
                 ])
             )
         ;
@@ -239,6 +244,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new ParameterBag([
+                'name' => 'resolvedParams',
                 'array_param' => [
                     '0' => 'val1',
                     '1' => 'val2',

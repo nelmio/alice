@@ -19,21 +19,21 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverDecorator
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\ParameterBagResolver
  */
-class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
+class ParameterBagResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAParameterBagResolver()
     {
-        $this->assertTrue(is_a(ParameterResolverDecorator::class, ParameterBagResolverInterface::class, true));
+        $this->assertTrue(is_a(ParameterBagResolver::class, ParameterBagResolverInterface::class, true));
     }
 
     public function testIsDeepClonable()
     {
-        $resolver = new ParameterResolverDecorator(new DummyParameterResolverInterface());
+        $resolver = new ParameterBagResolver(new DummyParameterResolverInterface());
         $newResolver = clone $resolver;
 
-        $this->assertInstanceOf(ParameterResolverDecorator::class, $newResolver);
+        $this->assertInstanceOf(ParameterBagResolver::class, $newResolver);
         $this->assertNotSame($newResolver, $resolver);
         $this->assertNotSameInjectedResolver($newResolver, $resolver);
     }
@@ -69,6 +69,8 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(
                 new ParameterBag([
+                    'foo' => 'bar',
+                    'other_param' => 'yo',
                     'ping' => 'pong',
                 ])
             )
@@ -76,7 +78,7 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
-        $resolver = new ParameterResolverDecorator($injectedResolver);
+        $resolver = new ParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters);
 
         $this->assertEquals(
@@ -106,7 +108,7 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
-        $resolver = new ParameterResolverDecorator($injectedResolver);
+        $resolver = new ParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters, $resolvedParameters);
 
         $this->assertEquals($resolvedParameters, $result);
@@ -132,8 +134,8 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(
                 new ParameterBag([
-                    'foo' => 'bar',
                     'other_param' => 'yo',
+                    'foo' => 'bar',
                 ])
             )
         ;
@@ -142,13 +144,15 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
                 new Parameter('ping', 'unresolved(pong)'),
                 $unresolvedParameters,
                 new ParameterBag([
-                    'other_param' => 'oï',
+                    'other_param' => 'yo',
                     'foo' => 'bar',
                 ]),
                 new ResolvingContext('ping')
             )
             ->willReturn(
                 new ParameterBag([
+                    'other_param' => 'yo',
+                    'foo' => 'bar',
                     'ping' => 'pong',
                 ])
             )
@@ -156,12 +160,12 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
-        $resolver = new ParameterResolverDecorator($injectedResolver);
+        $resolver = new ParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
         $this->assertEquals(
             new ParameterBag([
-                'other_param' => 'oï',
+                'other_param' => 'yo',
                 'foo' => 'bar',
                 'ping' => 'pong',
             ]),
@@ -169,7 +173,7 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    private function assertNotSameInjectedResolver(ParameterResolverDecorator $firstResolver, ParameterResolverDecorator $secondResolver)
+    private function assertNotSameInjectedResolver(ParameterBagResolver $firstResolver, ParameterBagResolver $secondResolver)
     {
         $this->assertNotSame(
             $this->getInjectedResolver($firstResolver),
@@ -177,7 +181,7 @@ class ParameterResolverDecoratorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    private function getInjectedResolver(ParameterResolverDecorator $resolver): ParameterResolverInterface
+    private function getInjectedResolver(ParameterBagResolver $resolver): ParameterResolverInterface
     {
         $resolverReflectionObject = new \ReflectionObject($resolver);
         $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');

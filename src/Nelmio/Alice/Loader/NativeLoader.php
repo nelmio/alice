@@ -40,7 +40,7 @@ use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\Resolver\Parameter\ArrayParameterResolver;
-use Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverDecorator;
+use Nelmio\Alice\Generator\Resolver\Parameter\ParameterBagResolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry;
 use Nelmio\Alice\Generator\Resolver\Parameter\RecursiveParameterResolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterResolver;
@@ -169,7 +169,7 @@ final class NativeLoader implements LoaderInterface
             new RecursiveParameterResolver(new StringParameterResolver()),
         ]);
 
-        return new ParameterResolverDecorator($registry);
+        return new ParameterBagResolver($registry);
     }
 
     public function getBuiltInObjectResolver(): ObjectGeneratorInterface

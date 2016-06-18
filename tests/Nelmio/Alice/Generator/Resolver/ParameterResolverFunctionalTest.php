@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverDecorator;
+use Nelmio\Alice\Generator\Resolver\Parameter\ParameterBagResolver;
 
 /**
  * @coversNothing
@@ -21,7 +21,7 @@ use Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverDecorator;
 class ParameterResolverFunctionalTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ParameterResolverDecorator
+     * @var ParameterBagResolver
      */
     private $resolver;
 

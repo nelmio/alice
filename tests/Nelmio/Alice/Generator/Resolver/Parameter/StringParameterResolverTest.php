@@ -180,8 +180,11 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
         $unresolvedParameters = new ParameterBag([
             'bar' => 'unresolved(bar)',
         ]);
-        $resolvedParameters = new ParameterBag();
+        $resolvedParameters = new ParameterBag([
+            'random' => 'param',
+        ]);
         $expected = new ParameterBag([
+            'random' => 'param',
             'bar' => 'Mad Hatter',
             'foo' => 'Mad Hatter',
         ]);
@@ -196,6 +199,7 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn(
                 new ParameterBag([
+                    'random' => 'param',
                     'bar' => 'Mad Hatter',
                 ])
             )
