@@ -14,7 +14,6 @@ namespace Nelmio\Alice\Generator\Resolver;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolverInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 final class SimpleResolver implements ResolverInterface
@@ -32,7 +31,7 @@ final class SimpleResolver implements ResolverInterface
     public function __construct(ParameterBagResolverInterface $parameterResolver, FixtureBagResolverInterface $fixtureResolver)
     {
         $this->parameterResolver = $parameterResolver;
-        $this->fixtureResolver = $fixtureResolverf;
+        $this->fixtureResolver = $fixtureResolver;
     }
 
     /**

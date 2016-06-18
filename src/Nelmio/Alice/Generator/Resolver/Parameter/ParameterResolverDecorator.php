@@ -32,7 +32,7 @@ final class ParameterResolverDecorator implements ParameterBagResolverInterface
     /**
      * {@inheritdoc}
      *
-     * @param \Nelmio\Alice\Generator\Resolver\ResolvingContext $context
+     * @param ResolvingContext $context
      *
      * @return ParameterBag
      */
