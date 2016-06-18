@@ -51,7 +51,7 @@ use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\LoaderInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectSet;
-use Nelmio\Alice\ParameterBagResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**

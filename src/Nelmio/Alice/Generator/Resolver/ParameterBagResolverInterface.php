@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice;
+namespace Nelmio\Alice\Generator\Resolver;
+
+use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 interface ParameterBagResolverInterface
 {
@@ -21,6 +24,8 @@ interface ParameterBagResolverInterface
      *
      * @param ParameterBag      $unresolvedParameters
      * @param ParameterBag|null $injectedParameters
+     *
+     * @throws ResolutionThrowable
      *
      * @return ParameterBag
      */

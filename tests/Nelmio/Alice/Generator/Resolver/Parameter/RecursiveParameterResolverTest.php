@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -96,7 +97,7 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
         $parameter = new Parameter('foo', null);
         $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
         $resolvedParameters = new ParameterBag(['place' => 'Wonderlands']);
-        $context = new ResolvingContext('foo');
+        $context = new \Nelmio\Alice\Generator\Resolver\ResolvingContext('foo');
         $expected = new ParameterBag(['foo' => 'bar']);
 
         $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
@@ -133,7 +134,7 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
         $parameter = new Parameter('foo', null);
         $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
         $resolvedParameters = new ParameterBag(['place' => 'Wonderlands']);
-        $context = new ResolvingContext('foo');
+        $context = new \Nelmio\Alice\Generator\Resolver\ResolvingContext('foo');
 
         $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $decoratedResolverProphecy
@@ -286,10 +287,10 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
                 null,
             ],
             'empty context' => [
-                new ResolvingContext(),
+                new \Nelmio\Alice\Generator\Resolver\ResolvingContext(),
             ],
             'context with random value' => [
-                (new ResolvingContext())->with('name'),
+                (new \Nelmio\Alice\Generator\Resolver\ResolvingContext())->with('name'),
             ],
         ];
     }
