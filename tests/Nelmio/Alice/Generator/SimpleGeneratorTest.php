@@ -37,9 +37,9 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $resolverProphecy = $this->prophesize(ResolverInterface::class);
+        $resolverProphecy = $this->prophesize(FixtureSetResolverInterface::class);
         $resolverProphecy->resolve(Argument::any())->shouldNotBeCalled();
-        /** @var ResolverInterface $resolver */
+        /** @var FixtureSetResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
         $objectGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
@@ -69,9 +69,9 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
         $resolvedParameters = $injectedParameters->with(new Parameter('loaded', true));
         $resolvedSet = new ResolvedFixtureSet($resolvedParameters, $fixtures, $objects);
 
-        $resolverProphecy = $this->prophesize(ResolverInterface::class);
+        $resolverProphecy = $this->prophesize(FixtureSetResolverInterface::class);
         $resolverProphecy->resolve($set)->willReturn($resolvedSet);
-        /** @var ResolverInterface $resolver */
+        /** @var FixtureSetResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
         $generatedObjectProphecy = $this->prophesize(ObjectInterface::class);

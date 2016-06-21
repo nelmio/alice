@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Generator;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
 
 final class SimpleGenerator implements GeneratorInterface
@@ -21,7 +22,7 @@ final class SimpleGenerator implements GeneratorInterface
     use NotClonableTrait;
 
     /**
-     * @var ResolverInterface
+     * @var FixtureSetResolverInterface
      */
     private $resolver;
     
@@ -30,7 +31,7 @@ final class SimpleGenerator implements GeneratorInterface
      */
     private $generator;
 
-    public function __construct(ResolverInterface $resolver, ObjectGeneratorInterface $generator)
+    public function __construct(FixtureSetResolverInterface $resolver, ObjectGeneratorInterface $generator)
     {
         $this->resolver = $resolver;
         $this->generator = $generator;
@@ -43,12 +44,10 @@ final class SimpleGenerator implements GeneratorInterface
     {
         $resolvedFixtureSet = $this->resolver->resolve($fixtureSet);
 
-        $objects = $resolvedFixtureSet->getObjects();
+        $objects = new ObjectBag();
         $fixtures = $resolvedFixtureSet->getFixtures();
         foreach ($fixtures as $fixture) {
-            $objects = $objects->mergeWith(
-                $this->generator->generate($fixture, $resolvedFixtureSet, $objects)
-            );
+            $objects = $this->generator->generate($fixture, $resolvedFixtureSet);
         }
         
         return new ObjectSet($resolvedFixtureSet->getParameters(), $objects);

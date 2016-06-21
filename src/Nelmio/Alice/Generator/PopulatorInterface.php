@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator;
 
+use Nelmio\Alice\ObjectInterface;
 use Nelmio\Alice\Throwable\PopulationThrowable;
 
 interface PopulatorInterface
@@ -19,12 +20,12 @@ interface PopulatorInterface
      * Populates a given object. Has access to the current fixture set and returns the new fixture set containing the
      * populated object.
      *
-     * @param UnpopulatedObject  $object Object to populate
+     * @param ObjectInterface    $object Object to populate
      * @param ResolvedFixtureSet $fixtureSet
      *
      * @throws PopulationThrowable
      *
      * @return ResolvedFixtureSet
      */
-    public function populate(UnpopulatedObject $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet;
+    public function populate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet;
 }

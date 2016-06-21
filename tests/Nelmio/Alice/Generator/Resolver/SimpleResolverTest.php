@@ -15,19 +15,19 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
-use Nelmio\Alice\Generator\ResolverInterface;
+use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\SimpleResolver
+ * @covers Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver
  */
 class SimpleResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAResolver()
     {
-        $this->assertTrue(is_a(SimpleResolver::class, ResolverInterface::class, true));
+        $this->assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));
     }
 
     public function testCanResolveAFixtureSet()
@@ -66,7 +66,7 @@ class SimpleResolverTest extends \PHPUnit_Framework_TestCase
 
         $expected = new ResolvedFixtureSet($resolvedParameters, $resolvedFixtures, $injectedObjects);
 
-        $resolver = new SimpleResolver($parametersResolver, $fixtureResolver);
+        $resolver = new SimpleFixtureSetResolver($parametersResolver, $fixtureResolver);
         $actual = $resolver->resolve($set);
 
         $this->assertEquals($expected, $actual);

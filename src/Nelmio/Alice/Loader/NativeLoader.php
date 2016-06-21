@@ -45,7 +45,7 @@ use Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry;
 use Nelmio\Alice\Generator\Resolver\Parameter\RecursiveParameterResolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterResolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\StringParameterResolver;
-use Nelmio\Alice\Generator\ResolverInterface;
+use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Generator\SimpleGenerator;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\LoaderInterface;
@@ -156,7 +156,7 @@ final class NativeLoader implements LoaderInterface
         );
     }
 
-    public function getBuiltInResolver(): ResolverInterface
+    public function getBuiltInResolver(): FixtureSetResolverInterface
     {
         //TODO
     }

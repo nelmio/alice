@@ -13,10 +13,10 @@ namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
-use Nelmio\Alice\Generator\ResolverInterface;
+use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
-final class SimpleResolver implements ResolverInterface
+final class SimpleFixtureSetResolver implements FixtureSetResolverInterface
 {
     /**
      * @var ParameterBagResolverInterface
