@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Generator;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
-interface ResolverInterface
+interface FixtureSetResolverInterface
 {
     /**
      * Resolves the loaded parameters and merge the injected ones with them and also resolves the fixture flags.
