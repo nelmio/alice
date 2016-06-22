@@ -5,6 +5,7 @@
   * Added support for dots in reference names (#312)
   * Added support for Fixture parameters in PHP File (#341)
   * Deprecated usage of custom context in Parsers (#342)
+  * Fix singularify deprecation warnings and optimize method detection (#407)
 
 ### 2.1.2 (2015-12-10)
 
