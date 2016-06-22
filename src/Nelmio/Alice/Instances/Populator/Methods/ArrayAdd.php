@@ -11,9 +11,6 @@
 
 namespace Nelmio\Alice\Instances\Populator\Methods;
 
-use Symfony\Component\Form\Util\FormUtil;
-use Symfony\Component\PropertyAccess\StringUtil;
-
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Util\TypeHintChecker;
 
@@ -24,9 +21,19 @@ class ArrayAdd implements MethodInterface
      */
     protected $typeHintChecker;
 
+    /**
+     * @var callable
+     */
+    private $singularizer;
+
+    /**
+     * @param TypeHintChecker $typeHintChecker
+     */
     public function __construct(TypeHintChecker $typeHintChecker)
     {
         $this->typeHintChecker = $typeHintChecker;
+
+        $this->detectSingularizeMethod();
     }
 
     /**
@@ -52,9 +59,10 @@ class ArrayAdd implements MethodInterface
     /**
      * finds the method used to append values to the named property
      *
-     * @param  mixed  $object
-     * @param  string $property
-     * @return string Method name or null if adder method not detected
+     * @param mixed  $object
+     * @param string $property
+     *
+     * @return string|null Method name or null if adder method not detected
      */
     private function findAdderMethod($object, $property)
     {
@@ -62,17 +70,9 @@ class ArrayAdd implements MethodInterface
             return $method;
         }
 
-        if (class_exists('Symfony\Component\PropertyAccess\StringUtil') && method_exists('Symfony\Component\PropertyAccess\StringUtil', 'singularify')) {
-            foreach ((array) StringUtil::singularify($property) as $singularForm) {
-                if (method_exists($object, $method = 'add'.$singularForm)) {
-                    return $method;
-                }
-            }
-        } elseif (class_exists('Symfony\Component\Form\Util\FormUtil') && method_exists('Symfony\Component\Form\Util\FormUtil', 'singularify')) {
-            foreach ((array) FormUtil::singularify($property) as $singularForm) {
-                if (method_exists($object, $method = 'add'.$singularForm)) {
-                    return $method;
-                }
+        foreach ($this->singularize($property) as $singularForm) {
+            if (method_exists($object, $adder = 'add'.$singularForm)) {
+                return $adder;
             }
         }
 
@@ -82,6 +82,43 @@ class ArrayAdd implements MethodInterface
 
         if (substr($property, -3) === 'ies' && method_exists($object, $method = 'add'.substr($property, 0, -3).'y')) {
             return $method;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $plural
+     *
+     * @return string[]
+     */
+    private function singularize($plural)
+    {
+        if ($this->singularizer) {
+            return (array) call_user_func($this->singularizer, $plural);
+        }
+
+        return [];
+    }
+
+    /**
+     * Tries to detect a singularize method that's available.
+     */
+    private function detectSingularizeMethod()
+    {
+        $classes = [
+            'Symfony\Component\Inflector\Inflector' => 'singularize',
+            'Symfony\Component\PropertyAccess\StringUtil' => 'singularify',
+            'Symfony\Component\Form\Util\FormUtil' => 'singularify',
+        ];
+
+        foreach ($classes as $class => $method) {
+            if (class_exists($class) && method_exists($class, $method)) {
+                // cache the singularize method
+                $this->singularizer = [$class, $method];
+
+                break;
+            }
         }
     }
 }
