@@ -109,7 +109,7 @@ final class ObjectBag implements \IteratorAggregate
         $className = $fixture->getClassName();
         $reference = $fixture->getReference();
         if (isset($this->objects[$className][$reference])) {
-            return $this->objects[$className][$reference];
+            return clone $this->objects[$className][$reference];
         }
         
         throw ObjectNotFoundException::create($reference, $className);
