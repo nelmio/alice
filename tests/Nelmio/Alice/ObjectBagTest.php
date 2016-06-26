@@ -11,7 +11,10 @@
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\Exception\ObjectNotFoundException;
 
 /**
  * @covers Nelmio\Alice\ObjectBag
@@ -32,15 +35,27 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
     public function testConstructBag()
     {
         $objects = [
-            'foo' => new \stdClass(),
-            'bar' => new \stdClass(),
+            'Nelmio\Entity\User' => [
+                'user1' => new \stdClass(),
+                'user2' => new \stdClass(),
+            ],
+            'Nelmio\Entity\Group' => [
+                'group1' => new \stdClass(),
+                'group2' => new \stdClass(),
+            ],
         ];
         $bag = new ObjectBag($objects);
 
         $this->assertSameObjects(
             [
-                'foo' => new SimpleObject('foo', new \stdClass()),
-                'bar' => new SimpleObject('bar', new \stdClass()),
+                'Nelmio\Entity\User' => [
+                    'user1' => new SimpleObject('user1', new \stdClass()),
+                    'user2' => new SimpleObject('user2', new \stdClass()),
+                ],
+                'Nelmio\Entity\Group' => [
+                    'group1' => new SimpleObject('group1', new \stdClass()),
+                    'group2' => new SimpleObject('group2', new \stdClass()),
+                ],
             ],
             $bag
         );
@@ -54,39 +69,114 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         );
 
         $objects = [
-            0 => new \stdClass(),
+            'Nelmio\Entity\User' => [
+                0 => new \stdClass(),
+            ],
         ];
         $bag = new ObjectBag($objects);
 
         $this->assertSameObjects(
             [
-                '0' => new SimpleObject('0', new \stdClass()),
+                'Nelmio\Entity\User' => [
+                    '0' => new SimpleObject('0', new \stdClass()),
+                ],
             ],
             $bag
         );
+    }
+
+    /**
+     * @expectedException \TypeError
+     * @expectedExceptionMessage Expected array of objects to be an array where keys are FQCN and values arrays of
+     *                           object reference/object pairs but found a "object" instead of an array.',
+     */
+    public function testThrowErrorOnInvalidArgument()
+    {
+        new ObjectBag([
+            'user1' => new \stdClass(),
+        ]);
+    }
+
+    public function testAccessors()
+    {
+        $objects = [
+            'Nelmio\Entity\User' => [
+                'user1' => new \stdClass(),
+            ],
+            'Nelmio\Entity\Group' => [
+                'group1' => new \stdClass(),
+            ],
+        ];
+        $bag = new ObjectBag($objects);
+
+        $user1Fixture = $this->createFixture('user1', 'Nelmio\Entity\User');
+        $group1Fixture = $this->createFixture('group1', 'Nelmio\Entity\Group');
+        $userWithWrongClass = $this->createFixture('user1', 'stdClass');
+
+        $this->assertTrue($bag->has($user1Fixture));
+        $this->assertEquals(
+            new SimpleObject('user1', new \stdClass()),
+            $bag->get($user1Fixture)
+        );
+
+        $this->assertTrue($bag->has($group1Fixture));
+        $this->assertEquals(
+            new SimpleObject('group1', new \stdClass()),
+            $bag->get($group1Fixture)
+        );
+
+        $this->assertFalse($bag->has($userWithWrongClass));
+        try {
+            $bag->get($userWithWrongClass);
+            $this->fail('Expected exception to be thrown.');
+        } catch (ObjectNotFoundException $exception) {
+            $this->assertEquals(
+                'Could not find the object "user1" of the class "stdClass".',
+                $exception->getMessage()
+            );
+        }
     }
 
     public function testImmutableMutator()
     {
         $object1 = new SimpleObject('foo', new \stdClass());
         $object2 = new SimpleObject('bar', new \stdClass());
+        $object3 = new SimpleObject('foo', new Dummy());
+        $object4 = new SimpleObject('baz', new AnotherDummy());
 
         $bag = new ObjectBag();
-        $bag1 = $bag->with($object1);
-        $bag2 = $bag1->with($object2);
+        $bag1 = $bag
+            ->with($object1)
+            ->with($object2)
+        ;
+        $bag2 = $bag1
+            ->with($object3)
+            ->with($object4)
+        ;
 
         $this->assertInstanceOf(ObjectBag::class, $bag1);
         $this->assertSameObjects([], $bag);
         $this->assertSameObjects(
             [
-                'foo' => $object1,
+                'stdClass' => [
+                    'foo' => $object1,
+                    'bar' => $object2,
+                ],
             ],
             $bag1
         );
         $this->assertSameObjects(
             [
-                'foo' => $object1,
-                'bar' => $object2,
+                'stdClass' => [
+                    'foo' => $object1,
+                    'bar' => $object2,
+                ],
+                'Nelmio\Alice\Dummy' => [
+                    'foo' => $object3,
+                ],
+                'Nelmio\Alice\AnotherDummy' => [
+                    'baz' => $object4,
+                ],
             ],
             $bag2
         );
@@ -103,8 +193,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         $std3 = new \stdClass();
         $std3->id = 3;
 
-        $std4 = new \stdClass();
-        $std4->id = 4;
+        $std4 = new Dummy();
 
         $object1 = new SimpleObject('foo', $std1);
         $object2 = new SimpleObject('bar', $std2);
@@ -118,23 +207,33 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ObjectBag::class, $bag);
         $this->assertSameObjects(
             [
-                'foo' => $object1,
-                'bar' => $object2,
+                'stdClass' => [
+                    'foo' => $object1,
+                    'bar' => $object2,
+                ],
             ],
             $bag1
         );
         $this->assertSameObjects(
             [
-                'bar' => $object3,
-                'baz' => $object4,
+                'stdClass' => [
+                    'bar' => $object3,
+                ],
+                'Nelmio\Alice\Dummy' => [
+                    'baz' => $object4,
+                ],
             ],
             $bag2
         );
         $this->assertSameObjects(
             [
-                'foo' => $object1,
-                'bar' => $object3,
-                'baz' => $object4,
+                'stdClass' => [
+                    'foo' => $object1,
+                    'bar' => $object3,
+                ],
+                'Nelmio\Alice\Dummy' => [
+                    'baz' => $object4,
+                ],
             ],
             $bag
         );
@@ -153,8 +252,10 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [
-                'foo' => $object1,
-                'bar' => $object2,
+                'stdClass' => [
+                    'foo' => $object1,
+                    'bar' => $object2,
+                ],
             ],
             $traversed
         );
@@ -167,4 +268,21 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actualObjects);
         $this->assertEquals(count($expected), count($actualObjects));
     }
+
+    private function createFixture(string $reference, string $className): FixtureInterface
+    {
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $fixtureProphecy->getReference()->willReturn($reference);
+        $fixtureProphecy->getClassName()->willReturn($className);
+
+        return $fixtureProphecy->reveal();
+    }
+}
+
+class Dummy
+{
+}
+
+class AnotherDummy
+{
 }

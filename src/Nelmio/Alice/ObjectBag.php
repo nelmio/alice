@@ -12,6 +12,7 @@
 namespace Nelmio\Alice;
 
 use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Exception\ObjectNotFoundException;
 
 /**
  * Value object containing a list of objects.
@@ -22,9 +23,23 @@ final class ObjectBag implements \IteratorAggregate
 
     public function __construct(array $objects = [])
     {
-        foreach ($objects as $reference => $object) {
-            $this->objects[$reference] = new SimpleObject($reference, $object);
+        foreach ($objects as $className => $classObjects) {
+            if (false === is_array($classObjects)) {
+                throw new \TypeError(
+                    sprintf(
+                        'Expected array of objects to be an array where keys are FQCN and values arrays of object '
+                        .'reference/object pairs but found a "%s" instead of an array.',
+                        gettype($classObjects)
+                    )
+                );
+            }
+            
+            $this->objects[$className] = [];
+            foreach ($classObjects as $reference => $object) {
+                $this->objects[$className][$reference] = new SimpleObject($reference, $object);
+            }
         }
+
     }
 
     /**
@@ -38,7 +53,11 @@ final class ObjectBag implements \IteratorAggregate
     public function with(ObjectInterface $object): self
     {
         $clone = clone $this;
-        $clone->objects[$object->getReference()] = $object;
+        $objectClass = get_class($object->getInstance());
+        if (false === array_key_exists($objectClass, $clone->objects)) {
+            $clone->objects[$objectClass] = [];
+        }
+        $clone->objects[$objectClass][$object->getReference()] = $object;
         
         return $clone;
     }
@@ -54,12 +73,46 @@ final class ObjectBag implements \IteratorAggregate
     public function mergeWith(self $objects): self
     {
         $clone = clone $this;
-        foreach ($objects as $object) {
-            /** @var ObjectInterface $object */
-            $clone->objects[$object->getReference()] = $object;
+        foreach ($objects as $className => $classObjects) {
+            /** @var ObjectInterface[] $classObjects */
+            if (false === array_key_exists($className, $clone->objects)) {
+                $clone->objects[$className] = $classObjects;
+                
+                continue;
+            }
+
+            foreach ($classObjects as $reference => $object) {
+                $clone->objects[$className][$reference] = $object;
+            }
         }
         
         return $clone;
+    }
+    
+    public function has(FixtureInterface $fixture): bool
+    {
+        $className = $fixture->getClassName();
+        $reference = $fixture->getReference();
+        
+        return isset($this->objects[$className][$reference]);
+    }
+
+    /**
+     * @param FixtureInterface $fixture
+     *
+     * @throws ObjectNotFoundException
+     * 
+     * @return ObjectInterface
+     */
+    public function get(FixtureInterface $fixture): ObjectInterface
+    {
+        $className = $fixture->getClassName();
+        $reference = $fixture->getReference();
+        if (isset($this->objects[$className][$reference])) {
+            return $this->objects[$className][$reference];
+        }
+        
+        throw ObjectNotFoundException::create($reference, $className);
     }
 
     /**
