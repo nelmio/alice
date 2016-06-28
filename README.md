@@ -7,6 +7,7 @@ or testing your project. It gives you a few essential tools to make it
 very easy to generate complex data with constraints in a readable and easy
 to edit way, so that everyone on your team can tweak the fixtures if needed.
 
+*Note*: [v3 is on its way](https://github.com/nelmio/alice/issues/265), get involved!
 
 ## Table of Contents
 
@@ -35,10 +36,13 @@ to edit way, so that everyone on your team can tweak the fixtures if needed.
   4. [Parameters](doc/fixtures-refactoring.md#parameters)
 1. [Customize Data Generation](doc/customizing-data-generation.md)
   1. [Faker Data](doc/customizing-data-generation.md#faker-data)
-  2. [Reuse generated data using objects value](doc/customizing-data-generation.md#reuse-generated-data-using-objects-value) 
+  2. [Reuse generated data using objects value](doc/customizing-data-generation.md#reuse-generated-data-using-objects-value)
   3. [Custom Faker Data Providers](doc/customizing-data-generation.md#custom-faker-data-providers)
 20. [Event handling with Processors](doc/processors.md)
+21. [Third-party libraries](#third-party-libraries)
 
+Other references:
+  - [Tutorial: Using Alice in Symfony](https://knpuniversity.com/screencast/symfony-doctrine/fixtures-alice)
 
 ## Installation
 

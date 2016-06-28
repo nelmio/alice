@@ -41,20 +41,24 @@ class Parameterized implements MethodInterface
     {
         $value = $processable->getValue();
 
-        return preg_replace_callback('#<\{([a-z0-9_\.-]+)\}>#i', function ($matches) {
-            $key = $matches[1];
-            if (!$this->parameters->has($key)) {
-                throw new \UnexpectedValueException(sprintf(
-                    'Parameter "%s" was not found',
-                    $key
-                ));
-            }
+        return preg_replace_callback(
+            '#<\{([a-z0-9_\.-]+)\}>#i',
+            function ($matches) {
+                $key = $matches[1];
+                if (!$this->parameters->has($key)) {
+                    throw new \UnexpectedValueException(sprintf(
+                        'Parameter "%s" was not found',
+                        $key
+                    ));
+                }
 
-            if (is_array($value = $this->parameters->get($key))) {
-                return var_export($value, true);
-            }
+                if (is_array($value = $this->parameters->get($key))) {
+                    return var_export($value, true);
+                }
 
-            return $value;
-        }, $value);
+                return $value;
+            },
+            $value
+        );
     }
 }

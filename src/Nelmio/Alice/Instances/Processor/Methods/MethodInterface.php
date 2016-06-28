@@ -16,18 +16,20 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 interface MethodInterface
 {
     /**
-     * returns true if this method can process the given value persister
+     * Returns true if this method can process the given value persister.
      *
-     * @param  ProcessableInterface $processable
+     * @param ProcessableInterface $processable
+     * 
      * @return bool
      */
     public function canProcess(ProcessableInterface $processable);
 
     /**
-     * returns the processed value
+     * Returns the processed value.
      *
      * @param ProcessableInterface $processable
      * @param array
+     * 
      * @return mixed
      */
     public function process(ProcessableInterface $processable, array $variables);

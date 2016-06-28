@@ -27,24 +27,13 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $processor;
 
-    protected function createProcessor(array $options = [])
-    {
-        $defaults = [
-            'objects' => new Collection,
-            'methods' => []
-        ];
-        $options = array_merge($defaults, $options);
-
-        return $this->processor = new Processor($this->objects = $options['objects'], $options['methods'], new ParameterBag());
-    }
-
     /**
-     * @expectedException        InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage All methods passed into Processor must implement MethodInterface.
      */
     public function testOnlyMethodInterfacesCanBeUsedToInstantiateTheProcessor()
     {
-        $builder = new Processor(new Collection, ['CustomProcessor'], new ParameterBag());
+        new Processor(new Collection, ['CustomProcessor'], new ParameterBag());
     }
 
     public function testAddProcessor()
@@ -69,5 +58,16 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->createProcessor();
         $this->processor->addProcessor($custom = new CustomProcessor);
         $this->assertEquals($this->processor, $custom->processor);
+    }
+
+    protected function createProcessor(array $options = [])
+    {
+        $defaults = [
+            'objects' => new Collection,
+            'methods' => []
+        ];
+        $options = array_merge($defaults, $options);
+
+        return $this->processor = new Processor($this->objects = $options['objects'], $options['methods'], new ParameterBag());
     }
 }
