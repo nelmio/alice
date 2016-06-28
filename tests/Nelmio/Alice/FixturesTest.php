@@ -50,15 +50,15 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadFailsOnMissingFiles()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $objects = Fixtures::load(__DIR__.'/fixtures/missing_file.yml', $om, ['providers' => [$this]]);
     }
 
     public function testThatNewLoaderIsCreatedForDifferingOptions()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $metadataFactory = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory')->getMock();
+        $metadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
 
         $om->expects($this->any())
             ->method('find')->will($this->returnValue(new User()));
@@ -184,7 +184,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testThatExceptionIsThrownForInvalidProvider()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $om->expects($this->any())
             ->method('find')->will($this->returnValue(new User()));
 
@@ -268,7 +268,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadWithLogger()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
 
         Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, [
             'logger' => function () {}
@@ -317,11 +317,11 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     protected function getDoctrineManagerMock($objects = null)
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
-        $metadata1 = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $metadata2 = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $metadata3 = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $metadataFactory = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory')->getMock();
+        $metadata1 = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $metadata2 = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $metadata3 = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
 
         $om->expects($this->once())
             ->method('getMetadataFactory')
