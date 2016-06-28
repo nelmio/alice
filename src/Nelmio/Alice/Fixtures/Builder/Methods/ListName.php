@@ -36,11 +36,7 @@ class ListName implements MethodInterface
                 return false;
             }
 
-            if (1 === preg_match('/\{\d+.\d+/', $name)) {
-                return false;
-            }
-
-            return true;
+            return 1 !== preg_match('/\{\d+.\d+/', $name);
         }
 
         return true;
@@ -48,13 +44,10 @@ class ListName implements MethodInterface
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \InvalidArgumentException
      */
     public function build($class, $name, array $spec)
     {
-        if (1 === preg_match('/\{(?<content>[^,\s]+(?:,\s[^,\s]+)+)\}/', $name, $this->matches)) {
-        } else {
+        if (1 !== preg_match('/\{(?<content>[^,\s]+(?:,\s[^,\s]+)+)\}/', $name, $this->matches)) {
             preg_match('/\{(?<content>.*)\}/', $name, $this->matches);
 
             @trigger_error(
