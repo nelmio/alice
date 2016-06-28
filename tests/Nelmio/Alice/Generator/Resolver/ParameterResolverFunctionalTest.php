@@ -225,6 +225,22 @@ class ParameterResolverFunctionalTest extends \PHPUnit_Framework_TestCase
             ])
         ];
 
+        $return['deep nested parameters'] = [
+            new ParameterBag([
+                'param1' => 'hey <{param<{param<{param3}>}>}> <{param4}> world',
+                'param3' => 2,
+                'param2' => 4,
+                'param4' => 'foo'
+            ]),
+            null,
+            new ParameterBag([
+                'param1' => 'hey foo foo world',
+                'param3' => 2,
+                'param2' => 4,
+                'param4' => 'foo'
+            ])
+        ];
+
         return $return;
     }
 }
