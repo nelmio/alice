@@ -15,21 +15,25 @@ use Nelmio\Alice\ExpressionLanguage\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
-final class StringTokenParser implements ChainableTokenParserInterface
+final class EscapedParameterTokenParser implements ChainableTokenParserInterface
 {
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::STRING_TYPE;
+        return $token->getType() === TokenType::ESCAPED_PARAMETER_TYPE;
     }
 
     /**
-     * @inheritdoc
+     * Parses '<<param>>' into '<param>'.
+     *
+     * {@inheritdoc}
      */
-    public function parse(Token $token)
+    public function parse(Token $token): string
     {
-        return $token->getValue();
+        $value = $token->getValue();
+
+        return substr($value, 1, strlen($value) - 3);
     }
 }

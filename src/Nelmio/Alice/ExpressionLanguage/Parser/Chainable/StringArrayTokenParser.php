@@ -22,7 +22,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::STRING_ARRAY_TYPE;
+        return $token->getType() === TokenType::STRING_ARRAY;
     }
 
     /**
@@ -35,7 +35,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
         parent::parse($token);
 
         $value = $token->getValue();
-        $elements = substr($value, 1, strlen($value) - 2);
+        $elements = substr($value, 1, strlen($value) - 1);
 
         return $this->parseElements($this->parser, $elements);
     }

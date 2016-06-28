@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
 
-use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
+use Nelmio\Alice\ExpressionLanguage\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;

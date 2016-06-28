@@ -11,7 +11,9 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
 
+use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\OptionalValue;
+use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
@@ -23,7 +25,7 @@ final class OptionalTokenParser extends AbstractChainableParserAwareParser
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::OPTIONAL_TYPE;
+        return $token->getType() === TokenType::OPTIONAL_TYPE;
     }
 
     /**
@@ -52,7 +54,7 @@ final class OptionalTokenParser extends AbstractChainableParserAwareParser
         return new OptionalValue(
             $this->parser->parse($matches['quantifier']),
             $this->parser->parse($matches['first_member']),
-            array_key_exists('second_member', $matches) ? $this->parser->parse($matches['second_member']) : null
+            ('' === $matches['second_member']) ? null : $this->parser->parse($matches['second_member'])
         );
     }
 }

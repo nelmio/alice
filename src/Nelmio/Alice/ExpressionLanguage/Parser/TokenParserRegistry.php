@@ -15,21 +15,23 @@ use Nelmio\Alice\Exception\ExpressionLanguage\ParserNotFoundException;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
+use Nelmio\Alice\ExpressionLanguage\TokenParserInterface;
+use Nelmio\Alice\FixtureBuilder\Parser\ChainableParserInterface;
 
 final class TokenParserRegistry implements TokenParserInterface, ParserAwareInterface
 {
     /**
-     * @var ChainableTokenParserInterface[]
+     * @var ChainableParserInterface[]
      */
     private $parsers = [];
 
     /**
-     * @param ChainableTokenParserInterface[] $parsers
+     * @param ChainableParserInterface[] $parsers
      */
     public function __construct(array $parsers)
     {
         $this->parsers = (
-        function (ChainableTokenParserInterface ...$parsers) {
+        function (ChainableParserInterface ...$parsers) {
             return $parsers;
         }
         )(...$parsers);

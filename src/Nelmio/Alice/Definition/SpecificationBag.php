@@ -49,7 +49,7 @@ final class SpecificationBag
         $clone = clone $this;
         $clone->constructor = $constructor;
 
-        return $clone;
+        return $constructor;
     }
 
     /**
