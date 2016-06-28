@@ -63,4 +63,4 @@ $objects = $loader->loadFiles(__DIR__.'/fixtures.yml');
 ```
 
 Previous chapter: [Customize Data Generation](customizing-data-generation.md)<br />
-Got back to [Table of Contents](../README.md#table-of-contents)
+Go back to [Table of Contents](../README.md#table-of-contents)
