@@ -107,8 +107,8 @@ class Fixture
         }
 
         foreach ($template->properties as $property) {
-            if (!isset($this->spec[$property->getName()])) {
-                $this->addProperty($property->getName(), $property->getValue());
+            if (!$this->hasProperty($property->getName())) {
+                $this->addProperty($property->getRawName(), $property->getValue());
             }
         }
     }
@@ -159,6 +159,21 @@ class Fixture
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasProperty($name)
+    {
+        foreach ($this->properties as $property) {
+            if ($property->getName() === $name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

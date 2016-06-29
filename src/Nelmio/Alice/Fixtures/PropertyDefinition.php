@@ -13,14 +13,28 @@ class PropertyDefinition extends Processable
     private $name;
 
     /**
+     * @var string
+     */
+    private $rawName;
+
+    /**
      * @var array
      */
     private $nameFlags;
 
     public function __construct($name, $value)
     {
+        $this->rawName = $name;
         list($this->name, $this->nameFlags) = FlagParser::parse($name);
         parent::__construct($value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawName()
+    {
+        return $this->rawName;
     }
 
     /**
