@@ -127,13 +127,11 @@ class Fixture
             }
         );
 
-        return array_reverse(
-            array_map(
-                function ($extension) {
-                    return str_replace('extends ', '', $extension);
-                },
-                $extensions
-            )
+        return array_map(
+            function ($extension) {
+                return str_replace('extends ', '', $extension);
+            },
+            $extensions
         );
     }
 
