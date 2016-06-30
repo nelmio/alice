@@ -94,7 +94,7 @@ It is also possible to create a relation to a random object by id:
 ```yaml
 Nelmio\Entity\Group:
     group1:
-        owner: <numberBetween(1, 200)>
+        owner: '<numberBetween(1, 200)>'
 ```
 
 > **Note**: To create a string `@foo` that is not a reference you can escape it
@@ -128,7 +128,7 @@ Nelmio\Entity\Group:
     group1:
         name: Admins
         owner: '@user1'
-        members: 5x @user*
+        members: '5x @user*'
 ```
 
 In this case it will pick 5 fixture objects which have a name matching `user*`.
@@ -166,9 +166,10 @@ You can pass references to providers much like you can pass [variables](#variabl
 ```yaml
 Nelmio\Entity\Group:
     group1:
-        owner: <numberBetween(1, 200)>
+        owner: '<numberBetween(1, 200)>'
+        
     group2:
-        owner: <numberBetween(@group1->owner, 200)>
+        owner: '<numberBetween(@group1->owner, 200)>'
 ```
 
 Next chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)<br />

@@ -29,6 +29,7 @@ Nelmio\Entity\User:
     user (template):
         username: <username()>
         age: <numberBetween(1, 20)>
+        
     user1 (extends user):
         name: <firstName()>
         lastname: <lastName()>
@@ -49,8 +50,10 @@ Nelmio\Entity\User:
     user (template):
         username: <username()>
         age: <numberBetween(1, 40)>
+        
     user_young (template):
         age: <numberBetween(1, 20)>
+        
     user1 (extends user, extends user_young):
         username: user1
         name: <firstName()>
@@ -67,6 +70,7 @@ You may include other files from your fixtures using the top-level `include` key
 include:
     - relative/path/to/file.yml
     - relative/path/to/another/file.yml
+    
 Nelmio\Entity\User:
     user1 (extends user, extends user_young):
         name: <firstName()>
