@@ -30,7 +30,7 @@ is a detailed yaml example.
 ```yaml
 Nelmio\Entity\User:
     user{1..10}:
-        username: 'User<identity($fake('numberBetween', 1, 100) / 2 + 5)>'
+        username: 'User<identity($fake("numberBetween", 1, 100) / 2 + 5)>'
 ```
 
 In plain PHP fixtures the `$fake` closure is also available.
