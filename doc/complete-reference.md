@@ -100,7 +100,7 @@ a `setLocation` method that requires a latitude and a longitude:
 ```yaml
 Nelmio\Entity\User:
     user1:
-        username: <username()>
+        username: '<username()>'
         setLocation: [40.689269, -74.044737]
 ```
 

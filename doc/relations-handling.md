@@ -137,7 +137,7 @@ You can also randomize the amount by combining it with faker data:
 
 ```yaml
     # ...
-        members: <numberBetween(1, 10)>x @user*
+        members: '<numberBetween(1, 10)>x @user*'
 ```
 
 If the data needs to be static instead, you can use the same syntax as
