@@ -23,8 +23,6 @@ use Nelmio\Alice\ParameterBag;
  */
 final class ResolvedFixtureSet
 {
-    use NotClonableTrait;
-
     /**
      * @var ParameterBag
      */
@@ -63,5 +61,12 @@ final class ResolvedFixtureSet
     public function getObjects(): ObjectBag
     {
         return clone $this->objects;
+    }
+
+    public function __clone()
+    {
+        $this->parameters = clone $this->parameters;
+        $this->fixtures = clone $this->fixtures;
+        $this->objects = clone $this->objects;
     }
 }

@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value;
 
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 
 final class PartsResolver implements ValueResolverInterface
@@ -35,29 +36,35 @@ final class PartsResolver implements ValueResolverInterface
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope = []
-    ): ResolvedFixtureSet
+    ): ResolvedValueWithFixtureSet
     {
         if (is_array($value)) {
-            $resolvedArray = [];
-            foreach ($value as $unresolvedValue) {
-                $resolvedArray[] = $this->resolve($unresolvedValue, $fixture, $fixtureSet, $scope);
-            }
-
-            return $resolvedArray;
+            return $this->resolver->resolve($value, $fixture, $fixtureSet, $scope);
         }
 
         if (is_string($value) === false) {
-            return $value;
+            return new ResolvedValueWithFixtureSet($value, $fixtureSet);
         }
 
-
-
-        $parts = ...;
-
-        foreach ($parts as $part) {
-            $this->resolver->resolve();
+        if (1 === preg_match('/^(?:\d+(?:\.\d*)?)|(?:<.*>)x .*/', $value)) {
+            return $this->resolver->resolve($value, $fixture, $fixtureSet, $scope);
         }
 
-        return implode();
+        if (1 === preg_match('/^(?:(.*?)?(?:(<.*>)|(\[.*\])))+(.*?)?$/', $value, $matches)) {
+            unset($matches[0]);
+            foreach ($matches as $index => $match) {
+                if ($match === '' || trim($match) === '') {
+                    continue;
+                }
+                $result = $this->resolver->resolve($match, $fixture, $fixtureSet, $scope);
+
+                $fixtureSet = $result->getSet();
+                $matches[$index] = $result->getValue();
+            }
+
+            $value = implode('', $matches);
+        }
+
+        return new ResolvedValueWithFixtureSet($value, $fixtureSet);
     }
 }

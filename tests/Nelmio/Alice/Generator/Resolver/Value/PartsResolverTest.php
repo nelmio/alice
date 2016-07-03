@@ -11,25 +11,80 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Value;
 
+use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
+use Nelmio\Alice\Generator\ValueResolverInterface;
+use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\ParameterBag;
+use Prophecy\Argument;
+
 /**
  * @covers Nelmio\Alice\Generator\Resolver\Value\PartsResolver
  */
 class PartsResolverTest extends \PHPUnit_Framework_TestCase
 {
+    public function testIsAValueResolver()
+    {
+        $this->assertTrue(is_a(PartsResolver::class, ValueResolverInterface::class, true));
+    }
+
     /**
-     * Here is a list of possible patterns the resolver must be able to detect to split the string value accordingly.
-     * Unless specified otherwise, X and Y are a group of characters (any) or an empty string.
-     *
-     *  - P1: '<X>'
-     *  - P2: [X];recursive on each element
-     *  - P3: 'Xx Y'; X: number|'<X>', Y: *
-     *  - P4: 'X%? Y' or 'X%? Y: Z'; X: number|'<X>', Y: [^:]*; Z: *
-     *  - P5: "@X": delimited on the right by ø or a space
-     *  - P6: '$X'
-     *
+     * @dataProvider provideValues
+     */
+    public function testResolveValues($value, array $expected = null)
+    {
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $fixtureProphecy->getId()->shouldNotBeCalled();
+        /** @var FixtureInterface $fixture */
+        $fixture = $fixtureProphecy->reveal();
+
+        $set = new ResolvedFixtureSet(
+            new ParameterBag(),
+            new FixtureBag(),
+            new ObjectBag()
+        );
+
+        $scope = [];
+
+        $decoratedResolverProphecy = $this->prophesize(ValueResolverInterface::class);
+        /** @var ValueResolverInterface $decoratedResolver */
+        $decoratedResolver = $decoratedResolverProphecy->reveal();
+
+        if ($expected === null) {
+            $expectedSet = new ResolvedValueWithFixtureSet($value, $set);
+
+            $decoratedResolverProphecy->resolve(Argument::cetera())->shouldNotBeCalled();
+            $resolver = new PartsResolver($decoratedResolver);
+            $actual = $resolver->resolve($value, $fixture, $set, $scope);
+
+            return $this->assertEquals($expectedSet, $actual);
+        }
+
+        $max = 'abcdefghijklmn';
+        foreach ($expected as $index => $expectedValue) {
+            $decoratedResolverProphecy
+                ->resolve($expectedValue, $fixture, $set, $scope)
+                ->willReturn(new ResolvedValueWithFixtureSet($max[$index], $set))
+            ;
+        }
+
+        $resolver = new PartsResolver($decoratedResolver);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope);
+
+        $nbrOfExpected = count($expected);
+        $expectedSet = new ResolvedValueWithFixtureSet(
+            substr($max, 0, $nbrOfExpected),
+            $set
+        );
+
+        $this->assertEquals($expectedSet, $actual);
+        $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes($nbrOfExpected);
+    }
+
+    /**
      * @link https://github.com/nelmio/alice/issues/377
-     *
-     * @return array|\Generator
      */
     public function provideValues()
     {
@@ -48,231 +103,492 @@ class PartsResolverTest extends \PHPUnit_Framework_TestCase
         ];
         yield 'regular string value' => [
             'dummy',
+            null,
+        ];
+
+        // Parameters or functions
+        yield '[X] alone' => [
+            '<string_value>',
             [
-                'dummy',
+                '<string_value>',
             ],
         ];
-        yield 'string array' => [
-            '[dummy]',
+        yield '[X] escaped' => [
+            '<<escaped_value>>',
             [
-                '[dummy]',
+                '<<escaped_value>>',
+            ],
+        ];
+        yield '[X] nested' => [
+            '<value_<{nested_param}>>',
+            [
+                '<value_<{nested_param}>>',
+            ],
+        ];
+        yield '[X] nested escape' => [
+            '<value_<<{nested_param}>>>',
+            [
+                '<value_<<{nested_param}>>>',
+            ],
+        ];
+        yield '[X] surrounded' => [
+            'foo <string_value> bar',
+            [
+                'foo ' ,
+                '<string_value>',
+                ' bar',
+            ],
+        ];
+        yield '[X] surrounded - escaped' => [
+            'foo <<escaped_value>> bar',
+            [
+                'foo ' ,
+                '<<escaped_value>>',
+                ' bar',
+            ],
+        ];
+        yield '[X] surrounded - nested' => [
+            'foo <value_<{nested_param}>> bar',
+            [
+                'foo ' ,
+                '<value_<{nested_param}>>',
+                ' bar',
+            ],
+        ];
+        yield '[X] surrounded - nested escape' => [
+            'foo <value_<<{nested_param}>>> bar',
+            [
+                'foo ' ,
+                '<value_<<{nested_param}>>>',
+                ' bar',
             ],
         ];
 
-        // array values: apply itself recursively
-        yield 'array of strings' => [
+        // Arrays
+        yield '[Array] array of strings' => [
             [
                 'foo',
                 'bar',
                 'baz',
             ],
             [
-                'dummy',
+                [
+                    'foo',
+                    'bar',
+                    'baz',
+                ],
             ],
         ];
-
-        // P1
-        yield '[P1] alone' => [
-            '<string_value>',
+        yield '[Array] nominal string array' => [
+            '10x @user',
             [
-                '<string_value>',
+                '10x @user',
             ],
         ];
-        yield '[P1] surrounded' => [
-            'foo <string_value> bar',
+        yield '[Array] string array with negative number' => [
+            '-10x @user',
+            null,
+        ];
+        yield '[Array] string array with left member' => [
+            'foo 10x @user',
+            null,
+        ];
+        yield '[Array] string array with right member' => [
+            '10x @user bar',
             [
-                'foo' ,
-                '<string_value>',
-                ' bar',
+                '10x @user bar',
             ],
         ];
-        yield '[P1] surrounded left' => [
-            'foo <string_value>',
+        yield '[Array] string array with P1' => [
+            '<dummy>x 50x <hello>',
             [
-                'foo ',
-                '<string_value>',
+                '<dummy>x 50x <hello>',
             ],
         ];
-        yield '[P1] surrounded right' => [
-            '<string_value> bar',
+        yield '[Array] string array with string array' => [
+            '10x [@user*->name, @group->name]',
             [
-                '<string_value>',
-                ' bar',
+                '10x [@user*->name, @group->name]',
             ],
         ];
-
-        // P3
-        yield '[P3] alone' => [
-            '80x Y',
+        yield '[Array] escaped array' => [
+            '[[X]]',
             [
-                '80x Y',
+                '[[X]]',
             ],
         ];
-        yield '[P3] alone' => [
-            '<dummy>x Y',
-            [
-                '<dummy>x Y',
-            ],
-        ];
-        yield '[P3] alone with negative number' => [
-            '-50x Y',
-            [
-                '-',
-                '-50x Y',
-            ],
-        ];
-        yield '[P3] left with strings' => [
-            'foo 100x Y',
+        yield '[Array] surrounded escaped array' => [
+            'foo [[X]] bar',
             [
                 'foo ',
-                'Xx Y',
+                '[[X]]',
+                ' bar',
             ],
         ];
-        yield '[P3] left with param' => [
-            'foo <current()>x Y',
+        yield '[Array] surrounded escaped array with param' => [
+            'foo [[X]] <param> bar',
             [
                 'foo ',
-                '<current()>x Y',
-            ],
-        ];
-        yield '[P3] right with strings' => [
-            '10x Y bar',
-            [
-                '10x Y',
+                '[[X]]',
+                ' ',
+                '<param>',
                 ' bar',
             ],
         ];
-
-        // P4
-        yield '[P4] alone' => [
-            '100%? Y',
+        yield '[Array] simple string array' => [
+            '[@user*->name, @group->name]',
             [
-                '100%? Y',
+                '[@user*->name, @group->name]',
             ],
         ];
-        yield '[P4] alone with negative number' => [
-            '-100%? Y',
-            [
-                '-',
-                '100%? Y',
-            ],
-        ];
-        yield '[P4] alone with negative number' => [
-            '-100%? Y',
-            [
-                '-',
-                '100%? Y',
-            ],
-        ];
-        yield '[P4] alone with scalars' => [
-            '80%? dummy',
-            [
-                '80%? dummy',
-            ],
-        ];
-        yield '[P4] left with strings' => [
-            'foo X%? Y',
-            [
-                'foo X%? Y',
-            ],
-        ];
-        yield '[P4] right with strings' => [
-            'X%? Y bar',
-            [
-                'X%? Y bar',
-            ],
-        ];
-
-        // P5
-        yield '[P5] alone with strings' => [
-            '@user0',
-            [
-                '@user0',
-            ],
-        ];
-        yield '[P5] left with strings' => [
-            'foo @user0',
-            [
-                'foo ',
-                '@user0',
-            ],
-        ];
-        yield '[P5] right with strings' => [
-            '@user0 bar',
-            [
-                '@user0',
-                ' bar',
-            ],
-        ];
-        yield '[P5] alone with prop' => [
-            '@user0->username',
-            [
-                '@user0->username',
-            ],
-        ];
-        yield '[P5] left with prop' => [
-            'foo @user0->username',
-            [
-                'foo ',
-                '@user0->username',
-            ],
-        ];
-        yield '[P5] right with prop' => [
-            '@user0->username bar',
-            [
-                '@user0->username',
-                ' bar',
-            ],
-        ];
-        yield '[P5] alone with function' => [
-            '@user0->getUserName()',
-            [
-                '@user0->getUserName()',
-            ],
-        ];
-        yield '[P5] left with function' => [
-            'foo @user0->getUserName()',
-            [
-                ' foo',
-                '@user0->getUserName()',
-            ],
-        ];
-        yield '[P5] right with function' => [
-            '@user0->getUserName() bar',
-            [
-                '@user0->getUserName()',
-                ' bar',
-            ],
-        ];
-
-        yield '[P6] alone' => [
-            '$username',
-            [
-                '$username',
-            ],
-        ];
-        yield '[P6] left' => [
-            'foo $username',
-            [
-                'foo ',
-                '$username',
-            ],
-        ];
-        yield '[P6] right' => [
-            '$username bar',
-            [
-                '$username',
-                ' bar',
-            ],
-        ];
-
-        yield '[P1][P3] next 1' => [
-            '<string_value> foo Xx Y',
-            [
-                'foo',
-                '<string_value>',
-                'bar',
-            ],
-        ];
+//
+//        // Optional
+//        yield '[Optional] nominal' => [
+//            '80%? Y',
+//            [
+//                '80%? Y',
+//            ],
+//        ];
+//        yield '[Optional] with negative number' => [
+//            '-50%? Y',
+//            [
+//                '-',
+//                '-50%? Y',
+//            ],
+//        ];
+//        yield '[Optional] with float' => [
+//            '0.5%? Y',
+//            [
+//                '0.5%? Y',
+//            ],
+//        ];
+//        yield '[Optional] with <X>' => [
+//            '<dummy>%? Y',
+//            [
+//                '<dummy>%? Y',
+//            ],
+//        ];
+//        yield '[Optional] complete' => [
+//            '80%? Y: Z',
+//            [
+//                '80%? Y: Z',
+//            ],
+//        ];
+//        yield '[Optional] complete with negative number' => [
+//            '-50%? Y: Z',
+//            [
+//                '-',
+//                '-50%? Y: Z',
+//            ],
+//        ];
+//        yield '[Optional] complete with float' => [
+//            '0.5%? Y: Z',
+//            [
+//                '0.5%? Y: Z',
+//            ],
+//        ];
+//        yield '[Optional] complete with <X>' => [
+//            '<dummy>%? Y: Z',
+//            [
+//                '<dummy>%? Y: Z',
+//            ],
+//        ];
+//        yield '[Optional] nominal with left member' => [
+//            'foo 80%? Y',
+//            [
+//                'foo ',
+//                '80%? Y',
+//            ],
+//        ];
+//        yield '[Optional] with negative number and left member' => [
+//            'foo -50%? Y',
+//            [
+//                'foo -',
+//                '-50%? Y',
+//            ],
+//        ];
+//        yield '[Optional] with float and left member' => [
+//            'foo 0.5%? Y',
+//            [
+//                'foo ',
+//                '0.5%? Y',
+//            ],
+//        ];
+//        yield '[Optional] with <X> and left member' => [
+//            'foo <dummy>%? Y',
+//            [
+//                'foo ',
+//                '<dummy>%? Y',
+//            ],
+//        ];
+//        yield '[Optional] complete with left member' => [
+//            'foo 80%? Y: Z',
+//            [
+//                'foo ',
+//                '80%? Y: Z',
+//            ],
+//        ];
+//        yield '[Optional] complete with negative number and left member' => [
+//            'foo -50%? Y: Z',
+//            [
+//                'foo -',
+//                '-50%? Y: Z',
+//            ],
+//        ];
+//        yield '[Optional] complete with float and left member' => [
+//            'foo 0.5%? Y: Z',
+//            [
+//                'foo ',
+//                '0.5%? Y: Z',
+//            ],
+//        ];
+//        yield '[Optional] complete with <X> and left member' => [
+//            'foo <dummy>%? Y: Z',
+//            [
+//                'foo ',
+//                '<dummy>%? Y: Z',
+//            ],
+//        ];
+//        yield '[Optional] without members' => [
+//            '80%? ',
+//            [
+//                '80%? ',
+//            ],
+//        ];
+//        yield '[Optional] without members 2' => [
+//            '80%?',
+//            [
+//                '80%?',
+//            ],
+//        ];
+//        yield '[Optional] without first member but with second' => [
+//            '80%? :Z',
+//            [
+//                '80%? :Z',
+//            ],
+//        ];
+//        yield '[Optional] with first member containing a string' => [
+//            '80%? foo bar',
+//            [
+//                '80%? foo bar',
+//            ],
+//        ];
+//        yield '[Optional] with first member containing a space and second member' => [
+//            '80%? foo bar: baz',
+//            [
+//                '80%? foo bar: baz',
+//            ],
+//        ];
+//        yield '[Optional] with first member containing a space and second member too' => [
+//            '80%? foo bar: baz faz',
+//            [
+//                '80%? foo bar: baz faz',
+//            ],
+//        ];
+//        yield '[Optional] with second member containing a space' => [
+//            '80%? foo: bar baz',
+//            [
+//                '80%? foo: bar',
+//                ' baz',
+//            ],
+//        ];
+//        yield '[Optional] with second member without the space after semicolon' => [
+//            '80%? foo:bar baz',
+//            [
+//                '80%? foo:bar baz',
+//            ],
+//        ];
+//        yield '[Optional] without space after quantifier' => [
+//            '80%?foo bar',
+//            [
+//                '80%?foo bar',
+//            ],
+//        ];
+//        yield '[Optional] without space after quantifier with second member' => [
+//            '80%?foo: bar baz',
+//            [
+//                '80%?foo: bar baz',
+//            ],
+//        ];
+//        yield '[Optional] surrounded with params' => [
+//            'foo 80%? <dummy>: <another> baz',
+//            [
+//                'foo ',
+//                '80%? <dummy>: <another>',
+//                'baz',
+//            ],
+//        ];
+//        yield '[Optional] surrounded with params and nested' => [
+//            '<foo> -80%? <dum10%? y: z my>: <<another>> <baz>',
+//            [
+//                '<foo> -',
+//                '80%? <dum10%? y: z my>: <<another>>',
+//                '<baz>',
+//            ],
+//        ];
+//
+//        // P4
+//        yield '[P4] alone' => [
+//            '100%? Y',
+//            [
+//                '100%? Y',
+//            ],
+//        ];
+//        yield '[P4] alone with negative number' => [
+//            '-100%? Y',
+//            [
+//                '-',
+//                '100%? Y',
+//            ],
+//        ];
+//        yield '[P4] alone with negative number' => [
+//            '-100%? Y',
+//            [
+//                '-',
+//                '100%? Y',
+//            ],
+//        ];
+//
+//        // References
+//        yield '[Reference] alone with strings' => [
+//            '@user0',
+//            [
+//                '@user0',
+//            ],
+//        ];
+//        yield '[Reference] left with strings' => [
+//            'foo @user0',
+//            [
+//                'foo ',
+//                '@user0',
+//            ],
+//        ];
+//        yield '[Reference] right with strings' => [
+//            '@user0 bar',
+//            [
+//                '@user0',
+//                ' bar',
+//            ],
+//        ];
+//        yield '[Reference] alone with prop' => [
+//            '@user0->username',
+//            [
+//                '@user0->username',
+//            ],
+//        ];
+//        yield '[Reference] left with prop' => [
+//            'foo @user0->username',
+//            [
+//                'foo ',
+//                '@user0->username',
+//            ],
+//        ];
+//        yield '[Reference] right with prop' => [
+//            '@user0->username bar',
+//            [
+//                '@user0->username',
+//                ' bar',
+//            ],
+//        ];
+//        yield '[Reference] with nested' => [
+//            '@user0@user1',
+//            [
+//                '@user0',
+//                '@user1',
+//            ],
+//        ];
+//        yield '[Reference] with nested surrounded' => [
+//            'foo @user0@user1 bar',
+//            [
+//                'foo ',
+//                '@user0',
+//                '@user1',
+//                ' bar',
+//            ],
+//        ];
+//        yield '[Reference] with nested with prop' => [
+//            '@user0->@user1',
+//            [
+//                '@user0->@user1',
+//            ],
+//        ];
+//        yield '[Reference] with nested with prop surrounded' => [
+//            'foo @user0->@user1 bar',
+//            [
+//                'foo @user0->@user1 bar',
+//            ],
+//        ];
+//        yield '[Reference] with successive with prop surrounded' => [
+//            'foo @user0->username@user1->name bar',
+//            [
+//                'foo ',
+//                '@user0->username',
+//                '@user1->name',
+//                ' bar',
+//            ],
+//        ];
+//        yield '[Reference] alone with function' => [
+//            '@user0->getUserName()',
+//            [
+//                '@user0->getUserName()',
+//            ],
+//        ];
+//        yield '[Reference] function surrounded' => [
+//            'foo @user0->getUserName() bar',
+//            [
+//                ' foo',
+//                '@user0->getUserName()',
+//                ' bar',
+//            ],
+//        ];
+//        yield '[Reference] function nested' => [
+//            '@user0->getUserName()@user1->getName()',
+//            [
+//                '@user0->getUserName()',
+//                '@user1->getName()',
+//            ],
+//        ];
+//        yield '[Reference] function nested surrounded' => [
+//            'foo @user0->getUserName()@user1->getName() bar',
+//            [
+//                'foo ',
+//                '@user0->getUserName()',
+//                '@user1->getName()',
+//                ' bar',
+//            ],
+//        ];
+//        yield '[Reference] function nested with function' => [
+//            '@user0->@user1->getUsername()',
+//            [
+//                '@user0->@user1->getUsername()',
+//            ],
+//        ];
+//        yield '[Reference] function nested with function surrounded' => [
+//            'foo @user0->@user1->getUsername() bar',
+//            [
+//                'foo @user0->@user1->getUsername() bar',
+//            ],
+//        ];
+//
+//        yield '[Variable] alone' => [
+//            '$username',
+//            [
+//                '$username',
+//            ],
+//        ];
+//        yield '[Variable] left' => [
+//            'foo $username',
+//            [
+//                'foo ',
+//                '$username',
+//            ],
+//        ];
+//        yield '[Variable] right' => [
+//            '$username bar',
+//            [
+//                '$username',
+//                ' bar',
+//            ],
+//        ];
     }
 }
