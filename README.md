@@ -69,8 +69,8 @@ Nelmio\Entity\Group:
         name: Admins
         owner: '@user1'
         members: '<numberBetween(1, 10)>x @user*'
-        created: '<dateTimeBetween('-200 days', 'now')>'
-        updated: '<dateTimeBetween($created, 'now')>'
+        created: '<dateTimeBetween("-200 days", "now")>'
+        updated: '<dateTimeBetween($created, "now")>'
 ```
 
 You can then load them easily with:
