@@ -142,5 +142,7 @@ Nelmio\Entity\Shop:
 Additionally, you can pass in a list of defined parameters as the last argument to the `Loader` class to prepare the initial set of values.
 
 
+**Warning**: Parameters cannot be composite or dynamic. See #354 for more information.
+
 Next chapter: [Customize Data Generation](customizing-data-generation.md)<br />
 Previous chapter: [Handling Relations](relations-handling.md)

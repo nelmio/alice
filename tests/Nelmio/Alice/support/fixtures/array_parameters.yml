@@ -1,6 +1,0 @@
-parameters:
-    usernames: ['Alice', 'Bob', 'Ogi']
-
-Nelmio\Alice\support\models\User:
-    user{1..5}:
-        username: <randomElement(<{usernames}>)>

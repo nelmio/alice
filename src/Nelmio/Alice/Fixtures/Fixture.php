@@ -36,7 +36,7 @@ class Fixture
     protected $properties;
 
     /**
-     * @var array
+     * @var array e.g. ['template' => true, 'extends dummy' => true]
      */
     protected $classFlags;
 
@@ -56,19 +56,19 @@ class Fixture
     protected $setProperties = [];
 
     /**
-     * built a class representation of a fixture
-     *
-     * @param string $class
-     * @param string $name
-     * @param array  $spec
-     * @param string $valueForCurrent - when <current()> is called, this value is used
+     * @param string      $class
+     * @param string      $name
+     * @param array       $spec
+     * @param string|null $valueForCurrent When <current()> is called, this value is used
      */
     public function __construct($class, $name, array $spec, $valueForCurrent)
     {
         list($this->class, $this->classFlags) = FlagParser::parse($class);
-        list($this->name, $this->nameFlags)   = FlagParser::parse($name);
+        list($this->name, $this->nameFlags) = FlagParser::parse($name);
 
-        $this->spec            = $spec;
+        $this->checkName($name);
+
+        $this->spec = $spec;
         $this->valueForCurrent = $valueForCurrent;
 
         $this->properties = [];
@@ -78,9 +78,7 @@ class Fixture
     }
 
     /**
-     * returns true when the fixture has either the local class or name flag
-     *
-     * @return boolean
+     * @return boolean true when the fixture has either the local class or name flag.
      */
     public function isLocal()
     {
@@ -88,7 +86,7 @@ class Fixture
     }
 
     /**
-     * returns true when the fixture has been flagged as a template
+     * @return boolean true when the fixture has been flagged as a template.
      */
     public function isTemplate()
     {
@@ -96,7 +94,7 @@ class Fixture
     }
 
     /**
-     * extends this fixture by the given template
+     * Extends this fixture by the given template.
      *
      * @param Fixture $template
      */
@@ -114,9 +112,7 @@ class Fixture
     }
 
     /**
-     * returns a list of templates to extend
-     *
-     * @return array
+     * @return string[] list of templates (references) to extend.
      */
     public function getExtensions()
     {
@@ -136,9 +132,7 @@ class Fixture
     }
 
     /**
-     * returns true if the fixture has extensions
-     *
-     * @return boolean
+     * @return boolean true if the fixture has extensions.
      */
     public function hasExtensions()
     {
@@ -162,9 +156,8 @@ class Fixture
     }
 
     /**
-     * returns the list of properties with the complex properties (__construct, __set, etc) filtered out
-     *
-     * @return PropertyDefinition[]
+     * @return PropertyDefinition[] list of properties with the complex properties (__construct, __set, etc) filtered
+     *                              out.
      */
     public function getProperties()
     {
@@ -177,9 +170,7 @@ class Fixture
     }
 
     /**
-     * get the list of class flags on this fixture
-     *
-     * @return array
+     * @return array The list of class flags on this fixture.
      */
     public function getClassFlags()
     {
@@ -187,10 +178,9 @@ class Fixture
     }
 
     /**
-     * returns true if this fixture has the given class flag
+     * @param string $flag
      *
-     * @param  string $flag
-     * @return bool
+     * @return bool true if this fixture has the given class flag
      */
     public function hasClassFlag($flag)
     {
@@ -198,9 +188,7 @@ class Fixture
     }
 
     /**
-     * get the list of name flags on this fixture
-     *
-     * @return array
+     * @return array List of name flags on this fixture
      */
     public function getNameFlags()
     {
@@ -208,10 +196,9 @@ class Fixture
     }
 
     /**
-     * returns true if this fixture has the given name flag
+     * @param string $flag
      *
-     * @param  string $flag
-     * @return bool
+     * @return bool true if this fixture has the given name flag.
      */
     public function hasNameFlag($flag)
     {
@@ -227,9 +214,7 @@ class Fixture
     }
 
     /**
-     * returns the name of the static method to use as the constructor
-     *
-     * @return string
+     * @return string Name of the static method to use as the constructor.
      */
     public function getConstructorMethod()
     {
@@ -239,9 +224,7 @@ class Fixture
     }
 
     /**
-     * returns the list of arguments to pass to the constructor
-     *
-     * @return array
+     * @return array List of arguments to pass to the constructor
      */
     public function getConstructorArgs()
     {
@@ -251,9 +234,7 @@ class Fixture
     }
 
     /**
-     * returns true when the __construct property has been specified in the spec
-     *
-     * @return boolean
+     * @return bool true when the __construct property has been specified in the spec.
      */
     public function shouldUseConstructor()
     {
@@ -261,9 +242,7 @@ class Fixture
     }
 
     /**
-     * returns true when the __set property has been specified in the spec
-     *
-     * @return boolean
+     * @return bool true when the __set property has been specified in the spec.
      */
     public function hasCustomSetter()
     {
@@ -271,9 +250,7 @@ class Fixture
     }
 
     /**
-     * returns the name of the method to use as the custom setter
-     *
-     * @return PropertyDefinition
+     * @return PropertyDefinition Name of the method to use as the custom setter.
      */
     public function getCustomSetter()
     {
@@ -281,7 +258,7 @@ class Fixture
     }
 
     /**
-     * allows registering a set property value on the fixture itself
+     * Allows registering a set property value on the fixture itself.
      *
      * @param string $property
      * @param mixed  $value
@@ -292,10 +269,9 @@ class Fixture
     }
 
     /**
-     * returns the value of a property that has been registered as set
-     *
      * @param  string $property
-     * @return mixed
+     *
+     * @return mixed The value of a property that has been registered as set
      */
     public function getPropertyValue($property)
     {
@@ -303,9 +279,7 @@ class Fixture
     }
 
     /**
-     * get a list of properties that have been registered as set
-     *
-     * @return array
+     * @return array List of properties that have been registered as set
      */
     public function getSetProperties()
     {
@@ -313,7 +287,7 @@ class Fixture
     }
 
     /**
-     * display the fixture as a string
+     * @return string Displays the fixture as a string.
      */
     public function __toString()
     {
@@ -321,10 +295,11 @@ class Fixture
     }
 
     /**
-     * creates and adds a PropertyDefinition to the fixture with the given name and value
+     * Creates and adds a PropertyDefinition to the fixture with the given name and value.
      *
-     * @param  string             $name
-     * @param  mixed              $value
+     * @param string $name
+     * @param mixed  $value
+     *
      * @return PropertyDefinition
      */
     protected function addProperty($name, $value)
@@ -333,21 +308,19 @@ class Fixture
     }
 
     /**
-     * returns the constructor property
-     *
-     * @return PropertyDefinition
+     * @return PropertyDefinition The constructor property
      */
     protected function getConstructor()
     {
         return isset($this->properties['__construct']) ? $this->properties['__construct'] : null;
     }
 
-    //
-    // Sequential arrays call the constructor, hashes call a static method
-    //
-    // array('foo', 'bar') => new $fixture->getClass()('foo', 'bar')
-    // array('foo' => array('bar')) => $fixture->getClass()::foo('bar')
-    //
+    /**
+     * Sequential arrays call the constructor, hashes call a static method
+     *
+     * array('foo', 'bar') => new $fixture->getClass()('foo', 'bar')
+     * array('foo' => array('bar')) => $fixture->getClass()::foo('bar')
+     */
     protected function getConstructorComponents()
     {
         if (is_null($this->getConstructor())) {
@@ -372,5 +345,32 @@ class Fixture
         }
 
         return ['method' => '__construct', 'args' => $constructorValue];
+    }
+
+    /**
+     * @param string $name
+     */
+    private function checkName($name)
+    {
+        if (1 === strlen($name) && 1 !== preg_match('/\p{L}/', $name)) {
+            @trigger_error(
+                sprintf(
+                    'Fixture references 1 character long should be composed of a letter. Found "%s" instead. This is '
+                    .'is deprecated since 2.2.0 and will be removed in 3.0',
+                    $name
+                ),
+                E_USER_DEPRECATED
+            );
+        } elseif (1 !== preg_match('/[\p{L}\d\._\/]+/', $name)) {
+            @trigger_error(
+                sprintf(
+                    'Fixture references should only be composed of letters, digits, periods ("."), underscores ("_") '
+                    .' and slashes ("/"). The usage of other characters is deprecated since 2.2.0 and will no longer be'
+                    .'supported in 3.0',
+                    $name
+                ),
+                E_USER_DEPRECATED
+            );
+        }
     }
 }
