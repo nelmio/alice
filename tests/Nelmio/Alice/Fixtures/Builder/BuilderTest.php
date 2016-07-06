@@ -173,6 +173,15 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertEquals($expected, $actual, null, 0.0, 10, true);
     }
+
+    /**
+     * @group legacy
+     */
+    public function testReturnsNullWhenCannotBuildAFixture()
+    {
+        $builder = new Builder([]);
+        $builder->build('Dummy', 'dummy', []);
+    }
 }
 
 class CustomMethod implements MethodInterface

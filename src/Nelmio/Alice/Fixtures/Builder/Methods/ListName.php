@@ -16,20 +16,15 @@ use Nelmio\Alice\Fixtures\Fixture;
 class ListName implements MethodInterface
 {
     /**
-     * @var string[]
-     */
-    private $matches = [];
-
-    /**
      * {@inheritDoc}
      */
     public function canBuild($name)
     {
-        if (1 !== preg_match('/\{(?<content>.*)\}/', $name, $this->matches)) {
+        if (1 !== preg_match('/\{(?<content>.*)\}/', $name, $matches)) {
             return false;
         }
 
-        $content = $this->matches['content'];
+        $content = $matches['content'];
         if (false === strpos($content, ',')) {
             // is not a list but can be a single element e.g. user{alice}
             if (false !== strpos($content, '..')) {
@@ -47,8 +42,8 @@ class ListName implements MethodInterface
      */
     public function build($class, $name, array $spec)
     {
-        if (1 !== preg_match('/\{(?<content>[^,\s]+(?:,\s[^,\s]+)+)\}/', $name, $this->matches)) {
-            preg_match('/\{(?<content>.*)\}/', $name, $this->matches);
+        if (1 !== preg_match('/\{(?<content>[^,\s]+(?:,\s[^,\s]+)+)\}/', $name, $matches)) {
+            preg_match('/\{(?<content>.*)\}/', $name, $matches);
 
             @trigger_error(
                 sprintf(
@@ -61,13 +56,13 @@ class ListName implements MethodInterface
         }
         $fixtures = [];
 
-        $enumItems = array_map('trim', explode(',', $this->matches['content']));
+        $enumItems = array_map('trim', explode(',', $matches['content']));
         foreach ($enumItems as $itemName) {
             if ('' === $itemName) {
                 continue;
             }
 
-            $currentName = str_replace($this->matches[0], $itemName, $name);
+            $currentName = str_replace($matches[0], $itemName, $name);
             $fixtures[] = new Fixture($class, $currentName, $spec, $itemName);
         }
 

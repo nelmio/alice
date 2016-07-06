@@ -17,6 +17,7 @@
       - `user_{0.2}`: was generating a fixture named `user_{0.2}`; Now doesn't generate any.
       - `user_{2..}`: was generating a fixture named `user_{2..}`; Now doesn't generate any.
       - `user_{-1..2}`: was generating a fixture named `user_-1..2`; Now doesn't generate any. Same goes for all ranges containing a negative number
+      - Deprecate the silent failing occurring when a fixture could not be built by the builder: current returns `null`, will throw an exception in the future.
 
 ### 2.1.2 (2015-12-10)
 

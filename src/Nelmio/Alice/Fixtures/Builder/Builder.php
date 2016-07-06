@@ -91,7 +91,9 @@ class Builder
         @trigger_error(
             sprintf(
                 'Fixture with the name "%s" and the class "%s" could not be build. In such cases, null is returned.'
-                .' As of 2.2.0, this behaviour is deprecated and an exception will be thrown in 3.0 instead.'
+                .' As of 2.2.0, this behaviour is deprecated and an exception will be thrown in 3.0 instead.',
+                $name,
+                $class
             ),
             E_USER_DEPRECATED
         );
