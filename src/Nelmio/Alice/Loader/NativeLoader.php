@@ -12,6 +12,14 @@
 namespace Nelmio\Alice\Loader;
 
 
+use Nelmio\Alice\ExpressionLanguage\Lexer\SimpleLexer;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\EscapedParameterTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\FunctionTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\ParameterTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\StringTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\SimpleParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\TokenParserRegistry;
+use Nelmio\Alice\ExpressionLanguage\ParserInterface as ExpressionLanguageParserInterface;
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormalizer;
@@ -175,5 +183,20 @@ final class NativeLoader implements LoaderInterface
     public function getBuiltInObjectResolver(): ObjectGeneratorInterface
     {
         //TODO
+    }
+
+    public function getBuiltInExpressionLanguageParser(): ExpressionLanguageParserInterface
+    {
+        $registry = new TokenParserRegistry([
+            new EscapedParameterTokenParser(),
+            new FunctionTokenParser(),
+            new ParameterTokenParser(),
+            new StringTokenParser(),
+        ]);
+
+        return new SimpleParser(
+            new SimpleLexer(),
+            $registry
+        );
     }
 }

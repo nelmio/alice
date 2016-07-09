@@ -12,7 +12,6 @@
 namespace Nelmio\Alice\Generator;
 
 use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 

@@ -12,7 +12,7 @@
 namespace Nelmio\Alice;
 
 /**
- * Value objects containing the loaded parameters, fixtures and the injected parameters, objects.
+ * Value objects containing the loaded parameters, fixtures, injected parameters and injected objects.
  */
 final class FixtureSet
 {
