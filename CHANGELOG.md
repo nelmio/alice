@@ -1,33 +1,58 @@
 ### 2.2.0 (2016-07-11)
 
-  * Drop support for PHP 5.4 and 5.5 (#414)
-  * Add support for snake_case properties (#323)
-  * Deprecate usage of the the range operator with more than two dots (#329)
-  * Add support for dots in reference names (#312)
-  * Add support for Fixture parameters in PHP File (#341)
-  * Deprecate usage of custom context in Parsers (#342)
-  * Fix singularify deprecation warnings and optimize method detection (#407)
-  * Fix various bugs in #355:
-      - `user_{alice, bob,}` previously was building a reference named `user_{alice, bob,}`. Now builds that as a list, i.e. result in `user_alice` and `user_bob`. A deprecation warning is also thrown to warn the user that the list is poorly formatted and an exception will be thrown in v3.
-      - `user_{, alice, bob}`: same as previous case.
-      - `user_{0..2}`: value for `<current()>` were respectively `'0'`, `1`, `2`; Now are all strings as states the phpdoc. Changed in #339.
-      - `user_{0....2}`: was generating only one fixture named `user_{0....2}`; Now is equivalent to `user_{0...2}`
-      - `user_{2...0}`: as reported in #358 was generating 4 fixtures... Now is equivalent to `0...2` which result in `user_0`, `user_1` and `user_2`
-      - `user_{2...2}`: was generating two fixtures `user_1` and `user_3`; Now doesn't build any (the segment is `[2;2[` so contains no element)
-      - `user_{0.2}`: was generating a fixture named `user_{0.2}`; Now doesn't generate any.
-      - `user_{2..}`: was generating a fixture named `user_{2..}`; Now doesn't generate any.
-      - `user_{-1..2}`: was generating a fixture named `user_-1..2`; Now doesn't generate any. Same goes for all ranges containing a negative number
-      - Deprecate the silent failing occurring when a fixture could not be built by the builder: current returns `null`, will throw an exception in the future.
-  * Fix unique flag usage with templates (#359)
-  * Fix some phpdoc (#264)
-  * Don't persist ORM entities (#272)
-  * Fix the order in which the files were included (#314)
-  * Enable quoting references to reflect on the changes in Symfony YAML Parser (#305)
+#### Features
+
+* Add support for snake_case properties (#323)
+* Add support for dots in reference names (#312)
+* Add support for Fixture parameters in PHP File (#341)
+* Don't persist ORM entities (embeddable support) (#272)
+* Enable quoting references to reflect on the changes in Symfony YAML Parser (#305)
+
+#### Deprecations
+
+* Drop support for PHP 5.4 and 5.5 (#414)
+* Deprecate usage of the the range operator with more than two dots (#329)
+* Deprecate usage of custom context in Parsers (#342)
+
+#### Bugfixes
+
+* Fix singularify deprecation warnings and optimize method detection (#407)
+* Fix various bugs in #355:
+  - `user_{alice, bob,}` previously was building a reference named `user_{alice, bob,}`. Now builds that as a list, i.e. result in `user_alice` and `user_bob`. A deprecation warning is also thrown to warn the user that the list is poorly formatted and an exception will be thrown in v3.
+  - `user_{, alice, bob}`: same as previous case.
+  - `user_{0..2}`: value for `<current()>` were respectively `'0'`, `1`, `2`; Now are all strings as states the phpdoc. Changed in #339.
+  - `user_{0....2}`: was generating only one fixture named `user_{0....2}`; Now is equivalent to `user_{0...2}`
+  - `user_{2...0}`: as reported in #358 was generating 4 fixtures... Now is equivalent to `0...2` which result in `user_0`, `user_1` and `user_2`
+  - `user_{2...2}`: was generating two fixtures `user_1` and `user_3`; Now doesn't build any (the segment is `[2;2[` so contains no element)
+  - `user_{0.2}`: was generating a fixture named `user_{0.2}`; Now doesn't generate any.
+  - `user_{2..}`: was generating a fixture named `user_{2..}`; Now doesn't generate any.
+  - `user_{-1..2}`: was generating a fixture named `user_-1..2`; Now doesn't generate any. Same goes for all ranges containing a negative number
+  - Deprecate the silent failing occurring when a fixture could not be built by the builder: current returns `null`, will throw an exception in the future.
+* Fix unique flag usage with templates (#359)
+* Fix some phpdoc (#264)
+* Fix the order in which the files were included (#314)
+
+### 2.1.4 (2016-01-07)
+
+#### Bugfixes
+
+* Ensure named static constructors are preferred over reflection (#303)
+
+### 2.1.3 (2015-12-28)
+
+#### Features
+
+* Add support for static constructors (#301)
 
 ### 2.1.2 (2015-12-10)
 
-  * Bug fix - private properties were populatable directly on the instance, but not private properties of parent classes. Although this is an antipattern, if we're allowing it for the instance we should allow it up the chain.
-  * Fixed dependencies to allow Symfony3
+#### Features
+
+  * Add support for Symfony3 (#290, #287, #296)
+
+#### Bugfixes
+
+  * Allow the Populator to set private properties of a parent class (#282)
 
 ### 2.1.1 (2015-10-01)
 
