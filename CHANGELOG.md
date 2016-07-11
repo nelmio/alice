@@ -1,4 +1,4 @@
-### 2.x (WIP)
+### 2.2.0 (2016-07-11)
 
   * Drop support for PHP 5.4 and 5.5 (#414)
   * Add support for snake_case properties (#323)
@@ -19,6 +19,10 @@
       - `user_{-1..2}`: was generating a fixture named `user_-1..2`; Now doesn't generate any. Same goes for all ranges containing a negative number
       - Deprecate the silent failing occurring when a fixture could not be built by the builder: current returns `null`, will throw an exception in the future.
   * Fix unique flag usage with templates (#359)
+  * Fix some phpdoc (#264)
+  * Don't persist ORM entities (#272)
+  * Fix the order in which the files were included (#314)
+  * Enable quoting references to reflect on the changes in Symfony YAML Parser (#305)
 
 ### 2.1.2 (2015-12-10)
 
