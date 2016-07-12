@@ -52,7 +52,7 @@ return [
 ];
 ```
 
-**Warning**: the usage of the `$fake` closre has been deprecated since in v2.2.0 and will be removed in v3.0.0.
+**Warning**: the usage of the `$fake` closure has been deprecated since in v2.2.0 and will be removed in v3.0.0.
 
 ## Fixture Ranges
 
