@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Fixtures;
 
+use Nelmio\Alice\support\extensions\FakerProviderWithRequiredParameter;
+use Nelmio\Alice\support\models\DummyWithVariadicConstructor;
 use Nelmio\Alice\support\models\Group;
 use Nelmio\Alice\support\models\MagicUser;
 use Nelmio\Alice\support\models\User;
@@ -103,6 +105,45 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             sprintf('%s cannot be parsed - no parser exists that can handle it.', $file)
         );
         $this->createLoader()->load($file);
+    }
+
+    public function testFakerProviderWithEmptyValues()
+    {
+        $objects = $this
+            ->createLoader([
+                'providers' => [
+                    new FakerProviderWithRequiredParameter(),
+                ]
+            ])
+            ->load([
+                DummyWithVariadicConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '<passValue([])>',
+                            '<passValue(0)>',
+                            '<passValue("")>',
+                            '<passValue(null)>',
+                            '<passValue(false)>',
+                        ],
+                    ],
+                ],
+            ])
+        ;
+
+        $this->assertCount(1, $objects);
+        /** @var DummyWithVariadicConstructor $dummy */
+        $dummy = $objects['dummy'];
+
+        $this->assertSame(
+            [
+                [],
+                0,
+                '',
+                null,
+                false,
+            ],
+            $dummy->data
+        );
     }
 
     public function testCreatePrivateConstructorInstance()

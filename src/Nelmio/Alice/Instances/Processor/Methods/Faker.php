@@ -145,13 +145,13 @@ class Faker implements MethodInterface
      */
     public function replacePlaceholder($matches, array $variables)
     {
-        $args = isset($matches['args']) && '' !== $matches['args'] ? $matches['args'] : null;
+        $args = array_key_exists('args', $matches) && '' !== $matches['args'] ? $matches['args'] : null;
 
         if (trim($matches['name']) == '') {
             $matches['name'] = 'identity';
         }
 
-        if (!$args) {
+        if (null === $args) {
             return $this->fake($matches['name'], $matches['locale']);
         }
 
