@@ -1020,6 +1020,17 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->loader->getReference('user2')->fullname, 'testfullname');
     }
 
+    public function testTemplatesAreKeptBetweenFiles()
+    {
+        $objects = $this->createLoader()->load(__DIR__.'/Files/includes/user.yml');
+
+        $this->assertCount(1, $objects);
+        /** @var User $user0 */
+        $user0 = $this->loader->getReference('user0');
+        $this->assertInstanceOf(self::USER, $user0);
+        $this->assertSame($user0->username, 'Base user');
+    }
+
     public function testTemplateCanExtendOtherTemplateObjectsCombinedWithRange()
     {
         $res = $this->loadData([
