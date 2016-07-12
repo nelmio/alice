@@ -1626,6 +1626,54 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Could not determine how to assign name to a stdClass object
+     */
+    public function testCannotUseStdClass()
+    {
+        $this->loadData(
+            [
+                \stdClass::class => [
+                    'dummy0' => [
+                        'name' => 'foo',
+                    ],
+                ],
+            ]
+        );
+    }
+
+    public function testStdClassSupport()
+    {
+        $loader = $this->createLoader();
+        $objects = $loader->load(
+            [
+                \Nelmio\Alice\Model\stdClass::class => [
+                    'dummy0' => [
+                        'name' => 'foo',
+                        'pseudo' => null,
+                    ],
+                    'dummy1' => [
+                        'name' => 'bar',
+                        'related' => '@dummy0',
+                    ],
+                ],
+            ]
+        );
+
+        $this->assertCount(2, $objects);
+
+        $dummy0 = $loader->getReference('dummy0');
+        $this->assertInstanceOf(\Nelmio\Alice\Model\stdClass::class, $dummy0);
+        $this->assertEquals('foo', $dummy0->name);
+        $this->assertNull($dummy0->pseudo);
+
+        $dummy1 = $loader->getReference('dummy1');
+        $this->assertInstanceOf(\Nelmio\Alice\Model\stdClass::class, $dummy1);
+        $this->assertEquals('bar', $dummy1->name);
+        $this->assertSame($dummy0, $dummy1->related);
+    }
+
     public function testUseTypehintInSetter()
     {
         $loader = $this->createLoader();
