@@ -1707,30 +1707,40 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testCompositeParametersLoading()
     {
-        $this->markTestSkipped('Parameters cannot be composite yet.');
-        $res = $this->createLoader()->load(__DIR__ . '/Files/parameters/composite.yml');
+        $objects = $this->createLoader()->load(__DIR__ . '/Files/parameters/composite.yml');
 
-        $this->assertCount(1, $res);
+        $this->assertCount(2, $objects);
 
-        $user = $res['user0'];
+        $user = $objects['user0'];
         $this->assertInstanceOf(self::USER, $user);
-        $this->assertEquals('Nan Bat!', $user->username);
+        //$this->assertEquals('NaN Bat!', $user->username); Not supported yet
+        $this->assertEquals('<{key1}> <{key2}>!', $user->username);
+
+        $user = $objects['user1'];
+        $this->assertInstanceOf(self::USER, $user);
+        //$this->assertEquals('NaN Bat!', $user->username); Not supported yet
+        $this->assertEquals('NaN Bat!', $user->username);
     }
 
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Parameter "username_<current()>" was not found.
+     */
     public function testDynamicParametersLoading()
     {
-        $this->markTestSkipped('Parameters cannot be dynamic yet.');
-        $res = $this->createLoader()->load(__DIR__ . '/Files/parameters/dynamic.yml');
+        $objects = $this->createLoader()->load(__DIR__ . '/Files/parameters/dynamic.yml');
+        $this->fail('Expected exception to be thrown.');
 
-        $this->assertCount(2, $res);
+        // Skipped: not supported yet
+        //$this->assertCount(2, $objects);
 
-        $alice = $res['user_alice'];
-        $this->assertInstanceOf(self::USER, $alice);
-        $this->assertEquals('Alice', $alice->username);
+        //$alice = $objects['user_alice'];
+        //$this->assertInstanceOf(self::USER, $alice);
+        //$this->assertEquals('Alice', $alice->username);
 
-        $bob = $res['user_bob'];
-        $this->assertInstanceOf(self::USER, $bob);
-        $this->assertEquals('Bob', $bob->username);
+        //$bob = $objects['user_bob'];
+        //$this->assertInstanceOf(self::USER, $bob);
+        //$this->assertEquals('Bob', $bob->username);
     }
 
     public function testBackslashes()

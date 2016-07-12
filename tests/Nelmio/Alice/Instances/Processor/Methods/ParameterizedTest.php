@@ -101,6 +101,10 @@ class ParameterizedTest extends \PHPUnit_Framework_TestCase
                 new Processable('<{<{part1}> <{part2}>}>'),
                 true,
             ],
+            'successive' => [
+                new Processable('<{foo}> <{bar}>'),
+                true,
+            ],
             'dynamic' => [
                 new Processable('<{username_<current()>}>'),
                 true,

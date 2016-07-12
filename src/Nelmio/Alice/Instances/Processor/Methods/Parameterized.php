@@ -16,7 +16,7 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
 class Parameterized implements MethodInterface
 {
-    private static $regex = '/<\{(?<parameter>.*)\}>/i';
+    private static $regex = '/<\{(?<parameter>.*?)\}>/i';
 
     /**
      * @var ParameterBag
@@ -58,7 +58,7 @@ class Parameterized implements MethodInterface
                 if (false === $this->parameters->has($key)) {
                     throw new \UnexpectedValueException(
                         sprintf(
-                            'Parameter "%s" was not found',
+                            'Parameter "%s" was not found.',
                             $key
                         )
                     );
