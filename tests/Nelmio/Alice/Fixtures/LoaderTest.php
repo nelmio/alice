@@ -13,6 +13,9 @@ namespace Nelmio\Alice\Fixtures;
 
 use Nelmio\Alice\support\models\Group;
 use Nelmio\Alice\support\models\MagicUser;
+use Nelmio\Alice\support\models\typehint\Dummy;
+use Nelmio\Alice\support\models\typehint\DummyWithInterface;
+use Nelmio\Alice\support\models\typehint\RelatedDummy;
 use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\extensions;
 
@@ -1546,6 +1549,102 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
+    }
+
+    public function testUseTypehintInSetter()
+    {
+        $loader = $this->createLoader();
+        $objects = $loader->load([
+            Dummy::class => [
+               'dummy0' => [
+                   'related_dummy' => '@related_dummy0',
+               ],
+            ],
+            RelatedDummy::class => [
+                'related_dummy0' => [],
+            ],
+        ]);
+
+        $dummy0 = $loader->getReference('dummy0');
+        $relatedDummy0 = $loader->getReference('related_dummy0');
+
+        $this->assertInstanceOf(Dummy::class, $dummy0);
+        $this->assertInstanceOf(RelatedDummy::class, $relatedDummy0);
+
+        $this->assertCount(2, $objects);
+        $this->assertSame($dummy0->data, $relatedDummy0);
+    }
+
+    public function testUseTypehintInSetterWithLocalFlag()
+    {
+        $loader = $this->createLoader();
+        $objects = $loader->load([
+            Dummy::class => [
+                'dummy0' => [
+                    'related_dummy' => '@related_dummy0',
+                ],
+            ],
+            RelatedDummy::class => [
+                'related_dummy0 (local)' => [],
+            ],
+        ]);
+
+        $dummy0 = $loader->getReference('dummy0');
+        $relatedDummy0 = $loader->getReference('related_dummy0');
+
+        $this->assertInstanceOf(Dummy::class, $dummy0);
+        $this->assertInstanceOf(RelatedDummy::class, $relatedDummy0);
+
+        $this->assertCount(1, $objects);
+        $this->assertSame($dummy0->data, $relatedDummy0);
+    }
+
+    public function testUseTypehintInSetterWithInterface()
+    {
+        $loader = $this->createLoader();
+        $objects = $loader->load([
+            DummyWithInterface::class => [
+                'dummy0' => [
+                    'related_dummy' => '@related_dummy0',
+                ],
+            ],
+            RelatedDummy::class => [
+                'related_dummy0' => [],
+            ],
+        ]);
+
+        $dummy0 = $loader->getReference('dummy0');
+        $relatedDummy0 = $loader->getReference('related_dummy0');
+
+        $this->assertInstanceOf(DummyWithInterface::class, $dummy0);
+        $this->assertInstanceOf(RelatedDummy::class, $relatedDummy0);
+
+        $this->assertCount(2, $objects);
+        $this->assertSame($dummy0->data, $relatedDummy0);
+    }
+
+    public function testUseTypehintInSetterWithInterfaceAndLocalFlag()
+    {
+        $loader = $this->createLoader();
+        $objects = $loader->load([
+            DummyWithInterface::class => [
+                'dummy0' => [
+                    'related_dummy' => '@related_dummy0',
+                ],
+            ],
+            RelatedDummy::class => [
+                'related_dummy0 (local)' => [],
+            ],
+        ]);
+
+        $dummy0 = $loader->getReference('dummy0');
+        $relatedDummy0 = $loader->getReference('related_dummy0');
+
+        $this->assertInstanceOf(DummyWithInterface::class, $dummy0);
+        $this->assertInstanceOf(RelatedDummy::class, $relatedDummy0);
+
+        $this->assertCount(1, $objects);
+        $this->assertSame($dummy0->data, $relatedDummy0);
     }
 
     public function testNullVariable()
