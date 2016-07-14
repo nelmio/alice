@@ -1,3 +1,15 @@
+### 2.2.1 (2016-07-14)
+
+#### Bugfixes
+
+* Fix a BC break on how parameters were captured (#423)
+* Fix the usage of empty values with Faker provider (#426)
+
+#### Miscellaneous
+
+* Add tests for the usage of typehint in setters (#427)
+* Add tests for the usage of templates declared in an included file (#424)
+
 ### 2.2.0 (2016-07-11)
 
 #### Features
