@@ -1,3 +1,10 @@
+### 2.2.2 (2016-07-15)
+
+#### Bugfixes
+
+* Fix support for hyphens (#431)
+
+
 ### 2.2.1 (2016-07-14)
 
 #### Bugfixes
@@ -9,6 +16,7 @@
 
 * Add tests for the usage of typehint in setters (#427)
 * Add tests for the usage of templates declared in an included file (#424)
+
 
 ### 2.2.0 (2016-07-11)
 
@@ -44,17 +52,20 @@
 * Fix some phpdoc (#264)
 * Fix the order in which the files were included (#314)
 
+
 ### 2.1.4 (2016-01-07)
 
 #### Bugfixes
 
 * Ensure named static constructors are preferred over reflection (#303)
 
+
 ### 2.1.3 (2015-12-28)
 
 #### Features
 
 * Add support for static constructors (#301)
+
 
 ### 2.1.2 (2015-12-10)
 
@@ -66,6 +77,7 @@
 
   * Allow the Populator to set private properties of a parent class (#282)
 
+
 ### 2.1.1 (2015-10-01)
 
   * Bug fixes / cleanup in `Fixtures` static class
@@ -73,11 +85,13 @@
   * Bug fix to handle default instance with no properties
   * Performance improvements
 
+
 ### 2.1.0 (2015-09-06)
 
   * Added support for array parameters
   * Fixed bug handling addXXX setters
   * Fixed bug handling functions without signature that use func_get_args() to retrieve parameters
+
 
 ### 2.0.0 (2015-03-17)
 
@@ -95,14 +109,17 @@
         property: <{foo}>
     ```
 
+
 ### 1.7.2 (2014-10-10)
 
   * Fixed support for custom providers, using addProvider instead of setProviders lets you add single providers
+
 
 ### 1.7.1 (2014-09-29)
 
   * Fixed handling of non-existing files
   * Fixed support for fixture inheritance combined with fixture ranges
+
 
 ### 1.7.0 (2014-04-24)
 
@@ -112,6 +129,7 @@
   * Added `@self` reference which is the equivalent to `$this`
   * Added support for passing references to faker providers
   * Added support for HHVM and PHP 5.6
+
 
 ### 1.6.0 (2014-02-05)
 
@@ -123,15 +141,18 @@
   * Fixed support for null variable references
   * Fixed invalid invocation of private setters
 
+
 ### 1.5.2 (2013-08-07)
 
   * Fixed typo in the handling of processors
   * Fixed regression in handling of <current()> in constructors
 
+
 ### 1.5.1 (2013-08-01)
 
   * Fixed persist_once issue, it is now disabled by default again
   * Fixed regression in handling of suppressed constructors
+
 
 ### 1.5.0 (2013-07-29)
 
@@ -144,6 +165,7 @@
   * Fixed self-referencing of objects
   * glob patterns now accept braces (http://php.net/manual/en/function.glob.php)
 
+
 ### 1.4.0 (2013-04-15)
 
   * Added possibility to mark fields as unique, so that random values are generated uniquely
@@ -151,9 +173,11 @@
   * Added support for symfony 2.3
   * Fixed caching of loader objects in the factory method to handle different options given for each loader
 
+
 ### 1.3.0 (2013-01-22)
 
   * Added support for multi and random references together with properties: `5x @user*->property`
+
 
 ### 1.2.0 (2013-01-06)
 
@@ -161,9 +185,11 @@
   * Added support for passing constructor arguments: `__construct: [arg, arg2]`
   * Added possibility to bypass constructors by setting: `__construct: false`
 
+
 ### 1.1.0 (2012-12-05)
 
   * Added possibility to reference an object's properties via `@reference->property`
+
 
 ### 1.0.0 (2012-11-22)
 
