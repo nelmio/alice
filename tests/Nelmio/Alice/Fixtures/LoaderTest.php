@@ -2025,27 +2025,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $return['with chinese characters'] = [
-            'data' => [
-                self::USER => [
-                    '汉字' => [
-                        'username' => 'alice',
-                    ],
-                    '汉字汉' => [
-                        'username' => '@汉字->username',
-                    ],
-                    '汉字汉字' => [
-                        'username' => '@汉字汉->username',
-                    ],
-                ]
-            ],
-            'keys' => [
-                '汉字',
-                '汉字汉',
-                '汉字汉字',
-            ],
-        ];
-
         return $return;
     }
 }
