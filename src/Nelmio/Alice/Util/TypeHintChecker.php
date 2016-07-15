@@ -48,7 +48,7 @@ class TypeHintChecker
         $reflection = new \ReflectionMethod($object, $method);
         $params = $reflection->getParameters();
 
-        if (false === array_key_exists($parameterNumber, $params) || null !== $params[$parameterNumber]->getClass()) {
+        if (false === array_key_exists($parameterNumber, $params) || null === $params[$parameterNumber]->getClass()) {
             return $value;
         }
 
