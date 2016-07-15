@@ -63,26 +63,35 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadCreatesInstances()
     {
-        $res = $this->loadData([
+        $objects = $this->loadData([
             self::USER => [
+                'alice-user' => [],
                 'bob' => [],
             ],
         ]);
-        $user = $res['bob'];
 
-        $this->assertInstanceOf(self::USER, $user);
+        $this->assertCount(2, $objects);
+
+        $alice = $objects['alice-user'];
+        $bob = $objects['bob'];
+
+        $this->assertInstanceOf(User::class, $alice);
+        $this->assertInstanceOf(User::class, $bob);
     }
 
     public function testGetReference()
     {
-        $res = $this->loadData([
+        $objects = $this->loadData([
             self::USER => [
+                'alice-user' => [],
                 'bob' => [],
             ],
         ]);
-        $user = $res['bob'];
 
-        $this->assertSame($user, $this->loader->getReference('bob'));
+        $this->assertCount(2, $objects);
+
+        $this->assertSame($this->loader->getReference('alice-user'), $objects['alice-user']);
+        $this->assertSame($this->loader->getReference('bob'), $objects['bob']);
     }
 
     /**
@@ -91,12 +100,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBadReference()
     {
-        $this->loadData([
-            self::USER => [
-                'bob' => [],
-            ],
-        ]);
-
+        $this->loadData([]);
         $this->loader->getReference('foo');
     }
 
@@ -190,6 +194,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadSequencedItems()
     {
         $object = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/sequenced_items.yml');
+
         $this->assertArrayHasKey('group1', $object);
         $this->assertInstanceOf(self::GROUP, $object['group1']);
         $counter = 1;
@@ -321,23 +326,38 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadParsesReferences()
     {
-        $res = $this->loadData([
+        $objects = $this->loadData([
             self::USER => [
                 'user1' => [
                     'username' => 'alice',
                 ],
+                'user-2' => [
+                    'username' => 'bob',
+                ],
             ],
             self::GROUP => [
                 'a' => [
-                    'members' => ['@user1']
+                    'members' => [
+                        '@user1',
+                        '@user-2',
+                    ]
                 ],
             ],
         ]);
         /** @var Group $group */
-        $group = $res['a'];
+        $group = $objects['a'];
 
-        $this->assertInstanceOf(self::USER, current($group->getMembers()));
-        $this->assertEquals('alice', current($group->getMembers())->username);
+        $this->assertInstanceOf(Group::class, $group);
+
+        $members = $group->getMembers();
+
+        $this->assertCount(2, $members);
+        foreach ($members as $member) {
+            $this->assertInstanceOf(User::class, $member);
+        }
+
+        $this->assertEquals('alice', $members[0]->username);
+        $this->assertEquals('bob', $members[1]->username);
     }
 
     public function testLoadParsesReferencesInQuotes()
@@ -363,21 +383,24 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadParsesPropertyReferences()
     {
-        $res = $this->loadData([
+        $objects = $this->loadData([
             self::USER => [
-                'user1' => [
+                'user-1' => [
                     'username' => 'alice',
                 ],
                 'user2' => [
-                    'username' => '@user1->username',
+                    'username' => '@user-1->username',
                 ],
             ]
         ]);
 
-        $this->assertInstanceOf(self::USER, $res['user1']);
-        $this->assertInstanceOf(self::USER, $res['user2']);
-        $this->assertEquals('alice', $res['user1']->username);
-        $this->assertEquals($res['user1']->username, $res['user2']->username);
+        $user1 = $objects['user-1'];
+        $user2 = $objects['user2'];
+
+        $this->assertInstanceOf(User::class, $user1);
+        $this->assertInstanceOf(User::class, $user2);
+        $this->assertEquals('alice', $user1->username);
+        $this->assertEquals($user1->username, $user2->username);
     }
 
     public function testLoadParsesPropertyReferencesGetter()
@@ -1999,27 +2022,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
                 'user/alice',
                 'user/alias/alice_alias',
                 'user/deep_alias',
-            ],
-        ];
-
-        $return['with chinese characters'] = [
-            'data' => [
-                self::USER => [
-                    '汉字' => [
-                        'username' => 'alice',
-                    ],
-                    '汉字汉' => [
-                        'username' => '@汉字->username',
-                    ],
-                    '汉字汉字' => [
-                        'username' => '@汉字汉->username',
-                    ],
-                ]
-            ],
-            'keys' => [
-                '汉字',
-                '汉字汉',
-                '汉字汉字',
             ],
         ];
 
