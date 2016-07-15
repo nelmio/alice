@@ -16,6 +16,15 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
 class Reference implements MethodInterface
 {
+    private static $regex = '/^[\',\"]?'
+        .'(?:(?<multi>\d+)x\ )?'
+        .'@(?<reference>[\p{L}\d\_\.\*\/\-]+)'
+        .'(?<sequence>\{(?P<from>\d+)\.\.(?P<to>\d+)\})?'
+        .'(?:\->(?<property>[\p{L}\d_.*\/-]+))?'
+        .'[\',\"]?$'
+        .'/xi'
+    ;
+
     /**
      * @var Collection
      */
@@ -36,16 +45,9 @@ class Reference implements MethodInterface
      */
     public function canProcess(ProcessableInterface $processable)
     {
-        $multiPart = '(?:(?<multi>\d+)x +)';
-        $referencePart = '@(?<reference>\{?[^\{\}\-\>\']+\}?)';
-        $sequencePart = '(?<sequence>\{(?<from>\d+)\.\.(?<to>\d+)\})';
-        $propertyPart = '(?:\->(?<property>[a-z0-9_-]+))';
-
-        $regex = "/^\\'?{$multiPart}?{$referencePart}{$sequencePart}?{$propertyPart}?\\'?$/i";
-
         return
             is_string($processable->getValue())
-            && $processable->valueMatches($regex)
+            && $processable->valueMatches(static::$regex)
         ;
     }
 
