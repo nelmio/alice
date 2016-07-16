@@ -15,7 +15,7 @@ use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
-use Prophecy\Argument;
+use Nelmio\Alice\Loader\NativeLoader;
 
 /**
  * @covers Nelmio\Alice\Lexer\SimpleLexer
@@ -29,7 +29,7 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->lexer = new SimpleLexer();
+        $this->lexer = (new NativeLoader())->getBuiltInLexer();
     }
 
     public function testIsALexer()
@@ -485,20 +485,20 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] alone with prop' => [
             '@user0->username',
             [
-                new Token('@user0->username', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] left with prop' => [
             'foo @user0->username',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user0->username', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] right with prop' => [
             '@user0->username bar',
             [
-                new Token('@user0->username', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -522,7 +522,7 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] with nested with prop' => [
             '@user0->@user1',
             [
-                new Token('@user0->', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
                 new Token('@user1', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
             ],
         ];
@@ -530,7 +530,7 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
             'foo @user0->@user1 bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user0->', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
                 new Token('@user1', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
@@ -539,54 +539,54 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
             'foo @user0->username@user1->name bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user0->username', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('@user1->name', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+                new Token('@user1->name', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] alone with function' => [
             '@user0->getUserName()',
             [
-                new Token('@user0->getUserName()', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] function surrounded' => [
             'foo @user0->getUserName() bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user0->getUserName()', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] function nested' => [
             '@user0->getUserName()@user1->getName()',
             [
-                new Token('@user0->getUserName()', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('@user1->getName()', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+                new Token('@user1->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] function nested surrounded' => [
             'foo @user0->getUserName()@user1->getName() bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user0->getUserName()', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('@user1->getName()', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+                new Token('@user1->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] function nested with function' => [
             '@user0->@user1->getUsername()',
             [
-                new Token('@user0->', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('@user1->getUsername()', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+                new Token('@user1->getUsername()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] function nested with function surrounded' => [
             'foo @user0->@user1->getUsername() bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user0->', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('@user1->getUsername()', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('@user0->', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+                new Token('@user1->getUsername()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];

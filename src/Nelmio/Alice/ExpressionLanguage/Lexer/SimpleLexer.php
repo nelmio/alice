@@ -35,13 +35,20 @@ final class SimpleLexer implements LexerInterface
         '/^(\[\[.*\]\])/' => TokenType::ESCAPED_ARRAY,
         '/^(\[[^\[\]]+\])/' => TokenType::STRING_ARRAY,
         '/^(@@[^\ @]+)/' => TokenType::ESCAPED_REFERENCE_TYPE,
-
-        '/^(\p{L}+[\p{L}\d\._\/]*)/' => TokenType::STRING_TYPE,
-
-        '/^(@[^\ @]+)/' => TokenType::SIMPLE_REFERENCE_TYPE,
+        '/^(@[^\ @]+)/' => 'reference',
         '/^(\$\S+)/' => TokenType::VARIABLE_TYPE,
         '/^([^<\[\d\$@]+)/' => TokenType::STRING_TYPE,
     ];
+
+    /**
+     * @var LexerInterface
+     */
+    private $referenceLexer;
+
+    public function __construct(LexerInterface $referenceLexer)
+    {
+        $this->referenceLexer = $referenceLexer;
+    }
 
     /**
      * {@inheritdoc}
@@ -72,6 +79,16 @@ final class SimpleLexer implements LexerInterface
                     }
 
                     $match = $matches[1];
+                    if ('reference' === $tokenTypeConstant) {
+                        $referenceTokens = $this->referenceLexer->lex($match);
+                        foreach ($referenceTokens as $referenceToken) {
+                            $tokens[] = $referenceToken;
+                            $offset += strlen($referenceToken->getValue());
+                        }
+
+                        break;
+                    }
+
                     $tokens[] = new Token($match, new TokenType($tokenTypeConstant));
                     $offset += strlen($match);
 

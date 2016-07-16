@@ -12,7 +12,9 @@
 namespace Nelmio\Alice\Loader;
 
 
+use Nelmio\Alice\ExpressionLanguage\Lexer\ReferenceLexer;
 use Nelmio\Alice\ExpressionLanguage\Lexer\SimpleLexer;
+use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\EscapedParameterTokenParser;
 use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\FunctionTokenParser;
 use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\ParameterTokenParser;
@@ -195,8 +197,15 @@ final class NativeLoader implements LoaderInterface
         ]);
 
         return new SimpleParser(
-            new SimpleLexer(),
+            $this->getBuiltInLexer(),
             $registry
+        );
+    }
+
+    public function getBuiltInLexer(): LexerInterface
+    {
+        return new SimpleLexer(
+            new ReferenceLexer()
         );
     }
 }
