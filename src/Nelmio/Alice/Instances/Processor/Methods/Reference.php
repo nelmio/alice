@@ -16,13 +16,22 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
 class Reference implements MethodInterface
 {
+    private static $regex = '/^[\',\"]?'
+        .'(?:(?<multi>\d+)x\ )?'
+        .'@(?<reference>[\p{L}\d\_\.\*\/\-]+)'
+        .'(?<sequence>\{(?P<from>\d+)\.\.(?P<to>\d+)\})?'
+        .'(?:\->(?<property>[\p{L}\d_.*\/-]+))?'
+        .'[\',\"]?$'
+        .'/xi'
+    ;
+
     /**
      * @var Collection
      */
     protected $objects;
 
     /**
-     * sets the object collection to handle referential calls
+     * Sets the object collection to handle referential calls.
      *
      * @param Collection $objects
      */
@@ -36,7 +45,10 @@ class Reference implements MethodInterface
      */
     public function canProcess(ProcessableInterface $processable)
     {
-        return is_string($processable->getValue()) && $processable->valueMatches('{^\'?(?:(?<multi>\d+)x )?@(?<reference>[a-z0-9_.*-]+)(?<sequence>\{(?P<from>\d+)\.\.(?P<to>\d+)\})?(?:\->(?<property>[a-z0-9_-]+))?\'?$}i');
+        return
+            is_string($processable->getValue())
+            && $processable->valueMatches(static::$regex)
+        ;
     }
 
     /**
@@ -45,10 +57,14 @@ class Reference implements MethodInterface
     public function process(ProcessableInterface $processable, array $variables)
     {
         $multi = ('' !== $processable->getMatch('multi')) ? (int) $processable->getMatch('multi') : null;
-        $property = !is_null($processable->getMatch('property')) ? $processable->getMatch('property') : null;
-        $sequence = !is_null($processable->getMatch('sequence')) ? $processable->getMatch('sequence') : null;
+        $property = null !== ($processable->getMatch('property')) ? $processable->getMatch('property') : null;
+        $sequence = null !== ($processable->getMatch('sequence')) ? $processable->getMatch('sequence') : null;
+        $reference = null !== $processable->getMatch('escaped_reference')
+            ? $processable->getMatch('escaped_reference')
+            : $processable->getMatch('reference')
+        ;
 
-        if (strpos($reference = $processable->getMatch('reference'), '*')) {
+        if (strpos($reference, '*')) {
             return $this->objects->random($reference, $multi, $property);
         }
 
@@ -68,6 +84,6 @@ class Reference implements MethodInterface
             throw new \UnexpectedValueException('To use multiple references you must use a mask like "'.$processable->getMatch('multi').'x @user*", otherwise you would always get only one item.');
         }
 
-        return $this->objects->find($processable->getMatch('reference'), $property);
+        return $this->objects->find($reference, $property);
     }
 }

@@ -1,0 +1,12 @@
+\Nelmio\Alice\support\models\User:
+    user_template_1 (template):
+        username (unique): <regexify('[A-Z]{1}')>
+        email (unique): <regexify('[A-Z]{1}')>
+        fullname: <word()>
+
+    user_template_2 (template, extends user_template_1):
+        email: <regexify('[A-F]{1}')>
+        fullname (unique): <regexify('[A-Z]{1}')>
+
+    user_{1..26} (extends user_template_2):
+        family_name: <word()>

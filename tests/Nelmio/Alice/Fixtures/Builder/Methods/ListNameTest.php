@@ -12,13 +12,13 @@
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
 /**
- * @covers Nelmio\Alice\Fixtures\Builder\Methods\RangeName
+ * @covers Nelmio\Alice\Fixtures\Builder\Methods\ListName
  */
-class RangeNameTest extends MethodTestCase
+class ListNameTest extends MethodTestCase
 {
     public function setUp()
     {
-        $this->method = new RangeName();
+        $this->method = new ListName();
     }
 
     /**
@@ -34,7 +34,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testCanBuildListFixtures($name)
     {
-        $this->assertCannotBuild($name);
+        $this->assertCanBuild($name);
     }
 
     /**
@@ -43,7 +43,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testCanBuildMalformedListFixtures($name)
     {
-        $this->assertCannotBuild($name);
+        $this->assertCanBuild($name);
     }
 
     /**
@@ -51,7 +51,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testCanBuildSegmentFixtures($name)
     {
-        $this->assertCanBuild($name);
+        $this->assertCannotBuild($name);
     }
 
     /**
@@ -60,7 +60,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testCanBuildDeprecatedSegmentFixtures($name)
     {
-        $this->assertCanBuild($name);
+        $this->assertCannotBuild($name);
     }
 
     /**
@@ -85,7 +85,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testBuildListFixtures($name, $expected)
     {
-        $this->markAsInvalidCase();
+        $this->assertBuiltResultIsTheSame($name, $expected);
     }
 
     /**
@@ -94,7 +94,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testBuildMalformedListFixtures($name, $expected)
     {
-        $this->markAsInvalidCase();
+        $this->assertBuiltResultIsTheSame($name, $expected);
     }
 
     /**
@@ -102,7 +102,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testBuildSegmentFixtures($name, $expected)
     {
-        $this->assertBuiltResultIsTheSame($name, $expected);
+        $this->markAsInvalidCase();
     }
 
     /**
@@ -111,7 +111,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testBuildDeprecatedSegmentFixtures($name, $expected)
     {
-        $this->assertBuiltResultIsTheSame($name, $expected);
+        $this->markAsInvalidCase();
     }
 
     /**

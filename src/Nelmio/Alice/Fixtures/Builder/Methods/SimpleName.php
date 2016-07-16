@@ -20,7 +20,7 @@ class SimpleName implements MethodInterface
      */
     public function canBuild($name)
     {
-        return true;
+        return 1 === preg_match('/^[^\{\}]+$/', $name);
     }
 
     /**

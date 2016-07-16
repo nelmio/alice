@@ -16,19 +16,21 @@ use Nelmio\Alice\Fixtures\Fixture;
 interface MethodInterface
 {
     /**
-     * tests whether this class can build an fixture with the given name
+     * Tests whether this class can build an fixture with the given name.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return bool
      */
     public function canBuild($name);
 
     /**
-     * builds an fixture from the given class, name, and spec
+     * Builds an fixture from the given class, name, and spec.
      *
-     * @param  string    $class
-     * @param  string    $name
-     * @param  array     $spec
+     * @param string $class
+     * @param string $name
+     * @param array  $spec
+     *
      * @return Fixture[]
      */
     public function build($class, $name, array $spec);

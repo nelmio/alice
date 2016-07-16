@@ -18,6 +18,10 @@ Nelmio\Entity\Group:
         owner: '@user1'
 ```
 
+**Warning:** References (e.g. here `group1`) should always be composed of letters, digits, periods (`.`), underscores
+(`_`) and slashes (`/`). Other characters such as `{`, `}`, `(`, `)` are still allowed but hold a special meaning (e.g.
+for [ranged fixtures](complete-reference.md#fixture-ranges)).
+
 Alice also allows you to directly reference objects' properties using the ```@name->property``` notation.
 
 ```yaml
@@ -94,7 +98,7 @@ It is also possible to create a relation to a random object by id:
 ```yaml
 Nelmio\Entity\Group:
     group1:
-        owner: <numberBetween(1, 200)>
+        owner: '<numberBetween(1, 200)>'
 ```
 
 > **Note**: To create a string `@foo` that is not a reference you can escape it
@@ -128,7 +132,7 @@ Nelmio\Entity\Group:
     group1:
         name: Admins
         owner: '@user1'
-        members: 5x @user*
+        members: '5x @user*'
 ```
 
 In this case it will pick 5 fixture objects which have a name matching `user*`.
@@ -137,7 +141,7 @@ You can also randomize the amount by combining it with faker data:
 
 ```yaml
     # ...
-        members: <numberBetween(1, 10)>x @user*
+        members: '<numberBetween(1, 10)>x @user*'
 ```
 
 If the data needs to be static instead, you can use the same syntax as
@@ -166,9 +170,10 @@ You can pass references to providers much like you can pass [variables](#variabl
 ```yaml
 Nelmio\Entity\Group:
     group1:
-        owner: <numberBetween(1, 200)>
+        owner: '<numberBetween(1, 200)>'
+        
     group2:
-        owner: <numberBetween(@group1->owner, 200)>
+        owner: '<numberBetween(@group1->owner, 200)>'
 ```
 
 Next chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)<br />

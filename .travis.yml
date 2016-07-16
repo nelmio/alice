@@ -14,8 +14,6 @@ matrix:
   include:
     - php: '7.0'
       env: COVERAGE='true'
-    - php: hhvm
-      env: COMPOSER_FLAGS='--ignore-platform-reqs'
     - php: '7.0'
       env: SYMFONY_VERSION='2.3.*'
     - php: '7.0'
@@ -25,18 +23,14 @@ matrix:
     - php: '7.0'
       env: SYMFONY_VERSION='3.0.*'
   allow_failures:
-    - php: hhvm
     - php: nightly
 
 install:
+  - phpenv config-rm xdebug.ini
   - |
-    if [ "hhvm" != "$TRAVIS_PHP_VERSION" ]; then
-        phpenv config-rm xdebug.ini;
-    fi;
-  - |
-    if [ "" != "$SYMFONY_VERSION" ]; then
-        composer require --no-update "symfony/symfony:${SYMFONY_VERSION}";
-    fi;
+    if [ -n "$SYMFONY_VERSION" ]; then
+        composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"
+    fi
   - composer install --prefer-dist $COMPOSER_FLAGS
 
 script:
@@ -44,5 +38,5 @@ script:
     if [ -n "$COVERAGE" ]; then
         phpdbg -qrr vendor/bin/phpunit --testdox --verbose
     else
-        vendor/bin/phpunit;
+        vendor/bin/phpunit
     fi;
