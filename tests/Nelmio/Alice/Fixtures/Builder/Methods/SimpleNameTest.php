@@ -12,13 +12,13 @@
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
 /**
- * @covers Nelmio\Alice\Fixtures\Builder\Methods\RangeName
+ * @covers Nelmio\Alice\Fixtures\Builder\Methods\SimpleName
  */
-class RangeNameTest extends MethodTestCase
+class SimpleNameTest extends MethodTestCase
 {
     public function setUp()
     {
-        $this->method = new RangeName();
+        $this->method = new SimpleName();
     }
 
     /**
@@ -26,7 +26,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testCanBuildSimpleFixtures($name)
     {
-        $this->assertCannotBuild($name);
+        $this->assertCanBuild($name);
     }
 
     /**
@@ -51,7 +51,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testCanBuildSegmentFixtures($name)
     {
-        $this->assertCanBuild($name);
+        $this->assertCannotBuild($name);
     }
 
     /**
@@ -60,7 +60,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testCanBuildDeprecatedSegmentFixtures($name)
     {
-        $this->assertCanBuild($name);
+        $this->assertCannotBuild($name);
     }
 
     /**
@@ -102,7 +102,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testBuildSegmentFixtures($name, $expected)
     {
-        $this->assertBuiltResultIsTheSame($name, $expected);
+        $this->markAsInvalidCase();
     }
 
     /**
@@ -111,7 +111,7 @@ class RangeNameTest extends MethodTestCase
      */
     public function testBuildDeprecatedSegmentFixtures($name, $expected)
     {
-        $this->assertBuiltResultIsTheSame($name, $expected);
+        $this->markAsInvalidCase();
     }
 
     /**

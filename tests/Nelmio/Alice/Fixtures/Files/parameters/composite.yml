@@ -1,0 +1,19 @@
+#
+# This file is part of the Alice package.
+#
+#  (c) Nelmio <hello@nelm.io>
+#
+#  For the full copyright and license information, please view the LICENSE
+#  file that was distributed with this source code.
+#
+
+parameters:
+    key1: NaN
+    key2: Bat
+    composite: '<{key1}> <{key2}>!'
+
+Nelmio\Alice\support\models\User:
+    user0:
+        username: '<{composite}>'
+    user1:
+        username: '<{key1}> <{key2}>!'

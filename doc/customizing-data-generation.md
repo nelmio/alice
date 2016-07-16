@@ -11,11 +11,11 @@ Let's turn our static bob user into a randomized entry:
 ```yaml
 Nelmio\Entity\User:
     user{1..10}:
-        username: <username()>
-        fullname: <firstName()> <lastName()>
-        birthDate: <date()>
-        email: <email()>
-        favoriteNumber: <numberBetween(1, 200)>
+        username: '<username()>'
+        fullname: '<firstName()> <lastName()>'
+        birthDate: '<date()>'
+        email: '<email()>'
+        favoriteNumber: '<numberBetween(1, 200)>'
 ```
 
 As you see in the last line, you can also pass arguments to those just as if
@@ -30,10 +30,12 @@ is a detailed yaml example.
 ```yaml
 Nelmio\Entity\User:
     user{1..10}:
-        username: User<identity($fake('numberBetween', 1, 100) / 2 + 5)>
+        username: 'User<identity($fake("numberBetween", 1, 100) / 2 + 5)>'
 ```
 
 In plain PHP fixtures the `$fake` closure is also available.
+
+**Warning**: the usage of the `$fake` closure has been deprecated since in v2.2.0 and will be removed in v3.0.0.
 
 
 ### Localized Fake Data
@@ -72,11 +74,11 @@ if you use the Doctrine persister.
 ```yaml
 Nelmio\Data\Geopoint (local):
     geo1:
-        __construct: [<latitude()>, <longitude()>]
+        __construct: ['<latitude()>', '<longitude()>']
 
 Nelmio\Entity\Location:
     loc{1..100}:
-        name: <city()>
+        name: '<city()>'
         geopoint: '@geo1'
 ```
 
@@ -107,29 +109,29 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Nelmio\Alice\Fixtures;
 
-class LoadFixtureData implements FixtureInterface
+final class LoadFixtureData implements FixtureInterface
 {
+   const NAMES = [
+       'Group A',
+       'Group B',
+       'Group C',
+   ]
+
    public function load(ObjectManager $manager)
    {
-       // pass $this as an additional faker provider to make the "groupName"
+       // Pass $this as an additional faker provider to make the "groupName"
        // method available as a data provider
        Fixtures::load(__DIR__.'/fixtures.yml', $manager, ['providers' => [$this]]);
    }
 
    public function groupName()
    {
-       $names = [
-           'Group A',
-           'Group B',
-           'Group C',
-       ];
-
-       return $names[array_rand($names)];
+       return \Faker\Provider\Base::randomElement(self::NAMES);
    }
 }
 ```
 
-That way you can now use `name: <groupName()>` to generate specific group names.
+That way you can now use `name: '<groupName()>'` to generate specific group names.
    
 #### Add a custom [Faker Provider](https://github.com/fzaninotto/Faker/tree/master/src/Faker/Provider) class
 
@@ -140,14 +142,14 @@ namespace AppBundle\DataFixtures\ORM;
 
 use Faker\Provider\Base as BaseProvider;
 
-class JobProvider extends BaseProvider
+final class JobProvider extends BaseProvider
 {
    /**
     * Sources: {@link http://siliconvalleyjobtitlegenerator.tumblr.com/}
     *
     * @var array List of job titles.
     */
-   private $titleProvider = [
+   const TITLE_PROVIDER = [
        'firstname' => [
            'Audience Recognition',
            'Big Data',
@@ -182,7 +184,7 @@ class JobProvider extends BaseProvider
     *
     * @var array List of job abbreviations.
     */
-   private $abbreviationProvider = [
+   const ABBREVIATION_PROVIDER = [
        'ABATE',
        'ACAD',
        'ACCT',
@@ -192,7 +194,6 @@ class JobProvider extends BaseProvider
        'WKR',
    ];
 
-
    /**
     * @return string Random job title.
     */
@@ -201,26 +202,30 @@ class JobProvider extends BaseProvider
        $names = [
            sprintf(
                '%s %s',
-               self::randomElement($this->titleProvider['firstname']),
-               self::randomElement($this->titleProvider['lastname'])
+               self::randomElement(self::TITLE_PROVIDER['firstname']),
+               self::randomElement(self::TITLE_PROVIDER['lastname'])
            ),
-           self::randomElement($this->titleProvider['fullname']),
+           self::randomElement(self::TITLE_PROVIDER['fullname']),
        ];
+       
        return self::randomElement($names);
    }
+   
    /**
     * @return string Random job abbreviation title
     */
    public function jobAbbreviation()
    {
-       return self::randomElement($this->abbreviationProvider);
+       return self::randomElement(self::ABBREVIATION_PROVIDER);
    }
 }
 ```
 
-You will need to inject a Faker generator instance, which you can get thanks to [`Nelmio\Alice\Instances\Processor\Methods\Faker`](../src/Nelmio/Alice/Instances/Processor/Methods/Faker.php).
+You will need to inject a Faker generator instance, which you can get thanks to
+[`Nelmio\Alice\Instances\Processor\Methods\Faker`](../src/Nelmio/Alice/Instances/Processor/Methods/Faker.php).
 
-Then, inject your provider to the [`Nelmio\Alice\Fixtures\Loader`](../src/Nelmio/Alice/Fixtures/Loader.php) or when calling [`Nelmio\Alice\Fixtures::load()`](../src/Nelmio/Alice/Fixtures.php#L55).
+Then, inject your provider to the [`Nelmio\Alice\Fixtures\Loader`](../src/Nelmio/Alice/Fixtures/Loader.php) or when
+calling [`Nelmio\Alice\Fixtures::load()`](../src/Nelmio/Alice/Fixtures.php#L55).
 
 Next chapter: [Event handling with Processors](processors.md)<br />
 Previous chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)

@@ -89,7 +89,8 @@ class Populator
 
             $value = $property->requiresUnique() ?
                 $this->generateUnique($fixture, $property) :
-                $this->processor->process($property, $fixture->getSetProperties(), $fixture->getValueForCurrent());
+                $this->processor->process($property, $fixture->getSetProperties(), $fixture->getValueForCurrent())
+            ;
 
             foreach ($this->setters as $setter) {
                 if ($setter->canSet($fixture, $object, $key, $value)) {
