@@ -27,7 +27,7 @@ interface ValueResolverInterface
      *
      * @throws ResolutionThrowable
      *
-     * @return ResolvedFixtureSet Set where the arguments of the given fixture will have been resolved.
+     * @return ResolvedValueWithFixtureSet
      */
-    public function resolve($value, FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, array $scope = []): ResolvedFixtureSet;
+    public function resolve($value, FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, array $scope = []): ResolvedValueWithFixtureSet;
 }

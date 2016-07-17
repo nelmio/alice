@@ -12,7 +12,6 @@
 namespace Nelmio\Alice\Generator;
 
 use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 
@@ -23,8 +22,6 @@ use Nelmio\Alice\ParameterBag;
  */
 final class ResolvedFixtureSet
 {
-    use NotClonableTrait;
-
     /**
      * @var ParameterBag
      */
@@ -63,5 +60,12 @@ final class ResolvedFixtureSet
     public function getObjects(): ObjectBag
     {
         return clone $this->objects;
+    }
+
+    public function __clone()
+    {
+        $this->parameters = clone $this->parameters;
+        $this->fixtures = clone $this->fixtures;
+        $this->objects = clone $this->objects;
     }
 }
