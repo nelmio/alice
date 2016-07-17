@@ -18,6 +18,11 @@ namespace Nelmio\Alice\Definition;
 interface MethodCallInterface
 {
     /**
+     * @return static
+     */
+    public function withArguments(array $arguments = null);
+
+    /**
      * @return ServiceReferenceInterface|null No caller means that the caller is the instance of the object itself.
      */
     public function getCaller();

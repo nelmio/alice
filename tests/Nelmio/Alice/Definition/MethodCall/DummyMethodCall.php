@@ -30,6 +30,14 @@ final class DummyMethodCall implements MethodCallInterface
         $this->token = uniqid();
         $this->toString = $toString;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function withArguments(array $arguments = null): self
+    {
+        throw new \BadMethodCallException();
+    }
     
     /**
      * @inheritdoc

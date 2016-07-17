@@ -42,6 +42,14 @@ final class OptionalMethodCall implements MethodCallInterface
     /**
      * @inheritdoc
      */
+    public function withArguments(array $arguments = null): self
+    {
+        throw new \BadMethodCallException();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getCaller()
     {
         return $this->methodCall->getCaller();

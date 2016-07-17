@@ -42,6 +42,14 @@ final class SimpleMethodCall implements MethodCallInterface
     /**
      * @inheritdoc
      */
+    public function withArguments(array $arguments = null): self
+    {
+        return new self($this->method, $arguments);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getCaller()
     {
         return null;

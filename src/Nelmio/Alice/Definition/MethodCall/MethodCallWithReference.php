@@ -59,6 +59,14 @@ final class MethodCallWithReference implements MethodCallInterface
     /**
      * @inheritdoc
      */
+    public function withArguments(array $arguments = null): self
+    {
+        return new self(clone $this->caller, $this->method, $arguments);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getCaller()
     {
         return clone $this->caller;
