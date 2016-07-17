@@ -4,7 +4,6 @@
          backupGlobals="false"
          bootstrap="vendor/autoload.php"
          colors="true"
-         enforceTimeLimit="true"
 >
 
     <testsuites>

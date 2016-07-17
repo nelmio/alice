@@ -43,14 +43,6 @@ final class SpecificationBag
         $this->properties = $properties;
         $this->calls = $calls;
     }
-    
-    public function withConstructor(MethodCallInterface $constructor = null): self
-    {
-        $clone = clone $this;
-        $clone->constructor = $constructor;
-        
-        return $constructor;
-    }
 
     /**
      * @return MethodCallInterface|null
