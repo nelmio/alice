@@ -36,7 +36,8 @@ final class SimpleLexer implements LexerInterface
         '/^(\[[^\[\]]+\])/' => TokenType::STRING_ARRAY,
         '/^(@@[^\ @]+)/' => TokenType::ESCAPED_REFERENCE_TYPE,
         '/^(@[^\ @]+)/' => 'reference',
-        '/^(\$\S+)/' => TokenType::VARIABLE_TYPE,
+        '/^(\$\$\S+)/' => TokenType::ESCAPED_VARIABLE_TYPE,
+        '/^(\$[^\$\ ]+)/' => TokenType::VARIABLE_TYPE,
         '/^([^<\[\d\$@]+)/' => TokenType::STRING_TYPE,
     ];
 
@@ -100,8 +101,9 @@ final class SimpleLexer implements LexerInterface
                 continue;
             }
 
+            /** @var Token|false $lastToken */
             $lastToken = end($tokens);
-            if ($lastToken instanceof Token && $lastToken->getType() === TokenType::STRING_TYPE) {
+            if (false !== $lastToken && $lastToken->getType()->getValue() === TokenType::STRING_TYPE) {
                 $tokens[key($tokens)] = new Token(
                     $lastToken->getValue().$valueFragment,
                     new TokenType(TokenType::STRING_TYPE)

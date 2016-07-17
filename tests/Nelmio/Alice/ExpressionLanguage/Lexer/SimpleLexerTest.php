@@ -18,7 +18,8 @@ use Nelmio\Alice\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Loader\NativeLoader;
 
 /**
- * @covers Nelmio\Alice\Lexer\SimpleLexer
+ * @covers Nelmio\Alice\ExpressionLanguage\Lexer\ReferenceLexer
+ * @covers Nelmio\Alice\ExpressionLanguage\Lexer\SimpleLexer
  */
 class SimpleLexerTest extends \PHPUnit_Framework_TestCase
 {
@@ -622,6 +623,37 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
             [
                 new Token('$username', new TokenType(TokenType::VARIABLE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Variable] empty escaped variable' => [
+            '$$',
+            [
+                new Token('$$', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Variable] empty variable with second member' => [
+            '$ foo',
+            [
+                new Token('$ foo', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Variable] escaped empty variable with second member' => [
+            '$$ foo',
+            [
+                new Token('$$ foo', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Variable] alone with strings' => [
+            '$$username',
+            [
+                new Token('$$username', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+            ],
+        ];
+
+        yield '[String] combine string tokens' => [
+            'foo $$',
+            [
+                new Token('foo $$', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
     }

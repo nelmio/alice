@@ -44,7 +44,7 @@ final class ReferenceLexer implements LexerInterface
 
         throw new ParseException(
             sprintf(
-                'Expected "%s" to be a reference but no matching pattern found for it.',
+                'Expected "%s" to be a reference but no matching pattern could be found.',
                 $value
             )
         );

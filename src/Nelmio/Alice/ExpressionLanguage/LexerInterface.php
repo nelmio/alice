@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\ExpressionLanguage;
 
-use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\Throwable\ParseThrowable;
 
 interface LexerInterface

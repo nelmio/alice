@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -10,8 +10,6 @@
  */
 
 namespace Nelmio\Alice\ExpressionLanguage;
-
-use Nelmio\Alice\ExpressionLanguage\TokenType;
 
 final class Token
 {
@@ -51,6 +49,6 @@ final class Token
 
     public function __toString()
     {
-        return sprintf('(%s) %s', $this->type->__toString(), $this->value);
+        return sprintf('(%s) %s', $this->type->getValue(), $this->value);
     }
 }
