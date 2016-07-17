@@ -1,3 +1,10 @@
+### 2.3.0 (WIP)
+
+#### Features
+
+* Add support for stdClass objects (#425)
+
+
 ### 2.2.2 (2016-07-15)
 
 #### Bugfixes
