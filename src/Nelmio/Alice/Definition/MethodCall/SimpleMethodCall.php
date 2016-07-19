@@ -30,10 +30,10 @@ final class SimpleMethodCall implements MethodCallInterface
     private $arguments;
 
     /**
-     * @param string                   $method
-     * @param ValueInterface[]|mixed[] $arguments
+     * @param string                        $method
+     * @param ValueInterface[]|mixed[]|null $arguments
      */
-    public function __construct(string $method, array $arguments)
+    public function __construct(string $method, array $arguments = null)
     {
         $this->method = $method;
         $this->arguments = $arguments;
@@ -66,7 +66,7 @@ final class SimpleMethodCall implements MethodCallInterface
     /**
      * @inheritdoc
      */
-    public function getArguments(): array 
+    public function getArguments()
     {
         return $this->arguments;
     }

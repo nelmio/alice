@@ -1,0 +1,59 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *  
+ * (c) Nelmio <hello@nelm.io>
+ *  
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Nelmio\Alice\Definition;
+
+use Nelmio\Alice\NotCallableTrait;
+
+class FakeMethodCall implements MethodCallInterface
+{
+    use NotCallableTrait;
+
+    /**
+     * @inheritdoc
+     */
+    public function withArguments(array $arguments = null)
+    {
+        $this->__call();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCaller()
+    {
+        $this->__call();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMethod(): string
+    {
+        $this->__call();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getArguments(): array
+    {
+        $this->__call();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        $this->__call();
+    }
+}

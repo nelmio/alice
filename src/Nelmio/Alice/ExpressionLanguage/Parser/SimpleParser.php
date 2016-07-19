@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser;
 
-use Nelmio\Alice\Definition\Value\ValueList;
+use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
@@ -55,6 +55,6 @@ final class SimpleParser implements ParserInterface
             return $tokens[0];
         }
 
-        return new ValueList($tokens);
+        return new ListValue($tokens);
     }
 }

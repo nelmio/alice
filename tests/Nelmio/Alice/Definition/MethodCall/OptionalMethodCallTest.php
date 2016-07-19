@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Definition\MethodCall;
 
+use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
@@ -56,13 +57,33 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
         $methodCallProphecy->getArguments()->shouldHaveBeenCalledTimes(1);
     }
 
+    public function testImmutableMutator()
+    {
+        $methodCall = new SimpleMethodCall('getUsername', null);
+        $definition = new OptionalMethodCall($methodCall, new OptionalFlag(30));
+
+        $newArguments = [new \stdClass()];
+        $newDefinition = $definition->withArguments($newArguments);
+
+        $this->assertInstanceOf(OptionalMethodCall::class, $newDefinition);
+
+        $this->assertEquals($methodCall->getCaller(), $definition->getCaller());
+        $this->assertEquals(30, $definition->getPercentage());
+        $this->assertEquals($methodCall->getMethod(), $definition->getMethod());
+        $this->assertEquals($methodCall->getArguments(), $definition->getArguments());
+
+        $this->assertEquals($methodCall->getCaller(), $newDefinition->getCaller());
+        $this->assertEquals(30, $newDefinition->getPercentage());
+        $this->assertEquals($methodCall->getMethod(), $newDefinition->getMethod());
+        $this->assertEquals($newArguments, $newDefinition->getArguments());
+    }
+
     /**
      * @expectedException \DomainException
      */
     public function testIsNotClonable()
     {
-        /** @var MethodCallInterface $methodCall */
-        $methodCall = $this->prophesize(MethodCallInterface::class)->reveal();
+        $methodCall = new FakeMethodCall();
         $flag = new OptionalFlag(30);
 
         $definition = new OptionalMethodCall($methodCall, $flag);

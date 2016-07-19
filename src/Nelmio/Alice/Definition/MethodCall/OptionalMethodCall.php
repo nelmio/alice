@@ -44,7 +44,10 @@ final class OptionalMethodCall implements MethodCallInterface
      */
     public function withArguments(array $arguments = null): self
     {
-        throw new \BadMethodCallException();
+        return new self(
+            $this->methodCall->withArguments($arguments),
+            clone $this->flag
+        );
     }
 
     /**
@@ -66,7 +69,7 @@ final class OptionalMethodCall implements MethodCallInterface
     /**
      * @inheritdoc
      */
-    public function getArguments(): array
+    public function getArguments()
     {
         return $this->methodCall->getArguments();
     }

@@ -44,11 +44,11 @@ final class MethodCallWithReference implements MethodCallInterface
     private $stringValue;
 
     /**
-     * @param ServiceReferenceInterface $caller
-     * @param string                    $method
-     * @param ValueInterface[]|mixed[]  $arguments
+     * @param ServiceReferenceInterface     $caller
+     * @param string                        $method
+     * @param ValueInterface[]|mixed[]|null $arguments
      */
-    public function __construct(ServiceReferenceInterface $caller, string $method, array $arguments)
+    public function __construct(ServiceReferenceInterface $caller, string $method, array $arguments = null)
     {
         $this->caller = $caller;
         $this->method = $method;
@@ -83,7 +83,7 @@ final class MethodCallWithReference implements MethodCallInterface
     /**
      * @inheritdoc
      */
-    public function getArguments(): array 
+    public function getArguments()
     {
         return $this->arguments;
     }

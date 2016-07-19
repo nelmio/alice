@@ -38,6 +38,19 @@ final class FunctionCallValue implements ValueInterface
         $this->arguments = $arguments;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getArguments()
+    {
+        return $this->arguments;
+    }
+
     /**
      * @inheritdoc
      */

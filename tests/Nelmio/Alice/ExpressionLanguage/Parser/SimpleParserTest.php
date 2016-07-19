@@ -18,7 +18,7 @@ use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Definition\Value\ParameterValue;
-use Nelmio\Alice\Definition\Value\ValueList;
+use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
@@ -94,7 +94,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         $parsedValue = $parser->parse($value);
 
         $this->assertEquals(
-            new ValueList([
+            new ListValue([
                 'parsed_foo',
                 'parsed_bar',
             ]),
@@ -193,7 +193,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[X] parameter, function, identity and escaped' => [
             '<{param}><function()><(echo("hello"))><<escaped_value>>',
-            new ValueList([
+            new ListValue([
                 new ParameterValue('param'),
                 new FunctionCallValue('function'),
                 new FunctionCallValue('identity', ['echo("hello")']),
@@ -203,7 +203,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         yield '[X] nested' => [
             '<{value_<{nested_param}>}>',
             new ParameterValue(
-                new ValueList([
+                new ListValue([
                     'value_',
                     new ParameterValue('nested_param'),
                 ])
@@ -211,9 +211,9 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[X] nested escape' => [
             '<{value_<<{nested_param}>>}>',
-            new ValueList([
+            new ListValue([
                 new ParameterValue(
-                    new ValueList([
+                    new ListValue([
                         'value_',
                         '<nested_param>',
                     ])
@@ -222,7 +222,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[X] surrounded' => [
             'foo <function()> bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new FunctionCallValue('function'),
                 ' bar',
@@ -230,7 +230,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[X] surrounded - escaped' => [
             'foo <<escaped_value>> bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 '<escaped_value>',
                 ' bar',
@@ -238,10 +238,10 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[X] surrounded - nested' => [
             'foo <{value_<{nested_param}>}> bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new ParameterValue(
-                    new ValueList([
+                    new ListValue([
                         'value_',
                         new ParameterValue('nested_param'),
                     ])
@@ -251,10 +251,10 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[X] surrounded - nested escape' => [
             'foo <{value_<<{nested_param}>>}> bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new ParameterValue(
-                    new ValueList([
+                    new ListValue([
                         'value_',
                         '<nested_param>',
                     ])
@@ -281,7 +281,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] string array with right member' => [
             '10x @user bar',
-            new ValueList([
+            new ListValue([
                 new DynamicArrayValue(
                     '10',
                     new FixtureReferenceValue('user')
@@ -311,13 +311,13 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] escaped array' => [
             '[[X]]',
-            new ValueList([
+            new ListValue([
                 '[X]'
             ]),
         ];
         yield '[Array] malformed escaped array 1' => [
             '[[X]',
-            new ValueList([
+            new ListValue([
                 [
                     '[X'
                 ]
@@ -325,7 +325,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] malformed escaped array 1' => [
             '[X]]',
-            new ValueList([
+            new ListValue([
                 [
                     'X]'
                 ]
@@ -333,7 +333,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] surrounded escaped array' => [
             'foo [[X]] bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 '[X]',
                 ' bar',
@@ -341,7 +341,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] surrounded escaped array with param' => [
             'foo [[X]] yo <{param}> bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 '[X]',
                 ' yo ',
@@ -351,7 +351,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] simple string array' => [
             '[@user->name, @group->getName()]',
-            new ValueList([
+            new ListValue([
                 [
                     new FixturePropertyValue(
                         new FixtureReferenceValue('user'),
@@ -375,7 +375,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] with negative number' => [
             '-50%? Y',
-            new ValueList([
+            new ListValue([
                 '-',
                 new OptionalValue(
                     '50',
@@ -407,7 +407,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] complete with negative number' => [
             '-50%? Y: Z',
-            new ValueList([
+            new ListValue([
                 '-',
                 new OptionalValue(
                     '80',
@@ -418,7 +418,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] complete with float' => [
             '0.5%? Y: Z',
-            new ValueList([
+            new ListValue([
                 new OptionalValue(
                     '0.5',
                     'Y',
@@ -428,7 +428,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] complete with <X>' => [
             '<{dummy}>%? Y: Z',
-            new ValueList([
+            new ListValue([
                 new OptionalValue(
                     new ParameterValue('dummy'),
                     'Y',
@@ -438,7 +438,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] nominal with left member' => [
             'foo 80%? Y',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new OptionalValue(
                     '80',
@@ -448,7 +448,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] with negative number and left member' => [
             'foo -50%? Y',
-            new ValueList([
+            new ListValue([
                 'foo -',
                 new OptionalValue(
                     '50',
@@ -458,7 +458,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] with float and left member' => [
             'foo 0.5%? Y',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new OptionalValue(
                     '0.5',
@@ -468,7 +468,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] with <X> and left member' => [
             'foo <{dummy}>%? Y',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new OptionalValue(
                     new ParameterValue('dummy'),
@@ -478,7 +478,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] complete with left member' => [
             'foo 80%? Y: Z',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new OptionalValue(
                     '80',
@@ -489,7 +489,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] complete with negative number and left member' => [
             'foo -50%? Y: Z',
-            new ValueList([
+            new ListValue([
                 'foo -',
                 new OptionalValue(
                     '50',
@@ -500,7 +500,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] complete with float and left member' => [
             'foo 0.5%? Y: Z',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new OptionalValue(
                     '0.5',
@@ -511,7 +511,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] complete with <X> and left member' => [
             'foo <{dummy}>%? Y: Z',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new OptionalValue(
                     new ParameterValue('dummy'),
@@ -534,7 +534,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] with first member containing a string' => [
             '80%? foo bar',
-            new ValueList([
+            new ListValue([
                 new OptionalValue(
                     '80',
                     'foo bar'
@@ -543,7 +543,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] with first member containing a space and second member' => [
             '80%? foo bar: baz',
-            new ValueList([
+            new ListValue([
                 new OptionalValue(
                     '80',
                     'foo bar',
@@ -553,7 +553,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] with first member containing a space and second member too' => [
             '80%? foo bar: baz faz',
-            new ValueList([
+            new ListValue([
                 new OptionalValue(
                     '80',
                     'foo bar',
@@ -563,7 +563,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] with second member containing a space' => [
             '80%? foo: bar baz',
-            new ValueList([
+            new ListValue([
                 new OptionalValue(
                     '80',
                     'foo',
@@ -585,7 +585,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] surrounded with params' => [
             'foo 80%? <{dummy}>: <another()> baz',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new OptionalValue(
                     '80%',
@@ -627,21 +627,21 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] left with strings' => [
             'foo @user0',
-            new ValueList([
+            new ListValue([
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new FixtureReferenceValue('user0'),
             ]),
         ];
         yield '[Reference] right with strings' => [
             '@user0 bar',
-            new ValueList([
+            new ListValue([
                 new FixtureReferenceValue('user0'),
                 ' bar',
             ]),
         ];
         yield '[Reference] alone with prop' => [
             '@user0->username',
-            new ValueList([
+            new ListValue([
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user0'),
                     'username'
@@ -650,7 +650,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] left with prop' => [
             'foo @user0->username',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user0'),
@@ -660,7 +660,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] right with prop' => [
             '@user0->username bar',
-            new ValueList([
+            new ListValue([
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user0'),
                     'username'
@@ -670,14 +670,14 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] with nested' => [
             '@user0@user1',
-            new ValueList([
+            new ListValue([
                 new FixtureReferenceValue('user0'),
                 new FixtureReferenceValue('user1'),
             ]),
         ];
         yield '[Reference] with nested surrounded' => [
             'foo @user0@user1 bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new FixtureReferenceValue('user0'),
                 new FixtureReferenceValue('user1'),
@@ -695,7 +695,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] with successive with prop surrounded' => [
             'foo @user0->username@user1->name bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user0'),
@@ -710,7 +710,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] alone with function' => [
             '@user0->getUserName()',
-            new ValueList([
+            new ListValue([
                 new FixtureMethodCallValue(
                     new FixtureReferenceValue('user0'),
                     new FunctionCallValue('getUserName')
@@ -719,7 +719,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] function surrounded' => [
             'foo @user0->getUserName() bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new FixtureMethodCallValue(
                     new FixtureReferenceValue('user0'),
@@ -730,7 +730,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] function nested' => [
             '@user0->getUserName()@user1->getName()',
-            new ValueList([
+            new ListValue([
                 new FixtureMethodCallValue(
                     new FixtureReferenceValue('user0'),
                     new FunctionCallValue('getUserName')
@@ -743,7 +743,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] function nested surrounded' => [
             'foo @user0->getUserName()@user1->getName() bar',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new FixtureMethodCallValue(
                     new FixtureReferenceValue('user0'),
@@ -776,20 +776,20 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Variable] alone' => [
             '$username',
-            new ValueList([
+            new ListValue([
                 new VariableValue('username'),
             ]),
         ];
         yield '[Variable] left' => [
             'foo $username',
-            new ValueList([
+            new ListValue([
                 'foo ',
                 new VariableValue('username'),
             ]),
         ];
         yield '[Variable] right' => [
             '$username bar',
-            new ValueList([
+            new ListValue([
                 new VariableValue('username'),
                 ' bar',
             ]),
