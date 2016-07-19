@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
 
-use Nelmio\Alice\ExpressionLanguage\ChainableTokenParserInterface;
+use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
@@ -22,7 +22,7 @@ final class EscapedArrayTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::ESCAPED_ARRAY;
+        return $token->getType()->getValue() === TokenType::ESCAPED_ARRAY_TYPE;
     }
 
     /**
@@ -34,6 +34,6 @@ final class EscapedArrayTokenParser implements ChainableTokenParserInterface
     {
         $value = $token->getValue();
 
-        return substr($value, 1, strlen($value) - 3);
+        return substr($value, 1, strlen($value) - 2);
     }
 }

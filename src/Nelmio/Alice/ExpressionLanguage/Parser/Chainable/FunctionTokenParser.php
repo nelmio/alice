@@ -24,7 +24,7 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::FUNCTION_TYPE;
+        return $token->getType()->getValue() === TokenType::FUNCTION_TYPE;
     }
 
     /**
@@ -46,7 +46,10 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
         }
 
         $function = $matches['function'];
-        $arguments = $this->parseArguments($this->parser, $matches['arguments']);
+        $arguments = ('identity' === $function)
+            ? [$matches['arguments']]
+            : $this->parseArguments($this->parser, $matches['arguments'])
+        ;
 
         return new FunctionCallValue($function, $arguments);
     }

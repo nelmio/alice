@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage;
+namespace Nelmio\Alice\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\Throwable\ParseThrowable;
 
 /**

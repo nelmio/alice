@@ -15,21 +15,29 @@ use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
-final class StringTokenParser implements ChainableTokenParserInterface
+final class EscapedTokenParser implements ChainableTokenParserInterface
 {
+    const SUPPORTED_TYPES = [
+        TokenType::ESCAPED_ARROW_TYPE => true,
+        TokenType::ESCAPED_REFERENCE_TYPE => true,
+        TokenType::ESCAPED_VARIABLE_TYPE => true,
+    ];
+
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::STRING_TYPE;
+        return isset(self::SUPPORTED_TYPES[$token->getType()->getValue()]);
     }
 
     /**
-     * @inheritdoc
+     * Parses '<<', '@@'...
+     *
+     * {@inheritdoc}
      */
-    public function parse(Token $token)
+    public function parse(Token $token): string
     {
-        return $token->getValue();
+        return $token->getValue()[0];
     }
 }

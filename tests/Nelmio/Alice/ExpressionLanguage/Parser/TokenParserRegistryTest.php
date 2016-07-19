@@ -11,9 +11,9 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser;
 
-use Nelmio\Alice\ExpressionLanguage\ChainableTokenParserInterface;
+use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
-use Nelmio\Alice\ExpressionLanguage\TokenParserInterface;
+use Nelmio\Alice\ExpressionLanguage\Parser\TokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 use Prophecy\Argument;
 

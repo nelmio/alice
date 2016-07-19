@@ -22,7 +22,7 @@ final class IdentityTokenParser extends AbstractChainableParserAwareParser
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::IDENTITY_TYPE;
+        return $token->getType()->getValue() === TokenType::IDENTITY_TYPE;
     }
 
     /**

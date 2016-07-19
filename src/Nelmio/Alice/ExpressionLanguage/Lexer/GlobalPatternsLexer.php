@@ -2,9 +2,9 @@
 
 /*
  * This file is part of the Alice package.
- *
+ *  
  * (c) Nelmio <hello@nelm.io>
- *
+ *  
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -16,21 +16,15 @@ use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
-final class ReferenceLexer implements LexerInterface
+final class GlobalPatternsLexer implements LexerInterface
 {
     const PATTERNS = [
-        '/^(@[^\ @]+\{\d+\.\.\d+\})/' => TokenType::RANGE_REFERENCE_TYPE,
-        '/^(@[^\ @]+\{.*,.*})/' => TokenType::LIST_REFERENCE_TYPE,
-        '/^(@.*\*)/' => TokenType::WILDCARD_REFERENCE_TYPE,
-        '/^(@.*->\S+\(\))/' => TokenType::METHOD_REFERENCE_TYPE,
-        '/^(@.*->[^\(\)\ ]+)/' => TokenType::PROPERTY_REFERENCE_TYPE,
-        '/^(@.*->.*)/' => null,
-        '/^(@\S+)/' => TokenType::SIMPLE_REFERENCE_TYPE,
+        '/^((?:\d+|<.*>)x .*)/' => TokenType::DYNAMIC_ARRAY_TYPE,
+        '/^.*(?:\d+|<.*>)x .*/' => null,
+        '/^([^<>\[\%\$@]+)$/' => TokenType::STRING_TYPE,
     ];
 
     /**
-     * Lex a value with the mask "@X" where X is a valid possible reference
-     *
      * {@inheritdoc}
      *
      * @throws LexException

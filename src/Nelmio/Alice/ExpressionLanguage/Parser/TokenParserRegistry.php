@@ -12,11 +12,9 @@
 namespace Nelmio\Alice\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Exception\ExpressionLanguage\ParserNotFoundException;
-use Nelmio\Alice\ExpressionLanguage\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
-use Nelmio\Alice\ExpressionLanguage\TokenParserInterface;
 
 final class TokenParserRegistry implements TokenParserInterface, ParserAwareInterface
 {

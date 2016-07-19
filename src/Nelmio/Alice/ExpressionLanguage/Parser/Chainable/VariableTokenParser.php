@@ -11,29 +11,26 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
 
-use Nelmio\Alice\ExpressionLanguage\ChainableTokenParserInterface;
+use Nelmio\Alice\Definition\Value\VariableValue;
+use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
-final class EscapedParameterTokenParser implements ChainableTokenParserInterface
+final class VariableTokenParser implements ChainableTokenParserInterface
 {
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::ESCAPED_PARAMETER_TYPE;
+        return $token->getType()->getValue() === TokenType::VARIABLE_TYPE;
     }
 
     /**
-     * Parses '<<param>>' into '<param>'.
-     *
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function parse(Token $token): string
+    public function parse(Token $token)
     {
-        $value = $token->getValue();
-
-        return substr($value, 1, strlen($value) - 3);
+        return new VariableValue(substr($token->getValue(), 1));
     }
 }

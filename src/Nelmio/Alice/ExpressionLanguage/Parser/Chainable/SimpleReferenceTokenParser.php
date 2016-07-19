@@ -11,25 +11,30 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
 
+use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
-final class StringTokenParser implements ChainableTokenParserInterface
+final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
 {
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::STRING_TYPE;
+        return $token->getType()->getValue() === TokenType::SIMPLE_REFERENCE_TYPE;
     }
 
     /**
-     * @inheritdoc
+     * Parses "10x @user*", "<randomNumber(0, 10)x @user<{param}>*", etc.
+     *
+     * {@inheritdoc}
      */
-    public function parse(Token $token)
+    public function parse(Token $token): FixtureReferenceValue
     {
-        return $token->getValue();
+        $value = $token->getValue();
+
+        return new FixtureReferenceValue(substr($value, 1));
     }
 }

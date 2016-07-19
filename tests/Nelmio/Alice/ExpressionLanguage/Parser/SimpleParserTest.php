@@ -20,13 +20,12 @@ use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\VariableValue;
-use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
-use Nelmio\Alice\ExpressionLanguage\TokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Loader\NativeLoader;
+use Nelmio\Alice\Throwable\ParseThrowable;
 use Prophecy\Argument;
 
 /**
@@ -85,7 +84,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         $lexer = $lexerProphecy->reveal();
 
         $tokenParserProphecy = $this->prophesize(TokenParserInterface::class);
-        $tokenParserProphecy->parse($token1)->willReturn('parsed_foo');
+        $tokenParserProphecy->parse($token1)->willReturn(new ParameterValue('parsed_foo'));
         $tokenParserProphecy->parse($token2)->willReturn('parsed_bar');
         /** @var TokenParserInterface $tokenParser */
         $tokenParser = $tokenParserProphecy->reveal();
@@ -95,7 +94,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new ListValue([
-                'parsed_foo',
+                new ParameterValue('parsed_foo'),
                 'parsed_bar',
             ]),
             $parsedValue
@@ -137,12 +136,19 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
             if (null === $expected) {
                 $this->fail(
                     sprintf(
-                        'Expected exception to be thrown for "%s".',
-                        $value
+                        'Expected exception to be thrown for "%s", got "%s" instead.',
+                        $value,
+                        var_export($actual, true)
                     )
                 );
             }
-        } catch (ParseException $exception) {
+        } catch (\InvalidArgumentException $exception) {
+            if (null === $expected) {
+                return;
+            }
+
+            throw $exception;
+        } catch (ParseThrowable $exception) {
             if (null === $expected) {
                 return;
             }
@@ -166,61 +172,144 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
             'dummy',
         ];
 
-        // Parameters or functions
-        yield '[X] parameter alone' => [
+        // Escaped arrow
+        yield '[Escaped arrow] nominal (1)' => [
+            '<<',
+            '<',
+        ];
+        yield '[Escaped arrow] nominal (2)' => [
+            '>>',
+            '>',
+        ];
+        yield '[Escaped arrow] parameter' => [
+            '<<{param}>>',
+            '<{param}>',
+        ];
+        yield '[Escaped arrow] function' => [
+            '<<f()>>',
+            '<f()>',
+        ];
+        yield '[Escaped arrow] surrounded' => [
+            'foo << bar >> baz',
+            'foo < bar > baz',
+        ];
+
+        // Parameters
+        yield '[Parameter] nominal' => [
             '<{dummy_param}>',
             new ParameterValue('dummy_param'),
         ];
-        yield '[X] function alone' => [
+        yield '[Parameter] unbalanced (1)' => [
+            '<{dummy_param>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (1)' => [
+            '<<{dummy_param>>',
+            '<{dummy_param>',
+        ];
+        yield '[Parameter] unbalanced (2)' => [
+            '<{dummy_param',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (2)' => [
+            '<<{dummy_param',
+            '<{dummy_param',
+        ];
+        yield '[Parameter] unbalanced (3)' => [
+            '<dummy_param}>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (3)' => [
+            '<<dummy_param}>>',
+            '<dummy_param}>',
+        ];
+        yield '[Parameter] unbalanced (4)' => [
+            'dummy_param}>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (4)' => [
+            'dummy_param}>>',
+            'dummy_param}>',
+        ];
+        yield '[Parameter] successive' => [
+            '<{param1}><{param2}>',
+            new ListValue([
+                new ParameterValue('param1'),
+                new ParameterValue('param2'),
+            ]),
+        ];
+        yield '[Parameter] nested' => [
+            '<{value_<{nested_param}>}>',
+            null,
+        ];
+        yield '[Parameter] nested escape' => [
+            '<{value_<<{nested_param}>>}>',
+            null,
+        ];
+        yield '[Parameter] surrounded - nested' => [
+            'foo <{value_<{nested_param}>}> bar',
+            null,
+        ];
+
+        // Functions
+        yield '[Function] nominal' => [
             '<function()>',
             new FunctionCallValue('function'),
         ];
-        yield '[X] identity alone' => [
-            '<(function())>',
-            new FunctionCallValue('identity', ['function()']),
+        yield '[Function] unbalanced (1)' => [
+            '<function()',
+            null,
         ];
-        yield '[X] malformed alone 1' => [
+        yield '[Function] escaped unbalanced (1)' => [
+            '<<function()',
+            '<function()',
+        ];
+        yield '[Function] unbalanced (2)' => [
+            'function()>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (2)' => [
+            'function()>>',
+            'function()>',
+        ];
+        yield '[Function] unbalanced (3)' => [
             '<function(>',
             null,
         ];
-        yield '[X] malformed alone 2' => [
-            '<function>',
+        yield '[Function] escaped unbalanced (3)' => [
+            '<<function(>>',
+            '<function(>',
+        ];
+        yield '[Function] unbalanced (4)' => [
+            '<function)>',
             null,
         ];
-        yield '[X] escaped' => [
-            '<<escaped_value>>',
-            '<escaped_value>',
+        yield '[Function] escaped unbalanced (4)' => [
+            '<<function)>>',
+            '<function)>',
         ];
-        yield '[X] parameter, function, identity and escaped' => [
-            '<{param}><function()><(echo("hello"))><<escaped_value>>',
+        yield '[Function] successive functions' => [
+            '<f()><g()>',
+            null,
+        ];
+        yield '[Function] correct successive functions' => [
+            '<f()> <g()>',
             new ListValue([
-                new ParameterValue('param'),
-                new FunctionCallValue('function'),
-                new FunctionCallValue('identity', ['echo("hello")']),
-                '<escaped_value>',
+                new FunctionCallValue('f'),
+                ' ',
+                new FunctionCallValue('g'),
             ]),
         ];
-        yield '[X] nested' => [
-            '<{value_<{nested_param}>}>',
-            new ParameterValue(
-                new ListValue([
-                    'value_',
-                    new ParameterValue('nested_param'),
-                ])
+        yield '[Function] nested functions' => [
+            '<f(<g()>)>',
+            new FunctionCallValue(
+                'f',
+                [
+                    new FunctionCallValue('g'),
+                ]
             ),
         ];
-        yield '[X] nested escape' => [
-            '<{value_<<{nested_param}>>}>',
-            new ListValue([
-                new ParameterValue(
-                    new ListValue([
-                        'value_',
-                        '<nested_param>',
-                    ])
-                ),
-            ]),
-        ];
-        yield '[X] surrounded' => [
+        yield '[Function] nominal surrounded' => [
             'foo <function()> bar',
             new ListValue([
                 'foo ',
@@ -228,39 +317,37 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
                 ' bar',
             ]),
         ];
-        yield '[X] surrounded - escaped' => [
-            'foo <<escaped_value>> bar',
-            new ListValue([
-                'foo ',
-                '<escaped_value>',
-                ' bar',
-            ]),
+
+        yield '[Function] nominal identity' => [
+            '<(function())>',
+            new FunctionCallValue(
+                'identity',
+                [
+                    'function()'
+                ]
+            ),
         ];
-        yield '[X] surrounded - nested' => [
-            'foo <{value_<{nested_param}>}> bar',
-            new ListValue([
-                'foo ',
-                new ParameterValue(
-                    new ListValue([
-                        'value_',
-                        new ParameterValue('nested_param'),
-                    ])
-                ),
-                ' bar',
-            ]),
+        yield '[Function] identity with args' => [
+            '<(function(echo("hello")))>',
+            new FunctionCallValue(
+                'identity',
+                [
+                    'function(echo("hello"))'
+                ]
+            ),
         ];
-        yield '[X] surrounded - nested escape' => [
-            'foo <{value_<<{nested_param}>>}> bar',
-            new ListValue([
-                'foo ',
-                new ParameterValue(
-                    new ListValue([
-                        'value_',
-                        '<nested_param>',
-                    ])
-                ),
-                ' bar',
-            ]),
+        yield '[Function] identity with params' => [
+            '<(function(echo(<{param}>))>',
+            new FunctionCallValue(
+                'identity',
+                [
+                    'function(echo(<{param}>)'
+                ]
+            ),
+        ];
+        yield '[X] parameter, function, identity and escaped' => [
+            '<{param}><function()><(echo("hello"))><<escaped_value>>',
+            null,
         ];
 
         // Arrays
@@ -281,13 +368,13 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] string array with right member' => [
             '10x @user bar',
-            new ListValue([
-                new DynamicArrayValue(
-                    '10',
-                    new FixtureReferenceValue('user')
-                ),
-                ' bar',
-            ]),
+            new DynamicArrayValue(
+                '10',
+                new ListValue([
+                    new FixtureReferenceValue('user'),
+                    ' bar',
+                ])
+            ),
         ];
         yield '[Array] string array with P1' => [
             '<dummy>x 50x <hello>',
@@ -311,9 +398,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] escaped array' => [
             '[[X]]',
-            new ListValue([
-                '[X]'
-            ]),
+            '[X]',
         ];
         yield '[Array] malformed escaped array 1' => [
             '[[X]',
@@ -326,43 +411,34 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         yield '[Array] malformed escaped array 1' => [
             '[X]]',
             new ListValue([
-                [
-                    'X]'
-                ]
+                ['X'],
+                ']',
             ]),
         ];
         yield '[Array] surrounded escaped array' => [
             'foo [[X]] bar',
-            new ListValue([
-                'foo ',
-                '[X]',
-                ' bar',
-            ]),
+            'foo [X] bar',
         ];
         yield '[Array] surrounded escaped array with param' => [
             'foo [[X]] yo <{param}> bar',
             new ListValue([
-                'foo ',
-                '[X]',
-                ' yo ',
+                'foo [X] yo ',
                 new ParameterValue('param'),
                 ' bar',
             ]),
         ];
         yield '[Array] simple string array' => [
             '[@user->name, @group->getName()]',
-            new ListValue([
-                [
-                    new FixturePropertyValue(
-                        new FixtureReferenceValue('user'),
-                        'name'
-                    ),
-                    new FixtureMethodCallValue(
-                        new FixtureReferenceValue('group'),
-                        new FunctionCallValue('getName')
-                    ),
-                ]
-            ]),
+            [
+                new FixturePropertyValue(
+                    new FixtureReferenceValue('user'),
+                    'name'
+                ),
+                new FixtureMethodCallValue(
+                    new FixtureReferenceValue('group'),
+                    new FunctionCallValue('getName')
+                ),
+            ],
         ];
 
         // Optional
@@ -410,7 +486,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
             new ListValue([
                 '-',
                 new OptionalValue(
-                    '80',
+                    '50',
                     'Y',
                     'Z'
                 ),
@@ -418,23 +494,19 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] complete with float' => [
             '0.5%? Y: Z',
-            new ListValue([
-                new OptionalValue(
-                    '0.5',
-                    'Y',
-                    'Z'
-                )
-            ]),
+            new OptionalValue(
+                '0.5',
+                'Y',
+                'Z'
+            )
         ];
         yield '[Optional] complete with <X>' => [
             '<{dummy}>%? Y: Z',
-            new ListValue([
-                new OptionalValue(
-                    new ParameterValue('dummy'),
-                    'Y',
-                    'Z'
-                )
-            ]),
+            new OptionalValue(
+                new ParameterValue('dummy'),
+                'Y',
+                'Z'
+            ),
         ];
         yield '[Optional] nominal with left member' => [
             'foo 80%? Y',
@@ -522,11 +594,11 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] without members' => [
             '80%? ',
-            '80%? ',
+            null,
         ];
         yield '[Optional] without members 2' => [
             '80%?',
-            '80%?',
+            null,
         ];
         yield '[Optional] without first member but with second' => [
             '80%? :Z',
@@ -534,22 +606,18 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] with first member containing a string' => [
             '80%? foo bar',
-            new ListValue([
-                new OptionalValue(
-                    '80',
-                    'foo bar'
-                )
-            ]),
+            new OptionalValue(
+                '80',
+                'foo bar'
+            ),
         ];
         yield '[Optional] with first member containing a space and second member' => [
             '80%? foo bar: baz',
-            new ListValue([
-                new OptionalValue(
-                    '80',
-                    'foo bar',
-                    'baz'
-                )
-            ]),
+            new OptionalValue(
+                '80',
+                'foo bar',
+                'baz'
+            ),
         ];
         yield '[Optional] with first member containing a space and second member too' => [
             '80%? foo bar: baz faz',
@@ -557,8 +625,9 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
                 new OptionalValue(
                     '80',
                     'foo bar',
-                    'baz faz'
-                )
+                    'baz'
+                ),
+                ' faz',
             ]),
         ];
         yield '[Optional] with second member containing a space' => [
@@ -567,8 +636,9 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
                 new OptionalValue(
                     '80',
                     'foo',
-                    'bar baz'
-                )
+                    'bar'
+                ),
+                ' baz',
             ]),
         ];
         yield '[Optional] with second member without the space after semicolon' => [
@@ -577,18 +647,18 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] without space after quantifier' => [
             '80%?foo bar',
-            '80%?foo bar',
+            null,
         ];
         yield '[Optional] without space after quantifier with second member' => [
             '80%?foo: bar baz',
-            '80%?foo: bar baz',
+            null,
         ];
         yield '[Optional] surrounded with params' => [
             'foo 80%? <{dummy}>: <another()> baz',
             new ListValue([
                 'foo ',
                 new OptionalValue(
-                    '80%',
+                    '80',
                     new ParameterValue('dummy'),
                     new FunctionCallValue('another')
                 ),
@@ -603,7 +673,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         // References
         yield '[Reference] empty reference' => [
             '@',
-            '@',
+            null,
         ];
         yield '[Reference] empty escaped reference' => [
             '@@',
@@ -611,11 +681,11 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] empty reference with second member' => [
             '@ foo',
-            '@ foo',
+            null,
         ];
         yield '[Reference] escaped empty reference with second member' => [
             '@@ foo',
-            '@@ foo',
+            '@ foo',
         ];
         yield '[Reference] alone with strings' => [
             '@user0',
@@ -628,7 +698,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] left with strings' => [
             'foo @user0',
             new ListValue([
-                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                'foo ',
                 new FixtureReferenceValue('user0'),
             ]),
         ];
@@ -641,12 +711,10 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] alone with prop' => [
             '@user0->username',
-            new ListValue([
-                new FixturePropertyValue(
-                    new FixtureReferenceValue('user0'),
-                    'username'
-                ),
-            ]),
+            new FixturePropertyValue(
+                new FixtureReferenceValue('user0'),
+                'username'
+            ),
         ];
         yield '[Reference] left with prop' => [
             'foo @user0->username',
@@ -710,12 +778,10 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] alone with function' => [
             '@user0->getUserName()',
-            new ListValue([
-                new FixtureMethodCallValue(
-                    new FixtureReferenceValue('user0'),
-                    new FunctionCallValue('getUserName')
-                ),
-            ]),
+            new FixtureMethodCallValue(
+                new FixtureReferenceValue('user0'),
+                new FunctionCallValue('getUserName')
+            ),
         ];
         yield '[Reference] function surrounded' => [
             'foo @user0->getUserName() bar',
@@ -768,17 +834,15 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
         // Variables
         yield '[Variable] empty variable' => [
             '$',
-            '$',
+            null,
         ];
         yield '[Variable] empty variable with second member' => [
             '$ foo',
-            '$ foo',
+            null,
         ];
         yield '[Variable] alone' => [
             '$username',
-            new ListValue([
-                new VariableValue('username'),
-            ]),
+            new VariableValue('username'),
         ];
         yield '[Variable] left' => [
             'foo $username',
@@ -798,22 +862,17 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
             '$$',
             '$',
         ];
-        yield '[Variable] empty variable with second member' => [
-            '$ foo',
-            '$ foo',
-        ];
         yield '[Variable] escaped empty variable with second member' => [
             '$$ foo',
-            '$$ foo',
+            '$ foo',
         ];
         yield '[Variable] alone with strings' => [
             '$$username',
             '$username',
         ];
-
-        yield '[String] combine string tokens' => [
-            'foo $$',
-            'foo $$',
-        ];
     }
+
+    //TODO: @user->username->fluent
+    //TODO: @user->getUsername()->fluent()
+    //TODO: @user*...
 }

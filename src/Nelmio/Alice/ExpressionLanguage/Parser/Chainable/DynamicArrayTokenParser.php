@@ -23,7 +23,7 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::DYNAMIC_ARRAY_TYPE;
+        return $token->getType()->getValue() === TokenType::DYNAMIC_ARRAY_TYPE;
     }
 
     /**

@@ -12,17 +12,18 @@
 namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
 
 use Nelmio\Alice\Definition\Value\ParameterValue;
+use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
-final class ParameterTokenParser extends AbstractChainableParserAwareParser
+final class ParameterTokenParser implements ChainableTokenParserInterface
 {
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::PARAMETER_TYPE;
+        return $token->getType()->getValue() === TokenType::PARAMETER_TYPE;
     }
 
     /**
@@ -32,13 +33,9 @@ final class ParameterTokenParser extends AbstractChainableParserAwareParser
      */
     public function parse(Token $token): ParameterValue
     {
-        parent::parse($token);
-
         $value = $token->getValue();
         $paramKey = substr($value, 2, strlen($value) - 4);
 
-        return new ParameterValue(
-            $this->parser->parse($paramKey)
-        );
+        return new ParameterValue($paramKey);
     }
 }

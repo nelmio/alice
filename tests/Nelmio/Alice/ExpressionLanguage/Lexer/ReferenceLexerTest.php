@@ -34,8 +34,8 @@ class ReferenceLexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Expected "@ " to be a reference but no matching pattern could be found.
+     * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\LexException
+     * @expectedExceptionMessage Could not lex the value "@ ".
      */
     public function testThrowExceptionIfNoMatchingPatternFound()
     {

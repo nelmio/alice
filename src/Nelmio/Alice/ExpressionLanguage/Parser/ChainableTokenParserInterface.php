@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage;
+namespace Nelmio\Alice\ExpressionLanguage\Parser;
+
+use Nelmio\Alice\ExpressionLanguage\Token;
 
 interface ChainableTokenParserInterface extends TokenParserInterface
 {

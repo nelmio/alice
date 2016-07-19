@@ -11,20 +11,20 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Exception\ExpressionLanguage\LexException;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Loader\NativeLoader;
+use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\ExpressionLanguage\Lexer\ReferenceLexer
- * @covers Nelmio\Alice\ExpressionLanguage\Lexer\SimpleLexer
+ * @covers Nelmio\Alice\ExpressionLanguage\Lexer\LexerRegistry
  */
-class SimpleLexerTest extends \PHPUnit_Framework_TestCase
+class LexerRegistryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SimpleLexer
+     * @var LexerRegistry
      */
     private $lexer;
 
@@ -35,7 +35,52 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsALexer()
     {
-        $this->assertTrue(is_a(SimpleLexer::class, LexerInterface::class, true));
+        $this->assertTrue(is_a(LexerRegistry::class, LexerInterface::class, true));
+    }
+
+    public function takesLexers()
+    {
+        new LexerRegistry([]);
+        new LexerRegistry([new FakeLexer()]);
+    }
+
+    public function testReturnsResultOfTheFirstLexer()
+    {
+        $value = 'random';
+        $expected = [new Token('random', new TokenType(TokenType::STRING_TYPE))];
+
+        $lexer1Prophecy = $this->prophesize(LexerInterface::class);
+        $lexer1Prophecy->lex($value)->willThrow(LexException::class);
+        /** @var LexerInterface $lexer1 */
+        $lexer1 = $lexer1Prophecy->reveal();
+
+        $lexer2Prophecy = $this->prophesize(LexerInterface::class);
+        $lexer2Prophecy->lex($value)->willReturn($expected);
+        /** @var LexerInterface $lexer2 */
+        $lexer2 = $lexer2Prophecy->reveal();
+
+        $lexer3Prophecy = $this->prophesize(LexerInterface::class);
+        $lexer3Prophecy->lex(Argument::any())->shouldNotBeCalled();
+        /** @var LexerInterface $lexer3 */
+        $lexer3 = $lexer3Prophecy->reveal();
+
+        $lexer = new LexerRegistry([$lexer1, $lexer2, $lexer3]);
+        $actual = $lexer->lex($value);
+
+        $this->assertSame($expected, $actual);
+
+        $lexer1Prophecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
+        $lexer2Prophecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\LexException
+     * @expectedExceptionMessage Could not lex the value "".
+     */
+    public function testThrowExceptionIfNoLexerCanLexValue()
+    {
+        $lexer = new LexerRegistry([]);
+        $lexer->lex('');
     }
 
     /**
@@ -48,12 +93,19 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
             if (null === $expected) {
                 $this->fail(
                     sprintf(
-                        'Expected exception to be thrown for "%s".',
-                        $value
+                        'Expected exception to be thrown for "%s", got "%s" instead.',
+                        $value,
+                        var_export($actual, true)
                     )
                 );
             }
-        } catch (ParseException $exception) {
+        } catch (\InvalidArgumentException $exception) {
+            if (null === $expected) {
+                return;
+            }
+
+            throw $exception;
+        } catch (LexException $exception) {
             if (null === $expected) {
                 return;
             }
@@ -73,7 +125,9 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         // simple values
         yield 'empty string' => [
             '',
-            [],
+            [
+                new Token('', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         
         yield 'regular string value' => [
@@ -83,60 +137,193 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        // Parameters or functions
-        yield '[X] parameter alone' => [
+        // Escaped arrow
+        yield '[Escaped arrow] nominal (1)' => [
+            '<<',
+            [
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Escaped arrow] nominal (2)' => [
+            '>>',
+            [
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Escaped arrow] parameter' => [
+            '<<{param}>>',
+            [
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('{param}', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Escaped arrow] function' => [
+            '<<f()>>',
+            [
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('f()', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Escaped arrow] surrounded' => [
+            'foo << bar >> baz',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token(' bar ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token(' baz', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        // Parameters
+        yield '[Parameter] nominal' => [
             '<{dummy_param}>',
             [
                 new Token('<{dummy_param}>', new TokenType(TokenType::PARAMETER_TYPE)),
             ],
         ];
-        yield '[X] function alone' => [
+        yield '[Parameter] unbalanced (1)' => [
+            '<{dummy_param>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (1)' => [
+            '<<{dummy_param>>',
+            [
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('{dummy_param', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Parameter] unbalanced (2)' => [
+            '<{dummy_param',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (2)' => [
+            '<<{dummy_param',
+            [
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('{dummy_param', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Parameter] unbalanced (3)' => [
+            '<dummy_param}>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (3)' => [
+            '<<dummy_param}>>',
+            [
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('dummy_param}', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Parameter] unbalanced (4)' => [
+            'dummy_param}>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (4)' => [
+            'dummy_param}>>',
+            [
+                new Token('dummy_param}', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Parameter] successive' => [
+            '<{param1}><{param2}>',
+            [
+                new Token('<{param1}>', new TokenType(TokenType::PARAMETER_TYPE)),
+                new Token('<{param2}>', new TokenType(TokenType::PARAMETER_TYPE)),
+            ],
+        ];
+        yield '[Parameter] nested' => [
+            '<{value_<{nested_param}>}>',
+            null,
+        ];
+        yield '[Parameter] nested escape' => [
+            '<{value_<<{nested_param}>>}>',
+            null,
+        ];
+        yield '[Parameter] surrounded - nested' => [
+            'foo <{value_<{nested_param}>}> bar',
+            null,
+        ];
+
+        // Functions
+        yield '[Function] nominal' => [
             '<function()>',
             [
                 new Token('<function()>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
-        yield '[X] identity alone' => [
-            '<(function())>',
+        yield '[Function] unbalanced (1)' => [
+            '<function()',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (1)' => [
+            '<<function()',
             [
-                new Token('<(function())>', new TokenType(TokenType::IDENTITY_TYPE)),
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('function()', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
-        yield '[X] malformed alone 1' => [
+        yield '[Function] unbalanced (2)' => [
+            'function()>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (2)' => [
+            'function()>>',
+            [
+                new Token('function()', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Function] unbalanced (3)' => [
             '<function(>',
             null,
         ];
-        yield '[X] malformed alone 2' => [
-            '<function>',
+        yield '[Function] escaped unbalanced (3)' => [
+            '<<function(>>',
+            [
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('function(', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Function] unbalanced (4)' => [
+            '<function)>',
             null,
         ];
-        yield '[X] escaped' => [
-            '<<escaped_value>>',
+        yield '[Function] escaped unbalanced (4)' => [
+            '<<function)>>',
             [
-                new Token('<<escaped_value>>', new TokenType(TokenType::ESCAPED_PARAMETER_TYPE)),
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('function)', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
             ],
         ];
-        yield '[X] parameter, function, identity and escaped' => [
-            '<{param}><function()><(echo("hello"))><<escaped_value>>',
+        yield '[Function] successive functions' => [
+            '<f()><g()>',
             [
-                new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
-                new Token('<function()><(echo("hello"))>', new TokenType(TokenType::FUNCTION_TYPE)),
-                new Token('<<escaped_value>>', new TokenType(TokenType::ESCAPED_PARAMETER_TYPE)),
+                new Token('<f()><g()>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
-        yield '[X] nested' => [
-            '<{value_<{nested_param}>}>',
+        yield '[Function] correct successive functions' => [
+            '<f()> <g()>',
             [
-                new Token('<{value_<{nested_param}>}>', new TokenType(TokenType::PARAMETER_TYPE)),
+                new Token('<f()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token(' ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<g()>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
-        yield '[X] nested escape' => [
-            '<{value_<<{nested_param}>>}>',
+        yield '[Function] nested functions' => [
+            '<f(<g()>)>',
             [
-                new Token('<{value_<<{nested_param}>>}>', new TokenType(TokenType::PARAMETER_TYPE)),
+                new Token('<f(<g()>)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
-        yield '[X] surrounded' => [
+        yield '[Function] nominal surrounded' => [
             'foo <function()> bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
@@ -144,28 +331,33 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
-        yield '[X] surrounded - escaped' => [
-            'foo <<escaped_value>> bar',
+
+        yield '[Function] nominal identity' => [
+            '<(function())>',
             [
-                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<<escaped_value>>', new TokenType(TokenType::ESCAPED_PARAMETER_TYPE)),
-                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<(function())>', new TokenType(TokenType::IDENTITY_TYPE)),
             ],
         ];
-        yield '[X] surrounded - nested' => [
-            'foo <{value_<{nested_param}>}> bar',
+        yield '[Function] identity with args' => [
+            '<(function(echo("hello")))>',
             [
-                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<{value_<{nested_param}>}>', new TokenType(TokenType::PARAMETER_TYPE)),
-                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<(function(echo("hello")))>', new TokenType(TokenType::IDENTITY_TYPE)),
             ],
         ];
-        yield '[X] surrounded - nested escape' => [
-            'foo <{value_<<{nested_param}>>}> bar',
+        yield '[Function] identity with params' => [
+            '<(function(echo(<{param}>))>',
             [
-                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<{value_<<{nested_param}>>}>', new TokenType(TokenType::PARAMETER_TYPE)),
-                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<(function(echo(<{param}>))>', new TokenType(TokenType::IDENTITY_TYPE)),
+            ],
+        ];
+        yield '[X] parameter, function, identity and escaped' => [
+            '<{param}><function()><(echo("hello"))><<escaped_value>>',
+            [
+                new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
+                new Token('<function()><(echo("hello"))>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('escaped_value', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
             ],
         ];
 
@@ -205,19 +397,19 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         yield '[Array] escaped array' => [
             '[[X]]',
             [
-                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY)),
+                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY_TYPE)),
             ],
         ];
         yield '[Array] malformed escaped array 1' => [
             '[[X]',
             [
-                new Token('[[X]', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
+                new Token('[[X]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
             ],
         ];
         yield '[Array] malformed escaped array 1' => [
             '[X]]',
             [
-                new Token('[X]', new TokenType(TokenType::STRING_ARRAY)),
+                new Token('[X]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
                 new Token(']', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -225,7 +417,7 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
             'foo [[X]] bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY)),
+                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -233,7 +425,7 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
             'foo [[X]] yo <{param}> bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY)),
+                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY_TYPE)),
                 new Token(' yo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
@@ -242,7 +434,7 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         yield '[Array] simple string array' => [
             '[@user*->name, @group->name]',
             [
-                new Token('[@user*->name, @group->name]', new TokenType(TokenType::STRING_ARRAY)),
+                new Token('[@user*->name, @group->name]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
             ],
         ];
 
@@ -355,15 +547,11 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] without members' => [
             '80%? ',
-            [
-                new Token('80%? ', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
         yield '[Optional] without members 2' => [
             '80%?',
-            [
-                new Token('80%?', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
         yield '[Optional] without first member but with second' => [
             '80%? :Z',
@@ -401,15 +589,11 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Optional] without space after quantifier' => [
             '80%?foo bar',
-            [
-                new Token('80%?foo bar', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
         yield '[Optional] without space after quantifier with second member' => [
             '80%?foo: bar baz',
-            [
-                new Token('80%?foo: bar baz', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
         yield '[Optional] surrounded with params' => [
             'foo 80%? <dummy>: <another> baz',
@@ -420,13 +604,13 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         yield '[Optional] surrounded with params and nested' => [
-            '<foo()> -80%? <dum10%? y: z my>: <<another>> <baz()>',
+            '<foo()> -80%? <{dum10}>%? y: z my: <<another>> <baz()>',
             [
-                new Token('<foo()>', new TokenType(TokenType::FUNCTION_TYPE)),
-                new Token(' -', new TokenType(TokenType::STRING_TYPE)),
-                new Token('80%? <dum10%? y: z', new TokenType(TokenType::OPTIONAL_TYPE)),
-                new Token(' my>: ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<<another>>', new TokenType(TokenType::ESCAPED_PARAMETER_TYPE)),
+                new Token('<foo()> -80%? <{dum10}>%? y: z', new TokenType(TokenType::OPTIONAL_TYPE)),
+                new Token(' my: ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('another', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
                 new Token(' ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('<baz()>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
@@ -435,26 +619,23 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         // References
         yield '[Reference] empty reference' => [
             '@',
-            [
-                new Token('@', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
         yield '[Reference] empty escaped reference' => [
             '@@',
             [
-                new Token('@@', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] empty reference with second member' => [
             '@ foo',
-            [
-                new Token('@ foo', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
         yield '[Reference] escaped empty reference with second member' => [
             '@@ foo',
             [
-                new Token('@@ foo', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
+                new Token(' foo', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] alone with strings' => [
@@ -466,7 +647,8 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] escaped alone with strings' => [
             '@@user0',
             [
-                new Token('@@user0', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
+                new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
+                new Token('user0', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] left with strings' => [
@@ -522,19 +704,11 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] with nested with prop' => [
             '@user0->@user1',
-            [
-                new Token('@user0->', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
-                new Token('@user1', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-            ],
+            null,
         ];
         yield '[Reference] with nested with prop surrounded' => [
             'foo @user0->@user1 bar',
-            [
-                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user0->', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
-                new Token('@user1', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
         yield '[Reference] with successive with prop surrounded' => [
             'foo @user0->username@user1->name bar',
@@ -577,33 +751,21 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] function nested with function' => [
             '@user0->@user1->getUsername()',
-            [
-                new Token('@user0->', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
-                new Token('@user1->getUsername()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
-            ],
+            null,
         ];
         yield '[Reference] function nested with function surrounded' => [
             'foo @user0->@user1->getUsername() bar',
-            [
-                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user0->', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
-                new Token('@user1->getUsername()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
-                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
 
         // Variables
         yield '[Variable] empty variable' => [
             '$',
-            [
-                new Token('$', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
         yield '[Variable] empty variable with second member' => [
             '$ foo',
-            [
-                new Token('$ foo', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            null,
         ];
         yield '[Variable] alone' => [
             '$username',
@@ -628,32 +790,21 @@ class SimpleLexerTest extends \PHPUnit_Framework_TestCase
         yield '[Variable] empty escaped variable' => [
             '$$',
             [
-                new Token('$$', new TokenType(TokenType::STRING_TYPE)),
-            ],
-        ];
-        yield '[Variable] empty variable with second member' => [
-            '$ foo',
-            [
-                new Token('$ foo', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$$', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
             ],
         ];
         yield '[Variable] escaped empty variable with second member' => [
             '$$ foo',
             [
-                new Token('$$ foo', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$$', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+                new Token(' foo', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Variable] alone with strings' => [
             '$$username',
             [
-                new Token('$$username', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
-            ],
-        ];
-
-        yield '[String] combine string tokens' => [
-            'foo $$',
-            [
-                new Token('foo $$', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$$', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+                new Token('username', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
     }

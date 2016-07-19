@@ -12,10 +12,11 @@
 namespace Nelmio\Alice\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Definition\Value\ListValue;
+use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
-use Nelmio\Alice\ExpressionLanguage\TokenParserInterface;
+use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\NotClonableTrait;
 
 final class SimpleParser implements ParserInterface
@@ -47,14 +48,45 @@ final class SimpleParser implements ParserInterface
     public function parse(string $value)
     {
         $tokens = $this->lexer->lex($value);
-        foreach ($tokens as $index => $token) {
-            $tokens[$index] = $this->tokenParser->parse($token);
+        $parsedTokens = [];
+        foreach ($tokens as $token) {
+            $parsedTokens[] = $this->tokenParser->parse($token);
+            $parsedTokens = $this->mergeStringTokens($parsedTokens);
         }
 
-        if (1 === count($tokens)) {
-            return $tokens[0];
+        if (1 === count($parsedTokens)) {
+            return $parsedTokens[0];
         }
 
-        return new ListValue($tokens);
+        return new ListValue($parsedTokens);
+    }
+
+    /**
+     * If the last two tokens were parsed into strings, they are combined into one.
+     *
+     * @param ValueInterface[]|mixed[] $values
+     *
+     * @return ValueInterface[]|mixed[]
+     */
+    private function mergeStringTokens(array $values)
+    {
+        /** @var ValueInterface|mixed|false $lastValue */
+        $lastValue = end($values);
+        if (false === $lastValue || count($values) < 2 || false === is_string($lastValue)) {
+            return $values;
+        }
+
+        $lastValueKey = key($values);
+        $previousValueKey = $lastValueKey - 1;
+        /** @var ValueInterface|mixed $previousValue */
+        $previousValue = $values[$lastValueKey - 1];
+        if (false === is_string($previousValue)) {
+            return $values;
+        }
+
+        $values[$previousValueKey] = $previousValue.$lastValue;
+        unset($values[$lastValueKey]);
+
+        return array_values($values);
     }
 }
