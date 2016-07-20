@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Exception\ExpressionLanguage\LexException;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
@@ -22,8 +22,9 @@ final class ReferenceLexer implements LexerInterface
         '/^(@[^\ @]+\{\d+\.\.\d+\})/' => TokenType::RANGE_REFERENCE_TYPE,
         '/^(@[^\ @]+\{.*,.*})/' => TokenType::LIST_REFERENCE_TYPE,
         '/^(@.*\*)/' => TokenType::WILDCARD_REFERENCE_TYPE,
-        '/^(@.*->\S+\(\))/' => TokenType::METHOD_REFERENCE_TYPE,
-        '/^(@.*->[^\(\)\ ]*)/' => TokenType::PROPERTY_REFERENCE_TYPE,
+        '/^(@.*->\S+\(.*\))/' => TokenType::METHOD_REFERENCE_TYPE,
+        '/^(@.*->[^\(\)\ ]+)/' => TokenType::PROPERTY_REFERENCE_TYPE,
+        '/^(@.*->.*)/' => null,
         '/^(@\S+)/' => TokenType::SIMPLE_REFERENCE_TYPE,
     ];
 
@@ -32,21 +33,25 @@ final class ReferenceLexer implements LexerInterface
      *
      * {@inheritdoc}
      *
-     * @throws ParseException
+     * @throws LexException
      */
     public function lex(string $value): array
     {
         foreach (self::PATTERNS as $pattern => $tokenTypeConstant) {
             if (1 === preg_match($pattern, $value, $matches)) {
+                if (null === $tokenTypeConstant) {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'Invalid token "%s" found.',
+                            $value
+                        )
+                    );
+                }
+
                 return [new Token($matches[1], new TokenType($tokenTypeConstant))];
             }
         }
 
-        throw new ParseException(
-            sprintf(
-                'Expected "%s" to be a reference but no matching pattern could be found.',
-                $value
-            )
-        );
+        throw LexException::create($value);
     }
 }

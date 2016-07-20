@@ -12,16 +12,29 @@
 namespace Nelmio\Alice\Loader;
 
 
+use Nelmio\Alice\ExpressionLanguage\Lexer\EmptyValueLexer;
+use Nelmio\Alice\ExpressionLanguage\Lexer\GlobalPatternsLexer;
 use Nelmio\Alice\ExpressionLanguage\Lexer\ReferenceLexer;
-use Nelmio\Alice\ExpressionLanguage\Lexer\SimpleLexer;
+use Nelmio\Alice\ExpressionLanguage\Lexer\LexerRegistry;
+use Nelmio\Alice\ExpressionLanguage\Lexer\SubPatternsLexer;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
-use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\EscapedParameterTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\DynamicArrayTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\EscapedArrayTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\EscapedTokenParser;
 use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\FunctionTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\IdentityTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\MethodReferenceTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\OptionalTokenParser;
 use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\ParameterTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\PropertyReferenceTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\SimpleReferenceTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\StringArrayTokenParser;
 use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\StringTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\Chainable\VariableTokenParser;
 use Nelmio\Alice\ExpressionLanguage\Parser\SimpleParser;
 use Nelmio\Alice\ExpressionLanguage\Parser\TokenParserRegistry;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface as ExpressionLanguageParserInterface;
+use Nelmio\Alice\ExpressionLanguage\Parser\TokenParserInterface;
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormalizer;
@@ -189,23 +202,39 @@ final class NativeLoader implements LoaderInterface
 
     public function getBuiltInExpressionLanguageParser(): ExpressionLanguageParserInterface
     {
-        $registry = new TokenParserRegistry([
-            new EscapedParameterTokenParser(),
-            new FunctionTokenParser(),
-            new ParameterTokenParser(),
-            new StringTokenParser(),
-        ]);
-
         return new SimpleParser(
             $this->getBuiltInLexer(),
-            $registry
+            $this->getBuiltInExpressionLanguageTokenParser()
         );
+    }
+
+    public function getBuiltInExpressionLanguageTokenParser(): TokenParserInterface
+    {
+        return new TokenParserRegistry([
+            new DynamicArrayTokenParser(),
+            new EscapedArrayTokenParser(),
+            new EscapedTokenParser(),
+            new FunctionTokenParser(),
+            new IdentityTokenParser(),
+            new MethodReferenceTokenParser(),
+            new OptionalTokenParser(),
+            new ParameterTokenParser(),
+            new PropertyReferenceTokenParser(),
+            new SimpleReferenceTokenParser(),
+            new StringArrayTokenParser(),
+            new StringTokenParser(),
+            new VariableTokenParser(),
+        ]);
     }
 
     public function getBuiltInLexer(): LexerInterface
     {
-        return new SimpleLexer(
-            new ReferenceLexer()
-        );
+        return new LexerRegistry([
+            new EmptyValueLexer(),
+            new GlobalPatternsLexer(),
+            new SubPatternsLexer(
+                new ReferenceLexer()
+            ),
+        ]);
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Fixture\Definition;
 
+use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\MethodCallInterface;
@@ -72,6 +73,32 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($bag->getConstructor(), $bag->getConstructor());
         $this->assertNotSame($bag->getProperties(), $properties, $bag->getProperties());
         $this->assertNotSame($bag->getMethodCalls(), $bag->getMethodCalls());
+    }
+
+    public function testImmutableMutator()
+    {
+        $constructor = new FakeMethodCall();
+        $newConstructor = new FakeMethodCall();
+
+        $properties = (new PropertyBag())
+            ->with(new Property('username', 'bob'))
+        ;
+        $calls = (new MethodCallBag())
+            ->with(new FakeMethodCall())
+        ;
+
+        $bag = new SpecificationBag($constructor, $properties, $calls);
+        $newBag = $bag->withConstructor($newConstructor);
+
+        $this->assertInstanceOf(SpecificationBag::class, $newBag);
+
+        $this->assertEquals($constructor, $bag->getConstructor());
+        $this->assertEquals($calls, $bag->getMethodCalls());
+        $this->assertEquals($properties, $bag->getProperties());
+
+        $this->assertEquals($newConstructor, $newBag->getConstructor());
+        $this->assertEquals($calls, $newBag->getMethodCalls());
+        $this->assertEquals($properties, $newBag->getProperties());
     }
 
     public function testIsDeepClonable()

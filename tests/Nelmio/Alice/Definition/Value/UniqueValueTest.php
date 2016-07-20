@@ -11,11 +11,18 @@
 
 namespace Nelmio\Alice\Definition\Value;
 
+use Nelmio\Alice\Definition\ValueInterface;
+
 /**
  * @covers Nelmio\Alice\Definition\Value\UniqueValue
  */
 class UniqueValueTest extends \PHPUnit_Framework_TestCase
 {
+    public function testIsAValue()
+    {
+        $this->assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
+    }
+
     /**
      * @dataProvider provideValues
      */

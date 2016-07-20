@@ -41,7 +41,8 @@ final class Token
     {
         return $this->value;
     }
-    
+
+    // TODO: return type right away
     public function getType(): TokenType
     {
         return clone $this->type;

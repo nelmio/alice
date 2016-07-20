@@ -33,7 +33,12 @@
         "psr-4": { "Nelmio\\Alice\\": "src/Nelmio/Alice" }
     },
     "autoload-dev": {
-        "psr-4": { "Nelmio\\Alice\\": "tests/Nelmio/Alice" }
+        "psr-4": {
+            "Nelmio\\Alice\\": [
+                "tests/Nelmio/Alice",
+                "fixtures/Nelmio/Alice"
+            ]
+        }
     },
     "extra": {
         "branch-alias": {
