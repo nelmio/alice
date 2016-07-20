@@ -13,19 +13,19 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 
-final class FunctionCallValue implements ValueInterface
+/**
+ * Contain a string value that can be processed, i.e. is an expression that can be resolved. E.g. '$username'.
+ */
+final class ProcessableValue implements ValueInterface
 {
     /**
-     * @var string|ValueInterface
+     * @var string
      */
-    private $parameterKey;
+    private $value;
 
-    /**
-     * @param string|ValueInterface $parameterKey Can be a value for dynamic parameters.
-     */
-    public function __construct(string $method, array $arguments = null)
+    public function __construct(string $value)
     {
-        $this->parameterKey = $parameterKey;
+        $this->value = $value;
     }
 
     /**
@@ -33,6 +33,6 @@ final class FunctionCallValue implements ValueInterface
      */
     public function getValue()
     {
-        return $this->parameterKey;
+        return $this->value;
     }
 }

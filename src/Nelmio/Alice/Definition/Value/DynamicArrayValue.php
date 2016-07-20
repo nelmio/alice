@@ -13,62 +13,51 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 
-/**
- * VO representing a array like "10x @user0". '10' is called "quantifier" and "@user0" is called "element".
- */
 final class DynamicArrayValue implements ValueInterface
 {
     /**
-     * @var string|ValueInterface
+     * @var float|int|ValueInterface
      */
     private $quantifier;
 
     /**
-     * @var string|ValueInterface
+     * @var ValueInterface|string
      */
-    private $element;
+    private $elements;
 
     /**
-     * @param string|ValueInterface $quantifier
-     * @param string|ValueInterface    $element
+     * @param ValueInterface|int|float $quantifier
+     * @param ValueInterface|string    $elements
      */
-    public function __construct($quantifier, $element)
+    public function __construct($quantifier, $elements)
     {
         $this->quantifier = $quantifier;
-        $this->element = $element;
+        $this->elements = $elements;
     }
 
     /**
-     * @return string|ValueInterface
+     * @return float|int|ValueInterface
      */
     public function getQuantifier()
     {
-        return is_object($this->quantifier) ? clone $this->quantifier : $this->quantifier;
+        return $this->quantifier;
     }
 
     /**
      * @return string|ValueInterface
      */
-    public function getElement()
+    public function getElements()
     {
-        return is_object($this->element) ? clone $this->element : $this->element;
+        return $this->elements;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @return array The first element is the quantifier and the second the element.
+     * @return array The first element is the quantifier and the second the elements.
      */
     public function getValue(): array
     {
-        return [
-            $this->getQuantifier(),
-            $this->getElement(),
-        ];
-    }
-
-    public function __clone()
-    {
-        list($this->quantifier, $this->element) = $this->getValue();
+        return [$this->quantifier, $this->elements];
     }
 }

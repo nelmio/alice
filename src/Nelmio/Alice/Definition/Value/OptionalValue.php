@@ -13,32 +13,29 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 
-/**
- * VO representing "80%? 'value': 'empty'"
- */
 final class OptionalValue implements ValueInterface
 {
     /**
-     * @var string|ValueInterface
+     * @var float|int|ValueInterface
      */
     private $quantifier;
 
     /**
-     * @var string|ValueInterface
+     * @var ValueInterface|string
      */
     private $firstMember;
 
     /**
-     * @var string|ValueInterface|null
+     * @var ValueInterface|null|string
      */
     private $secondMember;
 
     /**
-     * @param string|ValueInterface      $quantifier
-     * @param string|ValueInterface      $firstMember
-     * @param string|ValueInterface|null $secondMember
+     * @param ValueInterface|int|float   $quantifier
+     * @param ValueInterface|string      $firstMember
+     * @param ValueInterface|string|null $secondMember
      */
-    public function __construct($quantifier, $firstMember, $secondMember = null)
+    public function __construct($quantifier, $firstMember, $secondMember)
     {
         $this->quantifier = $quantifier;
         $this->firstMember = $firstMember;
@@ -46,11 +43,11 @@ final class OptionalValue implements ValueInterface
     }
 
     /**
-     * @return string|ValueInterface
+     * @return float|int|ValueInterface
      */
     public function getQuantifier()
     {
-        return is_object($this->quantifier) ? clone $this->quantifier : $this->quantifier;
+        return $this->quantifier;
     }
 
     /**
@@ -58,15 +55,12 @@ final class OptionalValue implements ValueInterface
      */
     public function getFirstMember()
     {
-        return is_object($this->firstMember) ? clone $this->firstMember : $this->firstMember;
+        return $this->firstMember;
     }
 
-    /**
-     * @return ValueInterface|null|string
-     */
     public function getSecondMember()
     {
-        return is_object($this->secondMember) ? clone $this->secondMember : $this->secondMember;
+        return $this->secondMember;
     }
 
     /**
@@ -76,15 +70,6 @@ final class OptionalValue implements ValueInterface
      */
     public function getValue(): array
     {
-        return [
-            $this->getQuantifier(),
-            $this->getFirstMember(),
-            $this->getSecondMember(),
-        ];
-    }
-
-    public function __clone()
-    {
-        list($this->quantifier, $this->firstMember, $this->secondMember) = $this->getValue();
+        return [$this->quantifier, $this->firstMember, $this->secondMember];
     }
 }

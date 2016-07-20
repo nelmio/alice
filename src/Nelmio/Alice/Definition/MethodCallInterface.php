@@ -20,7 +20,7 @@ interface MethodCallInterface
     /**
      * @return static
      */
-    public function withArguments(array $arguments = null);
+    public function withArguments(array $arguments);
 
     /**
      * @return ServiceReferenceInterface|null No caller means that the caller is the instance of the object itself.

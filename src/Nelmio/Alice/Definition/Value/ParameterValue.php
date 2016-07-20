@@ -13,9 +13,6 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 
-/**
- * VO representing '<{param}>'.
- */
 final class ParameterValue implements ValueInterface
 {
     /**
@@ -24,7 +21,7 @@ final class ParameterValue implements ValueInterface
     private $parameterKey;
 
     /**
-     * @param string|ValueInterface $parameterKey e.g. 'dummy_param'
+     * @param string|ValueInterface $parameterKey Can be a value for dynamic parameters.
      */
     public function __construct($parameterKey)
     {
@@ -36,11 +33,6 @@ final class ParameterValue implements ValueInterface
      */
     public function getValue()
     {
-        return is_object($this->parameterKey) ? clone $this->parameterKey: $this->parameterKey;
-    }
-
-    public function __clone()
-    {
-        $this->parameterKey = $this->getValue();
+        return $this->parameterKey;
     }
 }
