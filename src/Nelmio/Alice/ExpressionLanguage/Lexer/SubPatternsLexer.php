@@ -32,7 +32,7 @@ final class SubPatternsLexer implements LexerInterface
         '/^(\[\[.*\]\])/' => TokenType::ESCAPED_ARRAY_TYPE,
         '/^(\[[^\[\]]+\])/' => TokenType::STRING_ARRAY_TYPE,
         '/^(@@)[^\ @]*/' => TokenType::ESCAPED_REFERENCE_TYPE,
-        '/^(@[^\ @]+)/' => self::REFERENCE_LEXER,
+        '/^(@[^\ @]+(?:\{.*\})*)/' => self::REFERENCE_LEXER,
         '/^(\${2})/' => TokenType::ESCAPED_VARIABLE_TYPE,
         '/^(\$[^\$\ ]+)/' => TokenType::VARIABLE_TYPE,
         '/^([^<>\[\d\%\$@]+)/' => TokenType::STRING_TYPE,
@@ -68,8 +68,6 @@ final class SubPatternsLexer implements LexerInterface
                 $tokens[] = $fragmentToken;
                 $offset += strlen($fragmentToken->getValue());
             }
-
-            $tokens = $this->mergeStringTokens($tokens);
         }
 
         return $tokens;
@@ -106,37 +104,5 @@ final class SubPatternsLexer implements LexerInterface
         }
 
         throw LexException::create($valueFragment);
-    }
-
-    /**
-     * If the last two tokens are strings types, they are combined into one.
-     *
-     * @param Token[] $tokens
-     *
-     * @return Token[]
-     */
-    private function mergeStringTokens(array $tokens)
-    {
-        /** @var Token|false $lastToken */
-        $lastToken = end($tokens);
-        if (false === $lastToken || count($tokens) < 2 || TokenType::STRING_TYPE !== $lastToken->getType()->getValue()) {
-            return $tokens;
-        }
-
-        $lastTokenKey = key($tokens);
-        $previousTokenKey = $lastTokenKey - 1;
-        /** @var Token $previousToken */
-        $previousToken = $tokens[$previousTokenKey];
-        if (TokenType::STRING_TYPE !== $previousToken->getType()->getValue()) {
-            return $tokens;
-        }
-
-        $tokens[$previousTokenKey] = new Token(
-            $previousToken->getValue().$lastToken->getValue(),
-            new TokenType(TokenType::STRING_TYPE)
-        );
-        unset($tokens[$lastTokenKey]);
-
-        return array_values($tokens);
     }
 }

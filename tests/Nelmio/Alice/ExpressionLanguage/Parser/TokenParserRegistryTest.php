@@ -11,9 +11,8 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser;
 
-use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
+use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
-use Nelmio\Alice\ExpressionLanguage\Parser\TokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 use Prophecy\Argument;
 
@@ -22,6 +21,17 @@ use Prophecy\Argument;
  */
 class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \ReflectionProperty
+     */
+    private $parsersRefl;
+
+    public function setUp()
+    {
+        $this->parsersRefl = (new \ReflectionClass(TokenParserRegistry::class))->getProperty('parsers');
+        $this->parsersRefl->setAccessible(true);
+    }
+
     public function testIsAParser()
     {
         $this->assertTrue(is_a(TokenParserRegistry::class, TokenParserInterface::class, true));
@@ -29,12 +39,51 @@ class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
 
     public function testAcceptChainableParsers()
     {
-        $parserProphecy = $this->prophesize(ChainableTokenParserInterface::class);
-        $parserProphecy->canParse(Argument::any())->shouldNotBeCalled();
-        /* @var ChainableTokenParserInterface $parser */
-        $parser = $parserProphecy->reveal();
+        new TokenParserRegistry([new FakeChainableTokenParser()]);
 
-        new TokenParserRegistry([$parser]);
+        try {
+            new TokenParserRegistry([new \stdClass()]);
+            $this->fails('Expected exception to be thrown.');
+        } catch (\TypeError $exception) {
+            // expected
+        }
+    }
+
+    public function testImmutableMutators()
+    {
+        $parser = new FakeParser();
+
+        $parserAwareProphecy = $this->prophesize(ParserAwareInterface::class);
+        $parserAwareProphecy->withParser($parser)->willReturn(new \stdClass());
+        /** @var ParserAwareInterface $parserAware */
+        $parserAware = $parserAwareProphecy->reveal();
+
+        $tokenParser = new TokenParserRegistry([
+            $parser1 = new FakeChainableTokenParser(),
+            $parser2 = new DummyChainableTokenParserAware(new FakeChainableTokenParser(), $parserAware)
+        ]);
+
+        $newTokenParser = $tokenParser->withParser($parser);
+
+        $this->assertInstanceOf(TokenParserRegistry::class, $newTokenParser);
+
+        $this->assertSame(
+            [
+                $parser1,
+                $parser2,
+            ],
+            $this->parsersRefl->getValue($tokenParser)
+        );
+
+        $newTokenParserParsers = $this->parsersRefl->getValue($newTokenParser);
+        $this->assertCount(2, $newTokenParserParsers);
+        $this->assertEquals(
+            [
+                $parser1,
+                new \stdClass(),
+            ],
+            $newTokenParserParsers
+        );
     }
 
     /**
@@ -45,13 +94,23 @@ class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
         new TokenParserRegistry([new \stdClass()]);
     }
 
-    public function testIsClonable()
+    public function testIsDeepClonable()
     {
         $parser = new TokenParserRegistry([]);
         $clone = clone $parser;
 
         $this->assertEquals($parser, $clone);
         $this->assertNotSame($parser, $clone);
+
+        $parsers = [new FakeChainableTokenParser()];
+        $parser = new TokenParserRegistry($parsers);
+        $clone = clone $parser;
+
+        $this->assertEquals($parser, $clone);
+        $this->assertNotSame($parser, $clone);
+
+        $this->assertSame($parsers, $this->parsersRefl->getValue($parser));
+        $this->assertNotSame($parsers, $this->parsersRefl->getValue($clone));
     }
 
     public function testIterateOverEveryParsersAndUseTheFirstValidOne()

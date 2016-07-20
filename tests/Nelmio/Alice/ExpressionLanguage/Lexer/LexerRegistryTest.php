@@ -88,6 +88,7 @@ class LexerRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testLexValues(string $value, $expected)
     {
+        \PHPUnit_Framework_Assert::markTestIncomplete('TODO');
         try {
             $actual = $this->lexer->lex($value);
             if (null === $expected) {
@@ -685,6 +686,21 @@ class LexerRegistryTest extends \PHPUnit_Framework_TestCase
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
+        yield '[Reference] successive prop' => [
+            '@user0->username->value',
+            [
+                new Token('@user0->username->value', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] surrounded successive prop' => [
+            'foo @user0->username->value bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user0->username->value', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+
+            ],
+        ];
         yield '[Reference] with nested' => [
             '@user0@user1',
             [
@@ -701,6 +717,47 @@ class LexerRegistryTest extends \PHPUnit_Framework_TestCase
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
 
             ],
+        ];
+        yield '[Reference] nominal range' => [
+            '@user{1..2}',
+            [
+                new Token('@user{1..2}', new TokenType(TokenType::RANGE_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] surrounded range' => [
+            'foo @user{1..2} bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user{1..2}', new TokenType(TokenType::RANGE_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Reference] successive' => [
+            '@user{1..2}@group{3..4}',
+            [
+                new Token('@user{1..2}', new TokenType(TokenType::RANGE_REFERENCE_TYPE)),
+                new Token('@group{3..4}', new TokenType(TokenType::RANGE_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] range-prop (1)' => [
+            '@user->username{1..2}',
+            [
+                new Token('@user->username{1..2}', new TokenType(TokenType::RANGE_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] range-prop (2)' => [
+            '@user{1..2}->username',
+            null,
+        ];
+        yield '[Reference] range-method (1)' => [
+            '@user->getUserName(){1..2}',
+            [
+                new Token('@user->getUserName(){1..2}', new TokenType(TokenType::RANGE_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] range-method (2)' => [
+            '@user{1..2}->getUserName()',
+            null,
         ];
         yield '[Reference] with nested with prop' => [
             '@user0->@user1',
@@ -730,6 +787,78 @@ class LexerRegistryTest extends \PHPUnit_Framework_TestCase
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Reference] alone with function with arguments' => [
+            '@user0->getUserName($username)',
+            [
+                new Token('@user0->getUserName($username)', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] alone with function with arguments containing nested reference' => [
+            '@user0->getUserName($username, @group->getName($foo))',
+            [
+                new Token('@user0->getUserName', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+                new Token('(', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$username,', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(' ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@group->getName($foo))', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] alone with fluent function' => [
+            '@user0->getUserName()->getName()',
+            [
+                new Token('@user0->getUserName()->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] surrounded with fluent function' => [
+            'foo @user0->getUserName()->getName() bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user0->getUserName()->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Reference] nominal wildcard' => [
+            '@user*',
+            [
+                new Token('@user*', new TokenType(TokenType::WILDCARD_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] surrounded wildcard' => [
+            'foo @user* bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user*', new TokenType(TokenType::WILDCARD_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Reference] nominal list' => [
+            '@user0{alice, bob}',
+            [
+                new Token('@user{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] surrounded list' => [
+            'foo @user0{alice, bob} bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Reference] reference function' => [
+            '@user0<current()>',
+            [
+                new Token('@user{@lice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] reference function with args' => [
+            '@user0<f($foo, $bar)>',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user{@lice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -785,6 +914,22 @@ class LexerRegistryTest extends \PHPUnit_Framework_TestCase
             [
                 new Token('$username', new TokenType(TokenType::VARIABLE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Variable] successive' => [
+            '$foo$bar',
+            [
+                new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token('$bar', new TokenType(TokenType::VARIABLE_TYPE)),
+            ],
+        ];
+        yield '[Variable] successive surrounded' => [
+            'faz $foo$bar baz',
+            [
+                new Token('faz ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token('$bar', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(' baz', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Variable] empty escaped variable' => [

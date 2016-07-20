@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser;
 
+use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
@@ -131,6 +132,7 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseValues($value, $expected)
     {
+        \PHPUnit_Framework_Assert::markTestIncomplete('TODO');
         try {
             $actual = $this->parser->parse($value);
             if (null === $expected) {
@@ -736,6 +738,14 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
                 ' bar',
             ]),
         ];
+        yield '[Reference] successive prop' => [
+            '@user0->username->value',
+            null,
+        ];
+        yield '[Reference] surrounded successive prop' => [
+            'foo @user0->username->value bar',
+            null,
+        ];
         yield '[Reference] with nested' => [
             '@user0@user1',
             new ListValue([
@@ -752,6 +762,53 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
                 ' bar',
 
             ]),
+        ];
+        yield '[Reference] nominal range' => [
+            '@user{1..2}',
+            new ChoiceListValue([
+                new FixtureReferenceValue('user1'),
+                new FixtureReferenceValue('user2'),
+            ]),
+        ];
+        yield '[Reference] surrounded range' => [
+            'foo @user{1..2} bar',
+            new ListValue([
+                'foo ',
+                new ChoiceListValue([
+                    new FixtureReferenceValue('user1'),
+                    new FixtureReferenceValue('user2'),
+                ]),
+                ' bar',
+            ]),
+        ];
+        yield '[Reference] successive' => [
+            '@user{1..2}@group{3..4}',
+            new ListValue([
+                new ChoiceListValue([
+                    new FixtureReferenceValue('user1'),
+                    new FixtureReferenceValue('user2'),
+                ]),
+                new ChoiceListValue([
+                    new FixtureReferenceValue('group3'),
+                    new FixtureReferenceValue('group4'),
+                ]),
+            ]),
+        ];
+        yield '[Reference] range-prop (1)' => [
+            '@user->username{1..2}',
+            null,
+        ];
+        yield '[Reference] range-prop (2)' => [
+            '@user{1..2}->username',
+            null,
+        ];
+        yield '[Reference] range-method (1)' => [
+            '@user->getUserName(){1..2}',
+            null,
+        ];
+        yield '[Reference] range-method (2)' => [
+            '@user{1..2}->getUserName()',
+            null,
         ];
         yield '[Reference] with nested with prop' => [
             '@user0->@user1',
@@ -793,6 +850,70 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
                 ),
                 ' bar',
             ]),
+        ];
+        yield '[Reference] alone with function with arguments' => [
+            '@user0->getUserName($username)',
+            new FixtureMethodCallValue(
+                new FixtureReferenceValue('user0'),
+                new FunctionCallValue('getUserName'),
+                [
+                    new VariableValue('username'),
+                ]
+            ),
+        ];
+        yield '[Reference] alone with function with arguments containing nested reference' => [
+            '@user0->getUserName($username, @group->getName($foo))',
+            null,
+        ];
+        yield '[Reference] alone with fluent function' => [
+            '@user0->getUserName()->getName()',
+            null,
+        ];
+        yield '[Reference] surrounded with fluent function' => [
+            'foo @user0->getUserName()->getName() bar',
+            null,
+        ];
+        yield '[Reference] nominal wildcard' => [
+            '@user*',
+            [
+                new Token('@user*', new TokenType(TokenType::WILDCARD_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] surrounded wildcard' => [
+            'foo @user* bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user*', new TokenType(TokenType::WILDCARD_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Reference] nominal list' => [
+            '@user0{alice, bob}',
+            [
+                new Token('@user{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] surrounded list' => [
+            'foo @user0{alice, bob} bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Reference] reference function' => [
+            '@user0<current()>',
+            [
+                new Token('@user{@lice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] reference function with args' => [
+            '@user0<f($foo, $bar)>',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user{@lice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Reference] function nested' => [
             '@user0->getUserName()@user1->getName()',
@@ -856,6 +977,22 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
             new ListValue([
                 new VariableValue('username'),
                 ' bar',
+            ]),
+        ];
+        yield '[Variable] successive' => [
+            '$foo$bar',
+            new ListValue([
+                new VariableValue('foo'),
+                new VariableValue('bar'),
+            ]),
+        ];
+        yield '[Variable] successive surrounded' => [
+            'faz $foo$bar baz',
+            new ListValue([
+                'faz ',
+                new VariableValue('foo'),
+                new VariableValue('bar'),
+                ' baz',
             ]),
         ];
         yield '[Variable] empty escaped variable' => [
