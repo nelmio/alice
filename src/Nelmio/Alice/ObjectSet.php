@@ -16,5 +16,29 @@ namespace Nelmio\Alice;
  */
 final class ObjectSet
 {
-    //TODO
+    /**
+     * @var ParameterBag
+     */
+    private $parameters;
+
+    /**
+     * @var ObjectBag
+     */
+    private $objects;
+
+    public function __construct(ParameterBag $parameters, ObjectBag $objects)
+    {
+        $this->parameters = $parameters->toArray();
+        $this->objects = $objects->toFlatArray();
+    }
+
+    public function getParameters(): array
+    {
+        return $this->parameters;
+    }
+
+    public function getObjects(): array
+    {
+        return $this->objects;
+    }
 }

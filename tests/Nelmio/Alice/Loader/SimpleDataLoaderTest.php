@@ -54,7 +54,7 @@ class SimpleDataLoaderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $fixtureSet = new FixtureSet(new ParameterBag(), new ParameterBag(), new FixtureBag(), new ObjectBag());
-        $objectSet = new ObjectSet();
+        $objectSet = new ObjectSet(new ParameterBag(), new ObjectBag());
 
         $fixtureBuilderProphecy = $this->prophesize(FixtureBuilderInterface::class);
         $fixtureBuilderProphecy->build($data, $parameters, $objects)->willReturn($fixtureSet);

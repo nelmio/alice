@@ -59,7 +59,7 @@ class SimpleFileLoaderTest extends \PHPUnit_Framework_TestCase
         $objects = [
             'dummy0' => new \stdClass(),
         ];
-        $objectSet = new ObjectSet();
+        $objectSet = new ObjectSet(new ParameterBag(), new ObjectBag());
 
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse($file)->willReturn($data);

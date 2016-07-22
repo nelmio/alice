@@ -95,4 +95,9 @@ final class ParameterBag implements \IteratorAggregate, \Countable
     {
         return count($this->parameters);
     }
+
+    public function toArray(): array
+    {
+        return $this->parameters;
+    }
 }
