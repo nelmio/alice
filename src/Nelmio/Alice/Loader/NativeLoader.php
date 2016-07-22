@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Loader;
 
-
+use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\ExpressionLanguage\Lexer\EmptyValueLexer;
 use Nelmio\Alice\ExpressionLanguage\Lexer\GlobalPatternsLexer;
 use Nelmio\Alice\ExpressionLanguage\Lexer\ReferenceLexer;
@@ -53,13 +53,12 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
-use Nelmio\Alice\FixtureBuilder\Parser\Chainable\PhpParser;
-use Nelmio\Alice\FixtureBuilder\Parser\Chainable\YamlParser;
-use Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\DefaultIncludeProcessor;
-use Nelmio\Alice\FixtureBuilder\Parser\ParserRegistry;
-use Nelmio\Alice\FixtureBuilder\Parser\RuntimeCacheParser;
-use Nelmio\Alice\FixtureBuilder\ParserInterface;
-use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
+use Nelmio\Alice\Parser\Chainable\PhpParser;
+use Nelmio\Alice\Parser\Chainable\YamlParser;
+use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
+use Nelmio\Alice\Parser\ParserRegistry;
+use Nelmio\Alice\Parser\RuntimeCacheParser;
+use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\Resolver\Parameter\ArrayParameterResolver;
@@ -71,7 +70,7 @@ use Nelmio\Alice\Generator\Resolver\Parameter\StringParameterResolver;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Generator\SimpleGenerator;
 use Nelmio\Alice\GeneratorInterface;
-use Nelmio\Alice\LoaderInterface;
+use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
@@ -79,36 +78,45 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
  * Loader implementation made to be usable without any dependency injection for quick and easy usage. For more advanced
- * usages, use {@see Nelmio\Alice\Loader\SimpleLoader} instead or implement your own loader.
+ * usages, use {@see Nelmio\Alice\Loader\SimpleFileLoader} instead or implement your own loader.
  */
-final class NativeLoader implements LoaderInterface
+final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 {
     use NotClonableTrait;
     
     /**
-     * @var FixtureBuilderInterface
+     * @var FileLoaderInterface
      */
-    private $builder;
+    private $fileLoader;
 
     /**
-     * @var GeneratorInterface
+     * @var DataLoaderInterface
      */
-    private $generator;
+    private $dataLoader;
 
     public function __construct()
     {
-        $this->builder = $this->getBuiltInBuilder();
-//        $this->generator = $this->getBuiltInGenerator();
+        $this->dataLoader = $this->getBuiltInDataLoader();
+        $this->fileLoader = new SimpleFileLoader(
+            $this->getBuiltInParser(),
+            $this->dataLoader
+        );
     }
 
     /**
      * @inheritdoc
      */
-    public function load(string $file, array $parameters = [], array $objects = []): ObjectSet
+    public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
-        $fixtureSet = $this->builder->build($file, $parameters, $objects);
+        return $this->fileLoader->loadFile($file, $parameters, $objects);
+    }
 
-        return $this->generator->generate($fixtureSet);
+    /**
+     * @inheritdoc
+     */
+    public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
+    {
+        return $this->dataLoader->loadData($data, $parameters, $objects);
     }
 
     public function getBuiltInParser(): ParserInterface
@@ -121,10 +129,17 @@ final class NativeLoader implements LoaderInterface
         return new RuntimeCacheParser($registry, new DefaultIncludeProcessor(new DefaultFileLocator()));
     }
 
+    public function getBuiltInDataLoader(): DataLoaderInterface
+    {
+        return new SimpleDataLoader(
+            $this->getBuiltInBuilder(),
+            $this->getBuiltInGenerator()
+        );
+    }
+
     public function getBuiltInBuilder(): FixtureBuilderInterface
     {
         return new SimpleBuilder(
-            $this->getBuiltInParser(),
             $this->getBuiltInDenormalizer()
         );
     }
@@ -181,7 +196,10 @@ final class NativeLoader implements LoaderInterface
 
     public function getBuiltInResolver(): FixtureSetResolverInterface
     {
-        //TODO
+        return new SimpleFixtureSetResolver(
+            $this->getBuiltInParameterResolver(),
+            $this->getBuiltInObjectResolver()
+        );
     }
 
     public function getBuiltInParameterResolver(): ParameterBagResolverInterface
@@ -197,7 +215,11 @@ final class NativeLoader implements LoaderInterface
 
     public function getBuiltInObjectResolver(): ObjectGeneratorInterface
     {
-        //TODO
+//        return new SimpleObjectGenerator(
+//            new InstantiatorResolver(),
+//            //TODO: populator
+//            //TODO: caller
+//        );
     }
 
     public function getBuiltInExpressionLanguageParser(): ExpressionLanguageParserInterface

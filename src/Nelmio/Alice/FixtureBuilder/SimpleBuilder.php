@@ -20,29 +20,22 @@ use Nelmio\Alice\ParameterBag;
 final class SimpleBuilder implements FixtureBuilderInterface
 {
     use NotClonableTrait;
-    
-    /**
-     * @var ParserInterface
-     */
-    private $parser;
-    
+
     /**
      * @var DenormalizerInterface
      */
     private $denormalizer;
 
-    public function __construct(ParserInterface $parser, DenormalizerInterface $denormalizer)
+    public function __construct(DenormalizerInterface $denormalizer)
     {
-        $this->parser = $parser;
         $this->denormalizer = $denormalizer;
     }
 
     /**
      * @inheritdoc
      */
-    public function build(string $file, array $parameters = [], array $objects = []): FixtureSet
+    public function build(array $data, array $parameters = [], array $objects = []): FixtureSet
     {
-        $data = $this->parser->parse($file);
         $bareFixtureSet = $this->denormalizer->denormalize($data);
         
         return new FixtureSet(
