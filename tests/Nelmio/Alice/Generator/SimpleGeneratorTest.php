@@ -62,7 +62,11 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
         $fixture = $fixtureProphecy->reveal();
 
         $fixtures = (new FixtureBag())->with($fixture);
-        $objects = new ObjectBag(['stdClass' => new \stdClass()]);
+        $objects = new ObjectBag([
+            'stdClass' => [
+                'std' => new \stdClass(),
+            ],
+        ]);
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $objects);
 
@@ -76,12 +80,13 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $generatedObjectProphecy = $this->prophesize(ObjectInterface::class);
         $generatedObjectProphecy->getReference()->willReturn('stdObject');
+        $generatedObjectProphecy->getInstance()->willReturn(new \stdClass());
         /** @var ObjectInterface $generatedObject */
         $generatedObject = $generatedObjectProphecy->reveal();
 
         $objectGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
         $objectGeneratorProphecy
-            ->generate($fixture, $resolvedSet, $objects)
+            ->generate($fixture, $resolvedSet)
             ->willReturn($objects->with($generatedObject))
         ;
         /** @var ObjectGeneratorInterface $objectGenerator */
@@ -94,9 +99,7 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $actual);
 
-        $fixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
         $resolverProphecy->resolve(Argument::any())->shouldHaveBeenCalledTimes(1);
-        $generatedObjectProphecy->getReference()->shouldHaveBeenCalledTimes(2);
         $objectGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 }

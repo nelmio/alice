@@ -17,7 +17,6 @@ use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
 
 /**
@@ -41,10 +40,17 @@ class SimpleBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildSet()
     {
-        $data = ['dummy' => new \stdClass()];
+        $data = [
+            'stdClass' => [
+                'dummy' => new \stdClass(),
+            ],
+        ];
         $injectedParameters = ['foo' => 'bar'];
-        $injectedObjects = ['std' => new \stdClass()];
-
+        $injectedObjects = [
+            'stdClass' => [
+                'another_dummy' => new \stdClass(),
+            ],
+        ];
         $loadedParameters = new ParameterBag(['rab' => 'oof']);
         $loadedFixtures = new FixtureBag();
         $set = new BareFixtureSet($loadedParameters, $loadedFixtures);
