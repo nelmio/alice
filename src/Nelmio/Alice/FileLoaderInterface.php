@@ -11,20 +11,23 @@
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Throwable\BuildThrowable;
+use Nelmio\Alice\Throwable\LoadingThrowable;
 
-interface FixtureBuilderInterface
+/**
+ * Main interface of the library.
+ */
+interface FileLoaderInterface
 {
     /**
-     * Builds a comprehensive set of data from it and the injected parameters and objects.
+     * Loads a fixture file.
      *
      * @param string $file       File to load.
      * @param array  $parameters Additional parameters to inject.
      * @param array  $objects    Additional objects to inject.
      *
-     * @throws BuildThrowable
+     * @throws LoadingThrowable
      *
-     * @return FixtureSet Contains the loaded parameters, fixtures and the injected parameters, objects.
+     * @return ObjectSet Contains the list of objects and parameters loaded and injected.
      */
-    public function build(array $data, array $parameters = [], array $objects = []): FixtureSet;
+    public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet;
 }
