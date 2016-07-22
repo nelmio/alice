@@ -53,6 +53,15 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
+use Nelmio\Alice\Generator\Caller\FakeCaller;
+use Nelmio\Alice\Generator\Instantiator\InstantiatorResolver;
+use Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator;
+use Nelmio\Alice\Generator\Populator\FakePopulator;
+use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
+use Nelmio\Alice\Generator\Resolver\Instantiator\FakeInstantiator;
+use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
+use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Parser\Chainable\PhpParser;
 use Nelmio\Alice\Parser\Chainable\YamlParser;
 use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
@@ -198,7 +207,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     {
         return new SimpleFixtureSetResolver(
             $this->getBuiltInParameterResolver(),
-            $this->getBuiltInObjectResolver()
+            new TemplateFixtureBagResolver()
         );
     }
 
@@ -215,11 +224,14 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     public function getBuiltInObjectResolver(): ObjectGeneratorInterface
     {
-//        return new SimpleObjectGenerator(
-//            new InstantiatorResolver(),
-//            //TODO: populator
-//            //TODO: caller
-//        );
+        return new SimpleObjectGenerator(
+            new InstantiatorResolver(
+                new FakeValueResolver(),
+                new FakeInstantiator()
+            ),
+            new FakePopulator(),
+            new FakeCaller()
+        );
     }
 
     public function getBuiltInExpressionLanguageParser(): ExpressionLanguageParserInterface

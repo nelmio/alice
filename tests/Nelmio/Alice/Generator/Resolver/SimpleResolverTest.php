@@ -45,7 +45,11 @@ class SimpleResolverTest extends \PHPUnit_Framework_TestCase
         $loadedParameters = new ParameterBag(['foo' => 'bar']);
         $injectedParameters = new ParameterBag(['fou' => 'baz']);
         $unresolvedFixtures = (new FixtureBag())->with($unresolvedFixture);
-        $injectedObjects = new ObjectBag(['std' => new \stdClass()]);
+        $injectedObjects = new ObjectBag([
+            'stdClass' => [
+                'std' => new \stdClass(),
+            ],
+        ]);
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $unresolvedFixtures, $injectedObjects);
 

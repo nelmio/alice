@@ -21,7 +21,11 @@ class FixtureSetTest extends \PHPUnit_Framework_TestCase
         $loadedParameters = new ParameterBag(['foo' => 'bar']);
         $injectedParameters = new ParameterBag(['foo' => 'baz']);
         $fixtures = new FixtureBag();
-        $injectedObjects = new ObjectBag(['std' => new \stdClass()]);
+        $injectedObjects = new ObjectBag([
+            'stdClass' => [
+                'dummy' => new \stdClass(),
+            ],
+        ]);
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $injectedObjects);
 
@@ -36,7 +40,11 @@ class FixtureSetTest extends \PHPUnit_Framework_TestCase
         $loadedParameters = new ParameterBag(['foo' => 'bar']);
         $injectedParameters = new ParameterBag(['foo' => 'baz']);
         $fixtures = new FixtureBag();
-        $injectedObjects = new ObjectBag(['std' => new \stdClass()]);
+        $injectedObjects = new ObjectBag([
+            'stdClass' => [
+                'dummy' => new \stdClass(),
+            ],
+        ]);
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $injectedObjects);
 
@@ -54,7 +62,11 @@ class FixtureSetTest extends \PHPUnit_Framework_TestCase
         $loadedParameters = new ParameterBag(['foo' => 'bar']);
         $injectedParameters = new ParameterBag(['foo' => 'baz']);
         $fixtures = new FixtureBag();
-        $injectedObjects = new ObjectBag(['std' => new \stdClass()]);
+        $injectedObjects = new ObjectBag([
+            'stdClass' => [
+                'dummy' => new \stdClass(),
+            ],
+        ]);
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $injectedObjects);
         clone $set;

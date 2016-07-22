@@ -46,16 +46,27 @@ class ResolvedFixtureSetTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($set->getObjects(), $set->getObjects());
     }
 
-    /**
-     * @expectedException \DomainException
-     */
-    public function testIsNotClonable()
+    public function testIsDeepClonable()
     {
         $parameters = new ParameterBag();
         $fixtures = new FixtureBag();
         $objects = new ObjectBag();
 
         $set = new ResolvedFixtureSet($parameters, $fixtures, $objects);
-        clone $set;
+        $clone = clone $set;
+
+        $reflClass = new \ReflectionClass(ResolvedFixtureSet::class);
+        $parametersRefl = $reflClass->getProperty('parameters');
+        $parametersRefl->setAccessible(true);
+        $fixturesRefl = $reflClass->getProperty('fixtures');
+        $fixturesRefl->setAccessible(true);
+        $objectsRefl = $reflClass->getProperty('objects');
+        $objectsRefl->setAccessible(true);
+
+        $this->assertInstanceOf(ResolvedFixtureSet::class, $clone);
+        $this->assertNotSame($set, $clone);
+        $this->assertNotSame($parametersRefl->getValue($set), $parametersRefl->getValue($clone));
+        $this->assertNotSame($fixturesRefl->getValue($set), $fixturesRefl->getValue($clone));
+        $this->assertNotSame($objectsRefl->getValue($set), $objectsRefl->getValue($clone));
     }
 }
