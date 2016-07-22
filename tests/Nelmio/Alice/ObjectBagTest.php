@@ -11,9 +11,7 @@
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
-use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Exception\ObjectNotFoundException;
 
 /**
@@ -276,6 +274,73 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         $fixtureProphecy->getClassName()->willReturn($className);
 
         return $fixtureProphecy->reveal();
+    }
+
+    public function testCountable()
+    {
+        $this->assertTrue(is_a(ObjectBag::class, \Countable::class, true));
+
+        $bag = new ObjectBag();
+        $this->assertEquals(0, $bag->count());
+
+        $bag = new ObjectBag([
+            'stdClass' => [
+                'foo' => new \stdClass(),
+                'bar' => new \stdClass(),
+            ],
+        ]);
+        $this->assertEquals(2, $bag->count());
+
+        $object1 = new SimpleObject('foo', new \stdClass());
+        $object2 = new SimpleObject('bar', new \stdClass());
+        $bag = (new ObjectBag())->with($object1)->with($object2);
+        $this->assertEquals(2, $bag->count());
+
+        $object3 = new SimpleObject('foz', new \stdClass());
+        $object4 = new SimpleObject('baz', new \stdClass());
+        $anotherBag = (new ObjectBag())->with($object3)->with($object4);
+        $bag = $bag->mergeWith($anotherBag);
+        $this->assertEquals(4, $bag->count());
+    }
+
+    public function toFlatArray()
+    {
+        $bag = new ObjectBag();
+
+        $this->assertSame([], $bag->toFlatArray());
+
+        $object1 = new SimpleObject('foo', new \stdClass());
+        $object2 = new SimpleObject('bar', new \stdClass());
+        $bag = (new ObjectBag())->with($object1)->with($object2);
+
+        $this->assertSame(
+            [
+                'foo' => $object1->getInstance(),
+                'bar' => $object2->getInstance(),
+            ],
+            $bag->toFlatArray()
+        );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Two objects have the reference "foo".
+     */
+    public function toFlatArrayWithReferenceOverlap()
+    {
+        $foo = new \stdClass();
+        $foo->faz = true;
+        $bag = new ObjectBag([
+            'stdClass' => [
+                'foo' => new \stdClass(),
+                'bar' => new \stdClass(),
+            ],
+            'stdFaz' => [
+                'foo' => $foo,
+            ]
+        ]);
+
+        $bag->toFlatArray();
     }
 }
 

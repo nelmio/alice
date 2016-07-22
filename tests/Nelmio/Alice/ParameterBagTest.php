@@ -127,4 +127,24 @@ class ParameterBagTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount($size, $paramReflection->getValue($bag));
     }
+
+    public function testToArray()
+    {
+        $bag = new ParameterBag();
+
+        $this->assertSame([], $bag->toArray());
+
+        $bag = new ParameterBag([
+            'foo' => 'bar',
+            'baz' => $std = new \stdClass(),
+        ]);
+
+        $this->assertSame(
+            [
+                'foo' => 'bar',
+                'baz' => $std,
+            ],
+            $bag->toArray()
+        );
+    }
 }

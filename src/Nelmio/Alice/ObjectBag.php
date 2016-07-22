@@ -17,9 +17,17 @@ use Nelmio\Alice\Exception\ObjectNotFoundException;
 /**
  * Value object containing a list of objects.
  */
-final class ObjectBag implements \IteratorAggregate
+final class ObjectBag implements \IteratorAggregate, \Countable
 {
+    /**
+     * @var array<string, ObjectInterface[]>
+     */
     private $objects = [];
+
+    /**
+     * @var int
+     */
+    private $count = 0;
 
     public function __construct(array $objects = [])
     {
@@ -37,6 +45,7 @@ final class ObjectBag implements \IteratorAggregate
             $this->objects[$className] = [];
             foreach ($classObjects as $reference => $object) {
                 $this->objects[$className][$reference] = new SimpleObject($reference, $object);
+                $this->count++;
             }
         }
 
@@ -58,6 +67,7 @@ final class ObjectBag implements \IteratorAggregate
             $clone->objects[$objectClass] = [];
         }
         $clone->objects[$objectClass][$object->getReference()] = $object;
+        $clone->count++;
         
         return $clone;
     }
@@ -77,12 +87,14 @@ final class ObjectBag implements \IteratorAggregate
             /** @var ObjectInterface[] $classObjects */
             if (false === array_key_exists($className, $clone->objects)) {
                 $clone->objects[$className] = $classObjects;
+                $clone->count++;
                 
                 continue;
             }
 
             foreach ($classObjects as $reference => $object) {
                 $clone->objects[$className][$reference] = $object;
+                $clone->count++;
             }
         }
         
@@ -118,8 +130,43 @@ final class ObjectBag implements \IteratorAggregate
     /**
      * @inheritdoc
      */
+    public function count()
+    {
+        return $this->count;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getIterator()
     {
         return new \ArrayIterator($this->objects);
+    }
+
+    public function toFlatArray(): array
+    {
+        $flatArray = [];
+        foreach ($this->objects as $className => $references) {
+            foreach ($references as $reference => $instance) {
+                $flatArray[$reference] = $instance->getInstance();
+            }
+        }
+
+        if (count($flatArray) !== $this->count) {
+            foreach ($this->objects as $className => $references) {
+                foreach ($references as $reference => $instance) {
+                    if (array_key_exists($reference, $flatArray)) {
+                        throw new \InvalidArgumentException(
+                            'Two objects have the reference "%s".',
+                            $reference
+                        );
+                    }
+
+                    $flatArray[$reference] = $instance->getInstance();
+                }
+            }
+        }
+
+        return $flatArray;
     }
 }
