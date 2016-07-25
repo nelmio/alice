@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
 use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\Property;
@@ -46,6 +47,8 @@ class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInte
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param FixtureInterface    $scope
      * @param FlagParserInterface $parser
      * @param array               $unparsedSpecs
@@ -69,8 +72,11 @@ class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInte
         $calls = new MethodCallBag();
 
         foreach ($unparsedSpecs as $unparsedPropertyName => $value) {
-            if ('__construct' === $unparsedPropertyName && null !== $unparsedPropertyName) {
-                $constructor = $this->denormalizeConstructor($scope, $parser, $value);
+            if ('__construct' === $unparsedPropertyName) {
+                $constructor = (false === $value)
+                    ? new NoMethodCall()
+                    : $this->denormalizeConstructor($scope, $parser, $value)
+                ;
 
                 continue;
             }
@@ -86,6 +92,15 @@ class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInte
                         );
                     }
                     $unparsedMethod = key($methodCall);
+                    if (false === is_string($unparsedMethod)) {
+                        throw new \TypeError(
+                            sprintf(
+                                'Expected method name, got "%s" instead.',
+                                gettype($unparsedMethod)
+                            )
+                        );
+                    }
+
                     $calls = $calls->with(
                         $this->denormalizeCall($scope, $parser, $unparsedMethod, $methodCall[$unparsedMethod])
                     );

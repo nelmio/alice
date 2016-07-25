@@ -54,9 +54,16 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenorma
 use Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
+use Nelmio\Alice\Generator\Caller\DummyCaller;
 use Nelmio\Alice\Generator\Caller\FakeCaller;
+use Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator;
+use Nelmio\Alice\Generator\Instantiator\Chainable\NoConstructorInstantiator;
+use Nelmio\Alice\Generator\Instantiator\Chainable\FactoryInstantiator;
+use Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorResolver;
+use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator;
+use Nelmio\Alice\Generator\Populator\DummyPopulator;
 use Nelmio\Alice\Generator\Populator\FakePopulator;
 use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
 use Nelmio\Alice\Generator\Resolver\Instantiator\FakeInstantiator;
@@ -227,10 +234,14 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         return new SimpleObjectGenerator(
             new InstantiatorResolver(
                 new FakeValueResolver(),
-                new FakeInstantiator()
+                new InstantiatorRegistry([
+                    new NoCallerMethodCallInstantiator(),
+                    new NoConstructorInstantiator(),
+                    new FactoryInstantiator(),
+                ])
             ),
-            new FakePopulator(),
-            new FakeCaller()
+            new DummyPopulator(),
+            new DummyCaller()
         );
     }
 

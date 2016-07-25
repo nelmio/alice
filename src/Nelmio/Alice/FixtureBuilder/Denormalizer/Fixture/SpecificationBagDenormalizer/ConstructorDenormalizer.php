@@ -61,8 +61,9 @@ final class ConstructorDenormalizer
         array $unparsedConstructor
     ): MethodCallInterface
     {
+        /** @var int|string|null $firstKey */
         $firstKey = key($unparsedConstructor);
-        if (is_int($firstKey) || count($unparsedConstructor) > 1) {
+        if (null === $firstKey || is_int($firstKey) || count($unparsedConstructor) > 1) {
             return new SimpleMethodCall(
                 '__construct',
                 $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
