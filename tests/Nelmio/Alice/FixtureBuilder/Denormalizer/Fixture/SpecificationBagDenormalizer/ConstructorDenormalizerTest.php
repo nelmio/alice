@@ -35,6 +35,30 @@ class ConstructorDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->denormalizer = new ConstructorDenormalizer();
     }
 
+    public function testDenormalizeNoArguments()
+    {
+        $unparsedConstructor = [];
+
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $fixtureProphecy->getId()->willReturn('dummy');
+        /** @var FixtureInterface $fixture */
+        $fixture = $fixtureProphecy->reveal();
+
+        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
+        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
+        /** @var FlagParserInterface $flagParser */
+        $flagParser = $flagParserProphecy->reveal();
+
+        $expected = new SimpleMethodCall(
+            '__construct',
+            []
+        );
+
+        $actual = $this->denormalizer->denormalize($fixture, $flagParser, $unparsedConstructor);
+
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testDenormalizeSimpleArguments()
     {
         $unparsedConstructor = [

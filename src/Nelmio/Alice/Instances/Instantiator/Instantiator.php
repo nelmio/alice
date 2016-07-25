@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Instances\Instantiator;
 
 use Nelmio\Alice\Fixtures\Fixture;
-use Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface;
+use Nelmio\Alice\Generator\Instantiator\Chainable\MethodInterface;
 
 /**
  * The instantiator is responsible for creating an object defined by its fixture.

@@ -57,7 +57,7 @@ final class SpecificationBag
      */
     public function getConstructor()
     {
-        return (null === $this->constructor) ? null : clone $this->constructor;
+        return $this->constructor;
     }
     
     public function getProperties(): PropertyBag
@@ -93,10 +93,6 @@ final class SpecificationBag
 
     public function __clone()
     {
-        if (null !== $this->constructor) {
-            $this->constructor = clone $this->constructor;
-        }
-        
         $this->properties = clone $this->properties;
         $this->calls = clone $this->calls;
     }

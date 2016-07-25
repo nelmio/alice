@@ -48,6 +48,11 @@ final class SimpleGenerator implements GeneratorInterface
         $fixtures = $resolvedFixtureSet->getFixtures();
         foreach ($fixtures as $fixture) {
             $objects = $this->generator->generate($fixture, $resolvedFixtureSet);
+            $resolvedFixtureSet = new ResolvedFixtureSet(
+                $resolvedFixtureSet->getParameters(),
+                $resolvedFixtureSet->getFixtures(),
+                $objects
+            );
         }
         
         return new ObjectSet($resolvedFixtureSet->getParameters(), $objects);

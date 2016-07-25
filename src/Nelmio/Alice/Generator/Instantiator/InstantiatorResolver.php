@@ -11,11 +11,11 @@
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
+use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
-use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
@@ -50,38 +50,38 @@ final class InstantiatorResolver implements InstantiatorInterface
      */
     public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {
+        list($fixture, $fixtureSet) = $this->resolveFixtureConstructor($fixture, $fixtureSet);
+
+        return $this->instantiator->instantiate($fixture, $fixtureSet);
+    }
+
+    private function resolveFixtureConstructor(FixtureInterface $fixture, ResolvedFixtureSet $set): array
+    {
         $specs = $fixture->getSpecs();
         $constructor = $specs->getConstructor();
-        
-        $result = $this->getResolvedArguments($constructor->getArguments(), $this->valueResolver, $fixture, $fixtureSet);
-        $fixtureSet = $result->getSet();
-        /** @var array $arguments */
-        $resolvedArguments = $result->getValue();
-        
-        return $this->instantiator->instantiate(
+
+        if (null === $constructor || $constructor instanceof NoMethodCall) {
+            return [$fixture, $set];
+        }
+
+        list($resolvedArguments, $set) = $this->resolveArguments($constructor->getArguments(), $this->valueResolver, $fixture, $set);
+
+        return [
             $fixture->withSpecs(
                 $specs->withConstructor(
                     $constructor->withArguments($resolvedArguments)
                 )
             ),
-            $fixtureSet
-        );
+            $set,
+        ];
     }
 
-    /**
-     * @param array|ValueInterface[] $arguments
-     * @param ValueResolverInterface      $resolver
-     * @param FixtureInterface            $fixture
-     * @param ResolvedFixtureSet          $fixtureSet
-     *
-     * @return ResolvedValueWithFixtureSet
-     */
-    private function getResolvedArguments(
+    private function resolveArguments(
         array $arguments,
         ValueResolverInterface $resolver,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet
-    ): ResolvedValueWithFixtureSet
+    ): array
     {
         foreach ($arguments as $index => $argument) {
             if ($argument instanceof ValueInterface) {
@@ -92,6 +92,6 @@ final class InstantiatorResolver implements InstantiatorInterface
             }
         }
         
-        return new ResolvedValueWithFixtureSet($arguments, $fixtureSet);
+        return [$arguments, $fixtureSet];
     }
 }

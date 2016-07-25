@@ -9,7 +9,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Instances\Instantiator\Methods;
+namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 /**
  * @covers Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithConstructor
