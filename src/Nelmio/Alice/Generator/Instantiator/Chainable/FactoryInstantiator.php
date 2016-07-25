@@ -16,7 +16,7 @@ use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
 
-final class StaticCallerMethodCallInstantiator extends AbstractChainableInstantiator
+final class FactoryInstantiator extends AbstractChainableInstantiator
 {
     /**
      * @inheritDoc

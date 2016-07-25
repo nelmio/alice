@@ -58,7 +58,7 @@ use Nelmio\Alice\Generator\Caller\DummyCaller;
 use Nelmio\Alice\Generator\Caller\FakeCaller;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoConstructorInstantiator;
-use Nelmio\Alice\Generator\Instantiator\Chainable\StaticCallerMethodCallInstantiator;
+use Nelmio\Alice\Generator\Instantiator\Chainable\FactoryInstantiator;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorResolver;
 use Nelmio\Alice\Generator\InstantiatorInterface;
@@ -237,7 +237,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
                 new InstantiatorRegistry([
                     new NoCallerMethodCallInstantiator(),
                     new NoConstructorInstantiator(),
-                    new StaticCallerMethodCallInstantiator(),
+                    new FactoryInstantiator(),
                 ])
             ),
             new DummyPopulator(),

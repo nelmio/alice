@@ -15,9 +15,12 @@ use Nelmio\Alice\Exception\Generator\Instantiator\InstantiatorNotFoundException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\NotClonableTrait;
 
 final class InstantiatorRegistry implements InstantiatorInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ChainableInstantiatorInterface[]
      */

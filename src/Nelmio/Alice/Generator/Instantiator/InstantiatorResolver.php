@@ -38,15 +38,9 @@ final class InstantiatorResolver implements InstantiatorInterface
     }
 
     /**
-     * Instantiates the object described by the given fixture. Has access to the current fixture set and returns the new
-     * fixture set containing the instantiated the object.
+     * Resolves the fixture consturctor arguments before instantiating it.
      *
-     * @param FixtureInterface   $fixture
-     * @param ResolvedFixtureSet $fixtureSet
-     *
-     * @throws InstantiationThrowable
-     *
-     * @return ResolvedFixtureSet
+     * {@inheritdoc}
      */
     public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {

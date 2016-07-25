@@ -11,30 +11,99 @@
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
+use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\InstantiatorInterface;
-use Nelmio\Alice\Loader\NativeLoader;
+use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\ParameterBag;
+use Prophecy\Argument;
 
 /**
  * @covers Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry
  */
 class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var InstantiatorInterface
-     */
-    private $instantiator;
-
-    public function setUp()
-    {
-        $this->instantiator = (new NativeLoader())->getBuiltInInstantiatorRegistry();
-    }
-
     public function testIsAnInstantiator()
     {
         $this->assertTrue(is_a(InstantiatorRegistry::class, InstantiatorInterface::class, true));
     }
 
-    //TODO: unit tests
+    public function testAcceptChainableInstantiators()
+    {
+        new InstantiatorRegistry([new FakeChainableInstantiator()]);
+    }
 
+    /**
+     * @expectedException \TypeError
+     */
+    public function testThrowExceptionIfInvalidParserIsPassed()
+    {
+        new InstantiatorRegistry([new \stdClass()]);
+    }
 
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        $instantiator = new InstantiatorRegistry([]);
+        clone $instantiator;
+    }
+
+    public function testIterateOverEveryParsersAndUseTheFirstValidOne()
+    {
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        /** @var FixtureInterface $fixture */
+        $fixture = $fixtureProphecy->reveal();
+        $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
+        $expected = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), (new ObjectBag())->with(new SimpleObject('dummy', new \stdClass())));
+
+        $instantiator1Prophecy = $this->prophesize(ChainableInstantiatorInterface::class);
+        $instantiator1Prophecy->canInstantiate($fixture)->willReturn(false);
+        /* @var ChainableInstantiatorInterface $instantiator1 */
+        $instantiator1 = $instantiator1Prophecy->reveal();
+
+        $instantiator2Prophecy = $this->prophesize(ChainableInstantiatorInterface::class);
+        $instantiator2Prophecy->canInstantiate($fixture)->willReturn(true);
+        $instantiator2Prophecy->instantiate($fixture, $set)->willReturn($expected);
+        /* @var ChainableInstantiatorInterface $instantiator2 */
+        $instantiator2 = $instantiator2Prophecy->reveal();
+
+        $instantiator3Prophecy = $this->prophesize(ChainableInstantiatorInterface::class);
+        $instantiator3Prophecy->canInstantiate(Argument::any())->shouldNotBeCalled();
+        /* @var ChainableInstantiatorInterface $instantiator3 */
+        $instantiator3 = $instantiator3Prophecy->reveal();
+
+        $registry = new InstantiatorRegistry([
+            $instantiator1,
+            $instantiator2,
+            $instantiator3,
+        ]);
+        $actual = $registry->instantiate($fixture, $set);
+
+        $this->assertSame($expected, $actual);
+
+        $instantiator1Prophecy->canInstantiate(Argument::any())->shouldHaveBeenCalledTimes(1);
+        $instantiator2Prophecy->canInstantiate(Argument::any())->shouldHaveBeenCalledTimes(1);
+        $instantiator2Prophecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiatorNotFoundException
+     * @expectedExceptionMessage No suitable instantiator found for the fixture "dummy".
+     */
+    public function testThrowExceptionIfNoSuitableParserIsFound()
+    {
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $fixtureProphecy->getReference()->willReturn('dummy');
+        /** @var FixtureInterface $fixture */
+        $fixture = $fixtureProphecy->reveal();
+
+        $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
+
+        $registry = new InstantiatorRegistry([]);
+        $registry->instantiate($fixture, $set);
+    }
 }
