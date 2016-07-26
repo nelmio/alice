@@ -56,6 +56,7 @@ use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
 use Nelmio\Alice\Generator\Caller\DummyCaller;
 use Nelmio\Alice\Generator\Caller\FakeCaller;
+use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoConstructorInstantiator;
 use Nelmio\Alice\Generator\Instantiator\Chainable\FactoryInstantiator;
@@ -65,10 +66,12 @@ use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator;
 use Nelmio\Alice\Generator\Populator\DummyPopulator;
 use Nelmio\Alice\Generator\Populator\FakePopulator;
+use Nelmio\Alice\Generator\PopulatorInterface;
 use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
 use Nelmio\Alice\Generator\Resolver\Instantiator\FakeInstantiator;
 use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
+use Nelmio\Alice\Generator\Resolver\Value\PartsResolver;
 use Nelmio\Alice\Parser\Chainable\PhpParser;
 use Nelmio\Alice\Parser\Chainable\YamlParser;
 use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
@@ -194,7 +197,9 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             $this->getBuiltInFlagParser(),
             [
                 new \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer(
-                    new SimpleSpecificationsDenormalizer()
+                    new SimpleSpecificationsDenormalizer(
+                        $this->getBuiltInExpressionLanguageParser()
+                    )
                 ),
                 new ListNameDenormalizer(),
                 new RangeNameDenormalizer(),
@@ -232,17 +237,32 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     public function getBuiltInObjectResolver(): ObjectGeneratorInterface
     {
         return new SimpleObjectGenerator(
-            new InstantiatorResolver(
-                new FakeValueResolver(),
-                new InstantiatorRegistry([
-                    new NoCallerMethodCallInstantiator(),
-                    new NoConstructorInstantiator(),
-                    new FactoryInstantiator(),
-                ])
-            ),
-            new DummyPopulator(),
-            new DummyCaller()
+            $this->getBuiltInInstantiator(),
+            $this->getBuiltInPopulator(),
+            $this->getBuiltInCaller()
         );
+    }
+
+    public function getBuiltInInstantiator(): InstantiatorInterface
+    {
+        return new InstantiatorResolver(
+            new PartsResolver(),
+            new InstantiatorRegistry([
+                new NoCallerMethodCallInstantiator(),
+                new NoConstructorInstantiator(),
+                new FactoryInstantiator(),
+            ])
+        );
+    }
+
+    public function getBuiltInPopulator(): PopulatorInterface
+    {
+        return new DummyPopulator();
+    }
+
+    public function getBuiltInCaller(): CallerInterface
+    {
+        return new DummyCaller();
     }
 
     public function getBuiltInExpressionLanguageParser(): ExpressionLanguageParserInterface

@@ -16,6 +16,7 @@ use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
+use Nelmio\Alice\ExpressionLanguage\Parser\DummyParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Prophecy\Argument;
@@ -32,7 +33,7 @@ class ConstructorDenormalizerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->denormalizer = new ConstructorDenormalizer();
+        $this->denormalizer = new ConstructorDenormalizer(new DummyParser());
     }
 
     public function testDenormalizeNoArguments()
@@ -222,7 +223,7 @@ class ConstructorDenormalizerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $denormalizer = new ConstructorDenormalizer();
+        $denormalizer = new ConstructorDenormalizer(new DummyParser());
         $actual = $denormalizer->denormalize($fixture, $flagParser, $unparsedConstructor);
 
         $this->assertEquals($expected, $actual);

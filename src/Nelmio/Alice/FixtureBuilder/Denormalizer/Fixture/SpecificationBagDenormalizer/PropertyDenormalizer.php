@@ -15,10 +15,24 @@ use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\Value\UniqueValue;
+use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class PropertyDenormalizer
 {
+    use NotClonableTrait;
+
+    /**
+     * @var ParserInterface
+     */
+    private $parser;
+
+    public function __construct(ParserInterface $parser)
+    {
+        $this->parser = $parser;
+    }
+
     /**
      * Denormalizes a property.
      *
@@ -31,6 +45,10 @@ final class PropertyDenormalizer
      */
     public function denormalize(FixtureInterface $scope, string $name, $value, FlagBag $flags): Property
     {
+        if (is_string($value)) {
+            $value = $this->parser->parse($value);
+        }
+
         foreach ($flags as $flag) {
             if ($flag instanceof UniqueFlag) {
                 $uniqueId = $scope->getId().'::'.$name;

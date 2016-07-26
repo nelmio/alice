@@ -13,9 +13,9 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Definition\FlagInterface;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 
@@ -24,6 +24,16 @@ use Nelmio\Alice\FixtureInterface;
  */
 class ArgumentsDenormalizer
 {
+    /**
+     * @var ParserInterface
+     */
+    private $parser;
+
+    public function __construct(ParserInterface $parser)
+    {
+        $this->parser = $parser;
+    }
+
     /**
      * Denormalizes an array of arguments.
      *
@@ -66,10 +76,13 @@ class ArgumentsDenormalizer
      * @param FlagBag|null     $flags
      * @param mixed            $argument
      *
-     * @return mixed|FlagInterface
+     * @return mixed|ValueInterface
      */
     protected function handleArgumentFlags(FixtureInterface $scope, FlagBag $flags = null, $argument)
     {
+        if (is_string($argument)) {
+            $argument = $this->parser->parse($argument);
+        }
         if (null === $flags) {
             return $argument;
         }

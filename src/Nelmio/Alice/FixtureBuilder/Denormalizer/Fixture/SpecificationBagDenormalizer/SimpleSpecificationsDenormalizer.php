@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -39,11 +40,11 @@ class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInte
      */
     private $callsDenormalizer;
 
-    public function __construct()
+    public function __construct(ParserInterface $parser)
     {
-        $this->constructorDenormalizer = new ConstructorDenormalizer();
-        $this->propertyDenormalizer = new PropertyDenormalizer();
-        $this->callsDenormalizer = new CallsDenormalizer();
+        $this->constructorDenormalizer = new ConstructorDenormalizer($parser);
+        $this->propertyDenormalizer = new PropertyDenormalizer($parser);
+        $this->callsDenormalizer = new CallsDenormalizer($parser);
     }
 
     /**

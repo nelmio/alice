@@ -21,6 +21,7 @@ use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\ExpressionLanguage\Parser\DummyParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Prophecy\Argument;
@@ -70,7 +71,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer();
+        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
         $actual = $denormalizer->denormalizer(new FakeFixture, $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
@@ -90,7 +91,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer();
+        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
         $actual = $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
@@ -112,7 +113,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer();
+        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
         $actual = $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
@@ -134,7 +135,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer();
+        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
         $actual = $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
@@ -167,7 +168,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer();
+        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
         $actual = $denormalizer->denormalizer($fixture, $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
@@ -189,7 +190,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer();
+        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
         $actual = $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
@@ -212,7 +213,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer();
+        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
         $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
     }
 
@@ -233,7 +234,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer();
+        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
         $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
     }
 
@@ -259,7 +260,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer();
+        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
         $denormalizer->denormalizer($fixture, $flagParser, $specs);
     }
 }
