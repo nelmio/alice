@@ -20,35 +20,15 @@ use Nelmio\Alice\Exception\ObjectNotFoundException;
 final class ObjectBag implements \IteratorAggregate, \Countable
 {
     /**
-     * @var array<string, ObjectInterface[]>
+     * @var ObjectInterface[]
      */
     private $objects = [];
 
-    /**
-     * @var int
-     */
-    private $count = 0;
-
     public function __construct(array $objects = [])
     {
-        foreach ($objects as $className => $classObjects) {
-            if (false === is_array($classObjects)) {
-                throw new \TypeError(
-                    sprintf(
-                        'Expected array of objects to be an array where keys are FQCN and values arrays of object '
-                        .'reference/object pairs but found a "%s" instead of an array.',
-                        gettype($classObjects)
-                    )
-                );
-            }
-            
-            $this->objects[$className] = [];
-            foreach ($classObjects as $reference => $object) {
-                $this->objects[$className][$reference] = new SimpleObject($reference, $object);
-                $this->count++;
-            }
+        foreach ($objects as $reference => $object) {
+            $this->objects[$reference] = new SimpleObject($reference, $object);
         }
-
     }
 
     /**
@@ -62,13 +42,8 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     public function with(ObjectInterface $object): self
     {
         $clone = clone $this;
-        $objectClass = get_class($object->getInstance());
-        if (false === array_key_exists($objectClass, $clone->objects)) {
-            $clone->objects[$objectClass] = [];
-        }
-        $clone->objects[$objectClass][$object->getReference()] = $object;
-        $clone->count++;
-        
+        $clone->objects[$object->getReference()] = $object;
+
         return $clone;
     }
 
@@ -83,19 +58,8 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     public function mergeWith(self $objects): self
     {
         $clone = clone $this;
-        foreach ($objects as $className => $classObjects) {
-            /** @var ObjectInterface[] $classObjects */
-            if (false === array_key_exists($className, $clone->objects)) {
-                $clone->objects[$className] = $classObjects;
-                $clone->count++;
-                
-                continue;
-            }
-
-            foreach ($classObjects as $reference => $object) {
-                $clone->objects[$className][$reference] = $object;
-                $clone->count++;
-            }
+        foreach ($objects->objects as $reference => $object) {
+            $clone->objects[$reference] = $object;
         }
         
         return $clone;
@@ -103,10 +67,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     
     public function has(FixtureInterface $fixture): bool
     {
-        $className = $fixture->getClassName();
-        $reference = $fixture->getReference();
-        
-        return isset($this->objects[$className][$reference]);
+        return isset($this->objects[$fixture->getReference()]);
     }
 
     /**
@@ -118,13 +79,11 @@ final class ObjectBag implements \IteratorAggregate, \Countable
      */
     public function get(FixtureInterface $fixture): ObjectInterface
     {
-        $className = $fixture->getClassName();
-        $reference = $fixture->getReference();
-        if (isset($this->objects[$className][$reference])) {
-            return clone $this->objects[$className][$reference];
+        if ($this->has($fixture)) {
+            return clone $this->objects[$fixture->getReference()];
         }
         
-        throw ObjectNotFoundException::create($reference, $className);
+        throw ObjectNotFoundException::create($fixture->getReference(), $fixture->getClassName());
     }
 
     /**
@@ -132,7 +91,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
      */
     public function count()
     {
-        return $this->count;
+        return count($this->objects);
     }
 
     /**
@@ -143,30 +102,13 @@ final class ObjectBag implements \IteratorAggregate, \Countable
         return new \ArrayIterator($this->objects);
     }
 
-    public function toFlatArray(): array
+    public function toArray(): array
     {
-        $flatArray = [];
-        foreach ($this->objects as $className => $references) {
-            foreach ($references as $reference => $instance) {
-                $flatArray[$reference] = $instance->getInstance();
-            }
+        $array = [];
+        foreach ($this->objects as $reference => $object) {
+            $array[$reference] = $object->getInstance();
         }
 
-        if (count($flatArray) !== $this->count) {
-            foreach ($this->objects as $className => $references) {
-                foreach ($references as $reference => $instance) {
-                    if (array_key_exists($reference, $flatArray)) {
-                        throw new \InvalidArgumentException(
-                            'Two objects have the reference "%s".',
-                            $reference
-                        );
-                    }
-
-                    $flatArray[$reference] = $instance->getInstance();
-                }
-            }
-        }
-
-        return $flatArray;
+        return $array;
     }
 }

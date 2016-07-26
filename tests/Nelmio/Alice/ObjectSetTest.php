@@ -22,9 +22,7 @@ class ObjectSetTest extends \PHPUnit_Framework_TestCase
             'foo' => 'bar',
         ]);
         $objects = new ObjectBag([
-            'stdClass' => [
-                'dummy' => $std = new \stdClass(),
-            ]
+            'dummy' => $std = new \stdClass(),
         ]);
 
         $set = new ObjectSet($parameters, $objects);
