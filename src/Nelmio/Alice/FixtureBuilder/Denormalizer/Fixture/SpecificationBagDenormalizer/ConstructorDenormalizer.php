@@ -16,6 +16,7 @@ use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
+use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 
@@ -26,9 +27,9 @@ final class ConstructorDenormalizer
      */
     private $argumentDenormalizer;
 
-    public function __construct()
+    public function __construct(ParserInterface $parser)
     {
-        $this->argumentDenormalizer = new ArgumentsDenormalizer();
+        $this->argumentDenormalizer = new ArgumentsDenormalizer($parser);
     }
 
     /**

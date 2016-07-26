@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Value\UniqueValue;
+use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Prophecy\Argument;
@@ -30,6 +31,7 @@ class ArgumentsDenormalizerTest extends \PHPUnit_Framework_TestCase
             '<latitude()>',
             '1 (unique)' => '<longitude()>',
             '2 (dummy_flag)' => 'dudu',
+            1000
         ];
 
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
@@ -45,10 +47,15 @@ class ArgumentsDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new ArgumentsDenormalizer();
+        $valueParserProphecy = $this->prophesize(ParserInterface::class);
+        $valueParserProphecy->parse(Argument::any())->will(function ($args) { return $args[0]; });
+        /** @var ParserInterface $parser */
+        $parser = $valueParserProphecy->reveal();
+
+        $denormalizer = new ArgumentsDenormalizer($parser);
         $result = $denormalizer->denormalize($fixture, $flagParser, $arguments);
 
-        $this->assertCount(3, $result);
+        $this->assertCount(4, $result);
         $this->assertEquals('<latitude()>', $result[0]);
 
         /** @var UniqueValue $uniqueValue */
@@ -59,7 +66,11 @@ class ArgumentsDenormalizerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('dudu', $result[2]);
 
+        $this->assertEquals(1000, $result[3]);
+
         $fixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
+        $valueParserProphecy->parse('<longitude()>')->shouldHaveBeenCalledTimes(1);
+        $valueParserProphecy->parse('dudu')->shouldHaveBeenCalledTimes(1);
     }
 }

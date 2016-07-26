@@ -19,16 +19,6 @@ use Nelmio\Alice\Generator\ValueResolverInterface;
 final class PartsResolver implements ValueResolverInterface
 {
     /**
-     * @var ValueResolverInterface
-     */
-    private $resolver;
-
-    public function __construct(ValueResolverInterface $resolver)
-    {
-        $this->resolver = $resolver;
-    }
-
-    /**
      * @inheritdoc
      */
     public function resolve(
@@ -38,32 +28,7 @@ final class PartsResolver implements ValueResolverInterface
         array $scope = []
     ): ResolvedValueWithFixtureSet
     {
-        if (is_array($value)) {
-            return $this->resolver->resolve($value, $fixture, $fixtureSet, $scope);
-        }
-
-        if (is_string($value) === false) {
-            return new ResolvedValueWithFixtureSet($value, $fixtureSet);
-        }
-
-        if (1 === preg_match('/^(?:\d+(?:\.\d*)?)|(?:<.*>)x .*/', $value)) {
-            return $this->resolver->resolve($value, $fixture, $fixtureSet, $scope);
-        }
-
-        if (1 === preg_match('/^(?:(.*?)?(?:(<.*>)|(\[.*\])))+(.*?)?$/', $value, $matches)) {
-            unset($matches[0]);
-            foreach ($matches as $index => $match) {
-                if ($match === '' || trim($match) === '') {
-                    continue;
-                }
-                $result = $this->resolver->resolve($match, $fixture, $fixtureSet, $scope);
-
-                $fixtureSet = $result->getSet();
-                $matches[$index] = $result->getValue();
-            }
-
-            $value = implode('', $matches);
-        }
+        var_dump($value);
 
         return new ResolvedValueWithFixtureSet($value, $fixtureSet);
     }

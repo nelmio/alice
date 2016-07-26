@@ -14,24 +14,18 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Property;
+use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
+use Nelmio\Alice\ExpressionLanguage\Parser\FakeParser;
+use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureInterface;
+use Prophecy\Argument;
 
 /**
  * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\PropertyDenormalizer
  */
 class PropertyDenormalizerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var PropertyDenormalizer
-     */
-    private $denormalizer;
-
-    public function setUp()
-    {
-        $this->denormalizer = new PropertyDenormalizer();
-    }
-
     public function testDenormalize()
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
@@ -39,13 +33,14 @@ class PropertyDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FixtureInterface $fixture */
         $fixture = $fixtureProphecy->reveal();
 
-        $name = 'username';
-        $value = '<username()>';
+        $name = 'groupId';
+        $value = 10;
         $flags = new FlagBag('');
 
         $expected = new Property($name, $value);
 
-        $actual = $this->denormalizer->denormalize($fixture, $name, $value, $flags);
+        $denormalizer = new PropertyDenormalizer(new FakeParser());
+        $actual = $denormalizer->denormalize($fixture, $name, $value, $flags);
         $this->assertEquals($expected, $actual);
     }
 
@@ -56,17 +51,50 @@ class PropertyDenormalizerTest extends \PHPUnit_Framework_TestCase
         /** @var FixtureInterface $fixture */
         $fixture = $fixtureProphecy->reveal();
 
-        $name = 'username';
-        $value = '<username()>';
+        $name = 'groupId';
+        $value = 10;
         $flags = (new FlagBag(''))->with(new UniqueFlag());
 
         $expected = new Property($name, $value);
 
-        $result = $this->denormalizer->denormalize($fixture, $name, $value, $flags);
+        $denormalizer = new PropertyDenormalizer(new FakeParser());
+        $result = $denormalizer->denormalize($fixture, $name, $value, $flags);
+
+        $this->assertEquals('groupId', $expected->getName());
+        /** @var UniqueValue $uniqueValue */
+        $uniqueValue = $result->getValue();
+        $this->assertInstanceOf(UniqueValue::class, $uniqueValue);
+        $this->assertEquals(1, preg_match('/^dummy.+$/', $uniqueValue->getId()));
+    }
+
+    public function testParseStringValues()
+    {
+        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $fixtureProphecy->getId()->willReturn('dummy');
+        /** @var FixtureInterface $fixture */
+        $fixture = $fixtureProphecy->reveal();
+
+        $name = 'username';
+        $value = '<name()>';
+        $parsedValue = new FunctionCallValue('name');
+        $flags = (new FlagBag(''))->with(new UniqueFlag());
+
+        $expected = new Property($name, $parsedValue);
+
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse('<name()>')->willReturn($parsedValue);
+        /** @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $denormalizer = new PropertyDenormalizer($parser);
+        $result = $denormalizer->denormalize($fixture, $name, $value, $flags);
+
         $this->assertEquals('username', $expected->getName());
         /** @var UniqueValue $uniqueValue */
         $uniqueValue = $result->getValue();
         $this->assertInstanceOf(UniqueValue::class, $uniqueValue);
         $this->assertEquals(1, preg_match('/^dummy.+$/', $uniqueValue->getId()));
+
+        $parserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 }

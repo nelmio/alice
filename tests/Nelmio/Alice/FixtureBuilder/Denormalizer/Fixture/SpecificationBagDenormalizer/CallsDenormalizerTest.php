@@ -13,14 +13,11 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
-use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
-use Nelmio\Alice\Definition\ServiceReference\StaticReference;
+use Nelmio\Alice\ExpressionLanguage\Parser\DummyParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
-use Prophecy\Argument;
 
 /**
  * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizer
@@ -34,7 +31,7 @@ class CallsDenormalizerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->denormalizer = new CallsDenormalizer();
+        $this->denormalizer = new CallsDenormalizer(new DummyParser());
     }
 
     public function testDenormalize()
