@@ -41,15 +41,11 @@ class SimpleBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuildSet()
     {
         $data = [
-            'stdClass' => [
-                'dummy' => new \stdClass(),
-            ],
+            'dummy' => new \stdClass(),
         ];
         $injectedParameters = ['foo' => 'bar'];
         $injectedObjects = [
-            'stdClass' => [
-                'another_dummy' => new \stdClass(),
-            ],
+            'another_dummy' => new \stdClass(),
         ];
         $loadedParameters = new ParameterBag(['rab' => 'oof']);
         $loadedFixtures = new FixtureBag();

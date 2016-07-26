@@ -66,7 +66,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedFixtureSet(
             new ParameterBag(),
             (new FixtureBag())->with($fixture->withSpecs($resolvedSpecs)),
-            new ObjectBag(['std' => ['dummy' => new \stdClass()]])
+            new ObjectBag(['dummy' => new \stdClass()])
         );
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
@@ -132,7 +132,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedFixtureSet(
             new ParameterBag(),
             (new FixtureBag())->with($fixture),
-            new ObjectBag(['std' => ['dummy' => new \stdClass()]])
+            new ObjectBag(['dummy' => new \stdClass()])
         );
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
@@ -164,7 +164,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedFixtureSet(
             new ParameterBag(),
             (new FixtureBag())->with($fixture),
-            new ObjectBag(['std' => ['dummy' => new \stdClass()]])
+            new ObjectBag(['dummy' => new \stdClass()])
         );
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);

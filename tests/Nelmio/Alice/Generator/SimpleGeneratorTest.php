@@ -63,9 +63,7 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $fixtures = (new FixtureBag())->with($fixture);
         $objects = new ObjectBag([
-            'stdClass' => [
-                'std' => new \stdClass(),
-            ],
+            'std' => new \stdClass(),
         ]);
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $objects);

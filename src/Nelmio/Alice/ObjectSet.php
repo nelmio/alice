@@ -29,7 +29,7 @@ final class ObjectSet
     public function __construct(ParameterBag $parameters, ObjectBag $objects)
     {
         $this->parameters = $parameters->toArray();
-        $this->objects = $objects->toFlatArray();
+        $this->objects = $objects->toArray();
     }
 
     public function getParameters(): array
