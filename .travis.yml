@@ -22,6 +22,7 @@ matrix:
       env: SYMFONY_VERSION='^3.2@dev'
   allow_failures:
     - php: nightly
+    - env: SYMFONY_VERSION='^3.2@dev'
 
 install:
   - phpenv config-rm xdebug.ini
