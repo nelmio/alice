@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
+use Nelmio\Alice\Definition\Fixture\DummyFixture;
+use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
@@ -54,9 +56,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
 
     public function testIterateOverEveryInstantiatorAndUseTheFirstValidOne()
     {
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
+        $fixture = new FakeFixture();
         $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
         $expected = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), (new ObjectBag())->with(new SimpleObject('dummy', new \stdClass())));
 
@@ -96,10 +96,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowExceptionIfNoSuitableParserIsFound()
     {
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getReference()->willReturn('dummy');
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
+        $fixture = new DummyFixture('dummy');
 
         $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
 

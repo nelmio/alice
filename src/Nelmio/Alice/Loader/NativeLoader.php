@@ -55,8 +55,9 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
 use Nelmio\Alice\Generator\Caller\DummyCaller;
-use Nelmio\Alice\Generator\Caller\FakeCaller;
 use Nelmio\Alice\Generator\CallerInterface;
+use Nelmio\Alice\Generator\Hydrator\PropertyAccessorHydrator;
+use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoConstructorInstantiator;
 use Nelmio\Alice\Generator\Instantiator\Chainable\FactoryInstantiator;
@@ -64,16 +65,13 @@ use Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorResolver;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator;
-use Nelmio\Alice\Generator\Populator\DummyPopulator;
-use Nelmio\Alice\Generator\Populator\FakePopulator;
+use Nelmio\Alice\Generator\Populator\SimplePopulator;
 use Nelmio\Alice\Generator\PopulatorInterface;
 use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
-use Nelmio\Alice\Generator\Resolver\Instantiator\FakeInstantiator;
 use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
-use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\ResolverRegistry;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\Parser\Chainable\PhpParser;
@@ -97,6 +95,7 @@ use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
@@ -261,7 +260,10 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     public function getBuiltInPopulator(): PopulatorInterface
     {
-        return new DummyPopulator();
+        return new SimplePopulator(
+            $this->getBuiltInValueResolver(),
+            $this->getBuiltInHydrator()
+        );
     }
 
     public function getBuiltInCaller(): CallerInterface
@@ -277,6 +279,13 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
                 $this->getBuiltInUniqueValuesPool()
             ),
         ]);
+    }
+
+    public function getBuiltInHydrator(): HydratorInterface
+    {
+        return new PropertyAccessorHydrator(
+            new PropertyAccessor()
+        );
     }
 
     public function getBuiltInUniqueValuesPool(): UniqueValuesPool

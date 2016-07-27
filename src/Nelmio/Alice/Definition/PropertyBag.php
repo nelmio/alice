@@ -11,7 +11,9 @@
 
 namespace Nelmio\Alice\Definition;
 
-final class PropertyBag
+use Traversable;
+
+final class PropertyBag implements \IteratorAggregate
 {
     /**
      * @var Property[]
@@ -42,5 +44,13 @@ final class PropertyBag
         }
         
         return $clone;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator(array_values($this->properties));
     }
 }

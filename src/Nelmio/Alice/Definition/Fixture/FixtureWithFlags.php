@@ -43,14 +43,6 @@ final class FixtureWithFlags implements FixtureInterface
     {
         return $this->fixture->getId();
     }
-    
-    /**
-     * @inheritdoc
-     */
-    public function getReference(): string
-    {
-        return $this->fixture->getReference();
-    }
 
     /**
      * @inheritdoc

@@ -17,5 +17,5 @@ namespace Nelmio\Alice\Definition;
  */
 interface ServiceReferenceInterface
 {
-    public function getReference(): string;
+    public function getId(): string;
 }

@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
+use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
@@ -26,20 +27,13 @@ class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
 {
     public function testAccessors()
     {
-        $fixtureId = 'Nelmio\Entity\User#user0';
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getId()->willReturn($fixtureId);
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
+        $fixtureId = 'user0';
+        $fixture = new DummyFixture($fixtureId);
 
-        $templateId = 'Nelmio\Entity\User#user_base';
-        $templateProphecy = $this->prophesize(FixtureInterface::class);
-        $templateProphecy->getId()->willReturn($templateId);
-        /** @var FixtureInterface $template */
-        $template = $templateProphecy->reveal();
+        $templateId = 'user_base';
         $template = new TemplatingFixture(
             new FixtureWithFlags(
-                $template,
+                new DummyFixture($templateId),
                 (new FlagBag('user_base'))->with(new TemplateFlag())
             )
         );

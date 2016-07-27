@@ -375,7 +375,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\FixtureNotFoundException
-     * @expectedExceptionMessage Could not find the fixture "Nelmio\Entity\User#user_base".
+     * @expectedExceptionMessage Could not find the fixture "user_base".
      */
     public function testThrowExceptionIfFixtureNotFound()
     {

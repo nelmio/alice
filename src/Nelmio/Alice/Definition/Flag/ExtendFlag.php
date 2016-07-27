@@ -38,7 +38,7 @@ final class ExtendFlag implements FlagInterface
     public function __construct(FixtureReference $extendedFixture)
     {
         $this->extendedFixture = $extendedFixture;
-        $this->stringValue = 'extends '.$extendedFixture->getReference();
+        $this->stringValue = 'extends '.$extendedFixture->getId();
     }
 
     public function getExtendedFixture(): FixtureReference

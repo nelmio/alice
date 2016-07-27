@@ -39,6 +39,23 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($definition->getValue(), $definition->getValue());
     }
 
+    public function testImmutableFactories()
+    {
+        $property = 'username';
+        $value = new \stdClass();
+        $newValue = clone $value;
+        $newValue->foo = 'bar';
+
+        $definition = new Property($property, $value);
+        $newDefinition = $definition->withValue($newValue);
+
+        $this->assertInstanceOf(Property::class, $newDefinition);
+        $this->assertEquals($property, $definition->getName());
+        $this->assertEquals($property, $newDefinition->getName());
+        $this->assertEquals($value, $definition->getValue());
+        $this->assertEquals($newValue, $newDefinition->getValue());
+    }
+
     /**
      * @expectedException \DomainException
      */

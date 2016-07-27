@@ -30,14 +30,12 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
     
     public function testAccessors()
     {
-        $id = 'Nelmio\Entity\User#user0';
         $reference = 'user0';
         $className = 'Nelmio\Entity\User';
         $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
 
         $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $decoratedFixtureProphecy->getId()->willReturn($id);
-        $decoratedFixtureProphecy->getReference()->willReturn($reference);
+        $decoratedFixtureProphecy->getId()->willReturn($reference);
         $decoratedFixtureProphecy->getClassName()->willReturn($className);
         $decoratedFixtureProphecy->getSpecs()->willReturn($specs);
         /** @var FixtureInterface $decoratedFixture */
@@ -47,14 +45,12 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
 
         $fixture = new FixtureWithFlags($decoratedFixture, $flags);
 
-        $this->assertEquals($id, $fixture->getId());
-        $this->assertEquals($reference, $fixture->getReference());
+        $this->assertEquals($reference, $fixture->getId());
         $this->assertEquals($className, $fixture->getClassName());
         $this->assertEquals($specs, $fixture->getSpecs());
         $this->assertEquals($flags, $fixture->getFlags());
 
         $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
-        $decoratedFixtureProphecy->getReference()->shouldHaveBeenCalledTimes(1);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
         $decoratedFixtureProphecy->getSpecs()->shouldHaveBeenCalledTimes(1);
     }

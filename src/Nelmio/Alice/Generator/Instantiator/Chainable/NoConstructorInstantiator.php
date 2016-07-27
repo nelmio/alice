@@ -34,7 +34,7 @@ final class NoConstructorInstantiator extends AbstractChainableInstantiator
                 throw new InstantiationException(
                     sprintf(
                         'Could not instantiate "%s", constructor is not public.',
-                        $fixture->getReference()
+                        $fixture->getId()
                     )
                 );
             }
@@ -46,7 +46,7 @@ final class NoConstructorInstantiator extends AbstractChainableInstantiator
             throw new InstantiationException(
                 sprintf(
                     'Could not instantiate "%s", constructor has mandatory parameters but no parameters has been given.',
-                    $fixture->getReference()
+                    $fixture->getId()
                 )
             );
         } catch (\ReflectionException $exception) {

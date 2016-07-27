@@ -46,7 +46,7 @@ final class TemplateFixtureResolver
              * @var TemplatingFixtureBag $resolvedFixtures
              */
             list($extendedFixtures, $resolvedFixtures) = $this->resolveExtendedFixtures(
-                $fixture->getExtendedFixturesReferences(),
+                $fixture->getExtendedFixtureIds(),
                 $unresolvedFixtures,
                 $resolvedFixtures,
                 $context
@@ -69,7 +69,7 @@ final class TemplateFixtureResolver
     }
 
     /**
-     * @param FixtureReference[]   $fixturesReferences
+     * @param FixtureReference[]   $extendedFixtureReferences
      * @param FixtureBag           $unresolvedFixtures
      * @param TemplatingFixtureBag $resolvedFixtures
      * @param ResolvingContext     $context
@@ -79,38 +79,38 @@ final class TemplateFixtureResolver
      * @return array<FixtureBag, TemplatingFixtureBag>
      */
     private function resolveExtendedFixtures(
-        array $fixturesReferences,
+        array $extendedFixtureReferences,
         FixtureBag $unresolvedFixtures,
         TemplatingFixtureBag $resolvedFixtures,
         ResolvingContext $context
     ): array
     {
         $fixtures = new FixtureBag();
-        foreach ($fixturesReferences as $reference) {
-            $id = $reference->getReference();
-            $context = $context->with($id);
+        foreach ($extendedFixtureReferences as $reference) {
+            $fixtureId = $reference->getId();
+            $context = $context->with($fixtureId);
 
-            if (false === $unresolvedFixtures->has($id)) {
-                throw FixtureNotFoundException::create($id);
+            if (false === $unresolvedFixtures->has($fixtureId)) {
+                throw FixtureNotFoundException::create($fixtureId);
             }
 
-            if ($resolvedFixtures->has($id)) {
+            if ($resolvedFixtures->has($fixtureId)) {
                 $fixtures = $fixtures->with(
-                    $resolvedFixtures->get($id)
+                    $resolvedFixtures->get($fixtureId)
                 );
 
                 continue;
             }
 
             $resolvedFixtures = $this->resolve(
-                $unresolvedFixtures->get($id),
+                $unresolvedFixtures->get($fixtureId),
                 $unresolvedFixtures,
                 $resolvedFixtures,
                 $context
             );
 
             $fixtures = $fixtures->with(
-                $resolvedFixtures->get($id)
+                $resolvedFixtures->get($fixtureId)
             );
         }
 

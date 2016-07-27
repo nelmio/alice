@@ -355,9 +355,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 DummyWithNamedPrivateConstructor::class => [
                     'dummy' => [
-                        'dummy' => [
-                            '__construct' => false,
-                        ],
+                        '__construct' => false,
                     ],
                 ],
             ],

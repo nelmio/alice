@@ -89,4 +89,28 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
             $this->propRefl->getValue($bag)
         );
     }
+
+    public function testIsIterable()
+    {
+        $property1 = new Property('username', 'alice');
+        $property2 = new Property('owner', 'bob');
+
+        $bag = (new PropertyBag())
+            ->with($property1)
+            ->with($property2)
+        ;
+
+        $array = [];
+        foreach ($bag as $index => $property) {
+            $array[$index] = $property;
+        }
+
+        $this->assertSame(
+            [
+                $property1,
+                $property2,
+            ],
+            $array
+        );
+    }
 }

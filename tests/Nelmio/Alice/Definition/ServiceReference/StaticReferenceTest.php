@@ -28,6 +28,6 @@ class StaticReferenceTest extends \PHPUnit_Framework_TestCase
         $reference = 'dummy*';
         $definition = new StaticReference($reference);
         
-        $this->assertEquals($reference, $definition->getReference());
+        $this->assertEquals($reference, $definition->getId());
     }
 }

@@ -35,8 +35,7 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
 
         $fixture = new SimpleFixture($reference, $className, $specs);
 
-        $this->assertEquals('Nelmio\Entity\User#user0', $fixture->getId());
-        $this->assertEquals($reference, $fixture->getReference());
+        $this->assertEquals($reference, $fixture->getId());
         $this->assertEquals($className, $fixture->getClassName());
         $this->assertEquals($specs, $fixture->getSpecs());
     }

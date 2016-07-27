@@ -31,7 +31,7 @@ final class InstantiatedReference implements ServiceReferenceInterface
         $this->reference = $reference;
     }
 
-    public function getReference(): string
+    public function getId(): string
     {
         return $this->reference;
     }

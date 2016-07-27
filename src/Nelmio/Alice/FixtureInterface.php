@@ -19,15 +19,9 @@ use Nelmio\Alice\Definition\SpecificationBag;
 interface FixtureInterface
 {
     /**
-     * @return string Unique across a whole fixture set, mainly used to build unique values. By default is
-     *                'className#reference'
-     */
-    public function getId(): string;
-    
-    /**
      * @return string e.g. 'dummy0'. May contain flags depending of the implementation.
      */
-    public function getReference(): string;
+    public function getId(): string;
 
     /**
      * @return string FQCN. May contain flags depending of the implementation.

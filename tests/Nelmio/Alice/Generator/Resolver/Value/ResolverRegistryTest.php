@@ -11,17 +11,15 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Value;
 
+use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Value\FakeValue;
-use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
-use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
@@ -102,10 +100,7 @@ class ResolverRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowExceptionIfNoSuitableParserIsFound()
     {
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getReference()->willReturn('dummy');
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
+        $fixture = new DummyFixture('dummy');
 
         $set = ResolvedFixtureSetFactory::create();
 

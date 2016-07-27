@@ -30,14 +30,6 @@ class FakeFixture implements FixtureInterface
     /**
      * @inheritdoc
      */
-    public function getReference(): string
-    {
-        $this->__call();
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getClassName(): string
     {
         $this->__call();
