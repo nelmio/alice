@@ -11,25 +11,33 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Value;
 
+use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
-use Nelmio\Alice\Generator\ValueResolverInterface;
+use Nelmio\Alice\NotCallableTrait;
 
-final class PartsResolver implements ValueResolverInterface
+class FakeChainableValueResolver implements ChainableValueResolverInterface
 {
+    use NotCallableTrait;
+
+    /**
+     * @inheritdoc
+     */
+    public function canResolve(ValueInterface $value): bool
+    {
+        $this->__call();
+    }
+
     /**
      * @inheritdoc
      */
     public function resolve(
-        $value,
+        ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = []
-    ): ResolvedValueWithFixtureSet
+        array $scope = []): ResolvedValueWithFixtureSet
     {
-        var_dump($value);
-
-        return new ResolvedValueWithFixtureSet($value, $fixtureSet);
+        $this->__call();
     }
 }

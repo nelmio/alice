@@ -70,8 +70,12 @@ use Nelmio\Alice\Generator\PopulatorInterface;
 use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
 use Nelmio\Alice\Generator\Resolver\Instantiator\FakeInstantiator;
 use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
+use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
-use Nelmio\Alice\Generator\Resolver\Value\PartsResolver;
+use Nelmio\Alice\Generator\Resolver\Value\ResolverRegistry;
+use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\Parser\Chainable\PhpParser;
 use Nelmio\Alice\Parser\Chainable\YamlParser;
 use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
@@ -246,7 +250,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     public function getBuiltInInstantiator(): InstantiatorInterface
     {
         return new InstantiatorResolver(
-            new PartsResolver(),
+            $this->getBuiltInValueResolver(),
             new InstantiatorRegistry([
                 new NoCallerMethodCallInstantiator(),
                 new NoConstructorInstantiator(),
@@ -263,6 +267,21 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     public function getBuiltInCaller(): CallerInterface
     {
         return new DummyCaller();
+    }
+
+    public function getBuiltInValueResolver(): ValueResolverInterface
+    {
+        return new ResolverRegistry([
+            new DynamicArrayValueResolver(),
+            new UniqueValueResolver(
+                $this->getBuiltInUniqueValuesPool()
+            ),
+        ]);
+    }
+
+    public function getBuiltInUniqueValuesPool(): UniqueValuesPool
+    {
+        return new UniqueValuesPool();
     }
 
     public function getBuiltInExpressionLanguageParser(): ExpressionLanguageParserInterface

@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Value;
 
+use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -25,7 +26,7 @@ class FakeValueResolver implements ValueResolverInterface
      * @inheritdoc
      */
     public function resolve(
-        $value,
+        ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope = []): ResolvedValueWithFixtureSet

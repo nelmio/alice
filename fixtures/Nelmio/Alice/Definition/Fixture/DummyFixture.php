@@ -26,7 +26,7 @@ class DummyFixture implements FixtureInterface
 
     public function __construct(string $reference)
     {
-        $this->id = uniqid($reference);
+        $this->id = __CLASS__.'#'.$reference;
         $this->reference = $reference;
     }
 

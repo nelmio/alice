@@ -15,4 +15,13 @@ use Nelmio\Alice\Throwable\ParseThrowable;
 
 class ParserNotFoundException extends \RuntimeException implements ParseThrowable
 {
+    public static function create(string $file): self
+    {
+        return new static(
+            sprintf(
+                'No suitable parser found for the file "%s".',
+                $file
+            )
+        );
+    }
 }

@@ -47,11 +47,6 @@ final class ParserRegistry implements ParserInterface
             }
         }
 
-        throw new ParserNotFoundException(
-            sprintf(
-                'No suitable parser found for the file "%s".',
-                $file
-            )
-        );
+        throw ParserNotFoundException::create($file);
     }
 }

@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver;
 
-use Nelmio\Alice\Exception\Resolver\CircularReferenceException;
+use Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException;
 
 /**
  * Counter to keep track of the parameters being resolved and detect circular references.

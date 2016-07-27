@@ -26,13 +26,13 @@ class DynamicArrayValueTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testAccessors($quantifier, $element)
+    public function testAccessors($quantifier, $element, $expectedQuantifier)
     {
         $value = new DynamicArrayValue($quantifier, $element);
 
-        $this->assertEquals($quantifier, $value->getQuantifier());
+        $this->assertEquals($expectedQuantifier, $value->getQuantifier());
         $this->assertEquals($element, $value->getElement());
-        $this->assertEquals([$quantifier, $element], $value->getValue());
+        $this->assertEquals([$expectedQuantifier, $element], $value->getValue());
     }
 
     public function testIsImmutable()
@@ -65,8 +65,8 @@ class DynamicArrayValueTest extends \PHPUnit_Framework_TestCase
 
     public function provideValues()
     {
-        yield 'null value' => [null, null];
-        yield 'string value' => ['string', 'string'];
-        yield 'object value' => [new \stdClass(), new \stdClass()];
+        yield 'null value' => [null, null, 0];
+        yield 'string value' => ['string', 'string', 0];
+        yield 'object value' => [new \stdClass(), new \stdClass(), new \stdClass()];
     }
 }

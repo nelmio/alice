@@ -30,7 +30,7 @@ final class DynamicArrayValue implements ValueInterface
 
     /**
      * @param string|ValueInterface $quantifier
-     * @param string|ValueInterface    $element
+     * @param string|ValueInterface $element
      */
     public function __construct($quantifier, $element)
     {
@@ -39,11 +39,11 @@ final class DynamicArrayValue implements ValueInterface
     }
 
     /**
-     * @return string|ValueInterface
+     * @return int|ValueInterface
      */
     public function getQuantifier()
     {
-        return is_object($this->quantifier) ? clone $this->quantifier : $this->quantifier;
+        return is_object($this->quantifier) ? clone $this->quantifier : (int) $this->quantifier;
     }
 
     /**

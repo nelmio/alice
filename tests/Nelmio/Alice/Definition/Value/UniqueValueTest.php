@@ -36,6 +36,16 @@ class UniqueValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $definition->getValue());
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Cannot create a unique value of a unique value for value "".
+     */
+    public function testCannotCreateUniqueOfUniqueValue()
+    {
+        $definition = new UniqueValue('', new \stdClass());
+        new UniqueValue('', $definition);
+    }
+
     public function testIsImmutable()
     {
         $id = 'Nelmio\Entity\User#user0#username';
@@ -44,6 +54,23 @@ class UniqueValueTest extends \PHPUnit_Framework_TestCase
         $definition = new UniqueValue($id, $value);
 
         $this->assertNotSame($definition->getValue(), $definition->getValue());
+    }
+
+    public function testImmutableFactories()
+    {
+        $id = 'Nelmio\Entity\User#user0#username';
+        $value = new \stdClass();
+        $newValue = new \stdClass();
+        $newValue->foo = 'bar';
+
+        $original = new UniqueValue($id, $value);
+        $clone = $original->withValue($newValue);
+
+        $this->assertInstanceOf(UniqueValue::class, $clone);
+        $this->assertEquals($id, $original->getId());
+        $this->assertEquals($id, $clone->getId());
+        $this->assertEquals($value, $original->getValue());
+        $this->assertEquals($newValue, $clone->getValue());
     }
 
     public function testIsDeepClonable()

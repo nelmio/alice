@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use Nelmio\Alice\Exception\Resolver\ParameterNotFoundException;
+use Nelmio\Alice\Exception\Generator\Resolver\ParameterNotFoundException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
@@ -260,7 +260,7 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Resolver\ResolverNotFoundException
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage No resolver found to resolve parameter "bar".
      */
     public function testThrowExceptionIfNoResolverInjectedWhenRequired()

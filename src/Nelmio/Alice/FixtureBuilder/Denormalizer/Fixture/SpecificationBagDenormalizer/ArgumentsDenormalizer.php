@@ -13,6 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
@@ -89,7 +90,13 @@ class ArgumentsDenormalizer
 
         if ($this->requiresUnique($flags)) {
             $uniqueId = uniqid($scope->getId());
-            
+
+            if ($argument instanceof DynamicArrayValue) {
+                return new DynamicArrayValue(
+                    $argument->getQuantifier(),
+                    new UniqueValue($uniqueId, $argument->getValue())
+                );
+            }
             return new UniqueValue($uniqueId, $argument);
         }
         
