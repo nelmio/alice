@@ -46,7 +46,7 @@ final class TemplateFixtureResolver
              * @var TemplatingFixtureBag $resolvedFixtures
              */
             list($extendedFixtures, $resolvedFixtures) = $this->resolveExtendedFixtures(
-                $fixture->getExtendedFixturesReferences(),
+                $fixture->getExtendedFixtureIds(),
                 $unresolvedFixtures,
                 $resolvedFixtures,
                 $context

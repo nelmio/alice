@@ -62,7 +62,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($specs, $fixture->getSpecs());
         $this->assertTrue($fixture->isATemplate());
         $this->assertTrue($fixture->extendsFixtures());
-        $this->assertEquals([new FixtureReference('user_base')], $fixture->getExtendedFixturesReferences());
+        $this->assertEquals([new FixtureReference('user_base')], $fixture->getExtendedFixtureIds());
 
         $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
