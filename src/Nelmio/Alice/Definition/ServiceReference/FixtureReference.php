@@ -12,56 +12,27 @@
 namespace Nelmio\Alice\Definition\ServiceReference;
 
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
-use Nelmio\Alice\FixtureInterface;
 
 /**
- * Value object to point to refer to a fixture. The reference can be relative, e.g. 'user_base' (fixture reference) or
- * absolute e.g. 'Nelmio\Alice\User#user_base' (fixture ID).
+ * Value object to point to refer to a fixture.
  */
 final class FixtureReference implements ServiceReferenceInterface
 {
     /**
      * @var string
      */
-    private $reference;
+    private $id;
 
     /**
-     * @param string $reference
+     * @param string $fixtureId
      */
-    public function __construct(string $reference)
+    public function __construct(string $fixtureId)
     {
-        $this->reference = $reference;
+        $this->id = $fixtureId;
     }
 
-    /**
-     * A fixture reference may be relative, e.g. 'user_base' (fixture reference). By giving it a fixture, this method
-     * creates a new reference which will be absolute, e.g. 'Nelmio\Alice\User#user_base' (fixture ID.
-     *
-     * @param FixtureInterface $fixture
-     *
-     * @return self
-     */
-    public function createAbsoluteFrom(FixtureInterface $fixture): self
+    public function getId(): string
     {
-        if (false !== strpos($this->reference, '#')) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'Attempted to make the reference "%s" absolute from the fixture of ID "%s", however the reference '.
-                    'is already absolute.',
-                    $this->reference,
-                    $fixture->getId()
-                )
-            );
-        }
-        
-        $clone = clone $this;
-        $clone->reference = $fixture->getClassName().'#'.$this->reference;
-
-        return $clone;
-    }
-
-    public function getReference(): string
-    {
-        return $this->reference;
+        return $this->id;
     }
 }

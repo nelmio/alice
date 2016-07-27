@@ -28,6 +28,6 @@ class InstantiatedReferenceTest extends \PHPUnit_Framework_TestCase
         $reference = 'dummy*';
         $definition = new InstantiatedReference($reference);
         
-        $this->assertEquals($reference, $definition->getReference());
+        $this->assertEquals($reference, $definition->getId());
     }
 }

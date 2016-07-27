@@ -64,8 +64,8 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             [
-                new FixtureReference('Nelmio\Entity\User#user_base0'),
-                new FixtureReference('Nelmio\Entity\User#user_base1'),
+                new FixtureReference('user_base0'),
+                new FixtureReference('user_base1'),
             ],
         ];
 
@@ -80,8 +80,8 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
             true,
             true,
             [
-                new FixtureReference('Nelmio\Entity\User#user_base0'),
-                new FixtureReference('Nelmio\Entity\User#user_base1'),
+                new FixtureReference('user_base0'),
+                new FixtureReference('user_base1'),
             ],
         ];
     }

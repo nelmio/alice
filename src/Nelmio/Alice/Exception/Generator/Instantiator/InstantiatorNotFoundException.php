@@ -21,7 +21,7 @@ class InstantiatorNotFoundException extends \RuntimeException implements Instant
         return new static(
             sprintf(
                 'No suitable instantiator found for the fixture "%s".',
-                $fixture->getReference()
+                $fixture->getId()
             )
         );
     }

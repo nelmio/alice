@@ -50,14 +50,6 @@ final class TemplatingFixture implements FixtureInterface
     /**
      * @inheritdoc
      */
-    public function getReference(): string
-    {
-        return $this->fixture->getReference();
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getClassName(): string
     {
         return $this->fixture->getClassName();

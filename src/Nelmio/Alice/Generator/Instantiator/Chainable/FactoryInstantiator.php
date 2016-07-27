@@ -35,7 +35,7 @@ final class FactoryInstantiator extends AbstractChainableInstantiator
     {
         $constructor = $fixture->getSpecs()->getConstructor();
         list($factory, $method, $arguments) = [
-            $constructor->getCaller()->getReference(),
+            $constructor->getCaller()->getId(),
             $constructor->getMethod(),
             $constructor->getArguments()
         ];

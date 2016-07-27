@@ -22,12 +22,11 @@ class DummyFixture implements FixtureInterface
     /**
      * @var string
      */
-    private $reference;
+    private $id;
 
-    public function __construct(string $reference)
+    public function __construct(string $id)
     {
-        $this->id = __CLASS__.'#'.$reference;
-        $this->reference = $reference;
+        $this->id = $id;
     }
 
     /**
@@ -36,14 +35,6 @@ class DummyFixture implements FixtureInterface
     public function getId(): string
     {
         return $this->id;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getReference(): string
-    {
-        return $this->reference;
     }
 
     /**

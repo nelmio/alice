@@ -11,9 +11,11 @@
 
 namespace Nelmio\Alice\Generator\Hydrator;
 
+use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\ObjectInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class PropertyAccessorHydrator implements HydratorInterface
@@ -31,17 +33,13 @@ final class PropertyAccessorHydrator implements HydratorInterface
     }
 
     /**
-     * Hydrate the object with the provided.
-     *
-     * @param \object  $object
-     * @param Property $property
-     *
-     * @return \object
+     * @inheritdoc
      */
-    public function hydrate($object, Property $property)
+    public function hydrate(ObjectInterface $object, Property $property): ObjectInterface
     {
-        $this->propertyAccess->setValue($object, $property->getName(), $property->getValue());
+        $instance = $object->getInstance();
+        $this->propertyAccess->setValue($instance, $property->getName(), $property->getValue());
 
-        return $object;
+        return new SimpleObject($object->getReference(), $instance);
     }
 }

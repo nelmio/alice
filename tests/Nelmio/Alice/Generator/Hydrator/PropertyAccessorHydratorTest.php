@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Hydrator;
 
+use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -45,7 +46,8 @@ class PropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsModifiedObject()
     {
         $property = new Property('username', 'bob');
-        $object = new \stdClass();
+        $instance = new \stdClass();
+        $object = new SimpleObject('dummy', $instance);
 
         $accessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         /** @var PropertyAccessorInterface $accessor */
@@ -54,7 +56,7 @@ class PropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         $hydrator = new PropertyAccessorHydrator($accessor);
         $result = $hydrator->hydrate($object, $property);
 
-        $this->assertSame($object, $result);
+        $this->assertEquals($object, $result);
     }
 
     /**
@@ -62,11 +64,12 @@ class PropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetValue(Property $property)
     {
-        $object = new Dummy();
+        $instance = new Dummy();
+        $object = new SimpleObject('dummy', $instance);
         $hydratedObject = $this->hydrator->hydrate($object , $property);
 
         $expected = $property->getValue();
-        $actual = $this->propertyAccessor->getValue($hydratedObject, $property->getName());
+        $actual = $this->propertyAccessor->getValue($hydratedObject->getInstance(), $property->getName());
 
         $this->assertSame($expected, $actual);
     }

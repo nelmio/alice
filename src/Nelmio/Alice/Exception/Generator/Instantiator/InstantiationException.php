@@ -21,7 +21,7 @@ class InstantiationException extends \RuntimeException implements InstantiationT
         return new static(
             sprintf(
                 'Could no instantiate fixture "%s".',
-                $fixture->getReference()
+                $fixture->getId()
             ),
             0,
             $previous

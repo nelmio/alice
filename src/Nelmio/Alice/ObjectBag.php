@@ -27,6 +27,10 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     public function __construct(array $objects = [])
     {
         foreach ($objects as $reference => $object) {
+            if ($object instanceof ObjectInterface) {
+                $object = $object->getInstance();
+            }
+
             $this->objects[$reference] = new SimpleObject($reference, $object);
         }
     }
@@ -67,7 +71,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     
     public function has(FixtureInterface $fixture): bool
     {
-        return isset($this->objects[$fixture->getReference()]);
+        return isset($this->objects[$fixture->getId()]);
     }
 
     /**
@@ -80,10 +84,10 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     public function get(FixtureInterface $fixture): ObjectInterface
     {
         if ($this->has($fixture)) {
-            return clone $this->objects[$fixture->getReference()];
+            return clone $this->objects[$fixture->getId()];
         }
         
-        throw ObjectNotFoundException::create($fixture->getReference(), $fixture->getClassName());
+        throw ObjectNotFoundException::create($fixture->getId(), $fixture->getClassName());
     }
 
     /**

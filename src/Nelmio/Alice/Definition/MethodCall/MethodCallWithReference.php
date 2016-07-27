@@ -53,7 +53,7 @@ final class MethodCallWithReference implements MethodCallInterface
         $this->caller = $caller;
         $this->method = $method;
         $this->arguments = $arguments;
-        $this->stringValue = $caller->getReference().$method;
+        $this->stringValue = $caller->getId().$method;
     }
 
     /**

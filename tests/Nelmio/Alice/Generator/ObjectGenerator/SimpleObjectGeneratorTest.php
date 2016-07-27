@@ -60,9 +60,8 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGeneratorObject()
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getId()->willReturn('stdClass#dummy');
+        $fixtureProphecy->getId()->willReturn('dummy');
         $fixtureProphecy->getClassName()->willReturn('stdClass');
-        $fixtureProphecy->getReference()->willReturn('dummy');
         /** @var FixtureInterface $fixture */
         $fixture = $fixtureProphecy->reveal();
 

@@ -40,6 +40,16 @@ final class Property
         $this->value = $value;
     }
 
+    /**
+     * param ValueInterface|mixed $value
+     *
+     * @return self
+     */
+    public function withValue($value): self
+    {
+        return new self($this->name, $value);
+    }
+
     public function getName(): string
     {
         return $this->name;

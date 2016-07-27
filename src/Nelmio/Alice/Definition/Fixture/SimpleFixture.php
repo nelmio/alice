@@ -27,11 +27,6 @@ final class SimpleFixture implements FixtureInterface
     /**
      * @var string
      */
-    private $reference;
-
-    /**
-     * @var string
-     */
     private $className;
 
     /**
@@ -39,11 +34,10 @@ final class SimpleFixture implements FixtureInterface
      */
     private $specs;
 
-    public function __construct(string $reference, string $className, SpecificationBag $specs)
+    public function __construct(string $id, string $className, SpecificationBag $specs)
     {
-        $this->id = $className.'#'.$reference;
+        $this->id = $id;
         $this->className = $className;
-        $this->reference = $reference;
         $this->specs = $specs;
     }
 
@@ -53,14 +47,6 @@ final class SimpleFixture implements FixtureInterface
     public function getId(): string
     {
         return $this->id;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getReference(): string
-    {
-        return $this->reference;
     }
 
     /**

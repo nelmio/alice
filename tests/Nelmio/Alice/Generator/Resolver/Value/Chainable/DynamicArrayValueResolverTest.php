@@ -110,7 +110,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected quantifier to be an integer superior or equal to 2. Got "1" for "Nelmio\Alice\Definition\Fixture\DummyFixture#dummy", check you dynamic arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").
+     * @expectedExceptionMessage Expected quantifier to be an integer superior or equal to 2. Got "1" for "dummy", check you dynamic arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").
      */
     public function testThrowsExceptionIfInvalidQuantifier()
     {

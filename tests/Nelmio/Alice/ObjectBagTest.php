@@ -258,7 +258,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
     private function createFixture(string $reference, string $className): FixtureInterface
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getReference()->willReturn($reference);
+        $fixtureProphecy->getId()->willReturn($reference);
         $fixtureProphecy->getClassName()->willReturn($className);
 
         return $fixtureProphecy->reveal();
