@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator;
 
+use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
@@ -20,7 +21,7 @@ interface ValueResolverInterface
      * Resolves a value, i.e. determine the final value. Once resolved, the value will be ready to be passed to the
      * object.
      *
-     * @param string             $value
+     * @param ValueInterface     $value
      * @param FixtureInterface   $fixture Fixture to which belongs the arguments.
      * @param ResolvedFixtureSet $fixtureSet
      * @param array              $scope   List of variables accessible while resolving the arguments.
@@ -29,5 +30,5 @@ interface ValueResolverInterface
      *
      * @return ResolvedValueWithFixtureSet
      */
-    public function resolve($value, FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, array $scope = []): ResolvedValueWithFixtureSet;
+    public function resolve(ValueInterface $value, FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, array $scope = []): ResolvedValueWithFixtureSet;
 }

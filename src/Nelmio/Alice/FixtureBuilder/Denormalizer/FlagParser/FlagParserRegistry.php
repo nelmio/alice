@@ -22,7 +22,7 @@ use Nelmio\Alice\NotClonableTrait;
 final class FlagParserRegistry implements FlagParserInterface
 {
     use NotClonableTrait;
-    
+
     /**
      * @var ChainableFlagParserInterface[]
      */
@@ -34,9 +34,9 @@ final class FlagParserRegistry implements FlagParserInterface
     public function __construct(array $parsers)
     {
         $this->parsers = (
-        function (ChainableFlagParserInterface ...$parsers) {
-            return $parsers;
-        }
+            function (ChainableFlagParserInterface ...$parsers) {
+                return $parsers;
+            }
         )(...$parsers);
     }
 
@@ -51,11 +51,6 @@ final class FlagParserRegistry implements FlagParserInterface
             }
         }
 
-        throw new FlagParserNotFoundException(
-            sprintf(
-                'No suitable flag parser found to handle the element "%s".',
-                $element
-            )
-        );
+        throw FlagParserNotFoundException::create($element);
     }
 }

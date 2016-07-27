@@ -58,6 +58,14 @@ final class Reference
                     '0 (dummy_flag)',
                     (new FlagBag('0'))->with(new ElementFlag('dummy_flag')),
                 ],
+                'with an index with no flags' => [
+                    '0',
+                    new FlagBag('0'),
+                ],
+                'with an numeric index' => [
+                    0,
+                    new FlagBag('0'),
+                ],
             ],
             'malformed-element' => [
                 'non-empty string with empty flags' => [

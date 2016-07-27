@@ -13,4 +13,13 @@ namespace Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser;
 
 class FlagParserNotFoundException extends \RuntimeException
 {
+    public static function create(string $element): self
+    {
+        return new static(
+            sprintf(
+                'No suitable flag parser found to handle the element "%s".',
+                $element
+            )
+        );
+    }
 }

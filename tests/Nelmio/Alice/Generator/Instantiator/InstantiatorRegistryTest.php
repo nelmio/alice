@@ -52,7 +52,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
         clone $instantiator;
     }
 
-    public function testIterateOverEveryParsersAndUseTheFirstValidOne()
+    public function testIterateOverEveryInstantiatorAndUseTheFirstValidOne()
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
         /** @var FixtureInterface $fixture */

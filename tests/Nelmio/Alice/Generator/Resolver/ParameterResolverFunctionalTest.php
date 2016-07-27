@@ -46,7 +46,7 @@ class ParameterResolverFunctionalTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideCircularReferences
      *
-     * @expectedException \Nelmio\Alice\Exception\Resolver\CircularReferenceException
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
      * @expectedExceptionMessageRegExp /^Circular reference detected for the parameter "[^\"]+" while resolving \[.+]\.$/
      */
     public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null)

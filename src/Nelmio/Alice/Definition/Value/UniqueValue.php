@@ -32,7 +32,22 @@ final class UniqueValue implements ValueInterface
     public function __construct(string $id, $value)
     {
         $this->id = $id;
+
+        if ($value instanceof self) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Cannot create a unique value of a unique value for value "%s".',
+                    $id
+                )
+            );
+        }
+
         $this->value = $value;
+    }
+
+    public function withValue($value): self
+    {
+        return new self($this->id, $value);
     }
 
     public function getId(): string

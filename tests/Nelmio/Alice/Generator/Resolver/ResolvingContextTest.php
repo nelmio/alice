@@ -57,7 +57,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Resolver\CircularReferenceException
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
      */
     public function testFactoryMethodCannotTriggerCircularReference()
     {
@@ -79,7 +79,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Resolver\CircularReferenceException
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
      * @expectedExceptionMessage Circular reference detected for the parameter "foo" while resolving ["bar", "foo"].
      */
     public function testCheckForCircularReferences()
@@ -98,7 +98,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Resolver\CircularReferenceException
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
      * @expectedExceptionMessage Circular reference detected for the parameter "foo" while resolving ["foo"].
      */
     public function testCheckForCircularReferencesWithInitializedConstructor()

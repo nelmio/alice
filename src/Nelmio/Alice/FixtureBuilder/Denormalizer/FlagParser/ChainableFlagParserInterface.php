@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 
-use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 
 interface ChainableFlagParserInterface extends FlagParserInterface

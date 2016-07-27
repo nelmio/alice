@@ -14,6 +14,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Property;
+use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -53,7 +54,18 @@ final class PropertyDenormalizer
             if ($flag instanceof UniqueFlag) {
                 $uniqueId = $scope->getId().'::'.$name;
 
-                return new Property($name, new UniqueValue($uniqueId, $value));
+                if ($value instanceof DynamicArrayValue) {
+                    $value = new DynamicArrayValue(
+                        $value->getQuantifier(),
+                        new UniqueValue($uniqueId, $value->getValue())
+                    );
+
+                    break;
+                }
+
+                $value = new UniqueValue($uniqueId, $value);
+
+                break;
             }
         }
 

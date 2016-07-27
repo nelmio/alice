@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Exception\Resolver;
+namespace Nelmio\Alice\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Exception\ParameterNotFoundException as RootParameterNotFoundException;
 use Nelmio\Alice\Throwable\ResolveThrowable;
