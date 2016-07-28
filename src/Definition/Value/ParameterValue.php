@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * VO representing '<{param}>'.
+ * Value object representing '<{param}>'.
  */
 final class ParameterValue implements ValueInterface
 {
@@ -28,6 +28,15 @@ final class ParameterValue implements ValueInterface
      */
     public function __construct($parameterKey)
     {
+        if (false === is_string($parameterKey) && false === $parameterKey instanceof ValueInterface) {
+            throw new \TypeError(
+                sprintf(
+                    'Expected parameter key to be either a string or an instance of "%s". Got "%s" instead.',
+                    ValueInterface::class,
+                    is_object($parameterKey) ? get_class($parameterKey) : gettype($parameterKey)
+                )
+            );
+        }
         $this->parameterKey = $parameterKey;
     }
 
@@ -37,10 +46,5 @@ final class ParameterValue implements ValueInterface
     public function getValue()
     {
         return is_object($this->parameterKey) ? clone $this->parameterKey: $this->parameterKey;
-    }
-
-    public function __clone()
-    {
-        $this->parameterKey = $this->getValue();
     }
 }

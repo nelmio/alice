@@ -39,7 +39,7 @@ final class SpecificationBag
      */
     public function __construct(MethodCallInterface $constructor = null, PropertyBag $properties, MethodCallBag $calls)
     {
-        $this->constructor = $constructor;
+        $this->constructor = (null === $constructor) ? null : clone $constructor;
         $this->properties = $properties;
         $this->calls = $calls;
     }
@@ -47,7 +47,7 @@ final class SpecificationBag
     public function withConstructor(MethodCallInterface $constructor = null): self
     {
         $clone = clone $this;
-        $clone->constructor = $constructor;
+        $clone->constructor = (null === $constructor) ? null : clone $constructor;
 
         return $clone;
     }
@@ -57,7 +57,7 @@ final class SpecificationBag
      */
     public function getConstructor()
     {
-        return $this->constructor;
+        return (null === $this->constructor) ? null : clone $this->constructor;
     }
     
     public function getProperties(): PropertyBag
@@ -89,11 +89,5 @@ final class SpecificationBag
         $clone->calls = $this->calls->mergeWith($specs->calls);
 
         return $clone;
-    }
-
-    public function __clone()
-    {
-        $this->properties = clone $this->properties;
-        $this->calls = clone $this->calls;
     }
 }

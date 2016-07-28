@@ -35,32 +35,11 @@ class FixturePropertyValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$reference, $property], $value->getValue());
     }
 
+    /**
+     * @depends FixtureReferenceValueTest::testIsImmutable
+     */
     public function testIsImmutable()
     {
-        $reference = new FixtureReferenceValue('user0');
-        $property = 'username';
-
-        $value = new FixturePropertyValue($reference, $property);
-
-        $this->assertNotSame($value->getReference(), $value->getReference());
-        $this->assertNotSame($value->getValue(), $value->getValue());
-    }
-
-    public function testIsDeepClonable()
-    {
-        $reference = new FixtureReferenceValue('user0');
-        $property = 'username';
-        $value = new FixturePropertyValue($reference, $property);
-
-        $reflClass = new \ReflectionClass(FixturePropertyValue::class);
-        $referenceRefl = $reflClass->getProperty('reference');
-        $referenceRefl->setAccessible(true);
-
-        $clone = clone $value;
-
-        $this->assertEquals($clone, $value);
-        $this->assertNotSame($clone, $value);
-
-        $this->assertNotSame($referenceRefl->getValue($value), $referenceRefl->getValue($clone));
+        $this->assertTrue(true, 'Nothing to do.');
     }
 }

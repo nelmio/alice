@@ -26,13 +26,33 @@ class ChoiceListValueTest extends \PHPUnit_Framework_TestCase
     public function testReadAccessorsReturnPropertiesValues()
     {
         $list = [];
-        $value = new ListValue($list);
+        $value = new ChoiceListValue($list);
 
         $this->assertEquals($list, $value->getValue());
 
         $list = [new \stdClass()];
-        $value = new ListValue($list);
+        $value = new ChoiceListValue($list);
 
         $this->assertEquals($list, $value->getValue());
+    }
+
+    public function testIsImmutable()
+    {
+        $value = new ChoiceListValue([
+            $std = new \stdClass(),
+        ]);
+
+        // Mutate input value
+        $std->foo = 'bar';
+
+        // Mutate retrieved value
+        $value->getValue()[0]->foo = 'baz';
+
+        $this->assertEquals(
+            [
+                new \stdClass(),
+            ],
+            $value->getValue()
+        );
     }
 }

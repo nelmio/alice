@@ -35,4 +35,24 @@ class ListValueTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($list, $value->getValue());
     }
+
+    public function testIsImmutable()
+    {
+        $value = new ListValue([
+            $arg0 = new \stdClass(),
+        ]);
+
+        // Mutate injected value
+        $arg0->foo = 'bar';
+
+        // Mutate returned value
+        $value->getValue()[0]->foo = 'baz';
+
+        $this->assertEquals(
+            [
+                new \stdClass(),
+            ],
+            $value->getValue()
+        );
+    }
 }

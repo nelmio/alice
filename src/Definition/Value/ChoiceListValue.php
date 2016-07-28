@@ -28,7 +28,7 @@ final class ChoiceListValue implements ValueInterface
      */
     public function __construct(array $values)
     {
-        $this->values = $values;
+        $this->values = deep_clone($values);
     }
 
     /**
@@ -38,6 +38,6 @@ final class ChoiceListValue implements ValueInterface
      */
     public function getValue(): array
     {
-        return $this->values;
+        return deep_clone($this->values);
     }
 }

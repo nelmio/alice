@@ -45,7 +45,7 @@ final class FlagBag implements \IteratorAggregate, \Countable
     public function with(FlagInterface $flag): self
     {
         $clone = clone $this;
-        $clone->flags[$flag->__toString()] = $flag;
+        $clone->flags[$flag->__toString()] = clone $flag;
         
         return $clone;
     }
@@ -65,7 +65,7 @@ final class FlagBag implements \IteratorAggregate, \Countable
         $clone = clone $this;
         foreach ($flags as $stringFlag => $flag) {
             /** @var FlagInterface $flag */
-            $clone->flags[$flag->__toString()] = $flag;
+            $clone->flags[$flag->__toString()] = clone $flag;
         }
 
         return $clone;

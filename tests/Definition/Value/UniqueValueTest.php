@@ -26,7 +26,7 @@ class UniqueValueTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testAccessors($value)
+    public function testReadAccessorsReturnPropertiesValues($value)
     {
         $id = 'Nelmio\Entity\User#user0#username';
 
@@ -49,11 +49,18 @@ class UniqueValueTest extends \PHPUnit_Framework_TestCase
     public function testIsImmutable()
     {
         $id = 'Nelmio\Entity\User#user0#username';
-        $value = new \stdClass();
-
+        $value = [
+            $arg0 = new \stdClass()
+        ];
         $definition = new UniqueValue($id, $value);
 
-        $this->assertNotSame($definition->getValue(), $definition->getValue());
+        // Mutate injected value
+        $arg0->foo = 'bar';
+
+        // Mutate returned value
+        $definition->getValue()[0]->foo = 'baz';
+
+        $this->assertEquals([new \stdClass()], $definition->getValue());
     }
 
     public function testImmutableFactories()
@@ -71,20 +78,6 @@ class UniqueValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($id, $clone->getId());
         $this->assertEquals($value, $original->getValue());
         $this->assertEquals($newValue, $clone->getValue());
-    }
-
-    public function testIsDeepClonable()
-    {
-        $definition = new UniqueValue('dummy', null);
-        $clone = clone $definition;
-        $this->assertEquals($clone, $definition);
-        $this->assertNotSame($clone, $definition);
-
-        $value = new \stdClass();
-        $definition = new UniqueValue('dummy', $value);
-        $clone = clone $definition;
-        $this->assertEquals($clone, $definition);
-        $this->assertNotSame($clone->getValue(), $value);
     }
 
     public function provideValues()

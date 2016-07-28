@@ -11,6 +11,9 @@
 
 namespace Nelmio\Alice\Definition;
 
+/**
+ * TODO: review this class (i.e. immutability) after Caller is implemented
+ */
 final class MethodCallBag
 {
     /**

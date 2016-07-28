@@ -42,7 +42,7 @@ final class UniqueValue implements ValueInterface
             );
         }
 
-        $this->value = $value;
+        $this->value = deep_clone($value);
     }
 
     public function withValue($value): self
@@ -60,6 +60,6 @@ final class UniqueValue implements ValueInterface
      */
     public function getValue()
     {
-        return (is_object($this->value))? clone $this->value : $this->value;
+        return deep_clone($this->value);
     }
 }

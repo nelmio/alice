@@ -16,13 +16,10 @@ namespace Nelmio\Alice\Definition;
  */
 class PropertyTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @dataProvider provideValues
-     */
-    public function testAccessors($value)
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $property = 'username';
-
+        $value = new \stdClass();
         $definition = new Property($property, $value);
 
         $this->assertEquals($property, $definition->getName());
@@ -31,44 +28,42 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
 
     public function testIsImmutable()
     {
-        $property = 'username';
-        $value = new \stdClass();
+        $value = [
+            $arg0 = new \stdClass(),
+        ];
+        $definition = new Property('username', $value);
 
-        $definition = new Property($property, $value);
+        // Mutate injected value
+        $arg0->foo = 'bar';
 
-        $this->assertNotSame($definition->getValue(), $definition->getValue());
+        // Mutate returned value
+        $definition->getValue()[0]->foo = 'baz';
+
+        $this->assertEquals([new \stdClass()], $definition->getValue());
     }
 
-    public function testImmutableFactories()
+    public function testWithersAreImmutablesAndReturnNewModifiedInstance()
     {
         $property = 'username';
-        $value = new \stdClass();
-        $newValue = clone $value;
-        $newValue->foo = 'bar';
-
+        $value = 'foo';
+        $newValue = [
+            $arg0 = new \stdClass(),
+        ];
         $definition = new Property($property, $value);
         $newDefinition = $definition->withValue($newValue);
 
+        // Mutate injected value
+        $arg0->foo = 'bar';
+
+        // Mutate returned value
+        $newDefinition->getValue()[0]->foo = 'baz';
+
         $this->assertInstanceOf(Property::class, $newDefinition);
+
         $this->assertEquals($property, $definition->getName());
         $this->assertEquals($property, $newDefinition->getName());
+
         $this->assertEquals($value, $definition->getValue());
-        $this->assertEquals($newValue, $newDefinition->getValue());
-    }
-
-    /**
-     * @expectedException \DomainException
-     */
-    public function testIsNotClonable()
-    {
-        $definition = new Property('username', null);
-        clone $definition;
-    }
-
-    public function provideValues()
-    {
-        yield 'null value' => [null];
-        yield 'string value' => ['azerty'];
-        yield 'object value' => [new \stdClass()];
+        $this->assertEquals([new \stdClass()], $newDefinition->getValue());
     }
 }

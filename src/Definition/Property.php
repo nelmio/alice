@@ -11,15 +11,11 @@
 
 namespace Nelmio\Alice\Definition;
 
-use Nelmio\Alice\NotClonableTrait;
-
 /**
  * Value object representing a fixture property.
  */
 final class Property
 {
-    use NotClonableTrait;
-    
     /**
      * @var string
      */
@@ -37,7 +33,7 @@ final class Property
     public function __construct(string $name, $value)
     {
         $this->name = $name;
-        $this->value = $value;
+        $this->value = deep_clone($value);
     }
 
     /**
@@ -47,7 +43,10 @@ final class Property
      */
     public function withValue($value): self
     {
-        return new self($this->name, $value);
+        $clone = clone $this;
+        $clone->value = deep_clone($value);
+
+        return $clone;
     }
 
     public function getName(): string
@@ -60,6 +59,6 @@ final class Property
      */
     public function getValue()
     {
-        return (is_object($this->value))? clone $this->value : $this->value;
+        return deep_clone($this->value);
     }
 }

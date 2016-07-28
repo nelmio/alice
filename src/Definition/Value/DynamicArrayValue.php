@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * VO representing a array like "10x @user0". '10' is called "quantifier" and "@user0" is called "element".
+ * Value object representing an array like "10x @user0". '10' is called "quantifier" and "@user0" is called "element".
  */
 final class DynamicArrayValue implements ValueInterface
 {
@@ -29,13 +29,37 @@ final class DynamicArrayValue implements ValueInterface
     private $element;
 
     /**
-     * @param string|ValueInterface $quantifier
+     * @param int|ValueInterface    $quantifier
      * @param string|ValueInterface $element
      */
     public function __construct($quantifier, $element)
     {
+        if ($quantifier instanceof ValueInterface) {
+            $quantifier = clone $quantifier;
+        } elseif (is_scalar($quantifier)) {
+            $quantifier = (int) $quantifier;
+        } else {
+            throw new \TypeError(
+                sprintf(
+                    'Expected quantifier to be either a scalar value or a "%s" object. Got "%s" instead.',
+                    ValueInterface::class,
+                    is_object($quantifier) ? get_class($quantifier) : gettype($quantifier)
+                )
+            );
+        }
+
+        if (false === is_string($element) && false === $element instanceof ValueInterface) {
+            throw new \TypeError(
+                sprintf(
+                    'Expected element to be either string or a "%s" object. Got "%s" instead.',
+                    ValueInterface::class,
+                    is_object($element) ? get_class($element) : gettype($element)
+                )
+            );
+        }
+
         $this->quantifier = $quantifier;
-        $this->element = $element;
+        $this->element = deep_clone($element);
     }
 
     /**
@@ -43,7 +67,7 @@ final class DynamicArrayValue implements ValueInterface
      */
     public function getQuantifier()
     {
-        return is_object($this->quantifier) ? clone $this->quantifier : (int) $this->quantifier;
+        return deep_clone($this->quantifier);
     }
 
     /**
@@ -51,7 +75,7 @@ final class DynamicArrayValue implements ValueInterface
      */
     public function getElement()
     {
-        return is_object($this->element) ? clone $this->element : $this->element;
+        return deep_clone($this->element);
     }
 
     /**
@@ -65,10 +89,5 @@ final class DynamicArrayValue implements ValueInterface
             $this->getQuantifier(),
             $this->getElement(),
         ];
-    }
-
-    public function __clone()
-    {
-        list($this->quantifier, $this->element) = $this->getValue();
     }
 }

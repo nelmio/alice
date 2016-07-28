@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Fixture\Definition;
 
 use Nelmio\Alice\Definition\FakeMethodCall;
+use Nelmio\Alice\Definition\MethodCall\MutableMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\MethodCallInterface;
@@ -26,25 +27,16 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
 {
     public function testReadAccessorsReturnPropertiesValues()
     {
-        $constructorProphecy = $this->prophesize(MethodCallInterface::class);
-        $constructorProphecy->getCaller()->shouldNotBeCalled();
-        /** @var MethodCallInterface $constructor */
-        $constructor = $constructorProphecy->reveal();
+        $constructor = new FakeMethodCall();
+        $properties = new PropertyBag();
+        $calls = new MethodCallBag();
 
-        $methodCallProphecy = $this->prophesize(MethodCallInterface::class);
-        $methodCallProphecy->__toString()->shouldNotBeCalled();
-        /** @var MethodCallInterface $methodCall */
-        $methodCall = $methodCallProphecy->reveal();
-
-        $properties = (new PropertyBag())
-            ->with(new Property('username', 'bob'))
-        ;
-        $calls = (new MethodCallBag())->with($methodCall);
-
-        $bag = new SpecificationBag(null, $properties, $calls);
-        $this->assertNull($bag->getConstructor());
+        $bag = new SpecificationBag($constructor, $properties, $calls);
+        $this->assertEquals($constructor, $bag->getConstructor());
         $this->assertEquals($properties, $bag->getProperties());
         $this->assertEquals($calls, $bag->getMethodCalls());
+
+        $constructor = null;
 
         $bag = new SpecificationBag($constructor, $properties, $calls);
         $this->assertEquals($constructor, $bag->getConstructor());
@@ -52,44 +44,42 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($calls, $bag->getMethodCalls());
     }
 
+    /**
+     * @depends PropertyBagTest::testIsImmutable
+     * @depends MethodCallBagTest::testIsImmutable
+     */
     public function testIsImmutable()
     {
-        $this->markTestSkipped('TODO');
-        $constructorProphecy = $this->prophesize(MethodCallInterface::class);
-        $constructorProphecy->getCaller()->shouldNotBeCalled();
-        /** @var MethodCallInterface $constructor */
-        $constructor = $constructorProphecy->reveal();
-
-        $methodCallProphecy = $this->prophesize(MethodCallInterface::class);
-        $methodCallProphecy->__toString()->willReturn('call');
-        /** @var MethodCallInterface $methodCall */
-        $methodCall = $methodCallProphecy->reveal();
-
-        $properties = (new PropertyBag())
-            ->with(new Property('username', 'bob'))
-        ;
-        $calls = (new MethodCallBag())->with($methodCall);
+        $constructor = new MutableMethodCall(null, 'mutable');
+        $properties = new PropertyBag();
+        $calls = new MethodCallBag();
 
         $bag = new SpecificationBag($constructor, $properties, $calls);
-        $this->assertNotSame($bag->getConstructor(), $bag->getConstructor());
-        $this->assertNotSame($bag->getProperties(), $properties, $bag->getProperties());
-        $this->assertNotSame($bag->getMethodCalls(), $bag->getMethodCalls());
+
+        // Mutate injected value
+        $constructor->setMethod('foo');
+
+        // Mutate returned value
+        $bag->getConstructor()->setMethod('bar');
+
+        $this->assertNotSame(new MutableMethodCall(null, 'mutable'), $bag->getConstructor());
     }
 
     public function testWithersReturnNewModifiedInstance()
     {
-        $constructor = new FakeMethodCall();
-        $newConstructor = new FakeMethodCall();
-
-        $properties = (new PropertyBag())
-            ->with(new Property('username', 'bob'))
-        ;
-        $calls = (new MethodCallBag())
-            ->with(new FakeMethodCall())
-        ;
-
+        $constructor = null;
+        $properties = new PropertyBag();
+        $calls = new MethodCallBag();
         $bag = new SpecificationBag($constructor, $properties, $calls);
+
+        $newConstructor = new MutableMethodCall(null, 'mutable');
         $newBag = $bag->withConstructor($newConstructor);
+
+        // Mutate injected value
+        $newConstructor->setMethod('foo');
+
+        // Mutate returned value
+        $newBag->getConstructor()->setMethod('bar');
 
         $this->assertInstanceOf(SpecificationBag::class, $newBag);
 
@@ -97,29 +87,9 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($calls, $bag->getMethodCalls());
         $this->assertEquals($properties, $bag->getProperties());
 
-        $this->assertEquals($newConstructor, $newBag->getConstructor());
+        $this->assertEquals(new MutableMethodCall(null, 'mutable'), $newBag->getConstructor());
         $this->assertEquals($calls, $newBag->getMethodCalls());
         $this->assertEquals($properties, $newBag->getProperties());
-    }
-
-    public function testIsDeepClonable()
-    {
-        /** @var MethodCallInterface $constructor */
-        $constructor = $this->prophesize(MethodCallInterface::class)->reveal();
-        $properties = new PropertyBag();
-        $calls = new MethodCallBag();
-
-        $bagWithoutConstructor = new SpecificationBag(null, $properties, $calls);
-        $clone = clone $bagWithoutConstructor;
-        $this->assertInstanceOf(SpecificationBag::class, $clone);
-        $this->assertEquals($bagWithoutConstructor, $clone);
-        $this->assertNotSame($bagWithoutConstructor, $clone);
-
-        $bagWithConstructor = new SpecificationBag($constructor, $properties, $calls);
-        $clone = clone $bagWithConstructor;
-        $this->assertInstanceOf(SpecificationBag::class, $clone);
-        $this->assertEquals($bagWithConstructor, $clone);
-        $this->assertNotSame($bagWithConstructor, $clone);
     }
 
     public function testMergeTwoBags()
@@ -174,8 +144,7 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox Merging a bag that has a constructor method with a new one that does not, the result will have a
-     *          constructor method.
+     * @testdox Merging a bag that has a constructor method with a new one that does not, the result will have a constructor method.
      */
     public function testMergeTwoBags1()
     {
@@ -192,8 +161,7 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox Merging a bag that has a constructor method with a new one that has one as well, the result will kept
-     *          its constructor method.
+     * @testdox Merging a bag that has a constructor method with a new one that has one as well, the result will kept its constructor method.
      */
     public function testMergeTwoBags2()
     {

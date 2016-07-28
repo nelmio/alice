@@ -24,9 +24,22 @@ class DynamicArrayValueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider provideInputTypes
+     */
+    public function testThrowsErrorIfInvalidInputType($quantifier, $element, $errorMessage)
+    {
+        try {
+            new DynamicArrayValue($quantifier, $element);
+            $this->fail('Expected error to be thrown.');
+        } catch (\TypeError $error) {
+            $this->assertEquals($errorMessage, $error->getMessage());
+        }
+    }
+
+    /**
      * @dataProvider provideValues
      */
-    public function testAccessors($quantifier, $element, $expectedQuantifier)
+    public function testReadAccessorsReturnPropertiesValues($quantifier, $element, $expectedQuantifier)
     {
         $value = new DynamicArrayValue($quantifier, $element);
 
@@ -37,36 +50,64 @@ class DynamicArrayValueTest extends \PHPUnit_Framework_TestCase
 
     public function testIsImmutable()
     {
-        $value = new DynamicArrayValue(new \stdClass(), new \stdClass());
+        $quantifier = new MutableValue('q0');
+        $elementValue = new MutableValue('e0');
+        $value = new DynamicArrayValue($quantifier, $elementValue);
 
-        $this->assertNotSame($value->getQuantifier(), $value->getQuantifier());
-        $this->assertNotSame($value->getElement(), $value->getElement());
-        $this->assertNotSame($value->getValue(), $value->getValue());
+        // Mutate injected values
+        $quantifier->setValue('q1');
+        $elementValue->setValue('e1');
+
+        // Mutate returned values
+        $value->getQuantifier()->setValue('q2');
+        $value->getElement()->setValue('e2');
+
+        $this->assertEquals(new MutableValue('q0'), $value->getQuantifier());
+        $this->assertEquals(new MutableValue('e0'), $value->getElement());
+        $this->assertEquals(
+            [
+                new MutableValue('q0'),
+                new MutableValue('e0'),
+            ],
+            $value->getValue()
+        );
     }
 
-    public function testIsDeepClonable()
+    public function provideInputTypes()
     {
-        $quantifier = '10';
-        $element = '@user0';
-        $valueWithScalars = new DynamicArrayValue($quantifier, $element);
-        $clone = clone $valueWithScalars;
+        yield 'null/string' => [
+            null,
+            'dummy_element',
+            'Expected quantifier to be either a scalar value or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"NULL" instead.'
+        ];
 
-        $this->assertEquals($valueWithScalars, $clone);
-        $this->assertNotSame($valueWithScalars, $clone);
+        yield 'array/string' => [
+            [],
+            'dummy_element',
+            'Expected quantifier to be either a scalar value or a "Nelmio\Alice\Definition\ValueInterface" object. Got'
+            .' "array" instead.'
+        ];
 
-        $quantifier = new \stdClass();
-        $element = new \stdClass();
-        $valueWithObjects = new DynamicArrayValue($quantifier, $element);
-        $clone = clone $valueWithObjects;
+        yield 'string/null' => [
+            'dummy_quantifier',
+            null,
+            'Expected element to be either string or a "Nelmio\Alice\Definition\ValueInterface" object. Got "NULL" '
+            .'instead.'
+        ];
 
-        $this->assertEquals($valueWithObjects, $clone);
-        $this->assertNotSame($valueWithObjects, $clone);
+        yield 'string/stdClass' => [
+            'dummy_quantifier',
+            new \stdClass(),
+            'Expected element to be either string or a "Nelmio\Alice\Definition\ValueInterface" object. Got "stdClass" '
+            .'instead.'
+        ];
     }
 
     public function provideValues()
     {
-        yield 'null value' => [null, null, 0];
         yield 'string value' => ['string', 'string', 0];
-        yield 'object value' => [new \stdClass(), new \stdClass(), new \stdClass()];
+        yield 'string numeric value' => ['100', 'string', 100];
+        yield 'object value' => [new FakeValue(), new FakeValue(), new FakeValue()];
     }
 }

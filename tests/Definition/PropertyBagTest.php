@@ -30,7 +30,10 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
         $this->propRefl = $propRefl;
     }
 
-    public function testMutatorsAreImmutable()
+    /**
+     * @depends PropertyTest::testIsImmutable
+     */
+    public function testWithersAreImmutableAndReturnNewModifiedInstance()
     {
         $property = new Property('username', 'alice');
 

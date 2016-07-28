@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * VO representing "@user0->getUserName()"
+ * Value object representing "@user0->getUserName()"
  */
 final class FixtureMethodCallValue implements ValueInterface
 {
@@ -36,12 +36,12 @@ final class FixtureMethodCallValue implements ValueInterface
 
     public function getReference(): FixtureReferenceValue
     {
-        return clone $this->reference;
+        return $this->reference;
     }
 
     public function getFunctionCall(): FunctionCallValue
     {
-        return clone $this->function;
+        return $this->function;
     }
 
     /**
@@ -50,13 +50,8 @@ final class FixtureMethodCallValue implements ValueInterface
     public function getValue(): array
     {
         return [
-            $this->getReference(),
-            $this->getFunctionCall(),
+            $this->reference,
+            $this->function,
         ];
-    }
-
-    public function __clone()
-    {
-        list($this->reference, $this->function) = $this->getValue();
     }
 }
