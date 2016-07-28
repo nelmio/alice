@@ -13,12 +13,12 @@ namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * Represents a method call that should be called or not based on the given probability.
+ */
 final class OptionalMethodCall implements MethodCallInterface
 {
-    use NotClonableTrait;
-    
     /**
      * @var MethodCallInterface
      */
@@ -35,7 +35,7 @@ final class OptionalMethodCall implements MethodCallInterface
      */
     public function __construct(MethodCallInterface $methodCall, OptionalFlag $flag)
     {
-        $this->methodCall = $methodCall;
+        $this->methodCall = clone $methodCall;
         $this->flag = $flag;
     }
 
@@ -44,10 +44,10 @@ final class OptionalMethodCall implements MethodCallInterface
      */
     public function withArguments(array $arguments = null): self
     {
-        return new self(
-            $this->methodCall->withArguments($arguments),
-            clone $this->flag
-        );
+        $clone = clone $this;
+        $clone->methodCall = $clone->methodCall->withArguments(deep_clone($arguments));
+
+        return $clone;
     }
 
     /**
@@ -55,7 +55,7 @@ final class OptionalMethodCall implements MethodCallInterface
      */
     public function getCaller()
     {
-        return $this->methodCall->getCaller();
+        return deep_clone($this->methodCall->getCaller());
     }
 
     /**
@@ -71,7 +71,7 @@ final class OptionalMethodCall implements MethodCallInterface
      */
     public function getArguments()
     {
-        return $this->methodCall->getArguments();
+        return deep_clone($this->methodCall->getArguments());
     }
 
     /**

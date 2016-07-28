@@ -23,7 +23,7 @@ class FixtureReferenceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(FixtureReference::class, ServiceReferenceInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $id = 'user_base';
         $definition = new FixtureReference($id);
@@ -33,6 +33,6 @@ class FixtureReferenceTest extends \PHPUnit_Framework_TestCase
 
     public function testIsImmutable()
     {
-        //TODO
+        $this->assertTrue(true, 'Nothing to do.');
     }
 }

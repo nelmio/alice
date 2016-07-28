@@ -31,7 +31,7 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
         $this->propRefl = $propRelf;
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
         $fixtureProphecy->getId()->willReturn('foo');

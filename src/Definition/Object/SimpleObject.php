@@ -13,6 +13,9 @@ namespace Nelmio\Alice\Definition\Object;
 
 use Nelmio\Alice\ObjectInterface;
 
+/**
+ * Minimalist implementation of ObjectInterface.
+ */
 final class SimpleObject implements ObjectInterface
 {
     /**
@@ -41,13 +44,13 @@ final class SimpleObject implements ObjectInterface
         }
         
         $this->reference = $reference;
-        $this->instance = $instance;
+        $this->instance = clone $instance;
     }
 
     /**
      * @param \object $newInstance
      *
-     * @return SimpleObject
+     * @return self
      */
     public function withInstance($newInstance): self
     {
@@ -65,10 +68,5 @@ final class SimpleObject implements ObjectInterface
     public function getInstance()
     {
         return clone $this->instance;
-    }
-
-    public function __clone()
-    {
-        $this->instance = clone $this->instance;
     }
 }

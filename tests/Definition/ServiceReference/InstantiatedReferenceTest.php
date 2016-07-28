@@ -23,9 +23,9 @@ class InstantiatedReferenceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(InstantiatedReference::class, ServiceReferenceInterface::class, true));
     }
     
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
-        $reference = 'dummy*';
+        $reference = 'nelmio.alice.user_factory';
         $definition = new InstantiatedReference($reference);
         
         $this->assertEquals($reference, $definition->getId());

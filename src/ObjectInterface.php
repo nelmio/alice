@@ -12,7 +12,7 @@
 namespace Nelmio\Alice;
 
 /**
- * An object is an instance with a reference.
+ * An object is an instance (the real object) with a reference (fixture describing the instance).
  */
 interface ObjectInterface
 {

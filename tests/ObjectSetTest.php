@@ -16,7 +16,7 @@ namespace Nelmio\Alice;
  */
 class ObjectSetTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $parameters = new ParameterBag([
             'foo' => 'bar',

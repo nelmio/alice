@@ -21,7 +21,8 @@
     "require": {
         "php": "^7.0",
         "fzaninotto/faker": "^1.0",
-        "symfony/yaml": "^2.0||^3.0"
+        "symfony/yaml": "^2.0||^3.0",
+        "myclabs/deep-copy": "^1.5"
     },
     "require-dev": {
         "doctrine/common": "^2.3",
@@ -30,7 +31,12 @@
         "symfony/property-access": "^2.2||^3.0"
     },
     "autoload": {
-        "psr-4": { "Nelmio\\Alice\\": "src" }
+        "files": [
+            "src/functions.php"
+        ],
+        "psr-4": {
+            "Nelmio\\Alice\\": "src"
+        }
     },
     "autoload-dev": {
         "psr-4": {

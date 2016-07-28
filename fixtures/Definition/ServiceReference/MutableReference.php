@@ -2,9 +2,9 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -13,28 +13,17 @@ namespace Nelmio\Alice\Definition\ServiceReference;
 
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 
-/**
- * Value object representing a reference to an existing fixture.
- */
-final class FixtureReference implements ServiceReferenceInterface
+class MutableReference implements ServiceReferenceInterface
 {
-    /**
-     * @var string
-     */
-    private $id;
+    private $id = 'default';
 
-    /**
-     * @param string $fixtureId e.g. 'user0'
-     */
-    public function __construct(string $fixtureId)
+    public function setId(string $id)
     {
-        $this->id = $fixtureId;
+        $this->id = $id;
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return string fixture ID e.g. 'user0'
+     * @inheritdoc
      */
     public function getId(): string
     {

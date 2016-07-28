@@ -1,0 +1,98 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Nelmio\Alice\Definition\MethodCall;
+
+use Nelmio\Alice\Definition\MethodCallInterface;
+use Nelmio\Alice\Definition\ServiceReferenceInterface;
+use Nelmio\Alice\NotCallableTrait;
+
+class MutableMethodCall implements MethodCallInterface
+{
+    use NotCallableTrait;
+
+    /**
+     * @var ServiceReferenceInterface|null
+     */
+    private $caller;
+
+    /**
+     * @var string
+     */
+    private $method;
+
+    /**
+     * @var array|null
+     */
+    private $arguments;
+
+    public function __construct(ServiceReferenceInterface $caller = null, string $method, array $arguments = null)
+    {
+        $this->caller = $caller;
+        $this->method = $method;
+        $this->arguments = $arguments;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withArguments(array $arguments = null)
+    {
+        $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCaller()
+    {
+        return $this->caller;
+    }
+
+    public function setCaller(ServiceReferenceInterface $caller = null)
+    {
+        $this->caller = $caller;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    public function setMethod(string $method)
+    {
+        $this->method = $method;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getArguments()
+    {
+        return $this->arguments;
+    }
+
+    public function setArguments(array $arguments = null)
+    {
+        $this->arguments = $arguments;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return 'mutable_method_call';
+    }
+}

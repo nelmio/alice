@@ -23,7 +23,7 @@ class ChoiceListValueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(ListValue::class, ValueInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $list = [];
         $value = new ListValue($list);

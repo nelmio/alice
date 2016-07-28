@@ -23,7 +23,7 @@ class TemplateFlagTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(TemplateFlag::class, FlagInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $flag = new TemplateFlag();
         $this->assertEquals('template', $flag->__toString());

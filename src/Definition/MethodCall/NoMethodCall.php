@@ -13,6 +13,11 @@ namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
 
+/**
+ * Represents an absence of method call. Is used for example when a fixtures has 'constructor: false'. The difference
+ * with 'null' would be that null represents the absence of a method specified, which in the context of the constructor
+ * is very different from specifying "no call".
+ */
 final class NoMethodCall implements MethodCallInterface
 {
     /**

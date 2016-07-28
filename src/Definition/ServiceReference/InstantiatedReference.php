@@ -14,25 +14,31 @@ namespace Nelmio\Alice\Definition\ServiceReference;
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 
 /**
- * Value object to point to refer to a service, e.g. 'nelmio.alice.user_factory'
+ * Value object to point to refer to a "service", e.g. 'nelmio.alice.user_factory'. Is used in some bridges to be able
+ * to make use of existing factories or simply an existing fixture than can be used as a constructor.
  */
 final class InstantiatedReference implements ServiceReferenceInterface
 {
     /**
      * @var string
      */
-    private $reference;
+    private $id;
 
     /**
-     * @param string $reference 
+     * @param string $serviceId
      */
-    public function __construct(string $reference)
+    public function __construct(string $serviceId)
     {
-        $this->reference = $reference;
+        $this->id = $serviceId;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return string Service ID coming from a framework DIC or an instantiated fixture e.g. 'nelmio.alice.user_factory'
+     */
     public function getId(): string
     {
-        return $this->reference;
+        return $this->id;
     }
 }

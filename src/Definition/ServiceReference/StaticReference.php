@@ -14,25 +14,30 @@ namespace Nelmio\Alice\Definition\ServiceReference;
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 
 /**
- * Value object to point to refer to a static service, e.g. 'Nelmio\User\UserFactory' 
+ * Value object to point to refer to a static service, e.g. 'Nelmio\User\UserFactory'
  */
 final class StaticReference implements ServiceReferenceInterface
 {
     /**
      * @var string
      */
-    private $reference;
+    private $id;
 
     /**
-     * @param string $reference
+     * @param string $className FQCN
      */
-    public function __construct(string $reference)
+    public function __construct(string $className)
     {
-        $this->reference = $reference;
+        $this->id = $className;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return string FQCN e.g. 'Nelmio\User\UserFactory'
+     */
     public function getId(): string
     {
-        return $this->reference;
+        return $this->id;
     }
 }

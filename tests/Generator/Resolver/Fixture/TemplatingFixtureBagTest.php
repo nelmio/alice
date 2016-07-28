@@ -25,7 +25,7 @@ use Nelmio\Alice\FixtureInterface;
  */
 class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $fixtureId = 'user0';
         $fixture = new DummyFixture($fixtureId);

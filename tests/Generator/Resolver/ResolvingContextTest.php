@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver;
  */
 class ResolvingContextTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $context = new ResolvingContext();
         $this->assertFalse($context->has('foo'));
@@ -25,7 +25,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($context->has('foo'));
     }
 
-    public function testImmutableMutators()
+    public function testWithersReturnsNewModifiedInstance()
     {
         $context = new ResolvingContext();
         $newContext = $context->with('foo');

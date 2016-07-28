@@ -20,7 +20,7 @@ use Nelmio\Alice\ParameterBag;
  */
 class ResolvedFixtureSetTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $parameters = new ParameterBag();
         $fixtures = new FixtureBag();

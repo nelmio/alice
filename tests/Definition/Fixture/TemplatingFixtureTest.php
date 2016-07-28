@@ -16,14 +16,9 @@ use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
-use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
-use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * @covers Nelmio\Alice\Definition\Fixture\TemplatingFixture
@@ -35,7 +30,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(TemplatingFixture::class, FixtureInterface::class, true));
     }
     
-    public function testReadAccessorsReturnsPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $reference = 'user0';
         $className = 'Nelmio\Alice\Entity\User';
@@ -72,6 +67,9 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $decoratedFixtureProphecy->getSpecs()->shouldHaveBeenCalledTimes(1);
     }
 
+    /**
+     * @depends SpecificationBagTest::testIsImmutable
+     */
     public function testIsImmutable()
     {
         $specs = SpecificationBagFactory::create();
@@ -87,6 +85,9 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($specs, $fixture->getSpecs());
     }
 
+    /**
+     * @depends SpecificationBagTest::testIsImmutable
+     */
     public function testWithersReturnsNewModifiedInstance()
     {
         $specs = SpecificationBagFactory::create();

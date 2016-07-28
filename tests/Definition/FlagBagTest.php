@@ -24,7 +24,7 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
  */
 class FlagBagTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $flags = new FlagBag('user0');
 
@@ -36,7 +36,7 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         //TODO
     }
 
-    public function testImmutableMutator()
+    public function testWithersReturnNewModifiedInstance()
     {
         $flags = new FlagBag('user0');
         $newFlags = $flags->with(new DummyFlag());

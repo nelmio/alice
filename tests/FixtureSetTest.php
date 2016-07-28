@@ -16,7 +16,7 @@ namespace Nelmio\Alice;
  */
 class FixtureSetTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $loadedParameters = new ParameterBag(['foo' => 'bar']);
         $injectedParameters = new ParameterBag(['foo' => 'baz']);

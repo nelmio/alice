@@ -34,7 +34,7 @@ class SimpleObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(SimpleObject::class, ObjectInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $reference = 'user0';
         $instance = new \stdClass();
@@ -52,7 +52,13 @@ class SimpleObjectTest extends \PHPUnit_Framework_TestCase
 
         $object = new SimpleObject($reference, $instance);
 
-        $this->assertNotSame($object->getInstance(), $object->getInstance());
+        // Mutate injected values
+        $instance->foo = 'bar';
+
+        // Mutate returned values
+        $object->getInstance()->foo = 'baz';
+
+        $this->assertEquals(new \stdClass(), $object->getInstance());
     }
 
     /**
@@ -61,7 +67,7 @@ class SimpleObjectTest extends \PHPUnit_Framework_TestCase
      * @expectedException \TypeError
      * @expectedExceptionMessageRegExp /^Expected instance argument to be an object, got ".+?" instead\.$/
      */
-    public function testThrowAnErrorIfInstanceIsNotAnObject($instance)
+    public function testThrowsAnErrorIfInstanceIsNotAnObject($instance)
     {
         new SimpleObject('user0', $instance);
     }
@@ -74,27 +80,5 @@ class SimpleObjectTest extends \PHPUnit_Framework_TestCase
             'int' => [10],
             'float' => [1.01],
         ];
-    }
-
-    public function testIsDeepClonable()
-    {
-        $reference = 'user0';
-        $instance = new \stdClass();
-
-        $object = new SimpleObject($reference, $instance);
-        $clone = clone $object;
-
-        $this->assertInstanceOf(SimpleObject::class, $clone);
-        $this->assertEquals($object, $clone);
-
-        $this->assertNotSameInstace($object, $clone);
-    }
-
-    private function assertNotSameInstace(SimpleObject $object1, SimpleObject $object2)
-    {
-        $this->assertNotSame(
-            $this->propRefl->getValue($object1),
-            $this->propRefl->getValue($object2)
-        );
     }
 }

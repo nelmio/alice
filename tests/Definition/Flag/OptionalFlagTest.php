@@ -23,7 +23,7 @@ class OptionalFlagTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(OptionalFlag::class, FlagInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $flag = new OptionalFlag(50);
 
@@ -34,7 +34,7 @@ class OptionalFlagTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider providePercentageValues
      */
-    public function testPercentageValues(int $percentage, string $expectedMessage = null)
+    public function testThrowsExceptionIfPercentageValueIsInvalid(int $percentage, string $expectedMessage = null)
     {
         try {
             new OptionalFlag($percentage);

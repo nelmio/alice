@@ -67,7 +67,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $objects = [
             'user1' => new \stdClass(),
@@ -103,7 +103,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testImmutableMutator()
+    public function testWithersReturnNewModifiedInstance()
     {
         $object1 = new SimpleObject('foo', new \stdClass());
         $object2 = new SimpleObject('bar', new \stdClass());
