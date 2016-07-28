@@ -13,7 +13,6 @@ namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
-use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 
 /**

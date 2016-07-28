@@ -23,7 +23,7 @@ class FakeChainableTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -31,6 +31,6 @@ class FakeChainableTokenParser implements ChainableTokenParserInterface
      */
     public function parse(Token $token)
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

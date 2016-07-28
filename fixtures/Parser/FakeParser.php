@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -11,15 +11,18 @@
 
 namespace Nelmio\Alice\Parser;
 
+use Nelmio\Alice\NotCallableTrait;
 use Nelmio\Alice\ParserInterface;
 
 class FakeParser implements ParserInterface
 {
+    use NotCallableTrait;
+
     /**
      * @inheritdoc
      */
     public function parse(string $file): array
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

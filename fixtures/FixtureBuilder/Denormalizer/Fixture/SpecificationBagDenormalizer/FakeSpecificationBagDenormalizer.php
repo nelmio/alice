@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -15,9 +15,12 @@ use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\NotCallableTrait;
 
 class FakeSpecificationBagDenormalizer implements SpecificationsDenormalizerInterface
 {
+    use NotCallableTrait;
+
     /**
      * @inheritdoc
      */
@@ -27,6 +30,6 @@ class FakeSpecificationBagDenormalizer implements SpecificationsDenormalizerInte
         array $unparsedSpecs
     ): SpecificationBag
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

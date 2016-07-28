@@ -25,6 +25,6 @@ class FakeGenerator implements GeneratorInterface
      */
     public function generate(FixtureSet $fixtureSet): ObjectSet
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

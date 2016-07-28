@@ -17,7 +17,6 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 final class InstantiatorResolver implements InstantiatorInterface
 {

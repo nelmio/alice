@@ -14,8 +14,6 @@ namespace Nelmio\Alice\Generator\Resolver\Parameter;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
-use Prophecy\Argument;
 
 /**
  * @covers Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterResolver

@@ -24,7 +24,7 @@ class FakeChainableInstantiator implements ChainableInstantiatorInterface
      */
     public function canInstantiate(FixtureInterface $fixture): bool
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -32,6 +32,6 @@ class FakeChainableInstantiator implements ChainableInstantiatorInterface
      */
     public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

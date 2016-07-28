@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Definition;
 
-use Traversable;
-
 final class PropertyBag implements \IteratorAggregate
 {
     /**

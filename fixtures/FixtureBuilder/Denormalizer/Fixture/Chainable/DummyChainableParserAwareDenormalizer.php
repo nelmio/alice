@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -17,7 +17,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 
-class FakeChainableParserAwareDenormalizer implements ChainableFixtureDenormalizerInterface, FlagParserAwareInterface
+class DummyChainableParserAwareDenormalizer implements ChainableFixtureDenormalizerInterface, FlagParserAwareInterface
 {
     /**
      * @var ChainableFixtureDenormalizerInterface
