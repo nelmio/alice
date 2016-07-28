@@ -19,7 +19,7 @@ use Nelmio\Alice\Definition\SpecificationBag;
 interface FixtureInterface
 {
     /**
-     * @return string e.g. 'dummy0'. May contain flags depending of the implementation.
+     * @return string e.g. 'dummy0'. May contain flags e.g. 'dummy (extends base_dummy)' depending of the implementation.
      */
     public function getId(): string;
 

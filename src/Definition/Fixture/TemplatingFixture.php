@@ -35,7 +35,7 @@ final class TemplatingFixture implements FixtureInterface
 
     public function __construct(FixtureWithFlags $fixture)
     {
-        $this->fixture = $fixture;
+        $this->fixture = clone $fixture;
         $this->templating = new Templating($fixture);
     }
 
@@ -75,7 +75,7 @@ final class TemplatingFixture implements FixtureInterface
     }
 
     /**
-     * Gets the decorated fixture stripped of its templating flags.
+     * Gets the decorated fixture stripped of its templating flags (they are simply removed, no side-effect caused).
      *
      * @return FixtureWithFlags
      */
@@ -108,11 +108,5 @@ final class TemplatingFixture implements FixtureInterface
     public function getExtendedFixturesReferences(): array
     {
         return $this->templating->getExtendedFixtures();
-    }
-    
-    public function __clone()
-    {
-        $this->fixture = clone $this->fixture;
-        $this->templating = clone $this->templating;
     }
 }

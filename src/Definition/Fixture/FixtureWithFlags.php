@@ -32,7 +32,7 @@ final class FixtureWithFlags implements FixtureInterface
 
     public function __construct(FixtureInterface $fixture, FlagBag $flags)
     {
-        $this->fixture = $fixture;
+        $this->fixture = clone $fixture;
         $this->flags = $flags;
     }
 
@@ -73,12 +73,6 @@ final class FixtureWithFlags implements FixtureInterface
     
     public function getFlags(): FlagBag
     {
-        return clone $this->flags;
-    }
-    
-    public function __clone()
-    {
-        $this->fixture = clone $this->fixture;
-        $this->flags = clone $this->flags;
+        return $this->flags;
     }
 }
