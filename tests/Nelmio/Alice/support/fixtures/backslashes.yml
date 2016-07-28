@@ -1,7 +1,0 @@
-Nelmio\Alice\support\models\User:
-    foo:
-        username: Bob
-    user0:
-        username: |-
-            \\
-        friends: ['@foo', \@foo, \\@foo, \\\@foo]

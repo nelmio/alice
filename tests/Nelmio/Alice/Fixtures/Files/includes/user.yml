@@ -1,5 +1,0 @@
-include:
-    - 'base_user.yml'
-
-Nelmio\Alice\support\models\User:
-    user0 (extends base_user): {}
