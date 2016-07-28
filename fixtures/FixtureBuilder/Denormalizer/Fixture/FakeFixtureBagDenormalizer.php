@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -13,14 +13,17 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
+use Nelmio\Alice\NotCallableTrait;
 
 class FakeFixtureBagDenormalizer implements FixtureBagDenormalizerInterface
 {
+    use NotCallableTrait;
+
     /**
      * @inheritdoc
      */
     public function denormalize(array $data): FixtureBag
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

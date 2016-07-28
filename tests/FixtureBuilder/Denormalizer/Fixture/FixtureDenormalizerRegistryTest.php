@@ -13,7 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\FakeChainableParserAwareDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\DummyChainableParserAwareDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -96,7 +96,7 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
         /** @var FlagParserAwareInterface $flagParserAware */
         $flagParserAware = $flagParserAwareProphecy->reveal();
 
-        $flagParserAwareDenormalizer = new FakeChainableParserAwareDenormalizer($chainableDenormalizer2, $flagParserAware);
+        $flagParserAwareDenormalizer = new DummyChainableParserAwareDenormalizer($chainableDenormalizer2, $flagParserAware);
 
         $denormalizer = new FixtureDenormalizerRegistry(
             $flagParser,

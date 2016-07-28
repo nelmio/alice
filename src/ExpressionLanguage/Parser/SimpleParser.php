@@ -16,7 +16,6 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
-use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\NotClonableTrait;
 
 final class SimpleParser implements ParserInterface

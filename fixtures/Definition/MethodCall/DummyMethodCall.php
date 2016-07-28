@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -12,9 +12,12 @@
 namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
+use Nelmio\Alice\NotCallableTrait;
 
 final class DummyMethodCall implements MethodCallInterface
 {
+    use NotCallableTrait;
+
     /**
      * @var string
      */
@@ -36,7 +39,7 @@ final class DummyMethodCall implements MethodCallInterface
      */
     public function withArguments(array $arguments = null): self
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
     
     /**
@@ -44,7 +47,7 @@ final class DummyMethodCall implements MethodCallInterface
      */
     public function getCaller()
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -52,7 +55,7 @@ final class DummyMethodCall implements MethodCallInterface
      */
     public function getMethod(): string
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -60,7 +63,7 @@ final class DummyMethodCall implements MethodCallInterface
      */
     public function getArguments(): array
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**

@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Generator\Populator;
 
-use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\PopulatorInterface;

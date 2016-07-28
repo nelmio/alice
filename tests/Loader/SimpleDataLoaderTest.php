@@ -18,7 +18,6 @@ use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\FakeGenerator;
 use Nelmio\Alice\GeneratorInterface;
-use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\ParameterBag;

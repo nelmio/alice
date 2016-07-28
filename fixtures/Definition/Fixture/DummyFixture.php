@@ -42,7 +42,7 @@ class DummyFixture implements FixtureInterface
      */
     public function getClassName(): string
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -50,7 +50,7 @@ class DummyFixture implements FixtureInterface
      */
     public function getSpecs(): SpecificationBag
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -58,6 +58,6 @@ class DummyFixture implements FixtureInterface
      */
     public function withSpecs(SpecificationBag $specs)
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

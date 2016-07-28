@@ -31,6 +31,6 @@ class FakeValueResolver implements ValueResolverInterface
         ResolvedFixtureSet $fixtureSet,
         array $scope = []): ResolvedValueWithFixtureSet
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

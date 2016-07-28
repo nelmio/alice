@@ -15,7 +15,6 @@ use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Value\FakeValue;
-use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *  
  * (c) Nelmio <hello@nelm.io>
@@ -12,11 +12,14 @@
 namespace Nelmio\Alice\FileLocator;
 
 use Nelmio\Alice\FileLocatorInterface;
+use Nelmio\Alice\NotCallableTrait;
 
 final class DummyFileLocator implements FileLocatorInterface
 {
+    use NotCallableTrait;
+
     public function locate(string $name, string $currentPath = null): string
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

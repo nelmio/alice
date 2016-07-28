@@ -24,6 +24,6 @@ class FakeFixtureBuilder implements FixtureBuilderInterface
      */
     public function build(array $data, array $parameters = [], array $objects = []): FixtureSet
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

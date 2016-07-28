@@ -24,6 +24,6 @@ class FakeDataLoader implements DataLoaderInterface
      */
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

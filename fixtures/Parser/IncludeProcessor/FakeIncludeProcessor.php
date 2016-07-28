@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -11,13 +11,16 @@
 
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
+use Nelmio\Alice\NotCallableTrait;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
 
 final class FakeIncludeProcessor implements IncludeProcessorInterface
 {
+    use NotCallableTrait;
+
     public function process(ParserInterface $parser, string $file, array $data): array
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

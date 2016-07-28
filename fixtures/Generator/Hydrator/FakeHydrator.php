@@ -25,6 +25,6 @@ class FakeHydrator implements HydratorInterface
      */
     public function hydrate(ObjectInterface $object, Property $property): ObjectInterface
     {
-        $this->__call();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }
