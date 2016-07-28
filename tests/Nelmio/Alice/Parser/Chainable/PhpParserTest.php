@@ -13,7 +13,6 @@ namespace Nelmio\Alice\Parser\Chainable;
 
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
-use Prophecy\Argument;
 
 /**
  * @covers Nelmio\Alice\FixtureBuilder\Parser\Chainable\PhpParser
@@ -33,7 +32,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUpBeforeClass();
 
-        self::$dir = __DIR__.'/../File/Php';
+        self::$dir = __DIR__.'/../../../../../fixtures/Nelmio/Alice/Parser/files/php';
     }
 
     public static function tearDownAfterClass()

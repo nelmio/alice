@@ -26,7 +26,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        self::$dir = __DIR__.'/File/Cache';
+        self::$dir = __DIR__.'/../../../../fixtures/Nelmio/Alice/Parser/files/cache';
     }
 
     public function testIsAParser()
@@ -169,7 +169,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         ];
 
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse($mainFile)->willReturn($parsedMainFileContent);
+        $decoratedParserProphecy->parse(Argument::containingString('main.yml'))->willReturn($parsedMainFileContent);
         $decoratedParserProphecy->parse(Argument::containingString('file1.yml'))->willReturn($parsedFile1Content);
         $decoratedParserProphecy->parse(Argument::containingString('file2.yml'))->willReturn($parsedFile2Content);
         $decoratedParserProphecy->parse(Argument::containingString('file3.yml'))->willReturn($parsedFile3Content);
@@ -192,7 +192,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedFile2, $actualFile2);
         $this->assertSame($parsedFile3Content, $actualFile3);
 
-        $decoratedParserProphecy->parse($mainFile)->shouldHaveBeenCalledTimes(1);
+        $decoratedParserProphecy->parse(Argument::containingString('main.yml'))->shouldHaveBeenCalledTimes(1);
         $decoratedParserProphecy->parse('file1.yml')->shouldHaveBeenCalledTimes(1);
         $decoratedParserProphecy->parse('file2.yml')->shouldHaveBeenCalledTimes(1);
         $decoratedParserProphecy->parse('file3.yml')->shouldHaveBeenCalledTimes(1);
