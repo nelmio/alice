@@ -1,3 +1,0 @@
-Nelmio\Alice\support\models\User
-user{1..10},username:<username()>,email:<current>@test.org
-user11,username:user11,email:user11@test.org

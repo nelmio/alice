@@ -1,7 +1,0 @@
-\Nelmio\Alice\support\models\User:
-    user_template (template):
-        username (unique): <regexify('[A-Z]{1}')>
-        fullname: <word()>
-
-    user_{1..26} (extends user_template):
-        email: <email()>

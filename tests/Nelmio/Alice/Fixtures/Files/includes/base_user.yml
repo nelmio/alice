@@ -1,3 +1,0 @@
-Nelmio\Alice\support\models\User:
-    base_user (template):
-        username: 'Base user'
