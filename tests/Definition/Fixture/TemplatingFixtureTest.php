@@ -88,7 +88,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends SpecificationBagTest::testIsImmutable
      */
-    public function testWithersReturnsNewModifiedInstance()
+    public function testWithersKeepsImmutabilityAndReturnNewModifiedInstance()
     {
         $specs = SpecificationBagFactory::create();
         $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());

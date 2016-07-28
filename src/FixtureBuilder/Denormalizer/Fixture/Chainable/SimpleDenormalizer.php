@@ -22,9 +22,12 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface, FlagParserAwareInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var FlagParserInterface|null
      */
@@ -35,9 +38,10 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
      */
     private $specsDenormalizer;
 
-    public function __construct(SpecificationsDenormalizerInterface $specsDenormalizer)
+    public function __construct(SpecificationsDenormalizerInterface $specsDenormalizer, FlagParserInterface $parser = null)
     {
         $this->specsDenormalizer = $specsDenormalizer;
+        $this->flagParser = $parser;
     }
     
     /**
@@ -45,10 +49,7 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
      */
     public function withParser(FlagParserInterface $parser): self
     {
-        $clone = clone $this;
-        $clone->flagParser = $parser;
-        
-        return $clone;
+        return new self($this->specsDenormalizer, $parser);
     }
 
     /**
@@ -62,30 +63,16 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
     /**
      * @inheritdoc
      */
-    public function denormalize(FixtureBag $builtFixtures, string $className, string $unparsedReference, array $specs, FlagBag $flags): FixtureBag
+    public function denormalize(FixtureBag $builtFixtures, string $className, string $unparsedFixtureId, array $specs, FlagBag $flags): FixtureBag
     {
-        if (null === $this->flagParser) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'Expected method "%s" to be called only if it has a flag parser.',
-                    __METHOD__
-                )
-            );
-        }
+        $this->checkFlagParser();
         
-        $referenceFlags = $this->flagParser->parse($unparsedReference);
-        $reference = $referenceFlags->getKey();
-        
+        $idFlags = $this->flagParser->parse($unparsedFixtureId);
         $fixture = new SimpleFixture(
-            $reference,
+            $idFlags->getKey(),
             $className,
-            new SpecificationBag(
-                null,
-                new PropertyBag(),
-                new MethodCallBag()
-            )
+            new SpecificationBag(null, new PropertyBag(), new MethodCallBag())
         );
-        
         $fixture = $fixture->withSpecs(
             $this->specsDenormalizer->denormalizer($fixture, $this->flagParser, $specs)
         );
@@ -93,16 +80,20 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
         return $builtFixtures->with(
             new FixtureWithFlags(
                 $fixture,
-                $referenceFlags->mergeWith($flags)
+                $idFlags->mergeWith($flags)
             )
         );
     }
 
-    public function __clone()
+    private function checkFlagParser()
     {
-        if (null !== $this->flagParser) {
-            $this->flagParser = clone $this->flagParser;
+        if (null === $this->flagParser) {
+            throw new \LogicException(
+                sprintf(
+                    'Expected method "%s" to be called only if it has a flag parser.',
+                    __METHOD__
+                )
+            );
         }
-        $this->specsDenormalizer = clone $this->specsDenormalizer;
     }
 }

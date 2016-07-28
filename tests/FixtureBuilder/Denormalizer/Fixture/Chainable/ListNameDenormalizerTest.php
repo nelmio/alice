@@ -11,13 +11,14 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FakeFixtureDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
-use Nelmio\Alice\FixtureInterface;
 use Prophecy\Argument;
 
 /**
@@ -35,131 +36,145 @@ class ListNameDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(ListNameDenormalizer::class, FixtureDenormalizerAwareInterface::class, true));
     }
 
+    public function testCanBeInstantiatedWithADenormalizer()
+    {
+        new ListNameDenormalizer(new FakeFixtureDenormalizer());
+    }
+
+    public function testCanBeInstantiatedWithoutADenormalizer()
+    {
+        new ListNameDenormalizer();
+    }
+
     /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Expected method
-     *                           "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer::denormalize"
-     *                           to be called only if it has a denormalizer.
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        $denormalizer = new ListNameDenormalizer();
+        clone $denormalizer;
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\Fixture\Chainable\DenormalizerNotFoundException
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalizeTemporaryFixture" to be called only if it has a denormalizer.
      */
     public function testCannotDenormalizerIfHasNoDenormalizer()
     {
         $denormalizer = new ListNameDenormalizer();
-        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Entity\User', 'user{alice, bob}', [], new FlagBag(''));
+        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Alice\Entity\User', 'user{alice, bob}', [], new FlagBag(''));
     }
 
     /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage As a chainable denormalizer,
-     *                           "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer::getReferences"
-     *                           should be called only if "::canDenormalize() returns true. Got false instead.
+     * @expectedException \LogicException
+     * @expectedExceptionMessage As a chainable denormalizer, "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer::buildIds" should be called only if "::canDenormalize() returns true. Got false instead.
      */
-    public function testCannotDenormalizeIfDoesNotSupportIt()
+    public function testCannotDenormalizeFixtureIfDoesNotSupportIt()
     {
         $reference = 'user0';
-        /** @var FixtureDenormalizerInterface $decoratedDenormalizer */
-        $decoratedDenormalizer = $this->prophesize(FixtureDenormalizerInterface::class)->reveal();
 
-        $denormalizer = (new ListNameDenormalizer())->with($decoratedDenormalizer);
+        $decoratedDenormalizerProphecy = $this->prophesize(FixtureDenormalizerInterface::class);
+        $decoratedDenormalizerProphecy
+            ->denormalize(Argument::cetera())
+            ->will(
+                function ($args) {
+                    return (new FixtureBag())
+                        ->with(new SimpleFixture($args[2], 'Dummy', SpecificationBagFactory::create()))
+                    ;
+                }
+            )
+        ;
+        /** @var FixtureDenormalizerInterface $decoratedDenormalizer */
+        $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
+
+        $denormalizer = new ListNameDenormalizer($decoratedDenormalizer);
         // Hypothesis check
         $this->assertFalse($denormalizer->canDenormalize($reference));
 
-        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Entity\User', $reference, [], new FlagBag(''));
+        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Alice\Entity\User', $reference, [], new FlagBag(''));
     }
 
-    public function testDenormalize()
+    public function testDenormalizeListToBuildFixtures()
     {
         $fixtures = new FixtureBag();
-        $className = 'Nelmio\Entity\User';
+        $className = 'Nelmio\Alice\Entity\User';
         $reference = 'user_{alice, bob}';
         $specs = [
             'username' => '<name()>',
         ];
         $flags = new FlagBag('');
-
-        $fixture1Prophecy = $this->prophesize(FixtureInterface::class);
-        $fixture1Prophecy->getId()->willReturn('f1');
-        /** @var FixtureInterface $fixture1 */
-        $fixture1 = $fixture1Prophecy->reveal();
-
-        $fixture2Prophecy = $this->prophesize(FixtureInterface::class);
-        $fixture2Prophecy->getId()->willReturn('f2');
-        /** @var FixtureInterface $fixture2 */
-        $fixture2 = $fixture2Prophecy->reveal();
+        $expected = (new FixtureBag())
+            ->with(new SimpleFixture('user_alice', $className, SpecificationBagFactory::create()))
+            ->with(new SimpleFixture('user_bob', $className, SpecificationBagFactory::create()))
+        ;
 
         $denormalizerProphecy = $this->prophesize(FixtureDenormalizerInterface::class);
+        $temporaryId = null;
         $denormalizerProphecy
-            ->denormalize($fixtures, $className, 'user_alice', $specs, $flags)
-            ->willReturn((new FixtureBag())->with($fixture1))
+            ->denormalize(
+                $fixtures,
+                $className,
+                Argument::that(
+                    function ($args) use (&$temporaryId) {
+                        $temporaryId = $args[0];
+
+                        return true;
+                    }
+                ),
+                $specs,
+                $flags
+            )
+            ->will(
+                function ($args) use ($className, $specs) {
+                    return (new FixtureBag())
+                        ->with(new SimpleFixture($args[2], $className, SpecificationBagFactory::create()))
+                    ;
+                }
+            )
         ;
-        $newFixtures = $fixtures->with($fixture1);
-        $denormalizerProphecy
-            ->denormalize($newFixtures, $className, 'user_bob', $specs, $flags)
-            ->willReturn((new FixtureBag())->with($fixture2))
-        ;
-        $expected = $newFixtures->with($fixture2);
         /** @var FixtureDenormalizerInterface $denormalizer */
         $denormalizer = $denormalizerProphecy->reveal();
 
-        $denormalizer = (new ListNameDenormalizer())->with($denormalizer);
+        $denormalizer = new ListNameDenormalizer($denormalizer);
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
         $this->assertEquals($expected, $actual);
+        $this->stringContains('temporary_id', $temporaryId);
 
-        $fixture1Prophecy->getId()->shouldHaveBeenCalledTimes(3);
-        $fixture2Prophecy->getId()->shouldHaveBeenCalledTimes(3);
-        $denormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
+        $denormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testIsDeepClonable()
-    {
-        $denormalizer = (new ListNameDenormalizer())->with(new FakeFixtureDenormalizer());
-        $clone = clone $denormalizer;
-
-        $this->assertEquals($denormalizer, $clone);
-        $this->assertNotSame($denormalizer, $clone);
-    }
-
-    public function testConserveReferenceFlags()
+    public function testDenormalizationKeepsFlagsInIds()
     {
         $fixtures = new FixtureBag();
-        $className = 'Nelmio\Entity\User';
-        $reference = 'user_{alice, bob} (template)';
+        $className = 'Nelmio\Alice\Entity\User';
+        $reference = 'user_{alice, bob} (dummy_flag)';
         $specs = [
             'username' => '<name()>',
         ];
         $flags = new FlagBag('');
-
-        $fixture1Prophecy = $this->prophesize(FixtureInterface::class);
-        $fixture1Prophecy->getId()->willReturn('f1');
-        /** @var FixtureInterface $fixture1 */
-        $fixture1 = $fixture1Prophecy->reveal();
-
-        $fixture2Prophecy = $this->prophesize(FixtureInterface::class);
-        $fixture2Prophecy->getId()->willReturn('f2');
-        /** @var FixtureInterface $fixture2 */
-        $fixture2 = $fixture2Prophecy->reveal();
+        $expected = (new FixtureBag())
+            ->with(new SimpleFixture('user_alice (dummy_flag)', $className, SpecificationBagFactory::create()))
+            ->with(new SimpleFixture('user_bob (dummy_flag)', $className, SpecificationBagFactory::create()))
+        ;
 
         $denormalizerProphecy = $this->prophesize(FixtureDenormalizerInterface::class);
         $denormalizerProphecy
-            ->denormalize($fixtures, $className, 'user_alice (template)', $specs, $flags)
-            ->willReturn((new FixtureBag())->with($fixture1))
+            ->denormalize(Argument::cetera())
+            ->will(
+                function ($args) use ($className, $specs) {
+                    return (new FixtureBag())
+                        ->with(new SimpleFixture($args[2], $className, SpecificationBagFactory::create()))
+                        ;
+                }
+            )
         ;
-        $newFixtures = $fixtures->with($fixture1);
-        $denormalizerProphecy
-            ->denormalize($newFixtures, $className, 'user_bob (template)', $specs, $flags)
-            ->willReturn((new FixtureBag())->with($fixture2))
-        ;
-        $expected = $newFixtures->with($fixture2);
         /** @var FixtureDenormalizerInterface $denormalizer */
         $denormalizer = $denormalizerProphecy->reveal();
 
-        $denormalizer = (new ListNameDenormalizer())->with($denormalizer);
+        $denormalizer = new ListNameDenormalizer($denormalizer);
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
         $this->assertEquals($expected, $actual);
-
-        $fixture1Prophecy->getId()->shouldHaveBeenCalledTimes(3);
-        $fixture2Prophecy->getId()->shouldHaveBeenCalledTimes(3);
-        $denormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 }

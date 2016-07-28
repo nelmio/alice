@@ -22,7 +22,7 @@ interface FixtureDenormalizerInterface
      *
      * @param FixtureBag $builtFixtures
      * @param string     $className FQCN (no flags)
-     * @param string     $reference
+     * @param string     $fixtureId
      * @param array      $specs     Contains the list of property calls, constructor specification and method calls
      * @param FlagBag    $flags     Flags inherited from the namespace.
      *
@@ -30,5 +30,5 @@ interface FixtureDenormalizerInterface
      *
      * @return FixtureBag $builtFixtures with the new built fixtures.
      */
-    public function denormalize(FixtureBag $builtFixtures, string $className, string $reference, array $specs, FlagBag $flags): FixtureBag;
+    public function denormalize(FixtureBag $builtFixtures, string $className, string $fixtureId, array $specs, FlagBag $flags): FixtureBag;
 }

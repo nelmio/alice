@@ -58,18 +58,18 @@ final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
     /**
      * @inheritdoc
      */
-    public function denormalize(FixtureBag $builtFixtures, string $className, string $reference, array $specs, FlagBag $flags): FixtureBag
+    public function denormalize(FixtureBag $builtFixtures, string $className, string $fixtureId, array $specs, FlagBag $flags): FixtureBag
     {
         foreach ($this->denormalizers as $denormalizer) {
-            if ($denormalizer->canDenormalize($reference)) {
-                return $denormalizer->denormalize($builtFixtures, $className, $reference, $specs, $flags);
+            if ($denormalizer->canDenormalize($fixtureId)) {
+                return $denormalizer->denormalize($builtFixtures, $className, $fixtureId, $specs, $flags);
             }
         }
 
         throw new FixtureDenormalizerNotFoundException(
             sprintf(
                 'No suitable fixture denormalizer found to handle the fixture with the reference "%s".',
-                $reference
+                $fixtureId
             )
         );
     }

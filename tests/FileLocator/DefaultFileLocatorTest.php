@@ -36,7 +36,7 @@ class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideAbsolutePaths
      */
-    public function testIsAbsolutePath($path)
+    public function testCanDetectAbsolutePaths($path)
     {
         $reflectionObject = new \ReflectionObject($this->locator);
         $methodReflection = $reflectionObject->getMethod('isAbsolutePath');
@@ -48,7 +48,7 @@ class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testLocate()
+    public function testCanLocateFiles()
     {
         $this->assertEquals(
             __FILE__,
@@ -65,7 +65,7 @@ class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage An empty file name is not valid to be located.
      */
-    public function testThrowExceptionIfEmptyFileNamePassed()
+    public function testThrowsExceptionIfEmptyFileNamePassed()
     {
         $this->locator->locate('');
     }
@@ -74,7 +74,7 @@ class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /The file "(.+?)foobar.xml" does not exist\./
      */
-    public function testThrowExceptionIfTheFileDoesNotExists()
+    public function testThrowsExceptionIfTheFileDoesNotExists()
     {
         $this->locator->locate('foobar.xml', __DIR__);
     }
@@ -83,7 +83,7 @@ class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /The file "(.+?)foobar.xml" does not exist\./
      */
-    public function testLocateThrowExceptionIfTheFileDoesNotExistsInAbsolutePath()
+    public function testLocatingFileThrowsExceptionIfTheFileDoesNotExistsInAbsolutePath()
     {
         $this->locator->locate(__DIR__.'/Fixtures/foobar.xml');
     }
