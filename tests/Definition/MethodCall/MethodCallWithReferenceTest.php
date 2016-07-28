@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
+use Nelmio\Alice\Definition\ServiceReference\MutableReference;
 
 /**
  * @covers Nelmio\Alice\Definition\MethodCall\MethodCallWithReference
@@ -24,7 +25,7 @@ class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(MethodCallWithReference::class, MethodCallInterface::class, true));
     }
     
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $caller = new InstantiatedReference('user.factory');
         $method = 'setUsername';
@@ -34,7 +35,7 @@ class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($caller, $definition->getCaller());
         $this->assertEquals($method, $definition->getMethod());
-        $this->assertSame($arguments, $definition->getArguments());
+        $this->assertEquals($arguments, $definition->getArguments());
         $this->assertEquals('user.factorysetUsername', $definition->__toString());
 
         $definition = new MethodCallWithReference($caller, $method, null);
@@ -47,16 +48,35 @@ class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
 
     public function testIsImmutable()
     {
-        $caller = new InstantiatedReference('user.factory');
+        $caller = new MutableReference();
         $method = 'setUsername';
-        $arguments = [new \stdClass()];
+        $arguments = [
+            $arg0 = new \stdClass(),
+        ];
 
         $definition = new MethodCallWithReference($caller, $method, $arguments);
 
-        $this->assertNotSame($definition->getCaller(), $definition->getCaller());
+        // Mutate injected elements
+        $caller->setId('user.factory');
+        $arg0->foo = 'bar';
+
+        // Mutate retrieved elements
+        /** @var MutableReference $caller */
+        $caller = $definition->getCaller();
+        $caller->setId('user.factory');
+        $arguments = $definition->getArguments();
+        $arguments[0]->foo = 'bar';
+
+        $this->assertEquals(new MutableReference(), $definition->getCaller());
+        $this->assertEquals(
+            [
+                new \stdClass(),
+            ],
+            $definition->getArguments()
+        );
     }
 
-    public function testImmutableMutator()
+    public function testCanCreateANewInstanceWithNoArguments()
     {
         $caller = new InstantiatedReference('user.factory');
         $method = 'setUsername';
@@ -77,16 +97,35 @@ class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($newArguments, $newDefinition->getArguments());
     }
 
-    /**
-     * @expectedException \DomainException
-     */
-    public function testIsNotClonable()
+    public function testCanCreateANewInstanceWithArguments()
     {
         $caller = new InstantiatedReference('user.factory');
         $method = 'setUsername';
         $arguments = [new \stdClass()];
-
         $definition = new MethodCallWithReference($caller, $method, $arguments);
-        clone $definition;
+
+        $newArguments = [
+            $arg0 = new \stdClass(),
+        ];
+        $newDefinition = $definition->withArguments($newArguments);
+
+        // Mutate argument before reading it
+        // Test done to ensure we are keeping the immutability
+        $arg0->foo = 'bar';
+
+        $this->assertInstanceOf(MethodCallWithReference::class, $newDefinition);
+
+        $this->assertEquals($caller, $definition->getCaller());
+        $this->assertEquals($method, $definition->getMethod());
+        $this->assertEquals($arguments, $definition->getArguments());
+
+        $this->assertEquals($caller, $newDefinition->getCaller());
+        $this->assertEquals($method, $newDefinition->getMethod());
+        $this->assertEquals(
+            [
+                new \stdClass(),
+            ],
+            $newDefinition->getArguments()
+        );
     }
 }

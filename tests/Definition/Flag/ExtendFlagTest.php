@@ -24,22 +24,12 @@ class ExtendFlagTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(ExtendFlag::class, FlagInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
-        $reference = new FixtureReference('Nelmio\Alice\User#user_base');
+        $reference = new FixtureReference('Nelmio\Alice\EntityUser#user_base');
         $flag = new ExtendFlag($reference);
 
         $this->assertEquals($reference, $flag->getExtendedFixture());
-        $this->assertEquals('extends Nelmio\Alice\User#user_base', $flag->__toString());
-    }
-
-    /**
-     * @expectedException \DomainException
-     */
-    public function testIsNotClonable()
-    {
-        $reference = new FixtureReference('Nelmio\Alice\User#user_base');
-        $flag = new ExtendFlag($reference);
-        clone $flag;
+        $this->assertEquals('extends Nelmio\Alice\EntityUser#user_base', $flag->__toString());
     }
 }

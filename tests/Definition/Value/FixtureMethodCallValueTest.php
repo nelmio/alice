@@ -23,7 +23,7 @@ class FixtureMethodCallValueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(FixtureMethodCallValue::class, ValueInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $reference = new FixtureReferenceValue('user0');
         $function = new FunctionCallValue('getName');

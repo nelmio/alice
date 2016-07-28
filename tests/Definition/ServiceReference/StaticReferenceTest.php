@@ -23,9 +23,9 @@ class StaticReferenceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(StaticReference::class, ServiceReferenceInterface::class, true));
     }
     
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
-        $reference = 'dummy*';
+        $reference = 'Nelmio\User\UserFactory';
         $definition = new StaticReference($reference);
         
         $this->assertEquals($reference, $definition->getId());

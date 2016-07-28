@@ -13,8 +13,6 @@ namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
-use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
 
@@ -28,10 +26,10 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(FixtureWithFlags::class, FixtureInterface::class, true));
     }
     
-    public function testReadAccessorsReturnsPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $reference = 'user0';
-        $className = 'Nelmio\Entity\User';
+        $className = 'Nelmio\Alice\Entity\User';
         $specs = SpecificationBagFactory::create();
 
         $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
@@ -56,6 +54,7 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends SpecificationBagTest::testIsImmutable
      * @depends FlagBagTest::testIsImmutable
      */
     public function testIsImmutable()
@@ -65,15 +64,16 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $flags = new FlagBag('something');
         $fixture = new FixtureWithFlags($decoratedFixture, $flags);
 
-        $this->assertNotSame($fixture->getSpecs(), $fixture->getSpecs());
-        // flags is immutable
-
         $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
         $decoratedFixture->setSpecs($newSpecs);
 
         $this->assertEquals($specs, $fixture->getSpecs());
     }
 
+    /**
+     * @depends SpecificationBagTest::testIsImmutable
+     * @depends FlagBagTest::testIsImmutable
+     */
     public function testWithersReturnNewModifiedInstance()
     {
         $specs = SpecificationBagFactory::create();

@@ -23,7 +23,7 @@ class NoMethodCallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(NoMethodCall::class, MethodCallInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $call = new NoMethodCall();
 
@@ -34,7 +34,7 @@ class NoMethodCallTest extends \PHPUnit_Framework_TestCase
      * @expectedException \DomainException
      * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::withArguments()" should not be called.
      */
-    public function testCallWithArguments()
+    public function testCannotCreateNewInstanceWithNewArguments()
     {
         $call = new NoMethodCall();
         $call->withArguments();
@@ -44,7 +44,7 @@ class NoMethodCallTest extends \PHPUnit_Framework_TestCase
      * @expectedException \DomainException
      * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getMethod()" should not be called.
      */
-    public function testGetMethod()
+    public function testCannotGetMethod()
     {
         $call = new NoMethodCall();
         $call->getMethod();
@@ -54,7 +54,7 @@ class NoMethodCallTest extends \PHPUnit_Framework_TestCase
      * @expectedException \DomainException
      * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getCaller()" should not be called.
      */
-    public function testGetCaller()
+    public function testCannotGetCaller()
     {
         $call = new NoMethodCall();
         $call->getCaller();

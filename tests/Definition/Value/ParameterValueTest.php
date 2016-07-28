@@ -23,7 +23,7 @@ class ParameterValueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(ParameterValue::class, ValueInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $parameterKey = 'dummy_param';
         $value = new ParameterValue($parameterKey);

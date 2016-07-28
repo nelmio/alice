@@ -25,7 +25,7 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(SimpleFixture::class, FixtureInterface::class, true));
     }
     
-    public function testReadAccessorsReturnsPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $reference = 'user0';
         $className = 'Nelmio\Alice\Entity\User';
@@ -46,6 +46,9 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(true, 'Nothing to do here.');
     }
 
+    /**
+     * @depends SpecificationBagTest::testIsImmutable
+     */
     public function testWithersReturnsNewModifiedInstance()
     {
         $reference = 'user0';

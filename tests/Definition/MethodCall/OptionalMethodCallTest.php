@@ -26,7 +26,7 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(OptionalMethodCall::class, MethodCallInterface::class, true));
     }
     
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $caller = new InstantiatedReference('user.factory');
         $method = 'setUsername';
@@ -39,7 +39,7 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
         $methodCallProphecy->getMethod()->willReturn($method);
         $methodCallProphecy->getArguments()->willReturn($arguments);
         $methodCallProphecy->__toString()->willReturn($stringValue);
-        /** @var MethodCallInterface $methodCall */
+        /** @var MethodCallInterface $caller */
         $methodCall = $methodCallProphecy->reveal();
 
         $flag = new OptionalFlag($percentage);
@@ -48,7 +48,7 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($caller, $definition->getCaller());
         $this->assertEquals($method, $definition->getMethod());
-        $this->assertSame($arguments, $definition->getArguments());
+        $this->assertEquals($arguments, $definition->getArguments());
         $this->assertEquals($percentage, $definition->getPercentage());
         $this->assertEquals($stringValue, $definition->__toString());
 
@@ -57,12 +57,49 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
         $methodCallProphecy->getArguments()->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testImmutableMutator()
+    /**
+     * @depends FlagBagTest::testIsImmutable
+     */
+    public function testIsImmutable()
     {
-        $methodCall = new SimpleMethodCall('getUsername', null);
+        $caller = new MutableMethodCall(
+            new FakeMethodCall(),
+            'mutate',
+            [
+                $arg0 = new \stdClass(),
+            ]
+        );
+        $flag = new OptionalFlag(30);
+
+        $definition = new OptionalMethodCall($caller, $flag);
+
+        // Mutate before reading values
+        $caller->setMethod(new DummyMethodCall('dummy'));
+        $arg0->foo = 'bar';
+
+        // Mutate retrieved values
+        /** @var MutableMethodCall $retrievedCaller */
+        $retrievedCaller = $definition->getCaller();
+        $retrievedCaller->setMethod(new DummyMethodCall('another_dummy'));
+
+        $definition->getArguments()[0]->foo = 'baz';
+
+        $this->assertEquals(new FakeMethodCall(), $definition->getCaller());
+        $this->assertEquals(
+            [
+                new \stdClass(),
+            ],
+            $definition->getArguments()
+        );
+    }
+
+    public function testCanCreateANewInstanceWithNoArguments()
+    {
+        $arguments = [new \stdClass()];
+        $methodCall = new SimpleMethodCall('getUsername', $arguments);
         $definition = new OptionalMethodCall($methodCall, new OptionalFlag(30));
 
-        $newArguments = [new \stdClass()];
+        $newArguments = null;
         $newDefinition = $definition->withArguments($newArguments);
 
         $this->assertInstanceOf(OptionalMethodCall::class, $newDefinition);
@@ -79,14 +116,36 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DomainException
+     * @depends FlagBagTest::testIsImmutable
      */
-    public function testIsNotClonable()
+    public function testCanCreateANewInstanceWithArguments()
     {
-        $methodCall = new FakeMethodCall();
-        $flag = new OptionalFlag(30);
+        $methodCall = new SimpleMethodCall('getUsername', null);
+        $definition = new OptionalMethodCall($methodCall, new OptionalFlag(30));
 
-        $definition = new OptionalMethodCall($methodCall, $flag);
-        clone $definition;
+        $newArguments = [
+            $arg0 = new \stdClass(),
+        ];
+        $newDefinition = $definition->withArguments($newArguments);
+
+        // Mutate arguments before reading it
+        $arg0->foo = 'bar';
+
+        $this->assertInstanceOf(OptionalMethodCall::class, $newDefinition);
+
+        $this->assertEquals($methodCall->getCaller(), $definition->getCaller());
+        $this->assertEquals(30, $definition->getPercentage());
+        $this->assertEquals($methodCall->getMethod(), $definition->getMethod());
+        $this->assertEquals($methodCall->getArguments(), $definition->getArguments());
+
+        $this->assertEquals($methodCall->getCaller(), $newDefinition->getCaller());
+        $this->assertEquals(30, $newDefinition->getPercentage());
+        $this->assertEquals($methodCall->getMethod(), $newDefinition->getMethod());
+        $this->assertEquals(
+            [
+                new \stdClass(),
+            ],
+            $newDefinition->getArguments()
+        );
     }
 }

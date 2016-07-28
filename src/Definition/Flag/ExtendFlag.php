@@ -13,12 +13,9 @@ namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
-use Nelmio\Alice\NotClonableTrait;
 
 final class ExtendFlag implements FlagInterface
 {
-    use NotClonableTrait;
-    
     /**
      * @var string
      */

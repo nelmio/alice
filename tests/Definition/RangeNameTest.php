@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Definition;
  */
 class RangeNameTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $name = 'user';
         $from = 10;

@@ -57,7 +57,7 @@ final class FixtureWithFlags implements FixtureInterface
      */
     public function getSpecs(): SpecificationBag
     {
-        return clone $this->fixture->getSpecs();
+        return $this->fixture->getSpecs();
     }
 
     /**

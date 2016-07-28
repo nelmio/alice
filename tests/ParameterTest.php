@@ -34,7 +34,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($parameter->getValue(), $parameter->getValue());
     }
 
-    public function testImmutableMutator()
+    public function testWithersReturnNewModifiedInstance()
     {
         $parameter = new Parameter('foo', 'bar');
         $newParam = $parameter->withValue('rab');

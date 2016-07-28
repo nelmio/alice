@@ -23,7 +23,7 @@ class UniqueFlagTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(UniqueFlag::class, FlagInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $flag = new UniqueFlag();
 

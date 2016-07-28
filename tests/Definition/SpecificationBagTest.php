@@ -24,7 +24,7 @@ use Nelmio\Alice\Definition\SpecificationBag;
  */
 class SpecificationBagTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $constructorProphecy = $this->prophesize(MethodCallInterface::class);
         $constructorProphecy->getCaller()->shouldNotBeCalled();
@@ -76,7 +76,7 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($bag->getMethodCalls(), $bag->getMethodCalls());
     }
 
-    public function testImmutableMutator()
+    public function testWithersReturnNewModifiedInstance()
     {
         $constructor = new FakeMethodCall();
         $newConstructor = new FakeMethodCall();

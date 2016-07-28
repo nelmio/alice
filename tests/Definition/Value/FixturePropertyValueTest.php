@@ -23,7 +23,7 @@ class FixturePropertyValueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(FixturePropertyValue::class, ValueInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $reference = new FixtureReferenceValue('user0');
         $property = 'username';

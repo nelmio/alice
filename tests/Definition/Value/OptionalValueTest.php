@@ -23,7 +23,7 @@ class OptionalValueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(OptionalValue::class, ValueInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $quantifier = 50;
         $firstMember = 'first';

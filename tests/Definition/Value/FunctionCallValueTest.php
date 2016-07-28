@@ -23,7 +23,7 @@ class FunctionCallValueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(FunctionCallValue::class, ValueInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $name = 'setUsername';
         $arguments = [new \stdClass()];

@@ -14,15 +14,12 @@ namespace Nelmio\Alice\Definition\MethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\NotClonableTrait;
 
 /**
  * Represents a method call for which the caller has been specified.
  */
 final class MethodCallWithReference implements MethodCallInterface
 {
-    use NotClonableTrait;
-
     /**
      * @var ServiceReferenceInterface
      */
@@ -50,9 +47,9 @@ final class MethodCallWithReference implements MethodCallInterface
      */
     public function __construct(ServiceReferenceInterface $caller, string $method, array $arguments = null)
     {
-        $this->caller = $caller;
+        $this->caller = clone $caller;
         $this->method = $method;
-        $this->arguments = $arguments;
+        $this->arguments = deep_clone($arguments);
         $this->stringValue = $caller->getId().$method;
     }
 
@@ -61,7 +58,10 @@ final class MethodCallWithReference implements MethodCallInterface
      */
     public function withArguments(array $arguments = null): self
     {
-        return new self(clone $this->caller, $this->method, $arguments);
+        $clone = clone $this;
+        $clone->arguments = deep_clone($arguments);
+
+        return $clone;
     }
 
     /**
@@ -85,7 +85,7 @@ final class MethodCallWithReference implements MethodCallInterface
      */
     public function getArguments()
     {
-        return $this->arguments;
+        return deep_clone($this->arguments);
     }
 
     /**

@@ -16,7 +16,7 @@ namespace Nelmio\Alice\ExpressionLanguage;
  */
 class TokenTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $value = 'bob';
         $type = new TokenType(TokenType::DYNAMIC_ARRAY_TYPE);
@@ -28,7 +28,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
     }
 
-    public function testImmutableMutators()
+    public function testWithersReturnsNewModifiedInstance()
     {
         $value = 'bob';
         $newValue = 'alice';

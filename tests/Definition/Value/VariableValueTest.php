@@ -23,7 +23,7 @@ class VariableValueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(VariableValue::class, ValueInterface::class, true));
     }
 
-    public function testAccessors()
+    public function testReadAccessorsReturnPropertiesValues()
     {
         $variable = 'username';
         $value = new VariableValue($variable);
