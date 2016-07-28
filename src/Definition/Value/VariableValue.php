@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * VO representing '$username'.
+ * Value object representing '$username'.
  */
 final class VariableValue implements ValueInterface
 {

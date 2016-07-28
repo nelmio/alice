@@ -23,6 +23,19 @@ class OptionalValueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(OptionalValue::class, ValueInterface::class, true));
     }
 
+    /**
+     * @dataProvider provideInputValues
+     */
+    public function testThrowsErrorIfInvalidTypeGiven($quantifier, $firstMember, $secondMember, $errorMessage)
+    {
+        try {
+            new OptionalValue($quantifier, $firstMember, $secondMember);
+            $this->fail('Expected error to be thrown.');
+        } catch (\TypeError $error) {
+            $this->assertEquals($errorMessage, $error->getMessage());
+        }
+    }
+
     public function testReadAccessorsReturnPropertiesValues()
     {
         $quantifier = 50;
@@ -36,9 +49,9 @@ class OptionalValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($secondMember, $value->getSecondMember());
         $this->assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
 
-        $quantifier = new \stdClass();
-        $firstMember = new \stdClass();
-        $secondMember = new \stdClass();
+        $quantifier = new FakeValue();
+        $firstMember = new FakeValue();
+        $secondMember = new FakeValue();
 
         $value = new OptionalValue($quantifier, $firstMember, $secondMember);
 
@@ -46,54 +59,113 @@ class OptionalValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($firstMember, $value->getFirstMember());
         $this->assertEquals($secondMember, $value->getSecondMember());
         $this->assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
+
+        $quantifier = '100';
+        $firstMember = new FakeValue();
+        $secondMember = null;
+
+        $value = new OptionalValue($quantifier, $firstMember, $secondMember);
+
+        $this->assertEquals(100, $value->getQuantifier());
+        $this->assertEquals($firstMember, $value->getFirstMember());
+        $this->assertEquals($secondMember, $value->getSecondMember());
+        $this->assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
     }
 
     public function testIsImmutable()
     {
-        $quantifier = new \stdClass();
-        $firstMember = new \stdClass();
-        $secondMember = new \stdClass();
-
+        $quantifier = new MutableValue('q0');
+        $firstMember = new MutableValue('f0');
+        $secondMember = new MutableValue('s0');
         $value = new OptionalValue($quantifier, $firstMember, $secondMember);
 
-        $this->assertNotSame($value->getQuantifier(), $value->getQuantifier());
-        $this->assertNotSame($value->getFirstMember(), $value->getFirstMember());
-        $this->assertNotSame($value->getSecondMember(), $value->getSecondMember());
-        $this->assertNotSame($value->getValue(), $value->getValue());
+        // Mutate injected values
+        $quantifier->setValue('q1');
+        $firstMember->setValue('f1');
+        $secondMember->setValue('s1');
+
+        // Mutate returned values
+        $value->getQuantifier()->setValue('q2');
+        $value->getFirstMember()->setValue('f2');
+        $value->getSecondMember()->setValue('s2');
+
+        $this->assertNotSame(new MutableValue('q0'), $value->getQuantifier());
+        $this->assertNotSame(new MutableValue('f0'), $value->getFirstMember());
+        $this->assertNotSame(new MutableValue('s0'), $value->getSecondMember());
+        $this->assertNotSame(
+            [
+                new MutableValue('q0'),
+                new MutableValue('f0'),
+                new MutableValue('s0'),
+            ],
+            $value->getValue()
+        );
     }
 
-    public function testIsDeepClonable()
+    public function provideInputValues()
     {
-        $reflClass = new \ReflectionClass(OptionalValue::class);
-        $quantifierRefl = $reflClass->getProperty('quantifier');
-        $quantifierRefl->setAccessible(true);
-        $firstMemberRelf = $reflClass->getProperty('firstMember');
-        $firstMemberRelf->setAccessible(true);
-        $secondMemberRefl = $reflClass->getProperty('secondMember');
-        $secondMemberRefl->setAccessible(true);
+        yield 'null/string/string' => [
+            null,
+            'first_member',
+            'second_member',
+            'Expected quantifier to be either a scalar value or an instance of "Nelmio\Alice\Definition\ValueInterface". '
+            .'Got "NULL" instead.',
+        ];
 
-        $quantifier = 50;
-        $firstMember = 'first';
-        $secondMember = 'second';
+        yield 'array/string/string' => [
+            [],
+            'first_member',
+            'second_member',
+            'Expected quantifier to be either a scalar value or an instance of "Nelmio\Alice\Definition\ValueInterface". '
+            .'Got "array" instead.',
+        ];
 
-        $value = new OptionalValue($quantifier, $firstMember, $secondMember);
-        $clone = clone $value;
+        yield 'stdClass/string/string' => [
+            new \stdClass(),
+            'first_member',
+            'second_member',
+            'Expected quantifier to be either a scalar value or an instance of "Nelmio\Alice\Definition\ValueInterface". '
+            .'Got "stdClass" instead.',
+        ];
 
-        $this->assertEquals($clone, $value);
-        $this->assertNotSame($clone, $value);
+        yield 'string/null/string' => [
+            'quantifier',
+            null,
+            'second_member',
+            'Expected first member to be either a string or an instance of "Nelmio\Alice\Definition\ValueInterface". '
+            .'Got "NULL" instead.',
+        ];
 
-        $quantifier = new \stdClass();
-        $firstMember = new \stdClass();
-        $secondMember = new \stdClass();
+        yield 'string/array/string' => [
+            'quantifier',
+            [],
+            'second_member',
+            'Expected first member to be either a string or an instance of "Nelmio\Alice\Definition\ValueInterface". '
+            .'Got "array" instead.',
+        ];
 
-        $value = new OptionalValue($quantifier, $firstMember, $secondMember);
-        $clone = clone $value;
+        yield 'string/stdClass/string' => [
+            'quantifier',
+            new \stdClass(),
+            'second_member',
+            'Expected first member to be either a string or an instance of "Nelmio\Alice\Definition\ValueInterface". '
+            .'Got "stdClass" instead.',
+        ];
 
-        $this->assertEquals($clone, $value);
-        $this->assertNotSame($clone, $value);
+        yield 'string/string/array' => [
+            'quantifier',
+            'first_member',
+            [],
+            'Expected second member to be either null, a string or an instance of "Nelmio\Alice\Definition\ValueInterface". '
+            .'Got "array" instead.',
+        ];
 
-        $this->assertNotSame($quantifierRefl->getValue($value), $quantifierRefl->getValue($clone));
-        $this->assertNotSame($firstMemberRelf->getValue($value), $firstMemberRelf->getValue($clone));
-        $this->assertNotSame($secondMemberRefl->getValue($value), $secondMemberRefl->getValue($clone));
+        yield 'string/string/stdClass' => [
+            'quantifier',
+            'first_member',
+            new \stdClass(),
+            'Expected second member to be either null, a string or an instance of "Nelmio\Alice\Definition\ValueInterface". '
+            .'Got "stdClass" instead.',
+        ];
     }
 }

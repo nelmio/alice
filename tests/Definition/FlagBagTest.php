@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Definition;
 use Nelmio\Alice\Definition\Flag\AnotherDummyFlag;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
+use Nelmio\Alice\Definition\Flag\MutableFlag;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
@@ -31,15 +32,19 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('user0', $flags->getKey());
     }
 
+    /**
+     * @depends testWithersReturnNewModifiedInstance
+     */
     public function testIsImmutable()
     {
-        //TODO
+        $this->assertTrue(true, 'Nothing to do.');
     }
 
     public function testWithersReturnNewModifiedInstance()
     {
+        $flag = new MutableFlag('flag0');
         $flags = new FlagBag('user0');
-        $newFlags = $flags->with(new DummyFlag());
+        $newFlags = $flags->with($flag);
 
         $this->assertInstanceOf(FlagBag::class, $flags);
         $this->assertNotSame($flags, $newFlags);
@@ -47,12 +52,38 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $flags);
         $this->assertCount(1, $newFlags);
 
-        $anotherBag = (new FlagBag('user2'))->with(new AnotherDummyFlag());
+        // Mutate injected value
+        $flag->setValue('flag1');
+
+        // Mutate return value
+        foreach ($flags as $flag) {
+            $flag->setvalue('flag2');
+        }
+
+        $this->assertEquals(
+            $flags->with(new MutableFlag('flag0')),
+            $newFlags
+        );
+
+        $anotherBag = (new FlagBag('user2'))->with(new MutableFlag('another_flag0'));
         $mergedBag = $newFlags->mergeWith($anotherBag);
 
         $this->assertInstanceOf(FlagBag::class, $mergedBag);
         $this->assertEquals('user0', $mergedBag->getKey(), 'Expected original key to be kept.');
         $this->assertCount(2, $mergedBag);
+
+        // Mutate injected value
+        $flag->setValue('another_flag1');
+
+        // Mutate return value
+        foreach ($flags as $flag) {
+            $flag->setvalue('another_flag2');
+        }
+
+        $this->assertEquals(
+            $newFlags->mergeWith($anotherBag),
+            $mergedBag
+        );
     }
 
     public function testIsCountable()
@@ -175,6 +206,6 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
             $flags[$key] = $value;
         }
 
-        $this->assertSame($expected, $flags);
+        $this->assertEquals($expected, $flags);
     }
 }

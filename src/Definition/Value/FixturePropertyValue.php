@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * VO representing "@user0->username".
+ * Value object representing "@user0->username".
  */
 final class FixturePropertyValue implements ValueInterface
 {
@@ -40,7 +40,7 @@ final class FixturePropertyValue implements ValueInterface
 
     public function getReference(): FixtureReferenceValue
     {
-        return clone $this->reference;
+        return $this->reference;
     }
 
     public function getProperty(): string
@@ -54,13 +54,8 @@ final class FixturePropertyValue implements ValueInterface
     public function getValue(): array
     {
         return [
-            $this->getReference(),
+            $this->reference,
             $this->property,
         ];
-    }
-
-    public function __clone()
-    {
-        list($this->reference, $this->property) = $this->getValue();
     }
 }

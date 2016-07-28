@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * VO representing '<name()>'.
+ * Value object representing '<name()>'.
  */
 final class FunctionCallValue implements ValueInterface
 {
@@ -35,7 +35,7 @@ final class FunctionCallValue implements ValueInterface
     public function __construct(string $name, array $arguments = null)
     {
         $this->name = $name;
-        $this->arguments = $arguments;
+        $this->arguments = deep_clone($arguments);
     }
 
     public function getName(): string
@@ -48,7 +48,7 @@ final class FunctionCallValue implements ValueInterface
      */
     public function getArguments()
     {
-        return $this->arguments;
+        return deep_clone($this->arguments);
     }
 
     /**
@@ -58,7 +58,7 @@ final class FunctionCallValue implements ValueInterface
     {
         return [
             $this->name,
-            $this->arguments,
+            $this->getArguments(),
         ];
     }
 }

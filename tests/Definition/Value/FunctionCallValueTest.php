@@ -34,4 +34,32 @@ class FunctionCallValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($arguments, $value->getArguments());
         $this->assertEquals([$name, $arguments], $value->getValue());
     }
+
+    public function testIsImmutable()
+    {
+        $arguments = [
+            $arg0 = new \stdClass(),
+        ];
+        $value = new FunctionCallValue('setUsername', $arguments);
+
+        // Mutate injected value
+        $arg0->foo = 'bar';
+
+        // Mutate returned value
+        $value->getArguments()[0]->foo = 'baz';
+
+        $this->assertEquals(
+            [
+                new \stdClass(),
+            ],
+            $value->getArguments()
+        );
+        $this->assertEquals(
+            [
+                'setUsername',
+                [new \stdClass()],
+            ],
+            $value->getValue()
+        );
+    }
 }

@@ -13,29 +13,28 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 
-/**
- * Value object representing "@user0".
- */
-final class FixtureReferenceValue implements ValueInterface
+class MutableValue implements ValueInterface
 {
     /**
-     * @var string
+     * @var mixed
      */
-    private $reference;
+    private $value;
 
-    /**
-     * @param string $reference e.g. "user0"
-     */
-    public function __construct(string $reference)
+    public function __construct($value)
     {
-        $this->reference = $reference;
+        $this->value = $value;
     }
 
     /**
      * @inheritdoc
      */
-    public function getValue(): string
+    public function getValue()
     {
-        return $this->reference;
+        return $this->value;
+    }
+
+    public function setValue($value)
+    {
+        $this->value = $value;
     }
 }

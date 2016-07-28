@@ -35,36 +35,12 @@ class FixtureMethodCallValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$reference, $function], $value->getValue());
     }
 
+    /**
+     * @depends FixtureReferenceTest::testIsImmutable
+     * @depends FunctionCallValueTest::testIsImmutable
+     */
     public function testIsImmutable()
     {
-        $reference = new FixtureReferenceValue('user0');
-        $function = new FunctionCallValue('getName');
-
-        $value = new FixtureMethodCallValue($reference, $function);
-
-        $this->assertNotSame($value->getReference(), $value->getReference());
-        $this->assertNotSame($value->getFunctionCall(), $value->getFunctionCall());
-        $this->assertNotSame($value->getValue(), $value->getValue());
-    }
-
-    public function testIsDeepClonable()
-    {
-        $reference = new FixtureReferenceValue('user0');
-        $function = new FunctionCallValue('getName');
-        $value = new FixtureMethodCallValue($reference, $function);
-
-        $reflClass = new \ReflectionClass(FixtureMethodCallValue::class);
-        $referenceRefl = $reflClass->getProperty('reference');
-        $referenceRefl->setAccessible(true);
-        $functionRefl = $reflClass->getProperty('function');
-        $functionRefl->setAccessible(true);
-
-        $clone = clone $value;
-
-        $this->assertEquals($clone, $value);
-        $this->assertNotSame($clone, $value);
-
-        $this->assertNotSame($referenceRefl->getValue($value), $referenceRefl->getValue($clone));
-        $this->assertNotSame($functionRefl->getValue($value), $functionRefl->getValue($clone));
+        $this->assertTrue(true, 'Nothing to do.');
     }
 }

@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * VO representing "80%? 'value': 'empty'"
+ * Value object representing "80%? 'value': 'empty'"
  */
 final class OptionalValue implements ValueInterface
 {
@@ -34,19 +34,51 @@ final class OptionalValue implements ValueInterface
     private $secondMember;
 
     /**
-     * @param string|ValueInterface      $quantifier
+     * @param int|ValueInterface         $quantifier
      * @param string|ValueInterface      $firstMember
      * @param string|ValueInterface|null $secondMember
      */
     public function __construct($quantifier, $firstMember, $secondMember = null)
     {
+        if ($quantifier instanceof ValueInterface) {
+            $quantifier = clone $quantifier;
+        } elseif (is_scalar($quantifier)) {
+            $quantifier = (int) $quantifier;
+        } else {
+            throw new \TypeError(
+                sprintf(
+                    'Expected quantifier to be either a scalar value or an instance of "%s". Got "%s" instead.',
+                    ValueInterface::class,
+                    is_object($quantifier)? get_class($quantifier) : gettype($quantifier)
+                )
+            );
+        }
+        if (false === is_string($firstMember) && false === $firstMember instanceof ValueInterface) {
+            throw new \TypeError(
+                sprintf(
+                    'Expected first member to be either a string or an instance of "%s". Got "%s" instead.',
+                    ValueInterface::class,
+                    is_object($firstMember) ? get_class($firstMember) : gettype($firstMember)
+                )
+            );
+        }
+        if (null !== $secondMember && false === is_string($secondMember) && false === $secondMember instanceof ValueInterface) {
+            throw new \TypeError(
+                sprintf(
+                    'Expected second member to be either null, a string or an instance of "%s". Got "%s" instead.',
+                    ValueInterface::class,
+                    is_object($secondMember) ? get_class($secondMember) : gettype($secondMember)
+                )
+            );
+        }
+
         $this->quantifier = $quantifier;
         $this->firstMember = $firstMember;
         $this->secondMember = $secondMember;
     }
 
     /**
-     * @return string|ValueInterface
+     * @return int|ValueInterface
      */
     public function getQuantifier()
     {
@@ -81,10 +113,5 @@ final class OptionalValue implements ValueInterface
             $this->getFirstMember(),
             $this->getSecondMember(),
         ];
-    }
-
-    public function __clone()
-    {
-        list($this->quantifier, $this->firstMember, $this->secondMember) = $this->getValue();
     }
 }
