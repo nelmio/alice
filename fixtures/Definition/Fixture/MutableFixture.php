@@ -2,23 +2,23 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 namespace Nelmio\Alice\Definition\Fixture;
 
-use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\NotCallableTrait;
 
-/**
- * Minimalist implementation of a fixture.
- */
-final class SimpleFixture implements FixtureInterface
+class MutableFixture implements FixtureInterface
 {
+    use NotCallableTrait;
+
     /**
      * @var string
      */
@@ -65,14 +65,16 @@ final class SimpleFixture implements FixtureInterface
         return $this->specs;
     }
 
+    public function setSpecs(SpecificationBag $specs)
+    {
+        $this->specs = $specs;
+    }
+
     /**
      * @inheritdoc
      */
-    public function withSpecs(SpecificationBag $specs): self
+    public function withSpecs(SpecificationBag $specs)
     {
-        $clone = clone $this;
-        $clone->specs = $specs;
-        
-        return $clone;
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

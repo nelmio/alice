@@ -11,12 +11,12 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
-use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\PropertyBag;
+use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * @covers Nelmio\Alice\Definition\Fixture\FixtureWithFlags
@@ -28,11 +28,11 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(FixtureWithFlags::class, FixtureInterface::class, true));
     }
     
-    public function testAccessors()
+    public function testReadAccessorsReturnsPropertiesValues()
     {
         $reference = 'user0';
         $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
+        $specs = SpecificationBagFactory::create();
 
         $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
         $decoratedFixtureProphecy->getId()->willReturn($reference);
@@ -55,40 +55,29 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $decoratedFixtureProphecy->getSpecs()->shouldHaveBeenCalledTimes(1);
     }
 
+    /**
+     * @depends FlagBagTest::testIsImmutable
+     */
     public function testIsImmutable()
     {
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
-
-        $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $decoratedFixtureProphecy->getSpecs()->willReturn($specs);
-        /** @var FixtureInterface $decoratedFixture */
-        $decoratedFixture = $decoratedFixtureProphecy->reveal();
-
+        $specs = SpecificationBagFactory::create();
+        $decoratedFixture = new MutableFixture('mutable', 'Mutable', $specs);
         $flags = new FlagBag('something');
-
         $fixture = new FixtureWithFlags($decoratedFixture, $flags);
 
         $this->assertNotSame($fixture->getSpecs(), $fixture->getSpecs());
-        $this->assertNotSame($fixture->getFlags(), $fixture->getFlags());
+        // flags is immutable
+
+        $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
+        $decoratedFixture->setSpecs($newSpecs);
+
+        $this->assertEquals($specs, $fixture->getSpecs());
     }
 
-    public function testIsDeepClonable()
+    public function testWithersReturnNewModifiedInstance()
     {
-        /** @var FixtureInterface $decoratedFixture */
-        $decoratedFixture = $this->prophesize(FixtureInterface::class)->reveal();
-        $flags = new FlagBag('something');
-
-        $fixture = new FixtureWithFlags($decoratedFixture, $flags);
-        $clone = clone $fixture;
-
-        $this->assertEquals($fixture, $clone);
-        $this->assertNotSame($fixture, $clone);
-    }
-
-    public function testImmutableMutators()
-    {
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
-        $newSpecs = new SpecificationBag(new DummyMethodCall('dummy'), new PropertyBag(), new MethodCallBag());
+        $specs = SpecificationBagFactory::create();
+        $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
 
         $newDecoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
         $newDecoratedFixtureProphecy->getSpecs()->willReturn($newSpecs);

@@ -30,4 +30,9 @@ class FixtureReferenceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($id, $definition->getId());
     }
+
+    public function testIsImmutable()
+    {
+        //TODO
+    }
 }

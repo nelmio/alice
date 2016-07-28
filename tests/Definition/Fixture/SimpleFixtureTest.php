@@ -12,10 +12,8 @@
 namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
-use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\PropertyBag;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * @covers Nelmio\Alice\Definition\Fixture\SimpleFixture
@@ -27,11 +25,11 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(SimpleFixture::class, FixtureInterface::class, true));
     }
     
-    public function testAccessors()
+    public function testReadAccessorsReturnsPropertiesValues()
     {
         $reference = 'user0';
-        $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
+        $className = 'Nelmio\Alice\Entity\User';
+        $specs = SpecificationBagFactory::create();
 
         $fixture = new SimpleFixture($reference, $className, $specs);
 
@@ -40,36 +38,20 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($specs, $fixture->getSpecs());
     }
 
+    /**
+     * @depends SpecificationBagTest::testIsImmutable
+     */
     public function testIsImmutable()
     {
-        $reference = 'user0';
-        $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
-
-        $fixture = new SimpleFixture($reference, $className, $specs);
-
-        $this->assertNotSame($fixture->getSpecs(), $fixture->getSpecs());
+        $this->assertTrue(true, 'Nothing to do here.');
     }
 
-    public function testIsDeepClonable()
+    public function testWithersReturnsNewModifiedInstance()
     {
         $reference = 'user0';
-        $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
-
-        $fixture = new SimpleFixture($reference, $className, $specs);
-        $clone = clone $fixture;
-
-        $this->assertEquals($fixture, $clone);
-        $this->assertNotSame($fixture, $clone);
-    }
-
-    public function testImmutableMutators()
-    {
-        $reference = 'user0';
-        $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
-        $newSpecs = new SpecificationBag(new DummyMethodCall('dummy'), new PropertyBag(), new MethodCallBag());
+        $className = 'Nelmio\Alice\Entity\User';
+        $specs = SpecificationBagFactory::create();
+        $newSpecs = SpecificationBagFactory::create(new DummyMethodCall('dummy'));
 
         $fixture = new SimpleFixture($reference, $className, $specs);
         $newFixture = $fixture->withSpecs($newSpecs);

@@ -11,14 +11,17 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
+use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
 
@@ -32,11 +35,11 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(TemplatingFixture::class, FixtureInterface::class, true));
     }
     
-    public function testAccessors()
+    public function testReadAccessorsReturnsPropertiesValues()
     {
         $reference = 'user0';
-        $className = 'Nelmio\Entity\User';
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
+        $className = 'Nelmio\Alice\Entity\User';
+        $specs = SpecificationBagFactory::create();
 
         $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
         $decoratedFixtureProphecy->getId()->willReturn($reference);
@@ -71,39 +74,23 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testIsImmutable()
     {
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
-
-        $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $decoratedFixtureProphecy->getSpecs()->willReturn($specs);
-        /** @var FixtureInterface $decoratedFixture */
-        $decoratedFixture = $decoratedFixtureProphecy->reveal();
-
+        $specs = SpecificationBagFactory::create();
+        $decoratedFixture = new MutableFixture('mutable', 'Mutable', $specs);
         $flags = new FlagBag('something');
 
         $fixtureWithFlags = new FixtureWithFlags($decoratedFixture, $flags);
         $fixture = new TemplatingFixture($fixtureWithFlags);
 
-        $this->assertNotSame($fixture->getSpecs(), $fixture->getSpecs());
+        $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
+        $decoratedFixture->setSpecs($newSpecs);
+
+        $this->assertEquals($specs, $fixture->getSpecs());
     }
 
-    public function testIsDeepClonable()
+    public function testWithersReturnsNewModifiedInstance()
     {
-        /** @var FixtureInterface $decoratedFixture */
-        $decoratedFixture = $this->prophesize(FixtureInterface::class)->reveal();
-        $flags = new FlagBag('something');
-
-        $fixtureWithFlags = new FixtureWithFlags($decoratedFixture, $flags);
-        $fixture = new TemplatingFixture($fixtureWithFlags);
-        $clone = clone $fixture;
-
-        $this->assertEquals($fixture, $clone);
-        $this->assertNotSame($fixture, $clone);
-    }
-
-    public function testMutatorsAreImmutable()
-    {
-        $specs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
-        $newSpecs = new SpecificationBag(new DummyMethodCall('dummy'), new PropertyBag(), new MethodCallBag());
+        $specs = SpecificationBagFactory::create();
+        $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
 
         $newDecoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
         $newDecoratedFixtureProphecy->getSpecs()->willReturn($newSpecs);
@@ -129,41 +116,59 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($newSpecs, $newFixture->getSpecs());
     }
 
-    public function testStripTemplateOfFlags()
+    /**
+     * @dataProvider provideFlags
+     */
+    public function testStripFixturesOfFlagsRemovesTemplateAndExtendFlags(FlagBag $flags, FlagBag $expected)
     {
-        $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $decoratedFixtureProphecy->getId()->shouldNotBeCalled();
-        /** @var FixtureInterface $decoratedFixture */
-        $decoratedFixture = $decoratedFixtureProphecy->reveal();
+        $fixture = new FixtureWithFlags(new FakeFixture(), $flags);
+        $strippedFixtures = (new TemplatingFixture($fixture))->getStrippedFixture()->getFlags();
 
-        $flags = new FlagBag('user0');
+        $this->assertEquals($expected, $strippedFixtures);
+    }
 
-        $fixture = new FixtureWithFlags($decoratedFixture, $flags);
-        $templatingFixture = new TemplatingFixture($fixture);
+    public function provideFlags()
+    {
+        yield 'empty flagbag' => [
+            new FlagBag('user0'),
+            new FlagBag('user0'),
+        ];
 
-        $strippedFixtures = $templatingFixture->getStrippedFixture();
+        yield 'flagbag with one non template element' => [
+            (new FlagBag('user0'))
+                ->with(new ElementFlag('dummy_flag'))
+            ,
+            (new FlagBag('user0'))
+                ->with(new ElementFlag('dummy_flag'))
+            ,
+        ];
 
-        $this->assertEquals(
-            new FixtureWithFlags($fixture, new FlagBag('user0')),
-            $strippedFixtures
-        );
+        yield 'flagbag with one template flag' => [
+            (new FlagBag('user0'))
+                ->with(new TemplateFlag())
+            ,
+            new FlagBag('user0'),
+        ];
 
-        $flags = (new FlagBag('user0'))
-            ->with(new TemplateFlag())
-            ->with(new ElementFlag('dummy_flag'))
-        ;
-        $fixture = new FixtureWithFlags($decoratedFixture, $flags);
-        $templatingFixture = new TemplatingFixture($fixture);
+        yield 'flagbag with one extend flag' => [
+            (new FlagBag('user0'))
+                ->with(new ExtendFlag(new FixtureReference('user_base')))
+            ,
+            new FlagBag('user0'),
+        ];
 
-        $strippedFixtures = $templatingFixture->getStrippedFixture();
-
-        $this->assertEquals(
-            new FixtureWithFlags(
-                $fixture,
-                (new FlagBag('user0'))
-                    ->with(new ElementFlag('dummy_flag'))
-            ),
-            $strippedFixtures
-        );
+        yield 'flagbag with multiple flags' => [
+            (new FlagBag('user0'))
+                ->with(new TemplateFlag())
+                ->with(new ExtendFlag(new FixtureReference('user_base')))
+                ->with(new ExtendFlag(new FixtureReference('random_user_template')))
+                ->with(new ElementFlag('dummy_flag'))
+                ->with(new ElementFlag('another_dummy_flag'))
+            ,
+            (new FlagBag('user0'))
+                ->with(new ElementFlag('dummy_flag'))
+                ->with(new ElementFlag('another_dummy_flag'))
+            ,
+        ];
     }
 }
