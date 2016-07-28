@@ -11,29 +11,15 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
+use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\NotClonableTrait;
 
-final class ListNameDenormalizer implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterface
+final class ListNameDenormalizer extends AbstractChainableDenormalizer
 {
-    /**
-     * @var FixtureDenormalizerInterface|null
-     */
-    private $denormalizer;
-
-    /**
-     * @inheritdoc
-     */
-    public function with(FixtureDenormalizerInterface $denormalizer)
-    {
-        $clone = clone $this;
-        $clone->denormalizer = $denormalizer;
-
-        return $clone;
-    }
+    use NotClonableTrait;
 
     /**
      * @inheritdoc
@@ -49,23 +35,30 @@ final class ListNameDenormalizer implements ChainableFixtureDenormalizerInterfac
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,
-        string $reference,
+        string $fixtureId,
         array $specs,
-        FlagBag $flags): FixtureBag
+        FlagBag $flags
+    ): FixtureBag
     {
-        if (null === $this->denormalizer) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'Expected method "%s" to be called only if it has a denormalizer.',
-                    __METHOD__
+        /**
+         * @var FixtureInterface $tempFixture
+         * @var FixtureBag       $builtFixtures
+         */
+        list($tempFixture, $builtFixtures) = $this->denormalizeTemporaryFixture(
+            $builtFixtures,
+            $className,
+            $specs,
+            $flags
+        );
+        $fixtureIds = $this->buildIds($fixtureId);
+
+        foreach ($fixtureIds as $fixtureId) {
+            $builtFixtures = $builtFixtures->with(
+                new SimpleFixture(
+                    $fixtureId,
+                    $tempFixture->getClassName(),
+                    $tempFixture->getSpecs()
                 )
-            );
-        }
-        
-        $references = $this->getReferences($reference);
-        foreach ($references as $builtReference) {
-            $builtFixtures = $builtFixtures->mergeWith( 
-                $this->denormalizer->denormalize($builtFixtures, $className, $builtReference, $specs, $flags)
             );
         }
 
@@ -73,9 +66,7 @@ final class ListNameDenormalizer implements ChainableFixtureDenormalizerInterfac
     }
 
     /**
-     * @param string $reference
-     *
-     * @throws \BadMethodCallException
+     * @param string $id
      *
      * @return string[]
      *
@@ -85,35 +76,29 @@ final class ListNameDenormalizer implements ChainableFixtureDenormalizerInterfac
      *      'user_bob',
      *  ]
      */
-    private function getReferences(string $reference): array
+    private function buildIds(string $id): array
     {
         $matches = [];
-        if (false === $this->canDenormalize($reference, $matches)) {
-            throw new \BadMethodCallException(
+        if (false === $this->canDenormalize($id, $matches)) {
+            throw new \LogicException(
                 sprintf(
-                    'As a chainable denormalizer, "%s" should be called only if "::canDenormalize() returns true. Got false instead.',
+                    'As a chainable denormalizer, "%s" should be called only if "::canDenormalize() returns true. Got '
+                    .'false instead.',
                     __METHOD__
                 )
             );
         }
         $listElements = preg_split('/\s*,\s*/', $matches['list']);
 
-        $references = [];
+        $ids = [];
         foreach ($listElements as $element) {
-            $references[] = str_replace(
+            $ids[] = str_replace(
                 sprintf('{%s}', $matches['list']),
                 $element,
-                $reference
+                $id
             );
         }
 
-        return $references;
-    }
-
-    public function __clone()
-    {
-        if (null !== $this->denormalizer) {
-            $this->denormalizer = clone $this->denormalizer;
-        }
+        return $ids;
     }
 }

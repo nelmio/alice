@@ -39,6 +39,22 @@ final class FixtureBag implements \IteratorAggregate
         return $clone;
     }
 
+    /**
+     * Creates a new instance which will not contain the fixture of the given ID. Will still proceed even if such
+     * fixture does not exist.
+     *
+     * @param string $fixtureId
+     *
+     * @return self
+     */
+    public function without(string $fixtureId): self
+    {
+        $clone = clone $this;
+        unset($clone->fixtures[$fixtureId]);
+
+        return $clone;
+    }
+
     public function mergeWith(self $newFixtures): self
     {
         $clone = clone $this;

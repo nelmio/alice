@@ -42,33 +42,38 @@ class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(SimpleDenormalizer::class, FlagParserAwareInterface::class, true));
     }
 
+    public function testCanBeInstantiatedWithAFlagParser()
+    {
+        new SimpleDenormalizer(new FakeSpecificationBagDenormalizer(), new FakeFlagParser());
+    }
+
+    public function testCanBeInstantiatedWithoutAFlagParser()
+    {
+        new SimpleDenormalizer(new FakeSpecificationBagDenormalizer());
+    }
+
     /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Expected method
-     *                           "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer::denormalize"
-     *                           to be called only if it has a flag parser.
+     * @expectedException \DomainException
      */
-    public function testCannotDenormalizerIfHasNoFlagParser()
+    public function testIsNotClonable()
+    {
+        clone new SimpleDenormalizer(new FakeSpecificationBagDenormalizer());;
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer::checkFlagParser" to be called only if it has a flag parser.
+     */
+    public function testCannotDenormalizeFixtureIfHasNoFlagParser()
     {
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $this->prophesize(SpecificationsDenormalizerInterface::class)->reveal();
 
         $denormalizer = new SimpleDenormalizer($specsDenormalizer);
-        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Entity\User', 'user0', [], new FlagBag(''));
-    }
-    
-    public function testIsDeepClonable()
-    {
-        $denormalizer = (new SimpleDenormalizer(new FakeSpecificationBagDenormalizer()))
-            ->withParser(new FakeFlagParser())
-        ;
-        $clone = clone $denormalizer;
-
-        $this->assertEquals($denormalizer, $clone);
-        $this->assertNotSame($denormalizer, $clone);
+        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Alice\Entity\User', 'user0', [], new FlagBag(''));
     }
 
-    public function testDenormalize()
+    public function testDenormalizesValuesToCreateANewFixtureObjectAndAddItToTheListOfFixturesReturned()
     {
         $fixtures = new FixtureBag();
         $className = 'Nelmio\Entity\User';
@@ -115,7 +120,7 @@ class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
         $specsDenormalizerProphecy->denormalizer(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testDenormalizeWithFlags()
+    public function testDenormalizationKeepsFlagsInIds()
     {
         $fixtures = new FixtureBag();
         $className = 'Nelmio\Entity\User';

@@ -25,7 +25,7 @@ class FakeFixtureDenormalizer implements FixtureDenormalizerInterface
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,
-        string $reference,
+        string $fixtureId,
         array $specs,
         FlagBag $flags
     ): FixtureBag

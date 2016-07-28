@@ -61,6 +61,34 @@ class SimpleObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(new \stdClass(), $object->getInstance());
     }
 
+    public function testWithersKeepsImmutabilityAndReturnNewModifiedInstance()
+    {
+        $reference = 'user0';
+        $instance = new \stdClass();
+        $instance->original = true;
+        $originalInstance = clone $instance;
+        $object = new SimpleObject($reference, $instance);
+
+        $newInstance = new \stdClass();
+        $newInstance->original = false;
+        $originalNewInstance = clone $newInstance;
+        $newobject = $object->withInstance($newInstance);
+
+        // Mutate injected values
+        $newInstance->foo = 'bar';
+
+        // Mutate returned values
+        $newobject->getInstance()->foo = 'baz';
+
+        $this->assertInstanceOf(SimpleObject::class, $newobject);
+
+        $this->assertEquals($reference, $object->getReference());
+        $this->assertEquals($originalInstance, $object->getInstance());
+
+        $this->assertEquals($reference, $newobject->getReference());
+        $this->assertEquals($originalNewInstance, $newobject->getInstance());
+    }
+
     /**
      * @dataProvider provideInvalidInstances
      *
