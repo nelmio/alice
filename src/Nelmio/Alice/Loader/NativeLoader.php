@@ -101,11 +101,37 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 /**
  * Loader implementation made to be usable without any dependency injection for quick and easy usage. For more advanced
  * usages, use {@see Nelmio\Alice\Loader\SimpleFileLoader} instead or implement your own loader.
+ *
+ * @method DataLoaderInterface getBuiltInDataLoader()
+ * @method ParserInterface getBuiltInParser()
+ * @method FixtureBuilderInterface getBuiltInBuilder()
+ * @method GeneratorInterface getBuiltInGenerator()
+ * @method DenormalizerInterface getBuiltInDenormalizer()
+ * @method getBuiltInFixtureBagDenormalizer
+ * @method FlagParserInterface getBuiltInFlagParser()
+ * @method FixtureDenormalizerInterface getBuiltInFixtureDenormalizer()
+ * @method ExpressionLanguageParserInterface getBuiltInExpressionLanguageParser()
+ * @method FixtureSetResolverInterface getBuiltInResolver()
+ * @method ObjectGeneratorInterface getBuiltInObjectGenerator()
+ * @method ParameterBagResolverInterface getBuiltInParameterResolver()
+ * @method InstantiatorInterface getBuiltInInstantiator()
+ * @method PopulatorInterface getBuiltInPopulator()
+ * @method LexerInterface getBuiltInLexer()
+ * @method TokenParserInterface getBuiltInExpressionLanguageTokenParser()
+ * @method UniqueValuesPool getBuiltInUniqueValuesPool()
+ * @method CallerInterface getBuiltInCaller()
+ * @method ValueResolverInterface getBuiltInValueResolver()
+ * @method HydratorInterface getBuiltInHydrator()
  */
 final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 {
     use NotClonableTrait;
-    
+
+    /**
+     * @var array
+     */
+    private $cache = [];
+
     /**
      * @var FileLoaderInterface
      */
@@ -141,7 +167,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         return $this->dataLoader->loadData($data, $parameters, $objects);
     }
 
-    public function getBuiltInParser(): ParserInterface
+    protected function _getBuiltInParser(): ParserInterface
     {
         $registry = new ParserRegistry([
             new YamlParser(new SymfonyYamlParser()),
@@ -151,7 +177,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         return new RuntimeCacheParser($registry, new DefaultIncludeProcessor(new DefaultFileLocator()));
     }
 
-    public function getBuiltInDataLoader(): DataLoaderInterface
+    protected function _getBuiltInDataLoader(): DataLoaderInterface
     {
         return new SimpleDataLoader(
             $this->getBuiltInBuilder(),
@@ -159,14 +185,14 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    public function getBuiltInBuilder(): FixtureBuilderInterface
+    protected function _getBuiltInBuilder(): FixtureBuilderInterface
     {
         return new SimpleBuilder(
             $this->getBuiltInDenormalizer()
         );
     }
 
-    public function getBuiltInDenormalizer(): DenormalizerInterface
+    protected function _getBuiltInDenormalizer(): DenormalizerInterface
     {
         return new SimpleDenormalizer(
             new SimpleParameterBagDenormalizer(),
@@ -174,7 +200,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    public function getBuiltInFlagParser(): FlagParserInterface
+    protected function _getBuiltInFlagParser(): FlagParserInterface
     {
         $registry = new FlagParserRegistry([
             new ExtendFlagParser(),
@@ -186,7 +212,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         return new ElementFlagParser($registry);
     }
 
-    public function getBuiltInFixtureBagDenormalizer(): FixtureBagDenormalizerInterface
+    protected function _getBuiltInFixtureBagDenormalizer(): FixtureBagDenormalizerInterface
     {
         return new SimpleFixtureBagDenormalizer(
             $this->getBuiltInFixtureDenormalizer(),
@@ -194,7 +220,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    public function getBuiltInFixtureDenormalizer(): FixtureDenormalizerInterface
+    protected function _getBuiltInFixtureDenormalizer(): FixtureDenormalizerInterface
     {
         return new FixtureDenormalizerRegistry(
             $this->getBuiltInFlagParser(),
@@ -210,15 +236,15 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    public function getBuiltInGenerator(): GeneratorInterface
+    protected function _getBuiltInGenerator(): GeneratorInterface
     {
         return new SimpleGenerator(
             $this->getBuiltInResolver(),
-            $this->getBuiltInObjectResolver()
+            $this->getBuiltInObjectGenerator()
         );
     }
 
-    public function getBuiltInResolver(): FixtureSetResolverInterface
+    protected function _getBuiltInResolver(): FixtureSetResolverInterface
     {
         return new SimpleFixtureSetResolver(
             $this->getBuiltInParameterResolver(),
@@ -226,7 +252,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    public function getBuiltInParameterResolver(): ParameterBagResolverInterface
+    protected function _getBuiltInParameterResolver(): ParameterBagResolverInterface
     {
         $registry = new ParameterResolverRegistry([
             new SimpleParameterResolver(),
@@ -237,7 +263,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         return new ParameterBagResolver($registry);
     }
 
-    public function getBuiltInObjectResolver(): ObjectGeneratorInterface
+    protected function _getBuiltInObjectGenerator(): ObjectGeneratorInterface
     {
         return new SimpleObjectGenerator(
             $this->getBuiltInInstantiator(),
@@ -246,7 +272,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    public function getBuiltInInstantiator(): InstantiatorInterface
+    protected function _getBuiltInInstantiator(): InstantiatorInterface
     {
         return new InstantiatorResolver(
             $this->getBuiltInValueResolver(),
@@ -258,7 +284,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    public function getBuiltInPopulator(): PopulatorInterface
+    protected function _getBuiltInPopulator(): PopulatorInterface
     {
         return new SimplePopulator(
             $this->getBuiltInValueResolver(),
@@ -266,12 +292,12 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    public function getBuiltInCaller(): CallerInterface
+    protected function _getBuiltInCaller(): CallerInterface
     {
         return new DummyCaller();
     }
 
-    public function getBuiltInValueResolver(): ValueResolverInterface
+    protected function _getBuiltInValueResolver(): ValueResolverInterface
     {
         return new ResolverRegistry([
             new DynamicArrayValueResolver(),
@@ -281,19 +307,19 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         ]);
     }
 
-    public function getBuiltInHydrator(): HydratorInterface
+    protected function _getBuiltInHydrator(): HydratorInterface
     {
         return new PropertyAccessorHydrator(
             new PropertyAccessor()
         );
     }
 
-    public function getBuiltInUniqueValuesPool(): UniqueValuesPool
+    protected function _getBuiltInUniqueValuesPool(): UniqueValuesPool
     {
         return new UniqueValuesPool();
     }
 
-    public function getBuiltInExpressionLanguageParser(): ExpressionLanguageParserInterface
+    protected function _getBuiltInExpressionLanguageParser(): ExpressionLanguageParserInterface
     {
         return new SimpleParser(
             $this->getBuiltInLexer(),
@@ -301,7 +327,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    public function getBuiltInExpressionLanguageTokenParser(): TokenParserInterface
+    protected function _getBuiltInExpressionLanguageTokenParser(): TokenParserInterface
     {
         return new TokenParserRegistry([
             new DynamicArrayTokenParser(),
@@ -320,7 +346,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         ]);
     }
 
-    public function getBuiltInLexer(): LexerInterface
+    protected function _getBuiltInLexer(): LexerInterface
     {
         return new LexerRegistry([
             new EmptyValueLexer(),
@@ -329,5 +355,18 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
                 new ReferenceLexer()
             ),
         ]);
+    }
+
+    public function __call(string $method, array $arguments)
+    {
+        if (array_key_exists($method, $this->cache)) {
+            return $this->cache[$method];
+        }
+
+        $realMethod = '_'.$method;
+        $service = $this->$realMethod(...$arguments);
+        $this->cache[$method] = $service;
+
+        return $service;
     }
 }
