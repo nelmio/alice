@@ -26,7 +26,7 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        self::$dir = __DIR__.'/../File/Cache';
+        self::$dir = __DIR__.'/../../../../../fixtures/Nelmio/Alice/Parser/files/cache';
     }
 
     public function testIsAnIncludeProcessor()

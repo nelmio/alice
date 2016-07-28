@@ -35,7 +35,7 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUpBeforeClass();
 
-        self::$dir = __DIR__.'/../File/Yaml';
+        self::$dir = __DIR__.'/../../../../../fixtures/Nelmio/Alice/Parser/files/yaml';
     }
 
     public static function tearDownAfterClass()
