@@ -30,13 +30,13 @@
         "symfony/property-access": "^2.2||^3.0"
     },
     "autoload": {
-        "psr-4": { "Nelmio\\Alice\\": "src/Nelmio/Alice" }
+        "psr-4": { "Nelmio\\Alice\\": "src" }
     },
     "autoload-dev": {
         "psr-4": {
             "Nelmio\\Alice\\": [
-                "tests/Nelmio/Alice",
-                "fixtures/Nelmio/Alice"
+                "tests",
+                "fixtures"
             ]
         }
     },
