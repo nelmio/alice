@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Prophecy\Argument;
@@ -29,7 +30,15 @@ class SimpleFixtureBagDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(SimpleFixtureBagDenormalizer::class, FixtureBagDenormalizerInterface::class, true));
     }
 
-    public function testDenormalize()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone new SimpleFixtureBagDenormalizer(new FakeFixtureDenormalizer(), new FakeFlagParser());
+    }
+
+    public function testDenormalizesASetOfDataIntoAFixtureBag()
     {
         $fixture1Prophecy = $this->prophesize(FixtureInterface::class);
         $fixture1Prophecy->getId()->willReturn('user_alice');

@@ -2,48 +2,43 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
+namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls;
 
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\ExpressionLanguage\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\SimpleArgumentsDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\NotClonableTrait;
 
-class CallsDenormalizer
+final class OptionalCallsDenormalizer implements CallsDenormalizerInterface
 {
+    use NotClonableTrait;
+
     /**
-     * @var ArgumentsDenormalizer
+     * @var SimpleArgumentsDenormalizer
      */
     private $argumentDenormalizer;
 
-    public function __construct(ParserInterface $parser)
+    public function __construct(ArgumentsDenormalizerInterface $argumentsDenormalizer)
     {
-        $this->argumentDenormalizer = new ArgumentsDenormalizer($parser);
+        $this->argumentDenormalizer = $argumentsDenormalizer;
     }
 
     /**
-     * Denormalizes a method call.
-     *
-     * @param FixtureInterface    $scope See SpecificationsDenormalizerInterface
-     * @param FlagParserInterface $parser
-     * @param string              $unparsedMethod
-     * @param array               $unparsedArguments
-     *
-     * @return MethodCallInterface|null
-     *
-     * @example
-     *  $unparsedMethod = 'setLocation (50%?)'
+     * @inheritdoc
      */
     public final function denormalize(
         FixtureInterface $scope,
@@ -58,14 +53,10 @@ class CallsDenormalizer
 
         $methodCall = new SimpleMethodCall($method, $arguments);
 
-        return $this->handleMethodFlags($scope, $methodCall, $methodFlags);
+        return $this->handleMethodFlags($methodCall, $methodFlags);
     }
 
-    protected function handleMethodFlags(
-        FixtureInterface $scope,
-        MethodCallInterface $methodCall,
-        FlagBag $flags
-    ): MethodCallInterface
+    private function handleMethodFlags(MethodCallInterface $methodCall, FlagBag $flags): MethodCallInterface
     {
         foreach ($flags as $flag) {
             if ($flag instanceof OptionalFlag) {

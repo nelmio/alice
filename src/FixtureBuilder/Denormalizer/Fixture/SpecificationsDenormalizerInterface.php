@@ -41,5 +41,5 @@ interface SpecificationsDenormalizerInterface
      *      'username' => 'bob',
      *  ]
      */
-    public function denormalizer(FixtureInterface $fixture, FlagParserInterface $parser, array $unparsedSpecs): SpecificationBag;
+    public function denormalize(FixtureInterface $fixture, FlagParserInterface $parser, array $unparsedSpecs): SpecificationBag;
 }

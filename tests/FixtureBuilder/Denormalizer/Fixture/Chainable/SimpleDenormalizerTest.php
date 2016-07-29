@@ -94,7 +94,7 @@ class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
         $specsDenormalizerProphecy = $this->prophesize(SpecificationsDenormalizerInterface::class);
         $expectedSpecs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
         $specsDenormalizerProphecy
-            ->denormalizer(Argument::type(SimpleFixture::class), $flagParser, $specs)
+            ->denormalize(Argument::type(SimpleFixture::class), $flagParser, $specs)
             ->willReturn($expectedSpecs)
         ;
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
@@ -117,7 +117,7 @@ class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
-        $specsDenormalizerProphecy->denormalizer(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
     public function testDenormalizationKeepsFlagsInIds()
@@ -143,7 +143,7 @@ class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
         $specsDenormalizerProphecy = $this->prophesize(SpecificationsDenormalizerInterface::class);
         $expectedSpecs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
         $specsDenormalizerProphecy
-            ->denormalizer(Argument::type(SimpleFixture::class), $flagParser, $specs)
+            ->denormalize(Argument::type(SimpleFixture::class), $flagParser, $specs)
             ->willReturn($expectedSpecs)
         ;
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
@@ -166,6 +166,6 @@ class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
-        $specsDenormalizerProphecy->denormalizer(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 }
