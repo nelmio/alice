@@ -13,7 +13,8 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimit;
+use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -60,7 +61,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
     /**
      * @inheritdoc
      */
-    public function withResolver(ValueResolverInterface $resolver): self
+    public function with(ValueResolverInterface $resolver): self
     {
         return new self($this->pool, $resolver);
     }
@@ -78,29 +79,24 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
      *
      * @param UniqueValue $value
      *
-     * @throws UniqueValueGenerationLimit
+     * @throws UniqueValueGenerationLimitReachedException
      */
     public function resolve(
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope = [],
-        int $tryCounter = null
+        int $tryCounter = 0
     ): ResolvedValueWithFixtureSet
     {
         $this->checkResolver(__METHOD__);
-        $tryCounter = $this->incrementCounter($tryCounter);
-        if ($tryCounter >= $this->limit) {
-            throw UniqueValueGenerationLimit::create($value, $this->limit);
-        }
+        $tryCounter = $this->incrementCounter($tryCounter, $value, $this->limit);
 
-        $realValue = $value->getValue();
-        if ($realValue instanceof ValueInterface) {
-            $result = $this->resolver->resolve($value->getValue(), $fixture, $fixtureSet, $scope);
-            list($generatedValue, $fixtureSet) = [$value->withValue($result->getValue()), $result->getSet()];
-        } else {
-            $generatedValue = $value;
-        }
+        /**
+         * @var UniqueValue        $generatedValue
+         * @var ResolvedFixtureSet $fixtureSet
+         */
+        list($generatedValue, $fixtureSet) = $this->generateValue($value, $fixture, $fixtureSet, $scope);
 
         if ($this->pool->has($generatedValue)) {
             return $this->resolve($value, $fixture, $fixtureSet, $scope, $tryCounter);
@@ -113,21 +109,34 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
     private function checkResolver(string $checkedMethod)
     {
         if (null === $this->resolver) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'Expected method "%s" to be called only if it has a resolver.',
-                    $checkedMethod
-                )
-            );
+            throw ResolverNotFoundException::createUnexpectedCall($checkedMethod);
         }
     }
 
-    private function incrementCounter(int $tryCounter = null): int
+    private function incrementCounter(int $tryCounter, UniqueValue $value, int $limit): int
     {
-        if (null !== $tryCounter) {
-            return $tryCounter + 1;
+        ++$tryCounter;
+        if ($tryCounter > $limit) {
+            throw UniqueValueGenerationLimitReachedException::create($value, $limit);
         }
 
-        return 0;
+        return $tryCounter;
+    }
+
+    private function generateValue(
+        UniqueValue $value,
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $fixtureSet,
+        array $scope = []
+    ): array
+    {
+        $realValue = $value->getValue();
+        if ($realValue instanceof ValueInterface) {
+            $result = $this->resolver->resolve($value->getValue(), $fixture, $fixtureSet, $scope);
+
+            return [$value->withValue($result->getValue()), $result->getSet()];
+        }
+
+        return [$value, $fixtureSet];
     }
 }

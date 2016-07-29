@@ -70,7 +70,7 @@ class SimpleFixtureBagDenormalizerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $userFlags = (new FlagBag('Nelmio\Entity\User'))->with(new ElementFlag('dummy_flag'));
+        $userFlags = (new FlagBag('Nelmio\Alice\Entity\User'))->with(new ElementFlag('dummy_flag'));
         $flagParserProphecy
             ->parse('Nelmio\Entity\User (dummy_flag)')
             ->willReturn($userFlags)
@@ -89,7 +89,7 @@ class SimpleFixtureBagDenormalizerTest extends \PHPUnit_Framework_TestCase
         $fixtureDenormalizerProphecy
             ->denormalize(
                 new FixtureBag(),
-                'Nelmio\Entity\User',
+                'Nelmio\Alice\Entity\User',
                 'user_alice',
                 [
                     'username' => 'alice'
@@ -102,7 +102,7 @@ class SimpleFixtureBagDenormalizerTest extends \PHPUnit_Framework_TestCase
         $fixtureDenormalizerProphecy
             ->denormalize(
                 $bag1,
-                'Nelmio\Entity\User',
+                'Nelmio\Alice\Entity\User',
                 'user_bob',
                 [
                     'username' => 'bob'

@@ -2,9 +2,9 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
+use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
@@ -20,8 +21,10 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 /**
  * Decorates a simple parameter resolver to resolve a bag.
  */
-final class ParameterBagResolver implements ParameterBagResolverInterface
+final class SimpleParameterBagResolver implements ParameterBagResolverInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ParameterResolverInterface
      */
@@ -49,7 +52,7 @@ final class ParameterBagResolver implements ParameterBagResolverInterface
             if ($resolvedParameters->has($key)) {
                 continue;
             }
-            
+
             $context = new ResolvingContext($key);
             $resolvedParameters = $this->resolver->resolve(
                 new Parameter($key, $value),
@@ -60,10 +63,5 @@ final class ParameterBagResolver implements ParameterBagResolverInterface
         }
 
         return $resolvedParameters;
-    }
-
-    public function __clone()
-    {
-        $this->resolver = clone $this->resolver;
     }
 }

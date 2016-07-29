@@ -15,7 +15,7 @@ use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
-use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimit;
+use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
@@ -74,18 +74,19 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         new UniqueValueResolver(new UniqueValuesPool(), null, 0);
     }
 
-    public function testImmutableFactories()
+    public function testWithersReturnNewModifiedInstance()
     {
-        $pool = new UniqueValuesPool();
-        $decoratedResolver = new FakeValueResolver();
-        $original = new UniqueValueResolver($pool);
+        $resolver = new UniqueValueResolver(new UniqueValuesPool());
+        $newResolver = $resolver->with(new FakeValueResolver());
 
-        $clone = $original->withResolver($decoratedResolver);
-
-        $this->assertInstanceOf(UniqueValueResolver::class, $clone);
-        $this->assertNull($this->resolverRefl->getValue($original));
-        $this->assertSame($decoratedResolver, $this->resolverRefl->getValue($clone));
-        $this->assertSame($this->poolRefl->getValue($original), $this->poolRefl->getValue($clone));
+        $this->assertEquals(
+            new UniqueValueResolver(new UniqueValuesPool()),
+            $resolver
+        );
+        $this->assertEquals(
+            new UniqueValueResolver(new UniqueValuesPool(), new FakeValueResolver()),
+            $newResolver
+        );
     }
 
     public function testCanResolveDynamicArrayValues()
@@ -97,18 +98,17 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BadMethodCallException
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver::resolve" to be called only if it has a resolver.
      */
     public function testCannotResolveValueIfHasNoResolver()
     {
-        $value = new DynamicArrayValue('', '');
         $resolver = new UniqueValueResolver(new UniqueValuesPool());
-        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $resolver->resolve(new UniqueValue('', ''), new FakeFixture(), ResolvedFixtureSetFactory::create());
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimit
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
      * @expectedExceptionMessage Could not generate a unique value after 1 attempts for "uniqid".
      */
     public function testThrowsExceptionIfLimitReached()
@@ -219,7 +219,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
-    public function testCannotResolveValueMoreTimesThanTheGivenLimit()
+    public function testThrowsIfLimitForGenerationOfUniqueValuesIsReached()
     {
         $uniqueId = 'uniqid';
         $realValue = new FakeValue();
@@ -246,7 +246,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         try {
             $resolver->resolve($value, $fixture, $set);
             $this->fail('Expected exception to be thrown.');
-        } catch (UniqueValueGenerationLimit $exception) {
+        } catch (UniqueValueGenerationLimitReachedException $exception) {
             $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(5);
         }
     }

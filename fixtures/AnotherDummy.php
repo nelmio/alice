@@ -9,14 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator;
+namespace Nelmio\Alice;
 
-interface ValueResolverAwareInterface
+class AnotherDummy
 {
-    /**
-     * @param ValueResolverInterface $resolver
-     *
-     * @return static
-     */
-    public function with(ValueResolverInterface $resolver);
 }

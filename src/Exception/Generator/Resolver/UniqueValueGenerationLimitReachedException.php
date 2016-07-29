@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\Generator\Resolver;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
-class UniqueValueGenerationLimit extends \RuntimeException implements ResolutionThrowable
+class UniqueValueGenerationLimitReachedException extends \RuntimeException implements ResolutionThrowable
 {
     public static function create(UniqueValue $value, int $limit): self
     {

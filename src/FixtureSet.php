@@ -16,8 +16,6 @@ namespace Nelmio\Alice;
  */
 final class FixtureSet
 {
-    use NotClonableTrait;
-    
     /**
      * @var ParameterBag
      */
@@ -52,21 +50,21 @@ final class FixtureSet
 
     public function getLoadedParameters(): ParameterBag
     {
-        return clone $this->loadedParameters;
+        return $this->loadedParameters;
     }
 
     public function getInjectedParameters(): ParameterBag
     {
-        return clone $this->injectedParameters;
+        return $this->injectedParameters;
     }
 
     public function getFixtures(): FixtureBag
     {
-        return clone $this->fixtures;
+        return $this->fixtures;
     }
 
     public function getObjects(): ObjectBag
     {
-        return clone $this->injectedObjects;
+        return $this->injectedObjects;
     }
 }

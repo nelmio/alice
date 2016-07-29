@@ -62,7 +62,7 @@ class RangeNameDenormalizerTest extends \PHPUnit_Framework_TestCase
     public function testCannotDenormalizerIfHasNoDenormalizer()
     {
         $denormalizer = new RangeNameDenormalizer();
-        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Entity\User', 'user{1..10}', [], new FlagBag(''));
+        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Alice\Entity\User', 'user{1..10}', [], new FlagBag(''));
     }
 
     /**
@@ -92,7 +92,7 @@ class RangeNameDenormalizerTest extends \PHPUnit_Framework_TestCase
         // Hypothesis check
         $this->assertFalse($denormalizer->canDenormalize($reference));
 
-        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Entity\User', $reference, [], new FlagBag(''));
+        $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Alice\Entity\User', $reference, [], new FlagBag(''));
     }
 
     public function testDenormalizeRangeToBuildFixtures()

@@ -76,7 +76,7 @@ class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
     public function testDenormalizesValuesToCreateANewFixtureObjectAndAddItToTheListOfFixturesReturned()
     {
         $fixtures = new FixtureBag();
-        $className = 'Nelmio\Entity\User';
+        $className = 'Nelmio\Alice\Entity\User';
         $reference = 'user_base';
         $specs = [
             'username' => '<name()>',
@@ -123,7 +123,7 @@ class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
     public function testDenormalizationKeepsFlagsInIds()
     {
         $fixtures = new FixtureBag();
-        $className = 'Nelmio\Entity\User';
+        $className = 'Nelmio\Alice\Entity\User';
         $reference = 'user_base (template)';
         $specs = [
             'username' => '<name()>',

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Resolver\Instantiator;
+namespace Nelmio\Alice\Generator\Instantiator;
 
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\InstantiatorInterface;

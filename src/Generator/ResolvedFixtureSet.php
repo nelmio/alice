@@ -49,23 +49,16 @@ final class ResolvedFixtureSet
 
     public function getParameters(): ParameterBag
     {
-        return clone $this->parameters;
+        return $this->parameters;
     }
 
     public function getFixtures(): FixtureBag
     {
-        return clone $this->fixtures;
+        return $this->fixtures;
     }
 
     public function getObjects(): ObjectBag
     {
-        return clone $this->objects;
-    }
-
-    public function __clone()
-    {
-        $this->parameters = clone $this->parameters;
-        $this->fixtures = clone $this->fixtures;
-        $this->objects = clone $this->objects;
+        return $this->objects;
     }
 }

@@ -14,10 +14,12 @@ namespace Nelmio\Alice\Generator\Resolver;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
-use Nelmio\Alice\Throwable\ResolutionThrowable;
+use Nelmio\Alice\NotClonableTrait;
 
 final class SimpleFixtureSetResolver implements FixtureSetResolverInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ParameterBagResolverInterface
      */
@@ -35,13 +37,7 @@ final class SimpleFixtureSetResolver implements FixtureSetResolverInterface
     }
 
     /**
-     * Resolves the loaded parameters and merge the injected ones with them and also resolves the fixture flags.
-     *
-     * @param FixtureSet $fixtureSet
-     *
-     * @throws ResolutionThrowable
-     *
-     * @return ResolvedFixtureSet
+     * @inheritdoc
      */
     public function resolve(FixtureSet $fixtureSet): ResolvedFixtureSet
     {

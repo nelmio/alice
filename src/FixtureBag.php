@@ -34,7 +34,7 @@ final class FixtureBag implements \IteratorAggregate
     public function with(FixtureInterface $fixture): self
     {
         $clone = clone $this;
-        $clone->fixtures[$fixture->getId()] = $fixture;
+        $clone->fixtures[$fixture->getId()] = clone $fixture;
         
         return $clone;
     }
@@ -86,7 +86,7 @@ final class FixtureBag implements \IteratorAggregate
     public function get(string $id): FixtureInterface
     {
         if ($this->has($id)) {
-            return $this->fixtures[$id];
+            return clone $this->fixtures[$id];
         }
 
         throw FixtureNotFoundException::create($id);

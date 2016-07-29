@@ -2,42 +2,67 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
+use Nelmio\Alice\Exception\Generator\Resolver\RecursionLimitReachedException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
+use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
+/**
+ * Decorates a chainable resolver to be able to apply it recursively.
+ */
 final class RecursiveParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ChainableParameterResolverInterface
      */
     private $resolver;
 
-    public function __construct(ChainableParameterResolverInterface $decoratedResolver)
+    /**
+     * @var int
+     */
+    private $limit;
+
+    public function __construct(ChainableParameterResolverInterface $resolver, int $limit = 5)
     {
-        $this->resolver = $decoratedResolver;
+        $this->resolver = $resolver;
+
+        if (2 >= $limit) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Expected limit for recursive calls to be of at least 2. Got %d instead.',
+                    $limit
+                )
+            );
+        }
+        $this->limit = $limit;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function withResolver(ParameterResolverInterface $resolver)
     {
-        $clone = clone $this;
-        if ($clone->resolver instanceof ParameterResolverAwareInterface) {
-            $clone->resolver = $clone->resolver->withResolver($resolver);
+        $decoratedResolver = $this->resolver;
+        if ($decoratedResolver instanceof ParameterResolverAwareInterface) {
+            $decoratedResolver = $decoratedResolver->withResolver($resolver);
         }
-        
-        return $clone;
+
+        return new self($decoratedResolver);
     }
 
     /**
@@ -49,16 +74,22 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
     }
 
     /**
+     * Resolves a parameter two times and if a different result is obtained will resolve the parameter again until two
+     * successive resolution give the same result.
+     *
      * {@inheritdoc}
      *
      * @param bool|int|float $parameter
+     *
+     * @throws RecursionLimitReachedException
      */
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
         ResolvingContext $context = null,
-        ParameterBag $previousResult = null
+        ParameterBag $previousResult = null,
+        int $counter = 1
     ): ParameterBag
     {
         if (null === $previousResult) {
@@ -66,7 +97,9 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
 
             return $this->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context, $result);
         }
-        $previousParameterValue = $previousResult->get($parameter->getKey());
+        $parameterKey = $parameter->getKey();
+        $previousParameterValue = $previousResult->get($parameterKey);
+        $counter = $this->incrementCounter($counter, $this->limit, $parameterKey);
 
         $newResult = $this->resolver->resolve(
             $parameter->withValue($previousParameterValue),
@@ -74,14 +107,26 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
             $resolvedParameters,
             $context
         );
-        $newParameterValue = $newResult->get($parameter->getKey());
+        $newParameterValue = $newResult->get($parameterKey);
         $result = $this->mergeResults($previousResult, $newResult);
 
         if ($previousParameterValue === $newParameterValue) {
             return $result;
         }
 
-        return $this->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context, $result);
+        return $this->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context, $result, $counter);
+    }
+
+    /**
+     * @throws RecursionLimitReachedException
+     */
+    private function incrementCounter(int $counter, int $limit, string $parameterKey): int
+    {
+        if ($counter >= $limit) {
+            throw RecursionLimitReachedException::create($limit, $parameterKey);
+        }
+
+        return ++$counter;
     }
 
     private function mergeResults(ParameterBag $previous, ParameterBag $new): ParameterBag
@@ -93,10 +138,5 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
         }
 
         return $new;
-    }
-
-    public function __clone()
-    {
-        $this->resolver = clone $this->resolver;
     }
 }

@@ -51,20 +51,16 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $resolver = new DynamicArrayValueResolver();
-        clone $resolver;
+        clone new DynamicArrayValueResolver();
     }
 
-    public function testImmutableFactories()
+    public function testWithersReturnNewModifiedInstance()
     {
-        $decoratedResolver = new FakeValueResolver();
-        $original = new DynamicArrayValueResolver();
+        $resolver = new DynamicArrayValueResolver();
+        $newResolver = $resolver->with(new FakeValueResolver());
 
-        $clone = $original->withResolver($decoratedResolver);
-
-        $this->assertInstanceOf(DynamicArrayValueResolver::class, $clone);
-        $this->assertNull($this->resolverRefl->getValue($original));
-        $this->assertSame($decoratedResolver, $this->resolverRefl->getValue($clone));
+        $this->assertEquals(new DynamicArrayValueResolver(), $resolver);
+        $this->assertEquals(new DynamicArrayValueResolver(new FakeValueResolver()), $newResolver);
     }
 
     public function testCanResolveDynamicArrayValues()
@@ -86,7 +82,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
     }
 
-    public function testResolvesQuantifierIfIsAValue()
+    public function testIfQuantifierIsAValueThenItWillBeResolvedAsWell()
     {
         $quantifier = new FakeValue();
         $value = new DynamicArrayValue($quantifier, '');
@@ -111,7 +107,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Expected quantifier to be an integer superior or equal to 2. Got "1" for "dummy", check you dynamic arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").
      */
-    public function testThrowsExceptionIfInvalidQuantifier()
+    public function testThrowsExceptionIfAnInvalidQuantifierIsGiven()
     {
         $quantifier = new FakeValue();
         $value = new DynamicArrayValue($quantifier, '');
@@ -158,7 +154,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($newSet, $result->getSet());
     }
 
-    public function testResolvesElementEachTimeIfIsAValue()
+    public function testResolvesElementAsManyTimeAsNecessaryIfItIsAValue()
     {
         $quantifier = 2;
         $element = new FakeValue();

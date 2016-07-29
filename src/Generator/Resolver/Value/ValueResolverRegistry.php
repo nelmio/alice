@@ -19,7 +19,7 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
-final class ResolverRegistry implements ValueResolverInterface
+final class ValueResolverRegistry implements ValueResolverInterface
 {
     use NotClonableTrait;
 
@@ -54,11 +54,6 @@ final class ResolverRegistry implements ValueResolverInterface
             }
         }
 
-        throw new ResolverNotFoundException(
-            sprintf(
-                'No suitable value resolver found to handle the value "%s".',
-                get_class($value)
-            )
-        );
+        throw ResolverNotFoundException::createForValue($value);
     }
 }

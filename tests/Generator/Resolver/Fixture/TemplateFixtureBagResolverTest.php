@@ -49,7 +49,15 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
         $this->resolver = new TemplateFixtureBagResolver();
     }
 
-    public function testResolvesTemplatesFixtures()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone new TemplateFixtureResolver();
+    }
+
+    public function testResolvesTemplatesFixturesAndReturnsResultingFixtureBag()
     {
         $unresolvedFixtures = (new FixtureBag())
             ->with(
@@ -83,7 +91,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user1',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -104,7 +112,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user2',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -124,7 +132,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user3',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -145,7 +153,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user4',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -166,7 +174,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                 $user5 = new FixtureWithFlags(  // has a template flag but is not a templating fixture!
                     new SimpleFixture(
                         'user5',
-                        'Nelmio\Entity\User',
+                        'Nelmio\Alice\Entity\User',
                         new SpecificationBag(
                             null,
                             new PropertyBag(),
@@ -186,7 +194,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user1',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -209,7 +217,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user3',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -233,7 +241,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testTheOrderOfFixturesGivesTheSameResult()
+    public function testTheResolutionIsInvarientToTheOrderInWhichFixturesAreGiven()
     {
         $unresolvedFixtures = (new FixtureBag())
             ->with(
@@ -241,7 +249,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user4',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -263,7 +271,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user3',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -284,7 +292,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user2',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -304,7 +312,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user1',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -327,7 +335,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user1',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -350,7 +358,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user3',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 (new PropertyBag())
@@ -385,7 +393,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user0',
-                            'Nelmio\Entity\User',
+                            'Nelmio\Alice\Entity\User',
                             new SpecificationBag(
                                 null,
                                 new PropertyBag(),

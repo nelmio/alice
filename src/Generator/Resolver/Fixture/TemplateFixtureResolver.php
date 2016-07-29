@@ -17,19 +17,23 @@ use Nelmio\Alice\Exception\FixtureNotFoundException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
+use Nelmio\Alice\NotClonableTrait;
 
 final class TemplateFixtureResolver
 {
+    use NotClonableTrait;
+
     /**
      * Resolves a given fixture. The resolution of a fixture may result in the resolution of several fixtures.
      *
-     * @param FixtureInterface $fixture Fixture to resolve
-     * @param FixtureBag       $unresolvedFixtures
-     * @param FixtureBag       $resolvedFixtures
+     * @param TemplatingFixture|FixtureInterface $fixture Fixture to resolve
+     * @param FixtureBag                         $unresolvedFixtures
+     * @param TemplatingFixtureBag               $resolvedFixtures
+     * @param ResolvingContext                   $context
      *
-     * @param ResolvingContext $context
+     * @throws FixtureNotFoundException
      *
-     * @return FixtureBag
+     * @return TemplatingFixtureBag
      */
     public function resolve(
         TemplatingFixture $fixture,
@@ -40,32 +44,23 @@ final class TemplateFixtureResolver
     {
         $context->checkForCircularReference($fixture->getId());
 
-        if ($fixture->extendsFixtures()) {
-            /**
-             * @var FixtureBag           $extendedFixtures
-             * @var TemplatingFixtureBag $resolvedFixtures
-             */
-            list($extendedFixtures, $resolvedFixtures) = $this->resolveExtendedFixtures(
-                $fixture->getExtendedFixturesReferences(),
-                $unresolvedFixtures,
-                $resolvedFixtures,
-                $context
-            );
-
-            $specs = $fixture->getSpecs();
-            foreach ($extendedFixtures as $extendedFixture) {
-                /** @var FixtureInterface $extendedFixture */
-                $specs = $specs->mergeWith($extendedFixture->getSpecs());
-            }
-
-            $fixture = $fixture
-                ->withSpecs($specs)
-                ->getStrippedFixture()
-            ;
+        if (false === $fixture->extendsFixtures()) {
+            return $resolvedFixtures->with($fixture);
         }
-        $resolvedFixtures = $resolvedFixtures->with($fixture);
 
-        return $resolvedFixtures;
+        /**
+         * @var FixtureBag           $extendedFixtures
+         * @var TemplatingFixtureBag $resolvedFixtures
+         */
+        list($extendedFixtures, $resolvedFixtures) = $this->resolveExtendedFixtures(
+            $fixture->getExtendedFixturesReferences(),
+            $unresolvedFixtures,
+            $resolvedFixtures,
+            $context
+        );
+        $fixture = $this->getExtendedFixture($fixture, $extendedFixtures);
+
+        return $resolvedFixtures->with($fixture);
     }
 
     /**
@@ -115,5 +110,19 @@ final class TemplateFixtureResolver
         }
 
         return [$fixtures, $resolvedFixtures];
+    }
+
+    public function getExtendedFixture(TemplatingFixture $fixture, FixtureBag $extendedFixtures)
+    {
+        $specs = $fixture->getSpecs();
+        foreach ($extendedFixtures as $extendedFixture) {
+            /** @var FixtureInterface $extendedFixture */
+            $specs = $specs->mergeWith($extendedFixture->getSpecs());
+        }
+
+        return $fixture
+            ->withSpecs($specs)
+            ->getStrippedFixture()
+        ;
     }
 }

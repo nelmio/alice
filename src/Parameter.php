@@ -33,13 +33,13 @@ final class Parameter
     public function __construct(string $key, $value)
     {
         $this->key = $key;
-        $this->value = $value;
+        $this->value = deep_clone($value);
     }
 
     public function withValue($value): self
     {
         $clone = clone $this;
-        $clone->value = $value;
+        $clone->value = deep_clone($value);
         
         return $clone;
     }
@@ -54,17 +54,6 @@ final class Parameter
      */
     public function getValue()
     {
-        if (is_object($this->value)) {
-            return clone $this->value;
-        }
-        
-        return $this->value;
-    }
-
-    public function __clone()
-    {
-        if (is_object($this->value)) {
-            $this->value = clone $this->value;
-        }
+        return deep_clone($this->value);
     }
 }
