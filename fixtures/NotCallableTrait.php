@@ -15,6 +15,11 @@ trait NotCallableTrait
 {
     public function __call($method, $arguments)
     {
-        throw new \DomainException('Did not expect to be called.');
+        throw new \DomainException(
+            sprintf(
+                'Did not expect "%s" to be called.',
+                $method
+            )
+        );
     }
 }

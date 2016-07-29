@@ -11,10 +11,10 @@
 
 namespace Nelmio\Alice\Definition\MethodCall;
 
-use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
+use Nelmio\Alice\Definition\ServiceReference\MutableReference;
 
 /**
  * @covers Nelmio\Alice\Definition\MethodCall\OptionalMethodCall
@@ -58,12 +58,12 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends FlagBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\FlagBagTest::testIsImmutable
      */
     public function testIsImmutable()
     {
         $caller = new MutableMethodCall(
-            new FakeMethodCall(),
+            new MutableReference(),
             'mutate',
             [
                 $arg0 = new \stdClass(),
@@ -78,13 +78,10 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
         $arg0->foo = 'bar';
 
         // Mutate retrieved values
-        /** @var MutableMethodCall $retrievedCaller */
-        $retrievedCaller = $definition->getCaller();
-        $retrievedCaller->setMethod(new DummyMethodCall('another_dummy'));
-
+        $definition->getCaller()->setId('mutated');
         $definition->getArguments()[0]->foo = 'baz';
 
-        $this->assertEquals(new FakeMethodCall(), $definition->getCaller());
+        $this->assertEquals(new MutableReference(), $definition->getCaller());
         $this->assertEquals(
             [
                 new \stdClass(),
@@ -116,7 +113,7 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends FlagBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\FlagBagTest::testIsImmutable
      */
     public function testCanCreateANewInstanceWithArguments()
     {

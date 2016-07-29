@@ -31,7 +31,15 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends PropertyTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\PropertyTest::testIsImmutable
+     */
+    public function testIsImmutable()
+    {
+        $this->assertTrue(true, 'Nothing to do.');
+    }
+
+    /**
+     * @depends Nelmio\Alice\Definition\PropertyTest::testIsImmutable
      */
     public function testWithersAreImmutableAndReturnNewModifiedInstance()
     {

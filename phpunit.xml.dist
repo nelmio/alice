@@ -8,7 +8,24 @@
 >
 
     <testsuites>
-        <testsuite name="Fixtures Test Suite">
+        <testsuite name="Dependent tests">
+            <file>tests/Definition/PropertyTest.php</file>
+            <file>tests/Definition/PropertyBagTest.php</file>
+            <file>tests/Definition/MethodCallBagTest.php</file>
+            <file>tests/Definition/SpecificationBagTest.php</file>
+            <file>tests/Definition/FlagBagTest.php</file>
+            <file>tests/Definition/Fixture/SimpleFixtureTest.php</file>
+            <file>tests/Definition/Fixture/FixtureWithFlagsTest.php</file>
+            <file>tests/Definition/Fixture/TemplatingFixtureTest.php</file>
+            <file>tests/Definition/ServiceReference/FixtureReferenceTest.php</file>
+            <file>tests/Definition/Fixture/TemplatingTest.php</file>
+            <file>tests/Definition/MethodCall/OptionalMethodCallTest.php</file>
+            <file>tests/Definition/Value/FunctionCallValueTest.php</file>
+            <file>tests/Definition/Value/FixtureMethodCallValueTest.php</file>
+            <file>tests/Definition/Value/FixtureReferenceValueTest.php</file>
+            <file>tests/Definition/Value/FixturePropertyValueTest.php</file>
+        </testsuite>
+        <testsuite name="Independent tests">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>

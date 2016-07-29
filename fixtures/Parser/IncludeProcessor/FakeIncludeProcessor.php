@@ -21,6 +21,6 @@ final class FakeIncludeProcessor implements IncludeProcessorInterface
 
     public function process(ParserInterface $parser, string $file, array $data): array
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

@@ -24,7 +24,7 @@ class FakeFixture implements FixtureInterface
      */
     public function getId(): string
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 
     /**
@@ -32,7 +32,7 @@ class FakeFixture implements FixtureInterface
      */
     public function getClassName(): string
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 
     /**
@@ -40,7 +40,7 @@ class FakeFixture implements FixtureInterface
      */
     public function getSpecs(): SpecificationBag
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 
     /**
@@ -48,6 +48,6 @@ class FakeFixture implements FixtureInterface
      */
     public function withSpecs(SpecificationBag $specs)
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

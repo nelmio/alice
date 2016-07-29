@@ -26,7 +26,7 @@ class FakeChainableValueResolver implements ChainableValueResolverInterface
      */
     public function canResolve(ValueInterface $value): bool
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 
     /**
@@ -38,6 +38,6 @@ class FakeChainableValueResolver implements ChainableValueResolverInterface
         ResolvedFixtureSet $fixtureSet,
         array $scope = []): ResolvedValueWithFixtureSet
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

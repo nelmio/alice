@@ -36,8 +36,8 @@ class FixtureMethodCallValueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends FixtureReferenceTest::testIsImmutable
-     * @depends FunctionCallValueTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\Value\FunctionCallValueTest::testIsImmutable
      */
     public function testIsImmutable()
     {

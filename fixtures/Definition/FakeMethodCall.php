@@ -22,7 +22,7 @@ class FakeMethodCall implements MethodCallInterface
      */
     public function withArguments(array $arguments = null)
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 
     /**
@@ -30,7 +30,7 @@ class FakeMethodCall implements MethodCallInterface
      */
     public function getCaller()
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 
     /**
@@ -38,7 +38,7 @@ class FakeMethodCall implements MethodCallInterface
      */
     public function getMethod(): string
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 
     /**
@@ -46,7 +46,7 @@ class FakeMethodCall implements MethodCallInterface
      */
     public function getArguments(): array
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 
     /**
@@ -54,6 +54,6 @@ class FakeMethodCall implements MethodCallInterface
      */
     public function __toString(): string
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

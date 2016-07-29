@@ -25,7 +25,7 @@ final class NoMethodCall implements MethodCallInterface
      */
     public function withArguments(array $arguments = null): self
     {
-        $this->throwException(__METHOD__);
+        return $this->throwException(__METHOD__);
     }
 
     /**
@@ -33,7 +33,7 @@ final class NoMethodCall implements MethodCallInterface
      */
     public function getCaller()
     {
-        $this->throwException(__METHOD__);
+        return $this->throwException(__METHOD__);
     }
 
     /**
@@ -41,7 +41,7 @@ final class NoMethodCall implements MethodCallInterface
      */
     public function getMethod(): string
     {
-        $this->throwException(__METHOD__);
+        return $this->throwException(__METHOD__);
     }
 
     /**
@@ -49,7 +49,7 @@ final class NoMethodCall implements MethodCallInterface
      */
     public function getArguments()
     {
-        $this->throwException(__METHOD__);
+        return $this->throwException(__METHOD__);
     }
 
     /**

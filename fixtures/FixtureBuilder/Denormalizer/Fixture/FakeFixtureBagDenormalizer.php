@@ -24,6 +24,6 @@ class FakeFixtureBagDenormalizer implements FixtureBagDenormalizerInterface
      */
     public function denormalize(array $data): FixtureBag
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

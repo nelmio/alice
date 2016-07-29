@@ -24,6 +24,6 @@ class FakeParameterBagDenormalizer implements ParameterBagDenormalizerInterface
      */
     public function denormalize(array $data): ParameterBag
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

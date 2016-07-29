@@ -23,6 +23,6 @@ class FakeParser implements ParserInterface
      */
     public function parse(string $file): array
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

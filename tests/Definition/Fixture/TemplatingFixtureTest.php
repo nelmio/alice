@@ -68,7 +68,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends SpecificationBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
      */
     public function testIsImmutable()
     {
@@ -86,7 +86,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends SpecificationBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
      */
     public function testWithersKeepsImmutabilityAndReturnNewModifiedInstance()
     {

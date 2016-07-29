@@ -36,7 +36,7 @@ class FixturePropertyValueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends FixtureReferenceValueTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\Value\FixtureReferenceValueTest::testIsImmutable
      */
     public function testIsImmutable()
     {
