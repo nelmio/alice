@@ -42,28 +42,42 @@ final class TemplateFixtureBagResolver implements FixtureBagResolverInterface
     {
         $resolvedFixtures = new TemplatingFixtureBag();
         foreach ($unresolvedFixtures as $fixture) {
-            /** @var FixtureInterface $fixture */
-            $id = $fixture->getId();
-
-            if ($resolvedFixtures->has($id)) {
-                continue;
-            }
-
-            if (false === $fixture instanceof TemplatingFixture) {
-                $resolvedFixtures = $resolvedFixtures->with($fixture);
-
-                continue;
-            }
-
-            $context = new ResolvingContext($id);
-            $resolvedFixtures = $this->resolver->resolve(
+            $resolvedFixtures = $this->resolveFixture(
+                $this->resolver,
                 $fixture,
                 $unresolvedFixtures,
-                $resolvedFixtures,
-                $context
+                $resolvedFixtures
             );
         }
 
         return $resolvedFixtures->getFixtures();
+    }
+
+    public function resolveFixture(
+        TemplateFixtureResolver $resolver,
+        FixtureInterface $fixture,
+        FixtureBag $unresolvedFixtures,
+        TemplatingFixtureBag $resolvedFixtures
+    ): TemplatingFixtureBag
+    {
+        /** @var FixtureInterface $fixture */
+        $id = $fixture->getId();
+
+        if ($resolvedFixtures->has($id)) {
+            return $resolvedFixtures;
+        }
+
+        if (false === $fixture instanceof TemplatingFixture) {
+            return $resolvedFixtures->with($fixture);
+        }
+
+        $context = new ResolvingContext($id);
+
+        return $resolver->resolve(
+            $fixture,
+            $unresolvedFixtures,
+            $resolvedFixtures,
+            $context
+        );
     }
 }

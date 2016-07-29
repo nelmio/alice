@@ -11,8 +11,37 @@
 
 namespace Nelmio\Alice\Exception\Generator\Resolver;
 
-use Nelmio\Alice\Throwable\ResolveThrowable;
+use Nelmio\Alice\Definition\ValueInterface;
 
-class ResolverNotFoundException extends \UnexpectedValueException implements ResolveThrowable
+class ResolverNotFoundException extends \LogicException
 {
+    public static function createForParameter(string $parameterKey)
+    {
+        return new static(
+            sprintf(
+                'No resolver found to resolve parameter "%s".',
+                $parameterKey
+            )
+        );
+    }
+
+    public static function createForValue(ValueInterface $value)
+    {
+        return new static(
+            sprintf(
+                'No resolver found to resolve value "%s".',
+                get_class($value)
+            )
+        );
+    }
+
+    public static function createUnexpectedCall(string $method)
+    {
+        return new static(
+            sprintf(
+                'Expected method "%s" to be called only if it has a resolver.',
+                $method
+            )
+        );
+    }
 }

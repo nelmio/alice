@@ -28,7 +28,7 @@ final class ParameterBag implements \IteratorAggregate, \Countable
      */
     public function __construct(array $parameters = [])
     {
-        $this->parameters = $parameters;
+        $this->parameters = deep_clone($parameters);
     }
 
     /**
@@ -74,7 +74,7 @@ final class ParameterBag implements \IteratorAggregate, \Countable
     public function get(string $key)
     {
         if ($this->has($key)) {
-            return $this->parameters[$key];
+            return deep_clone($this->parameters[$key]);
         }
 
         throw ParameterNotFoundException::create($key);

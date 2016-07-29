@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
+use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
@@ -20,7 +21,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\ArrayParameterResolver
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
  */
 class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,42 +35,41 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(ArrayParameterResolver::class, ParameterResolverAwareInterface::class, true));
     }
 
-    public function testIsImmutable()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
     {
-        $resolver = new ArrayParameterResolver();
-
-        $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
-        $injectedResolverProphecy->resolve(Argument::cetera())->shouldNotBeCalled();
-        /* @var ParameterResolverInterface $injectedResolver */
-        $injectedResolver = $injectedResolverProphecy->reveal();
-
-        $newResolver = $resolver->withResolver($injectedResolver);
-
-        $this->assertInstanceOf(ArrayParameterResolver::class, $newResolver);
-        $this->assertNotSame($resolver, $newResolver);
+        clone new ArrayParameterResolver();
     }
 
-    public function testIsDeepClonable()
+    public function testCanBeInstantiatedWithoutAResolver()
     {
-        $resolver = new ArrayParameterResolver();
-        $newResolver = clone $resolver;
-
-        $this->assertInstanceOf(ArrayParameterResolver::class, $newResolver);
-        $this->assertNotSame($newResolver, $resolver);
-
-        $resolver = (new ArrayParameterResolver())->withResolver(new DummyParameterResolverInterface());
-        $newResolver = clone $resolver;
-
-        $this->assertInstanceOf(ArrayParameterResolver::class, $newResolver);
-        $this->assertNotSame($newResolver, $resolver);
-        $this->assertNotSameInjectedResolver($newResolver, $resolver);
+        new ArrayParameterResolver();
     }
-    
-    public function testCanResolveOnlyArrayValues()
+
+    public function testCanBeInstantiatedWithAResolver()
+    {
+        new ArrayParameterResolver(new FakeParameterResolver());
+    }
+
+    public function testWithersReturnANewModifiedInstance()
+    {
+        $propertyRefl = (new \ReflectionClass(ArrayParameterResolver::class))->getProperty('resolver');
+        $propertyRefl->setAccessible(true);
+
+        $resolver = new ArrayParameterResolver();
+        $newResolver = $resolver->withResolver(new FakeParameterResolver());
+
+        $this->assertEquals(new ArrayParameterResolver(), $resolver);
+        $this->assertEquals(new ArrayParameterResolver(new FakeParameterResolver()), $newResolver);
+    }
+
+    public function testCanOnlyResolveArrayValues()
     {
         $resolver = new ArrayParameterResolver();
         $parameter = new Parameter('foo', null);
-        
+
         $this->assertTrue($resolver->canResolve($parameter->withValue([])));
 
         $this->assertFalse($resolver->canResolve($parameter->withValue(null)));
@@ -82,8 +82,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Resolver "Nelmio\Alice\Generator\Resolver\Parameter\ArrayParameterResolver" must have a resolver
-     *                           set before having the method "ArrayParameterResolver::resolve()" called.
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver::resolve" to be called only if it has a resolver.
      */
     public function testRequiresInjectedResolverToResolverAParameter()
     {
@@ -91,15 +90,16 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver->resolve(new Parameter('foo', null), new ParameterBag(), new ParameterBag());
     }
-    
-    public function testIterateOverEachElementAndUseTheDecoratedResolverToResolveEachValue()
-    {
-        $array = [
-            $val1 = new \stdClass(),
-            $val2 = function () {},
-        ];
 
-        $parameter = new Parameter('array_param', $array);
+    public function testIteratesOverEachElementAndUsesTheDecoratedResolverToResolveEachValue()
+    {
+        $parameter = new Parameter(
+            'array_param',
+            [
+                'foo',
+                'bar',
+            ]
+        );
 
         $unresolvedParameters = new ParameterBag(['name' => 'unresolvedParams']);
         $resolvedParameters = new ParameterBag(['name' => 'resolvedParams']);
@@ -108,7 +108,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
         $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
         $injectedResolverProphecy
             ->resolve(
-                new Parameter('0', $val1),
+                new Parameter('0', 'foo'),
                 $unresolvedParameters,
                 $resolvedParameters,
                 $context->with('array_param')
@@ -122,7 +122,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
         ;
         $injectedResolverProphecy
             ->resolve(
-                new Parameter('1', $val2),
+                new Parameter('1', 'bar'),
                 $unresolvedParameters,
                 $resolvedParameters,
                 $context->with('array_param')
@@ -153,7 +153,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
         $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testIncludeAdditionalResolvedParametersInResult()
+    public function testIfResolutionResultsInMultipleParametersBeingResolvedThenTheyAreAllIncludedInTheResult()
     {
         $array = [
             $val1 = new \stdClass(),
@@ -195,11 +195,11 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideContexts
      */
-    public function testEnsureAValidContextIsAlwaysPassedToTheInjectedResolver(ResolvingContext $context = null, ResolvingContext $expected)
+    public function testTheContextPassedToTheInjectedResolverIsAlwaysValid(ResolvingContext $context = null, ResolvingContext $expected)
     {
         $array = [
-            $val1 = new \stdClass(),
-            $val2 = function () {},
+            $val1 = 'foo',
+            $val2 = 'bar',
         ];
 
         $parameter = new Parameter('array_param', $array);
@@ -270,22 +270,5 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
                 (new ResolvingContext('unrelated'))->with('array_param'),
             ],
         ];
-    }
-
-    private function assertNotSameInjectedResolver(ArrayParameterResolver $firstResolver, ArrayParameterResolver $secondResolver)
-    {
-        $this->assertNotSame(
-            $this->getInjectedResolver($firstResolver),
-            $this->getInjectedResolver($secondResolver)
-        );
-    }
-
-    private function getInjectedResolver(ArrayParameterResolver $resolver): ParameterResolverInterface
-    {
-        $resolverReflectionObject = new \ReflectionObject($resolver);
-        $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');
-        $resolverPropertyReflection->setAccessible(true);
-
-        return $resolverPropertyReflection->getValue($resolver);
     }
 }

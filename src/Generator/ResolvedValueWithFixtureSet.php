@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Generator;
 
 /**
- * Simple VO containing a value and a resolved fixture set.
+ * Simple value object containing a value and a resolved fixture set.
  */
 final class ResolvedValueWithFixtureSet
 {
@@ -32,7 +32,7 @@ final class ResolvedValueWithFixtureSet
      */
     public function __construct($resolvedValue, ResolvedFixtureSet $set)
     {
-        $this->value = $resolvedValue;
+        $this->value = deep_clone($resolvedValue);
         $this->set = $set;
     }
 
@@ -41,13 +41,11 @@ final class ResolvedValueWithFixtureSet
      */
     public function getValue()
     {
-        $value = $this->value;
-        
-        return is_object($value) ? clone $value : $value;
+        return deep_clone($this->value);
     }
 
     public function getSet(): ResolvedFixtureSet
     {
-        return clone $this->set;
+        return $this->set;
     }
 }

@@ -27,11 +27,17 @@ final class UniqueValuesPool
             return false;
         }
 
-        $realValue = $value->getValue();
-        $cachedValues = $this->pool[$valueId];
+        return $this->hasIdenticalValueInCache($valueId, $value->getValue());
+    }
 
+    private function hasIdenticalValueInCache(string $valueId, $value): bool
+    {
+        $cachedValues = $this->pool[$valueId];
         foreach ($cachedValues as $cachedValue) {
-            if ((is_object($realValue) && $realValue == $cachedValue) || $realValue === $cachedValue) {
+            if (
+                ((is_object($value) || is_array($value)) && $value == $cachedValue)
+                || $value === $cachedValue
+        ) {
                 return true;
             }
         }

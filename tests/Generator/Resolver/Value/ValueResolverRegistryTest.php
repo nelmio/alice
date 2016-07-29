@@ -22,18 +22,18 @@ use Nelmio\Alice\ObjectBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\ResolverRegistry
+ * @covers Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
  */
-class ResolverRegistryTest extends \PHPUnit_Framework_TestCase
+class ValueResolverRegistryTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAValueResolver()
     {
-        $this->assertTrue(is_a(ResolverRegistry::class, ValueResolverInterface::class, true));
+        $this->assertTrue(is_a(ValueResolverRegistry::class, ValueResolverInterface::class, true));
     }
 
     public function testAcceptChainableInstantiators()
     {
-        new ResolverRegistry([new FakeChainableValueResolver()]);
+        new ValueResolverRegistry([new FakeChainableValueResolver()]);
     }
 
     /**
@@ -41,7 +41,7 @@ class ResolverRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowExceptionIfInvalidParserIsPassed()
     {
-        new ResolverRegistry([new \stdClass()]);
+        new ValueResolverRegistry([new \stdClass()]);
     }
 
     /**
@@ -49,11 +49,11 @@ class ResolverRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $resolver = new ResolverRegistry([]);
+        $resolver = new ValueResolverRegistry([]);
         clone $resolver;
     }
 
-    public function testIterateOverEveryResolverAndUseTheFirstValidOne()
+    public function testPicksTheFirstSuitableResolverToResolveTheGivenValue()
     {
         $value = new FakeValue();
         $fixture = new FakeFixture();
@@ -79,7 +79,7 @@ class ResolverRegistryTest extends \PHPUnit_Framework_TestCase
         /* @var ChainableValueResolverInterface $instantiator3 */
         $instantiator3 = $instantiator3Prophecy->reveal();
 
-        $registry = new ResolverRegistry([
+        $registry = new ValueResolverRegistry([
             $instantiator1,
             $instantiator2,
             $instantiator3,
@@ -95,7 +95,7 @@ class ResolverRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage No suitable value resolver found to handle the value "Nelmio\Alice\Definition\Value\FakeValue".
+     * @expectedExceptionMessage No resolver found to resolve value "Nelmio\Alice\Definition\Value\FakeValue".
      */
     public function testThrowExceptionIfNoSuitableParserIsFound()
     {
@@ -103,7 +103,7 @@ class ResolverRegistryTest extends \PHPUnit_Framework_TestCase
 
         $set = ResolvedFixtureSetFactory::create();
 
-        $registry = new ResolverRegistry([]);
+        $registry = new ValueResolverRegistry([]);
         $registry->resolve(new FakeValue(), $fixture, $set);
     }
 }

@@ -11,23 +11,32 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterResolver
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
  */
-class SimpleParameterResolverTest extends \PHPUnit_Framework_TestCase
+class StaticParameterResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAChainableParameterResolver()
     {
-        $this->assertTrue(is_a(SimpleParameterResolver::class, ChainableParameterResolverInterface::class, true));
+        $this->assertTrue(is_a(StaticParameterResolver::class, ChainableParameterResolverInterface::class, true));
     }
 
-    public function testCanResolveOnlySimpleValues()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
     {
-        $resolver = new SimpleParameterResolver();
+        clone new StaticParameterResolver();
+    }
+
+    public function testCanOnlyResolveSimpleValues()
+    {
+        $resolver = new StaticParameterResolver();
         $parameter = new Parameter('foo', null);
 
         $this->assertTrue($resolver->canResolve($parameter->withValue(null)));
@@ -38,11 +47,11 @@ class SimpleParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($resolver->canResolve($parameter->withValue('string')));
     }
-    
-    public function testReturnResolveParameter()
+
+    public function testReturnsResolvedParameter()
     {
         $parameter = new Parameter('foo', null);
-        $resolver = new SimpleParameterResolver();
+        $resolver = new StaticParameterResolver();
 
         $result = $resolver->resolve($parameter, new ParameterBag(), new ParameterBag());
 

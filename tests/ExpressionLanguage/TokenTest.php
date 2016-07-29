@@ -28,7 +28,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
     }
 
-    public function testWithersReturnsNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance()
     {
         $value = 'bob';
         $newValue = 'alice';

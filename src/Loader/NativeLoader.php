@@ -83,7 +83,7 @@ use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
-use Nelmio\Alice\Generator\Resolver\Value\ResolverRegistry;
+use Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\Parser\Chainable\PhpParser;
 use Nelmio\Alice\Parser\Chainable\YamlParser;
@@ -93,12 +93,12 @@ use Nelmio\Alice\Parser\RuntimeCacheParser;
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
-use Nelmio\Alice\Generator\Resolver\Parameter\ArrayParameterResolver;
-use Nelmio\Alice\Generator\Resolver\Parameter\ParameterBagResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry;
-use Nelmio\Alice\Generator\Resolver\Parameter\RecursiveParameterResolver;
-use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterResolver;
-use Nelmio\Alice\Generator\Resolver\Parameter\StringParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Generator\SimpleGenerator;
 use Nelmio\Alice\GeneratorInterface;
@@ -310,12 +310,12 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function _getBuiltInParameterResolver(): ParameterBagResolverInterface
     {
         $registry = new ParameterResolverRegistry([
-            new SimpleParameterResolver(),
+            new StaticParameterResolver(),
             new ArrayParameterResolver(),
             new RecursiveParameterResolver(new StringParameterResolver()),
         ]);
 
-        return new ParameterBagResolver($registry);
+        return new SimpleParameterBagResolver($registry);
     }
 
     protected function _getBuiltInObjectGenerator(): ObjectGeneratorInterface
@@ -354,7 +354,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function _getBuiltInValueResolver(): ValueResolverInterface
     {
-        return new ResolverRegistry([
+        return new ValueResolverRegistry([
             new DynamicArrayValueResolver(),
             new UniqueValueResolver(
                 $this->getBuiltInUniqueValuesPool()

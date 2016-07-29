@@ -11,6 +11,11 @@
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\Definition\FakeMethodCall;
+use Nelmio\Alice\Definition\Fixture\DummyFixture;
+use Nelmio\Alice\Definition\Fixture\MutableFixture;
+use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Exception\FixtureNotFoundException;
 
 /**
@@ -33,11 +38,7 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
 
     public function testReadAccessorsReturnPropertiesValues()
     {
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getId()->willReturn('foo');
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
-
+        $fixture = new DummyFixture('foo');
         $bag = (new FixtureBag())->with($fixture);
 
         $this->assertTrue($bag->has('foo'));
@@ -57,15 +58,26 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
 
     public function testIsImmutable()
     {
-        //TODO
+        $fixture = new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
+        $bag = (new FixtureBag())->with($fixture);
+
+        // Mutate injected fixture
+        $fixture->setSpecs(SpecificationBagFactory::create(new FakeMethodCall()));
+
+        // Mutate retrieved fixture
+        $bag->get('foo')->setSpecs(SpecificationBagFactory::create(new NoMethodCall()));
+
+        $this->assertEquals(
+            (new FixtureBag())
+                ->with(new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create()))
+            ,
+            $bag
+        );
     }
 
-    public function testMutatorsAreImmutable()
+    public function testWithersReturnNewModifiedInstance()
     {
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getId()->willReturn('foo');
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
+        $fixture = new DummyFixture('foo');
 
         $bag = new FixtureBag();
         $newBag = $bag->with($fixture);
@@ -80,21 +92,12 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
             ],
             $newBag
         );
-
-        $fixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testAddingSameFixtureOverridesTheOldEntry()
+    public function testIfTwoFixturesWithTheSameIdIsAddedThenTheFirstOneWillBeOverridden()
     {
-        $fixtureProphecy1 = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy1->getId()->willReturn('foo');
-        /** @var FixtureInterface $fixture1 */
-        $fixture1 = $fixtureProphecy1->reveal();
-
-        $fixtureProphecy2 = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy2->getId()->willReturn('foo');
-        /** @var FixtureInterface $fixture2 */
-        $fixture2 = $fixtureProphecy2->reveal();
+        $fixture1 = new DummyFixture('foo');
+        $fixture2 = new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
 
         $bag = (new FixtureBag())
             ->with($fixture1)
@@ -115,22 +118,11 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testMergeBags()
+    public function testMergeBagsWillReturnANewInstanceWithTheMergedFixtures()
     {
-        $fixtureProphecy1 = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy1->getId()->willReturn('foo');
-        /** @var FixtureInterface $fixture1 */
-        $fixture1 = $fixtureProphecy1->reveal();
-
-        $fixtureProphecy2 = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy2->getId()->willReturn('foo');
-        /** @var FixtureInterface $fixture2 */
-        $fixture2 = $fixtureProphecy2->reveal();
-
-        $fixtureProphecy3 = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy3->getId()->willReturn('bar');
-        /** @var FixtureInterface $fixture3 */
-        $fixture3 = $fixtureProphecy3->reveal();
+        $fixture1 = new DummyFixture('foo');
+        $fixture2 = new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
+        $fixture3 = new DummyFixture('bar');
 
         $bag1 = (new FixtureBag())->with($fixture1);
         $bag2 = (new FixtureBag())
@@ -164,15 +156,8 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
 
     public function testIsIterable()
     {
-        $fixtureProphecy1 = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy1->getId()->willReturn('foo');
-        /** @var FixtureInterface $fixture1 */
-        $fixture1 = $fixtureProphecy1->reveal();
-
-        $fixtureProphecy2 = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy2->getId()->willReturn('foo');
-        /** @var FixtureInterface $fixture2 */
-        $fixture2 = $fixtureProphecy2->reveal();
+        $fixture1 = new DummyFixture('foo');
+        $fixture2 = new DummyFixture('bar');
 
         $bag = (new FixtureBag())
             ->with($fixture1)
@@ -189,11 +174,11 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
 
     private function assertSameFixtures(array $expected, FixtureBag $actual)
     {
-        $this->assertSame($expected, $this->propRefl->getValue($actual));
+        $this->assertEquals($expected, $this->propRefl->getValue($actual));
     }
 
     private function assertNotSameFixtures(array $expected, FixtureBag $actual)
     {
-        $this->assertNotSame($expected, $this->propRefl->getValue($actual));
+        $this->assertNotEquals($expected, $this->propRefl->getValue($actual));
     }
 }

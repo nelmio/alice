@@ -11,10 +11,12 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\DummyChainableParameterResolverAwareResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\FakeChainableParameterResolver;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
@@ -28,7 +30,7 @@ class ParameterResolverRegistryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(ParameterResolverRegistry::class, ParameterResolverInterface::class, true));
     }
 
-    public function testAcceptChainableParameterResolvers()
+    public function testAcceptsChainableParameterResolvers()
     {
         $resolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $resolverProphecy->canResolve(Argument::any())->shouldNotBeCalled();
@@ -38,18 +40,17 @@ class ParameterResolverRegistryTest extends \PHPUnit_Framework_TestCase
         new ParameterResolverRegistry([$resolver]);
     }
 
-    public function testInjectItselfToParameterResolverAwareResolvers()
+    public function testInjectsItselfToParameterResolverAwareResolvers()
     {
-        $resolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
-        $resolverProphecy->canResolve(Argument::any())->shouldNotBeCalled();
-        /* @var ChainableParameterResolverInterface $oneResolver */
-        $oneResolver = $resolverProphecy->reveal();
+        $propRefl = (new \ReflectionClass(ParameterResolverRegistry::class))->getProperty('resolvers');
+        $propRefl->setAccessible(true);
 
-        $secondResolver = new DummyChainableResolverAwareResolver();
+        $oneResolver = new FakeChainableParameterResolver();
+        $secondResolver = new DummyChainableParameterResolverAwareResolver();
 
         $registry = new ParameterResolverRegistry([$oneResolver, $secondResolver]);
 
-        $this->assertSame($registry, $secondResolver->resolver);
+        $this->assertSame($registry, $propRefl->getValue($registry)[1]->resolver);
     }
 
     /**
@@ -57,21 +58,19 @@ class ParameterResolverRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $registry = new ParameterResolverRegistry([]);
-        clone $registry;
+        clone new ParameterResolverRegistry([]);
     }
 
     /**
      * @expectedException \TypeError
-     * @expectedExceptionMessage Expected resolvers to be "Nelmio\Alice\Generator\Resolver\ParameterResolverInterface" objects. Got
-     *                           "stdClass" instead.
+     * @expectedExceptionMessage Expected resolvers to be "Nelmio\Alice\Generator\Resolver\ParameterResolverInterface" objects. Got "stdClass" instead.
      */
-    public function testThrowExceptionIfInvalidParserIsPassed()
+    public function testThrowsAnExceptionIfInvalidResolverIsPassed()
     {
         new ParameterResolverRegistry([new \stdClass()]);
     }
 
-    public function testIterateOverEveryParsersAndUseTheFirstValidOne()
+    public function testIteratesOverEveryResolverAndUsesTheFirstValidOne()
     {
         $parameter = new Parameter('foo', null);
         $expected = new ParameterBag(['foo' => 'bar']);
@@ -108,35 +107,11 @@ class ParameterResolverRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage No suitable resolver found for the parameter "foo".
+     * @expectedExceptionMessage No resolver found to resolve parameter "foo".
      */
-    public function testThrowExceptionIfNoSuitableParserIsFound()
+    public function testThrowsAnExceptionIfNoSuitableParserIsFound()
     {
         $registry = new ParameterResolverRegistry([]);
         $registry->resolve(new Parameter('foo', null), new ParameterBag(), new ParameterBag());
-    }
-}
-
-final class DummyChainableResolverAwareResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
-{
-    public $resolver;
-
-    public function canResolve(Parameter $parameter): bool
-    {
-        throw new \BadMethodCallException();
-    }
-
-    public function withResolver(ParameterResolverInterface $resolver)
-    {
-        $this->resolver = $resolver;
-    }
-
-    public function resolve(
-        Parameter $parameter,
-        ParameterBag $unresolvedParameters,
-        ParameterBag $resolvedParameters
-    ): ParameterBag
-    {
-        throw new \BadMethodCallException();
     }
 }

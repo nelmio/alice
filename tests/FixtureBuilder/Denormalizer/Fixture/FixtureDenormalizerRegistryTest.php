@@ -122,7 +122,7 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
         $fixture = $fixtureProphecy->reveal();
 
         $builtFixtures = new FixtureBag();
-        $className = 'Nelmio\Entity\User';
+        $className = 'Nelmio\Alice\Entity\User';
         $reference = 'user0';
         $specs = ['username' => '<name()>'];
         $flags = new FlagBag('');
@@ -172,7 +172,7 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
     public function testThrowsExceptionIfNotSuitableDenormalizer()
     {
         $builtFixtures = new FixtureBag();
-        $className = 'Nelmio\Entity\User';
+        $className = 'Nelmio\Alice\Entity\User';
         $reference = 'user0';
         $specs = ['username' => '<name()>'];
         $flags = new FlagBag('');

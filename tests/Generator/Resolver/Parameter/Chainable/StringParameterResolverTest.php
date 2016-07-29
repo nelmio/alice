@@ -2,16 +2,18 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use Nelmio\Alice\Exception\Generator\Resolver\ParameterNotFoundException;
+use Nelmio\Alice\Exception\ParameterNotFoundException;
+use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
@@ -21,7 +23,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\StringParameterResolver
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver
  */
 class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,38 +37,34 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(StringParameterResolver::class, ParameterResolverAwareInterface::class, true));
     }
 
-    public function testIsImmutable()
+    public function testCanBeInstantiatedWithoutAResolver()
     {
-        $resolver = new StringParameterResolver();
-
-        $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
-        $injectedResolverProphecy->resolve(Argument::cetera())->shouldNotBeCalled();
-        /* @var ParameterResolverInterface $injectedResolver */
-        $injectedResolver = $injectedResolverProphecy->reveal();
-
-        $newResolver = $resolver->withResolver($injectedResolver);
-
-        $this->assertInstanceOf(StringParameterResolver::class, $newResolver);
-        $this->assertNotSame($resolver, $newResolver);
+        new StringParameterResolver();
     }
 
-    public function testIsDeepClonable()
+    public function testCanBeInstantiatedWithAResolver()
+    {
+        new StringParameterResolver(new FakeParameterResolver());
+    }
+
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone new StringParameterResolver();
+    }
+
+    public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new StringParameterResolver();
-        $newResolver = clone $resolver;
+        $newResolver = $resolver->withResolver(new FakeParameterResolver());
 
-        $this->assertInstanceOf(StringParameterResolver::class, $newResolver);
-        $this->assertNotSame($newResolver, $resolver);
-
-        $resolver = (new StringParameterResolver())->withResolver(new DummyParameterResolverInterface());
-        $newResolver = clone $resolver;
-
-        $this->assertInstanceOf(StringParameterResolver::class, $newResolver);
-        $this->assertNotSame($newResolver, $resolver);
-        $this->assertNotSameInjectedResolver($newResolver, $resolver);
+        $this->assertEquals(new StringParameterResolver(), $resolver);
+        $this->assertEquals(new StringParameterResolver(new FakeParameterResolver()), $newResolver);
     }
-    
-    public function testCanResolveOnlyStringValues()
+
+    public function testCanOnlyResolveStringValues()
     {
         $resolver = new StringParameterResolver();
         $parameter = new Parameter('foo', null);
@@ -80,7 +78,7 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($resolver->canResolve($parameter->withValue(new \stdClass())));
         $this->assertFalse($resolver->canResolve($parameter->withValue(function () {})));
     }
-    
+
     public function testCanResolveStaticStringsWithoutDecoratedResolver()
     {
         $parameter = new Parameter('foo', 'Mad Hatter');
@@ -140,7 +138,7 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCheckIfParameterIsReferencedBeforeResolvingIt()
+    public function testChecksIfParameterIsReferencedBeforeTryingToResolveIt()
     {
         $parameter = new Parameter('foo', '<{bar}>');
         $unresolvedParameters = new ParameterBag();
@@ -261,9 +259,9 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage No resolver found to resolve parameter "bar".
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver::resolveStringKey" to be called only if it has a resolver.
      */
-    public function testThrowExceptionIfNoResolverInjectedWhenRequired()
+    public function testThrowsAnExceptionIfNoResolverInjectedWhenRequired()
     {
         $parameter = new Parameter('foo', '<{bar}>');
         $unresolvedParameters = new ParameterBag([
@@ -273,22 +271,5 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new StringParameterResolver();
         $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
-    }
-
-    private function assertNotSameInjectedResolver(StringParameterResolver $firstResolver, StringParameterResolver $secondResolver)
-    {
-        $this->assertNotSame(
-            $this->getInjectedResolver($firstResolver),
-            $this->getInjectedResolver($secondResolver)
-        );
-    }
-
-    private function getInjectedResolver(StringParameterResolver $resolver): ParameterResolverInterface
-    {
-        $resolverReflectionObject = new \ReflectionObject($resolver);
-        $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');
-        $resolverPropertyReflection->setAccessible(true);
-
-        return $resolverPropertyReflection->getValue($resolver);
     }
 }

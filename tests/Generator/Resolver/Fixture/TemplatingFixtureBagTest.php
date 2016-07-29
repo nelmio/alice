@@ -11,14 +11,17 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
+use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\MutableFixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Exception\FixtureNotFoundException;
 use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\FixtureInterface;
 
 /**
  * @covers Nelmio\Alice\Generator\Resolver\Fixture\TemplatingFixtureBag
@@ -65,61 +68,43 @@ class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @depends Nelmio\Alice\FixtureBagTest::testIsImmutable
+     */
     public function testIsImmutable()
     {
-        $fixtureId = 'Nelmio\Entity\User#user0';
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getId()->willReturn($fixtureId);
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
+        $fixture = new MutableFixture('user0', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
+        $originalFixture = deep_clone($fixture);
 
         $bag = (new TemplatingFixtureBag())->with($fixture);
 
-        $this->assertNotSame($bag->get($fixtureId), $bag->get($fixtureId));
-        $this->assertNotSame($bag->getFixtures(), $bag->getFixtures());
+        // Mutate injected value
+        $fixture->setSpecs(SpecificationBagFactory::create(new FakeMethodCall()));
+
+        // Mutate retrieved fixture
+        $bag->getFixtures()->get('user0')->setSpecs(SpecificationBagFactory::create(new NoMethodCall()));
+
+        $this->assertEquals($originalFixture, $bag->getFixtures()->get('user0'));
     }
 
-    public function testAddTemplateFixtureToTempalates()
+    public function testAddTemplateFixtureToTemplates()
     {
-        $fixtureId = 'Nelmio\Entity\User#user0';
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getId()->willReturn($fixtureId);
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
-
-        $templateId = 'Nelmio\Entity\User#user_base';
-        $templateProphecy = $this->prophesize(FixtureInterface::class);
-        $templateProphecy->getId()->willReturn($templateId);
-        /** @var FixtureInterface $template */
-        $template = $templateProphecy->reveal();
-        $realTemplate = new TemplatingFixture(
+        $fixture = new DummyFixture('user0');
+        $template = new TemplatingFixture(
             new FixtureWithFlags(
-                $template,
+                new DummyFixture('user_base'),
                 (new FlagBag('user_base'))->with(new TemplateFlag())
             )
         );
 
-        $templateId = 'Nelmio\Entity\User#user1';
-        $templateProphecy = $this->prophesize(FixtureInterface::class);
-        $templateProphecy->getId()->willReturn($templateId);
-        /** @var FixtureInterface $template */
-        $template = $templateProphecy->reveal();
-
-        $falseTemplate = new FixtureWithFlags(
-            $template,
-            (new FlagBag('user_base'))->with(new TemplateFlag())
-        );
-
         $bag = (new TemplatingFixtureBag())
             ->with($fixture)
-            ->with($realTemplate)
-            ->with($falseTemplate)
+            ->with($template)
         ;
 
         $this->assertEquals(
             (new FixtureBag())
                 ->with($fixture)
-                ->with($falseTemplate)
             ,
             $bag->getFixtures()
         );

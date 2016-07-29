@@ -25,9 +25,19 @@
             <file>tests/Definition/Value/FixtureReferenceValueTest.php</file>
             <file>tests/Definition/Value/FixturePropertyValueTest.php</file>
             <file>tests/Definition/Value/FixturePropertyValueTest.php</file>
+            <file>tests/Definition/Value/UniqueValueTest.php</file>
+            <file>tests/ParameterTest.php</file>
             <file>tests/ParameterBagTest.php</file>
             <file>tests/FixtureBagTest.php</file>
+            <file>tests/Definition/Object/SimpleObjectTest.php</file>
+            <file>tests/ObjectBagTest.php</file>
+            <file>tests/ObjectSetTest.php</file>
+            <file>tests/FixtureSetTest.php</file>
             <file>tests/FixtureBuilder/BareFixtureSetTest.php</file>
+            <file>tests/Generator/ResolvedFixtureSetTest.php</file>
+            <file>tests/Generator/ResolvedValueWithFixtureSetTest.php</file>
+            <file>tests/Generator/Resolver/Fixture/TemplatingFixtureBagTest.php</file>
+            <file>tests/Generator/Resolver/UniqueValuesPoolTest.php</file>
         </testsuite>
         <testsuite name="Independent tests">
             <directory>tests/</directory>

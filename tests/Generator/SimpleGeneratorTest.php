@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator;
 
+use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\FixtureSet;
@@ -37,18 +38,7 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $resolverProphecy = $this->prophesize(FixtureSetResolverInterface::class);
-        $resolverProphecy->resolve(Argument::any())->shouldNotBeCalled();
-        /** @var FixtureSetResolverInterface $resolver */
-        $resolver = $resolverProphecy->reveal();
-
-        $objectGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
-        $objectGeneratorProphecy->generate(Argument::cetera())->shouldNotBeCalled();
-        /** @var ObjectGeneratorInterface $objectGenerator */
-        $objectGenerator = $objectGeneratorProphecy->reveal();
-
-        $generator = new SimpleGenerator($resolver, $objectGenerator);
-        clone $generator;
+        clone new SimpleGenerator(new FakeFixtureSetResolver(), new FakeObjectGenerator());
     }
 
     public function testGenerateObjects()
@@ -56,12 +46,9 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
         $loadedParameters = new ParameterBag(['loaded' => true]);
         $injectedParameters = new ParameterBag(['injected' => true]);
 
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getId()->willReturn('dummy');
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
-
+        $fixture = new DummyFixture('dummy');
         $fixtures = (new FixtureBag())->with($fixture);
+
         $objects = new ObjectBag([
             'std' => new \stdClass(),
         ]);

@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
+use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -21,6 +22,8 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
 final class ParameterResolverRegistry implements ParameterResolverInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ParameterResolverInterface[]
      */
@@ -28,8 +31,6 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
 
     /**
      * @param ChainableParameterResolverInterface[] $resolvers
-     *
-     * @throws \TypeError
      */
     public function __construct(array $resolvers)
     {
@@ -53,9 +54,7 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws ResolverNotFoundException
+     * @inheritdoc
      */
     public function resolve(
         Parameter $parameter,
@@ -70,16 +69,6 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
             }
         }
         
-        throw new ResolverNotFoundException(
-            sprintf(
-                'No suitable resolver found for the parameter "%s".',
-                $parameter->getKey()
-            )
-        );
-    }
-
-    public function __clone()
-    {
-        throw new \DomainException();
+        throw ResolverNotFoundException::createForParameter($parameter->getKey());
     }
 }

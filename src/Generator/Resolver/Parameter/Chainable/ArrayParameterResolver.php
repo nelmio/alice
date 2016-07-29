@@ -2,39 +2,47 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
+use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
+/**
+ * Resolves array parameters.
+ */
 final class ArrayParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ParameterResolverInterface|null
      */
     private $resolver;
+
+    public function __construct(ParameterResolverInterface $resolver = null)
+    {
+        $this->resolver = $resolver;
+    }
 
     /**
      * @inheritdoc
      */
     public function withResolver(ParameterResolverInterface $resolver): self
     {
-        $clone = clone $this;
-        $clone->resolver = $resolver;
-
-        return $clone;
+        return new self($resolver);
     }
 
     /**
@@ -46,11 +54,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws ResolverNotFoundException
-     *
-     * @return array
+     * @inheritdoc
      */
     public function resolve(
         Parameter $unresolvedArrayParameter,
@@ -60,14 +64,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
     ): ParameterBag
     {
         if (null === $this->resolver) {
-            throw new ResolverNotFoundException(
-                sprintf(
-                    'Resolver "%s" must have a resolver set before having the method "%s::%s()" called.',
-                    __CLASS__,
-                    (new \ReflectionObject($this))->getShortName(),
-                    __FUNCTION__
-                )
-            );
+            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
         }
 
         $context = ResolvingContext::createFrom($context, $unresolvedArrayParameter->getKey());
@@ -90,14 +87,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
         $resolvedParameters = $resolvedParameters->with(
             $unresolvedArrayParameter->withValue($resolvedArray)
         );
-        
-        return $resolvedParameters;
-    }
 
-    public function __clone()
-    {
-        if (null !== $this->resolver) {
-            $this->resolver = clone $this->resolver;
-        }
+        return $resolvedParameters;
     }
 }

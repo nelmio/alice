@@ -43,7 +43,7 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
      *
      * @example
      *  $data = [
-     *      'Nelmio\Entity\User' => [
+     *      'Nelmio\Alice\Entity\User' => [
      *          'user0' => [
      *              'username' => 'bob',
      *          ],

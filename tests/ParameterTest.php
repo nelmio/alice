@@ -29,9 +29,15 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
 
     public function testIsImmutable()
     {
-        $parameter = new Parameter('foo', new \stdClass());
+        $parameter = new Parameter('foo', [$std = new \stdClass()]);
 
-        $this->assertNotSame($parameter->getValue(), $parameter->getValue());
+        // Mutate injected object
+        $std->foo = 'bar';
+
+        // Mutate retrieved object
+        $parameter->getValue()[0]->foo = 'baz';
+
+        $this->assertEquals(new Parameter('foo', [new \stdClass()]), $parameter);
     }
 
     public function testWithersReturnNewModifiedInstance()
@@ -42,29 +48,6 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($newParam, $parameter);
         $this->assertEquals('bar', $parameter->getValue());
         $this->assertEquals('rab', $newParam->getValue());
-    }
-
-    public function testIsDeepClonable()
-    {
-        $parameter = new Parameter('foo', null);
-        $newParameter = clone $parameter;
-
-        $this->assertInstanceOf(Parameter::class, $newParameter);
-        $this->assertNotSame($parameter, $newParameter);
-
-        $parameter = new Parameter('foo', new \stdClass());
-        $newParameter = clone $parameter;
-
-        $this->assertInstanceOf(Parameter::class, $newParameter);
-        $this->assertNotSame($parameter, $newParameter);
-        $this->assertNotSameValue($parameter, $newParameter);
-
-        $parameter = new Parameter('foo', function () {});
-        $newParameter = clone $parameter;
-
-        $this->assertInstanceOf(Parameter::class, $newParameter);
-        $this->assertNotSame($parameter, $newParameter);
-        $this->assertNotSameValue($parameter, $newParameter);
     }
 
     public function provideValues()
@@ -79,22 +62,5 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
             'closure' => [function () {}],
             'array' => [[new \stdClass()]],
         ];
-    }
-
-    private function assertNotSameValue(Parameter $firstParameter, Parameter $secondParameter)
-    {
-        $this->assertNotSame(
-            $this->getValue($firstParameter),
-            $this->getValue($secondParameter)
-        );
-    }
-
-    private function getValue(Parameter $parameter)
-    {
-        $reflectionObject = new \ReflectionObject($parameter);
-        $propertyReflection = $reflectionObject->getProperty('value');
-        $propertyReflection->setAccessible(true);
-
-        return $propertyReflection->getValue($parameter);
     }
 }

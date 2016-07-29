@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Generator\Resolver;
 
+use Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException;
+
 /**
  * @covers Nelmio\Alice\Generator\Resolver\ResolvingContext
  */
@@ -25,7 +27,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($context->has('foo'));
     }
 
-    public function testWithersReturnsNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance()
     {
         $context = new ResolvingContext();
         $newContext = $context->with('foo');
@@ -36,7 +38,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($newContext->has('foo'));
     }
 
-    public function testFactoryMethod()
+    public function testStaticFactoryMethodCreatesANewInstance()
     {
         $context = ResolvingContext::createFrom(null, 'foo');
         $this->assertTrue($context->has('foo'));
@@ -56,10 +58,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($newContext, $context);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
-     */
-    public function testFactoryMethodCannotTriggerCircularReference()
+    public function testFactoryMethodCannotTriggerACircularReference()
     {
         $context = new ResolvingContext('foo');
         $context->checkForCircularReference('foo');
@@ -74,41 +73,45 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
         $context = $context->with('foo');
-        $context->checkForCircularReference('foo');
-        $this->fail('Expected exception to be thrown.');
+        try {
+            $context->checkForCircularReference('foo');
+            $this->fail('Expected exception to be thrown.');
+        } catch (CircularReferenceException $exception) {
+            // expected result
+        }
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
-     * @expectedExceptionMessage Circular reference detected for the parameter "foo" while resolving ["bar", "foo"].
-     */
-    public function testCheckForCircularReferences()
+    public function testThrowsAnExceptionWhenACircularReferenceIsDetected()
     {
         $context = new ResolvingContext('bar');
         $context->checkForCircularReference('foo');
-        $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
         $context = $context->with('foo');
         $context->checkForCircularReference('foo');
-        $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
         $context = $context->with('foo');
-        $context->checkForCircularReference('foo');
-        $this->assertFalse(false, 'Expected exception to be thrown.');
-    }
+        try {
+            $context->checkForCircularReference('foo');
+            $this->fail('Expected exception to be thrown.');
+        } catch (CircularReferenceException $exception) {
+            $this->assertEquals(
+                'Circular reference detected for the parameter "foo" while resolving ["bar", "foo"].',
+                $exception->getMessage()
+            );
+        }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
-     * @expectedExceptionMessage Circular reference detected for the parameter "foo" while resolving ["foo"].
-     */
-    public function testCheckForCircularReferencesWithInitializedConstructor()
-    {
         $context = new ResolvingContext('foo');
         $context->checkForCircularReference('foo');
-        $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
         $context = $context->with('foo');
-        $context->checkForCircularReference('foo');
-        $this->assertFalse(false, 'Expected exception to be thrown.');
+        try {
+            $context->checkForCircularReference('foo');
+            $this->fail('Expected exception to be thrown.');
+        } catch (CircularReferenceException $exception) {
+            $this->assertEquals(
+                'Circular reference detected for the parameter "foo" while resolving ["foo"].',
+                $exception->getMessage()
+            );
+        }
     }
 }

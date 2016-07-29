@@ -49,7 +49,7 @@ class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testWithersReturnsNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance()
     {
         $parser = new FakeParser();
 

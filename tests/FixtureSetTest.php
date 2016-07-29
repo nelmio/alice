@@ -33,36 +33,13 @@ class FixtureSetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($injectedObjects, $set->getObjects());
     }
 
+    /**
+     * @depends Nelmio\Alice\ParameterBagTest::testIsImmutable
+     * @depends Nelmio\Alice\FixtureBagTest::testIsImmutable
+     * @depends Nelmio\Alice\ObjectBagTest::testIsImmutable
+     */
     public function testIsImmutable()
     {
-        $loadedParameters = new ParameterBag(['foo' => 'bar']);
-        $injectedParameters = new ParameterBag(['foo' => 'baz']);
-        $fixtures = new FixtureBag();
-        $injectedObjects = new ObjectBag([
-            'dummy' => new \stdClass(),
-        ]);
-
-        $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $injectedObjects);
-
-        $this->assertEquals($set->getInjectedParameters(), $set->getInjectedParameters());
-        $this->assertEquals($set->getLoadedParameters(), $set->getLoadedParameters());
-        $this->assertEquals($set->getFixtures(), $set->getFixtures());
-        $this->assertEquals($set->getObjects(), $set->getObjects());
-    }
-
-    /**
-     * @expectedException \DomainException
-     */
-    public function testIsNotClonable()
-    {
-        $loadedParameters = new ParameterBag(['foo' => 'bar']);
-        $injectedParameters = new ParameterBag(['foo' => 'baz']);
-        $fixtures = new FixtureBag();
-        $injectedObjects = new ObjectBag([
-            'dummy' => new \stdClass(),
-        ]);
-
-        $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $injectedObjects);
-        clone $set;
+        $this->assertTrue(true, 'Nothing to do.');
     }
 }

@@ -49,7 +49,7 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
      */
-    public function testWithersReturnsNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance()
     {
         $reference = 'user0';
         $className = 'Nelmio\Alice\Entity\User';

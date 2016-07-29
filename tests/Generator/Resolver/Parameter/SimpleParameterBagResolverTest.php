@@ -2,15 +2,16 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
@@ -19,25 +20,23 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\ParameterBagResolver
+ * @covers Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver
  */
-class ParameterBagResolverTest extends \PHPUnit_Framework_TestCase
+class SimpleParameterBagResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAParameterBagResolver()
     {
-        $this->assertTrue(is_a(ParameterBagResolver::class, ParameterBagResolverInterface::class, true));
+        $this->assertTrue(is_a(SimpleParameterBagResolver::class, ParameterBagResolverInterface::class, true));
     }
 
-    public function testIsDeepClonable()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
     {
-        $resolver = new ParameterBagResolver(new DummyParameterResolverInterface());
-        $newResolver = clone $resolver;
-
-        $this->assertInstanceOf(ParameterBagResolver::class, $newResolver);
-        $this->assertNotSame($newResolver, $resolver);
-        $this->assertNotSameInjectedResolver($newResolver, $resolver);
+        clone new SimpleParameterBagResolver(new FakeParameterResolver());
     }
-    
+
     public function testDecoratesResolverToResolveParameterBag()
     {
         $unresolvedParameters = new ParameterBag([
@@ -78,7 +77,7 @@ class ParameterBagResolverTest extends \PHPUnit_Framework_TestCase
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
-        $resolver = new ParameterBagResolver($injectedResolver);
+        $resolver = new SimpleParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters);
 
         $this->assertEquals(
@@ -108,7 +107,7 @@ class ParameterBagResolverTest extends \PHPUnit_Framework_TestCase
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
-        $resolver = new ParameterBagResolver($injectedResolver);
+        $resolver = new SimpleParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters, $resolvedParameters);
 
         $this->assertEquals($resolvedParameters, $result);
@@ -160,7 +159,7 @@ class ParameterBagResolverTest extends \PHPUnit_Framework_TestCase
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
-        $resolver = new ParameterBagResolver($injectedResolver);
+        $resolver = new SimpleParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
         $this->assertEquals(
@@ -171,22 +170,5 @@ class ParameterBagResolverTest extends \PHPUnit_Framework_TestCase
             ]),
             $result
         );
-    }
-
-    private function assertNotSameInjectedResolver(ParameterBagResolver $firstResolver, ParameterBagResolver $secondResolver)
-    {
-        $this->assertNotSame(
-            $this->getInjectedResolver($firstResolver),
-            $this->getInjectedResolver($secondResolver)
-        );
-    }
-
-    private function getInjectedResolver(ParameterBagResolver $resolver): ParameterResolverInterface
-    {
-        $resolverReflectionObject = new \ReflectionObject($resolver);
-        $resolverPropertyReflection = $resolverReflectionObject->getProperty('resolver');
-        $resolverPropertyReflection->setAccessible(true);
-
-        return $resolverPropertyReflection->getValue($resolver);
     }
 }

@@ -18,11 +18,6 @@ use Nelmio\Alice\Definition\Value\UniqueValue;
  */
 class UniqueValuesPoolTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        \PHPUnit_Framework_Assert::markTestSkipped('TODO');
-    }
-
     public function testDoesNotHaveValueIfValueIsNotCached()
     {
         $pool = new UniqueValuesPool();
@@ -96,5 +91,13 @@ class UniqueValuesPoolTest extends \PHPUnit_Framework_TestCase
 
         $newValue->foo = 'bar';
         $this->assertFalse($pool->has($value->withValue($newValue)));
+    }
+
+    /**
+     * @depends Nelmio\Alice\Definition\Value\UniqueValueTest::testIsImmutable
+     */
+    public function testIsImmutable()
+    {
+        $this->assertTrue(true, 'Nothing to do.');
     }
 }

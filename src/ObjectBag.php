@@ -84,7 +84,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     public function get(FixtureInterface $fixture): ObjectInterface
     {
         if ($this->has($fixture)) {
-            return clone $this->objects[$fixture->getId()];
+            return $this->objects[$fixture->getId()];
         }
         
         throw ObjectNotFoundException::create($fixture->getId(), $fixture->getClassName());

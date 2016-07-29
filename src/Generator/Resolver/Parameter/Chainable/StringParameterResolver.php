@@ -2,18 +2,19 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Resolver\Parameter;
+namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
-use Nelmio\Alice\Exception\Generator\Resolver\ParameterNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Exception\ParameterNotFoundException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
+use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -22,6 +23,8 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
 final class StringParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
+    use NotClonableTrait;
+
     const PATTERN = '/<{(?<parameter>[^<{]+?)}>/';
     const SINGLE_PARAMETER_PATTERN = '/^<{(?<parameter>(?(?=\{)^[\>]|.)+)}>$/';
 
@@ -30,12 +33,17 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
      */
     private $resolver;
 
+    public function __construct(ParameterResolverInterface $resolver = null)
+    {
+        $this->resolver = $resolver;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function withResolver(ParameterResolverInterface $resolver)
     {
-        $clone = clone $this;
-        $clone->resolver = $resolver;
-        
-        return $clone;
+        return new self($resolver);
     }
 
     /**
@@ -50,9 +58,8 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
      * {@inheritdoc}
      *
      * @param string $parameter
-     * 
+     *
      * @throws ParameterNotFoundException
-     * @throws ResolverNotFoundException
      */
     public function resolve(
         Parameter $parameter,
@@ -68,7 +75,14 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
             self::PATTERN,
             function ($match) use ($self, $context, $unresolvedParameters, &$resolvedParameters, $parameter) {
                 $key = $match['parameter'];
-                $resolvedParameters = $self->resolveStringKey($parameter, $key, $unresolvedParameters, $resolvedParameters, $context);
+                $resolvedParameters = $self->resolveStringKey(
+                    $self->resolver,
+                    $parameter,
+                    $key,
+                    $unresolvedParameters,
+                    $resolvedParameters,
+                    $context
+                );
 
                 return $resolvedParameters->get($key);
             },
@@ -79,18 +93,17 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
     }
 
     /**
-     * @param Parameter        $parameter Parameter being resolved
-     * @param string           $key       Key of the parameter that need to be resolved to resolve $parameter
-     * @param ParameterBag     $unresolvedParameters
-     * @param ParameterBag     $resolvedParameters
-     * @param ResolvingContext $context
-     *
-     * @throws ParameterNotFoundException
-     * @throws ResolverNotFoundException
+     * @param ParameterResolverInterface $resolver
+     * @param Parameter                  $parameter Parameter being resolved
+     * @param string                     $key       Key of the parameter that need to be resolved to resolve $parameter
+     * @param ParameterBag               $unresolvedParameters
+     * @param ParameterBag               $resolvedParameters
+     * @param ResolvingContext           $context
      *
      * @return ParameterBag
      */
     private function resolveStringKey(
+        ParameterResolverInterface $resolver = null,
         Parameter $parameter,
         string $key,
         ParameterBag $unresolvedParameters,
@@ -115,27 +128,15 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         $context->checkForCircularReference($key);
         $context = $context->with($key);
 
-        if (null === $this->resolver) {
-            throw new ResolverNotFoundException(
-                sprintf(
-                    'No resolver found to resolve parameter "%s".',
-                    $key
-                )
-            );
+        if (null === $resolver) {
+            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
         }
-        
-        return $this->resolver->resolve(
+
+        return $resolver->resolve(
             new Parameter($key, $unresolvedParameters->get($key)),
             $unresolvedParameters,
             $resolvedParameters,
             $context
         );
-    }
-
-    public function __clone()
-    {
-        if (null !== $this->resolver) {
-            $this->resolver = clone $this->resolver;
-        }
     }
 }
