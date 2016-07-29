@@ -22,6 +22,14 @@ abstract class FlagParserTestCase extends \PHPUnit_Framework_TestCase
     protected $parser;
 
     /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone $this->parser;
+    }
+
+    /**
      * @dataProvider provideElements
      */
     public function testCanParseElements(string $element, FlagBag $expected = null)

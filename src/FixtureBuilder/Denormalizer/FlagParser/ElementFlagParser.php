@@ -13,12 +13,15 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 /**
- * Extract flag elements from a given string and delegates the parsing of each element to the decorated parser.
+ * Extracts flag elements from a given string and delegates the parsing of each element to the decorated parser.
  */
 final class ElementFlagParser implements FlagParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var FlagParserInterface
      */

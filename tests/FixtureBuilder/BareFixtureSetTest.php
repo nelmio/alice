@@ -11,31 +11,17 @@
 
 namespace Nelmio\Alice\FixtureBuilder;
 
-use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\ParameterBag;
-
 /**
  * @covers Nelmio\Alice\FixtureBuilder\BareFixtureSet
  */
 class BareFixtureSetTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @depends Nelmio\Alice\ParameterBagTest::testIsImmutable
+     * @depends Nelmio\Alice\FixtureBagTest::testIsImmutable
+     */
     public function testIsImmutable()
     {
-        $parameters = new ParameterBag(['foo' => 'bar']);
-        $fixtures = new FixtureBag(['std' => new \stdClass()]);
-
-        $set = new BareFixtureSet($parameters, $fixtures);
-
-        $this->assertNotSame($set->getParameters(), $set->getParameters());
-        $this->assertNotSame($set->getFixtures(), $set->getFixtures());
-    }
-
-    /**
-     * @expectedException \DomainException
-     */
-    public function testIsNotClonable()
-    {
-        $set = new BareFixtureSet(new ParameterBag(), new FixtureBag());
-        clone $set;
+        $this->assertTrue(true, 'Nothing to do.');
     }
 }

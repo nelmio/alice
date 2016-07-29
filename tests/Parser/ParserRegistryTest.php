@@ -37,7 +37,7 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \TypeError
      */
-    public function testThrowExceptionIfInvalidParserIsPassed()
+    public function testThrowsAnExceptionIfInvalidParserIsPassed()
     {
         new ParserRegistry([new \stdClass()]);
     }
@@ -51,7 +51,7 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
         clone $parser;
     }
 
-    public function testIterateOverEveryParsersAndUseTheFirstValidOne()
+    public function testIteratesOverEveryParsersAndUseTheFirstValidOne()
     {
         $file = 'dummy.php';
         $expected = [new \stdClass()];
@@ -90,7 +90,7 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParserNotFoundException
      * @expectedExceptionMessage No suitable parser found for the file "dummy.php".
      */
-    public function testThrowExceptionIfNoSuitableParserIsFound()
+    public function testThrowsAnExceptionIfNoSuitableParserIsFound()
     {
         $registry = new ParserRegistry([]);
         $registry->parse('dummy.php');

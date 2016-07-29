@@ -26,7 +26,7 @@ class IncludeDataMergerTest extends \PHPUnit_Framework_TestCase
         $this->merger = new IncludeDataMerger();
     }
 
-    public function testMergeParameters()
+    public function testMergesParametersAndReturnTheResult()
     {
         $data = [
             'parameters' => [
@@ -52,7 +52,7 @@ class IncludeDataMergerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testMergeClassNames()
+    public function testCanMergeClassNames()
     {
         $data = [
             'Nelmio\Alice\Model\User' => [
@@ -108,7 +108,7 @@ class IncludeDataMergerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testMergeData()
+    public function testCanMergeCompleteDataSet()
     {
         $data = [
             'parameters' => [

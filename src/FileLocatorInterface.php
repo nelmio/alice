@@ -20,8 +20,7 @@ interface FileLocatorInterface
      * @param string|null $currentPath Path in which the file can be found
      *
      * @throws FileNotFoundException
-     * @throws \InvalidArgumentException
-     *                                 
+     *
      * @return string The full path to the file
      */
     public function locate(string $name, string $currentPath = null): string;

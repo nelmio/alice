@@ -11,10 +11,13 @@
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 
 final class PhpParser implements ChainableParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * {@inheritDoc}
      *

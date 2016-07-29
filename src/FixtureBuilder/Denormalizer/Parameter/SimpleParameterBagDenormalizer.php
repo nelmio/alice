@@ -12,16 +12,17 @@
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter;
 
 use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
+use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ParameterBag;
 
 final class SimpleParameterBagDenormalizer implements ParameterBagDenormalizerInterface
 {
+    use NotClonableTrait;
+
     /**
      * {@inheritdoc}
      *
      * @param array $data Full set of parsed data, will look for the parameter subset itself.
-     *
-     * @return ParameterBag
      */
     public function denormalize(array $data): ParameterBag
     {

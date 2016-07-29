@@ -28,10 +28,18 @@ class SimpleParameterBagDenormalizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->denormalizer = new SimpleParameterBagDenormalizer();
     }
-    
+
     public function testIsAParameterBagDenormalizer()
     {
         $this->assertInstanceOf(ParameterBagDenormalizerInterface::class, $this->denormalizer);
+    }
+
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone $this->denormalizer;
     }
 
     /**
@@ -47,7 +55,7 @@ class SimpleParameterBagDenormalizerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideDataWithInvalidParameterKeys
      */
-    public function testThrowExceptionIfParametersKeyIsNotAnArray(array $data, string $expectedExceptionMessage)
+    public function testThrowsExceptionIfParametersKeyIsNotAnArray(array $data, string $expectedExceptionMessage)
     {
         try {
             $this->denormalizer->denormalize($data);

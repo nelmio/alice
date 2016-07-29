@@ -12,7 +12,6 @@
 namespace Nelmio\Alice\FixtureBuilder;
 
 use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ParameterBag;
 
 /**
@@ -21,8 +20,6 @@ use Nelmio\Alice\ParameterBag;
  */
 final class BareFixtureSet
 {
-    use NotClonableTrait;
-    
     /**
      * @var ParameterBag
      */
@@ -41,11 +38,11 @@ final class BareFixtureSet
     
     public function getParameters(): ParameterBag
     {
-        return clone $this->parameters;
+        return $this->parameters;
     }
     
     public function getFixtures(): FixtureBag
     {
-        return clone $this->fixtures;
+        return $this->fixtures;
     }
 }

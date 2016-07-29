@@ -18,9 +18,9 @@ interface FixtureBuilderInterface
     /**
      * Builds a comprehensive set of data from it and the injected parameters and objects.
      *
-     * @param string $file       File to load.
-     * @param array  $parameters Additional parameters to inject.
-     * @param array  $objects    Additional objects to inject.
+     * @param array $data       Data to build
+     * @param array $parameters Additional parameters to inject
+     * @param array $objects    Additional objects to inject
      *
      * @throws BuildThrowable
      *

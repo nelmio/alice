@@ -39,8 +39,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $parser = new RuntimeCacheParser(new ParserRegistry([]), new FakeIncludeProcessor());
-        clone $parser;
+        clone new RuntimeCacheParser(new FakeParser(), new FakeIncludeProcessor());
     }
 
     /**
@@ -55,10 +54,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         /* @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $includeProcessorProphecy = $this->prophesize(IncludeProcessorInterface::class);
-        $includeProcessorProphecy->process(Argument::cetera())->shouldNotBeCalled();
-        /* @var IncludeProcessorInterface $includeProcessor */
-        $includeProcessor = $includeProcessorProphecy->reveal();
+        $includeProcessor = new FakeIncludeProcessor();
 
         $parser = new RuntimeCacheParser($decoratedParser, $includeProcessor);
         $actual = $parser->parse($file);
@@ -83,10 +79,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         /* @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $includeProcessorProphecy = $this->prophesize(IncludeProcessorInterface::class);
-        $includeProcessorProphecy->process(Argument::cetera())->shouldNotBeCalled();
-        /* @var IncludeProcessorInterface $includeProcessor */
-        $includeProcessor = $includeProcessorProphecy->reveal();
+        $includeProcessor = new FakeIncludeProcessor();
 
         $parser = new RuntimeCacheParser($decoratedParser, $includeProcessor);
         $actual1 = $parser->parse($file1);
@@ -98,7 +91,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testDontCacheParseResultIfNoAbsolutePathCouldBeRetrieved()
+    public function testDoesntCacheParseResultIfNoAbsolutePathCouldBeRetrieved()
     {
         $file = 'https://example.com/script.php';
         $expected = [new \stdClass()];
@@ -108,10 +101,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         /* @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $includeProcessorProphecy = $this->prophesize(IncludeProcessorInterface::class);
-        $includeProcessorProphecy->process(Argument::cetera())->shouldNotBeCalled();
-        /* @var IncludeProcessorInterface $includeProcessor */
-        $includeProcessor = $includeProcessorProphecy->reveal();
+        $includeProcessor = new FakeIncludeProcessor();
 
         $parser = new RuntimeCacheParser($decoratedParser, $includeProcessor);
         $actual1 = $parser->parse($file);
@@ -123,7 +113,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testProcessIncludesAndCacheTheResultOfEachIncludedFile()
+    public function testProcessesIncludesAndCacheTheResultOfEachIncludedFile()
     {
         $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
         $parsedMainFileContent = [

@@ -53,6 +53,14 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone $this->parser;
+    }
+
+    /**
      * @dataProvider providePhpList
      */
     public function testCanParsePhpFiles(string $file, array $expectedParsers)
@@ -87,12 +95,12 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The file "/nowhere.php" could not be found.
      */
-    public function testThrowExceptionIfFileDoesNotExist()
+    public function testThrowsAnExceptionIfFileDoesNotExist()
     {
         $this->parser->parse('/nowhere.php');
     }
 
-    public function testParseRegularFile()
+    public function testReturnsParsedFileContent()
     {
         $actual = $this->parser->parse(self::$dir.'/basic.php');
 
@@ -108,7 +116,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testParseEmptyFile()
+    public function testParsingEmptyFileResultsInEmptySet()
     {
         $actual = $this->parser->parse(self::$dir.'/empty.php');
 
@@ -119,7 +127,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /^The file ".+\/no_return\.php" must return a PHP array\.$/
      */
-    public function testThrowExceptionIfNoArrayReturnedInParsedFile()
+    public function testThrowsAnExceptionIfNoArrayReturnedInParsedFile()
     {
         $this->parser->parse(self::$dir.'/no_return.php');
     }
@@ -128,7 +136,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /^The file ".+\/wrong_return\.php" must return a PHP array\.$/
      */
-    public function testThrowExceptionIfWrongValueReturnedInParsedFile()
+    public function testThrowsAnExceptionIfWrongValueReturnedInParsedFile()
     {
         $this->parser->parse(self::$dir.'/wrong_return.php');
     }
