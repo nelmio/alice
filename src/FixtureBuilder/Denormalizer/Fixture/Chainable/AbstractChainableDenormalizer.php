@@ -70,7 +70,7 @@ abstract class AbstractChainableDenormalizer implements ChainableFixtureDenormal
         );
 
         $tempFixture = $builtFixtures->get($tempFixtureId);
-        $builtFixtures = $builtFixtures->without($tempFixtureId);
+        $builtFixtures = $builtFixtures->without($tempFixture);
 
         return [$tempFixture, $builtFixtures];
     }

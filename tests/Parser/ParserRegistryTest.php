@@ -15,7 +15,7 @@ use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Parser\ParserRegistry
+ * @covers Nelmio\Alice\Parser\ParserRegistry
  */
 class ParserRegistryTest extends \PHPUnit_Framework_TestCase
 {

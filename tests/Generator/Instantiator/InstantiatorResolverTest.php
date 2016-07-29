@@ -18,11 +18,14 @@ use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
+use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
@@ -35,21 +38,27 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAnInstantiator()
     {
-        $this->assertTrue(is_a(InstantiatorRegistry::class, InstantiatorInterface::class, true));
+        $this->assertTrue(is_a(InstantiatorResolver::class, InstantiatorInterface::class, true));
+    }
+
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone new InstantiatorResolver(new FakeValueResolver(), new FakeInstantiator());
     }
     
     public function testResolvesAllArguments()
     {
-        $specs = new SpecificationBag(
+        $specs = SpecificationBagFactory::create(
             new SimpleMethodCall(
                 '__construct',
                 [
                     $firstArg = new VariableValue('firstArg'),
                     $secondArg = new VariableValue('secondArg'),
                 ]
-            ),
-            new PropertyBag(),
-            new MethodCallBag()
+            )
         );
         $resolvedSpecs = $specs->withConstructor(
             new SimpleMethodCall(
@@ -63,8 +72,8 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
         $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
         $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
 
-        $expected = new ResolvedFixtureSet(
-            new ParameterBag(),
+        $expected = ResolvedFixtureSetFactory::create(
+            null,
             (new FixtureBag())->with($fixture->withSpecs($resolvedSpecs)),
             new ObjectBag(['dummy' => new \stdClass()])
         );
@@ -121,16 +130,12 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotResolveArgumentsIfNoConstructorGiven()
     {
-        $specs = new SpecificationBag(
-            null,
-            new PropertyBag(),
-            new MethodCallBag()
-        );
+        $specs = SpecificationBagFactory::create();
         $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
-        $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
+        $set = ResolvedFixtureSetFactory::create();
 
-        $expected = new ResolvedFixtureSet(
-            new ParameterBag(),
+        $expected = ResolvedFixtureSetFactory::create(
+            null,
             (new FixtureBag())->with($fixture),
             new ObjectBag(['dummy' => new \stdClass()])
         );
@@ -153,16 +158,12 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotResolveArgumentsIfSpecifiedNoConstructor()
     {
-        $specs = new SpecificationBag(
-            new NoMethodCall(),
-            new PropertyBag(),
-            new MethodCallBag()
-        );
+        $specs = SpecificationBagFactory::create();
         $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
-        $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
+        $set = ResolvedFixtureSetFactory::create();
 
-        $expected = new ResolvedFixtureSet(
-            new ParameterBag(),
+        $expected = ResolvedFixtureSetFactory::create(
+            null,
             (new FixtureBag())->with($fixture),
             new ObjectBag(['dummy' => new \stdClass()])
         );

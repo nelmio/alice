@@ -13,9 +13,13 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\Throwable\InstantiationThrowable;
 
-final class NoConstructorInstantiator extends AbstractChainableInstantiator
+final class NullConstructorInstantiator extends AbstractChainableInstantiator
 {
+    use NotClonableTrait;
+
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         return null === $fixture->getSpecs()->getConstructor();
@@ -51,13 +55,13 @@ final class NoConstructorInstantiator extends AbstractChainableInstantiator
             );
         } catch (\ReflectionException $exception) {
             // Thrown when __construct does not exist, i.e. is default constructor
-            if (1 === preg_match('/Method (.+)__construct\(.*\) does not exist/', $exception->getMessage())) {
-                return new $class();
+            if (1 !== preg_match('/Method (.+)__construct\(.*\) does not exist/', $exception->getMessage())) {
+                throw InstantiationException::create($fixture, $exception);
             }
 
-            throw InstantiationException::create($fixture, $exception);
-        } catch (\Exception $exception) {
-            throw InstantiationException::create($fixture, $exception);
+            // Continue
         }
+
+        return new $class();
     }
 }

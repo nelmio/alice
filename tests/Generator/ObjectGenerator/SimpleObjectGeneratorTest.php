@@ -11,16 +11,20 @@
 
 namespace Nelmio\Alice\Generator\ObjectGenerator;
 
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\Caller\FakeCaller;
 use Nelmio\Alice\Generator\CallerInterface;
+use Nelmio\Alice\Generator\Instantiator\FakeInstantiator;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
+use Nelmio\Alice\Generator\Populator\FakePopulator;
 use Nelmio\Alice\Generator\PopulatorInterface;
-use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\ObjectBag;
-use Nelmio\Alice\ObjectInterface;
-use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
@@ -38,57 +42,29 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $instantiatorProphecy = $this->prophesize(InstantiatorInterface::class);
-        $instantiatorProphecy->instantiate(Argument::cetera())->shouldNotBeCalled();
-        /** @var InstantiatorInterface $instantiator */
-        $instantiator = $instantiatorProphecy->reveal();
-
-        $populatorProphecy = $this->prophesize(PopulatorInterface::class);
-        $populatorProphecy->populate(Argument::cetera())->shouldNotBeCalled();
-        /** @var PopulatorInterface $populator */
-        $populator = $populatorProphecy->reveal();
-
-        $callerProphecy = $this->prophesize(CallerInterface::class);
-        $callerProphecy->doCallsOn(Argument::any())->shouldNotBeCalled();
-        /** @var CallerInterface $caller */
-        $caller = $callerProphecy->reveal();
-
-        $generator = new SimpleObjectGenerator($instantiator, $populator, $caller);
-        clone $generator;
+        clone new SimpleObjectGenerator(new FakeInstantiator(), new FakePopulator(), new FakeCaller());
     }
 
-    public function testGeneratorObject()
+    /**
+     * @testdox Do a instantiate-hydrate-calls cycle to generate the object described by the fixture.
+     */
+    public function testGenerate()
     {
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getId()->willReturn('dummy');
-        $fixtureProphecy->getClassName()->willReturn('stdClass');
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
-
-        $set = new ResolvedFixtureSet(
-            new ParameterBag(),
-            new FixtureBag(),
-            new ObjectBag()
-        );
-
+        $fixture = new SimpleFixture('dummy', \stdClass::class, SpecificationBagFactory::create());
+        $set = ResolvedFixtureSetFactory::create();
         $instance = new \stdClass();
-
-        $instantiatedObjectProphecy = $this->prophesize(ObjectInterface::class);
-        $instantiatedObjectProphecy->getReference()->willReturn('dummy');
-        $instantiatedObjectProphecy->getInstance()->willReturn($instance);
-        /** @var ObjectInterface $instantiatedObject */
-        $instantiatedObject = $instantiatedObjectProphecy->reveal();
-
-        $setWithInstantiatedObject = new ResolvedFixtureSet(
-            new ParameterBag(),
-            new FixtureBag(),
-            (new ObjectBag())->with($instantiatedObject)
-        );
+        $instantiatedObject = new SimpleObject($fixture->getId(), $instance);
 
         $instantiatorProphecy = $this->prophesize(InstantiatorInterface::class);
         $instantiatorProphecy
             ->instantiate($fixture, $set)
-            ->willReturn($setWithInstantiatedObject)
+            ->willReturn(
+                $setWithInstantiatedObject = ResolvedFixtureSetFactory::create(
+                    null,
+                    null,
+                    (new ObjectBag())->with($instantiatedObject)
+                )
+            )
         ;
         /** @var InstantiatorInterface $instantiator */
         $instantiator = $instantiatorProphecy->reveal();
@@ -96,22 +72,18 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
         $populatedInstance = clone $instance;
         $populatedInstance->populated = true;
 
-        $populatedObjectProphecy = $this->prophesize(ObjectInterface::class);
-        $populatedObjectProphecy->getReference()->willReturn('dummy');
-        $populatedObjectProphecy->getInstance()->willReturn($populatedInstance);
-        /** @var ObjectInterface $populatedObject */
-        $populatedObject = $populatedObjectProphecy->reveal();
-
-        $setWithPopulatedObject = new ResolvedFixtureSet(
-            new ParameterBag(),
-            new FixtureBag(),
-            (new ObjectBag())->with($populatedObject)
-        );
+        $populatedObject = new SimpleObject($fixture->getId(), $populatedInstance);
 
         $populatorProphecy = $this->prophesize(PopulatorInterface::class);
         $populatorProphecy
             ->populate($instantiatedObject, $setWithInstantiatedObject)
-            ->willReturn($setWithPopulatedObject)
+            ->willReturn(
+                $setWithPopulatedObject = ResolvedFixtureSetFactory::create(
+                    null,
+                    null,
+                    (new ObjectBag())->with($populatedObject)
+                )
+            )
         ;
         /** @var PopulatorInterface $populator */
         $populator = $populatorProphecy->reveal();
@@ -119,22 +91,18 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
         $instanceAfterCalls = clone $populatedInstance;
         $instanceAfterCalls->calls = true;
 
-        $objectAfterCallsProphecy = $this->prophesize(ObjectInterface::class);
-        $objectAfterCallsProphecy->getReference()->willReturn('dummy');
-        $objectAfterCallsProphecy->getInstance()->willReturn($instanceAfterCalls);
-        /** @var ObjectInterface $objectAfterCalls */
-        $objectAfterCalls = $objectAfterCallsProphecy->reveal();
-
-        $setWithObjectAfterCalls = new ResolvedFixtureSet(
-            new ParameterBag(),
-            new FixtureBag(),
-            (new ObjectBag())->with($objectAfterCalls)
-        );
+        $objectAfterCalls = new SimpleObject($fixture->getId(), $instanceAfterCalls);
 
         $callerProphecy = $this->prophesize(CallerInterface::class);
         $callerProphecy
             ->doCallsOn($populatedObject, $setWithPopulatedObject)
-            ->willReturn($setWithObjectAfterCalls)
+            ->willReturn(
+                $setWithObjectAfterCalls = ResolvedFixtureSetFactory::create(
+                    null,
+                    null,
+                    (new ObjectBag())->with($objectAfterCalls)
+                )
+            )
         ;
         /** @var CallerInterface $caller */
         $caller = $callerProphecy->reveal();

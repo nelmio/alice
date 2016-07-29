@@ -18,7 +18,7 @@ use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Parser\RuntimeCacheParser
+ * @covers Nelmio\Alice\Parser\RuntimeCacheParser
  */
 class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
 {

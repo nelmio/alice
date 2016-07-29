@@ -81,17 +81,19 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
 
         $bag = new FixtureBag();
         $newBag = $bag->with($fixture);
+        $newBagEmptied = $newBag->without($fixture);
 
         $this->assertInstanceOf(FixtureBag::class, $newBag);
         $this->assertNotSame($newBag, $bag);
 
-        $this->assertSameFixtures([], $bag);
+        $this->assertEquals(new FixtureBag(), $bag);
         $this->assertSameFixtures(
             [
                 'foo' => $fixture,
             ],
             $newBag
         );
+        $this->assertEquals(new FixtureBag(), $newBagEmptied);
     }
 
     public function testIfTwoFixturesWithTheSameIdIsAddedThenTheFirstOneWillBeOverridden()

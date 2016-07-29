@@ -13,9 +13,12 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class NoCallerMethodCallInstantiator extends AbstractChainableInstantiator
 {
+    use NotClonableTrait;
+
     /**
      * @inheritDoc
      */

@@ -19,7 +19,7 @@ use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Parser\IncludeProcessor\DefaultIncludeProcessor
+ * @covers Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
  */
 class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
 {

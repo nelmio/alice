@@ -15,7 +15,7 @@ use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Parser\Chainable\PhpParser
+ * @covers Nelmio\Alice\Parser\Chainable\PhpParser
  */
 class PhpParserTest extends \PHPUnit_Framework_TestCase
 {
