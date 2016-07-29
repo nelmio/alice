@@ -43,7 +43,15 @@ class PropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(PropertyAccessorHydrator::class, HydratorInterface::class, true));
     }
 
-    public function testItReturnsModifiedObject()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone $this->hydrator;
+    }
+
+    public function testReturnsHydratedObject()
     {
         $property = new Property('username', 'bob');
         $instance = new \stdClass();
@@ -62,7 +70,7 @@ class PropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideProperties
      */
-    public function testSetValue(Property $property)
+    public function testTestObjectHydrationAgainstMutlipleValues(Property $property)
     {
         $instance = new Dummy();
         $object = new SimpleObject('dummy', $instance);

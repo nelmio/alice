@@ -23,6 +23,9 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
+/**
+ * @coversNothing
+ */
 class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -17,9 +17,12 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class InstantiatorResolver implements InstantiatorInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ValueResolverInterface
      */

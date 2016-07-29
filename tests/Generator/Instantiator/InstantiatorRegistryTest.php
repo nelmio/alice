@@ -14,11 +14,9 @@ namespace Nelmio\Alice\Generator\Instantiator;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
-use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\InstantiatorInterface;
-use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\ObjectBag;
-use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
@@ -49,15 +47,19 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $instantiator = new InstantiatorRegistry([]);
-        clone $instantiator;
+        clone new InstantiatorRegistry([]);
     }
 
     public function testIterateOverEveryInstantiatorAndUseTheFirstValidOne()
     {
         $fixture = new FakeFixture();
-        $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
-        $expected = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), (new ObjectBag())->with(new SimpleObject('dummy', new \stdClass())));
+        $set = ResolvedFixtureSetFactory::create();
+        $expected = ResolvedFixtureSetFactory::create(
+            null,
+            null,
+            (new ObjectBag())
+                ->with(new SimpleObject('dummy', new \stdClass()))
+        );
 
         $instantiator1Prophecy = $this->prophesize(ChainableInstantiatorInterface::class);
         $instantiator1Prophecy->canInstantiate($fixture)->willReturn(false);
@@ -97,7 +99,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $fixture = new DummyFixture('dummy');
 
-        $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
+        $set = ResolvedFixtureSetFactory::create();
 
         $registry = new InstantiatorRegistry([]);
         $registry->instantiate($fixture, $set);

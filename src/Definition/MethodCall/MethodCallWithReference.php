@@ -41,9 +41,9 @@ final class MethodCallWithReference implements MethodCallInterface
     private $stringValue;
 
     /**
-     * @param ServiceReferenceInterface     $caller
-     * @param string                        $method
-     * @param ValueInterface[]|mixed[]|null $arguments
+     * @param ServiceReferenceInterface   $caller
+     * @param string                      $method
+     * @param ValueInterface[]|array|null $arguments
      */
     public function __construct(ServiceReferenceInterface $caller, string $method, array $arguments = null)
     {

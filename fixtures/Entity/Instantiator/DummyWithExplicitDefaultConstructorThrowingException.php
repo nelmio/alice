@@ -11,13 +11,10 @@
 
 namespace Nelmio\Alice\Entity\Instantiator;
 
-class DummyWithNamedConstructorAndRequiredParameters
+class DummyWithExplicitDefaultConstructorThrowingException
 {
-    public static function namedConstruct(int $param)
+    public function __construct()
     {
-        $instance = new static();
-        $instance->param = $param;
-
-        return $instance;
+        throw new \DomainException('You should not try to instantiate me!');
     }
 }

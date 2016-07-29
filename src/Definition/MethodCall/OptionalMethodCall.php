@@ -35,11 +35,10 @@ final class OptionalMethodCall implements MethodCallInterface
      */
     public function __construct(MethodCallInterface $methodCall, OptionalFlag $flag)
     {
-        if (null !== $caller = $methodCall->getCaller()) {
-            $this->methodCall = new MethodCallWithReference($caller, $methodCall->getMethod(), $methodCall->getArguments());
-        } else {
-            $this->methodCall = new SimpleMethodCall($methodCall->getMethod(), $methodCall->getArguments());
-        }
+        $this->methodCall = (null !== $caller = $methodCall->getCaller())
+            ? new MethodCallWithReference($caller, $methodCall->getMethod(), $methodCall->getArguments())
+            : new SimpleMethodCall($methodCall->getMethod(), $methodCall->getArguments())
+        ;
         $this->flag = $flag;
     }
 

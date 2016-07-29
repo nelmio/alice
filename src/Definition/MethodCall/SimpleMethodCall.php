@@ -31,7 +31,7 @@ final class SimpleMethodCall implements MethodCallInterface
 
     /**
      * @param string                        $method
-     * @param ValueInterface[]|mixed[]|null $arguments
+     * @param ValueInterface[]|array|null $arguments
      */
     public function __construct(string $method, array $arguments = null)
     {

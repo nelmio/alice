@@ -16,7 +16,7 @@ use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
 
-final class FactoryInstantiator extends AbstractChainableInstantiator
+final class StaticFactoryInstantiator extends AbstractChainableInstantiator
 {
     /**
      * @inheritDoc
@@ -34,16 +34,28 @@ final class FactoryInstantiator extends AbstractChainableInstantiator
     protected function createInstance(FixtureInterface $fixture)
     {
         $constructor = $fixture->getSpecs()->getConstructor();
-        list($factory, $method, $arguments) = [
+        list($class, $factory, $method, $arguments) = [
+            $fixture->getClassName(),
             $constructor->getCaller()->getId(),
             $constructor->getMethod(),
             $constructor->getArguments()
         ];
 
-        try {
-            return $factory::$method($arguments);
-        } catch (\Throwable $thrownable) {
-            throw InstantiationException::create($fixture, $thrownable);
+        if (null === $arguments) {
+            $arguments = [];
         }
+
+        $instance = $factory::$method(...$arguments);
+        if (false === $instance instanceof $class) {
+            throw new InstantiationException(
+                sprintf(
+                    'Instantiated fixture was expected to be an instance of "%s". Got "%s" instead.',
+                    $class,
+                    get_class($instance)
+                )
+            );
+        }
+
+        return $instance;
     }
 }

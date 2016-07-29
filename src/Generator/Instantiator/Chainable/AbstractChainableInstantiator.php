@@ -12,9 +12,11 @@
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 abstract class AbstractChainableInstantiator implements ChainableInstantiatorInterface
 {
@@ -23,7 +25,14 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
      */
     public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {
-        $instance = $this->createInstance($fixture);
+        try {
+            $instance = $this->createInstance($fixture);
+        } catch (InstantiationThrowable $throwable) {
+            throw $throwable;
+        } catch (\Throwable $throwable) {
+            throw InstantiationException::create($fixture, $throwable);
+        }
+
         $objects = $fixtureSet->getObjects()->with(
             new SimpleObject(
                 $fixture->getId(),

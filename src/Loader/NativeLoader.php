@@ -70,8 +70,8 @@ use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\Hydrator\PropertyAccessorHydrator;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator;
-use Nelmio\Alice\Generator\Instantiator\Chainable\NoConstructorInstantiator;
-use Nelmio\Alice\Generator\Instantiator\Chainable\FactoryInstantiator;
+use Nelmio\Alice\Generator\Instantiator\Chainable\NullConstructorInstantiator;
+use Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorResolver;
 use Nelmio\Alice\Generator\InstantiatorInterface;
@@ -333,8 +333,8 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             $this->getBuiltInValueResolver(),
             new InstantiatorRegistry([
                 new NoCallerMethodCallInstantiator(),
-                new NoConstructorInstantiator(),
-                new FactoryInstantiator(),
+                new NullConstructorInstantiator(),
+                new StaticFactoryInstantiator(),
             ])
         );
     }

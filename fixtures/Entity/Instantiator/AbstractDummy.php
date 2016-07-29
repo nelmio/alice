@@ -11,13 +11,6 @@
 
 namespace Nelmio\Alice\Entity\Instantiator;
 
-class DummyWithNamedConstructorAndRequiredParameters
+abstract class AbstractDummy
 {
-    public static function namedConstruct(int $param)
-    {
-        $instance = new static();
-        $instance->param = $param;
-
-        return $instance;
-    }
 }
