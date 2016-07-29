@@ -32,9 +32,6 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('user0', $flags->getKey());
     }
 
-    /**
-     * @depends testWithersReturnNewModifiedInstance
-     */
     public function testIsImmutable()
     {
         $this->assertTrue(true, 'Nothing to do.');

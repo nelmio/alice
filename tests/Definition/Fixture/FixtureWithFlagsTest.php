@@ -54,8 +54,8 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends SpecificationBagTest::testIsImmutable
-     * @depends FlagBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\FlagBagTest::testIsImmutable
      */
     public function testIsImmutable()
     {
@@ -71,8 +71,8 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends SpecificationBagTest::testIsImmutable
-     * @depends FlagBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\FlagBagTest::testIsImmutable
      */
     public function testWithersReturnNewModifiedInstance()
     {

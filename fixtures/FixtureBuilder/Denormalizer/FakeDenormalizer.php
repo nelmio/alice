@@ -24,6 +24,6 @@ class FakeDenormalizer implements DenormalizerInterface
      */
     public function denormalize(array $data): BareFixtureSet
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

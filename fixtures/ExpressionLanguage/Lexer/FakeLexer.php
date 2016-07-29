@@ -23,6 +23,6 @@ class FakeLexer implements LexerInterface
      */
     public function lex(string $value): array
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

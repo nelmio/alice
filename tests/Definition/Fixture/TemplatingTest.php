@@ -24,7 +24,7 @@ use Nelmio\Alice\FixtureInterface;
 class TemplatingTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @depends FixtureReferenceTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
      */
     public function testIsImmutable()
     {

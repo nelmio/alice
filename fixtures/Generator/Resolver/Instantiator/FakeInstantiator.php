@@ -25,6 +25,6 @@ class FakeInstantiator implements InstantiatorInterface
      */
     public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }

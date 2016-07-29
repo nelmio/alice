@@ -33,6 +33,11 @@ class MethodCallBagTest extends \PHPUnit_Framework_TestCase
         $this->propRefl = $propRefl;
     }
 
+    public function testIsImmutable()
+    {
+        //TODO
+    }
+
     public function testMutatorsAreImmutable()
     {
         $methodCall1 = new DummyMethodCall('mc1');

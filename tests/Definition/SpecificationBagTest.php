@@ -9,16 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Fixture\Definition;
+namespace Nelmio\Alice\Definition;
 
-use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\MethodCall\MutableMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
-use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Definition\Property;
-use Nelmio\Alice\Definition\PropertyBag;
-use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * @covers Nelmio\Alice\Definition\SpecificationBag
@@ -45,8 +39,8 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends PropertyBagTest::testIsImmutable
-     * @depends MethodCallBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\PropertyBagTest::testIsImmutable
+     * @depends Nelmio\Alice\Definition\MethodCallBagTest::testIsImmutable
      */
     public function testIsImmutable()
     {

@@ -25,6 +25,6 @@ class FakeCaller implements CallerInterface
      */
     public function doCallsOn(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {
-        $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__METHOD__, func_get_args());
     }
 }
