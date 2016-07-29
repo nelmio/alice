@@ -17,7 +17,7 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 final class ExtendFlag implements FlagInterface
 {
     /**
-     * @var string
+     * @var FixtureReference
      */
     private $extendedFixture;
 

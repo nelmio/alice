@@ -53,6 +53,7 @@ final class TemplateFixtureResolver
          * @var TemplatingFixtureBag $resolvedFixtures
          */
         list($extendedFixtures, $resolvedFixtures) = $this->resolveExtendedFixtures(
+            $fixture,
             $fixture->getExtendedFixturesReferences(),
             $unresolvedFixtures,
             $resolvedFixtures,
@@ -71,9 +72,11 @@ final class TemplateFixtureResolver
      *
      * @throws FixtureNotFoundException
      *
-     * @return array<FixtureBag, TemplatingFixtureBag>
+     * @return array The first element is a FixtureBag with all the extended fixtures and the second is a
+     *               TemplatingFixtureBag which may contain new fixtures (from the resolution)
      */
     private function resolveExtendedFixtures(
+        TemplatingFixture $fixture,
         array $extendedFixtureReferences,
         FixtureBag $unresolvedFixtures,
         TemplatingFixtureBag $resolvedFixtures,
@@ -95,6 +98,18 @@ final class TemplateFixtureResolver
                 );
 
                 continue;
+            }
+
+            $unresolvedFixture = $unresolvedFixtures->get($fixtureId);
+            if (false === $unresolvedFixture instanceof TemplatingFixture) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Fixture "%s" extends "%s" but "%s" is not a template.',
+                        $fixture->getId(),
+                        $fixtureId,
+                        $fixtureId
+                    )
+                );
             }
 
             $resolvedFixtures = $this->resolve(

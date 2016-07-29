@@ -26,17 +26,17 @@ use Nelmio\Alice\FixtureInterface;
 final class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInterface
 {
     /**
-     * @var SimplePropertyDenormalizer
-     */
-    private $propertyDenormalizer;
-
-    /**
-     * @var ConstructorWithCallerDenormalizer
+     * @var ConstructorDenormalizerInterface
      */
     private $constructorDenormalizer;
 
     /**
-     * @var OptionalCallsDenormalizer
+     * @var PropertyDenormalizerInterface
+     */
+    private $propertyDenormalizer;
+
+    /**
+     * @var CallsDenormalizerInterface
      */
     private $callsDenormalizer;
 

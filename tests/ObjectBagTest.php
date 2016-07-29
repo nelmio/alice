@@ -228,8 +228,8 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'foo' => $object1->getInstance(),
-                'bar' => $object2->getInstance(),
+                'foo' => new \stdClass(),
+                'bar' => new \stdClass(),
             ],
             $bag->toArray()
         );

@@ -25,7 +25,7 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
     use NotClonableTrait;
 
     /**
-     * @var ParameterResolverInterface[]
+     * @var ChainableParameterResolverInterface[]
      */
     private $resolvers;
 

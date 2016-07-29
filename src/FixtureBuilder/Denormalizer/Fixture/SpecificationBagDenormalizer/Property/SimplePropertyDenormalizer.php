@@ -13,7 +13,6 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Property;
-use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\PropertyDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -24,7 +23,7 @@ final class SimplePropertyDenormalizer implements PropertyDenormalizerInterface
     use NotClonableTrait;
 
     /**
-     * @var ParserInterface
+     * @var ValueDenormalizerInterface
      */
     private $valueDenormalizer;
 

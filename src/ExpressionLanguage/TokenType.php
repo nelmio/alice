@@ -57,7 +57,7 @@ final class TokenType
     ];
 
     /**
-     * @var int
+     * @var string
      */
     private $value;
 

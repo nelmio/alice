@@ -36,11 +36,7 @@ final class SimpleParameterBagResolver implements ParameterBagResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param ResolvingContext $context
-     *
-     * @return ParameterBag
+     * @inheritdoc
      */
     public function resolve(
         ParameterBag $unresolvedParameters,

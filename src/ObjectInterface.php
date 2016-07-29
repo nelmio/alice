@@ -25,7 +25,7 @@ interface ObjectInterface
     public function getReference(): string;
 
     /**
-     * @return \object
+     * @return object
      */
     public function getInstance();
 }
