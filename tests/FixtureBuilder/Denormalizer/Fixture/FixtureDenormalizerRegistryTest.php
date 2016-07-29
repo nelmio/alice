@@ -114,7 +114,7 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($actualDenormalizers[1]->parser);
     }
     
-    public function testUseTheFirstSuitableDenormalizer()
+    public function testUsesTheFirstSuitableDenormalizer()
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
         $fixtureProphecy->getId()->willReturn('dummy');
@@ -169,7 +169,7 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerNotFoundException
      * @expectedExceptionMessage No suitable fixture denormalizer found to handle the fixture with the reference "user0".
      */
-    public function testThrowExceptionIfNotSuitableDenormalizer()
+    public function testThrowsExceptionIfNotSuitableDenormalizer()
     {
         $builtFixtures = new FixtureBag();
         $className = 'Nelmio\Entity\User';

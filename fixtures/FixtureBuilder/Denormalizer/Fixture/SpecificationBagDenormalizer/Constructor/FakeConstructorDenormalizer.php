@@ -2,22 +2,22 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
+namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor;
 
-use Nelmio\Alice\Definition\SpecificationBag;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
+use Nelmio\Alice\Definition\MethodCallInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\NotCallableTrait;
 
-class FakeSpecificationBagDenormalizer implements SpecificationsDenormalizerInterface
+class FakeConstructorDenormalizer implements ConstructorDenormalizerInterface
 {
     use NotCallableTrait;
 
@@ -25,11 +25,11 @@ class FakeSpecificationBagDenormalizer implements SpecificationsDenormalizerInte
      * @inheritdoc
      */
     public function denormalize(
-        FixtureInterface $fixture,
+        FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedSpecs
-    ): SpecificationBag
+        array $unparsedConstructor
+    ): MethodCallInterface
     {
-        $this->__call(__METHOD__, func_get_args());
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

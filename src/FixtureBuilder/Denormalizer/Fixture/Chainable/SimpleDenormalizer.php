@@ -74,7 +74,7 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
             new SpecificationBag(null, new PropertyBag(), new MethodCallBag())
         );
         $fixture = $fixture->withSpecs(
-            $this->specsDenormalizer->denormalizer($fixture, $this->flagParser, $specs)
+            $this->specsDenormalizer->denormalize($fixture, $this->flagParser, $specs)
         );
 
         return $builtFixtures->with(

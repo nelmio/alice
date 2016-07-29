@@ -41,7 +41,18 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormal
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SimpleFixtureBagDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\SimpleArgumentsDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\OptionalCallsDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorWithCallerDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\SimpleConstructorDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\SimplePropertyDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\PropertyDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ExtendFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\OptionalFlagParser;
@@ -110,6 +121,11 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  * @method getBuiltInFixtureBagDenormalizer
  * @method FlagParserInterface getBuiltInFlagParser()
  * @method FixtureDenormalizerInterface getBuiltInFixtureDenormalizer()
+ * @method ConstructorDenormalizerInterface getBuiltInConstructorDenormalizer()
+ * @method PropertyDenormalizerInterface getBuiltInPropertyDenormalizer()
+ * @method CallsDenormalizerInterface getBuiltInCallsDenormalizer()
+ * @method ArgumentsDenormalizerInterface getBuiltInArgumentsDenormalizer()
+ * @method ValueDenormalizerInterface getBuiltInValueDenormalizer()
  * @method ExpressionLanguageParserInterface getBuiltInExpressionLanguageParser()
  * @method FixtureSetResolverInterface getBuiltInResolver()
  * @method ObjectGeneratorInterface getBuiltInObjectGenerator()
@@ -227,12 +243,51 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             [
                 new \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer(
                     new SimpleSpecificationsDenormalizer(
-                        $this->getBuiltInExpressionLanguageParser()
+                        $this->getBuiltInConstructorDenormalizer(),
+                        $this->getBuiltInPropertyDenormalizer(),
+                        $this->getBuiltInCallsDenormalizer()
                     )
                 ),
                 new ListNameDenormalizer(),
                 new RangeNameDenormalizer(),
             ]
+        );
+    }
+
+    protected function _getBuiltInConstructorDenormalizer(): ConstructorDenormalizerInterface
+    {
+        return new ConstructorWithCallerDenormalizer(
+            new SimpleConstructorDenormalizer(
+                $this->getBuiltInArgumentsDenormalizer()
+            )
+        );
+    }
+
+    protected function _getBuiltInPropertyDenormalizer(): PropertyDenormalizerInterface
+    {
+        return new SimplePropertyDenormalizer(
+            $this->getBuiltInValueDenormalizer()
+        );
+    }
+
+    protected function _getBuiltInCallsDenormalizer(): CallsDenormalizerInterface
+    {
+        return new OptionalCallsDenormalizer(
+            $this->getBuiltInArgumentsDenormalizer()
+        );
+    }
+
+    protected function _getBuiltInArgumentsDenormalizer(): ArgumentsDenormalizerInterface
+    {
+        return new SimpleArgumentsDenormalizer(
+            $this->getBuiltInValueDenormalizer()
+        );
+    }
+
+    protected function _getBuiltInValueDenormalizer(): ValueDenormalizerInterface
+    {
+        return new UniqueValueDenormalizer(
+            $this->getBuiltInExpressionLanguageParser()
         );
     }
 

@@ -11,62 +11,50 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
-use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
-use Nelmio\Alice\ExpressionLanguage\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\OptionalCallsDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorWithCallerDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\SimplePropertyDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 
-class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInterface
+final class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInterface
 {
     /**
-     * @var PropertyDenormalizer
+     * @var SimplePropertyDenormalizer
      */
     private $propertyDenormalizer;
 
     /**
-     * @var ConstructorDenormalizer
+     * @var ConstructorWithCallerDenormalizer
      */
     private $constructorDenormalizer;
 
     /**
-     * @var CallsDenormalizer
+     * @var OptionalCallsDenormalizer
      */
     private $callsDenormalizer;
 
-    public function __construct(ParserInterface $parser)
+    public function __construct(
+        ConstructorDenormalizerInterface $constructorDenormalizer,
+        PropertyDenormalizerInterface $propertyDenormalizer,
+        CallsDenormalizerInterface $callsDenormalizer
+    )
     {
-        $this->constructorDenormalizer = new ConstructorDenormalizer($parser);
-        $this->propertyDenormalizer = new PropertyDenormalizer($parser);
-        $this->callsDenormalizer = new CallsDenormalizer($parser);
+        $this->constructorDenormalizer = $constructorDenormalizer;
+        $this->propertyDenormalizer = $propertyDenormalizer;
+        $this->callsDenormalizer = $callsDenormalizer;
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param FixtureInterface    $scope
-     * @param FlagParserInterface $parser
-     * @param array               $unparsedSpecs
-     *
-     * @return SpecificationBag
-     *
-     * @example
-     *  $unrparsedSpecs = [
-     *      '__construct' => [
-     *          'create' => [
-     *              '<name()>',
-     *          ]
-     *      ],
-     *      'username' => 'bob',
-     *  ]
+     * @inheritdoc
      */
-    public final function denormalizer(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedSpecs): SpecificationBag
+    public function denormalize(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedSpecs): SpecificationBag
     {
         $constructor = null;
         $properties = new PropertyBag();
@@ -74,65 +62,98 @@ class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInte
 
         foreach ($unparsedSpecs as $unparsedPropertyName => $value) {
             if ('__construct' === $unparsedPropertyName) {
-                $constructor = (false === $value)
-                    ? new NoMethodCall()
-                    : $this->denormalizeConstructor($scope, $parser, $value)
-                ;
+                $constructor = $this->denormalizeConstructor($value, $scope, $parser);
 
                 continue;
             }
 
             if ('__calls' === $unparsedPropertyName) {
-                foreach ($value as $methodCall) {
-                    if (false === is_array($methodCall)) {
-                        throw new \TypeError(
-                            sprintf(
-                                'Expected method call value to be an array, got "%s" instead.',
-                                gettype($methodCall)
-                            )
-                        );
-                    }
-                    $unparsedMethod = key($methodCall);
-                    if (false === is_string($unparsedMethod)) {
-                        throw new \TypeError(
-                            sprintf(
-                                'Expected method name, got "%s" instead.',
-                                gettype($unparsedMethod)
-                            )
-                        );
-                    }
-
-                    $calls = $calls->with(
-                        $this->denormalizeCall($scope, $parser, $unparsedMethod, $methodCall[$unparsedMethod])
-                    );
-                }
+                $calls = $this->denormalizeCall($this->callsDenormalizer, $value, $calls, $scope, $parser);
 
                 continue;
             }
 
-            $flags = $parser->parse($unparsedPropertyName);
-            $propertyName = $flags->getKey();
-
-            $properties = $properties->with(
-                $this->denormalizeProperty($scope, $propertyName, $value, $flags)
-            );
+            $properties = $this->denormalizeProperty($this->propertyDenormalizer, $parser, $unparsedPropertyName, $value, $properties, $scope);
         }
 
         return new SpecificationBag($constructor, $properties, $calls);
     }
 
-    protected function denormalizeConstructor(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedConstructor): MethodCallInterface
+    private function denormalizeConstructor(
+        $value,
+        FixtureInterface $scope,
+        FlagParserInterface $parser
+    ): MethodCallInterface
     {
-        return $this->constructorDenormalizer->denormalize($scope, $parser, $unparsedConstructor);
+        return (false === $value)
+            ? new NoMethodCall()
+            : $this->constructorDenormalizer->denormalize($scope, $parser, $value)
+        ;
     }
 
-    protected function denormalizeCall(FixtureInterface $scope, FlagParserInterface $parser, string $unparsedMethod, array $unparsedArguments): MethodCallInterface
+    private function denormalizeProperty(
+        PropertyDenormalizerInterface $propertyDenormalizer,
+        FlagParserInterface $flagParser,
+        string $unparsedPropertyName,
+        $value,
+        PropertyBag $properties,
+        FixtureInterface $scope
+    ): PropertyBag
     {
-        return $this->callsDenormalizer->denormalize($scope, $parser, $unparsedMethod, $unparsedArguments);
+        $flags = $flagParser->parse($unparsedPropertyName);
+        $propertyName = $flags->getKey();
+
+        $property = $propertyDenormalizer->denormalize($scope, $propertyName, $value, $flags);
+
+        return $properties->with($property);
     }
 
-    protected function denormalizeProperty(FixtureInterface $scope, string $name, $value, FlagBag $flags): Property
+    private function denormalizeCall(
+        CallsDenormalizerInterface $callsDenormalizer,
+        $value,
+        MethodCallBag $calls,
+        FixtureInterface $scope,
+        FlagParserInterface $parser
+    ): MethodCallBag
     {
-        return $this->propertyDenormalizer->denormalize($scope, $name, $value, $flags);
+        foreach ($value as $methodCall) {
+            $methodCall = $this->denormalizeCallMethod($callsDenormalizer, $methodCall, $scope, $parser);
+            $calls = $calls->with($methodCall);
+        }
+
+        return $calls;
+    }
+
+    private function denormalizeCallMethod(
+        CallsDenormalizerInterface $callsDenormalizer,
+        $methodCall,
+        FixtureInterface $scope,
+        FlagParserInterface $parser
+    ): MethodCallInterface
+    {
+        if (false === is_array($methodCall)) {
+            throw new \TypeError(
+                sprintf(
+                    'Expected method call value to be an array, got "%s" instead.',
+                    gettype($methodCall)
+                )
+            );
+        }
+        $unparsedMethod = key($methodCall);
+        if (false === is_string($unparsedMethod)) {
+            throw new \TypeError(
+                sprintf(
+                    'Expected method name, got "%s" instead.',
+                    gettype($unparsedMethod)
+                )
+            );
+        }
+
+        return $callsDenormalizer->denormalize(
+            $scope,
+            $parser,
+            $unparsedMethod,
+            $methodCall[$unparsedMethod]
+        );
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
+use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
@@ -22,6 +23,10 @@ use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\ExpressionLanguage\Parser\DummyParser;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\FakeCallsDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FakeConstructorDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\FakePropertyDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Prophecy\Argument;
@@ -31,169 +36,230 @@ use Prophecy\Argument;
  */
 class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDenormalize()
+    public function testIsNotClonable()
     {
-        $specs = [
-            '__construct' => [
-                '<latitude()>'
-            ],
-            'username' => '<name()>',
-            '__calls' => [
-                [
-                    'setLocation' => [
-                        '<latitude()>',
-                        '<longitude()>',
-                    ],
-                ],
-            ],
-        ];
-        $expected = new SpecificationBag(
-            new SimpleMethodCall(
-                '__construct',
-                ['<latitude()>']
-            ),
-            (new PropertyBag())->with(new Property('username', '<name()>')),
-            (new MethodCallBag())
-                ->with(
-                    new SimpleMethodCall(
-                        'setLocation',
-                        [
-                            '<latitude()>',
-                            '<longitude()>',
-                        ]
-                    )
-                )
-        );
-
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse('username')->willReturn(new FlagBag('username'));
-        $flagParserProphecy->parse('setLocation')->willReturn(new FlagBag('setLocation'));
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
-
-        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
-        $actual = $denormalizer->denormalizer(new FakeFixture, $flagParser, $specs);
-
-        $this->assertEquals($expected, $actual);
+        clone new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
     }
 
-    public function testDenormalizeEmptySpecs()
+    public function testCanDenormalizeEmptySpecs()
     {
         $specs = [];
+        $flagParser = new FakeFlagParser();
+
         $expected = new SpecificationBag(
             null,
             new PropertyBag(),
             new MethodCallBag()
         );
 
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
-
-        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
-        $actual = $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
+        $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function testDenormalizeEmptyNoConstructor()
+    public function testCanDenormalizeConstructor()
+    {
+        $fixture = new FakeFixture();
+        $specs = [
+            '__construct' => $construct = [
+                '<latitude()>'
+            ],
+        ];
+        $flagParser = new FakeFlagParser();
+
+        $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
+        $constructorDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, $construct)
+            ->willReturn($constructor = new FakeMethodCall())
+        ;
+        /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
+        $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
+
+        $expected = new SpecificationBag(
+            $constructor,
+            new PropertyBag(),
+            new MethodCallBag()
+        );
+
+        $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+
+        $this->assertEquals($expected, $actual);
+
+        $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testCanDenormalizeTheNoConstructor()
     {
         $specs = [
             '__construct' => false,
         ];
+
         $expected = new SpecificationBag(
             new NoMethodCall(),
             new PropertyBag(),
             new MethodCallBag()
         );
 
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
-
-        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
-        $actual = $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
+        $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+        $actual = $denormalizer->denormalize(new FakeFixture, new FakeFlagParser(), $specs);
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function testDenormalizeConstructorDefaultArguments()
+    public function testCanDenormalizeProperties()
     {
+        $fixture = new FakeFixture();
         $specs = [
-            '__construct' => [],
+            'username' => '<name()>',
+            'name' => 'bob',
         ];
+
+        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
+        $flagParserProphecy->parse('username')->willReturn($usernameFlags = new FlagBag('parsed_username'));
+        $flagParserProphecy->parse('name')->willReturn($nameFlags = new FlagBag('parsed_name'));
+        /** @var FlagParserInterface $flagParser */
+        $flagParser = $flagParserProphecy->reveal();
+
+        $propertyDenormalizerProphecy = $this->prophesize(PropertyDenormalizerInterface::class);
+        $propertyDenormalizerProphecy
+            ->denormalize($fixture, 'parsed_username', '<name()>', $usernameFlags)
+            ->willReturn($usernameProp = new Property('username', '<name()>'))
+        ;
+        $propertyDenormalizerProphecy
+            ->denormalize($fixture, 'parsed_name', 'bob', $nameFlags)
+            ->willReturn($nameProp = new Property('name', 'bob'))
+        ;
+        /** @var PropertyDenormalizerInterface $propertyDenormalizer */
+        $propertyDenormalizer = $propertyDenormalizerProphecy->reveal();
+
         $expected = new SpecificationBag(
-            new SimpleMethodCall('__construct', []),
-            new PropertyBag(),
+            null,
+            (new PropertyBag())
+                ->with($usernameProp)
+                ->with($nameProp)
+            ,
             new MethodCallBag()
         );
 
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
-
-        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
-        $actual = $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
+        $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), $propertyDenormalizer, new FakeCallsDenormalizer());
+        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
+
+        $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
+        $propertyDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testDenormalizeNamedConstructor()
+    public function testCanDenormalizeCalls()
     {
+        $fixture = new FakeFixture();
         $specs = [
-            '__construct' => [
-                'namedConstruct' => [],
+            '__calls' => [
+                [
+                    'setLocation' => $setLocationArgs = [
+                        '<latitude()>',
+                        '<longitude()>',
+                    ],
+                ],
             ],
         ];
-        $expected = new SpecificationBag(
-            new MethodCallWithReference(
-                new StaticReference('Dummy'),
-                'namedConstruct',
-                []
-            ),
-            new PropertyBag(),
-            new MethodCallBag()
-        );
+        $flagParser = new FakeFlagParser();
 
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getClassName()->willReturn('Dummy');
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
+        $callsDenormalizerProphecy = $this->prophesize(CallsDenormalizerInterface::class);
+        $callsDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, 'setLocation', $setLocationArgs)
+            ->willReturn($call = new NoMethodCall())
+        ;
+        /** @var CallsDenormalizerInterface $callsDenormalizer */
+        $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
-
-        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
-        $actual = $denormalizer->denormalizer($fixture, $flagParser, $specs);
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testDenormalizeEmptyCalls()
-    {
-        $specs = [
-            '__calls' => [],
-        ];
         $expected = new SpecificationBag(
             null,
             new PropertyBag(),
-            new MethodCallBag()
+            (new MethodCallBag())->with($call)
         );
 
+        $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), $callsDenormalizer);
+        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+
+        $this->assertEquals($expected, $actual);
+
+        $callsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testCanDenormalizeCompleteSpecs()
+    {
+        $fixture = new FakeFixture();
+        $specs = [
+            '__construct' => $construct = [
+                '<latitude()>'
+            ],
+            'username' => '<name()>',
+            'name' => 'bob',
+            '__calls' => [
+                [
+                    'setLocation' => $setLocationArgs = [
+                        '<latitude()>',
+                        '<longitude()>',
+                    ],
+                ],
+            ],
+        ];
+
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
+        $flagParserProphecy->parse('username')->willReturn($usernameFlags = new FlagBag('parsed_username'));
+        $flagParserProphecy->parse('name')->willReturn($nameFlags = new FlagBag('parsed_name'));
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
-        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
-        $actual = $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
+        $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
+        $constructorDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, $construct)
+            ->willReturn($constructor = new FakeMethodCall())
+        ;
+        /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
+        $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
+
+        $propertyDenormalizerProphecy = $this->prophesize(PropertyDenormalizerInterface::class);
+        $propertyDenormalizerProphecy
+            ->denormalize($fixture, 'parsed_username', '<name()>', $usernameFlags)
+            ->willReturn($usernameProp = new Property('username', '<name()>'))
+        ;
+        $propertyDenormalizerProphecy
+            ->denormalize($fixture, 'parsed_name', 'bob', $nameFlags)
+            ->willReturn($nameProp = new Property('name', 'bob'))
+        ;
+        /** @var PropertyDenormalizerInterface $propertyDenormalizer */
+        $propertyDenormalizer = $propertyDenormalizerProphecy->reveal();
+
+        $callsDenormalizerProphecy = $this->prophesize(CallsDenormalizerInterface::class);
+        $callsDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, 'setLocation', $setLocationArgs)
+            ->willReturn($call = new NoMethodCall())
+        ;
+        /** @var CallsDenormalizerInterface $callsDenormalizer */
+        $callsDenormalizer = $callsDenormalizerProphecy->reveal();
+
+        $expected = new SpecificationBag(
+            $constructor,
+            (new PropertyBag())
+                ->with($usernameProp)
+                ->with($nameProp)
+            ,
+            (new MethodCallBag())->with($call)
+        );
+
+        $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, $propertyDenormalizer, $callsDenormalizer);
+        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
+
+        $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
+        $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $propertyDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
+        $callsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
     /**
@@ -208,13 +274,8 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
-
-        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
-        $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
+        $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+        $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
     }
 
     /**
@@ -229,13 +290,8 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
-
-        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
-        $denormalizer->denormalizer(new FakeFixture(), $flagParser, $specs);
+        $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+        $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
     }
 
     /**
@@ -250,17 +306,7 @@ class SimpleSpecificationsDenormalizerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getId()->shouldNotBeCalled();
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
-
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
-
-        $denormalizer = new SimpleSpecificationsDenormalizer(new DummyParser());
-        $denormalizer->denormalizer($fixture, $flagParser, $specs);
+        $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+        $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
     }
 }
