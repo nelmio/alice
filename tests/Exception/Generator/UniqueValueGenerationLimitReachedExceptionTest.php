@@ -15,7 +15,7 @@ use Nelmio\Alice\Exception\Generator\Resolver\RecursionLimitReachedException;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\Generator\RecursionLimitReachedException
+ * @covers Nelmio\Alice\Exception\Generator\Resolver\RecursionLimitReachedException
  */
 class UniqueValueGenerationLimitReachedExceptionTest extends \PHPUnit_Framework_TestCase
 {
