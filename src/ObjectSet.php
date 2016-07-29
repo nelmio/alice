@@ -17,12 +17,12 @@ namespace Nelmio\Alice;
 final class ObjectSet
 {
     /**
-     * @var ParameterBag
+     * @var array Keys are parameter keys (strings) and values can be anything.
      */
     private $parameters;
 
     /**
-     * @var ObjectBag
+     * @var object[] Keys are objects IDs (strings)
      */
     private $objects;
 

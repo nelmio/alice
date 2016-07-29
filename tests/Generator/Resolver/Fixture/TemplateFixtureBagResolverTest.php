@@ -23,6 +23,7 @@ use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 
 /**
@@ -64,11 +65,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                 $group1 = new SimpleFixture(
                     'group1',
                     'Nelmio\Entity\Group',
-                    new SpecificationBag(
-                        null,
-                        new PropertyBag(),
-                        new MethodCallBag()
-                    )
+                    SpecificationBagFactory::create()
                 )
             )
             ->with(
@@ -76,11 +73,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new SimpleFixture(
                         'group2',
                         'Nelmio\Entity\Group',
-                        new SpecificationBag(
-                            null,
-                            new PropertyBag(),
-                            new MethodCallBag()
-                        )
+                        SpecificationBagFactory::create()
                     ),
                     (new FlagBag('group2'))
                         ->with(new ElementFlag('dummy_flag'))
@@ -92,12 +85,10 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user1',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v11'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         (new FlagBag('user1'))
@@ -113,13 +104,11 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user2',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v21'))
                                     ->with(new Property('p2', 'v22'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         (new FlagBag('user2'))
@@ -133,14 +122,12 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user3',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v31'))
                                     ->with(new Property('p2', 'v32'))
                                     ->with(new Property('p3', 'v33'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         (new FlagBag('user3'))
@@ -154,15 +141,13 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user4',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v41'))
                                     ->with(new Property('p2', 'v42'))
                                     ->with(new Property('p3', 'v43'))
                                     ->with(new Property('p4', 'v44'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         (new FlagBag('user4'))
@@ -175,11 +160,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     new SimpleFixture(
                         'user5',
                         'Nelmio\Alice\Entity\User',
-                        new SpecificationBag(
-                            null,
-                            new PropertyBag(),
-                            new MethodCallBag()
-                        )
+                        SpecificationBagFactory::create()
                     ),
                     (new FlagBag('user5'))
                         ->with(new TemplateFlag())
@@ -195,15 +176,13 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user1',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v11'))
                                     ->with(new Property('p2', 'v22'))
                                     ->with(new Property('p3', 'v33'))
                                     ->with(new Property('p4', 'v44'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         $this->getDecoratedFixturesFlag($user1)
@@ -218,15 +197,13 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user3',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v31'))
                                     ->with(new Property('p2', 'v32'))
                                     ->with(new Property('p3', 'v33'))
                                     ->with(new Property('p4', 'v44'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         $this->getDecoratedFixturesFlag($user3)
@@ -250,15 +227,13 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user4',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v41'))
                                     ->with(new Property('p2', 'v42'))
                                     ->with(new Property('p3', 'v43'))
                                     ->with(new Property('p4', 'v44'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         (new FlagBag('user4'))
@@ -272,14 +247,12 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user3',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v31'))
                                     ->with(new Property('p2', 'v32'))
                                     ->with(new Property('p3', 'v33'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         (new FlagBag('user3'))
@@ -293,13 +266,11 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user2',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v21'))
                                     ->with(new Property('p2', 'v22'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         (new FlagBag('user2'))
@@ -313,12 +284,10 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user1',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v11'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         (new FlagBag('user1'))
@@ -336,15 +305,13 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user1',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v11'))
                                     ->with(new Property('p2', 'v22'))
                                     ->with(new Property('p3', 'v33'))
                                     ->with(new Property('p4', 'v44'))
-                                ,
-                                new MethodCallBag()
                             )
                         ),
                         $this->getDecoratedFixturesFlag($user1)
@@ -359,15 +326,14 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user3',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
+                            SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v31'))
                                     ->with(new Property('p2', 'v32'))
                                     ->with(new Property('p3', 'v33'))
                                     ->with(new Property('p4', 'v44'))
-                                ,
-                                new MethodCallBag()
+
                             )
                         ),
                         $this->getDecoratedFixturesFlag($user3)
@@ -385,7 +351,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Nelmio\Alice\Exception\FixtureNotFoundException
      * @expectedExceptionMessage Could not find the fixture "user_base".
      */
-    public function testThrowExceptionIfFixtureNotFound()
+    public function testThrowsAnExceptionIfFixtureExtendsANonExistingFixture()
     {
         $unresolvedFixtures = (new FixtureBag())
             ->with(
@@ -394,11 +360,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         new SimpleFixture(
                             'user0',
                             'Nelmio\Alice\Entity\User',
-                            new SpecificationBag(
-                                null,
-                                new PropertyBag(),
-                                new MethodCallBag()
-                            )
+                            SpecificationBagFactory::create()
                         ),
                         (new FlagBag('user0'))
                             ->with(
@@ -407,6 +369,41 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                                 )
                             )
                     )
+                )
+            )
+        ;
+        $this->resolver->resolve($unresolvedFixtures);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Fixture "user0" extends "user_base" but "user_base" is not a template.
+     */
+    public function testThrowsAnExceptionIfAFixtureExtendANonTemplateFixture()
+    {
+        $unresolvedFixtures = (new FixtureBag())
+            ->with(
+                new TemplatingFixture(
+                    new FixtureWithFlags(
+                        new SimpleFixture(
+                            'user0',
+                            'Nelmio\Alice\Entity\User',
+                            SpecificationBagFactory::create()
+                        ),
+                        (new FlagBag('user0'))
+                            ->with(
+                                new ExtendFlag(
+                                    new FixtureReference('user_base')
+                                )
+                            )
+                    )
+                )
+            )
+            ->with(
+                new SimpleFixture(
+                    'user_base',
+                    'Nelmio\Alice\Entity\User',
+                    SpecificationBagFactory::create()
                 )
             )
         ;

@@ -33,7 +33,7 @@ interface MethodCallInterface
     public function getMethod(): string;
 
     /**
-     * @return ValueInterface[]|mixed[]|null
+     * @return ValueInterface[]|array|null
      */
     public function getArguments();
     

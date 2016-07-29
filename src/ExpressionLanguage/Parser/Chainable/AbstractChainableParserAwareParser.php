@@ -56,6 +56,3 @@ abstract class AbstractChainableParserAwareParser implements ChainableTokenParse
         }
     }
 }
-{
-
-}

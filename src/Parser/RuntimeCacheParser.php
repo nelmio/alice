@@ -30,7 +30,7 @@ final class RuntimeCacheParser implements ParserInterface
     private $cache = [];
 
     /**
-     * @var ParserInterface[]
+     * @var ParserInterface
      */
     private $parser;
 

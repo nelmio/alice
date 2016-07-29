@@ -30,7 +30,7 @@ final class SimpleObject implements ObjectInterface
 
     /**
      * @param string  $reference
-     * @param \object $instance
+     * @param object $instance
      */
     public function __construct(string $reference, $instance)
     {
@@ -48,7 +48,7 @@ final class SimpleObject implements ObjectInterface
     }
 
     /**
-     * @param \object $newInstance
+     * @param object $newInstance
      *
      * @return self
      */
@@ -57,13 +57,16 @@ final class SimpleObject implements ObjectInterface
         return new self($this->reference, $newInstance);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getReference(): string
     {
         return $this->reference;
     }
 
     /**
-     * @return \object
+     * @inheritdoc
      */
     public function getInstance()
     {

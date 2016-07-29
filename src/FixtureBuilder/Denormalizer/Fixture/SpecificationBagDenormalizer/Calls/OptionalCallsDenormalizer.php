@@ -28,7 +28,7 @@ final class OptionalCallsDenormalizer implements CallsDenormalizerInterface
     use NotClonableTrait;
 
     /**
-     * @var SimpleArgumentsDenormalizer
+     * @var ArgumentsDenormalizerInterface
      */
     private $argumentDenormalizer;
 
@@ -40,7 +40,7 @@ final class OptionalCallsDenormalizer implements CallsDenormalizerInterface
     /**
      * @inheritdoc
      */
-    public final function denormalize(
+    public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
         string $unparsedMethod,

@@ -69,6 +69,15 @@ final class InstantiatorResolver implements InstantiatorInterface
         ];
     }
 
+    /**
+     * @param array                  $arguments
+     * @param ValueResolverInterface $resolver
+     * @param FixtureInterface       $fixture
+     * @param ResolvedFixtureSet     $fixtureSet
+     *
+     * @return array The first element is an array ($arguments) which is the resolved arguments and the second the new
+     *               ResolvedFixtureSet which may contains new fixtures (from the arguments resolution)
+     */
     private function resolveArguments(
         array $arguments,
         ValueResolverInterface $resolver,
