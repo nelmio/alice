@@ -12,15 +12,12 @@
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
-use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\FakeFixtureBuilder;
 use Nelmio\Alice\FixtureBuilderInterface;
-use Nelmio\Alice\FixtureSet;
+use Nelmio\Alice\FixtureSetFactory;
 use Nelmio\Alice\Generator\FakeGenerator;
 use Nelmio\Alice\GeneratorInterface;
-use Nelmio\Alice\ObjectBag;
-use Nelmio\Alice\ObjectSet;
-use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\ObjectSetFactory;
 use Prophecy\Argument;
 
 /**
@@ -52,8 +49,8 @@ class SimpleDataLoaderTest extends \PHPUnit_Framework_TestCase
             'dummy0' => new \stdClass(),
         ];
 
-        $fixtureSet = new FixtureSet(new ParameterBag(), new ParameterBag(), new FixtureBag(), new ObjectBag());
-        $objectSet = new ObjectSet(new ParameterBag(), new ObjectBag());
+        $fixtureSet = FixtureSetFactory::create();
+        $objectSet = ObjectSetFactory::create();
 
         $fixtureBuilderProphecy = $this->prophesize(FixtureBuilderInterface::class);
         $fixtureBuilderProphecy->build($data, $parameters, $objects)->willReturn($fixtureSet);

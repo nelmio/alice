@@ -14,9 +14,12 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class OptionalFlagParser implements ChainableFlagParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * @inheritdoc
      */

@@ -36,8 +36,6 @@ final class ParserRegistry implements ParserInterface
      * Looks for the first suitable parser to parse the file.
      *
      * {@inheritdoc}
-     *
-     * @throws ParserNotFoundException When no parser is found.
      */
     public function parse(string $file): array
     {

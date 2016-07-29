@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
+use Nelmio\Alice\FileLocator\FakeFileLocator;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
@@ -39,15 +40,14 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
-        clone $processor;
+        clone new DefaultIncludeProcessor(new FakeFileLocator());
     }
 
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Could not find any include statement in the file "dummy.php".
      */
-    public function testThrowExceptionIfNoIncludeStatementFound()
+    public function testThrowsAnExceptionIfNoIncludeStatementFound()
     {
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
@@ -171,7 +171,7 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
         $processor->process($parser, $mainFile, $parsedMainFileContent);
     }
 
-    public function testProcessIncludeFiles()
+    public function testProcessesIncludeFiles()
     {
         $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
         $parsedMainFileContent = [

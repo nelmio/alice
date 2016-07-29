@@ -17,6 +17,8 @@ use Nelmio\Alice\NotClonableTrait;
 /**
  * Decorates a parser to cache the result and process includes. Includes are being processed in this parser to be able
  * to cache the whole result besides each included file.
+ *
+ * @TODO: make it PSR-6 or PSR-16 compliant
  */
 final class RuntimeCacheParser implements ParserInterface
 {

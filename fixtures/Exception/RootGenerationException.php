@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\Fixture;
+namespace Nelmio\Alice\Exception;
 
-use Nelmio\Alice\Throwable\DenormalizationThrowable;
+use Nelmio\Alice\Throwable\GenerationThrowable;
 
-class UnexpectedValueException extends \UnexpectedValueException implements DenormalizationThrowable
+class RootGenerationException extends \Exception implements GenerationThrowable
 {
 }

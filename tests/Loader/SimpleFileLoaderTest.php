@@ -12,16 +12,9 @@
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
-use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\FixtureBuilder\FakeFixtureBuilder;
+use Nelmio\Alice\ObjectSetFactory;
 use Nelmio\Alice\Parser\FakeParser;
-use Nelmio\Alice\FixtureBuilderInterface;
-use Nelmio\Alice\FixtureSet;
-use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\FileLoaderInterface;
-use Nelmio\Alice\ObjectBag;
-use Nelmio\Alice\ObjectSet;
-use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
 
@@ -40,9 +33,7 @@ class SimpleFileLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-
-        $loader = new SimpleFileLoader(new FakeParser(), new FakeDataLoader());
-        clone $loader;
+        clone new SimpleFileLoader(new FakeParser(), new FakeDataLoader());
     }
 
     public function testLoadAFileAndReturnsAnObjectSet()
@@ -59,7 +50,7 @@ class SimpleFileLoaderTest extends \PHPUnit_Framework_TestCase
         $objects = [
             'dummy0' => new \stdClass(),
         ];
-        $objectSet = new ObjectSet(new ParameterBag(), new ObjectBag());
+        $objectSet = ObjectSetFactory::create();
 
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse($file)->willReturn($data);

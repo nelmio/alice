@@ -47,7 +47,7 @@ class ParameterBagTest extends \PHPUnit_Framework_TestCase
         $bag->get('foo');
     }
 
-    public function testBagIsImmutable()
+    public function testIsImmutable()
     {
         $bag = new ParameterBag(['foo' => 'bar']);
         $bagClone = clone $bag;

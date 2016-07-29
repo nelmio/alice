@@ -24,6 +24,10 @@
             <file>tests/Definition/Value/FixtureMethodCallValueTest.php</file>
             <file>tests/Definition/Value/FixtureReferenceValueTest.php</file>
             <file>tests/Definition/Value/FixturePropertyValueTest.php</file>
+            <file>tests/Definition/Value/FixturePropertyValueTest.php</file>
+            <file>tests/ParameterBagTest.php</file>
+            <file>tests/FixtureBagTest.php</file>
+            <file>tests/FixtureBuilder/BareFixtureSetTest.php</file>
         </testsuite>
         <testsuite name="Independent tests">
             <directory>tests/</directory>

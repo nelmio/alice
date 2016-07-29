@@ -55,6 +55,11 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testIsImmutable()
+    {
+        //TODO
+    }
+
     public function testMutatorsAreImmutable()
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);

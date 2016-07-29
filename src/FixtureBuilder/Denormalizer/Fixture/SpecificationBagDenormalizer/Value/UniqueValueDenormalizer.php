@@ -16,7 +16,7 @@ use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\Fixture\UnexpectedValueException;
+use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureInterface;

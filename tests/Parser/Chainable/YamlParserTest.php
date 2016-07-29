@@ -133,7 +133,7 @@ EOF;
         $symfonyYamlParserProphecy->parse(Argument::any())->shouldBeCalledTimes(1);
     }
 
-    public function testParseRegularFile()
+    public function testReturnsParsedFileContent()
     {
         $symfonyParser = new SymfonyYamlParser();
 
@@ -152,7 +152,7 @@ EOF;
         );
     }
 
-    public function testParseEmptyFile()
+    public function testParsingEmptyFileResultsInEmptySet()
     {
         $symfonyParser = new SymfonyYamlParser();
 
@@ -166,7 +166,7 @@ EOF;
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException
      * @expectedExceptionMessageRegExp /^The file ".+\/basic\.yml" does not contain valid YAML\.$/
      */
-    public function testThrowExceptionIfFileNotParsable()
+    public function testThrowsAnExceptionIfFileNotParsable()
     {
         $file = self::$dir.'/basic.yml';
 
@@ -183,7 +183,7 @@ EOF;
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException
      * @expectedExceptionMessageRegExp /^Could not parse the file ".+\/basic\.yml"\.$/
      */
-    public function testThrowExceptionOnUnexpectedParseException()
+    public function testThrowsAnExceptionOnUnexpectedParseException()
     {
         $file = self::$dir.'/basic.yml';
 
