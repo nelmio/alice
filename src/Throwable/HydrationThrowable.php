@@ -11,6 +11,6 @@
 
 namespace Nelmio\Alice\Throwable;
 
-interface PopulationThrowable extends BuildThrowable
+interface HydrationThrowable extends BuildThrowable
 {
 }

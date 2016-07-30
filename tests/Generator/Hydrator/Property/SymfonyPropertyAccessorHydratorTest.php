@@ -9,21 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Hydrator;
+namespace Nelmio\Alice\Generator\Hydrator\Property;
 
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
-use Nelmio\Alice\Generator\HydratorInterface;
+use Nelmio\Alice\Generator\Hydrator\Dummy;
+use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @covers Nelmio\Alice\Generator\Hydrator\PropertyAccessorHydrator
+ * @covers Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator
  */
-class PropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
+class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PropertyAccessorHydrator
+     * @var SymfonyPropertyAccessorHydrator
      */
     private $hydrator;
 
@@ -35,12 +36,12 @@ class PropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->propertyAccessor = new PropertyAccessor();
-        $this->hydrator = new PropertyAccessorHydrator($this->propertyAccessor);
+        $this->hydrator = new SymfonyPropertyAccessorHydrator($this->propertyAccessor);
     }
 
     public function testIsAnHydrator()
     {
-        $this->assertTrue(is_a(PropertyAccessorHydrator::class, HydratorInterface::class, true));
+        $this->assertTrue(is_a(SymfonyPropertyAccessorHydrator::class, PropertyHydratorInterface::class, true));
     }
 
     /**
@@ -61,7 +62,7 @@ class PropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         /** @var PropertyAccessorInterface $accessor */
         $accessor = $accessorProphecy->reveal();
 
-        $hydrator = new PropertyAccessorHydrator($accessor);
+        $hydrator = new SymfonyPropertyAccessorHydrator($accessor);
         $result = $hydrator->hydrate($object, $property);
 
         $this->assertEquals($object, $result);

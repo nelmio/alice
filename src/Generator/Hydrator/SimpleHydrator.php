@@ -9,22 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Populator;
+namespace Nelmio\Alice\Generator\Hydrator;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Generator\HydratorInterface;
-use Nelmio\Alice\Generator\PopulatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectInterface;
 
-final class SimplePopulator implements PopulatorInterface
+final class SimpleHydrator implements HydratorInterface
 {
     use NotClonableTrait;
 
     /**
-     * @var HydratorInterface
+     * @var PropertyHydratorInterface
      */
     private $hydrator;
 
@@ -33,7 +32,7 @@ final class SimplePopulator implements PopulatorInterface
      */
     private $resolver;
 
-    public function __construct(ValueResolverInterface $resolver, HydratorInterface $hydrator)
+    public function __construct(ValueResolverInterface $resolver, PropertyHydratorInterface $hydrator)
     {
         $this->hydrator = $hydrator;
         $this->resolver = $resolver;
@@ -42,7 +41,7 @@ final class SimplePopulator implements PopulatorInterface
     /**
      * @inheritdoc
      */
-    public function populate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
+    public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {
         $fixture = $fixtureSet->getFixtures()->get($object->getReference());
         $properties = $fixture->getSpecs()->getProperties();

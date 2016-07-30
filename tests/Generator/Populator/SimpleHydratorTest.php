@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Populator;
+namespace Nelmio\Alice\Generator\Hydrator;
 
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCallBag;
@@ -19,9 +19,7 @@ use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\Generator\Hydrator\FakeHydrator;
 use Nelmio\Alice\Generator\HydratorInterface;
-use Nelmio\Alice\Generator\PopulatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -32,13 +30,13 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Populator\SimplePopulator
+ * @covers Nelmio\Alice\Generator\Hydrator\SimpleHydrator
  */
-class SimplePopulatorTest extends \PHPUnit_Framework_TestCase
+class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testIsAPopulator()
+    public function testIsAnHydrator()
     {
-        $this->assertTrue(is_a(SimplePopulator::class, PopulatorInterface::class, true));
+        $this->assertTrue(is_a(SimpleHydrator::class, HydratorInterface::class, true));
     }
 
     public function testAddsObjectToFixtureSet()
@@ -64,8 +62,8 @@ class SimplePopulatorTest extends \PHPUnit_Framework_TestCase
             new ObjectBag(['dummy' => $object])
         );
 
-        $populator = new SimplePopulator(new FakeValueResolver(), new FakeHydrator());
-        $actual = $populator->populate($object, $set);
+        $hydrator = new SimpleHydrator(new FakeValueResolver(), new FakePropertyHydrator());
+        $actual = $hydrator->hydrate($object, $set);
 
         $this->assertEquals($expected, $actual);
     }
@@ -90,7 +88,7 @@ class SimplePopulatorTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $hydratorProphecy = $this->prophesize(HydratorInterface::class);
+        $hydratorProphecy = $this->prophesize(PropertyHydratorInterface::class);
         $newInstance = new \stdClass();
         $newInstance->username = 'Bob';
         $newObject = $object->withInstance($newInstance);
@@ -100,7 +98,7 @@ class SimplePopulatorTest extends \PHPUnit_Framework_TestCase
         $secondNewInstance->group = 'Badass';
         $secondNewObject = $object->withInstance($secondNewInstance);
         $hydratorProphecy->hydrate($newObject, $group)->willReturn($secondNewObject);
-        /** @var HydratorInterface $hydrator */
+        /** @var PropertyHydratorInterface $hydrator */
         $hydrator = $hydratorProphecy->reveal();
 
         $expected = new ResolvedFixtureSet(
@@ -109,8 +107,8 @@ class SimplePopulatorTest extends \PHPUnit_Framework_TestCase
             new ObjectBag(['dummy' => $secondNewObject])
         );
 
-        $populator = new SimplePopulator(new FakeValueResolver(), $hydrator);
-        $actual = $populator->populate($object, $set);
+        $hydrator = new SimpleHydrator(new FakeValueResolver(), $hydrator);
+        $actual = $hydrator->hydrate($object, $set);
 
         $this->assertEquals($expected, $actual);
 
@@ -157,7 +155,7 @@ class SimplePopulatorTest extends \PHPUnit_Framework_TestCase
         /** @var ValueResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
-        $hydratorProphecy = $this->prophesize(HydratorInterface::class);
+        $hydratorProphecy = $this->prophesize(PropertyHydratorInterface::class);
         $newInstance = new \stdClass();
         $newInstance->username = 'Bob';
         $newObject = $object->withInstance($newInstance);
@@ -167,7 +165,7 @@ class SimplePopulatorTest extends \PHPUnit_Framework_TestCase
         $secondNewInstance->group = 'Badass';
         $secondNewObject = $object->withInstance($secondNewInstance);
         $hydratorProphecy->hydrate($newObject, $group->withValue('Badass'))->willReturn($secondNewObject);
-        /** @var HydratorInterface $hydrator */
+        /** @var PropertyHydratorInterface $hydrator */
         $hydrator = $hydratorProphecy->reveal();
 
         $expected = new ResolvedFixtureSet(
@@ -176,8 +174,8 @@ class SimplePopulatorTest extends \PHPUnit_Framework_TestCase
             new ObjectBag(['dummy' => $secondNewObject])
         );
 
-        $populator = new SimplePopulator($resolver, $hydrator);
-        $actual = $populator->populate($object, $set);
+        $hydrator = new SimpleHydrator($resolver, $hydrator);
+        $actual = $hydrator->hydrate($object, $set);
 
         $this->assertEquals($expected, $actual);
     }

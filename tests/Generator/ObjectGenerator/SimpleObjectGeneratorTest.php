@@ -21,8 +21,8 @@ use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\Instantiator\FakeInstantiator;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
-use Nelmio\Alice\Generator\Populator\FakePopulator;
-use Nelmio\Alice\Generator\PopulatorInterface;
+use Nelmio\Alice\Generator\Hydrator\FakeHydrator;
+use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\ObjectBag;
 use Prophecy\Argument;
@@ -42,7 +42,7 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new SimpleObjectGenerator(new FakeInstantiator(), new FakePopulator(), new FakeCaller());
+        clone new SimpleObjectGenerator(new FakeInstantiator(), new FakeHydrator(), new FakeCaller());
     }
 
     /**
@@ -69,33 +69,33 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
         /** @var InstantiatorInterface $instantiator */
         $instantiator = $instantiatorProphecy->reveal();
 
-        $populatedInstance = clone $instance;
-        $populatedInstance->populated = true;
+        $hydratedInstance = clone $instance;
+        $hydratedInstance->hydrated = true;
 
-        $populatedObject = new SimpleObject($fixture->getId(), $populatedInstance);
+        $hydratedObject = new SimpleObject($fixture->getId(), $hydratedInstance);
 
-        $populatorProphecy = $this->prophesize(PopulatorInterface::class);
-        $populatorProphecy
-            ->populate($instantiatedObject, $setWithInstantiatedObject)
+        $hydratorProphecy = $this->prophesize(HydratorInterface::class);
+        $hydratorProphecy
+            ->hydrate($instantiatedObject, $setWithInstantiatedObject)
             ->willReturn(
-                $setWithPopulatedObject = ResolvedFixtureSetFactory::create(
+                $setWithHydratedObject = ResolvedFixtureSetFactory::create(
                     null,
                     null,
-                    (new ObjectBag())->with($populatedObject)
+                    (new ObjectBag())->with($hydratedObject)
                 )
             )
         ;
-        /** @var PopulatorInterface $populator */
-        $populator = $populatorProphecy->reveal();
+        /** @var HydratorInterface $hydrator */
+        $hydrator = $hydratorProphecy->reveal();
 
-        $instanceAfterCalls = clone $populatedInstance;
+        $instanceAfterCalls = clone $hydratedInstance;
         $instanceAfterCalls->calls = true;
 
         $objectAfterCalls = new SimpleObject($fixture->getId(), $instanceAfterCalls);
 
         $callerProphecy = $this->prophesize(CallerInterface::class);
         $callerProphecy
-            ->doCallsOn($populatedObject, $setWithPopulatedObject)
+            ->doCallsOn($hydratedObject, $setWithHydratedObject)
             ->willReturn(
                 $setWithObjectAfterCalls = ResolvedFixtureSetFactory::create(
                     null,
@@ -107,13 +107,13 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
         /** @var CallerInterface $caller */
         $caller = $callerProphecy->reveal();
 
-        $generator = new SimpleObjectGenerator($instantiator, $populator, $caller);
+        $generator = new SimpleObjectGenerator($instantiator, $hydrator, $caller);
         $objects = $generator->generate($fixture, $set);
 
         $this->assertEquals($setWithObjectAfterCalls->getObjects(), $objects);
 
         $instantiatorProphecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
-        $populatorProphecy->populate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $hydratorProphecy->hydrate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $callerProphecy->doCallsOn(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 }

@@ -16,9 +16,9 @@ use Nelmio\Alice\ObjectInterface;
 interface CallerInterface
 {
     /**
-     * Do calls on the already populated object.
+     * Do calls on the already hydrated object.
      *
-     * @param ObjectInterface    $object Populated object
+     * @param ObjectInterface    $object Hydrated object
      * @param ResolvedFixtureSet $fixtureSet
      *
      * @return ResolvedFixtureSet Set containing the object on which the calls have been made.

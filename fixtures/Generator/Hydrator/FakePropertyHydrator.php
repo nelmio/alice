@@ -9,21 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Populator;
+namespace Nelmio\Alice\Generator\Hydrator;
 
-use Nelmio\Alice\Generator\PopulatorInterface;
-use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\NotCallableTrait;
 use Nelmio\Alice\ObjectInterface;
 
-class FakePopulator implements PopulatorInterface
+class FakePropertyHydrator implements PropertyHydratorInterface
 {
     use NotCallableTrait;
 
     /**
      * @inheritdoc
      */
-    public function populate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
+    public function hydrate(ObjectInterface $object, Property $property): ObjectInterface
     {
         $this->__call(__METHOD__, func_get_args());
     }

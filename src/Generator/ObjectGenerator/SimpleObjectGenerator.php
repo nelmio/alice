@@ -15,7 +15,7 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
-use Nelmio\Alice\Generator\PopulatorInterface;
+use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectBag;
@@ -30,9 +30,9 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
     private $instantiator;
     
     /**
-     * @var PopulatorInterface
+     * @var HydratorInterface
      */
-    private $populator;
+    private $hydrator;
 
     /**
      * @var CallerInterface
@@ -41,11 +41,11 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
 
     public function __construct(
         InstantiatorInterface $instantiator,
-        PopulatorInterface $populator,
+        HydratorInterface $hydrator,
         CallerInterface $caller
     ) {
         $this->instantiator = $instantiator;
-        $this->populator = $populator;
+        $this->hydrator = $hydrator;
         $this->caller = $caller;
     }
 
@@ -55,12 +55,12 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
     public function generate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ObjectBag
     {
         $fixtureSet = $this->instantiator->instantiate($fixture, $fixtureSet);
-        $unpopulatedObject = $fixtureSet->getObjects()->get($fixture);
+        $instantiatedObject = $fixtureSet->getObjects()->get($fixture);
         
-        $fixtureSet = $this->populator->populate($unpopulatedObject, $fixtureSet);
-        $populatedObject = $fixtureSet->getObjects()->get($fixture);
+        $fixtureSet = $this->hydrator->hydrate($instantiatedObject, $fixtureSet);
+        $hydratedObject = $fixtureSet->getObjects()->get($fixture);
         
-        $fixtureSet = $this->caller->doCallsOn($populatedObject, $fixtureSet);
+        $fixtureSet = $this->caller->doCallsOn($hydratedObject, $fixtureSet);
         
         return $fixtureSet->getObjects();
     }
