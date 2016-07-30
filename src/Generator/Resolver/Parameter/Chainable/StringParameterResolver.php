@@ -57,7 +57,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
     /**
      * {@inheritdoc}
      *
-     * @param string $parameter
+     * @param Parameter $parameter
      *
      * @throws ParameterNotFoundException
      */

@@ -33,7 +33,7 @@ final class DefaultFileLocator implements FileLocatorInterface
 
         $file = $name;
         if (false === $this->isAbsolutePath($name)) {
-            $file = (null === $currentPath)? $name : $currentPath.DIRECTORY_SEPARATOR.$name;
+            $file = (null === $currentPath) ? $name : $currentPath.DIRECTORY_SEPARATOR.$name;
         }
 
         if (false === file_exists($file)) {
