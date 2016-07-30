@@ -18,19 +18,16 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 /**
  * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser
  */
-class ElementFlagParserTest extends \PHPUnit_Framework_TestCase
+class ElementFlagParserTest extends FlagParserTestCase
 {
+    public function setUp()
+    {
+        $this->parser = new ElementFlagParser(new ElementParser());
+    }
+
     public function testIsAFlagParser()
     {
         $this->assertTrue(is_a(ElementFlagParser::class, FlagParserInterface::class, true));
-    }
-
-    /**
-     * @expectedException \DomainException
-     */
-    public function testIsNotClonable()
-    {
-        clone new ElementFlagParser(new FakeFlagParser());
     }
 
     public function testIfNoFlagIsFoundThenReturnsEmptyFlagBag()
@@ -74,5 +71,38 @@ class ElementFlagParserTest extends \PHPUnit_Framework_TestCase
         $actual = $parser->parse($element);
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @dataProvider provideElements
+     */
+    public function testCanParseElements(string $element, FlagBag $expected = null)
+    {
+        $actual = $this->parser->parse($element);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @dataProvider provideMalformedElements
+     */
+    public function testCannotParseMalformedElements(string $element)
+    {
+        try {
+            $this->parser->parse($element);
+            $this->fail('Expected exception to be thrown.');
+        } catch (\RuntimeException $exception) {
+            // expected
+        }
+    }
+
+    public function assertCanParse(string $element, FlagBag $expected)
+    {
+        // Do nothing: skip those tests as are irrelevant for this parser
+    }
+
+    public function assertCannotParse(string $element)
+    {
+        // Do nothing: skip those tests as are irrelevant for this parser
     }
 }
