@@ -15,7 +15,7 @@ use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 
-final class ElementParser implements FlagParserInterface
+final class ElementFlagParser implements FlagParserInterface
 {
     /**
      * @inheritdoc

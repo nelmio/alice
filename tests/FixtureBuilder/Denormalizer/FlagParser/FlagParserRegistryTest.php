@@ -12,35 +12,18 @@
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 
 use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\FakeChainableFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
-use Nelmio\Alice\Loader\NativeLoader;
 use Prophecy\Argument;
 
 /**
  * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry
  */
-class FlagParserRegistryTest extends FlagParserTestCase
+class FlagParserRegistryTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        $parser = (new NativeLoader())->getBuiltInFlagParser();
-        $propRefl = (new \ReflectionObject($parser))->getProperty('parser');
-        $propRefl->setAccessible(true);
-
-        $this->parser = $propRefl->getValue($parser);
-    }
-
     public function testIsAFlagParser()
     {
         $this->assertTrue(is_a(FlagParserRegistry::class, FlagParserInterface::class, true));
-    }
-
-    /**
-     * @expectedException \TypeError
-     */
-    public function testThrowExceptionOnInvalidParserInjected()
-    {
-        new FlagParserRegistry([new \stdClass()]);
     }
 
     /**
@@ -48,8 +31,20 @@ class FlagParserRegistryTest extends FlagParserTestCase
      */
     public function testIsNotClonable()
     {
-        $parser = new FlagParserRegistry([]);
-        clone $parser;
+        clone new FlagParserRegistry([]);
+    }
+
+    /**
+     * @expectedException \TypeError
+     */
+    public function testThrowsAnExceptionIfAnInvalidParserInjected()
+    {
+        new FlagParserRegistry([new \stdClass()]);
+    }
+
+    public function testCanBeInstantiatedWithChainableParsers()
+    {
+        new FlagParserRegistry([new FakeChainableFlagParser()]);
     }
 
     public function testPicksTheFirstSuitableParser()
@@ -86,41 +81,9 @@ class FlagParserRegistryTest extends FlagParserTestCase
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
      * @expectedExceptionMessage No suitable flag parser found to handle the element "string to parse".
      */
-    public function testThrowExceptionIfNotSuitableParserFound()
+    public function testThrowsAnExceptionIfNotSuitableParserFound()
     {
         $parser = new FlagParserRegistry([]);
         $parser->parse('string to parse');
-    }
-
-    /**
-     * @dataProvider provideExtends
-     */
-    public function testCanParseExtends(string $element, FlagBag $expected = null)
-    {
-        $this->assertCanParse($element, $expected);
-    }
-
-    /**
-     * @dataProvider provideOptionals
-     */
-    public function testCanParseOptionals(string $element, FlagBag $expected = null)
-    {
-        $this->assertCanParse($element, $expected);
-    }
-
-    /**
-     * @dataProvider provideTemplates
-     */
-    public function testCanParseTemplates(string $element, FlagBag $expected = null)
-    {
-        $this->assertCanParse($element, $expected);
-    }
-
-    /**
-     * @dataProvider provideUniques
-     */
-    public function testCanParseUniques(string $element, FlagBag $expected = null)
-    {
-        $this->assertCanParse($element, $expected);
     }
 }

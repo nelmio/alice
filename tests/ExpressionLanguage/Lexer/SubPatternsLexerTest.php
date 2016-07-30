@@ -26,7 +26,15 @@ class SubPatternsLexerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(SubPatternsLexer::class, LexerInterface::class, true));
     }
 
-    public function testLexReturnsTokens()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone new SubPatternsLexer(new FakeLexer());
+    }
+
+    public function testLexAValueToReturnAListOfTokens()
     {
         $expected = [
             new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
@@ -39,7 +47,7 @@ class SubPatternsLexerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testUseReferenceLexerWhenHasReferenceValue()
+    public function testUsesDecoratedLexerToLexReferenceValues()
     {
         $value = '@user';
         $expected = [
@@ -64,7 +72,7 @@ class SubPatternsLexerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\LexException
      * @expectedExceptionMessage Could not lex the value "<{foo".
      */
-    public function testThrowLexExceptionWhenCannotLexValue()
+    public function testThrowsAnExceptionIfCannotLexValue()
     {
         $lexer = new SubPatternsLexer(new FakeLexer());
         $lexer->lex('<{foo');
@@ -74,7 +82,7 @@ class SubPatternsLexerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid token "<foo>" found.
      */
-    public function testThrowExceptionWhenInvalidValue()
+    public function testThrowsAnExceptionWhenAnInvalidValueIsGiven()
     {
         $lexer = new SubPatternsLexer(new FakeLexer());
         $lexer->lex('<foo>');

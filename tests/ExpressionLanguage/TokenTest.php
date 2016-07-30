@@ -28,6 +28,14 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
     }
 
+    /**
+     * @depends Nelmio\Alice\ExpressionLanguage\TokenTypeTest::testIsImmutable
+     */
+    public function testIsImmutable()
+    {
+        $this->assertTrue(true, 'Nothing to do.');
+    }
+
     public function testWithersReturnNewModifiedInstance()
     {
         $value = 'bob';

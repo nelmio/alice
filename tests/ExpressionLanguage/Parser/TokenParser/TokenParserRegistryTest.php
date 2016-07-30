@@ -2,22 +2,27 @@
 
 /*
  * This file is part of the Alice package.
- *  
+ *
  * (c) Nelmio <hello@nelm.io>
- *  
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser;
 
+use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
+use Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable\ProphecyChainableTokenParserAware;
+use Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable\FakeChainableTokenParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\FakeParser;
+use Nelmio\Alice\ExpressionLanguage\Parser\TokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\ExpressionLanguage\Parser\TokenParserRegistry
+ * @covers Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\TokenParserRegistry
  */
 class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,21 +37,31 @@ class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
         $this->parsersRefl->setAccessible(true);
     }
 
-    public function testIsAParser()
+    public function testIsATokenParser()
     {
         $this->assertTrue(is_a(TokenParserRegistry::class, TokenParserInterface::class, true));
     }
 
-    public function testAcceptChainableParsers()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
     {
-        new TokenParserRegistry([new FakeChainableTokenParser()]);
+        clone new TokenParserRegistry([]);
+    }
 
+    /**
+     * @expectedException \TypeError
+     */
+    public function testAcceptsOnlyChainableParsers()
+    {
         try {
-            new TokenParserRegistry([new \stdClass()]);
-            $this->fails('Expected exception to be thrown.');
-        } catch (\TypeError $exception) {
-            // expected
+            new TokenParserRegistry([new FakeChainableTokenParser()]);
+        } catch (\Throwable $exception) {
+            $this->fails('Did not expect exception to be thrown.');
         }
+
+        new TokenParserRegistry([new \stdClass()]);
     }
 
     public function testWithersReturnNewModifiedInstance()
@@ -54,13 +69,13 @@ class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
         $parser = new FakeParser();
 
         $parserAwareProphecy = $this->prophesize(ParserAwareInterface::class);
-        $parserAwareProphecy->withParser($parser)->willReturn(new \stdClass());
+        $parserAwareProphecy->withParser($parser)->willReturn($returnedParser = new FakeChainableTokenParser());
         /** @var ParserAwareInterface $parserAware */
         $parserAware = $parserAwareProphecy->reveal();
 
         $tokenParser = new TokenParserRegistry([
             $parser1 = new FakeChainableTokenParser(),
-            $parser2 = new DummyChainableTokenParserAware(new FakeChainableTokenParser(), $parserAware)
+            $parser2 = new ProphecyChainableTokenParserAware(new FakeChainableTokenParser(), $parserAware)
         ]);
 
         $newTokenParser = $tokenParser->withParser($parser);
@@ -80,40 +95,13 @@ class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             [
                 $parser1,
-                new \stdClass(),
+                $returnedParser,
             ],
             $newTokenParserParsers
         );
     }
 
-    /**
-     * @expectedException \TypeError
-     */
-    public function testThrowExceptionIfInvalidParserIsPassed()
-    {
-        new TokenParserRegistry([new \stdClass()]);
-    }
-
-    public function testIsDeepClonable()
-    {
-        $parser = new TokenParserRegistry([]);
-        $clone = clone $parser;
-
-        $this->assertEquals($parser, $clone);
-        $this->assertNotSame($parser, $clone);
-
-        $parsers = [new FakeChainableTokenParser()];
-        $parser = new TokenParserRegistry($parsers);
-        $clone = clone $parser;
-
-        $this->assertEquals($parser, $clone);
-        $this->assertNotSame($parser, $clone);
-
-        $this->assertSame($parsers, $this->parsersRefl->getValue($parser));
-        $this->assertNotSame($parsers, $this->parsersRefl->getValue($clone));
-    }
-
-    public function testIterateOverEveryParsersAndUseTheFirstValidOne()
+    public function testPicksTheFirstSuitableParserToParseTheToken()
     {
         $token = new Token('foo', new TokenType(TokenType::STRING_TYPE));
         $expected = 'foo';
@@ -152,7 +140,7 @@ class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParserNotFoundException
      * @expectedExceptionMessage No suitable token parser found to handle the token "(STRING_TYPE) foo".
      */
-    public function testThrowExceptionIfNoSuitableParserIsFound()
+    public function testThrowsAnExceptionIfNoSuitableParserIsFound()
     {
         $registry = new TokenParserRegistry([]);
         $registry->parse(new Token('foo', new TokenType(TokenType::STRING_TYPE)));

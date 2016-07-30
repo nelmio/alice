@@ -9,27 +9,31 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
-final class StringTokenParser implements ChainableTokenParserInterface
+final class EscapedArrayTokenParser implements ChainableTokenParserInterface
 {
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::STRING_TYPE;
+        return $token->getType()->getValue() === TokenType::ESCAPED_ARRAY_TYPE;
     }
 
     /**
-     * @inheritdoc
+     * Parses '<<param>>' into '<param>'.
+     *
+     * {@inheritdoc}
      */
-    public function parse(Token $token)
+    public function parse(Token $token): string
     {
-        return $token->getValue();
+        $value = $token->getValue();
+
+        return substr($value, 1, strlen($value) - 2);
     }
 }

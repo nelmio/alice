@@ -15,9 +15,12 @@ use Nelmio\Alice\Exception\ExpressionLanguage\LexException;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
+use Nelmio\Alice\NotClonableTrait;
 
 final class GlobalPatternsLexer implements LexerInterface
 {
+    use NotClonableTrait;
+
     const PATTERNS = [
         '/^((?:\d+|<.*>)x .*)/' => TokenType::DYNAMIC_ARRAY_TYPE,
         '/^.*(?:\d+|<.*>)x .*/' => null,

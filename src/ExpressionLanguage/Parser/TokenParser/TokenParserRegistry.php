@@ -9,15 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser;
 
 use Nelmio\Alice\Exception\ExpressionLanguage\ParserNotFoundException;
+use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
+use Nelmio\Alice\ExpressionLanguage\Parser\TokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
+use Nelmio\Alice\NotClonableTrait;
 
 final class TokenParserRegistry implements TokenParserInterface, ParserAwareInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ChainableTokenParserInterface[]
      */
@@ -29,9 +34,9 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
     public function __construct(array $parsers)
     {
         $this->parsers = (
-        function (ChainableTokenParserInterface ...$parsers) {
-            return $parsers;
-        }
+            function (ChainableTokenParserInterface ...$parsers) {
+                return $parsers;
+            }
         )(...$parsers);
     }
 
@@ -40,14 +45,15 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
      */
     public function withParser(ParserInterface $parser): self
     {
-        $clone = clone $this;
-        foreach ($clone->parsers as $index => $tokenParser) {
-            if ($tokenParser instanceof ParserAwareInterface) {
-                $clone->parsers[$index] = $tokenParser->withParser($parser);
-            }
+        $parsers = [];
+        foreach ($this->parsers as $tokenParser) {
+            $parsers[] = ($tokenParser instanceof ParserAwareInterface)
+                ? $tokenParser->withParser($parser)
+                : $tokenParser
+            ;
         }
 
-        return $clone;
+        return new self($parsers);
     }
 
     /**
@@ -61,18 +67,6 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
             }
         }
 
-        throw new ParserNotFoundException(
-            sprintf(
-                'No suitable token parser found to handle the token "%s".',
-                $token
-            )
-        );
-    }
-
-    public function __clone()
-    {
-        foreach ($this->parsers as $index => $parser) {
-            $this->parsers[$index] = clone $parser;
-        }
+        throw ParserNotFoundException::create($token);
     }
 }

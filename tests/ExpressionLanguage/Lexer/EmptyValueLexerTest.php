@@ -35,7 +35,15 @@ class EmptyValueLexerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(LexerInterface::class, $this->lexer);
     }
 
-    public function testLexEmptyStringValue()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotCLonable()
+    {
+        clone $this->lexer;
+    }
+
+    public function testLexEmptyStringIntoAnEmptyStringToken()
     {
         $expected = [
             new Token('', new TokenType(TokenType::STRING_TYPE)),

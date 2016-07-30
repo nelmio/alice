@@ -9,32 +9,33 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
-final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
+final class ParameterTokenParser implements ChainableTokenParserInterface
 {
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::SIMPLE_REFERENCE_TYPE;
+        return $token->getType()->getValue() === TokenType::PARAMETER_TYPE;
     }
 
     /**
-     * Parses "10x @user*", "<randomNumber(0, 10)x @user<{param}>*", etc.
+     * Parses '<{paramKey}>', '<{nested_<{param}>}>', etc.
      *
      * {@inheritdoc}
      */
-    public function parse(Token $token): FixtureReferenceValue
+    public function parse(Token $token): ParameterValue
     {
         $value = $token->getValue();
+        $paramKey = substr($value, 2, strlen($value) - 4);
 
-        return new FixtureReferenceValue(substr($value, 1));
+        return new ParameterValue($paramKey);
     }
 }

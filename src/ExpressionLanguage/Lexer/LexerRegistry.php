@@ -13,9 +13,12 @@ namespace Nelmio\Alice\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\Exception\ExpressionLanguage\LexException;
 use Nelmio\Alice\ExpressionLanguage\LexerInterface;
+use Nelmio\Alice\NotClonableTrait;
 
 final class LexerRegistry implements LexerInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var LexerInterface[]
      */
