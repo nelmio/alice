@@ -45,6 +45,6 @@ final class ParameterValue implements ValueInterface
      */
     public function getValue()
     {
-        return is_object($this->parameterKey) ? clone $this->parameterKey: $this->parameterKey;
+        return deep_clone($this->parameterKey);
     }
 }

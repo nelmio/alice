@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Definition;
 
 /**
  * Represents a function call that will be done on the object described by the fixtures once it has been instantiated
- * and populated.
+ * and hydrated.
  */
 interface MethodCallInterface
 {

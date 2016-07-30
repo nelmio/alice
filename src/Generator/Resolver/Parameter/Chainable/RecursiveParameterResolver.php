@@ -79,7 +79,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
      *
      * {@inheritdoc}
      *
-     * @param bool|int|float $parameter
+     * @param Parameter $parameter
      *
      * @throws RecursionLimitReachedException
      */

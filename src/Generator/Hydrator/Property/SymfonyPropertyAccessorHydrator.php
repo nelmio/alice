@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Hydrator;
+namespace Nelmio\Alice\Generator\Hydrator\Property;
 
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
-use Nelmio\Alice\Generator\HydratorInterface;
+use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-final class PropertyAccessorHydrator implements HydratorInterface
+final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
 {
     use NotClonableTrait;
 

@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Definition;
 
 /**
  * Value object containing all the elements necessary to define how the object described by the fixture must be
- * instantiated, populated and initialized.
+ * instantiated, hydrated and initialized.
  */
 final class SpecificationBag
 {

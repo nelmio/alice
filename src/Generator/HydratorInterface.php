@@ -2,27 +2,30 @@
 
 /*
  * This file is part of the Alice package.
- *
+ *  
  * (c) Nelmio <hello@nelm.io>
- *
+ *  
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 namespace Nelmio\Alice\Generator;
 
-use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\ObjectInterface;
+use Nelmio\Alice\Throwable\HydrationThrowable;
 
 interface HydratorInterface
 {
     /**
-     * Hydrate the object with the provided.
+     * Hydrates the given object. Has access to the current fixture set and returns the new fixture set containing the
+     * hydrated object.
      *
-     * @param ObjectInterface $object
-     * @param Property        $property
+     * @param ObjectInterface    $object Object to hydrate
+     * @param ResolvedFixtureSet $fixtureSet
      *
-     * @return ObjectInterface
+     * @throws HydrationThrowable
+     *
+     * @return ResolvedFixtureSet
      */
-    public function hydrate(ObjectInterface $object, Property $property): ObjectInterface;
+    public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet;
 }

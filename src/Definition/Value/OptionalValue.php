@@ -49,7 +49,7 @@ final class OptionalValue implements ValueInterface
                 sprintf(
                     'Expected quantifier to be either a scalar value or an instance of "%s". Got "%s" instead.',
                     ValueInterface::class,
-                    is_object($quantifier)? get_class($quantifier) : gettype($quantifier)
+                    is_object($quantifier) ? get_class($quantifier) : gettype($quantifier)
                 )
             );
         }
