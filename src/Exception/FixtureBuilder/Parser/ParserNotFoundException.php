@@ -11,9 +11,7 @@
 
 namespace Nelmio\Alice\Exception\FixtureBuilder\Parser;
 
-use Nelmio\Alice\Throwable\ParseThrowable;
-
-class ParserNotFoundException extends \RuntimeException implements ParseThrowable
+class ParserNotFoundException extends \LogicException
 {
     public static function create(string $file): self
     {

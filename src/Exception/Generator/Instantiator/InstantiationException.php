@@ -16,7 +16,7 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 class InstantiationException extends \RuntimeException implements InstantiationThrowable
 {
-    public static function create(FixtureInterface $fixture, \Throwable $previous)
+    public static function create(FixtureInterface $fixture, \Throwable $previous = null)
     {
         return new static(
             sprintf(

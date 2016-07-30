@@ -18,6 +18,11 @@ use Nelmio\Alice\Throwable\DenormalizationThrowable;
  */
 class UnexpectedValueExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    public function testIsARuntimeException()
+    {
+        $this->assertTrue(is_a(UnexpectedValueException::class, \RuntimeException::class, true));
+    }
+
     public function testIsADenormalizationThrowable()
     {
         $this->assertTrue(is_a(UnexpectedValueException::class, DenormalizationThrowable::class, true));

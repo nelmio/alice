@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser;
 
-class FlagParserNotFoundException extends \RuntimeException
+class FlagParserNotFoundException extends \LogicException
 {
     public static function create(string $element): self
     {

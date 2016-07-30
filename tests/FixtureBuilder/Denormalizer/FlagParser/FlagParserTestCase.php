@@ -115,7 +115,7 @@ abstract class FlagParserTestCase extends \PHPUnit_Framework_TestCase
         try {
             $this->parser->parse($element);
             $this->fail('Expected exception to be thrown.');
-        } catch (\RuntimeException $exception) {
+        } catch (\LogicException $exception) {
             // expected
         }
     }

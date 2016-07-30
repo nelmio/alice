@@ -56,7 +56,7 @@ class RangeNameDenormalizerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\Fixture\Chainable\DenormalizerNotFoundException
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalizeTemporaryFixture" to be called only if it has a denormalizer.
      */
     public function testCannotDenormalizerIfHasNoDenormalizer()
