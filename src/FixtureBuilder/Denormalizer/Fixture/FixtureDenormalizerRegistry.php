@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerNotFoundException;
+use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
@@ -66,11 +66,6 @@ final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
             }
         }
 
-        throw new FixtureDenormalizerNotFoundException(
-            sprintf(
-                'No suitable fixture denormalizer found to handle the fixture with the reference "%s".',
-                $fixtureId
-            )
-        );
+        throw DenormalizerNotFoundException::createForFixture($fixtureId);
     }
 }

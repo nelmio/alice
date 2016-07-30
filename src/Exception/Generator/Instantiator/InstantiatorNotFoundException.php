@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\Generator\Instantiator;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
-class InstantiatorNotFoundException extends \RuntimeException implements InstantiationThrowable
+class InstantiatorNotFoundException extends \LogicException implements InstantiationThrowable
 {
     public static function create(FixtureInterface $fixture): self
     {

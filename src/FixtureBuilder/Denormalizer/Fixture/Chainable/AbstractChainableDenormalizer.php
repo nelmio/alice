@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\Fixture\Chainable\DenormalizerNotFoundException;
+use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
@@ -57,7 +57,7 @@ abstract class AbstractChainableDenormalizer implements ChainableFixtureDenormal
     ): array
     {
         if (null === $this->denormalizer) {
-            throw DenormalizerNotFoundException::create(__METHOD__);
+            throw DenormalizerNotFoundException::createUnexpectedCall(__METHOD__);
         }
 
         $tempFixtureId = uniqid('temporary_id');
