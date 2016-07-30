@@ -37,7 +37,7 @@ final class MethodReferenceTokenParser extends AbstractChainableParserAwareParse
 
         $explodedValue = explode('->', $token->getValue());
         if (count($explodedValue) !== 2) {
-            throw ParseException::create($token->getValue());
+            throw ParseException::createForToken($token);
         }
 
         $reference = $this->parser->parse($explodedValue[0]);

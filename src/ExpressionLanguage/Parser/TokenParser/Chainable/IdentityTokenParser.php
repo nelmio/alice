@@ -36,12 +36,7 @@ final class IdentityTokenParser extends AbstractChainableParserAwareParser
 
         $realValue = preg_replace('/<\((.*)\)>/', '<identity($1)>', $token->getValue());
         if (null === $realValue) {
-            throw new ParseException(
-                sprintf(
-                    'Could not parse the value "%s".',
-                    $token->getValue()
-                )
-            );
+            throw ParseException::createForToken($token);
         }
 
         return $this->parser->parse($realValue);

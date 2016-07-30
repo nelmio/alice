@@ -20,13 +20,13 @@ use Nelmio\Alice\ExpressionLanguage\TokenType;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser
+ * @covers Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable\IdentityTokenParser
  */
-class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
+class IdentityTokenParserTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAChainableTokenParser()
     {
-        $this->assertTrue(is_a(DynamicArrayTokenParser::class, ChainableTokenParserInterface::class, true));
+        $this->assertTrue(is_a(IdentityTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     /**
@@ -34,14 +34,14 @@ class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new DynamicArrayTokenParser();
+        clone new IdentityTokenParser();
     }
 
-    public function testCanParseDynamicArrayTokens()
+    public function testCanParseIdentityTokens()
     {
-        $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-        $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
-        $parser = new DynamicArrayTokenParser();
+        $token = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
+        $anotherToken = new Token('', new TokenType(TokenType::ESCAPED_ARROW_TYPE));
+        $parser = new IdentityTokenParser();
 
         $this->assertTrue($parser->canParse($token));
         $this->assertFalse($parser->canParse($anotherToken));
@@ -53,41 +53,28 @@ class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
     {
-        $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-        $parser = new DynamicArrayTokenParser();
+        $token = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
+        $parser = new IdentityTokenParser();
 
         $parser->parse($token);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the dynamic array "".
-     */
-    public function testThrowsAnExceptionIfCouldNotParseToken()
+    public function testUsesDecoratedParserToParseTokenReturnsADynamicArrayIfCanParseToken()
     {
-        $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-        $parser = new DynamicArrayTokenParser(new FakeParser());
-
-        $parser->parse($token);
-    }
-
-    public function testReturnsADynamicArrayIfCanParseToken()
-    {
-        $token = new Token('10x @user', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
+        $token = new Token('<( foo )>', new TokenType(TokenType::IDENTITY_TYPE));
 
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse('10')->willReturn('parsed_quantifier');
-        $decoratedParserProphecy->parse('@user')->willReturn('parsed_element');
+        $decoratedParserProphecy->parse('<identity( foo )>')->willReturn('parsed_function');
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $expected = new DynamicArrayValue('parsed_quantifier', 'parsed_element');
+        $expected = 'parsed_function';
 
-        $parser = new DynamicArrayTokenParser($decoratedParser);
+        $parser = new IdentityTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
         $this->assertEquals($expected, $actual);
 
-        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 }

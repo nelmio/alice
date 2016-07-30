@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -37,32 +37,31 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
         parent::parse($token);
 
         if (1 !== preg_match('/^<(?<function>.+?)\((?<arguments>.*)\)>$/', $token->getValue(), $matches)) {
-            throw new ParseException(
-                sprintf(
-                    'Could not parse the function "%s".',
-                    $token->getValue()
-                )
-            );
+            throw ParseException::createForToken($token);
         }
 
         $function = $matches['function'];
         $arguments = ('identity' === $function)
             ? [$matches['arguments']]
-            : $this->parseArguments($this->parser, $matches['arguments'])
+            : $this->parseArguments($this->parser, $function, trim($matches['arguments']))
         ;
 
         return new FunctionCallValue($function, $arguments);
     }
 
-    private function parseArguments(ParserInterface $parser, string $arguments)
+    private function parseArguments(ParserInterface $parser, string $function, string $arguments)
     {
         if ('' === $arguments) {
             return null;
         }
 
+        if ('identity' === $function) {
+            return $arguments;
+        }
+
         $arguments = preg_split('/\s*,\s*/', $arguments);
         foreach ($arguments as $index => $argument) {
-            $arguments[$index] = $parser->parse($argument);
+            $arguments[$index] = $parser->parse(trim($argument));
         }
 
         return $arguments;

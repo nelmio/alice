@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -37,7 +37,7 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
 
         $explodedValue = explode('->', $token->getValue());
         if (count($explodedValue) !== 2) {
-            throw ParseException::create($token->getValue());
+            throw ParseException::createForToken($token);
         }
 
         $reference = $this->parser->parse($explodedValue[0]);

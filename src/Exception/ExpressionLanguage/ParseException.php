@@ -11,16 +11,18 @@
 
 namespace Nelmio\Alice\Exception\ExpressionLanguage;
 
+use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\Throwable\ParseThrowable;
 
 class ParseException extends \Exception implements ParseThrowable
 {
-    public static function create(string $value)
+    public static function createForToken(Token $token)
     {
         return new static(
             sprintf(
-                'Could not lex the value "%s".',
-                $value
+                'Could not parse the token "%s" (type: %s).',
+                $token->getValue(),
+                $token->getType()->getValue()
             )
         );
     }

@@ -14,9 +14,12 @@ namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
+use Nelmio\Alice\NotClonableTrait;
 
 final class EscapedTokenParser implements ChainableTokenParserInterface
 {
+    use NotClonableTrait;
+
     const SUPPORTED_TYPES = [
         TokenType::ESCAPED_ARROW_TYPE => true,
         TokenType::ESCAPED_REFERENCE_TYPE => true,

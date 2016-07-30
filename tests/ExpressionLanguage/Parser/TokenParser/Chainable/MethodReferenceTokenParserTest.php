@@ -20,13 +20,13 @@ use Nelmio\Alice\ExpressionLanguage\TokenType;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser
+ * @covers Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable\MethodReferenceTokenParser
  */
-class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
+class MethodReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAChainableTokenParser()
     {
-        $this->assertTrue(is_a(DynamicArrayTokenParser::class, ChainableTokenParserInterface::class, true));
+        $this->assertTrue(is_a(MethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     /**
@@ -34,14 +34,14 @@ class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new DynamicArrayTokenParser();
+        clone new MethodReferenceTokenParser();
     }
 
-    public function testCanParseDynamicArrayTokens()
+    public function testCanParseMethodTokens()
     {
-        $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
+        $token = new Token('', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
-        $parser = new DynamicArrayTokenParser();
+        $parser = new MethodReferenceTokenParser();
 
         $this->assertTrue($parser->canParse($token));
         $this->assertFalse($parser->canParse($anotherToken));
@@ -54,7 +54,7 @@ class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
     {
         $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-        $parser = new DynamicArrayTokenParser();
+        $parser = new MethodReferenceTokenParser();
 
         $parser->parse($token);
     }
@@ -65,8 +65,8 @@ class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsAnExceptionIfCouldNotParseToken()
     {
-        $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-        $parser = new DynamicArrayTokenParser(new FakeParser());
+        $token = new Token('', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
+        $parser = new MethodReferenceTokenParser(new FakeParser());
 
         $parser->parse($token);
     }
@@ -83,7 +83,7 @@ class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
 
         $expected = new DynamicArrayValue('parsed_quantifier', 'parsed_element');
 
-        $parser = new DynamicArrayTokenParser($decoratedParser);
+        $parser = new MethodReferenceTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
         $this->assertEquals($expected, $actual);
