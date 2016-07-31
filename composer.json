@@ -25,7 +25,6 @@
         "myclabs/deep-copy": "^1.5"
     },
     "require-dev": {
-        "doctrine/common": "^2.3",
         "phpunit/phpunit": "^5.2",
         "symfony/phpunit-bridge": "^3.0",
         "symfony/property-access": "^2.2||^3.0"

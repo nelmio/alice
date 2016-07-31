@@ -45,20 +45,16 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
         $function = $matches['function'];
         $arguments = ('identity' === $function)
             ? [$matches['arguments']]
-            : $this->parseArguments($this->parser, $function, trim($matches['arguments']))
+            : $this->parseArguments($this->parser, trim($matches['arguments']))
         ;
 
         return new FunctionCallValue($function, $arguments);
     }
 
-    private function parseArguments(ParserInterface $parser, string $function, string $arguments)
+    private function parseArguments(ParserInterface $parser, string $arguments)
     {
         if ('' === $arguments) {
             return null;
-        }
-
-        if ('identity' === $function) {
-            return $arguments;
         }
 
         $arguments = preg_split('/\s*,\s*/', $arguments);
