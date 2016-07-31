@@ -28,7 +28,6 @@ use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Throwable\ParseThrowable;
 
 /**
- * @coversNothing
  * @group integration
  */
 class ParserIntegrationTest extends \PHPUnit_Framework_TestCase

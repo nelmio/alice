@@ -35,7 +35,8 @@ install:
 script:
   - |
     if [ -n "$COVERAGE" ]; then
-        phpdbg -qrr vendor/bin/phpunit --testdox --verbose
+        phpdbg -qrr vendor/bin/phpunit --verbose --testdox --coverage-text --exclude-group=integration
+        phpdbg -qrr vendor/bin/phpunit --verbose --coverage-text --group=integration
     else
         vendor/bin/phpunit
     fi;

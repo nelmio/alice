@@ -17,7 +17,6 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Loader\NativeLoader;
 
 /**
- * @coversNothing
  * @group integration
  */
 class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
