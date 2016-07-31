@@ -51,8 +51,7 @@ class ListNameDenormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $denormalizer = new ListNameDenormalizer();
-        clone $denormalizer;
+        clone new ListNameDenormalizer();
     }
 
     /**

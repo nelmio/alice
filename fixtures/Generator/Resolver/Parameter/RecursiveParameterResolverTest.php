@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use Nelmio\Alice\NotCallableTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -20,11 +21,16 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
 final class ImmutableDummyChainableResolverAwareResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
+    use NotCallableTrait;
+
+    /**
+     * @var ParameterResolverInterface
+     */
     public $resolver;
 
     public function canResolve(Parameter $parameter): bool
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     public function withResolver(ParameterResolverInterface $resolver)
@@ -41,7 +47,7 @@ final class ImmutableDummyChainableResolverAwareResolver implements ChainablePar
         ParameterBag $resolvedParameters
     ): ParameterBag
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }
 

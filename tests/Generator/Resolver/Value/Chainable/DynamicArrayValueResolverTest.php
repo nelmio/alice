@@ -72,7 +72,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BadMethodCallException
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver::resolve" to be called only if it has a resolver.
      */
     public function testCannotResolveValueIfHasNoResolver()
@@ -80,6 +80,15 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new DynamicArrayValue('', '');
         $resolver = new DynamicArrayValueResolver();
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Expected limit value to be a strictly positive integer, got "0" instead.
+     */
+    public function testThrowsAnExceptionIfAnInvalidLimitIsGiven()
+    {
+        new DynamicArrayValueResolver(null, 0);
     }
 
     public function testIfQuantifierIsAValueThenItWillBeResolvedAsWell()

@@ -13,13 +13,12 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\NotClonableTrait;
-use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 final class NullConstructorInstantiator extends AbstractChainableInstantiator
 {
-    use NotClonableTrait;
-
+    /**
+     * @inheritdoc
+     */
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         return null === $fixture->getSpecs()->getConstructor();

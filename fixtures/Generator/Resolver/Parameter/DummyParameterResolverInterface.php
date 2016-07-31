@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use Nelmio\Alice\NotCallableTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
@@ -20,12 +21,14 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
  */
 final class DummyParameterResolverInterface implements ParameterResolverInterface
 {
+    use NotCallableTrait;
+
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters
     ): ParameterBag
     {
-        throw new \BadMethodCallException();
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

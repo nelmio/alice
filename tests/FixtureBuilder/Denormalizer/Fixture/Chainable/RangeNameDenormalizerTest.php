@@ -51,8 +51,7 @@ class RangeNameDenormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $denormalizer = new RangeNameDenormalizer();
-        clone $denormalizer;
+        clone new RangeNameDenormalizer();
     }
 
     /**

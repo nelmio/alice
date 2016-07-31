@@ -16,12 +16,17 @@ use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 abstract class AbstractChainableInstantiator implements ChainableInstantiatorInterface
 {
+    use NotClonableTrait;
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @throws InstantiationException
      */
     public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {
