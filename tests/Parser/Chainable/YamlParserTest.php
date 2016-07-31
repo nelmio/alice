@@ -163,7 +163,7 @@ EOF;
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException
+     * @expectedException \Nelmio\Alice\Exception\Parser\ParseException
      * @expectedExceptionMessageRegExp /^The file ".+\/basic\.yml" does not contain valid YAML\.$/
      */
     public function testThrowsAnExceptionIfFileNotParsable()
@@ -180,7 +180,7 @@ EOF;
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException
+     * @expectedException \Nelmio\Alice\Exception\Parser\ParseException
      * @expectedExceptionMessageRegExp /^Could not parse the file ".+\/basic\.yml"\.$/
      */
     public function testThrowsAnExceptionOnUnexpectedParseException()

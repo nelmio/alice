@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Parser\Chainable;
 
-use Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException;
+use Nelmio\Alice\Exception\Parser\ParseException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
