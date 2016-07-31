@@ -20,16 +20,6 @@ class FakeAbstractChainableDenormalizer extends AbstractChainableDenormalizer
     use NotCallableTrait;
 
     /**
-     * @var AbstractChainableDenormalizer
-     */
-    private $denormalizer;
-
-    public function setProphecy(AbstractChainableDenormalizer $denormalizer)
-    {
-        $this->__call(__FUNCTION__, func_get_args());
-    }
-
-    /**
      * @inheritdoc
      */
     public function canDenormalize(string $reference): bool
@@ -48,7 +38,7 @@ class FakeAbstractChainableDenormalizer extends AbstractChainableDenormalizer
         FlagBag $flags
     ): FixtureBag
     {
-        return $this->denormalizer->denormalize($builtFixtures, $className, $fixtureId, $specs, $flags);
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**

@@ -16,7 +16,6 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver;
 
 /**
- * @coversNothing
  * @group integration
  */
 class ParameterResolverIntegrationTest extends \PHPUnit_Framework_TestCase
