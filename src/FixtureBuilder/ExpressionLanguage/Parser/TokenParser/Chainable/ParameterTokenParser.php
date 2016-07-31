@@ -47,7 +47,7 @@ final class ParameterTokenParser implements ChainableTokenParserInterface
 
             return new ParameterValue($paramKey);
         } catch (\TypeError $error) {
-            throw ParseException::createForToken($token, $error);
+            throw ParseException::createForToken($token, 0, $error);
         }
     }
 }

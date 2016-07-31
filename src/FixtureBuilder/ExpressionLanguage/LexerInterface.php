@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
-use Nelmio\Alice\Throwable\ParseThrowable;
+use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 interface LexerInterface
 {
@@ -20,7 +20,7 @@ interface LexerInterface
      *
      * @param string $value
      *
-     * @throws ParseThrowable
+     * @throws ExpressionLanguageParseThrowable
      * 
      * @return Token[]
      */

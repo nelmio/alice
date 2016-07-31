@@ -15,6 +15,7 @@ use Nelmio\Alice\Throwable\ParseThrowable;
 
 /**
  * @covers Nelmio\Alice\Exception\FixtureBuilder\Parser\ParseException
+ * @TODO: move that outside of FixtureBuilder
  */
 class ParseExceptionTest extends \PHPUnit_Framework_TestCase
 {
