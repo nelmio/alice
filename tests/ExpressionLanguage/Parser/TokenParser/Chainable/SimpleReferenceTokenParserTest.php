@@ -45,7 +45,8 @@ class SimpleReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \TypeError
+     * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParseException
+     * @expectedExceptionMessage Could not parse the token "" (type: SIMPLE_REFERENCE_TYPE).
      */
     public function testThrowsAnErrorIfAMalformedTokenIsGiven()
     {

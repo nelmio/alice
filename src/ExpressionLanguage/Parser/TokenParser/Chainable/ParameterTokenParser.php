@@ -44,10 +44,10 @@ final class ParameterTokenParser implements ChainableTokenParserInterface
         $value = $token->getValue();
         try {
             $paramKey = substr($value, 2, strlen($value) - 4);
+
+            return new ParameterValue($paramKey);
         } catch (\TypeError $error) {
             throw ParseException::createForToken($token, $error);
         }
-
-        return new ParameterValue($paramKey);
     }
 }

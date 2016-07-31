@@ -43,6 +43,18 @@ class EscapedArrayTokenParserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($parser->canParse($anotherToken));
     }
 
+    /**
+     * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParseException
+     * @expectedExceptionMessage Could not parse the token "" (type: ESCAPED_ARRAY_TYPE).
+     */
+    public function testThrowsAnErrorIfAMalformedTokenIsGiven()
+    {
+        $token = new Token('', new TokenType(TokenType::ESCAPED_ARRAY_TYPE));
+
+        $parser = new EscapedArrayTokenParser();
+        $parser->parse($token);
+    }
+
     public function testReturnsEscapedValue()
     {
         $token = new Token('[[ X ]]', new TokenType(TokenType::ESCAPED_ARRAY_TYPE));
