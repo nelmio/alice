@@ -14,7 +14,6 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
-use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\ServiceReference\DummyReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
@@ -29,7 +28,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 /**
  * @covers Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator
  */
-class FactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
+class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var StaticFactoryInstantiator
@@ -46,6 +45,9 @@ class FactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(StaticFactoryInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
+    /**
+     * @expectedException \DomainException
+     */
     public function testIsNotClonable()
     {
         clone $this->instantiator;
@@ -130,7 +132,7 @@ class FactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could no instantiate fixture "dummy".
+     * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfCouldNotInstantiateObject()
     {
@@ -150,7 +152,7 @@ class FactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could no instantiate fixture "dummy".
+     * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfCouldNotFindFactoryMethod()
     {
@@ -170,7 +172,7 @@ class FactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could no instantiate fixture "dummy".
+     * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfCouldNotFindFactoryClass()
     {
@@ -190,7 +192,7 @@ class FactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could no instantiate fixture "dummy".
+     * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfCouldNotCallOnTheFactory()
     {

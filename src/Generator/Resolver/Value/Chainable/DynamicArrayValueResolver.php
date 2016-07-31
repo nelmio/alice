@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -117,12 +118,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
     private function checkResolver(string $checkedMethod)
     {
         if (null === $this->resolver) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'Expected method "%s" to be called only if it has a resolver.',
-                    $checkedMethod
-                )
-            );
+            throw ResolverNotFoundException::createUnexpectedCall($checkedMethod);
         }
     }
 }

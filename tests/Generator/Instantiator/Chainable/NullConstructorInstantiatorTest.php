@@ -70,7 +70,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could no instantiate fixture "dummy".
+     * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfInstantiatingObjectWithoutArgumentsFails()
     {
@@ -80,7 +80,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could no instantiate fixture "dummy".
+     * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfReflectionFailsWithAnotherErrorThanMethodNotExisting()
     {
@@ -100,7 +100,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could no instantiate fixture "dummy".
+     * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfObjectInstantiationFailsUnderNominalConditions()
     {
