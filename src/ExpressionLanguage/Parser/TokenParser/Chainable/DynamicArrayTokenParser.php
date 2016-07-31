@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
@@ -30,18 +30,15 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
      * Parses "10x @user*", "<randomNumber(0, 10)x @user<{param}>*", etc.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token): DynamicArrayValue
     {
         parent::parse($token);
 
         if (1 !== preg_match('/^(?<quantifier>\d+|<.*>)x (?<elements>.*)/', $token->getValue(), $matches)) {
-            throw new ParseException(
-                sprintf(
-                    'Could not parse the function "%s".',
-                    $token->getValue()
-                )
-            );
+            throw ParseException::createForToken($token);
         }
 
         return new DynamicArrayValue(

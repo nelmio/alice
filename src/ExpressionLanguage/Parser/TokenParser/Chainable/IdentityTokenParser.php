@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Token;
@@ -26,9 +26,11 @@ final class IdentityTokenParser extends AbstractChainableParserAwareParser
     }
 
     /**
-     * Parses '<{paramKey}>', '<{nested_<{param}>}>'.
+     * Parses expressions such as '<(something)>'.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token)
     {
@@ -36,12 +38,7 @@ final class IdentityTokenParser extends AbstractChainableParserAwareParser
 
         $realValue = preg_replace('/<\((.*)\)>/', '<identity($1)>', $token->getValue());
         if (null === $realValue) {
-            throw new ParseException(
-                sprintf(
-                    'Could not parse the value "%s".',
-                    $token->getValue()
-                )
-            );
+            throw ParseException::createForToken($token);
         }
 
         return $this->parser->parse($realValue);

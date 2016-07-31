@@ -35,7 +35,15 @@ class GlobalPatternsLexerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(LexerInterface::class, $this->lexer);
     }
 
-    public function testLexReturnsTokens()
+    /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone $this->lexer;
+    }
+
+    public function testLexValueToReturnAToken()
     {
         $expected = [
             new Token('10x @users', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
@@ -50,7 +58,7 @@ class GlobalPatternsLexerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\LexException
      * @expectedExceptionMessage Could not lex the value "th%éo".
      */
-    public function testThrowLexExceptionWhenCannotLexValue()
+    public function testThrowsAnExceptionIfCannotLexValue()
     {
         $this->lexer->lex('th%éo');
     }
@@ -59,7 +67,7 @@ class GlobalPatternsLexerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid token "foo 10x @users" found.
      */
-    public function testThrowExceptionWhenInvalidValue()
+    public function testThrowsAnExceptionWhenInvalidValue()
     {
         $this->lexer->lex('foo 10x @users');
     }

@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
@@ -18,27 +19,16 @@ use Nelmio\Alice\ExpressionLanguage\Token;
 class DummyChainableTokenParserAware implements ChainableTokenParserInterface, ParserAwareInterface
 {
     /**
-     * @var ChainableTokenParserInterface
+     * @var ParserInterface|null
      */
-    private $decoratedParser;
-
-    /**
-     * @var ParserAwareInterface
-     */
-    private $decoratedAware;
-
-    public function __construct(ChainableTokenParserInterface $decoratedParser, ParserAwareInterface $decoratedAware)
-    {
-        $this->decoratedParser = $decoratedParser;
-        $this->decoratedAware = $decoratedAware;
-    }
+    public $parser;
 
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $this->decoratedParser->canParse($token);
+        return false;
     }
 
     /**
@@ -46,7 +36,9 @@ class DummyChainableTokenParserAware implements ChainableTokenParserInterface, P
      */
     public function withParser(ParserInterface $parser)
     {
-        return $this->decoratedAware->withParser($parser);
+        $this->parser = $parser;
+
+        return $this;
     }
 
     /**
@@ -54,6 +46,6 @@ class DummyChainableTokenParserAware implements ChainableTokenParserInterface, P
      */
     public function parse(Token $token)
     {
-        return $this->decoratedParser->parse($token);
+        return '';
     }
 }

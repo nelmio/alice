@@ -9,14 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+declare(strict_types=1);
 
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
+
+use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
+use Nelmio\Alice\NotClonableTrait;
 
 final class EscapedArrayTokenParser implements ChainableTokenParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * @inheritdoc
      */
@@ -26,14 +32,20 @@ final class EscapedArrayTokenParser implements ChainableTokenParserInterface
     }
 
     /**
-     * Parses '<<param>>' into '<param>'.
+     * Parses '[[X]]'.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token): string
     {
         $value = $token->getValue();
 
-        return substr($value, 1, strlen($value) - 2);
+        try {
+            return substr($value, 1, strlen($value) - 2);
+        } catch (\TypeError $error) {
+            throw ParseException::createForToken($token, $error);
+        }
     }
 }

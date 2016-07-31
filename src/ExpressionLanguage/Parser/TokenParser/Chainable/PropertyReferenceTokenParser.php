@@ -9,9 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
+use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
@@ -30,6 +31,8 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
      * Parses tokens values like "@user->username".
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token): FixturePropertyValue
     {
@@ -37,14 +40,17 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
 
         $explodedValue = explode('->', $token->getValue());
         if (count($explodedValue) !== 2) {
-            throw ParseException::create($token->getValue());
+            throw ParseException::createForToken($token);
         }
 
         $reference = $this->parser->parse($explodedValue[0]);
+        if ($reference instanceof FixtureReferenceValue) {
+            return new FixturePropertyValue(
+                $reference,
+                $explodedValue[1]
+            );
+        }
 
-        return new FixturePropertyValue(
-            $reference,
-            $explodedValue[1]
-        );
+        throw ParseException::createForToken($token);
     }
 }

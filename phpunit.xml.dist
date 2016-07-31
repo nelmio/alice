@@ -38,6 +38,8 @@
             <file>tests/Generator/ResolvedValueWithFixtureSetTest.php</file>
             <file>tests/Generator/Resolver/Fixture/TemplatingFixtureBagTest.php</file>
             <file>tests/Generator/Resolver/UniqueValuesPoolTest.php</file>
+            <file>tests/ExpressionLanguage/TokenTypeTest.php</file>
+            <file>tests/ExpressionLanguage/TokenTest.php</file>
         </testsuite>
         <testsuite name="Independent tests">
             <directory>tests/</directory>

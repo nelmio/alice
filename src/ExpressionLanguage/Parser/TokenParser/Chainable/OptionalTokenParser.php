@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
@@ -18,6 +18,10 @@ use Nelmio\Alice\ExpressionLanguage\TokenType;
 
 final class OptionalTokenParser extends AbstractChainableParserAwareParser
 {
+    //TODO: review those kinds of constants and consider making them internals
+    /** @internal */
+    const REGEX = '/^(?<quantifier>\d+|\d*\.\d+|<.+>)%\? (?<first_member>[^:]+)(?:\: (?<second_member>[^\ ]+))?/';
+
     /**
      * @inheritdoc
      */
@@ -27,26 +31,18 @@ final class OptionalTokenParser extends AbstractChainableParserAwareParser
     }
 
     /**
-     * Parses "10x @user*", "<randomNumber(0, 10)x @user<{param}>*", etc.
+     * Parses expressions such as '60%? foo: bar'.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token): OptionalValue
     {
         parent::parse($token);
 
-        if (1 !== preg_match(
-                '/^(?<quantifier>\d+|\d*\.\d+|<.+>)%\? (?<first_member>[^:]+)(?:\: (?<second_member>[^\ ]+))?/',
-                $token->getValue(),
-                $matches
-            )
-        ) {
-            throw new ParseException(
-                sprintf(
-                    'Could not parse the value "%s".',
-                    $token->getValue()
-                )
-            );
+        if (1 !== preg_match(self::REGEX, $token->getValue(), $matches)) {
+            throw ParseException::createForToken($token);
         }
 
         return new OptionalValue(

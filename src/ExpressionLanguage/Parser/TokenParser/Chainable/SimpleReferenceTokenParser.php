@@ -9,15 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+declare(strict_types=1);
+
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
+use Nelmio\Alice\NotClonableTrait;
 
 final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * @inheritdoc
      */
@@ -27,7 +33,7 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
     }
 
     /**
-     * Parses "10x @user*", "<randomNumber(0, 10)x @user<{param}>*", etc.
+     * Parses expressions such as "@user".
      *
      * {@inheritdoc}
      */
@@ -35,6 +41,10 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
     {
         $value = $token->getValue();
 
-        return new FixtureReferenceValue(substr($value, 1));
+        try {
+            return new FixtureReferenceValue(substr($value, 1));
+        } catch (\TypeError $error) {
+            throw ParseException::createForToken($token, $error);
+        }
     }
 }

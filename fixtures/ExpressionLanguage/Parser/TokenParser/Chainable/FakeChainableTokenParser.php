@@ -9,20 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
-use Nelmio\Alice\ExpressionLanguage\TokenType;
+use Nelmio\Alice\NotCallableTrait;
 
-final class StringTokenParser implements ChainableTokenParserInterface
+class FakeChainableTokenParser implements ChainableTokenParserInterface
 {
+    use NotCallableTrait;
+
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::STRING_TYPE;
+        $this->__call(__METHOD__, func_get_args());
     }
 
     /**
@@ -30,6 +32,6 @@ final class StringTokenParser implements ChainableTokenParserInterface
      */
     public function parse(Token $token)
     {
-        return $token->getValue();
+        $this->__call(__METHOD__, func_get_args());
     }
 }

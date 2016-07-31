@@ -9,8 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+declare(strict_types=1);
 
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
+
+use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
@@ -35,22 +38,26 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
         parent::parse($token);
 
         $value = $token->getValue();
-        $elements = substr($value, 1, strlen($value) - 2);
+        try {
+            $elements = substr($value, 1, strlen($value) - 2);
 
-        return $this->parseElements($this->parser, $elements);
+            return $this->parseElements($this->parser, $elements);
+        } catch (\TypeError $error) {
+            throw ParseException::createForToken($token);
+        }
     }
 
-    private function parseElements(ParserInterface $parser, string $arguments)
+    private function parseElements(ParserInterface $parser, string $elements)
     {
-        if ('' === $arguments) {
-            return null;
+        if ('' === $elements) {
+            return [];
         }
 
-        $arguments = preg_split('/\s*,\s*/', $arguments);
-        foreach ($arguments as $index => $argument) {
-            $arguments[$index] = $parser->parse($argument);
+        $elements = preg_split('/\s*,\s*/', $elements);
+        foreach ($elements as $index => $argument) {
+            $elements[$index] = $parser->parse(trim($argument));
         }
 
-        return $arguments;
+        return $elements;
     }
 }

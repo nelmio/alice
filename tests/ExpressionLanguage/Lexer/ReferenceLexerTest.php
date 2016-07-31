@@ -34,10 +34,18 @@ class ReferenceLexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \DomainException
+     */
+    public function testIsNotClonable()
+    {
+        clone $this->lexer;
+    }
+
+    /**
      * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\LexException
      * @expectedExceptionMessage Could not lex the value "@ ".
      */
-    public function testThrowLexExceptionWhenCannotLexValue()
+    public function testThrowsAnExceptionIfCannotLexValue()
     {
         $this->lexer->lex('@ ');
     }
@@ -46,7 +54,7 @@ class ReferenceLexerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid token "@u->" found.
      */
-    public function testThrowExceptionWhenInvalidValue()
+    public function testThrowsAnExceptionWhenAnInvalidValueIsGiven()
     {
         $this->lexer->lex('@u->');
     }

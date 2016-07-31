@@ -9,15 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+declare(strict_types=1);
+
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\VariableValue;
+use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
+use Nelmio\Alice\NotClonableTrait;
 
 final class VariableTokenParser implements ChainableTokenParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * @inheritdoc
      */
@@ -27,10 +33,18 @@ final class VariableTokenParser implements ChainableTokenParserInterface
     }
 
     /**
-     * @inheritdoc
+     * Parses expressions such as '$username'.
+     *
+     * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token)
     {
-        return new VariableValue(substr($token->getValue(), 1));
+        try {
+            return new VariableValue(substr($token->getValue(), 1));
+        } catch (\TypeError $error) {
+            throw ParseException::createForToken($token, $error);
+        }
     }
 }

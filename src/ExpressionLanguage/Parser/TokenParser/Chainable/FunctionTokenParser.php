@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
@@ -28,41 +28,42 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
     }
 
     /**
-     * Parses '<{paramKey}>', '<{nested_<{param}>}>'.
+     * Parses expressions such as '<foo()>', '<foo(arg1, arg2)>'.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token): FunctionCallValue
     {
         parent::parse($token);
 
         if (1 !== preg_match('/^<(?<function>.+?)\((?<arguments>.*)\)>$/', $token->getValue(), $matches)) {
-            throw new ParseException(
-                sprintf(
-                    'Could not parse the function "%s".',
-                    $token->getValue()
-                )
-            );
+            throw ParseException::createForToken($token);
         }
 
         $function = $matches['function'];
         $arguments = ('identity' === $function)
             ? [$matches['arguments']]
-            : $this->parseArguments($this->parser, $matches['arguments'])
+            : $this->parseArguments($this->parser, $function, trim($matches['arguments']))
         ;
 
         return new FunctionCallValue($function, $arguments);
     }
 
-    private function parseArguments(ParserInterface $parser, string $arguments)
+    private function parseArguments(ParserInterface $parser, string $function, string $arguments)
     {
         if ('' === $arguments) {
             return null;
         }
 
+        if ('identity' === $function) {
+            return $arguments;
+        }
+
         $arguments = preg_split('/\s*,\s*/', $arguments);
         foreach ($arguments as $index => $argument) {
-            $arguments[$index] = $parser->parse($argument);
+            $arguments[$index] = $parser->parse(trim($argument));
         }
 
         return $arguments;

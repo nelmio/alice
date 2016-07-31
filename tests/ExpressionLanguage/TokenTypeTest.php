@@ -27,8 +27,13 @@ class TokenTypeTest extends \PHPUnit_Framework_TestCase
         $this->constants = $reflClass->getConstants();
     }
 
+    public function testIsImmutable()
+    {
+        $this->assertTrue(true, 'Nothing to do.');
+    }
+
     /**
-     * Test that the static values used to control the input are grouping all the constants.
+     * @testdox Test that the static values used to control the input are grouping all the constants.
      */
     public function testStaticValues()
     {
@@ -47,7 +52,7 @@ class TokenTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideAcceptableTypes
      */
-    public function testCreateType(string $typeConstant)
+    public function testCanCreateType(string $typeConstant)
     {
         $type = new TokenType($typeConstant);
         $this->assertEquals($type->getValue(), constant(sprintf('%s::%s', TokenType::class, $typeConstant)));
@@ -57,7 +62,7 @@ class TokenTypeTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Expected type to be a known token type but got "unknown".
      */
-    public function testCreateInvalidType()
+    public function testThrowsAnExceptionIfAnInvalidTypeIsGiven()
     {
         new TokenType('unknown');
     }

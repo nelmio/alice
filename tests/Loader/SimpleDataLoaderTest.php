@@ -35,8 +35,7 @@ class SimpleDataLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        $loader = new SimpleDataLoader(new FakeFixtureBuilder(), new FakeGenerator());
-        clone $loader;
+        clone new SimpleDataLoader(new FakeFixtureBuilder(), new FakeGenerator());
     }
 
     public function testLoadAFileAndReturnsAnObjectSet()

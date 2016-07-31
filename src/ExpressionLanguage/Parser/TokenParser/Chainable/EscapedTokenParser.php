@@ -9,14 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
+use Nelmio\Alice\NotClonableTrait;
 
 final class EscapedTokenParser implements ChainableTokenParserInterface
 {
+    use NotClonableTrait;
+
     const SUPPORTED_TYPES = [
         TokenType::ESCAPED_ARROW_TYPE => true,
         TokenType::ESCAPED_REFERENCE_TYPE => true,
@@ -38,6 +42,11 @@ final class EscapedTokenParser implements ChainableTokenParserInterface
      */
     public function parse(Token $token): string
     {
-        return $token->getValue()[0];
+        $value = $token->getValue();
+        if ('' === $value) {
+            throw ParseException::createForToken($token);
+        }
+
+        return $value[0];
     }
 }

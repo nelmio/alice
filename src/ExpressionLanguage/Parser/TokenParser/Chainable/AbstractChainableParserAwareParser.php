@@ -9,29 +9,35 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\ExpressionLanguage\Parser\Chainable;
+namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Exception\ExpressionLanguage\ParserNotFoundException;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
+use Nelmio\Alice\NotClonableTrait;
 
 abstract class AbstractChainableParserAwareParser implements ChainableTokenParserInterface, ParserAwareInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ParserInterface|null
      */
     protected $parser;
+
+    public function __construct(ParserInterface $parser = null)
+    {
+        $this->parser = $parser;
+    }
 
     /**
      * @inheritdoc
      */
     public function withParser(ParserInterface $parser): self
     {
-        $clone = clone $this;
-        $clone->parser = $parser;
-
-        return $clone;
+        return new static($parser);
     }
 
     /**
@@ -40,19 +46,7 @@ abstract class AbstractChainableParserAwareParser implements ChainableTokenParse
     public function parse(Token $token)
     {
         if (null === $this->parser) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'Expected method "%s" to be called only if it has a parser.',
-                    __METHOD__
-                )
-            );
-        }
-    }
-
-    public function __clone()
-    {
-        if (null !== $this->parser) {
-            $this->parser = clone $this->parser;
+            throw ParserNotFoundException::createUnexpectedCall(__METHOD__);
         }
     }
 }
