@@ -26,9 +26,11 @@ final class IdentityTokenParser extends AbstractChainableParserAwareParser
     }
 
     /**
-     * Parses '<{paramKey}>', '<{nested_<{param}>}>'.
+     * Parses expressions such as '<(something)>'.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token)
     {

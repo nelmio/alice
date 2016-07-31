@@ -11,7 +11,9 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Definition\Value\DynamicArrayValue;
+use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
+use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
@@ -61,7 +63,7 @@ class MethodReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the dynamic array "".
+     * @expectedExceptionMessage Could not parse the token "" (type: METHOD_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfCouldNotParseToken()
     {
@@ -71,17 +73,69 @@ class MethodReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
         $parser->parse($token);
     }
 
-    public function testReturnsADynamicArrayIfCanParseToken()
+    /**
+     * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParseException
+     * @expectedExceptionMessage Could not parse the token "@@malformed_user->getUserName(arg1, arg2)" (type: METHOD_REFERENCE_TYPE).
+     */
+    public function testThrowsAnExceptionIfParsingReferenceGivesAnUnexpectedResult()
     {
-        $token = new Token('10x @user', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
+        $token = new Token('@@malformed_user->getUserName(arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse('10')->willReturn('parsed_quantifier');
-        $decoratedParserProphecy->parse('@user')->willReturn('parsed_element');
+        $decoratedParserProphecy->parse('@@malformed_user')->willReturn('string value')
+        ;
+        $decoratedParserProphecy
+            ->parse('<getUserName(arg1, arg2)>')
+            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']))
+        ;
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $expected = new DynamicArrayValue('parsed_quantifier', 'parsed_element');
+        $parser = new MethodReferenceTokenParser($decoratedParser);
+        $parser->parse($token);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParseException
+     * @expectedExceptionMessage Could not parse the token "@user->getUserName((arg1, arg2)" (type: METHOD_REFERENCE_TYPE).
+     */
+    public function testThrowsAnExceptionIfParsingFunctionCallGivesAnUnexpectedResult()
+    {
+        $token = new Token('@user->getUserName((arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy
+            ->parse('@user')
+            ->willReturn($reference = new FixtureReferenceValue('user'))
+        ;
+        $decoratedParserProphecy
+            ->parse('<getUserName((arg1, arg2)>')
+            ->willReturn('string value')
+        ;
+        /** @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $parser = new MethodReferenceTokenParser($decoratedParser);
+        $parser->parse($token);
+    }
+
+    public function testReturnsAFixtureMethodCallValueIfCanParseToken()
+    {
+        $token = new Token('@user->getUserName(arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy
+            ->parse('@user')
+            ->willReturn($reference = new FixtureReferenceValue('user'))
+        ;
+        $decoratedParserProphecy
+            ->parse('<getUserName(arg1, arg2)>')
+            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']))
+        ;
+        /** @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $expected = new FixtureMethodCallValue($reference, $call);
 
         $parser = new MethodReferenceTokenParser($decoratedParser);
         $actual = $parser->parse($token);

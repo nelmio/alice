@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-if (false === function_exists('clone_if_object')) {
+if (false === function_exists('deep_clone')) {
     /**
      * Deep clone the given value.
      *

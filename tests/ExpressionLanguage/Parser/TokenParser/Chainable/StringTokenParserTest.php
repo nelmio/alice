@@ -16,13 +16,13 @@ use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
 /**
- * @covers Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedArrayTokenParser
+ * @covers Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable\StringTokenParser
  */
-class EscapedArrayTokenParserTest extends \PHPUnit_Framework_TestCase
+class StringTokenParserTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAChainableTokenParser()
     {
-        $this->assertTrue(is_a(EscapedArrayTokenParser::class, ChainableTokenParserInterface::class, true));
+        $this->assertTrue(is_a(StringTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     /**
@@ -30,25 +30,25 @@ class EscapedArrayTokenParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new EscapedArrayTokenParser();
+        clone new StringTokenParser();
     }
 
-    public function testCanParseEscapedArrayTokens()
+    public function testCanParseDynamicArrayTokens()
     {
-        $token = new Token('', new TokenType(TokenType::ESCAPED_ARRAY_TYPE));
+        $token = new Token('', new TokenType(TokenType::STRING_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
-        $parser = new EscapedArrayTokenParser();
+        $parser = new StringTokenParser();
 
         $this->assertTrue($parser->canParse($token));
         $this->assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testReturnsEscapedValue()
+    public function testReturnsTheTokenValue()
     {
-        $token = new Token('[[ X ]]', new TokenType(TokenType::ESCAPED_ARRAY_TYPE));
-        $expected = '[ X ]';
+        $token = new Token(' foo ', new TokenType(TokenType::STRING_TYPE));
+        $expected = ' foo ';
 
-        $parser = new EscapedArrayTokenParser();
+        $parser = new StringTokenParser();
         $actual = $parser->parse($token);
 
         $this->assertEquals($expected, $actual);

@@ -11,9 +11,7 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\ExpressionLanguage\Parser\FakeParser;
-use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 

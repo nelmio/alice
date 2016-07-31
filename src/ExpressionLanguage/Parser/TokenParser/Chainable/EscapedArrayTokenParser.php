@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -9,8 +9,11 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
@@ -29,14 +32,20 @@ final class EscapedArrayTokenParser implements ChainableTokenParserInterface
     }
 
     /**
-     * Parses '<<param>>' into '<param>'.
+     * Parses '[[X]]'.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token): string
     {
         $value = $token->getValue();
 
-        return substr($value, 1, strlen($value) - 2);
+        try {
+            return substr($value, 1, strlen($value) - 2);
+        } catch (\TypeError $error) {
+            throw ParseException::createForToken($token, $error);
+        }
     }
 }

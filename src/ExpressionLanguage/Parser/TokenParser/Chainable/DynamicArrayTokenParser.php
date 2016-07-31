@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -30,18 +30,15 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
      * Parses "10x @user*", "<randomNumber(0, 10)x @user<{param}>*", etc.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token): DynamicArrayValue
     {
         parent::parse($token);
 
         if (1 !== preg_match('/^(?<quantifier>\d+|<.*>)x (?<elements>.*)/', $token->getValue(), $matches)) {
-            throw new ParseException(
-                sprintf(
-                    'Could not parse the dynamic array "%s".',
-                    $token->getValue()
-                )
-            );
+            throw ParseException::createForToken($token);
         }
 
         return new DynamicArrayValue(

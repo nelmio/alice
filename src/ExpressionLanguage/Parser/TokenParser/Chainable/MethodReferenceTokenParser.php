@@ -12,6 +12,8 @@
 namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
+use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
@@ -27,9 +29,11 @@ final class MethodReferenceTokenParser extends AbstractChainableParserAwareParse
     }
 
     /**
-     * Parses tokens values like "@user->username".
+     * Parses tokens values like "@user->getUserName()".
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token): FixtureMethodCallValue
     {
@@ -48,6 +52,10 @@ final class MethodReferenceTokenParser extends AbstractChainableParserAwareParse
             )
         );
 
-        return new FixtureMethodCallValue($reference, $method);
+        if ($reference instanceof FixtureReferenceValue && $method instanceof FunctionCallValue) {
+            return new FixtureMethodCallValue($reference, $method);
+        }
+
+        throw ParseException::createForToken($token);
     }
 }

@@ -14,9 +14,12 @@ namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
+use Nelmio\Alice\NotClonableTrait;
 
 final class StringTokenParser implements ChainableTokenParserInterface
 {
+    use NotClonableTrait;
+
     /**
      * @inheritdoc
      */

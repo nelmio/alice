@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Exception\ExpressionLanguage\ParseException;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
@@ -41,6 +42,11 @@ final class EscapedTokenParser implements ChainableTokenParserInterface
      */
     public function parse(Token $token): string
     {
-        return $token->getValue()[0];
+        $value = $token->getValue();
+        if ('' === $value) {
+            throw ParseException::createForToken($token);
+        }
+
+        return $value[0];
     }
 }

@@ -11,10 +11,7 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
-use Nelmio\Alice\ExpressionLanguage\Parser\FakeParser;
-use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
 
@@ -45,6 +42,18 @@ class EscapedTokenParserTest extends \PHPUnit_Framework_TestCase
         $actual = $parser->canParse($token);
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParseException
+     * @expectedExceptionMessage Could not parse the token "" (type: ESCAPED_ARROW_TYPE).
+     */
+    public function testThrowsAnExceptionIfAMalformedTokenIsGiven()
+    {
+        $token = new Token('', new TokenType(TokenType::ESCAPED_ARROW_TYPE));
+
+        $parser = new EscapedTokenParser();
+        $parser->parse($token);
     }
 
     public function testReturnsEscapedValue()

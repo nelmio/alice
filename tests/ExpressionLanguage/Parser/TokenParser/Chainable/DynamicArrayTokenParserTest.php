@@ -61,7 +61,7 @@ class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the dynamic array "".
+     * @expectedExceptionMessage Could not parse the token "" (type: DYNAMIC_ARRAY_TYPE).
      */
     public function testThrowsAnExceptionIfCouldNotParseToken()
     {

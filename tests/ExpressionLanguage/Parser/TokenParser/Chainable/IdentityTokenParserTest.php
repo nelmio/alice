@@ -11,9 +11,7 @@
 
 namespace Nelmio\Alice\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\ExpressionLanguage\Parser\ChainableTokenParserInterface;
-use Nelmio\Alice\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\ExpressionLanguage\Token;
 use Nelmio\Alice\ExpressionLanguage\TokenType;
@@ -59,7 +57,7 @@ class IdentityTokenParserTest extends \PHPUnit_Framework_TestCase
         $parser->parse($token);
     }
 
-    public function testUsesDecoratedParserToParseTokenReturnsADynamicArrayIfCanParseToken()
+    public function testUsesDecoratedParserToParseTokenReturnsAFunctionCallValueIfCanParseToken()
     {
         $token = new Token('<( foo )>', new TokenType(TokenType::IDENTITY_TYPE));
 

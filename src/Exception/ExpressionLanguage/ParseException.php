@@ -16,14 +16,16 @@ use Nelmio\Alice\Throwable\ParseThrowable;
 
 class ParseException extends \Exception implements ParseThrowable
 {
-    public static function createForToken(Token $token)
+    public static function createForToken(Token $token, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'Could not parse the token "%s" (type: %s).',
                 $token->getValue(),
                 $token->getType()->getValue()
-            )
+            ),
+            0,
+            $previous
         );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -28,9 +28,11 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
     }
 
     /**
-     * Parses '<{paramKey}>', '<{nested_<{param}>}>'.
+     * Parses expressions such as '<foo()>', '<foo(arg1, arg2)>'.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
     public function parse(Token $token): FunctionCallValue
     {
