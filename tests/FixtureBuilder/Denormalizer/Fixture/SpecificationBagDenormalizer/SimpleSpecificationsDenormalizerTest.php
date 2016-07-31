@@ -14,21 +14,16 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
-use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\PropertyBag;
-use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Definition\SpecificationBag;
-use Nelmio\Alice\ExpressionLanguage\Parser\DummyParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\FakeCallsDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FakeConstructorDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\FakePropertyDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
-use Nelmio\Alice\FixtureInterface;
 use Prophecy\Argument;
 
 /**
