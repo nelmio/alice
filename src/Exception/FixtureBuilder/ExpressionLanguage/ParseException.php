@@ -12,11 +12,11 @@
 namespace Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage;
 
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
-use Nelmio\Alice\Throwable\ParseThrowable;
+use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
-class ParseException extends \Exception implements ParseThrowable
+class ParseException extends \Exception implements ExpressionLanguageParseThrowable
 {
-    public static function createForToken(Token $token, \Throwable $previous = null)
+    public static function createForToken(Token $token, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
@@ -24,7 +24,7 @@ class ParseException extends \Exception implements ParseThrowable
                 $token->getValue(),
                 $token->getType()->getValue()
             ),
-            0,
+            $code,
             $previous
         );
     }

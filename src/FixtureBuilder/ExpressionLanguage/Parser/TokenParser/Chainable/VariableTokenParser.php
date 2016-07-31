@@ -44,7 +44,7 @@ final class VariableTokenParser implements ChainableTokenParserInterface
         try {
             return new VariableValue(substr($token->getValue(), 1));
         } catch (\TypeError $error) {
-            throw ParseException::createForToken($token, $error);
+            throw ParseException::createForToken($token, 0, $error);
         }
     }
 }

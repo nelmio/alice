@@ -45,7 +45,7 @@ final class EscapedArrayTokenParser implements ChainableTokenParserInterface
         try {
             return substr($value, 1, strlen($value) - 2);
         } catch (\TypeError $error) {
-            throw ParseException::createForToken($token, $error);
+            throw ParseException::createForToken($token, 0, $error);
         }
     }
 }

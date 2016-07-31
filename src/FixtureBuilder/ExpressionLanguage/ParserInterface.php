@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\ParseThrowable;
+use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 interface ParserInterface
 {
@@ -23,7 +23,7 @@ interface ParserInterface
      *
      * @param string $value
      *
-     * @throws ParseThrowable
+     * @throws ExpressionLanguageParseThrowable
      *
      * @return ValueInterface|string
      */
