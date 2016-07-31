@@ -87,7 +87,7 @@ class ParserRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Parser\ParserNotFoundException
+     * @expectedException \Nelmio\Alice\Exception\Parser\ParserNotFoundException
      * @expectedExceptionMessage No suitable parser found for the file "dummy.php".
      */
     public function testThrowsAnExceptionIfNoSuitableParserIsFound()
