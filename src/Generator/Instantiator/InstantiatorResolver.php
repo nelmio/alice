@@ -13,30 +13,44 @@ namespace Nelmio\Alice\Generator\Instantiator;
 
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
-final class InstantiatorResolver implements InstantiatorInterface
+final class InstantiatorResolver implements InstantiatorInterface, ValueResolverAwareInterface
 {
     use NotClonableTrait;
-
-    /**
-     * @var ValueResolverInterface
-     */
-    private $valueResolver;
 
     /**
      * @var InstantiatorInterface
      */
     private $instantiator;
 
-    public function __construct(ValueResolverInterface $valueResolver, InstantiatorInterface $instantiator)
+    /**
+     * @var ValueResolverInterface|null
+     */
+    private $valueResolver;
+
+    public function __construct(InstantiatorInterface $instantiator, ValueResolverInterface $valueResolver = null)
     {
-        $this->valueResolver = $valueResolver;
+        if (null !== $valueResolver && $instantiator instanceof ValueResolverAwareInterface) {
+            $instantiator = $instantiator->withResolver($valueResolver);
+        }
+
         $this->instantiator = $instantiator;
+        $this->valueResolver = $valueResolver;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withResolver(ValueResolverInterface $resolver): self
+    {
+        return new self($this->instantiator, $resolver);
     }
 
     /**
@@ -60,7 +74,16 @@ final class InstantiatorResolver implements InstantiatorInterface
             return [$fixture, $set];
         }
 
-        list($resolvedArguments, $set) = $this->resolveArguments($constructor->getArguments(), $this->valueResolver, $fixture, $set);
+        if (null === $this->valueResolver) {
+            ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+        }
+
+        list($resolvedArguments, $set) = $this->resolveArguments(
+            $constructor->getArguments(),
+            $this->valueResolver,
+            $fixture,
+            $set
+        );
 
         return [
             $fixture->withSpecs(
@@ -96,7 +119,7 @@ final class InstantiatorResolver implements InstantiatorInterface
                 $arguments[$index] = $result->getValue();
             }
         }
-        
+
         return [$arguments, $fixtureSet];
     }
 }

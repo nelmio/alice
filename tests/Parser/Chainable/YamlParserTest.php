@@ -101,7 +101,7 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage File "/nowhere.yml" could not be found.
+     * @expectedExceptionMessage The file "/nowhere.yml" could not be found.
      */
     public function testThrowExceptionIfFileDoesNotExist()
     {

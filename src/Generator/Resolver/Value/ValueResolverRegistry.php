@@ -14,12 +14,14 @@ namespace Nelmio\Alice\Generator\Resolver\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
+use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
-final class ValueResolverRegistry implements ValueResolverInterface
+final class ValueResolverRegistry implements ValueResolverInterface, ObjectGeneratorAwareInterface
 {
     use NotClonableTrait;
 
@@ -30,10 +32,33 @@ final class ValueResolverRegistry implements ValueResolverInterface
 
     /**
      * @param ChainableValueResolverInterface[] $resolvers
+     * @param ObjectGeneratorInterface|null     $generator
      */
-    public function __construct(array $resolvers)
+    public function __construct(array $resolvers, ObjectGeneratorInterface $generator = null)
     {
-        $this->resolvers = (function (ChainableValueResolverInterface ...$resolvers) { return $resolvers; })(...$resolvers);
+        $this->resolvers = (
+            function (ObjectGeneratorInterface $generator = null, ChainableValueResolverInterface ...$resolvers) {
+                if (null === $generator) {
+                    return $resolvers;
+                }
+
+                foreach ($resolvers as $index => $resolver) {
+                    if ($resolver instanceof ObjectGeneratorAwareInterface) {
+                        $resolvers[$index] = $resolver->withGenerator($generator);
+                    }
+                }
+
+                return $resolvers;
+            }
+        )($generator, ...$resolvers);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withGenerator(ObjectGeneratorInterface $generator)
+    {
+        return new self($this->resolvers, $generator);
     }
 
     /**

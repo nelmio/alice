@@ -24,9 +24,5 @@ class NativeLoaderTest extends \PHPUnit_Framework_TestCase
             $loader->getBuiltInUniqueValuesPool(),
             $loader->getBuiltInUniqueValuesPool()
         );
-        $this->assertNotSame(
-            $loader->_getBuiltInUniqueValuesPool(),
-            $loader->_getBuiltInUniqueValuesPool()
-        );
     }
 }

@@ -28,7 +28,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->lexer = (new NativeLoader())->_getBuiltInLexer();
+        $this->lexer = (new NativeLoader())->getBuiltInLexer();
     }
 
     /**

@@ -11,12 +11,12 @@
 
 namespace Nelmio\Alice\Generator;
 
-interface ValueResolverAwareInterface
+interface ObjectGeneratorAwareInterface
 {
     /**
-     * @param ValueResolverInterface $resolver
+     * @param ObjectGeneratorInterface $generator
      *
      * @return static
      */
-    public function withResolver(ValueResolverInterface $resolver);
+    public function withGenerator(ObjectGeneratorInterface $generator);
 }

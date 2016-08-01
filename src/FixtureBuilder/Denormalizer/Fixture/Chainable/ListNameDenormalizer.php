@@ -22,7 +22,7 @@ final class ListNameDenormalizer extends AbstractChainableDenormalizer
     use NotClonableTrait;
 
     /** @internal */
-    const REGEX = '/.+(\{(?<list>[^,]+(?:\s*,\s*[^,]+)*)\})(?:.*)/';
+    const REGEX = '/\{(?<list>[^,\s]+(?:,\s[^,\s]+)+)\}/';
 
     /**
      * @inheritdoc

@@ -13,11 +13,7 @@ namespace Nelmio\Alice\Generator\Instantiator;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
-use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
-use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\PropertyBag;
-use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBag;
@@ -46,7 +42,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new InstantiatorResolver(new FakeValueResolver(), new FakeInstantiator());
+        clone new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver());
     }
     
     public function testResolvesAllArguments()
@@ -119,7 +115,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
         /** @var InstantiatorInterface $decoratedInstantiator */
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
-        $instantiator = new InstantiatorResolver($resolver, $decoratedInstantiator);
+        $instantiator = new InstantiatorResolver($decoratedInstantiator, $resolver);
         $actual = $instantiator->instantiate($fixture, $set);
 
         $this->assertSame($expected, $actual);
@@ -150,7 +146,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
         /** @var InstantiatorInterface $decoratedInstantiator */
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
-        $instantiator = new InstantiatorResolver($resolver, $decoratedInstantiator);
+        $instantiator = new InstantiatorResolver($decoratedInstantiator, $resolver);
         $actual = $instantiator->instantiate($fixture, $set);
 
         $this->assertSame($expected, $actual);
@@ -178,7 +174,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
         /** @var InstantiatorInterface $decoratedInstantiator */
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
-        $instantiator = new InstantiatorResolver($resolver, $decoratedInstantiator);
+        $instantiator = new InstantiatorResolver($decoratedInstantiator, $resolver);
         $actual = $instantiator->instantiate($fixture, $set);
 
         $this->assertSame($expected, $actual);

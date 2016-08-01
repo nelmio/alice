@@ -62,7 +62,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
             new ObjectBag(['dummy' => $object])
         );
 
-        $hydrator = new SimpleHydrator(new FakeValueResolver(), new FakePropertyHydrator());
+        $hydrator = new SimpleHydrator(new FakePropertyHydrator());
         $actual = $hydrator->hydrate($object, $set);
 
         $this->assertEquals($expected, $actual);
@@ -107,7 +107,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
             new ObjectBag(['dummy' => $secondNewObject])
         );
 
-        $hydrator = new SimpleHydrator(new FakeValueResolver(), $hydrator);
+        $hydrator = new SimpleHydrator($hydrator);
         $actual = $hydrator->hydrate($object, $set);
 
         $this->assertEquals($expected, $actual);
@@ -174,7 +174,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
             new ObjectBag(['dummy' => $secondNewObject])
         );
 
-        $hydrator = new SimpleHydrator($resolver, $hydrator);
+        $hydrator = new SimpleHydrator($hydrator, $resolver);
         $actual = $hydrator->hydrate($object, $set);
 
         $this->assertEquals($expected, $actual);

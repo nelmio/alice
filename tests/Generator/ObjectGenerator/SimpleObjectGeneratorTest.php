@@ -22,6 +22,7 @@ use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\Hydrator\FakeHydrator;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
+use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\ObjectBag;
 use Prophecy\Argument;
 
@@ -40,7 +41,7 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new SimpleObjectGenerator(new FakeInstantiator(), new FakeHydrator(), new FakeCaller());
+        clone new SimpleObjectGenerator(new FakeValueResolver(), new FakeInstantiator(), new FakeHydrator(), new FakeCaller());
     }
 
     /**
@@ -105,7 +106,7 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
         /** @var CallerInterface $caller */
         $caller = $callerProphecy->reveal();
 
-        $generator = new SimpleObjectGenerator($instantiator, $hydrator, $caller);
+        $generator = new SimpleObjectGenerator(new FakeValueResolver(), $instantiator, $hydrator, $caller);
         $objects = $generator->generate($fixture, $set);
 
         $this->assertEquals($setWithObjectAfterCalls->getObjects(), $objects);

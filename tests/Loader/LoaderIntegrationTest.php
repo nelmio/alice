@@ -26,6 +26,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithOptionalParameterInConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
+use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
@@ -167,7 +168,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideFixturesToHydrate
      */
-    public function testObjectHydration(array $data, array $expected)
+    public function testObjectHydration(array $data, array $expected = null)
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
@@ -185,7 +186,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideFixturesToGenerate
      */
-    public function testFixtureGeneration(array $data, array $expected)
+    public function testFixtureGeneration(array $data, array $expected = null)
     {
         try {
             $set = $this->loader->loadData($data);
@@ -502,8 +503,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'dummy' => (function (CamelCaseDummy $dummy)
-                {
+                'dummy' => (function (CamelCaseDummy $dummy) {
                     $dummy->publicProperty = 'bob';
 
                     return $dummy;
@@ -520,8 +520,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'dummy' => (function (SnakeCaseDummy $dummy)
-                {
+                'dummy' => (function (SnakeCaseDummy $dummy) {
                     $dummy->public_property = 'bob';
 
                     return $dummy;
@@ -538,8 +537,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'dummy' => (function (PascalCaseDummy $dummy)
-                {
+                'dummy' => (function (PascalCaseDummy $dummy) {
                     $dummy->PublicProperty = 'bob';
 
                     return $dummy;
@@ -556,8 +554,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'dummy' => (function (CamelCaseDummy $dummy)
-                {
+                'dummy' => (function (CamelCaseDummy $dummy) {
                     $dummy->setSetterProperty('bob');
 
                     return $dummy;
@@ -573,32 +570,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
-            [
-                'dummy' => (function (SnakeCaseDummy $dummy)
-                {
-                    $dummy->set_setter_property('bob');
-
-                    return $dummy;
-                })(new SnakeCaseDummy())
-            ],
-        ];
-
-        yield 'public setter PascalCase property' => [
-            [
-                PascalCaseDummy::class => [
-                    'dummy' => [
-                        'SetterProperty' => 'bob',
-                    ],
-                ],
-            ],
-            [
-                'dummy' => (function (PascalCaseDummy $dummy)
-                {
-                    $dummy->SetSetterProperty('bob');
-
-                    return $dummy;
-                })(new PascalCaseDummy())
-            ],
+            null,
         ];
 
         yield 'magic call camelCase property' => [
@@ -610,8 +582,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'dummy' => (function (MagicCallDummy $dummy)
-                {
+                'dummy' => (function (MagicCallDummy $dummy) {
                     $dummy->magicProperty('bob');
 
                     return $dummy;
@@ -628,8 +599,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'dummy' => (function (MagicCallDummy $dummy)
-                {
+                'dummy' => (function (MagicCallDummy $dummy) {
                     $dummy->magic_property('bob');
 
                     return $dummy;
@@ -646,8 +616,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                'dummy' => (function (MagicCallDummy $dummy)
-                {
+                'dummy' => (function (MagicCallDummy $dummy) {
                     $dummy->MagicProperty('bob');
 
                     return $dummy;
@@ -658,9 +627,69 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function provideFixturesToGenerate()
     {
-        yield 'reference' => [
+        yield 'static value' => [
             [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ])
+                ],
+            ]
+        ];
 
+        yield 'reference value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummy' => '@dummy',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummy' => $dummy,
+                    ]),
+                ],
+            ]
+        ];
+
+        yield 'inversed reference value' => [
+            [
+                \stdClass::class => [
+                    'another_dummy' => [
+                        'dummy' => '@dummy',
+                    ],
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'another_dummy' => StdClassFactory::create([
+                        'dummy' => $dummy,
+                    ]),
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
             ]
         ];
     }

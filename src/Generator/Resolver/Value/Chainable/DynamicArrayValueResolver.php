@@ -53,7 +53,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
     /**
      * @inheritdoc
      */
-    public function with(ValueResolverInterface $resolver): self
+    public function withResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver, $this->limit);
     }
