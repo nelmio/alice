@@ -21,12 +21,15 @@ final class ListNameDenormalizer extends AbstractChainableDenormalizer
 {
     use NotClonableTrait;
 
+    /** @internal */
+    const REGEX = '/.+(\{(?<list>[^,]+(?:\s*,\s*[^,]+)*)\})(?:.*)/';
+
     /**
      * @inheritdoc
      */
     public function canDenormalize(string $reference, array &$matches = []): bool
     {
-        return 1 === preg_match('/.+(\{(?<list>[^,]+(?:\s*,\s*[^,]+)*)\})(?:.*)/', $reference, $matches);
+        return 1 === preg_match(self::REGEX, $reference, $matches);
     }
 
     /**

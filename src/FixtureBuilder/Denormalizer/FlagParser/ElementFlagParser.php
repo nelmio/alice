@@ -22,6 +22,9 @@ final class ElementFlagParser implements FlagParserInterface
 {
     use NotClonableTrait;
 
+    /** @internal */
+    const REGEX = '/\s*(?<reference>.+?)\s\((?<stringFlags>.+).*\)$/';
+
     /**
      * @var FlagParserInterface
      */
@@ -40,7 +43,7 @@ final class ElementFlagParser implements FlagParserInterface
      */
     public function parse(string $element): FlagBag
     {
-        if (1 !== preg_match('/\s*(?<reference>.+?)\s\((?<stringFlags>.+).*\)$/', $element, $matches)) {
+        if (1 !== preg_match(self::REGEX, $element, $matches)) {
             return new FlagBag($element);
         }
 

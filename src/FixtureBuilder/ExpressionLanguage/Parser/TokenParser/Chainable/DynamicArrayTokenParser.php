@@ -18,6 +18,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
 final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
 {
+    /** @interval */
+    const REGEX = '/^(?<quantifier>\d+|<.*>)x (?<elements>.*)/';
+
     /**
      * @inheritdoc
      */
@@ -37,7 +40,7 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
     {
         parent::parse($token);
 
-        if (1 !== preg_match('/^(?<quantifier>\d+|<.*>)x (?<elements>.*)/', $token->getValue(), $matches)) {
+        if (1 !== preg_match(self::REGEX, $token->getValue(), $matches)) {
             throw ParseException::createForToken($token);
         }
 

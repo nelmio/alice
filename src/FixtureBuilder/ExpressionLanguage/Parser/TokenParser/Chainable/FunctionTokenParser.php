@@ -19,6 +19,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
 final class FunctionTokenParser extends AbstractChainableParserAwareParser
 {
+    /** @interval */
+    const REGEX = '/^<(?<function>.+?)\((?<arguments>.*)\)>$/';
+
     /**
      * @inheritdoc
      */
@@ -38,7 +41,7 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
     {
         parent::parse($token);
 
-        if (1 !== preg_match('/^<(?<function>.+?)\((?<arguments>.*)\)>$/', $token->getValue(), $matches)) {
+        if (1 !== preg_match(self::REGEX, $token->getValue(), $matches)) {
             throw ParseException::createForToken($token);
         }
 

@@ -21,6 +21,9 @@ final class YamlParser implements ChainableParserInterface
 {
     use NotClonableTrait;
 
+    /** @interval */
+    const REGEX = '/.{1,}\.ya?ml$/i';
+
     /**
      * @var SymfonyYamlParser
      */
@@ -29,6 +32,18 @@ final class YamlParser implements ChainableParserInterface
     public function __construct(SymfonyYamlParser $yamlParser)
     {
         $this->yamlParser = $yamlParser;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function canParse(string $file): bool
+    {
+        if (false === stream_is_local($file)) {
+            return false;
+        }
+
+        return 1 === preg_match(self::REGEX, $file);
     }
 
     /**
@@ -62,17 +77,5 @@ final class YamlParser implements ChainableParserInterface
                 $error
             );
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function canParse(string $file): bool
-    {
-        if (false === stream_is_local($file)) {
-            return false;
-        }
-
-        return 1 === preg_match('/.{1,}\.ya?ml$/i', $file);
     }
 }

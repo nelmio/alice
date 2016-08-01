@@ -18,6 +18,21 @@ final class PhpParser implements ChainableParserInterface
 {
     use NotClonableTrait;
 
+    /** @interval */
+    const REGEX = '/.+\.php[7]?$/i';
+
+    /**
+     * @inheritdoc
+     */
+    public function canParse(string $file): bool
+    {
+        if (false === stream_is_local($file)) {
+            return false;
+        }
+
+        return 1 === preg_match(self::REGEX, $file);
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -36,17 +51,5 @@ final class PhpParser implements ChainableParserInterface
         }
 
         return $data;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function canParse(string $file): bool
-    {
-        if (false === stream_is_local($file)) {
-            return false;
-        }
-
-        return 1 === preg_match('/.+\.php[7]?$/i', $file);
     }
 }
