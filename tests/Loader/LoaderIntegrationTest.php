@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructor;
@@ -21,6 +22,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithOptionalParameterInConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
+use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 /**
@@ -29,13 +31,13 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
 class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var NativeLoader
+     * @var FileLoaderInterface|DataLoaderInterface
      */
     private $loader;
 
     public function setUp()
     {
-        $this->loader = (new NativeLoader())->getBuiltInDataLoader();
+        $this->loader = new IsolatedLoader();
     }
 
     public function testLoadEmptyInstances()
