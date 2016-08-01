@@ -27,7 +27,7 @@ class ParameterResolverIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->resolver = (new NativeLoader())->getBuiltInParameterResolver();
+        $this->resolver = (new NativeLoader())->_getBuiltInParameterResolver();
     }
 
     /**
