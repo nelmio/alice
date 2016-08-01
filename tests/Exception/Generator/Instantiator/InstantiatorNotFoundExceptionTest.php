@@ -24,9 +24,9 @@ class InstantiatorNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(InstantiatorNotFoundException::class, \LogicException::class, true));
     }
 
-    public function testIsAnInstantiationThrowable()
+    public function testIsNotAnInstantiationThrowable()
     {
-        $this->assertTrue(is_a(InstantiatorNotFoundException::class, InstantiationThrowable::class, true));
+        $this->assertFalse(is_a(InstantiatorNotFoundException::class, InstantiationThrowable::class, true));
     }
 
     public function testTestCreateNewExceptionWithFactory()

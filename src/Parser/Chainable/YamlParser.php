@@ -56,7 +56,7 @@ final class YamlParser implements ChainableParserInterface
     public function parse(string $file): array
     {
         if (false === file_exists($file)) {
-            throw new \InvalidArgumentException(sprintf('File "%s" could not be found.', $file));
+            throw new \InvalidArgumentException(sprintf('The file "%s" could not be found.', $file));
         }
 
         try {

@@ -11,6 +11,6 @@
 
 namespace Nelmio\Alice\Exception\FileLocator;
 
-class FileNotFoundException extends \InvalidArgumentException
+class FileNotFoundException extends \UnexpectedValueException
 {
 }

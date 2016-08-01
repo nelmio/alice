@@ -20,8 +20,10 @@ use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\DummySpecificationBagDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\FakeSpecificationBagDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\DummyFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
@@ -30,8 +32,16 @@ use Prophecy\Argument;
 /**
  * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer
  */
-class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
+class SimpleDenormalizerTest extends ChainableDenormalizerTest
 {
+    public function setUp()
+    {
+        $this->denormalizer = new SimpleDenormalizer(
+            new DummySpecificationBagDenormalizer(),
+            new DummyFlagParser()
+        );
+    }
+
     public function testIsAChainableDenormalizer()
     {
         $this->assertTrue(is_a(SimpleDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
@@ -167,5 +177,101 @@ class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
+     * @dataProvider provideSimpleFixtures
+     */
+    public function testCanBuildSimpleFixtures($name)
+    {
+        $this->assertCanBuild($name);
+    }
+
+    /**
+     * @dataProvider provideListFixtures
+     */
+    public function testCanBuildListFixtures($name)
+    {
+        $this->assertCannotBuild($name);
+    }
+
+    /**
+     * @dataProvider provideMalformedListFixtures
+     */
+    public function testCanBuildMalformedListFixtures($name)
+    {
+        $this->assertCannotBuild($name);
+    }
+
+    /**
+     * @dataProvider provideSegmentFixtures
+     */
+    public function testCanBuildSegmentFixtures($name)
+    {
+        $this->assertCannotBuild($name);
+    }
+
+    /**
+     * @dataProvider provideDeprecatedSegmentFixtures
+     */
+    public function testCanBuildDeprecatedSegmentFixtures($name)
+    {
+        $this->assertCannotBuild($name);
+    }
+
+    /**
+     * @dataProvider provideMalformedSegmentFixtures
+     */
+    public function testCanBuildMalformedSegmentFixtures($name)
+    {
+        $this->assertCannotBuild($name);
+    }
+
+    /**
+     * @dataProvider provideSimpleFixtures
+     */
+    public function testBuildSimpleFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
+    }
+
+    /**
+     * @dataProvider provideListFixtures
+     */
+    public function testBuildListFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
+    }
+
+    /**
+     * @dataProvider provideMalformedListFixtures
+     */
+    public function testBuildMalformedListFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
+    }
+
+    /**
+     * @dataProvider provideSegmentFixtures
+     */
+    public function testBuildSegmentFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
+    }
+
+    /**
+     * @dataProvider provideDeprecatedSegmentFixtures
+     */
+    public function testBuildDeprecatedSegmentFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
+    }
+
+    /**
+     * @dataProvider provideMalformedSegmentFixtures
+     */
+    public function testBuildMalformedSegmentFixtures($name, $expected)
+    {
+        $this->markAsInvalidCase();
     }
 }

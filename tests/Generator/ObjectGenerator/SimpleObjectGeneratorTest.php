@@ -14,8 +14,6 @@ namespace Nelmio\Alice\Generator\ObjectGenerator;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
-use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Caller\FakeCaller;
 use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\Instantiator\FakeInstantiator;
