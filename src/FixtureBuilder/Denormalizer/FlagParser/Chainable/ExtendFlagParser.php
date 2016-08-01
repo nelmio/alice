@@ -21,12 +21,15 @@ final class ExtendFlagParser implements ChainableFlagParserInterface
 {
     use NotClonableTrait;
 
+    /** @interval */
+    const REGEX = '/^extends (?<reference>.+)$/';
+
     /**
      * @inheritdoc
      */
     public function canParse(string $element, array &$matches = []): bool
     {
-        return 1 === preg_match('/^extends (?<reference>.+)$/', $element, $matches);
+        return 1 === preg_match(self::REGEX, $element, $matches);
     }
 
     /**

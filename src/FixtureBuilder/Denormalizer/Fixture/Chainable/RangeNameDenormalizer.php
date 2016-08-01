@@ -20,6 +20,9 @@ use Nelmio\Alice\FixtureInterface;
 
 final class RangeNameDenormalizer extends AbstractChainableDenormalizer
 {
+    /** @internal */
+    const REGEX = '/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+))\}/';
+
     /**
      * @var string Unique token
      */
@@ -37,7 +40,7 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
      */
     public function canDenormalize(string $name, array &$matches = []): bool
     {
-        return 1 === preg_match('/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+))\}/', $name, $matches);
+        return 1 === preg_match(self::REGEX, $name, $matches);
     }
 
     /**

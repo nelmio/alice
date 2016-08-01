@@ -20,12 +20,15 @@ final class OptionalFlagParser implements ChainableFlagParserInterface
 {
     use NotClonableTrait;
 
+    /** @interval */
+    const REGEX = '/^(?<percentage>\d+)\%\?$/';
+
     /**
      * @inheritdoc
      */
     public function canParse(string $element, array &$matches = []): bool
     {
-        return 1 === preg_match('/^(?<percentage>\d+)\%\?$/', $element, $matches);
+        return 1 === preg_match(self::REGEX, $element, $matches);
     }
 
     /**
