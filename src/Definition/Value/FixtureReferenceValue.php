@@ -28,6 +28,15 @@ final class FixtureReferenceValue implements ValueInterface
      */
     public function __construct($reference)
     {
+        if (false === is_string($reference) && false === $reference instanceof ValueInterface) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Expected reference to be either a string or a "%s" instance, got "%s" instead.',
+                    ValueInterface::class,
+                    is_scalar($reference) ? gettype($reference) : get_class($reference)
+                )
+            );
+        }
         $this->reference = $reference;
     }
 

@@ -92,14 +92,14 @@ class DynamicArrayValueTest extends \PHPUnit_Framework_TestCase
         yield 'string/null' => [
             'dummy_quantifier',
             null,
-            'Expected element to be either string or a "Nelmio\Alice\Definition\ValueInterface" object. Got "NULL" '
+            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got "NULL" '
             .'instead.'
         ];
 
         yield 'string/stdClass' => [
             'dummy_quantifier',
             new \stdClass(),
-            'Expected element to be either string or a "Nelmio\Alice\Definition\ValueInterface" object. Got "stdClass" '
+            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got "stdClass" '
             .'instead.'
         ];
     }

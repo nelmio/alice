@@ -43,8 +43,8 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
 
         try {
             return new FixtureReferenceValue(substr($value, 1));
-        } catch (\TypeError $error) {
-            throw ParseException::createForToken($token, 0, $error);
+        } catch (\InvalidArgumentException $exception) {
+            throw ParseException::createForToken($token, 0, $exception);
         }
     }
 }

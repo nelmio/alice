@@ -30,7 +30,7 @@ final class FixtureMethodReferenceTokenParser extends AbstractChainableParserAwa
     }
 
     /**
-     * Parses expressions such as '$username'.
+     * Parses expressions such as "@username->getName()".
      *
      * {@inheritdoc}
      *

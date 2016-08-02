@@ -13,10 +13,6 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 
-/**
- * Value representing a list of values which will be chained. For example '<foo()> <{bar}>' will be composed of a
- * function result, a static string (' ') and a parameter value.
- */
 final class NestedValue implements ValueInterface
 {
     /**
