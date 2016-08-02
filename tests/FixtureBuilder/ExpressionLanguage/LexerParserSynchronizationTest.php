@@ -11,8 +11,8 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerRegistryTest;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParserTest;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerIntegrationTest;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest;
 
 /**
  * @coversNothing
@@ -21,20 +21,21 @@ class LexerParserSynchronizationTest extends \PHPUnit_Framework_TestCase
 {
     public function testProvidesAreSynchronized()
     {
-        \PHPUnit_Framework_Assert::markTestSkipped('TODO');
-        $lexerTestCase = new LexerRegistryTest();
+        $lexerTestCase = new LexerIntegrationTest();
         $lexerProviderKeys = [];
         foreach ($lexerTestCase->provideValues() as $key => $values) {
             $lexerProviderKeys[] = $key;
         }
 
-        $parserTestCase = new SimpleParserTest();
+        $parserTestCase = new ParserIntegrationTest();
         $parserProviderKeys = [];
         foreach ($parserTestCase->provideValues() as $key => $value) {
             $parserProviderKeys[] = $key;
         }
 
-        $this->assertEquals($lexerProviderKeys, $parserProviderKeys);
-        $this->assertEquals($parserProviderKeys, $lexerProviderKeys);
+        foreach ($lexerProviderKeys as $index => $lexerProviderKey) {
+            $this->assertEquals($lexerProviderKey, $parserProviderKeys[$index]);
+        }
+        $this->assertEquals(count($lexerProviderKeys), count($parserProviderKeys));
     }
 }

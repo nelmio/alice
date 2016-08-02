@@ -9,18 +9,16 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
-
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\NotClonableTrait;
 
-final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
+final class WildcardReferenceTokenParser implements ChainableTokenParserInterface
 {
     use NotClonableTrait;
 
@@ -29,22 +27,26 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::SIMPLE_REFERENCE_TYPE;
+        return $token->getType()->getValue() === TokenType::WILDCARD_REFERENCE_TYPE;
     }
 
     /**
-     * Parses expressions such as "@user".
+     * Parses expressions such as '$username'.
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
-    public function parse(Token $token): FixtureReferenceValue
+    public function parse(Token $token)
     {
         $value = $token->getValue();
-
-        try {
-            return new FixtureReferenceValue(substr($value, 1));
-        } catch (\InvalidArgumentException $exception) {
-            throw ParseException::createForToken($token, 0, $exception);
+        $fixtureId = substr($value, 1, strlen($value) - 2);
+        if (false === $fixtureId) {
+            throw ParseException::createForToken($token);
         }
+
+        return new FixtureMatchReferenceValue(
+            sprintf('/^%s.*', $fixtureId)
+        );
     }
 }

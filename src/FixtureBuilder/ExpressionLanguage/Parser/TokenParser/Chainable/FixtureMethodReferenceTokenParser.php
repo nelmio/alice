@@ -9,18 +9,15 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
-
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\NotClonableTrait;
 
-final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
+final class FixtureMethodReferenceTokenParser extends AbstractChainableParserAwareParser
 {
     use NotClonableTrait;
 
@@ -29,21 +26,31 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::SIMPLE_REFERENCE_TYPE;
+        return $token->getType()->getValue() === TokenType::METHOD_REFERENCE_TYPE;
     }
 
     /**
-     * Parses expressions such as "@user".
+     * Parses expressions such as "@username->getName()".
      *
      * {@inheritdoc}
+     *
+     * @throws ParseException
      */
-    public function parse(Token $token): FixtureReferenceValue
+    public function parse(Token $token)
     {
-        $value = $token->getValue();
+        parent::parse($token);
+
+        $values = preg_split('/->/', $token->getValue());
+        if (2 !== count($values)) {
+            throw ParseException::createForToken($token);
+        }
+
+        $fixture = $this->parser->parse($values[0]);
+        $method = $this->parser->parse(sprintf('<%s>', $values[1]));
 
         try {
-            return new FixtureReferenceValue(substr($value, 1));
-        } catch (\InvalidArgumentException $exception) {
+            return new FixtureMethodCallValue($fixture, $method);
+        } catch (\TypeError $exception) {
             throw ParseException::createForToken($token, 0, $exception);
         }
     }

@@ -18,9 +18,14 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerRegistry;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\StringMergerParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedArrayTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedTokenParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureListReferenceTokenParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureMethodReferenceTokenParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureRangeReferenceTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FunctionTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\IdentityTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\MethodReferenceTokenParser;
@@ -30,8 +35,10 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\SimpleReferenceTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringArrayTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringTokenParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\TolerantFunctionTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\VariableTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\WildcardReferenceTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\TokenParserRegistry;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface as ExpressionLanguageParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface;
@@ -376,9 +383,13 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function _getBuiltInExpressionLanguageParser(): ExpressionLanguageParserInterface
     {
-        return new SimpleParser(
-            $this->getBuiltInLexer(),
-            $this->getBuiltInExpressionLanguageTokenParser()
+        return new FunctionFixtureReferenceParser(
+            new StringMergerParser(
+                new SimpleParser(
+                    $this->getBuiltInLexer(),
+                    $this->getBuiltInExpressionLanguageTokenParser()
+                )
+            )
         );
     }
 
@@ -388,7 +399,9 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new DynamicArrayTokenParser(),
             new EscapedArrayTokenParser(),
             new EscapedTokenParser(),
-            new FunctionTokenParser(),
+            new FixtureListReferenceTokenParser(),
+            new FixtureMethodReferenceTokenParser(),
+            new FixtureRangeReferenceTokenParser(),
             new IdentityTokenParser(),
             new MethodReferenceTokenParser(),
             new OptionalTokenParser(),
@@ -397,7 +410,9 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new SimpleReferenceTokenParser(),
             new StringArrayTokenParser(),
             new StringTokenParser(),
+            new TolerantFunctionTokenParser(new FunctionTokenParser()),
             new VariableTokenParser(),
+            new WildcardReferenceTokenParser(),
         ]);
     }
 

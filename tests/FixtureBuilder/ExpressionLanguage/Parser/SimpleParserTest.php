@@ -11,16 +11,9 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
-use Nelmio\Alice\Definition\Value\ChoiceListValue;
-use Nelmio\Alice\Definition\Value\DynamicArrayValue;
-use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
-use Nelmio\Alice\Definition\Value\FixturePropertyValue;
-use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
-use Nelmio\Alice\Definition\Value\FunctionCallValue;
-use Nelmio\Alice\Definition\Value\OptionalValue;
+use Nelmio\Alice\Definition\Value\NestedValue;
 use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\Definition\Value\ListValue;
-use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FakeLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DummyChainableTokenParserAware;
@@ -28,8 +21,6 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\FakeTokenP
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\Loader\NativeLoader;
-use Nelmio\Alice\Throwable\ParseThrowable;
 use Prophecy\Argument;
 
 /**
@@ -141,5 +132,49 @@ class SimpleParserTest extends \PHPUnit_Framework_TestCase
             'parsed_foo',
             $parsedValue
         );
+    }
+
+    public function testIfATokenIsParsedIntoANestedValueThenItsValuesAreMerged()
+    {
+        $value = 'foo';
+
+        $lexerProphecy = $this->prophesize(LexerInterface::class);
+        $lexerProphecy->lex($value)->willReturn([
+            $token1 = new Token('foo', new TokenType(TokenType::STRING_TYPE)),
+            $token2 = new Token('bar', new TokenType(TokenType::VARIABLE_TYPE)),
+            $token3 = new Token('baz', new TokenType(TokenType::FUNCTION_TYPE)),
+        ]);
+        /** @var LexerInterface $lexer */
+        $lexer = $lexerProphecy->reveal();
+
+        $tokenParserProphecy = $this->prophesize(TokenParserInterface::class);
+        $tokenParserProphecy->parse($token1)->willReturn('parsed_foo');
+        $tokenParserProphecy
+            ->parse($token2)
+            ->willReturn(
+                new NestedValue([
+                    'first',
+                    'second',
+                ])
+            )
+        ;
+        $tokenParserProphecy->parse($token3)->willReturn('parsed_baz');
+        /** @var TokenParserInterface $tokenParser */
+        $tokenParser = $tokenParserProphecy->reveal();
+
+        $expected = new ListValue([
+            'parsed_foo',
+            'first',
+            'second',
+            'parsed_baz',
+        ]);
+
+        $parser = new SimpleParser($lexer, $tokenParser);
+        $actual = $parser->parse($value);
+
+        $this->assertEquals($expected, $actual);
+
+        $lexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
+        $tokenParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(3);
     }
 }

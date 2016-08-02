@@ -43,7 +43,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
 
             return $this->parseElements($this->parser, $elements);
         } catch (\TypeError $error) {
-            throw ParseException::createForToken($token);
+            throw ParseException::createForToken($token, 0, $error);
         }
     }
 

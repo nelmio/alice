@@ -25,7 +25,7 @@ interface TokenParserInterface
      *
      * @throws ParseThrowable
      *
-     * @return ValueInterface|string
+     * @return ValueInterface|string|array
      */
     public function parse(Token $token);
 }

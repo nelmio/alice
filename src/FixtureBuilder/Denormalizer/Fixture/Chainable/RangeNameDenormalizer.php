@@ -79,6 +79,7 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
 
         return $builtFixtures;
     }
+
     /**
      * @param string $name
      *

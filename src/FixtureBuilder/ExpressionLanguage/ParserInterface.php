@@ -25,7 +25,7 @@ interface ParserInterface
      *
      * @throws ExpressionLanguageParseThrowable
      *
-     * @return ValueInterface|string
+     * @return ValueInterface|string|array
      */
     public function parse(string $value);
 }
