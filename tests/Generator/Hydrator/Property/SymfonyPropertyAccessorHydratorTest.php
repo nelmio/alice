@@ -13,8 +13,10 @@ namespace Nelmio\Alice\Generator\Hydrator\Property;
 
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
-use Nelmio\Alice\Generator\Hydrator\Dummy;
+use Nelmio\Alice\Entity\Hydrator\Dummy;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
+use Prophecy\Argument;
+use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -55,10 +57,11 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
     public function testReturnsHydratedObject()
     {
         $property = new Property('username', 'bob');
-        $instance = new \stdClass();
+        $instance = new Dummy();
         $object = new SimpleObject('dummy', $instance);
 
         $accessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
+        $accessorProphecy->setValue($instance, 'username', 'bob')->willReturn(null);
         /** @var PropertyAccessorInterface $accessor */
         $accessor = $accessorProphecy->reveal();
 
@@ -66,6 +69,54 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         $result = $hydrator->hydrate($object, $property);
 
         $this->assertEquals($object, $result);
+
+        $accessorProphecy->setValue(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Generator\Hydrator\HydrationException
+     * @expectedExceptionMessage Could not hydrate the property "dummy" of the object "username" (class: Nelmio\Alice\Entity\Hydrator\Dummy).
+     */
+    public function testThrowsAnHydrationExceptionIfAnAccessExceptionIsThrown()
+    {
+        $property = new Property('username', 'bob');
+        $instance = new Dummy();
+        $object = new SimpleObject('dummy', $instance);
+
+        $accessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
+        $accessorProphecy->setValue(Argument::cetera())->willThrow(AccessException::class);
+        /** @var PropertyAccessorInterface $accessor */
+        $accessor = $accessorProphecy->reveal();
+
+        $hydrator = new SymfonyPropertyAccessorHydrator($accessor);
+        $result = $hydrator->hydrate($object, $property);
+
+        $this->assertEquals($object, $result);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Generator\Hydrator\NoSuchPropertyException
+     * @expectedExceptionMessage Could not hydrate the property "dummy" of the object "foo" (class: Nelmio\Alice\Dummy).
+     */
+    public function testThrowsNoPropertyExceptionIfPropertyCouldNotBeFound()
+    {
+        $object = new SimpleObject('dummy', new \Nelmio\Alice\Dummy());
+        $property = new Property('foo', 'bar');
+        $this->hydrator->hydrate($object, $property);
+    }
+
+    public function testCanHydrateStdClassObjects()
+    {
+        $object = new SimpleObject('dummy', new \stdClass());
+        $property = new Property('foo', 'bar');
+
+        $std = new \stdClass();
+        $std->foo = 'bar';
+        $expected = new SimpleObject('dummy', $std);
+
+        $actual = $this->hydrator->hydrate($object, $property);
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**

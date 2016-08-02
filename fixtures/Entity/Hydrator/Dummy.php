@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Hydrator;
+namespace Nelmio\Alice\Entity\Hydrator;
 
 class Dummy
 {
