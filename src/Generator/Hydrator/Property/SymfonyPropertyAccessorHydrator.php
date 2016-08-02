@@ -13,9 +13,13 @@ namespace Nelmio\Alice\Generator\Hydrator\Property;
 
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
+use Nelmio\Alice\Exception\Generator\Hydrator\HydrationException;
+use Nelmio\Alice\Exception\Generator\Hydrator\NoSuchPropertyException;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectInterface;
+use Symfony\Component\PropertyAccess\Exception\AccessException as SymfonyAccessException;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException as SymfonyNoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
@@ -25,20 +29,33 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
     /**
      * @var PropertyAccessorInterface
      */
-    private $propertyAccess;
+    private $propertyAccessor;
 
-    public function __construct(PropertyAccessorInterface $propertyAccess)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
-        $this->propertyAccess = $propertyAccess;
+        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @throws NoSuchPropertyException
+     * @throws HydrationException
      */
     public function hydrate(ObjectInterface $object, Property $property): ObjectInterface
     {
         $instance = $object->getInstance();
-        $this->propertyAccess->setValue($instance, $property->getName(), $property->getValue());
+        try {
+            if ($instance instanceof \stdClass) {
+                $instance->{$property->getName()} = $property->getValue();
+            } else {
+                $this->propertyAccessor->setValue($instance, $property->getName(), $property->getValue());
+            }
+        } catch (SymfonyNoSuchPropertyException $exception) {
+            throw NoSuchPropertyException::create($object, $property, 0, $exception);
+        } catch (SymfonyAccessException $exception) {
+            throw HydrationException::create($object, $property, 0, $exception);
+        }
 
         return new SimpleObject($object->getReference(), $instance);
     }
