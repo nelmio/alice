@@ -21,6 +21,7 @@ interface ObjectInterface
      *
      * @example
      *  'user0'
+     * @TODO: rename to getId()
      */
     public function getReference(): string;
 

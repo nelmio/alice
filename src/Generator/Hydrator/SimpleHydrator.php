@@ -11,14 +11,17 @@
 
 namespace Nelmio\Alice\Generator\Hydrator;
 
+use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectInterface;
 
-final class SimpleHydrator implements HydratorInterface
+final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInterface
 {
     use NotClonableTrait;
 
@@ -32,7 +35,7 @@ final class SimpleHydrator implements HydratorInterface
      */
     private $resolver;
 
-    public function __construct(ValueResolverInterface $resolver, PropertyHydratorInterface $hydrator)
+    public function __construct(PropertyHydratorInterface $hydrator, ValueResolverInterface $resolver = null)
     {
         $this->hydrator = $hydrator;
         $this->resolver = $resolver;
@@ -41,13 +44,26 @@ final class SimpleHydrator implements HydratorInterface
     /**
      * @inheritdoc
      */
+    public function withResolver(ValueResolverInterface $resolver): self
+    {
+        return new self($this->hydrator, $resolver);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {
+        if (null === $this->resolver) {
+            ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+        }
+
         $fixture = $fixtureSet->getFixtures()->get($object->getReference());
         $properties = $fixture->getSpecs()->getProperties();
 
         $scope = [];
         foreach ($properties as $property) {
+            /** @var Property $property */
             $propertyValue = $property->getValue();
             if ($propertyValue instanceof ValueInterface) {
                 $result = $this->resolver->resolve($propertyValue, $fixture, $fixtureSet, $scope);

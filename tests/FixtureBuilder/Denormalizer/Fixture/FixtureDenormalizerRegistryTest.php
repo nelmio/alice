@@ -14,6 +14,9 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\DummyChainableParserAwareDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\FakeChainableDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\FakeChainableDenormalizerAwareDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -44,10 +47,7 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
 
     public function testOnlyAcceptsChainableFixtureDenormalizers()
     {
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
+        $flagParser = new FakeFlagParser();
 
         try {
             new FixtureDenormalizerRegistry($flagParser, [new \stdClass()]);
@@ -74,22 +74,11 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
         }
     }
     
-    public function testInjectsParserInParserAwareDenormalizers()
+    public function testInjectsParserInParserAwareDenormalizersAndItselfInDenormalizerAwareDenormalizers()
     {
-        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var FlagParserInterface $flagParser */
-        $flagParser = $flagParserProphecy->reveal();
-
-        $chainableDenormalizer1Prophecy = $this->prophesize(ChainableFixtureDenormalizerInterface::class);
-        $chainableDenormalizer1Prophecy->denormalize(Argument::cetera())->shouldNotBeCalled();
-        /** @var ChainableFixtureDenormalizerInterface $chainableDenormalizer1 */
-        $chainableDenormalizer1 = $chainableDenormalizer1Prophecy->reveal();
-
-        $chainableDenormalizer2Prophecy = $this->prophesize(ChainableFixtureDenormalizerInterface::class);
-        $chainableDenormalizer2Prophecy->denormalize(Argument::cetera())->shouldNotBeCalled();
-        /** @var ChainableFixtureDenormalizerInterface $chainableDenormalizer2 */
-        $chainableDenormalizer2 = $chainableDenormalizer2Prophecy->reveal();
+        $flagParser = new FakeFlagParser();
+        $chainableDenormalizer1 = new FakeChainableDenormalizer();
+        $chainableDenormalizer2 = new FakeChainableDenormalizer();
 
         $flagParserAwareProphecy = $this->prophesize(FlagParserAwareInterface::class);
         $flagParserAwareProphecy->withParser($flagParser)->shouldBeCalled();
@@ -97,21 +86,24 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
         $flagParserAware = $flagParserAwareProphecy->reveal();
 
         $flagParserAwareDenormalizer = new DummyChainableParserAwareDenormalizer($chainableDenormalizer2, $flagParserAware);
+        $denormalizerAwareDenormalizer = new FakeChainableDenormalizerAwareDenormalizer();
 
         $denormalizer = new FixtureDenormalizerRegistry(
             $flagParser,
             [
                 $chainableDenormalizer1,
                 $flagParserAwareDenormalizer,
+                $denormalizerAwareDenormalizer,
             ]
         );
         $actualDenormalizers = $this->propRefl->getValue($denormalizer);
 
-        $this->assertCount(2, $actualDenormalizers);
+        $this->assertCount(3, $actualDenormalizers);
         $this->assertSame($chainableDenormalizer1, $actualDenormalizers[0]);
         $this->assertNotSame($flagParserAwareDenormalizer, $actualDenormalizers[1]);
         $this->assertNull($flagParserAwareDenormalizer->parser);
         $this->assertNotNull($actualDenormalizers[1]->parser);
+        $this->assertSame($denormalizer, $denormalizerAwareDenormalizer->denormalizer);
     }
     
     public function testUsesTheFirstSuitableDenormalizer()

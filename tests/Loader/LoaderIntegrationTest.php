@@ -12,6 +12,10 @@
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
+use Nelmio\Alice\Entity\Hydrator\CamelCaseDummy;
+use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
+use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
+use Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy;
 use Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructor;
@@ -22,7 +26,13 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithOptionalParameterInConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
+use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\FileLoaderInterface;
+use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\ObjectSet;
+use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\GenerationThrowable;
+use Nelmio\Alice\Throwable\HydrationThrowable;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 /**
@@ -30,6 +40,8 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
  */
 class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 {
+    const FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
+
     /**
      * @var FileLoaderInterface|DataLoaderInterface
      */
@@ -38,6 +50,43 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->loader = new IsolatedLoader();
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The file "unknown.yml" could not be found.
+     */
+    public function testLoadInexistingFile()
+    {
+        $this->loader->loadFile('unknown.yml');
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Parser\ParserNotFoundException
+     * @expectedExceptionMessageRegExp /^No suitable parser found for the file ".*?plain_file"\.$/
+     */
+    public function testLoadUnsupportedFileFormat()
+    {
+        $this->loader->loadFile(self::FILES_DIR.'/unsupported/plain_file');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessageRegExp /^The file ".*?no_return.php" must return a PHP array\.$/
+     */
+    public function testLoadPhpFileWhichDoesNotReturnAnything()
+    {
+        $this->loader->loadFile(self::FILES_DIR.'/php/no_return.php');
+    }
+
+    public function testLoadEmptyData()
+    {
+        $set = $this->loader->loadData([]);
+
+        $this->assertEquals(
+            new ObjectSet(new ParameterBag(), new ObjectBag()),
+            $set
+        );
     }
 
     public function testLoadEmptyInstances()
@@ -57,6 +106,47 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\stdClass::class, $objects['bob']);
     }
 
+    public function testLoadASequencedOfItems()
+    {
+        $set = $this->loader->loadData([
+            \stdClass::class => [
+                'dummy{1..10}' => [],
+            ],
+        ]);
+        $objects = $set->getObjects();
+
+        $this->assertCount(0, $set->getParameters());
+        $this->assertCount(10, $objects);
+
+        for ($i = 1; $i <= 10; $i++) {
+            $this->assertInstanceOf(\stdClass::class, $objects['dummy'.$i]);
+            // TODO: test value for current
+        }
+    }
+
+    public function testLoadAListOfItems()
+    {
+        $set = $this->loader->loadData([
+            \stdClass::class => [
+                'user_{alice, bob, fred}' => [],
+            ],
+        ]);
+        $objects = $set->getObjects();
+
+        $this->assertCount(0, $set->getParameters());
+        $this->assertCount(3, $objects);
+
+        $this->assertSame(
+            [
+                'user_alice',
+                'user_bob',
+                'user_fred',
+            ],
+            array_keys($objects)
+        );
+        // TODO: test value for current
+    }
+
     /**
      * @dataProvider provideFixturesToInstantiate
      */
@@ -65,7 +155,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         try {
             $objects = $this->loader->loadData($data)->getObjects();
             if (null === $expected) {
-                $this->fail('Expected exception to be thrown');
+                $this->fail('Expected exception to be thrown.');
             }
         } catch (InstantiationThrowable $exception) {
             return;
@@ -73,6 +163,49 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $objects);
         $this->assertEquals($expected, $objects['dummy']);
+    }
+
+    /**
+     * @dataProvider provideFixturesToHydrate
+     */
+    public function testObjectHydration(array $data, array $expected = null)
+    {
+        try {
+            $objects = $this->loader->loadData($data)->getObjects();
+            if (null === $expected) {
+                $this->fail('Expected exception to be thrown.');
+            }
+        } catch (HydrationThrowable $exception) {
+            return;
+        }
+
+        $this->assertEquals(count($expected), count($objects));
+        $this->assertEquals($expected, $objects);
+    }
+
+    /**
+     * @dataProvider provideFixturesToGenerate
+     */
+    public function testFixtureGeneration(array $data, array $expected = null)
+    {
+        try {
+            $set = $this->loader->loadData($data);
+            if (null === $expected) {
+                $this->fail('Expected exception to be thrown.');
+            }
+        } catch (GenerationThrowable $exception) {
+            return;
+        }
+
+        $expectedParameters = $expected['parameters'];
+        $actualParameteters = $set->getParameters();
+        $this->assertEquals(count($expectedParameters), count($actualParameteters));
+        $this->assertEquals($expectedParameters, $actualParameteters);
+
+        $expectedObjects = $expected['objects'];
+        $actualObjects = $set->getObjects();
+        $this->assertEquals(count($expectedObjects), count($actualObjects));
+        $this->assertEquals($expectedObjects, $actualObjects);
     }
 
     public function provideFixturesToInstantiate()
@@ -356,6 +489,208 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             (new \ReflectionClass(DummyWithNamedPrivateConstructor::class))->newInstanceWithoutConstructor(),
+        ];
+    }
+
+    public function provideFixturesToHydrate()
+    {
+        yield 'public camelCase property' => [
+            [
+                CamelCaseDummy::class => [
+                    'dummy' => [
+                        'publicProperty' => 'bob',
+                    ],
+                ],
+            ],
+            [
+                'dummy' => (function (CamelCaseDummy $dummy) {
+                    $dummy->publicProperty = 'bob';
+
+                    return $dummy;
+                })(new CamelCaseDummy())
+            ],
+        ];
+
+        yield 'public snake_case property' => [
+            [
+                SnakeCaseDummy::class => [
+                    'dummy' => [
+                        'public_property' => 'bob',
+                    ],
+                ],
+            ],
+            [
+                'dummy' => (function (SnakeCaseDummy $dummy) {
+                    $dummy->public_property = 'bob';
+
+                    return $dummy;
+                })(new SnakeCaseDummy())
+            ],
+        ];
+
+        yield 'public PascalCase property' => [
+            [
+                PascalCaseDummy::class => [
+                    'dummy' => [
+                        'PublicProperty' => 'bob',
+                    ],
+                ],
+            ],
+            [
+                'dummy' => (function (PascalCaseDummy $dummy) {
+                    $dummy->PublicProperty = 'bob';
+
+                    return $dummy;
+                })(new PascalCaseDummy())
+            ],
+        ];
+
+        yield 'public setter camelCase property' => [
+            [
+                CamelCaseDummy::class => [
+                    'dummy' => [
+                        'setterProperty' => 'bob',
+                    ],
+                ],
+            ],
+            [
+                'dummy' => (function (CamelCaseDummy $dummy) {
+                    $dummy->setSetterProperty('bob');
+
+                    return $dummy;
+                })(new CamelCaseDummy())
+            ],
+        ];
+
+        yield 'public setter snake_case property' => [
+            [
+                SnakeCaseDummy::class => [
+                    'dummy' => [
+                        'setter_property' => 'bob',
+                    ],
+                ],
+            ],
+            null,
+        ];
+
+        yield 'magic call camelCase property' => [
+            [
+                MagicCallDummy::class => [
+                    'dummy' => [
+                        'magicProperty' => 'bob',
+                    ],
+                ],
+            ],
+            [
+                'dummy' => (function (MagicCallDummy $dummy) {
+                    $dummy->magicProperty('bob');
+
+                    return $dummy;
+                })(new MagicCallDummy())
+            ],
+        ];
+
+        yield 'magic call snake_case property' => [
+            [
+                SnakeCaseDummy::class => [
+                    'dummy' => [
+                        'magic_property' => 'bob',
+                    ],
+                ],
+            ],
+            [
+                'dummy' => (function (MagicCallDummy $dummy) {
+                    $dummy->magic_property('bob');
+
+                    return $dummy;
+                })(new MagicCallDummy())
+            ],
+        ];
+
+        yield 'magic call PascalCase property' => [
+            [
+                MagicCallDummy::class => [
+                    'dummy' => [
+                        'MagicProperty' => 'bob',
+                    ],
+                ],
+            ],
+            [
+                'dummy' => (function (MagicCallDummy $dummy) {
+                    $dummy->MagicProperty('bob');
+
+                    return $dummy;
+                })(new MagicCallDummy())
+            ],
+        ];
+    }
+
+    public function provideFixturesToGenerate()
+    {
+        yield 'static value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ])
+                ],
+            ]
+        ];
+
+        yield 'reference value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummy' => '@dummy',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummy' => $dummy,
+                    ]),
+                ],
+            ]
+        ];
+
+        yield 'inversed reference value' => [
+            [
+                \stdClass::class => [
+                    'another_dummy' => [
+                        'dummy' => '@dummy',
+                    ],
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'another_dummy' => StdClassFactory::create([
+                        'dummy' => $dummy,
+                    ]),
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ]
         ];
     }
 }

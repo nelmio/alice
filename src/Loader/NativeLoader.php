@@ -77,6 +77,7 @@ use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator;
+use Nelmio\Alice\Generator\Instantiator\Chainable\NoMethodCallInstantiator;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NullConstructorInstantiator;
 use Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry;
@@ -89,6 +90,7 @@ use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
 use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry;
 use Nelmio\Alice\Generator\ValueResolverInterface;
@@ -113,7 +115,7 @@ use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
@@ -328,6 +330,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function _getBuiltInObjectGenerator(): ObjectGeneratorInterface
     {
         return new SimpleObjectGenerator(
+            $this->getBuiltInValueResolver(),
             $this->getBuiltInInstantiator(),
             $this->getBuiltInHydrator(),
             $this->getBuiltInCaller()
@@ -337,10 +340,10 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function _getBuiltInInstantiator(): InstantiatorInterface
     {
         return new InstantiatorResolver(
-            $this->getBuiltInValueResolver(),
             new InstantiatorRegistry([
                 new NoCallerMethodCallInstantiator(),
                 new NullConstructorInstantiator(),
+                new NoMethodCallInstantiator(),
                 new StaticFactoryInstantiator(),
             ])
         );
@@ -349,7 +352,6 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function _getBuiltInHydrator(): HydratorInterface
     {
         return new SimpleHydrator(
-            $this->getBuiltInValueResolver(),
             $this->getBuiltInPropertyHydrator()
         );
     }
@@ -366,13 +368,14 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new UniqueValueResolver(
                 $this->getBuiltInUniqueValuesPool()
             ),
+            new FixtureReferenceResolver(),
         ]);
     }
 
     protected function _getBuiltInPropertyHydrator(): PropertyHydratorInterface
     {
         return new SymfonyPropertyAccessorHydrator(
-            new PropertyAccessor()
+            PropertyAccess::createPropertyAccessor()
         );
     }
 

@@ -57,7 +57,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
     public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new DynamicArrayValueResolver();
-        $newResolver = $resolver->with(new FakeValueResolver());
+        $newResolver = $resolver->withResolver(new FakeValueResolver());
 
         $this->assertEquals(new DynamicArrayValueResolver(), $resolver);
         $this->assertEquals(new DynamicArrayValueResolver(new FakeValueResolver()), $newResolver);

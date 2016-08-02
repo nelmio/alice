@@ -15,9 +15,11 @@ use Nelmio\Alice\Exception\Generator\Instantiator\InstantiatorNotFoundException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Generator\ValueResolverAwareInterface;
+use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
-final class InstantiatorRegistry implements InstantiatorInterface
+final class InstantiatorRegistry implements InstantiatorInterface, ValueResolverAwareInterface
 {
     use NotClonableTrait;
 
@@ -28,10 +30,33 @@ final class InstantiatorRegistry implements InstantiatorInterface
 
     /**
      * @param ChainableInstantiatorInterface[] $instantiators
+     * @param ValueResolverInterface|null      $resolver
      */
-    public function __construct(array $instantiators)
+    public function __construct(array $instantiators, ValueResolverInterface $resolver = null)
     {
-        $this->instantiators = (function (ChainableInstantiatorInterface ...$instantiators) { return $instantiators; })(...$instantiators);
+        $this->instantiators = (
+            function (ValueResolverInterface $resolver = null, ChainableInstantiatorInterface ...$instantiators) {
+                if (null === $resolver) {
+                    return $instantiators;
+                }
+
+                foreach ($instantiators as $index => $instantiator) {
+                    if ($instantiator instanceof ValueResolverAwareInterface) {
+                        $instantiators[$index] = $instantiator->withResolver($resolver);
+                    }
+                }
+
+                return $instantiators;
+            }
+        )($resolver, ...$instantiators);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withResolver(ValueResolverInterface $resolver): self
+    {
+        return new self($this->instantiators, $resolver);
     }
 
     /**
