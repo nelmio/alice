@@ -12,10 +12,11 @@
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Definition\Value\ListValue;
-use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Definition\Value\NestedValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\NotClonableTrait;
 
 final class SimpleParser implements ParserInterface
@@ -49,43 +50,38 @@ final class SimpleParser implements ParserInterface
         $tokens = $this->lexer->lex($value);
         $parsedTokens = [];
         foreach ($tokens as $token) {
-            $parsedTokens[] = $this->tokenParser->parse($token);
-            $parsedTokens = $this->mergeStringTokens($parsedTokens);
+            $parsedTokens = $this->parseToken($parsedTokens, $this->tokenParser, $token);
         }
 
-        if (1 === count($parsedTokens)) {
-            return $parsedTokens[0];
-        }
-
-        return new ListValue($parsedTokens);
+        return (1 === count($parsedTokens))
+            ? $parsedTokens[0]
+            : new ListValue($parsedTokens)
+        ;
     }
 
     /**
-     * If the last two tokens were parsed into strings, they are combined into one.
+     * Parses the given token. If the value returned is a ListValue, its values will be merged to the list of parsed
+     * tokens instead of adding the value itself. Another check is done to ensure that successive string tokens are
+     * merged.
      *
-     * @param ValueInterface[]|mixed[] $values
+     * @param array                $parsedTokens
+     * @param TokenParserInterface $parser
+     * @param Token                $token
      *
-     * @return ValueInterface[]|mixed[]
+     * @return array<ValueInterface, string> Parsed tokens
      */
-    private function mergeStringTokens(array $values)
+    private function parseToken(array $parsedTokens, TokenParserInterface $parser, Token $token): array
     {
-        /** @var ValueInterface|mixed|false $lastValue */
-        $lastValue = end($values);
-        if (false === $lastValue || count($values) < 2 || false === is_string($lastValue)) {
-            return $values;
+        $parsedToken = $parser->parse($token);
+        $parsedToken = ($parsedToken instanceof NestedValue)
+            ? $parsedToken->getValue()
+            : [$parsedToken]
+        ;
+
+        foreach ($parsedToken as $value) {
+            $parsedTokens[] = $value;
         }
 
-        $lastValueKey = key($values);
-        $previousValueKey = $lastValueKey - 1;
-        /** @var ValueInterface|mixed $previousValue */
-        $previousValue = $values[$lastValueKey - 1];
-        if (false === is_string($previousValue)) {
-            return $values;
-        }
-
-        $values[$previousValueKey] = $previousValue.$lastValue;
-        unset($values[$lastValueKey]);
-
-        return array_values($values);
+        return $parsedTokens;
     }
 }

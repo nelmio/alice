@@ -36,7 +36,6 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testTestCanLexValues(string $value, $expected)
     {
-        \PHPUnit_Framework_Assert::markTestIncomplete('TODO');
         try {
             $actual = $this->lexer->lex($value);
             if (null === $expected) {
@@ -261,9 +260,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Function] correct successive functions' => [
             '<f()> <g()>',
             [
-                new Token('<f()>', new TokenType(TokenType::FUNCTION_TYPE)),
-                new Token(' ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<g()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<f()> <g()>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] nested functions' => [
@@ -285,6 +282,115 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             '<(function())>',
             [
                 new Token('<(function())>', new TokenType(TokenType::IDENTITY_TYPE)),
+            ],
+        ];
+        yield '[Function] identity with args' => [
+            '<(function(echo("hello")))>',
+            [
+                new Token('<(function(echo("hello")))>', new TokenType(TokenType::IDENTITY_TYPE)),
+            ],
+        ];
+        yield '[Function] identity with params' => [
+            '<(function(echo(<{param}>))>',
+            [
+                new Token('<(function(echo(<{param}>))>', new TokenType(TokenType::IDENTITY_TYPE)),
+            ],
+        ];
+        yield '[X] parameter, function, identity and escaped' => [
+            '<{param}><function()><(echo("hello"))><<escaped_value>>',
+            [
+                new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
+                new Token('<function()><(echo("hello"))>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('escaped_value', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Function] nominal with arguments' => [
+            '<function($foo, $arg)>',
+            [
+                new Token('<function($foo, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] unbalanced with arguments (1)' => [
+            '<function($foo, $arg)',
+            null,
+        ];
+        yield '[Function] escaped unbalanced with arguments (1)' => [
+            '<<function($foo, $arg)',
+            [
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('function(', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(', ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$arg', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(')', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Function] unbalanced with arguments (2)' => [
+            'function($foo, $arg)>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced with arguments (2)' => [
+            'function($foo, $arg)>>',
+            [
+                new Token('function(', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(', ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$arg', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(')', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Function] escaped unbalanced with arguments (4)' => [
+            '<<function$foo, $arg)>>',
+            [
+                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('function', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(', ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$arg', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(')', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+            ],
+        ];
+        yield '[Function] successive functions with arguments' => [
+            '<f($foo, $arg)><g($baz, $faz)>',
+            [
+                new Token('<f($foo, $arg)><g($baz, $faz)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] correct successive functions with arguments' => [
+            '<f($foo, $arg)> <g($baz, $faz)>',
+            [
+                new Token('<f($foo, $arg)> <g($baz, $faz)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nested functions with arguments' => [
+            '<f(<g($baz)>, $arg)>',
+            [
+                new Token('<f(<g($baz)>, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nested functions with multiple arguments' => [
+            '<f(<g($baz, $faz)>, $arg)>',
+            [
+                new Token('<f(<g($baz, $faz)>, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nominal surrounded with arguments' => [
+            'foo <function($foo, $arg)> bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<function($foo, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        yield '[Function] nominal identity with arguments' => [
+            '<(function($foo, $arg))>',
+            [
+                new Token('<(function($foo, $arg))>', new TokenType(TokenType::IDENTITY_TYPE)),
             ],
         ];
         yield '[Function] identity with args' => [
@@ -597,7 +703,8 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             '@@user0',
             [
                 new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
-                new Token('user0', new TokenType(TokenType::STRING_TYPE)),
+                new Token('user', new TokenType(TokenType::STRING_TYPE)),
+                new Token('0', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] left with strings' => [
@@ -690,7 +797,9 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] range-prop (1)' => [
             '@user->username{1..2}',
             [
-                new Token('@user->username{1..2}', new TokenType(TokenType::RANGE_REFERENCE_TYPE)),
+                new Token('@user->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+                new Token('{', new TokenType(TokenType::STRING_TYPE)),
+                new Token('1..2}', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] range-prop (2)' => [
@@ -700,7 +809,9 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] range-method (1)' => [
             '@user->getUserName(){1..2}',
             [
-                new Token('@user->getUserName(){1..2}', new TokenType(TokenType::RANGE_REFERENCE_TYPE)),
+                new Token('@user->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+                new Token('{', new TokenType(TokenType::STRING_TYPE)),
+                new Token('1..2}', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] range-method (2)' => [
@@ -739,19 +850,15 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         yield '[Reference] alone with function with arguments' => [
-            '@user0->getUserName($username)',
+            '@user0->setName($foo, $bar)',
             [
-                new Token('@user0->getUserName($username)', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+                new Token('@user0->setName($foo, $bar)', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] alone with function with arguments containing nested reference' => [
             '@user0->getUserName($username, @group->getName($foo))',
             [
-                new Token('@user0->getUserName', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
-                new Token('(', new TokenType(TokenType::STRING_TYPE)),
-                new Token('$username,', new TokenType(TokenType::VARIABLE_TYPE)),
-                new Token(' ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@group->getName($foo))', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+                new Token('@user0->getUserName($username, @group->getName($foo))', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] alone with fluent function' => [
@@ -785,44 +892,60 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] nominal list' => [
             '@user0{alice, bob}',
             [
-                new Token('@user{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+                new Token('@user0{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] surrounded list' => [
             'foo @user0{alice, bob} bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+                new Token('@user0{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] reference function' => [
             '@user0<current()>',
             [
-                new Token('@user{@lice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+                new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('<current()>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Reference] surrounded reference function' => [
+            'foo @user0<current()> bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('<current()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Reference] reference function with args' => [
             '@user0<f($foo, $bar)>',
             [
+                new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('<f($foo, $bar)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Reference] surrounded reference function with args' => [
+            'foo @user0<f($foo, $bar)> bar',
+            [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user{@lice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+                new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('<f($foo, $bar)>', new TokenType(TokenType::FUNCTION_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
-        yield '[Reference] function nested' => [
+        yield '[Reference] function successive' => [
             '@user0->getUserName()@user1->getName()',
             [
-                new Token('@user0->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
-                new Token('@user1->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+                new Token('@user0->getUserName()@user1->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
             ],
         ];
-        yield '[Reference] function nested surrounded' => [
+        yield '[Reference] function successive surrounded' => [
             'foo @user0->getUserName()@user1->getName() bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user0->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
-                new Token('@user1->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+                new Token('@user0->getUserName()@user1->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];

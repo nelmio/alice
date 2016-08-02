@@ -24,17 +24,19 @@ final class FixtureReferenceValue implements ValueInterface
     private $reference;
 
     /**
-     * @param string $reference e.g. "user0"
+     * @param string|ValueInterface $reference e.g. "user0"
      */
-    public function __construct(string $reference)
+    public function __construct($reference)
     {
         $this->reference = $reference;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @return string|ValueInterface
      */
-    public function getValue(): string
+    public function getValue()
     {
         return $this->reference;
     }

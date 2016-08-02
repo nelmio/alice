@@ -13,6 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
+use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
@@ -25,7 +26,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Loader\NativeLoader;
-use Nelmio\Alice\Throwable\ParseThrowable;
+use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 /**
  * @group integration
@@ -37,16 +38,14 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        \PHPUnit_Framework_Assert::markTestSkipped('TODO');
         $this->parser = (new NativeLoader())->getBuiltInExpressionLanguageParser();
     }
 
     /**
      * @dataProvider provideValues
      */
-    public function testTestParseValues($value, $expected)
+    public function testTestParseValues(string $value, $expected)
     {
-        \PHPUnit_Framework_Assert::markTestIncomplete('TODO');
         try {
             $actual = $this->parser->parse($value);
             if (null === $expected) {
@@ -64,7 +63,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             }
 
             throw $exception;
-        } catch (ParseThrowable $exception) {
+        } catch (ExpressionLanguageParseThrowable $exception) {
             if (null === $expected) {
                 return;
             }
@@ -206,7 +205,10 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Function] successive functions' => [
             '<f()><g()>',
-            null,
+            new ListValue([
+                new FunctionCallValue('f'),
+                new FunctionCallValue('g'),
+            ]),
         ];
         yield '[Function] correct successive functions' => [
             '<f()> <g()>',
@@ -263,7 +265,181 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[X] parameter, function, identity and escaped' => [
             '<{param}><function()><(echo("hello"))><<escaped_value>>',
+            new ListValue([
+                new ParameterValue('param'),
+                new FunctionCallValue('function'),
+                new FunctionCallValue(
+                    'identity',
+                    [
+                        'echo("hello")',
+                    ]
+                ),
+                '<escaped_value>',
+            ]),
+        ];
+        yield '[Function] nominal with arguments' => [
+            '<function($foo, $arg)>',
+            new FunctionCallValue(
+                'function',
+                [
+                    new VariableValue('foo'),
+                    new VariableValue('arg'),
+                ]
+            ),
+        ];
+        yield '[Function] unbalanced with arguments (1)' => [
+            '<function($foo, $arg)',
             null,
+        ];
+        yield '[Function] escaped unbalanced with arguments (1)' => [
+            '<<function($foo, $arg)',
+            new ListValue([
+                '<function(',
+                new VariableValue('foo'),
+                ', ',
+                new VariableValue('arg'),
+                ')',
+            ]),
+        ];
+        yield '[Function] unbalanced with arguments (2)' => [
+            'function($foo, $arg)>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced with arguments (2)' => [
+            'function($foo, $arg)>>',
+            new ListValue([
+                'function(',
+                new VariableValue('foo'),
+                ', ',
+                new VariableValue('arg'),
+                ')>',
+            ]),
+        ];
+        yield '[Function] escaped unbalanced with arguments (4)' => [
+            '<<function$foo, $arg)>>',
+            new ListValue([
+                '<function',
+                new VariableValue('foo'),
+                ', ',
+                new VariableValue('arg'),
+                ')>',
+            ]),
+        ];
+        yield '[Function] successive functions with arguments' => [
+            '<f($foo, $arg)><g($baz, $faz)>',
+            new ListValue([
+                new FunctionCallValue(
+                    'f',
+                    [
+                        new VariableValue('foo'),
+                        new VariableValue('arg'),
+                    ]
+                ),
+                new FunctionCallValue(
+                    'g',
+                    [
+                        new VariableValue('baz'),
+                        new VariableValue('faz'),
+                    ]
+                ),
+            ]),
+        ];
+        yield '[Function] correct successive functions with arguments' => [
+            '<f($foo, $arg)> <g($baz, $faz)>',
+            new ListValue([
+                new FunctionCallValue(
+                    'f',
+                    [
+                        new VariableValue('foo'),
+                        new VariableValue('arg'),
+                    ]
+                ),
+                ' ',
+                new FunctionCallValue(
+                    'g',
+                    [
+                        new VariableValue('baz'),
+                        new VariableValue('faz'),
+                    ]
+                ),
+            ]),
+        ];
+        yield '[Function] nested functions with arguments' => [
+            '<f(<g($baz)>, $arg)>',
+            new FunctionCallValue(
+                'f',
+                [
+                    new FunctionCallValue(
+                        'g',
+                        [
+                            new VariableValue('baz'),
+                        ]
+                    ),
+                    new VariableValue('arg'),
+                ]
+            ),
+        ];
+        yield '[Function] nested functions with multiple arguments' => [
+            '<f(<g($baz, $faz)>, $arg)>',
+            null, // Will fail because cannot guess that the first comma is for the nested function and not for the
+                  // parent function.
+        ];
+        yield '[Function] nominal surrounded with arguments' => [
+            'foo <function($foo, $arg)> bar',
+            new ListValue([
+                'foo ',
+                new FunctionCallValue(
+                    'function',
+                    [
+                        new VariableValue('foo'),
+                        new VariableValue('arg'),
+                    ]
+                ),
+                ' bar',
+            ]),
+        ];
+
+        yield '[Function] nominal identity with arguments' => [
+            '<(function($foo, $arg))>',
+            new FunctionCallValue(
+                'identity',
+                [
+                    'function($foo, $arg)',
+                ]
+            ),
+        ];
+        yield '[Function] identity with args' => [
+            '<(function(echo("hello")))>',
+            new FunctionCallValue(
+                'identity',
+                [
+                    'function(echo("hello"))',
+                ]
+            ),
+        ];
+        yield '[Function] identity with params' => [
+            '<(function(echo(<{param}>))>',
+            new FunctionCallValue(
+                'identity',
+                [
+                    'function(echo(<{param}>)',
+                ]
+            ),
+        ];
+        yield '[X] parameter, function, identity and escaped' => [
+            '<{param}><function()><(echo("hello"))><<escaped_value>>',
+            new ListValue([
+                new ParameterValue('param'),
+                new FunctionCallValue('function'),
+                //TODO: refactor identity call by making a factory...
+                new FunctionCallValue(
+                    'identity',
+                    [
+                        'echo("hello")',
+                    ]
+                ),
+                '<escaped_value>',
+            ]),
         ];
 
         // Arrays
@@ -710,7 +886,13 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] range-prop (1)' => [
             '@user->username{1..2}',
-            null,
+            new ListValue([
+                new FixturePropertyValue(
+                    new FixtureReferenceValue('user'),
+                    'username'
+                ),
+                '{1..2}'
+            ]),
         ];
         yield '[Reference] range-prop (2)' => [
             '@user{1..2}->username',
@@ -718,7 +900,13 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] range-method (1)' => [
             '@user->getUserName(){1..2}',
-            null,
+            new ListValue([
+                new FixtureMethodCallValue(
+                    new FixtureReferenceValue('user'),
+                    new FunctionCallValue('getUserName')
+                ),
+                '{1..2}'
+            ]),
         ];
         yield '[Reference] range-method (2)' => [
             '@user{1..2}->getUserName()',
@@ -769,10 +957,12 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '@user0->getUserName($username)',
             new FixtureMethodCallValue(
                 new FixtureReferenceValue('user0'),
-                new FunctionCallValue('getUserName'),
-                [
-                    new VariableValue('username'),
-                ]
+                new FunctionCallValue(
+                    'getUserName',
+                    [
+                        new VariableValue('username'),
+                    ]
+                )
             ),
         ];
         yield '[Reference] alone with function with arguments containing nested reference' => [
@@ -789,73 +979,97 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] nominal wildcard' => [
             '@user*',
-            [
-                new Token('@user*', new TokenType(TokenType::WILDCARD_REFERENCE_TYPE)),
-            ],
+            new FixtureMatchReferenceValue('/^user.*'),
         ];
         yield '[Reference] surrounded wildcard' => [
             'foo @user* bar',
-            [
-                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user*', new TokenType(TokenType::WILDCARD_REFERENCE_TYPE)),
-                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            new ListValue([
+                'foo ',
+                new FixtureMatchReferenceValue('/^user.*'),
+                ' bar',
+            ]),
         ];
         yield '[Reference] nominal list' => [
             '@user0{alice, bob}',
-            [
-                new Token('@user{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
-            ],
+            new ChoiceListValue([
+                new FixtureReferenceValue('user0alice'),
+                new FixtureReferenceValue('user0bob'),
+            ]),
         ];
         yield '[Reference] surrounded list' => [
             'foo @user0{alice, bob} bar',
-            [
-                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
-                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            new ListValue([
+                'foo ',
+                new ChoiceListValue([
+                    new FixtureReferenceValue('user0alice'),
+                    new FixtureReferenceValue('user0bob'),
+                ]),
+                ' bar',
+            ]),
         ];
         yield '[Reference] reference function' => [
             '@user0<current()>',
-            [
-                new Token('@user{@lice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
-            ],
+            new FixtureReferenceValue(
+                new ListValue([
+                    'user0',
+                    new FunctionCallValue('current')
+                ])
+            ),
         ];
-        yield '[Reference] reference function with args' => [
-            '@user0<f($foo, $bar)>',
-            [
-                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('@user{@lice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
-                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-            ],
-        ];
-        yield '[Reference] function nested' => [
-            '@user0->getUserName()@user1->getName()',
-            new ListValue([
-                new FixtureMethodCallValue(
-                    new FixtureReferenceValue('user0'),
-                    new FunctionCallValue('getUserName')
-                ),
-                new FixtureMethodCallValue(
-                    new FixtureReferenceValue('user1'),
-                    new FunctionCallValue('getName')
-                ),
-            ]),
-        ];
-        yield '[Reference] function nested surrounded' => [
-            'foo @user0->getUserName()@user1->getName() bar',
+        yield '[Reference] surrounded reference function' => [
+            'foo @user0<current()> bar',
             new ListValue([
                 'foo ',
-                new FixtureMethodCallValue(
-                    new FixtureReferenceValue('user0'),
-                    new FunctionCallValue('getUserName')
-                ),
-                new FixtureMethodCallValue(
-                    new FixtureReferenceValue('user1'),
-                    new FunctionCallValue('getName')
+                new FixtureReferenceValue(
+                    new ListValue([
+                        'user0',
+                        new FunctionCallValue('current')
+                    ])
                 ),
                 ' bar',
             ]),
+        ];
+        yield '[Reference] reference function with args' => [
+            '@user0<f($foo, $bar)>',
+            new FixtureReferenceValue(
+                new ListValue([
+                    'user0',
+                    new FunctionCallValue(
+                        'f',
+                        [
+                            new VariableValue('foo'),
+                            new VariableValue('bar'),
+                        ]
+                    )
+                ])
+            ),
+        ];
+        yield '[Reference] surrounded reference function with args' => [
+            'foo @user0<f($foo, $bar)> bar',
+            new ListValue([
+                'foo ',
+                new FixtureReferenceValue(
+                    new ListValue([
+                        'user0',
+                        new FunctionCallValue(
+                            'f',
+                            [
+                                new VariableValue('foo'),
+                                new VariableValue('bar'),
+                            ]
+                        )
+                    ])
+                ),
+                ' bar',
+            ]),
+        ];
+        yield '[Reference] function successive' => [
+            '@user0->getUserName()@user1->getName()',
+            null,
+        ];
+        yield '[Reference] function successive surrounded' => [
+            'foo @user0->getUserName()@user1->getName() bar',
+            null,
         ];
         yield '[Reference] function nested with function' => [
             '@user0->@user1->getUsername()',
@@ -922,8 +1136,4 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '$username',
         ];
     }
-
-    //TODO: @user->username->fluent
-    //TODO: @user->getUsername()->fluent()
-    //TODO: @user*...
 }

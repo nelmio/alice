@@ -48,10 +48,10 @@ final class DynamicArrayValue implements ValueInterface
             );
         }
 
-        if (false === is_string($element) && false === $element instanceof ValueInterface) {
+        if (false === is_string($element) && false === is_array($element) && false === $element instanceof ValueInterface) {
             throw new \TypeError(
                 sprintf(
-                    'Expected element to be either string or a "%s" object. Got "%s" instead.',
+                    'Expected element to be either string, an array or a "%s" object. Got "%s" instead.',
                     ValueInterface::class,
                     is_object($element) ? get_class($element) : gettype($element)
                 )
