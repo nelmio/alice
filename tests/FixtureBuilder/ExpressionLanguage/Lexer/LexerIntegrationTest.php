@@ -77,7 +77,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
                 new Token('', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
-        
+
         yield 'regular string value' => [
             'dummy',
             [
@@ -727,6 +727,24 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
                 new Token('@user0->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
             ],
         ];
+        yield '[Reference] wildcard with prop' => [
+            '@user*->username',
+            [
+                new Token('@user*->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] list with prop' => [
+            '@user{alice, bob}->username',
+            [
+                new Token('@user{alice, bob}->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] range with prop' => [
+            '@user{1..2}->username',
+            [
+                new Token('@user{1..2}->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+            ],
+        ];
         yield '[Reference] left with prop' => [
             'foo @user0->username',
             [
@@ -794,7 +812,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
                 new Token('@group{3..4}', new TokenType(TokenType::RANGE_REFERENCE_TYPE)),
             ],
         ];
-        yield '[Reference] range-prop (1)' => [
+        yield '[Reference] range-prop' => [
             '@user->username{1..2}',
             [
                 new Token('@user->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
@@ -802,21 +820,13 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
                 new Token('1..2}', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
-        yield '[Reference] range-prop (2)' => [
-            '@user{1..2}->username',
-            null,
-        ];
-        yield '[Reference] range-method (1)' => [
+        yield '[Reference] range-method' => [
             '@user->getUserName(){1..2}',
             [
                 new Token('@user->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
                 new Token('{', new TokenType(TokenType::STRING_TYPE)),
                 new Token('1..2}', new TokenType(TokenType::STRING_TYPE)),
             ],
-        ];
-        yield '[Reference] range-method (2)' => [
-            '@user{1..2}->getUserName()',
-            null,
         ];
         yield '[Reference] with nested with prop' => [
             '@user0->@user1',
@@ -839,6 +849,12 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             '@user0->getUserName()',
             [
                 new Token('@user0->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] wildcard alone with function' => [
+            '@user*->getUserName()',
+            [
+                new Token('@user*->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] function surrounded' => [
@@ -893,6 +909,12 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             '@user0{alice, bob}',
             [
                 new Token('@user0{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
+            ],
+        ];
+        yield '[Reference] list with function' => [
+            '@user{alice, bob}->getUserName()',
+            [
+                new Token('@user{alice, bob}->getUserName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] surrounded list' => [

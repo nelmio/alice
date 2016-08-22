@@ -16,6 +16,8 @@ use Nelmio\Alice\Definition\ValueInterface;
 /**
  * Value object a reference to a fixture e.g. "@user0" matching a pattern. For example "@user*" will result in a pattern
  * '~^user.*~' which can match "@user0", "@user_base" etc.
+ *
+ * @TODO: add factory for wildcard...
  */
 final class FixtureMatchReferenceValue implements ValueInterface
 {

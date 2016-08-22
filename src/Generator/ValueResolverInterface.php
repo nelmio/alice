@@ -30,5 +30,10 @@ interface ValueResolverInterface
      *
      * @return ResolvedValueWithFixtureSet
      */
-    public function resolve(ValueInterface $value, FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, array $scope = []): ResolvedValueWithFixtureSet;
+    public function resolve(
+        ValueInterface $value,
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $fixtureSet,
+        array $scope = []
+    ): ResolvedValueWithFixtureSet;
 }

@@ -23,8 +23,6 @@ use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
@@ -808,6 +806,33 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 'username'
             ),
         ];
+        yield '[Reference] wildcard with prop' => [
+            '@user*->username',
+            new FixturePropertyValue(
+                new FixtureMatchReferenceValue('/^user.*/'),
+                'username'
+            ),
+        ];
+        yield '[Reference] list with prop' => [
+            '@user{alice, bob}->username',
+            new FixturePropertyValue(
+                new ChoiceListValue([
+                    new FixtureReferenceValue('useralice'),
+                    new FixtureReferenceValue('userbob'),
+                ]),
+                'username'
+            ),
+        ];
+        yield '[Reference] range with prop' => [
+            '@user{1..2}->username',
+            new FixturePropertyValue(
+                new ChoiceListValue([
+                    new FixtureReferenceValue('user1'),
+                    new FixtureReferenceValue('user2'),
+                ]),
+                'username'
+            ),
+        ];
         yield '[Reference] left with prop' => [
             'foo @user0->username',
             new ListValue([
@@ -884,7 +909,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 ]),
             ]),
         ];
-        yield '[Reference] range-prop (1)' => [
+        yield '[Reference] range-prop' => [
             '@user->username{1..2}',
             new ListValue([
                 new FixturePropertyValue(
@@ -894,11 +919,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 '{1..2}'
             ]),
         ];
-        yield '[Reference] range-prop (2)' => [
-            '@user{1..2}->username',
-            null,
-        ];
-        yield '[Reference] range-method (1)' => [
+        yield '[Reference] range-method' => [
             '@user->getUserName(){1..2}',
             new ListValue([
                 new FixtureMethodCallValue(
@@ -907,10 +928,6 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 ),
                 '{1..2}'
             ]),
-        ];
-        yield '[Reference] range-method (2)' => [
-            '@user{1..2}->getUserName()',
-            null,
         ];
         yield '[Reference] with nested with prop' => [
             '@user0->@user1',
@@ -939,6 +956,13 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '@user0->getUserName()',
             new FixtureMethodCallValue(
                 new FixtureReferenceValue('user0'),
+                new FunctionCallValue('getUserName')
+            ),
+        ];
+        yield '[Reference] wildcard alone with function' => [
+            '@user*->getUserName()',
+            new FixtureMethodCallValue(
+                new FixtureMatchReferenceValue('/^user.*/'),
                 new FunctionCallValue('getUserName')
             ),
         ];
@@ -979,13 +1003,13 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] nominal wildcard' => [
             '@user*',
-            new FixtureMatchReferenceValue('/^user.*'),
+            new FixtureMatchReferenceValue('/^user.*/'),
         ];
         yield '[Reference] surrounded wildcard' => [
             'foo @user* bar',
             new ListValue([
                 'foo ',
-                new FixtureMatchReferenceValue('/^user.*'),
+                new FixtureMatchReferenceValue('/^user.*/'),
                 ' bar',
             ]),
         ];
@@ -995,6 +1019,16 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 new FixtureReferenceValue('user0alice'),
                 new FixtureReferenceValue('user0bob'),
             ]),
+        ];
+        yield '[Reference] list with function' => [
+            '@user{alice, bob}->getUserName()',
+            new FixtureMethodCallValue(
+                new ChoiceListValue([
+                    new FixtureReferenceValue('useralice'),
+                    new FixtureReferenceValue('userbob'),
+                ]),
+                new FunctionCallValue('getUserName')
+            ),
         ];
         yield '[Reference] surrounded list' => [
             'foo @user0{alice, bob} bar',

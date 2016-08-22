@@ -46,7 +46,7 @@ final class WildcardReferenceTokenParser implements ChainableTokenParserInterfac
         }
 
         return new FixtureMatchReferenceValue(
-            sprintf('/^%s.*', $fixtureId)
+            sprintf('/^%s.*/', $fixtureId)
         );
     }
 }

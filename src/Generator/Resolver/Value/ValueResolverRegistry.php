@@ -18,6 +18,7 @@ use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
+use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
@@ -38,12 +39,12 @@ final class ValueResolverRegistry implements ValueResolverInterface, ObjectGener
     {
         $this->resolvers = (
             function (ObjectGeneratorInterface $generator = null, ChainableValueResolverInterface ...$resolvers) {
-                if (null === $generator) {
-                    return $resolvers;
-                }
-
                 foreach ($resolvers as $index => $resolver) {
-                    if ($resolver instanceof ObjectGeneratorAwareInterface) {
+                    if ($resolver instanceof ValueResolverAwareInterface) {
+                        $resolvers[$index] = $resolver = $resolver->withResolver($this);
+                    }
+
+                    if (null !== $generator && $resolver instanceof ObjectGeneratorAwareInterface) {
                         $resolvers[$index] = $resolver->withGenerator($generator);
                     }
                 }

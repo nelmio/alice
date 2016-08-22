@@ -12,20 +12,15 @@
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
-use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException;
-use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
-use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
-use Nelmio\Alice\Generator\ValueResolverAwareInterface;
-use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
 final class FixtureReferenceResolver implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface
@@ -45,7 +40,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
     /**
      * @inheritdoc
      */
-    public function withGenerator(ObjectGeneratorInterface $generator)
+    public function withGenerator(ObjectGeneratorInterface $generator): self
     {
         return new self($generator);
     }
@@ -69,15 +64,14 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = [],
-        int $tryCounter = 0
+        array $scope = []
     ): ResolvedValueWithFixtureSet
     {
         $referredFixtureId = $value->getValue();
         $referredFixture = $fixtureSet->getFixtures()->get($referredFixtureId);
 
         if (null === $this->generator) {
-            ObjectGeneratorNotFoundException::create(__METHOD__);
+            throw ObjectGeneratorNotFoundException::createUnexpectedCall(__METHOD__);
         }
         $objects = $this->generator->generate($referredFixture, $fixtureSet);
 
