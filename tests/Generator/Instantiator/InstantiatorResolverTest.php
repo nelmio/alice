@@ -44,6 +44,14 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
     {
         clone new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver());
     }
+
+    public function testIsResolverAware()
+    {
+        $this->assertEquals(
+            new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver()),
+            (new InstantiatorResolver(new FakeInstantiator()))->withResolver(new FakeValueResolver())
+        );
+    }
     
     public function testResolvesAllArguments()
     {

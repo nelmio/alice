@@ -809,7 +809,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] wildcard with prop' => [
             '@user*->username',
             new FixturePropertyValue(
-                new FixtureMatchReferenceValue('/^user.*/'),
+                FixtureMatchReferenceValue::createWildcardReference('user'),
                 'username'
             ),
         ];
@@ -962,7 +962,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] wildcard alone with function' => [
             '@user*->getUserName()',
             new FixtureMethodCallValue(
-                new FixtureMatchReferenceValue('/^user.*/'),
+                FixtureMatchReferenceValue::createWildcardReference('user'),
                 new FunctionCallValue('getUserName')
             ),
         ];
@@ -1003,13 +1003,13 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Reference] nominal wildcard' => [
             '@user*',
-            new FixtureMatchReferenceValue('/^user.*/'),
+            FixtureMatchReferenceValue::createWildcardReference('user'),
         ];
         yield '[Reference] surrounded wildcard' => [
             'foo @user* bar',
             new ListValue([
                 'foo ',
-                new FixtureMatchReferenceValue('/^user.*/'),
+                FixtureMatchReferenceValue::createWildcardReference('user'),
                 ' bar',
             ]),
         ];

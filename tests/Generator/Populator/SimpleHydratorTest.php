@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\Definition\Value\FakeObject;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\HydratorInterface;
@@ -37,6 +38,24 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
     public function testIsAnHydrator()
     {
         $this->assertTrue(is_a(SimpleHydrator::class, HydratorInterface::class, true));
+    }
+
+    public function testIsValueResolverAware()
+    {
+        $this->assertEquals(
+            (new SimpleHydrator(new FakePropertyHydrator()))->withResolver(new FakeValueResolver()),
+            new SimpleHydrator(new FakePropertyHydrator(), new FakeValueResolver())
+        );
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Hydrator\SimpleHydrator::hydrate" to be called only if it has a resolver.
+     */
+    public function testThrowsAnExceptionIfDoesNotHaveAResolver()
+    {
+        $hydrator = new SimpleHydrator(new FakePropertyHydrator());
+        $hydrator->hydrate(new FakeObject(), ResolvedFixtureSetFactory::create());
     }
 
     public function testAddsObjectToFixtureSet()
@@ -62,7 +81,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
             new ObjectBag(['dummy' => $object])
         );
 
-        $hydrator = new SimpleHydrator(new FakePropertyHydrator());
+        $hydrator = new SimpleHydrator(new FakePropertyHydrator(), new FakeValueResolver());
         $actual = $hydrator->hydrate($object, $set);
 
         $this->assertEquals($expected, $actual);
@@ -107,7 +126,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
             new ObjectBag(['dummy' => $secondNewObject])
         );
 
-        $hydrator = new SimpleHydrator($hydrator);
+        $hydrator = new SimpleHydrator($hydrator, new FakeValueResolver());
         $actual = $hydrator->hydrate($object, $set);
 
         $this->assertEquals($expected, $actual);

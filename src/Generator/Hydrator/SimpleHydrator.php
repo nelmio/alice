@@ -55,7 +55,7 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
     public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
     {
         if (null === $this->resolver) {
-            ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
         }
 
         $fixture = $fixtureSet->getFixtures()->get($object->getReference());

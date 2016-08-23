@@ -45,8 +45,6 @@ final class WildcardReferenceTokenParser implements ChainableTokenParserInterfac
             throw ParseException::createForToken($token);
         }
 
-        return new FixtureMatchReferenceValue(
-            sprintf('/^%s.*/', $fixtureId)
-        );
+        return FixtureMatchReferenceValue::createWildcardReference($fixtureId);
     }
 }

@@ -62,7 +62,7 @@ class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Nelmio\Alice\Exception\FileLocator\FileNotFoundException
      * @expectedExceptionMessage An empty file name is not valid to be located.
      */
     public function testThrowsExceptionIfEmptyFileNamePassed()
@@ -71,8 +71,8 @@ class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /The file "(.+?)foobar.xml" does not exist\./
+     * @expectedException \Nelmio\Alice\Exception\FileLocator\FileNotFoundException
+     * @expectedExceptionMessageRegExp /^The file "(.+?)foobar.xml" does not exist\.$/
      */
     public function testThrowsExceptionIfTheFileDoesNotExists()
     {
@@ -80,8 +80,8 @@ class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /The file "(.+?)foobar.xml" does not exist\./
+     * @expectedException \Nelmio\Alice\Exception\FileLocator\FileNotFoundException
+     * @expectedExceptionMessageRegExp /^The file "(.+?)foobar.xml" does not exist\.$/
      */
     public function testLocatingFileThrowsExceptionIfTheFileDoesNotExistsInAbsolutePath()
     {

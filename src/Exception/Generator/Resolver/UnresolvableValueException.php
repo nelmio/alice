@@ -14,15 +14,17 @@ namespace Nelmio\Alice\Exception\Generator\Resolver;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
-class ResolutionException extends \RuntimeException implements ResolutionThrowable
+class UnresolvableValueException extends \RuntimeException implements ResolutionThrowable
 {
-    public static function create(ValueInterface $value): self
+    public static function create(ValueInterface $value, int $code = 0, \Throwable $previous = null): self
     {
         return new static(
             sprintf(
-                'Could not resolve value %d.',
+                'Could not resolve value %s.',
                 get_class($value)
-            )
+            ),
+            $code,
+            $previous
         );
     }
 }

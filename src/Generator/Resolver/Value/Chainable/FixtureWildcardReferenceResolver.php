@@ -15,7 +15,7 @@ use Faker\Provider\Base;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Exception\Generator\Resolver\ResolutionException;
+use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\FixtureInterface;
@@ -79,7 +79,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
         $possibleIds = $this->getSuitableIds($value, $fixtureSet);
         $id = Base::randomElement($possibleIds);
         if (null === $id) {
-            throw new ResolutionException(
+            throw new UnresolvableValueException(
                 sprintf(
                     'Could not find a fixture or object ID matching the pattern "%s".',
                     $value->getValue()

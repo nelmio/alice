@@ -75,7 +75,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         }
 
         if (null === $this->valueResolver) {
-            ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
         }
 
         list($resolvedArguments, $set) = $this->resolveArguments(

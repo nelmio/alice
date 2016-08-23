@@ -16,8 +16,6 @@ use Nelmio\Alice\Definition\ValueInterface;
 /**
  * Value object a reference to a fixture e.g. "@user0" matching a pattern. For example "@user*" will result in a pattern
  * '~^user.*~' which can match "@user0", "@user_base" etc.
- *
- * @TODO: add factory for wildcard...
  */
 final class FixtureMatchReferenceValue implements ValueInterface
 {
@@ -32,6 +30,16 @@ final class FixtureMatchReferenceValue implements ValueInterface
     public function __construct(string $pattern)
     {
         $this->pattern = $pattern;
+    }
+
+    /**
+     * @param string $reference e.g. 'user'
+     *
+     * @return FixtureMatchReferenceValue reference with the pattern to match "@user*"
+     */
+    public static function createWildcardReference(string $reference): self
+    {
+        return new self(sprintf('/^%s.*/', $reference));
     }
 
     public function match(string $value): bool

@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\FileLocator;
 
+use Nelmio\Alice\Exception\FileLocator\FileNotFoundException;
 use Nelmio\Alice\FileLocatorInterface;
 
 /**
@@ -28,7 +29,7 @@ final class DefaultFileLocator implements FileLocatorInterface
     public function locate(string $name, string $currentPath = null): string
     {
         if ('' == $name) {
-            throw new \InvalidArgumentException('An empty file name is not valid to be located.');
+            throw new FileNotFoundException('An empty file name is not valid to be located.');
         }
 
         $file = $name;
@@ -37,7 +38,7 @@ final class DefaultFileLocator implements FileLocatorInterface
         }
 
         if (false === file_exists($file)) {
-            throw new \InvalidArgumentException(sprintf('The file "%s" does not exist.', $file));
+            throw new FileNotFoundException(sprintf('The file "%s" does not exist.', $file));
         }
 
         return $file;

@@ -11,9 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
-use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;

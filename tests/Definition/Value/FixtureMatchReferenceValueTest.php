@@ -39,4 +39,12 @@ class FixtureMatchReferenceValueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($value->match('d'));
         $this->assertFalse($value->match('a'));
     }
+
+    public function testCanCreateAReferenceForWildcards()
+    {
+        $expected = new FixtureMatchReferenceValue('/^user.*/');
+        $actual = FixtureMatchReferenceValue::createWildcardReference('user');
+
+        $this->assertEquals($expected, $actual);
+    }
 }

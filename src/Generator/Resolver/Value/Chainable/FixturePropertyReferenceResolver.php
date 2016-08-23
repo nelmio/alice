@@ -13,7 +13,8 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Exception\Generator\Resolver\ResolutionException;
+use Nelmio\Alice\Exception\Generator\Resolver\NoSuchPropertyException;
+use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\FixtureInterface;
@@ -105,13 +106,12 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         /** @var ResolvedFixtureSet $fixtureSet */
         list($instance, $fixtureSet) = [$fixtureReferenceResult->getValue(), $fixtureReferenceResult->getSet()];
 
-        // TODO: try with invalid instance returned
-        // TODO: try with no such property in object
-        // TODO: catch property Access exceptions
         try {
             $propertyValue = $this->propertyAccessor->getValue($instance, $value->getProperty());
         } catch (SymfonyNoSuchPropertyException $exception) {
-            throw ResolutionException::create($value); // TODO change this exception
+            throw NoSuchPropertyException::createForFixture($fixture, $value, 0, $exception);
+        } catch (\Exception $exception) {
+            throw UnresolvableValueException::create($value, 0, $exception);
         }
 
         return new ResolvedValueWithFixtureSet(
