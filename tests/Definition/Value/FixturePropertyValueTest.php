@@ -25,7 +25,7 @@ class FixturePropertyValueTest extends \PHPUnit_Framework_TestCase
 
     public function testReadAccessorsReturnPropertiesValues()
     {
-        $reference = new FixtureReferenceValue('user0');
+        $reference = new FakeValue();
         $property = 'username';
 
         $value = new FixturePropertyValue($reference, $property);

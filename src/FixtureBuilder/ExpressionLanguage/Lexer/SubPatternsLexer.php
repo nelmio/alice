@@ -35,8 +35,10 @@ final class SubPatternsLexer implements LexerInterface
         '/^(\[\[.*\]\])/' => TokenType::ESCAPED_ARRAY_TYPE,
         '/^(\[[^\[\]]+\])/' => TokenType::STRING_ARRAY_TYPE,
         '/^(@@)[^\ @]*/' => TokenType::ESCAPED_REFERENCE_TYPE,
-        '/^(@[^\ @\<]+\{.*\})/' => self::REFERENCE_LEXER,
-        '/^(@[^\ @\{\<]+\(.*\))/' => self::REFERENCE_LEXER,
+        '/^(@[^\ @\{\<]+\(.*\))/' => self::REFERENCE_LEXER, // function
+        '/^(@[^\ @\<]+\{.*\}->\S+\(.*\))/' => self::REFERENCE_LEXER, // range or list with function
+        '/^(@[^\ @\<]+\{.*\}->[^\(\)\ \{]+)/' => self::REFERENCE_LEXER, // range or list with property
+        '/^(@[^\ @\<]+\{.*\})/' => self::REFERENCE_LEXER,   // range or list
         '/^(@[^\ @\{\<]+)/' => self::REFERENCE_LEXER,
         '/^(\${2})/' => TokenType::ESCAPED_VARIABLE_TYPE,
         '/^(\$[\p{L}_]+)/' => TokenType::VARIABLE_TYPE,

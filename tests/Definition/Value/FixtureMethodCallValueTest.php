@@ -25,7 +25,7 @@ class FixtureMethodCallValueTest extends \PHPUnit_Framework_TestCase
 
     public function testReadAccessorsReturnPropertiesValues()
     {
-        $reference = new FixtureReferenceValue('user0');
+        $reference = new FakeValue();
         $function = new FunctionCallValue('getName');
 
         $value = new FixtureMethodCallValue($reference, $function);

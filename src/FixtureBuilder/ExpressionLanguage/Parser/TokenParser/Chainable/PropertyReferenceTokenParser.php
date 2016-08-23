@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
-use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -44,13 +44,13 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
         }
 
         $reference = $this->parser->parse($explodedValue[0]);
-        if ($reference instanceof FixtureReferenceValue) {
-            return new FixturePropertyValue(
-                $reference,
-                $explodedValue[1]
-            );
+        if (false === $reference instanceof ValueInterface) {
+            throw ParseException::createForToken($token);
         }
 
-        throw ParseException::createForToken($token);
+        return new FixturePropertyValue(
+            $reference,
+            $explodedValue[1]
+        );
     }
 }

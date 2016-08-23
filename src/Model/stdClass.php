@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Model;
 
 /**
  * Extends stdclass to support alice Populator.
+ * @TODO: see if is needed or should be removed
  */
 final class stdClass extends \stdClass
 {

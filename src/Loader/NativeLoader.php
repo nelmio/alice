@@ -90,7 +90,9 @@ use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
 use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry;
 use Nelmio\Alice\Generator\ValueResolverInterface;
@@ -365,10 +367,14 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     {
         return new ValueResolverRegistry([
             new DynamicArrayValueResolver(),
+            new FixturePropertyReferenceResolver(
+                PropertyAccess::createPropertyAccessor()
+            ),
+            new FixtureReferenceResolver(),
+            new FixtureWildcardReferenceResolver(),
             new UniqueValueResolver(
                 $this->getBuiltInUniqueValuesPool()
             ),
-            new FixtureReferenceResolver(),
         ]);
     }
 

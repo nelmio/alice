@@ -28,13 +28,13 @@ final class FixtureMethodCallValue implements ValueInterface
      */
     private $function;
 
-    public function __construct(FixtureReferenceValue $reference, FunctionCallValue $function)
+    public function __construct(ValueInterface $reference, FunctionCallValue $function)
     {
         $this->reference = $reference;
         $this->function = $function;
     }
 
-    public function getReference(): FixtureReferenceValue
+    public function getReference(): ValueInterface
     {
         return $this->reference;
     }

@@ -32,6 +32,16 @@ final class FixtureMatchReferenceValue implements ValueInterface
         $this->pattern = $pattern;
     }
 
+    /**
+     * @param string $reference e.g. 'user'
+     *
+     * @return FixtureMatchReferenceValue reference with the pattern to match "@user*"
+     */
+    public static function createWildcardReference(string $reference): self
+    {
+        return new self(sprintf('/^%s.*/', $reference));
+    }
+
     public function match(string $value): bool
     {
         return 1 === preg_match($this->pattern, $value);

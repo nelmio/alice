@@ -29,16 +29,16 @@ final class FixturePropertyValue implements ValueInterface
     private $property;
 
     /**
-     * @param FixtureReferenceValue $reference e.g. 'user0'
-     * @param string                $property  e.g. 'username'
+     * @param ValueInterface $reference e.g. 'user0'
+     * @param string         $property  e.g. 'username'
      */
-    public function __construct(FixtureReferenceValue $reference, string $property)
+    public function __construct(ValueInterface $reference, string $property)
     {
         $this->reference = $reference;
         $this->property = $property;
     }
 
-    public function getReference(): FixtureReferenceValue
+    public function getReference(): ValueInterface
     {
         return $this->reference;
     }

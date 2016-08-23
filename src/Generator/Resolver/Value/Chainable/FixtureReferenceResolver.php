@@ -12,23 +12,23 @@
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
-use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
-use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
-final class FixtureReferenceResolver implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface
+final class FixtureReferenceResolver
+implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, ValueResolverAwareInterface
 {
     use NotClonableTrait;
 
@@ -37,17 +37,31 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
      */
     private $generator;
 
-    public function __construct(ObjectGeneratorInterface $generator = null)
+    /**
+     * @var ValueResolverInterface|null
+     */
+    private $resolver;
+
+    public function __construct(ObjectGeneratorInterface $generator = null, ValueResolverInterface $resolver = null)
     {
         $this->generator = $generator;
+        $this->resolver = $resolver;
     }
 
     /**
      * @inheritdoc
      */
-    public function withGenerator(ObjectGeneratorInterface $generator)
+    public function withGenerator(ObjectGeneratorInterface $generator): self
     {
-        return new self($generator);
+        return new self($generator, $this->resolver);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withResolver(ValueResolverInterface $resolver): self
+    {
+        return new self($this->generator, $resolver);
     }
 
     /**
@@ -69,16 +83,27 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = [],
-        int $tryCounter = 0
+        array $scope = []
     ): ResolvedValueWithFixtureSet
     {
-        $referredFixtureId = $value->getValue();
-        $referredFixture = $fixtureSet->getFixtures()->get($referredFixtureId);
-
         if (null === $this->generator) {
-            ObjectGeneratorNotFoundException::create(__METHOD__);
+            throw ObjectGeneratorNotFoundException::createUnexpectedCall(__METHOD__);
         }
+        if (null === $this->resolver) {
+            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+        }
+
+        $referredFixtureId = $value->getValue();
+        if ($referredFixtureId instanceof ValueInterface) {
+            $resolvedSet = $this->resolver->resolve($referredFixtureId, $fixture, $fixtureSet, $scope);
+
+            list($referredFixtureId, $fixtureSet) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
+            if (false === is_string($referredFixtureId)) {
+                throw UnresolvableValueException::create($value);
+            }
+        }
+
+        $referredFixture = $fixtureSet->getFixtures()->get($referredFixtureId);
         $objects = $this->generator->generate($referredFixture, $fixtureSet);
 
         $fixtureSet = new ResolvedFixtureSet(
