@@ -13,7 +13,9 @@ namespace Nelmio\Alice\Generator\Hydrator\Property;
 
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
+use Nelmio\Alice\Entity\DummyWithDate;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
+use Nelmio\Alice\Exception\Symfony\PropertyAccess\RootException as GenericPropertyAccessException;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
 use Prophecy\Argument;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
@@ -75,7 +77,7 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Hydrator\HydrationException
-     * @expectedExceptionMessage Could not hydrate the property "dummy" of the object "username" (class: Nelmio\Alice\Entity\Hydrator\Dummy).
+     * @expectedExceptionMessage Could not access to the property "dummy" of the object "username" (class: Nelmio\Alice\Entity\Hydrator\Dummy).
      */
     public function testThrowsAnHydrationExceptionIfAnAccessExceptionIsThrown()
     {
@@ -103,6 +105,38 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         $object = new SimpleObject('dummy', new \Nelmio\Alice\Dummy());
         $property = new Property('foo', 'bar');
         $this->hydrator->hydrate($object, $property);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Generator\Hydrator\InvalidArgumentException
+     * @expectedExceptionMessage Invalid value given for the property "dummy" of the object "immutableDateTime" (class: Nelmio\Alice\Entity\DummyWithDate).
+     */
+    public function testThrowsInvalidArgumentExceptionIfInvalidTypeIsGiven()
+    {
+        $object = new SimpleObject('dummy', new DummyWithDate());
+        $property = new Property('immutableDateTime', 'bar');
+        $this->hydrator->hydrate($object, $property);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Generator\Hydrator\HydrationException
+     * @expectedExceptionMessage Could not hydrate the property "dummy" of the object "foo" (class: Nelmio\Alice\Entity\DummyWithDate).
+     */
+    public function testCatchesAnySymfonyPropertyAccessorToThrowAnHydratorException()
+    {
+        $object = new SimpleObject('dummy', new DummyWithDate());
+        $property = new Property('foo', 'bar');
+
+        $accessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
+        $accessorProphecy
+            ->setValue(Argument::cetera())
+            ->willThrow(GenericPropertyAccessException::class)
+        ;
+        /** @var PropertyAccessorInterface $accessor */
+        $accessor = $accessorProphecy->reveal();
+
+        $hydrator = new SymfonyPropertyAccessorHydrator($accessor);
+        $hydrator->hydrate($object, $property);
     }
 
     public function testCanHydrateStdClassObjects()

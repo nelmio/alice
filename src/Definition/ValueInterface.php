@@ -21,4 +21,6 @@ interface ValueInterface
      * @return mixed
      */
     public function getValue();
+
+    //TODO: implements __toString() for exceptions and easy dumping
 }

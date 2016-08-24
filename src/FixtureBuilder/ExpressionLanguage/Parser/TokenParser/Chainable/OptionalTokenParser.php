@@ -20,7 +20,7 @@ final class OptionalTokenParser extends AbstractChainableParserAwareParser
 {
     //TODO: review those kinds of constants and consider making them internals
     /** @internal */
-    const REGEX = '/^(?<quantifier>\d+|\d*\.\d+|<.+>)%\? (?<first_member>[^:]+)(?:\: (?<second_member>[^\ ]+))?/';
+    const REGEX = '/^(?<quantifier>\d+|\d*\.\d+|<.+>)%\? \ *?(?<first_member>[^:]+)(?:\: +(?<second_member>[^\ ]+))?/';
 
     /**
      * @inheritdoc
@@ -47,8 +47,10 @@ final class OptionalTokenParser extends AbstractChainableParserAwareParser
 
         return new OptionalValue(
             $this->parser->parse($matches['quantifier']),
-            $this->parser->parse($matches['first_member']),
-            array_key_exists('second_member', $matches) ? $this->parser->parse($matches['second_member']) : null
+            $this->parser->parse(trim($matches['first_member'])),
+            array_key_exists('second_member', $matches)
+                ? $this->parser->parse($matches['second_member'])
+                : null
         );
     }
 }

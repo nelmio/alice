@@ -525,6 +525,13 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
                 new Token('80%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
             ],
         ];
+        yield '[Optional] complete with superfluous space' => [
+            '80%?  Y :  Z  ',
+            [
+                new Token('80%?  Y :  Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+                new Token('  ', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
         yield '[Optional] complete with negative number' => [
             '-50%? Y: Z',
             [

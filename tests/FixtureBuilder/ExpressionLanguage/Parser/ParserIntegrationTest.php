@@ -571,6 +571,17 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 'Z'
             ),
         ];
+        yield '[Optional] complete with superfluous space' => [
+            '80%?  Y :  Z  ',
+            new ListValue([
+                new OptionalValue(
+                    '80',
+                    'Y',
+                    'Z'
+                ),
+                '  ',
+            ]),
+        ];
         yield '[Optional] complete with negative number' => [
             '-50%? Y: Z',
             new ListValue([

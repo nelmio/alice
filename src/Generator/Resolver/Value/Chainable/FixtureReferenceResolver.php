@@ -77,7 +77,7 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
      *
      * @param FixtureReferenceValue $value
      *
-     * @throws UniqueValueGenerationLimitReachedException
+     * @throws UnresolvableValueException
      */
     public function resolve(
         ValueInterface $value,
