@@ -62,7 +62,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
      *
      * @param FixtureMatchReferenceValue $value
      *
-     * @throws UniqueValueGenerationLimitReachedException
+     * @throws UnresolvableValueException
      */
     public function resolve(
         ValueInterface $value,

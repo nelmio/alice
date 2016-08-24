@@ -88,7 +88,8 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
      *
      * @param FixturePropertyValue $value
      *
-     * @throws UniqueValueGenerationLimitReachedException
+     * @throws NoSuchPropertyException
+     * @throws UnresolvableValueException
      */
     public function resolve(
         ValueInterface $value,

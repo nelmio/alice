@@ -25,7 +25,7 @@ final class SubPatternsLexer implements LexerInterface
 
     const PATTERNS = [
         '/^((?:\d+|<.+>)%\? [^:]+:[^\ ]+)/' => null,
-        '/^((?:\d+|\d*\.\d+|<.+>)%\? [^:]+(?:\: [^\ ]+)?)/' => TokenType::OPTIONAL_TYPE,
+        '/^((?:\d+|\d*\.\d+|<.+>)%\? [^:]+(?:\: +\S+)?)/' => TokenType::OPTIONAL_TYPE,
         '/^((?:\d+|\d*\.\d+|<.+>)%\? : ?[^\ ]+?)/' => null,
         '/^(<<|>>)/' => TokenType::ESCAPED_ARROW_TYPE,
         '/^(<{[^\ <]+}>)/' => TokenType::PARAMETER_TYPE,

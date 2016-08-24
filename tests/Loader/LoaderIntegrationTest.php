@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
+use Nelmio\Alice\Entity\DummyWithDate;
 use Nelmio\Alice\Entity\Hydrator\CamelCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
 use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
@@ -199,14 +200,46 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         }
 
         $expectedParameters = $expected['parameters'];
-        $actualParameteters = $set->getParameters();
-        $this->assertEquals(count($expectedParameters), count($actualParameteters));
-        $this->assertEquals($expectedParameters, $actualParameteters);
+        $actualParameters = $set->getParameters();
+        $this->assertEquals(count($expectedParameters), count($actualParameters));
+        $this->assertEquals($expectedParameters, $actualParameters);
 
         $expectedObjects = $expected['objects'];
         $actualObjects = $set->getObjects();
         $this->assertEquals(count($expectedObjects), count($actualObjects));
         $this->assertEquals($expectedObjects, $actualObjects);
+    }
+
+    public function testLoadOptionalValues()
+    {
+        $data = [
+            \stdClass::class => [
+                'user0' => [
+                    'username' => '80%? something',
+                ],
+                'user1' => [
+                    'username' => '80%? something : nothing',
+                ],
+                'user2' => [
+                    'username' => '0%? something : nothing',
+                ],
+                'user3' => [
+                    'username' => '100%? something : nothing',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($set->getParameters()));
+
+        $objects = $set->getObjects();
+        $this->assertEquals(4, count($objects));
+
+        $this->assertContains($objects['user0']->username, ['something', null]);
+        $this->assertContains($objects['user1']->username, ['something', 'nothing']);
+        $this->assertEquals('nothing', $objects['user2']->username);
+        $this->assertEquals('something', $objects['user3']->username);
     }
 
     public function provideFixturesToInstantiate()
@@ -819,6 +852,120 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                     ]),
                     'another_dummy' => StdClassFactory::create([
                         'dummies' => [$dummy, $dummy, $dummy]
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'dynamic array value with wildcard' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummies' => '3x @dummy*',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummies' => [$dummy, $dummy, $dummy]
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'objects with dots in their references' => [
+            [
+                \stdClass::class => [
+                    'user.alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user.alias.alice_alias' => [
+                        'username' => '@user.alice->username',
+                    ],
+                    'user.deep_alias' => [
+                        'username' => '@user.alias.alice_alias->username',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'user.alice' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user.alias.alice_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user.deep_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[special characters] references with underscores' => [
+            [
+                \stdClass::class => [
+                    'user_alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user_alias' => [
+                        'username' => '@user_alice->username',
+                    ],
+                    'user_deep_alias' => [
+                        'username' => '@user_alias->username',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'user_alice' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user_deep_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[special characters] references with slashes' => [
+            [
+                \stdClass::class => [
+                    'user/alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user/alias/alice_alias' => [
+                        'username' => '@user/alice->username',
+                    ],
+                    'user/deep_alias' => [
+                        'username' => '@user/alias/alice_alias->username',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'user/alice' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user/alias/alice_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user/deep_alias' => StdClassFactory::create([
+                        'username' => 'alice',
                     ]),
                 ],
             ],
