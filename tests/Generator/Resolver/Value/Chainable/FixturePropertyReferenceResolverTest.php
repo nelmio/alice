@@ -17,7 +17,6 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
-use Nelmio\Alice\Generator\FakeObjectGenerator;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -50,14 +49,10 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
     public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new FixturePropertyReferenceResolver(new FakePropertyAccessor());
-        $newResolverWithValueResolver = $resolver->withResolver(new FakeValueResolver());
-        $newResolverWithGenerator = $resolver->withGenerator(new FakeObjectGenerator());
-        $newResolverWithBoth = $resolver->withResolver(new FakeValueResolver())->withGenerator(new FakeObjectGenerator());
+        $newResolver = $resolver->withResolver(new FakeValueResolver());
 
         $this->assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor()), $resolver);
-        $this->assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor(), new FakeValueResolver()), $newResolverWithValueResolver);
-        $this->assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor(), null, new FakeObjectGenerator()), $newResolverWithGenerator);
-        $this->assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor(), new FakeValueResolver(), new FakeObjectGenerator()), $newResolverWithBoth);
+        $this->assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor(), new FakeValueResolver()), $newResolver);
     }
 
     public function testCanResolvePropertyReferenceValues()
@@ -110,7 +105,7 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedValueWithFixtureSet('yo', $newSet);
 
         $resolver = new FixturePropertyReferenceResolver($propertyAccessor, $valueResolver);
-        $actual = $resolver->resolve($value, new FakeFixture(), $set, $scope);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope);
 
         $this->assertEquals($expected, $actual);
 

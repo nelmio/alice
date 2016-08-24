@@ -970,5 +970,23 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        yield '[provider] faker functions' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<shuffle([1])>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => [1],
+                    ]),
+                ],
+            ],
+        ];
     }
 }
