@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Loader;
 
+use Faker\Factory as FakerGeneratorFactory;
+use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer;
@@ -74,7 +76,6 @@ use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
 use Nelmio\Alice\Generator\Caller\DummyCaller;
 use Nelmio\Alice\Generator\CallerInterface;
-use Nelmio\Alice\Generator\Hydrator\Property\DateTimeHydrator;
 use Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator;
@@ -91,6 +92,7 @@ use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
 use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver;
@@ -162,6 +164,11 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     private $cache = [];
 
     /**
+     * @var FakerGenerator
+     */
+    private $fakerGenerator;
+
+    /**
      * @var FileLoaderInterface
      */
     private $fileLoader;
@@ -171,8 +178,9 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
      */
     private $dataLoader;
 
-    public function __construct()
+    public function __construct(FakerGenerator $fakerGenerator = null)
     {
+        $this->fakerGenerator = (null === $fakerGenerator) ? FakerGeneratorFactory::create() : $fakerGenerator;
         $this->dataLoader = $this->getBuiltInDataLoader();
         $this->fileLoader = new SimpleFileLoader(
             $this->getBuiltInParser(),
@@ -369,6 +377,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     {
         return new ValueResolverRegistry([
             new DynamicArrayValueResolver(),
+            new FakerFunctionCallValueResolver($this->fakerGenerator),
             new FixturePropertyReferenceResolver(
                 PropertyAccess::createPropertyAccessor()
             ),

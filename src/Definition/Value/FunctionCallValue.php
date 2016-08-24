@@ -29,10 +29,10 @@ final class FunctionCallValue implements ValueInterface
     private $arguments;
 
     /**
-     * @param string     $name e.g. 'randomElement'
-     * @param array|null $arguments
+     * @param string $name e.g. 'randomElement'
+     * @param array  $arguments
      */
-    public function __construct(string $name, array $arguments = null)
+    public function __construct(string $name, array $arguments = [])
     {
         $this->name = $name;
         $this->arguments = deep_clone($arguments);

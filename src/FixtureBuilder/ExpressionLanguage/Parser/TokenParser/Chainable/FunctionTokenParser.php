@@ -54,10 +54,10 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
         return new FunctionCallValue($function, $arguments);
     }
 
-    private function parseArguments(ParserInterface $parser, string $arguments)
+    private function parseArguments(ParserInterface $parser, string $arguments): array
     {
         if ('' === $arguments) {
-            return null;
+            return [];
         }
 
         $arguments = preg_split('/\s*,\s*/', $arguments);

@@ -16,9 +16,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\NoSuchPropertyException;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
-use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -29,8 +27,7 @@ use Nelmio\Alice\NotClonableTrait;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException as SymfonyNoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-final class FixturePropertyReferenceResolver
-implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, ValueResolverAwareInterface
+final class FixturePropertyReferenceResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
     use NotClonableTrait;
 
@@ -38,11 +35,6 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
      * @var PropertyAccessorInterface
      */
     private $propertyAccessor;
-
-    /**
-     * @var ObjectGeneratorInterface|null
-     */
-    private $generator;
 
     /**
      * @var ValueResolverInterface
@@ -56,7 +48,6 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
     ) {
         $this->propertyAccessor = $propertyAccessor;
         $this->resolver = $resolver;
-        $this->generator = $generator;
     }
 
     /**
@@ -64,15 +55,7 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
      */
     public function withResolver(ValueResolverInterface $resolver): self
     {
-        return new self($this->propertyAccessor, $resolver, $this->generator);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function withGenerator(ObjectGeneratorInterface $generator): self
-    {
-        return new self($this->propertyAccessor, $this->resolver, $generator);
+        return new self($this->propertyAccessor, $resolver);
     }
 
     /**
