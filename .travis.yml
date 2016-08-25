@@ -28,7 +28,7 @@ env:
 #    - env: SYMFONY_VERSION='^3.2@dev'
 
 install:
-  - phpenv config-rm xdebug.ini
+#  - phpenv config-rm xdebug.ini
   - |
     if [ -n "$SYMFONY_VERSION" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"
