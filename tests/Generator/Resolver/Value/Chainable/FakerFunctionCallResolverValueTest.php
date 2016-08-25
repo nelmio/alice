@@ -27,7 +27,7 @@ use Nelmio\Alice\ParameterBag;
 /**
  * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver
  */
-class FakerFunctionCallValueResolverTest extends \PHPUnit_Framework_TestCase
+class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAChainableResolver()
     {
@@ -138,7 +138,7 @@ class FakerFunctionCallValueResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $actual);
     }
-    
+
     public function testCallAProviderFunction()
     {
         $value = new FunctionCallValue('lexify', ['Hello ???']);

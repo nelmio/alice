@@ -62,7 +62,12 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
 
         $arguments = preg_split('/\s*,\s*/', $arguments);
         foreach ($arguments as $index => $argument) {
-            $arguments[$index] = $parser->parse(trim($argument));
+            $argument = $parser->parse(trim($argument));
+            if (is_string($argument) && preg_match('/^\'(.*)\'$|^"(.*)"$/', $argument, $match)) {
+                $argument = array_key_exists(2, $match) ? $match[2] : $match[1];
+            }
+
+            $arguments[$index] = $argument;
         }
 
         return $arguments;

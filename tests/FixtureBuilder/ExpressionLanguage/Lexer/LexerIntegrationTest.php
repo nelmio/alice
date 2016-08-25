@@ -85,6 +85,20 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        yield 'string value with quotes' => [
+            '\'dummy\'',
+            [
+                new Token('\'dummy\'', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        yield 'string value with double quotes' => [
+            '"dummy"',
+            [
+                new Token('"dummy"', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
         // Escaped arrow
         yield '[Escaped arrow] nominal (1)' => [
             '<<',
@@ -310,6 +324,12 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             '<function($foo, $arg)>',
             [
                 new Token('<function($foo, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nominal with string arguments which contains quotes' => [
+            '<function(\'foo\', "bar")>',
+            [
+                new Token('<function(\'foo\', "bar")>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] unbalanced with arguments (1)' => [

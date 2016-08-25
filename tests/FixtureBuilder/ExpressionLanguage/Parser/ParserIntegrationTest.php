@@ -85,6 +85,16 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             'dummy',
         ];
 
+        yield 'string value with quotes' => [
+            '\'dummy\'',
+            '\'dummy\'',
+        ];
+
+        yield 'string value with double quotes' => [
+            '"dummy"',
+            '"dummy"',
+        ];
+
         // Escaped arrow
         yield '[Escaped arrow] nominal (1)' => [
             '<<',
@@ -282,6 +292,16 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 [
                     new VariableValue('foo'),
                     new VariableValue('arg'),
+                ]
+            ),
+        ];
+        yield '[Function] nominal with string arguments which contains quotes' => [
+            '<function(\'foo\', "bar")>',
+            new FunctionCallValue(
+                'function',
+                [
+                    'foo',
+                    'bar',
                 ]
             ),
         ];
