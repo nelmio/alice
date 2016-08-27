@@ -15,6 +15,7 @@ use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Faker\GeneratorFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -28,9 +29,9 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
     use NotClonableTrait;
 
     /**
-     * @var FakerGenerator
+     * @var GeneratorFactory
      */
-    private $fakerGenerator;
+    private $generatorFactory;
 
     /**
      * @var ValueResolverInterface
@@ -39,7 +40,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
 
     public function __construct(FakerGenerator $fakerGenerator, ValueResolverInterface $resolver = null)
     {
-        $this->fakerGenerator = $fakerGenerator;
+        $this->generatorFactory = new GeneratorFactory($fakerGenerator);
         $this->resolver = $resolver;
     }
 
@@ -48,7 +49,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
      */
     public function withResolver(ValueResolverInterface $resolver): self
     {
-        return new self($this->fakerGenerator, $resolver);
+        return new self($this->generatorFactory->getSeedGenerator(), $resolver);
     }
 
     /**
@@ -86,9 +87,39 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
             }
         }
 
+        /**
+         * @var FakerGenerator $generator
+         * @var string         $formatter
+         */
+        list($generator, $formatter) = $this->getGenerator($this->generatorFactory, $value->getName());
+
         return new ResolvedValueWithFixtureSet(
-            $this->fakerGenerator->format($value->getName(), $arguments),
+            $generator->format($formatter, $arguments),
             $fixtureSet
+        );
+    }
+
+    private function getGenerator(GeneratorFactory $factory, string $formatter)
+    {
+        $explodedFormatter = explode(':', $formatter);
+        $size = count($explodedFormatter);
+
+        if (1 === $size) {
+            return [$factory->getSeedGenerator(), $explodedFormatter[0]];
+        }
+
+        if (2 === $size) {
+            return [
+                $factory->createOrReturnExistingInstance($explodedFormatter[0]),
+                $explodedFormatter[1]
+            ];
+        }
+
+        throw new \InvalidArgumentException(
+            sprintf(
+                'Invalid faker formatter "%s" found.',
+                $formatter
+            )
         );
     }
 }
