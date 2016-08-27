@@ -7,7 +7,8 @@ cache:
     - "$HOME/.composer/cache"
 
 php:
-  - nightly
+  - '7.0'
+  #- nightly
 
 #matrix:
 #  fast_finish: true
