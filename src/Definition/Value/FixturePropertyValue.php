@@ -58,4 +58,12 @@ final class FixturePropertyValue implements ValueInterface
             $this->property,
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return sprintf('%s->%s', $this->reference, $this->property);
+    }
 }

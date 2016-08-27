@@ -42,4 +42,14 @@ class FixturePropertyValueTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(true, 'Nothing to do.');
     }
+
+    public function testIsCastableIntoAString()
+    {
+        $value = new FixturePropertyValue(
+            new FixtureReferenceValue('dummy'),
+            'foo'
+        );
+
+        $this->assertEquals('@dummy->foo', (string) $value);
+    }
 }

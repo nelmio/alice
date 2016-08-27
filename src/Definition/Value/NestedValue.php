@@ -37,4 +37,12 @@ final class NestedValue implements ValueInterface
     {
         return $this->values;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return '(nested) vals';
+    }
 }

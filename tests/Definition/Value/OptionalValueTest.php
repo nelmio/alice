@@ -102,6 +102,18 @@ class OptionalValueTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testIsCastableIntoAString()
+    {
+        $value = new OptionalValue(10, 'foo');
+        $this->assertEquals('10%? foo : null', (string) $value);
+
+        $value = new OptionalValue(10, 'foo', 'bar');
+        $this->assertEquals('10%? foo : bar', (string) $value);
+
+        $value = new OptionalValue(new DummyValue('10'), new DummyValue('foo'));
+        $this->assertEquals('10%? foo : null', (string) $value);
+    }
+
     public function provideInputValues()
     {
         yield 'null/string/string' => [

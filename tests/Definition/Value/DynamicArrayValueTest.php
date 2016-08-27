@@ -73,6 +73,15 @@ class DynamicArrayValueTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testIsCastableIntoAString()
+    {
+        $value = new DynamicArrayValue(10, 'foo');
+        $this->assertEquals('10x foo', (string) $value);
+
+        $value = new DynamicArrayValue(new DummyValue('10'), new DummyValue('foo'));
+        $this->assertEquals('10x foo', (string) $value);
+    }
+
     public function provideInputTypes()
     {
         yield 'null/string' => [

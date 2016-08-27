@@ -41,4 +41,12 @@ final class ListValue implements ValueInterface
     {
         return deep_clone($this->values);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return implode('', $this->values);
+    }
 }

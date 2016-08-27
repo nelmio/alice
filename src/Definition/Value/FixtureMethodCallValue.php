@@ -54,4 +54,17 @@ final class FixtureMethodCallValue implements ValueInterface
             $this->function,
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s->%s(%s)',
+            $this->reference,
+            $this->function->getName(),
+            [] === $this->function->getArguments() ? '' : 'args'
+        );
+    }
 }

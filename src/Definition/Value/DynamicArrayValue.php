@@ -90,4 +90,12 @@ final class DynamicArrayValue implements ValueInterface
             $this->getElement(),
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return sprintf('%sx %s', $this->quantifier, $this->element);
+    }
 }

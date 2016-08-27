@@ -62,4 +62,13 @@ class FunctionCallValueTest extends \PHPUnit_Framework_TestCase
             $value->getValue()
         );
     }
+
+    public function testIsCastableIntoAString()
+    {
+        $value = new FunctionCallValue('foo');
+        $this->assertEquals('<foo()>', (string) $value);
+
+        $value = new FunctionCallValue('foo', ['bar']);
+        $this->assertEquals('<foo(args)>', (string) $value);
+    }
 }

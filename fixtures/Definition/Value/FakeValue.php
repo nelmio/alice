@@ -25,4 +25,12 @@ class FakeValue implements ValueInterface
     {
         $this->__call(__METHOD__, func_get_args());
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        $this->__call(__METHOD__, func_get_args());
+    }
 }

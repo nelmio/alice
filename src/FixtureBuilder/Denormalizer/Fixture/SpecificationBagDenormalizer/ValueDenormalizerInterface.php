@@ -23,7 +23,7 @@ interface ValueDenormalizerInterface
      *
      * @param FixtureInterface $scope Used for unique values for example.
      * @param FlagBag|null     $flags
-     * @param mixed                 $value
+     * @param mixed            $value
      *
      * @throws DenormalizationThrowable
      *

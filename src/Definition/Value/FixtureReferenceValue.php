@@ -49,4 +49,14 @@ final class FixtureReferenceValue implements ValueInterface
     {
         return $this->reference;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string|ValueInterface
+     */
+    public function __toString(): string
+    {
+        return sprintf('@%s', $this->reference);
+    }
 }
