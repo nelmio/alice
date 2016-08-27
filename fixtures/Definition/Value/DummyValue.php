@@ -13,14 +13,14 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 
-class MutableValue implements ValueInterface
+class DummyValue implements ValueInterface
 {
     /**
-     * @var mixed
+     * @var string
      */
     private $value;
 
-    public function __construct($value)
+    public function __construct(string $value)
     {
         $this->value = $value;
     }
@@ -33,16 +33,11 @@ class MutableValue implements ValueInterface
         return $this->value;
     }
 
-    public function setValue($value)
-    {
-        $this->value = $value;
-    }
-
     /**
      * @inheritdoc
      */
     public function __toString(): string
     {
-        return 'mutable';
+        return $this->value;
     }
 }

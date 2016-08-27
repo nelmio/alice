@@ -62,4 +62,17 @@ final class UniqueValue implements ValueInterface
     {
         return deep_clone($this->value);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return sprintf(
+            '(unique) %s',
+            $this->value instanceof ValueInterface
+                ? $this->value
+                : is_scalar($this->value) ? $this->value : 'vals'
+        );
+    }
 }

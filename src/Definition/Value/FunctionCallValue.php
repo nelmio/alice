@@ -61,4 +61,12 @@ final class FunctionCallValue implements ValueInterface
             $this->getArguments(),
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return sprintf('<%s(%s)>', $this->name, [] === $this->arguments ? '' : 'args');
+    }
 }

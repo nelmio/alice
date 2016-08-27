@@ -114,4 +114,17 @@ final class OptionalValue implements ValueInterface
             $this->getSecondMember(),
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s%%? %s : %s',
+            $this->quantifier,
+            $this->firstMember,
+            null === $this->secondMember? 'null' : $this->secondMember
+        );
+    }
 }

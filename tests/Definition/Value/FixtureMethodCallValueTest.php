@@ -43,4 +43,19 @@ class FixtureMethodCallValueTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(true, 'Nothing to do.');
     }
+
+    public function testIsCastableIntoAString()
+    {
+        $value = new FixtureMethodCallValue(
+            new FixtureReferenceValue('dummy'),
+            new FunctionCallValue('foo')
+        );
+        $this->assertEquals('@dummy->foo()', (string) $value);
+
+        $value = new FixtureMethodCallValue(
+            new FixtureReferenceValue('dummy'),
+            new FunctionCallValue('foo', ['bar'])
+        );
+        $this->assertEquals('@dummy->foo(args)', (string) $value);
+    }
 }

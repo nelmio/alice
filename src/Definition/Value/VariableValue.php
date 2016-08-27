@@ -38,4 +38,12 @@ final class VariableValue implements ValueInterface
     {
         return $this->variable;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return sprintf('$%s', $this->variable);
+    }
 }

@@ -54,4 +54,12 @@ final class FixtureMatchReferenceValue implements ValueInterface
     {
         return $this->pattern;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __toString(): string
+    {
+        return sprintf('@(regex: %s)', $this->pattern);
+    }
 }
