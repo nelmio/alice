@@ -7,25 +7,26 @@ cache:
     - "$HOME/.composer/cache"
 
 php:
-  - nightly
+  - '7.0'
+  #- nightly
 
-matrix:
-  fast_finish: true
-  include:
-    - php: '7.0'
-      env: COVERAGE='true'
-    - php: '7.0'
-      env: SYMFONY_VERSION='^3.0'
-    - php: '7.0'
-      env: SYMFONY_VERSION='^3.1'
-    - php: '7.0'
-      env: SYMFONY_VERSION='^3.2@dev'
-  allow_failures:
-    - php: nightly
-    - env: SYMFONY_VERSION='^3.2@dev'
+#matrix:
+#  fast_finish: true
+#  include:
+#    - php: '7.0'
+#      env: COVERAGE='true'
+#    - php: '7.0'
+#      env: SYMFONY_VERSION='^3.0'
+#    - php: '7.0'
+#      env: SYMFONY_VERSION='^3.1'
+#    - php: '7.0'
+#      env: SYMFONY_VERSION='^3.2@dev'
+#  allow_failures:
+#    - php: nightly
+#    - env: SYMFONY_VERSION='^3.2@dev'
 
 install:
-  - phpenv config-rm xdebug.ini
+#  - phpenv config-rm xdebug.ini
   - |
     if [ -n "$SYMFONY_VERSION" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"

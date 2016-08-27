@@ -242,6 +242,78 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('something', $objects['user3']->username);
     }
 
+    public function testLoadTwoSuccessiveFakerFunctions()
+    {
+        $data = [
+            \stdClass::class => [
+                'user' => [
+                    'username' => '<firstName()> <lastName()>',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($set->getParameters()));
+
+        $objects = $set->getObjects();
+        $this->assertEquals(1, count($objects));
+
+        $user = $objects['user'];
+        $this->assertInstanceOf(\stdClass::class, $user);
+        $this->assertRegExp('/^[\w\']+ [\w\']+$/i', $user->username);
+    }
+
+    public function testLoadFakerFunctionWithData()
+    {
+        $data = [
+            \stdClass::class => [
+                'user' => [
+                    'age' => '<numberBetween(10, 10)>',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($set->getParameters()));
+
+        $objects = $set->getObjects();
+        $this->assertEquals(1, count($objects));
+
+        $user = $objects['user'];
+        $this->assertInstanceOf(\stdClass::class, $user);
+        $this->assertTrue(10 === $user->age);
+    }
+
+    public function testLoadFakerFunctionWithPhpArguments()
+    {
+        $this->markTestIncomplete('TODO, see https://github.com/nelmio/alice/issues/498#issuecomment-242488332');
+        $data = [
+            \stdClass::class => [
+                'user' => [
+                    'updatedAt' => '<dateTimeBetween(<("yest"."erday")>, <(strrev("omot")."rrow"))>>',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($set->getParameters()));
+
+        $objects = $set->getObjects();
+        $this->assertEquals(1, count($objects));
+
+        $user = $objects['user'];
+        $this->assertInstanceOf(\stdClass::class, $user);
+
+        $updatedAt = $user->updatedAt;
+        $this->assertInstanceOf(\DateTimeInterface::class, $updatedAt);
+        /** @var \DateTimeInterface $updatedAt */
+        $this->assertGreaterThanOrEqual(strtotime('yesterday'), $updatedAt->getTimestamp());
+        $this->assertLessThanOrEqual(strtotime('tomorrow'), $updatedAt->getTimestamp());
+    }
+
     public function provideFixturesToInstantiate()
     {
         yield 'with default constructor – use default constructor' => [

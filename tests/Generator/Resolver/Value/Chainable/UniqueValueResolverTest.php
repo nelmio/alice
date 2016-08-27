@@ -12,7 +12,6 @@
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
-use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;

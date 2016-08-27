@@ -122,12 +122,32 @@ class FunctionTokenParserTest extends \PHPUnit_Framework_TestCase
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testCanHandleASingleArgument()
+    public function testArgumentsQuotesAreRemoved()
     {
-        $token = new Token('<foo( "hello world" )>', new TokenType(TokenType::FUNCTION_TYPE));
+        $token = new Token('<foo( "arg1" , \'arg2\' )>', new TokenType(TokenType::FUNCTION_TYPE));
 
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse('"hello world"')->willReturn('parsed_arg');
+        $decoratedParserProphecy->parse('arg1')->willReturn('parsed_arg1');
+        $decoratedParserProphecy->parse('arg2')->willReturn('parsed_arg2');
+        /** @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $expected = new FunctionCallValue('foo', ['parsed_arg1', 'parsed_arg2']);
+
+        $parser = new FunctionTokenParser($decoratedParser);
+        $actual = $parser->parse($token);
+
+        $this->assertEquals($expected, $actual);
+
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
+    }
+
+    public function testCanHandleASingleArgument()
+    {
+        $token = new Token('<foo(arg)>', new TokenType(TokenType::FUNCTION_TYPE));
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy->parse('arg')->willReturn('parsed_arg');
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 

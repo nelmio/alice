@@ -96,6 +96,7 @@ use Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolv
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry;
@@ -383,6 +384,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             ),
             new FixtureReferenceResolver(),
             new FixtureWildcardReferenceResolver(),
+            new ListValueResolver(),
             new OptionalValueResolver(),
             new UniqueValueResolver(
                 $this->getBuiltInUniqueValuesPool()

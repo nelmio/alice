@@ -16,7 +16,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideScalarValues
      */
-    public function testDeepCloneScalarsReturnsScalara($value)
+    public function testDeepCloneScalarsReturnsScalar($value)
     {
         $clone = deep_clone($value);
 
@@ -25,14 +25,17 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testDeepCloneObjects()
     {
+        $this->markTestIncomplete('TODO: https://github.com/myclabs/DeepCopy/pull/43');
         $foo = new \stdClass();
         $bar = new \stdClass();
 
         $foo->name = 'foo';
         $foo->bar = $bar;
+        $foo->date = new \DateTime();
 
         $bar->name = 'bar';
         $bar->foo = $foo;
+        $bar->date = new \DateTimeImmutable();
 
         $fooClone = deep_clone($foo);
 
