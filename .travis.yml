@@ -9,26 +9,23 @@ cache:
 php:
   - nightly
 
-env:
-  - "COVERAGE=true"
-
-#matrix:
-#  fast_finish: true
-#  include:
-#    - php: '7.0'
-#      env: COVERAGE='true'
-#    - php: '7.0'
-#      env: SYMFONY_VERSION='^3.0'
-#    - php: '7.0'
-#      env: SYMFONY_VERSION='^3.1'
-#    - php: '7.0'
-#      env: SYMFONY_VERSION='^3.2@dev'
-#  allow_failures:
-#    - php: nightly
-#    - env: SYMFONY_VERSION='^3.2@dev'
+matrix:
+  fast_finish: true
+  include:
+    - php: '7.0'
+      env: COVERAGE='true'
+    - php: '7.0'
+      env: SYMFONY_VERSION='^3.0'
+    - php: '7.0'
+      env: SYMFONY_VERSION='^3.1'
+    - php: '7.0'
+      env: SYMFONY_VERSION='^3.2@dev'
+  allow_failures:
+    - php: nightly
+    - env: SYMFONY_VERSION='^3.2@dev'
 
 install:
-#  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini
   - |
     if [ -n "$SYMFONY_VERSION" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}"
@@ -38,10 +35,10 @@ install:
 script:
   - |
     if [ -n "$COVERAGE" ]; then
-        phpdbg -qrr phpunit --verbose --testdox --coverage-text --exclude-group=integration
-        phpdbg -qrr phpunit --verbose --coverage-text --group=integration
+        phpdbg -qrr vendor/bin/phpunit --verbose --testdox --coverage-text --exclude-group=integration
+        phpdbg -qrr vendor/bin/phpunit --verbose --coverage-text --group=integration
     else
-        phpunit
+        vendor/bin/phpunit
     fi;
 
 notifications:

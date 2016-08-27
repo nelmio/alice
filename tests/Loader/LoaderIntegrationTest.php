@@ -269,7 +269,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $data = [
             \stdClass::class => [
                 'user' => [
-                    'updatedAt' => '<dateTimeBetween("yesterday", "tomorrow")>',
+                    'age' => '<numberBetween(10, 10)>',
                 ],
             ],
         ];
@@ -283,12 +283,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $user = $objects['user'];
         $this->assertInstanceOf(\stdClass::class, $user);
-
-        $updatedAt = $user->updatedAt;
-        $this->assertInstanceOf(\DateTimeInterface::class, $updatedAt);
-        /** @var \DateTimeInterface $updatedAt */
-        $this->assertGreaterThanOrEqual(strtotime('yesterday'), $updatedAt->getTimestamp());
-        $this->assertLessThanOrEqual(strtotime('tomorrow'), $updatedAt->getTimestamp());
+        $this->assertTrue(10 === $user->age);
     }
 
     public function testLoadFakerFunctionWithPhpArguments()
