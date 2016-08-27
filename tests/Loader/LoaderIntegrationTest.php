@@ -286,6 +286,28 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(10 === $user->age);
     }
 
+    public function testLoadLocalizedFakerFunctionWithData()
+    {
+        $data = [
+            \stdClass::class => [
+                'user' => [
+                    'siren' => '<fr_FR:siren()>',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($set->getParameters()));
+
+        $objects = $set->getObjects();
+        $this->assertEquals(1, count($objects));
+
+        $user = $objects['user'];
+        $this->assertInstanceOf(\stdClass::class, $user);
+        $this->assertRegExp('/^\d{3} \d{3} \d{3}$/', $user->siren);
+    }
+
     public function testLoadFakerFunctionWithPhpArguments()
     {
         $this->markTestIncomplete('TODO, see https://github.com/nelmio/alice/issues/498#issuecomment-242488332');
