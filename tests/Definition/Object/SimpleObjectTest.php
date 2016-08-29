@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Definition\Object;
 
+use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
 
 /**
@@ -45,7 +46,7 @@ class SimpleObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($instance, $object->getInstance());
     }
 
-    public function testIsImmutable()
+    public function testIsNotImmutable()
     {
         $reference = 'user0';
         $instance = new \stdClass();
@@ -56,37 +57,27 @@ class SimpleObjectTest extends \PHPUnit_Framework_TestCase
         $instance->foo = 'bar';
 
         // Mutate returned values
-        $object->getInstance()->foo = 'baz';
+        $object->getInstance()->ping = 'pong';
 
-        $this->assertEquals(new \stdClass(), $object->getInstance());
+        $expected = StdClassFactory::create(['foo' => 'bar', 'ping' => 'pong']);
+        $actual = $object->getInstance();
+
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testWithersKeepsImmutabilityAndReturnNewModifiedInstance()
+    public function testNamedConstructor()
     {
         $reference = 'user0';
-        $instance = new \stdClass();
-        $instance->original = true;
+        $instance = StdClassFactory::create(['original' => true]);
         $originalInstance = clone $instance;
         $object = new SimpleObject($reference, $instance);
 
-        $newInstance = new \stdClass();
-        $newInstance->original = false;
+        $newInstance = StdClassFactory::create(['original' => false]);
         $originalNewInstance = clone $newInstance;
-        $newobject = $object->withInstance($newInstance);
+        $newObject = $object->withInstance($newInstance);
 
-        // Mutate injected values
-        $newInstance->foo = 'bar';
-
-        // Mutate returned values
-        $newobject->getInstance()->foo = 'baz';
-
-        $this->assertInstanceOf(SimpleObject::class, $newobject);
-
-        $this->assertEquals($reference, $object->getReference());
-        $this->assertEquals($originalInstance, $object->getInstance());
-
-        $this->assertEquals($reference, $newobject->getReference());
-        $this->assertEquals($originalNewInstance, $newobject->getInstance());
+        $this->assertEquals(new SimpleObject($reference, $originalInstance), $object);
+        $this->assertEquals(new SimpleObject($reference, $originalNewInstance), $newObject);
     }
 
     /**
