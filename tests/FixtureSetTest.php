@@ -32,14 +32,4 @@ class FixtureSetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($fixtures, $set->getFixtures());
         $this->assertEquals($injectedObjects, $set->getObjects());
     }
-
-    /**
-     * @depends Nelmio\Alice\ParameterBagTest::testIsImmutable
-     * @depends Nelmio\Alice\FixtureBagTest::testIsImmutable
-     * @depends Nelmio\Alice\ObjectBagTest::testIsImmutable
-     */
-    public function testIsImmutable()
-    {
-        $this->assertTrue(true, 'Nothing to do.');
-    }
 }

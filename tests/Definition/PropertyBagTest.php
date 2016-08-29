@@ -30,18 +30,7 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
         $this->propRefl = $propRefl;
     }
 
-    /**
-     * @depends Nelmio\Alice\Definition\PropertyTest::testIsImmutable
-     */
-    public function testIsImmutable()
-    {
-        $this->assertTrue(true, 'Nothing to do.');
-    }
-
-    /**
-     * @depends Nelmio\Alice\Definition\PropertyTest::testIsImmutable
-     */
-    public function testWithersAreImmutableAndReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance()
     {
         $property = new Property('username', 'alice');
 
@@ -49,7 +38,6 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
         $newBag = $bag->with($property);
 
         $this->assertInstanceOf(PropertyBag::class, $newBag);
-        $this->assertNotSame($newBag, $bag);
         $this->assertSame([], $this->propRefl->getValue($bag));
         $this->assertSame(['username' => $property], $this->propRefl->getValue($newBag));
     }

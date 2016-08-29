@@ -38,17 +38,6 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($specs, $fixture->getSpecs());
     }
 
-    /**
-     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
-     */
-    public function testIsImmutable()
-    {
-        $this->assertTrue(true, 'Nothing to do here.');
-    }
-
-    /**
-     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
-     */
     public function testWithersReturnNewModifiedInstance()
     {
         $reference = 'user0';

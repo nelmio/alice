@@ -38,27 +38,6 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($calls, $bag->getMethodCalls());
     }
 
-    /**
-     * @depends Nelmio\Alice\Definition\PropertyBagTest::testIsImmutable
-     * @depends Nelmio\Alice\Definition\MethodCallBagTest::testIsImmutable
-     */
-    public function testIsImmutable()
-    {
-        $constructor = new MutableMethodCall(null, 'mutable');
-        $properties = new PropertyBag();
-        $calls = new MethodCallBag();
-
-        $bag = new SpecificationBag($constructor, $properties, $calls);
-
-        // Mutate injected value
-        $constructor->setMethod('foo');
-
-        // Mutate returned value
-        $bag->getConstructor()->setMethod('bar');
-
-        $this->assertNotSame(new MutableMethodCall(null, 'mutable'), $bag->getConstructor());
-    }
-
     public function testWithersReturnNewModifiedInstance()
     {
         $constructor = null;
@@ -66,14 +45,8 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
         $calls = new MethodCallBag();
         $bag = new SpecificationBag($constructor, $properties, $calls);
 
-        $newConstructor = new MutableMethodCall(null, 'mutable');
+        $newConstructor = new FakeMethodCall();
         $newBag = $bag->withConstructor($newConstructor);
-
-        // Mutate injected value
-        $newConstructor->setMethod('foo');
-
-        // Mutate returned value
-        $newBag->getConstructor()->setMethod('bar');
 
         $this->assertInstanceOf(SpecificationBag::class, $newBag);
 
@@ -81,7 +54,7 @@ class SpecificationBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($calls, $bag->getMethodCalls());
         $this->assertEquals($properties, $bag->getProperties());
 
-        $this->assertEquals(new MutableMethodCall(null, 'mutable'), $newBag->getConstructor());
+        $this->assertEquals(new FakeMethodCall(), $newBag->getConstructor());
         $this->assertEquals($calls, $newBag->getMethodCalls());
         $this->assertEquals($properties, $newBag->getProperties());
     }

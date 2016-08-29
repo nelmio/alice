@@ -114,25 +114,6 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         $bag->get($this->createFixture('foo', 'Dummy'));
     }
 
-    /**
-     * @depends Nelmio\Alice\Definition\Object\SimpleObjectTest::testIsImmutable
-     */
-    public function testIsImmutable()
-    {
-        $bag = new ObjectBag(['foo' => $std = new \stdClass()]);
-
-        // Mutate injected object
-        $std->foo = 'bar';
-
-        // Mutate retrieved object
-        $bag->get($this->createFixture('foo', 'Dummy'))->getInstance()->foo = 'baz';
-
-        $this->assertEquals(
-            new ObjectBag(['foo' => new \stdClass()]),
-            $bag
-        );
-    }
-
     public function testWithersReturnNewModifiedInstance()
     {
         $bag = new ObjectBag(['foo' => new \stdClass()]);

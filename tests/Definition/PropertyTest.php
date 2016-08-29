@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Definition;
 
+use Nelmio\Alice\Entity\StdClassFactory;
+
 /**
  * @covers Nelmio\Alice\Definition\Property
  */
@@ -26,44 +28,36 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $definition->getValue());
     }
 
-    public function testIsImmutable()
+    public function testIsMutable()
     {
-        $value = [
-            $arg0 = new \stdClass(),
-        ];
+        $value = new \stdClass();
         $definition = new Property('username', $value);
 
         // Mutate injected value
-        $arg0->foo = 'bar';
+        $value->foo = 'bar';
 
         // Mutate returned value
-        $definition->getValue()[0]->foo = 'baz';
+        $definition->getValue()->ping = 'pong';
 
-        $this->assertEquals([new \stdClass()], $definition->getValue());
+        $expected = StdClassFactory::create(['foo' => 'bar', 'ping' => 'pong']);
+        $actual = $definition->getValue();
+
+        $this->assertEquals($expected, $actual);
     }
 
-    public function testWithersAreImmutablesAndReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance()
     {
-        $property = 'username';
-        $value = 'foo';
-        $newValue = [
-            $arg0 = new \stdClass(),
-        ];
-        $definition = new Property($property, $value);
-        $newDefinition = $definition->withValue($newValue);
+        $name = 'username';
+        $definition = new Property($name, 'foo');
+        $newDefinition = $definition->withValue(new \stdClass());
 
-        // Mutate injected value
-        $arg0->foo = 'bar';
-
-        // Mutate returned value
-        $newDefinition->getValue()[0]->foo = 'baz';
-
-        $this->assertInstanceOf(Property::class, $newDefinition);
-
-        $this->assertEquals($property, $definition->getName());
-        $this->assertEquals($property, $newDefinition->getName());
-
-        $this->assertEquals($value, $definition->getValue());
-        $this->assertEquals([new \stdClass()], $newDefinition->getValue());
+        $this->assertEquals(
+            new Property($name, 'foo'),
+            $definition
+        );
+        $this->assertEquals(
+            new Property($name, new \stdClass()),
+            $newDefinition
+        );
     }
 }

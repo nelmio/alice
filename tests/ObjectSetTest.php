@@ -41,13 +41,4 @@ class ObjectSetTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertCount(1, $set->getObjects());
     }
-
-    /**
-     * @depends Nelmio\Alice\ParameterBagTest::testIsImmutable
-     * @depends Nelmio\Alice\ObjectBagTest::testIsImmutable
-     */
-    public function testIsImmutable()
-    {
-        $this->assertTrue(true, 'Nothing to do.');
-    }
 }
