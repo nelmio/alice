@@ -92,6 +92,8 @@ For more information, refer to [the documentation](#table-of-contents).
   * [Zenify/DoctrineFixtures](https://github.com/Zenify/DoctrineFixtures)
 * Zend Framework 2:
   * [ma-si/aist-alice-fixtures](https://github.com/ma-si/aist-alice-fixtures)
+* Framework Agnostic
+  * [trappar/AliceGenerator](https://github.com/trappar/AliceGenerator)
 
 
 ## License
