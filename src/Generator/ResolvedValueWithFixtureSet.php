@@ -32,7 +32,7 @@ final class ResolvedValueWithFixtureSet
      */
     public function __construct($resolvedValue, ResolvedFixtureSet $set)
     {
-        $this->value = deep_clone($resolvedValue);
+        $this->value = $resolvedValue;
         $this->set = $set;
     }
 
@@ -41,7 +41,7 @@ final class ResolvedValueWithFixtureSet
      */
     public function getValue()
     {
-        return deep_clone($this->value);
+        return $this->value;
     }
 
     public function getSet(): ResolvedFixtureSet

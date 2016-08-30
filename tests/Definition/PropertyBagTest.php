@@ -112,4 +112,19 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
             $array
         );
     }
+
+    public function testIsCountable()
+    {
+        $bag = new PropertyBag();
+        $this->assertEquals(0, count($bag));
+
+        $bag = $bag->with(new Property('foo', 'bar'));
+        $this->assertEquals(1, count($bag));
+
+        $bag = $bag->with(new Property('foo', 'baz'));
+        $this->assertEquals(1, count($bag));
+
+        $bag = $bag->with(new Property('ping', 'pong'));
+        $this->assertEquals(2, count($bag));
+    }
 }

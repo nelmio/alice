@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Definition;
 
-use Nelmio\Alice\Definition\MethodCall\MutableMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 
 /**

@@ -28,7 +28,18 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     {
         foreach ($objects as $reference => $object) {
             if ($object instanceof ObjectInterface) {
-                $object = $object->getInstance();
+                if ($reference !== $object->getReference()) {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'Reference key mismatch, the keys "%s" and "%s" refers to the same fixture.',
+                            $reference,
+                            $object->getReference()
+                        )
+                    );
+                }
+                $this->objects[$reference] = $object;
+
+                continue;
             }
 
             $this->objects[$reference] = new SimpleObject($reference, $object);

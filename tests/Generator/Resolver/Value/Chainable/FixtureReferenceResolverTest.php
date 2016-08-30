@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\FakeObjectGenerator;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
@@ -105,7 +106,7 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
 
         $objectGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
         $objectGeneratorProphecy
-            ->generate($fixture, $set)
+            ->generate($fixture, $set, new GenerationContext())
             ->willReturn(
                 $objects = new ObjectBag(['dummy' => new \stdClass()])
             );
@@ -157,7 +158,7 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
 
         $objectGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
         $objectGeneratorProphecy
-            ->generate($fixture, $newSet)
+            ->generate($fixture, $newSet, new GenerationContext())
             ->willReturn(
                 $objects = new ObjectBag(['dummy' => new \stdClass()])
             );

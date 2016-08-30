@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Generator\ObjectGenerator;
 
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\CallerInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
@@ -72,16 +73,27 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function generate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ObjectBag
+    public function generate(
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): ObjectBag
     {
-        $fixtureSet = $this->instantiator->instantiate($fixture, $fixtureSet);
-        $instantiatedObject = $fixtureSet->getObjects()->get($fixture);
-        
-        $fixtureSet = $this->hydrator->hydrate($instantiatedObject, $fixtureSet);
-        $hydratedObject = $fixtureSet->getObjects()->get($fixture);
-        
-        $fixtureSet = $this->caller->doCallsOn($hydratedObject, $fixtureSet);
-        
+        if ($context->isFirstPass()) {
+            return $this->instantiator->instantiate($fixture, $fixtureSet)->getObjects();
+        }
+        $fixtureSet = $this->completeObject($fixture, $fixtureSet);
+
         return $fixtureSet->getObjects();
+    }
+
+    private function completeObject(FixtureInterface $fixture, ResolvedFixtureSet $set): ResolvedFixtureSet
+    {
+        $instantiatedObject = $set->getObjects()->get($fixture);
+
+        $set = $this->hydrator->hydrate($instantiatedObject, $set);
+        $hydratedObject = $set->getObjects()->get($fixture);
+
+        return $this->caller->doCallsOn($hydratedObject, $set);
     }
 }

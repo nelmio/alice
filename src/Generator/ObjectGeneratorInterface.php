@@ -25,10 +25,11 @@ interface ObjectGeneratorInterface
      *
      * @param FixtureInterface   $fixture    Fixture to generate
      * @param ResolvedFixtureSet $fixtureSet List of fixtures being generated
+     * @param GenerationContext  $context
      *
      * @throws GenerationThrowable
      *
      * @return ObjectBag New instance of $objects with the objects generated when generating $fixture.
      */
-    public function generate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ObjectBag;
+    public function generate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ObjectBag;
 }
