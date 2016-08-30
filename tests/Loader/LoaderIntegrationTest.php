@@ -12,7 +12,6 @@
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
-use Nelmio\Alice\Entity\DummyWithDate;
 use Nelmio\Alice\Entity\Hydrator\CamelCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
 use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
@@ -210,6 +209,71 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedObjects, $actualObjects);
     }
 
+    public function testLoadASetOfDataWithInjectedObjects()
+    {
+        $set = $this->loader->loadData(
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'relatedDummy' => '@injected_dummy',
+                    ],
+                ],
+            ],
+            [],
+            [
+                'injected_dummy' => StdClassFactory::create(['injected' => true])
+            ]
+        );
+        $objects = $set->getObjects();
+
+        $this->assertCount(0, $set->getParameters());
+        $this->assertCount(2, $objects);
+
+        $this->assertEquals(
+            [
+                'injected_dummy' => $injectedDummy = StdClassFactory::create(['injected' => true]),
+                'dummy' => StdClassFactory::create(['relatedDummy' => $injectedDummy]),
+            ],
+            $objects
+        );
+    }
+
+    public function testIfAFixtureAndAnInjectedObjectHaveTheSameIdThenTheInjectedObjectIsOverridden()
+    {
+        $set = $this->loader->loadData(
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'injected' => false,
+                    ],
+                    'dummy_with_constructor' => [
+                        '__construct' => [
+                            StdClassFactory::class.'::create' => [['injected' => false]],
+                        ],
+                        'injected' => false,
+                    ],
+                ],
+            ],
+            [],
+            [
+                'dummy' => StdClassFactory::create(['injected' => true]),
+                'dummy_with_constructor' => StdClassFactory::create(['injected' => true]),
+            ]
+        );
+        $objects = $set->getObjects();
+
+        $this->assertCount(0, $set->getParameters());
+        $this->assertCount(2, $objects);
+
+        $this->assertEquals(
+            [
+                'dummy' => StdClassFactory::create(['injected' => false]),
+                'dummy_with_constructor' => StdClassFactory::create(['injected' => false]),
+            ],
+            $objects
+        );
+    }
+
     public function testLoadOptionalValues()
     {
         $data = [
@@ -334,6 +398,47 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         /** @var \DateTimeInterface $updatedAt */
         $this->assertGreaterThanOrEqual(strtotime('yesterday'), $updatedAt->getTimestamp());
         $this->assertLessThanOrEqual(strtotime('tomorrow'), $updatedAt->getTimestamp());
+    }
+
+    public function testLoadSelfReferencedFixture()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy' => [
+                    'relatedDummy' => '@dummy*',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($set->getParameters()));
+
+        $objects = $set->getObjects();
+        $this->assertEquals(1, count($objects));
+
+        $expectedDummy = new \stdClass();
+        $expectedDummy->relatedDummy = $expectedDummy;
+
+        $this->assertEquals($expectedDummy, $objects['dummy']);
+    }
+
+    public function testLoadSelfReferencedFixtures()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy{1..2}' => [
+                    'relatedDummies' => '3x @dummy*',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($set->getParameters()));
+
+        $objects = $set->getObjects();
+        $this->assertEquals(2, count($objects));
     }
 
     public function provideFixturesToInstantiate()
@@ -811,11 +916,11 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'another_dummy' => StdClassFactory::create([
-                        'dummy' => $dummy,
-                    ]),
                     'dummy' => $dummy = StdClassFactory::create([
                         'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummy' => $dummy,
                     ]),
                 ],
             ],
@@ -1083,4 +1188,6 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    //TODO: test with circular reference
 }

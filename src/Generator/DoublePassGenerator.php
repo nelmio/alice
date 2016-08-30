@@ -14,10 +14,9 @@ namespace Nelmio\Alice\Generator;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\NotClonableTrait;
-use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
 
-final class SimpleGenerator implements GeneratorInterface
+final class DoublePassGenerator implements GeneratorInterface
 {
     use NotClonableTrait;
 
@@ -25,7 +24,7 @@ final class SimpleGenerator implements GeneratorInterface
      * @var FixtureSetResolverInterface
      */
     private $resolver;
-    
+
     /**
      * @var ObjectGeneratorInterface
      */
@@ -44,17 +43,26 @@ final class SimpleGenerator implements GeneratorInterface
     {
         $resolvedFixtureSet = $this->resolver->resolve($fixtureSet);
 
-        $objects = new ObjectBag();
-        $fixtures = $resolvedFixtureSet->getFixtures();
+        $context = new GenerationContext();
+        $resolvedFixtureSet = $this->generateFixtures($resolvedFixtureSet, $context);
+        $context->setToSecondPass();
+        $resolvedFixtureSet = $this->generateFixtures($resolvedFixtureSet, $context);
+
+        return new ObjectSet($resolvedFixtureSet->getParameters(), $resolvedFixtureSet->getObjects());
+    }
+
+    private function generateFixtures(ResolvedFixtureSet $set, GenerationContext $context): ResolvedFixtureSet
+    {
+        $fixtures = $set->getFixtures();
         foreach ($fixtures as $fixture) {
-            $objects = $this->generator->generate($fixture, $resolvedFixtureSet);
-            $resolvedFixtureSet = new ResolvedFixtureSet(
-                $resolvedFixtureSet->getParameters(),
-                $resolvedFixtureSet->getFixtures(),
+            $objects = $this->generator->generate($fixture, $set, $context);
+            $set = new ResolvedFixtureSet(
+                $set->getParameters(),
+                $set->getFixtures(),
                 $objects
             );
         }
-        
-        return new ObjectSet($resolvedFixtureSet->getParameters(), $objects);
+
+        return $set;
     }
 }

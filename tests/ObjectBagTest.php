@@ -60,13 +60,24 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
             'user2' => new SimpleObject('user2', $u2),
         ]);
 
-        $this->assertEquals(
-            new ObjectBag([
-                'user1' => $u1,
-                'user2' => $u2,
-            ]),
+        $this->assertSameObjects(
+            [
+                'user1' => new SimpleObject('user1', $u1),
+                'user2' => new SimpleObject('user2', $u2),
+            ],
             $bag
         );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Reference key mismatch, the keys "foo" and "bar" refers to the same fixture.
+     */
+    public function testThrowsAnExceptionIfAReferenceMismatchIsFound()
+    {
+        new ObjectBag([
+            'foo' => new SimpleObject('bar', new \stdClass()),
+        ]);
     }
 
     public function testBagsCanBeInstantiatedWithoutAnyObject()
@@ -128,7 +139,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             new ObjectBag([
                 'foo' => new \stdClass(),
-                'bar' => $std,
+                'bar' => new SimpleObject('bar', $std),
             ]),
             $newBag
         );

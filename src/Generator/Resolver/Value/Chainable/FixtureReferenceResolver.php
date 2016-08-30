@@ -11,13 +11,17 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\MethodCallBag;
+use Nelmio\Alice\Definition\PropertyBag;
+use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
-use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -86,35 +90,78 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         array $scope = []
     ): ResolvedValueWithFixtureSet
     {
+        $this->checkState(__METHOD__);
+        list($referredFixtureId, $fixtureSet) = $this->getReferredFixtureId(
+            $this->resolver,
+            $value,
+            $fixture,
+            $fixtureSet,
+            $scope
+        );
+
+        $referredFixture = $this->getReferredFixture($referredFixtureId, $fixtureSet);
+        if (false === $fixtureSet->getObjects()->has($referredFixture)) {
+            $objects = $this->generator->generate($referredFixture, $fixtureSet, new GenerationContext());
+
+            $fixtureSet = new ResolvedFixtureSet(
+                $fixtureSet->getParameters(),
+                $fixtureSet->getFixtures(),
+                $objects
+            );
+        }
+
+        return new ResolvedValueWithFixtureSet(
+            $fixtureSet->getObjects()->get($referredFixture)->getInstance(),
+            $fixtureSet
+        );
+    }
+
+    private function checkState(string $method)
+    {
         if (null === $this->generator) {
-            throw ObjectGeneratorNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ObjectGeneratorNotFoundException::createUnexpectedCall($method);
         }
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundException::createUnexpectedCall($method);
         }
+    }
 
+    private function getReferredFixtureId(
+        ValueResolverInterface $resolver,
+        ValueInterface $value,
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $set,
+        array $scope
+    ): array
+    {
         $referredFixtureId = $value->getValue();
         if ($referredFixtureId instanceof ValueInterface) {
-            $resolvedSet = $this->resolver->resolve($referredFixtureId, $fixture, $fixtureSet, $scope);
+            $resolvedSet = $resolver->resolve($referredFixtureId, $fixture, $set, $scope);
 
-            list($referredFixtureId, $fixtureSet) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
+            list($referredFixtureId, $set) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
             if (false === is_string($referredFixtureId)) {
                 throw UnresolvableValueException::create($value);
             }
         }
 
-        $referredFixture = $fixtureSet->getFixtures()->get($referredFixtureId);
-        $objects = $this->generator->generate($referredFixture, $fixtureSet);
+        return [$referredFixtureId, $set];
+    }
 
-        $fixtureSet = new ResolvedFixtureSet(
-            $fixtureSet->getParameters(),
-            $fixtureSet->getFixtures(),
-            $objects
-        );
+    private function getReferredFixture(string $id, ResolvedFixtureSet $set): FixtureInterface
+    {
+        $fixtures = $set->getFixtures();
+        if ($fixtures->has($id)) {
+            return $fixtures->get($id);
+        }
 
-        return new ResolvedValueWithFixtureSet(
-            $fixtureSet->getObjects()->get($referredFixture)->getInstance(),
-            $fixtureSet
+        return new SimpleFixture(
+            $id,
+            '',
+            new SpecificationBag(
+                null,
+                new PropertyBag(),
+                new MethodCallBag()
+            )
         );
     }
 }

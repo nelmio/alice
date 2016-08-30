@@ -12,25 +12,25 @@
 namespace Nelmio\Alice\Generator;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
+use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\ObjectBag;
-use Nelmio\Alice\ObjectInterface;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\SimpleGenerator
+ * @covers Nelmio\Alice\Generator\DoublePassGenerator
  */
-class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
+class DoublePassGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAGenerator()
     {
-        $this->assertTrue(is_a(SimpleGenerator::class, GeneratorInterface::class, true));
+        $this->assertTrue(is_a(DoublePassGenerator::class, GeneratorInterface::class, true));
     }
 
     /**
@@ -38,7 +38,7 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new SimpleGenerator(new FakeFixtureSetResolver(), new FakeObjectGenerator());
+        clone new DoublePassGenerator(new FakeFixtureSetResolver(), new FakeObjectGenerator());
     }
 
     public function testGenerateObjects()
@@ -63,28 +63,56 @@ class SimpleGeneratorTest extends \PHPUnit_Framework_TestCase
         /** @var FixtureSetResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
-        $generatedObjectProphecy = $this->prophesize(ObjectInterface::class);
-        $generatedObjectProphecy->getReference()->willReturn('stdObject');
-        $generatedObjectProphecy->getInstance()->willReturn(new \stdClass());
-        /** @var ObjectInterface $generatedObject */
-        $generatedObject = $generatedObjectProphecy->reveal();
+        $context = new GenerationContext();
 
         $objectGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
         $objectGeneratorProphecy
-            ->generate($fixture, $resolvedSet)
-            ->willReturn($objects->with($generatedObject))
+            ->generate($fixture, $resolvedSet, $context)
+            ->willReturn($objectsAfterFirstPass = $objects->with(
+                new SimpleObject(
+                    'foo',
+                    StdClassFactory::create(['pass' => 'first'])
+                )
+            ))
+        ;
+        $contextAfterFirstPass = clone $context;
+        $contextAfterFirstPass->setToSecondPass();
+        $objectGeneratorProphecy
+            ->generate(
+                $fixture,
+                new ResolvedFixtureSet(
+                    $resolvedSet->getParameters(),
+                    $resolvedSet->getFixtures(),
+                    $objectsAfterFirstPass
+                ),
+                $contextAfterFirstPass
+            )
+            ->willReturn($objectsAfterFirstPass = $objects->with(
+                new SimpleObject(
+                    'foo',
+                    StdClassFactory::create(['pass' => 'second'])
+                )
+            ))
         ;
         /** @var ObjectGeneratorInterface $objectGenerator */
         $objectGenerator = $objectGeneratorProphecy->reveal();
 
-        $expected = new ObjectSet($resolvedParameters, $objects->with($generatedObject));
+        $expected = new ObjectSet(
+            $resolvedParameters,
+            $objects->with(
+                new SimpleObject(
+                    'foo',
+                    StdClassFactory::create(['pass' => 'second'])
+                )
+            )
+        );
 
-        $generator = new SimpleGenerator($resolver, $objectGenerator);
+        $generator = new DoublePassGenerator($resolver, $objectGenerator);
         $actual = $generator->generate($set);
 
         $this->assertEquals($expected, $actual);
 
         $resolverProphecy->resolve(Argument::any())->shouldHaveBeenCalledTimes(1);
-        $objectGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $objectGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 }

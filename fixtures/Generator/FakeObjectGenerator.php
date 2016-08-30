@@ -22,7 +22,7 @@ class FakeObjectGenerator implements ObjectGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function generate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ObjectBag
+    public function generate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ObjectBag
     {
         $this->__call(__FUNCTION__, func_get_args());
     }

@@ -116,7 +116,7 @@ use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolv
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
-use Nelmio\Alice\Generator\SimpleGenerator;
+use Nelmio\Alice\Generator\DoublePassGenerator;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\NotClonableTrait;
@@ -315,7 +315,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function _getBuiltInGenerator(): GeneratorInterface
     {
-        return new SimpleGenerator(
+        return new DoublePassGenerator(
             $this->getBuiltInResolver(),
             $this->getBuiltInObjectGenerator()
         );
