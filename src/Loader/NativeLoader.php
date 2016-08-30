@@ -98,7 +98,9 @@ use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\SelfFixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\Parser\Chainable\PhpParser;
@@ -383,7 +385,11 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new FixturePropertyReferenceResolver(
                 $this->getPropertyAccessor()
             ),
-            new FixtureReferenceResolver(),
+            new UnresolvedFixtureReferenceResolver(
+                new SelfFixtureReferenceResolver(
+                    new FixtureReferenceResolver()
+                )
+            ),
             new FixtureWildcardReferenceResolver(),
             new ListValueResolver(),
             new OptionalValueResolver(),

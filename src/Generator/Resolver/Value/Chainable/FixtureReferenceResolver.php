@@ -18,7 +18,6 @@ use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException;
-use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -27,12 +26,9 @@ use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
-use Nelmio\Alice\Generator\ValueResolverAwareInterface;
-use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
-final class FixtureReferenceResolver
-implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, ValueResolverAwareInterface
+final class FixtureReferenceResolver implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface
 {
     use NotClonableTrait;
 
@@ -41,15 +37,9 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
      */
     private $generator;
 
-    /**
-     * @var ValueResolverInterface|null
-     */
-    private $resolver;
-
-    public function __construct(ObjectGeneratorInterface $generator = null, ValueResolverInterface $resolver = null)
+    public function __construct(ObjectGeneratorInterface $generator = null)
     {
         $this->generator = $generator;
-        $this->resolver = $resolver;
     }
 
     /**
@@ -57,15 +47,7 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
      */
     public function withGenerator(ObjectGeneratorInterface $generator): self
     {
-        return new self($generator, $this->resolver);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function withResolver(ValueResolverInterface $resolver): self
-    {
-        return new self($this->generator, $resolver);
+        return new self($generator);
     }
 
     /**
@@ -90,14 +72,14 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         array $scope = []
     ): ResolvedValueWithFixtureSet
     {
-        $this->checkState(__METHOD__);
-        list($referredFixtureId, $fixtureSet) = $this->getReferredFixtureId(
-            $this->resolver,
-            $value,
-            $fixture,
-            $fixtureSet,
-            $scope
-        );
+        if (null === $this->generator) {
+            throw ObjectGeneratorNotFoundException::createUnexpectedCall(__METHOD__);
+        }
+
+        $referredFixtureId = $value->getValue();
+        if ($referredFixtureId instanceof ValueInterface) {
+            throw new UnresolvableValueException($value);
+        }
 
         $referredFixture = $this->getReferredFixture($referredFixtureId, $fixtureSet);
         if (false === $fixtureSet->getObjects()->has($referredFixture)) {
@@ -114,37 +96,6 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
             $fixtureSet->getObjects()->get($referredFixture)->getInstance(),
             $fixtureSet
         );
-    }
-
-    private function checkState(string $method)
-    {
-        if (null === $this->generator) {
-            throw ObjectGeneratorNotFoundException::createUnexpectedCall($method);
-        }
-        if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall($method);
-        }
-    }
-
-    private function getReferredFixtureId(
-        ValueResolverInterface $resolver,
-        ValueInterface $value,
-        FixtureInterface $fixture,
-        ResolvedFixtureSet $set,
-        array $scope
-    ): array
-    {
-        $referredFixtureId = $value->getValue();
-        if ($referredFixtureId instanceof ValueInterface) {
-            $resolvedSet = $resolver->resolve($referredFixtureId, $fixture, $set, $scope);
-
-            list($referredFixtureId, $set) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
-            if (false === is_string($referredFixtureId)) {
-                throw UnresolvableValueException::create($value);
-            }
-        }
-
-        return [$referredFixtureId, $set];
     }
 
     private function getReferredFixture(string $id, ResolvedFixtureSet $set): FixtureInterface

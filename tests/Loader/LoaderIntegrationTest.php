@@ -1199,6 +1199,72 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        yield '[self reference] alone' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'itself' => '@self',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function() {
+                        $dummy = new \stdClass();
+                        $dummy->itself = $dummy;
+
+                        return $dummy;
+                    })(),
+                ],
+            ],
+        ];
+
+// TODO
+//        yield '[self reference] alone' => [
+//            [
+//                \stdClass::class => [
+//                    'dummy' => [
+//                        'itself' => '@<("self")>',
+//                    ],
+//                ],
+//            ],
+//            [
+//                'parameters' => [],
+//                'objects' => [
+//                    'dummy' => (function() {
+//                        $dummy = new \stdClass();
+//                        $dummy->itself = $dummy;
+//
+//                        return $dummy;
+//                    })(),
+//                ],
+//            ],
+//        ];
+
+        yield '[self reference] property' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'itself' => '@self',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function() {
+                        $dummy = new \stdClass();
+                        $dummy->foo = 'bar';
+                        $dummy->itself = $dummy;
+
+                        return $dummy;
+                    })(),
+                ],
+            ],
+        ];
     }
 
     //TODO: test with circular reference

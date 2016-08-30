@@ -34,6 +34,11 @@ use Prophecy\Argument;
  */
 class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $this->markTestIncomplete('TODO');
+    }
+
     public function testIsAChainableResolver()
     {
         $this->assertTrue(is_a(FixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));
