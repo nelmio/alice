@@ -67,28 +67,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $decoratedFixtureProphecy->getSpecs()->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
-     */
-    public function testIsImmutable()
-    {
-        $specs = SpecificationBagFactory::create();
-        $decoratedFixture = new MutableFixture('mutable', 'Mutable', $specs);
-        $flags = new FlagBag('something');
-
-        $fixtureWithFlags = new FixtureWithFlags($decoratedFixture, $flags);
-        $fixture = new TemplatingFixture($fixtureWithFlags);
-
-        $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
-        $decoratedFixture->setSpecs($newSpecs);
-
-        $this->assertEquals($specs, $fixture->getSpecs());
-    }
-
-    /**
-     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
-     */
-    public function testWithersKeepsImmutabilityAndReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance()
     {
         $specs = SpecificationBagFactory::create();
         $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());

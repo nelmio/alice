@@ -26,24 +26,4 @@ class ResolvedValueWithFixtureSetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, $resolvedValueWithSet->getValue());
         $this->assertEquals($set, $resolvedValueWithSet->getSet());
     }
-
-    /**
-     * @depends Nelmio\Alice\Generator\ResolvedFixtureSetTest::testIsImmutable
-     */
-    public function testIsImmutable()
-    {
-        $value = new \stdClass();
-        $set = ResolvedFixtureSetFactory::create();
-
-        $resolvedValueWithSet = new ResolvedValueWithFixtureSet($value, $set);
-
-        // Mutate injected value
-        $value->foo = 'bar';
-
-        // Mutate retrieved value
-        $resolvedValueWithSet->getValue()->foo = 'baz';
-
-        $this->assertEquals(new \stdClass(), $resolvedValueWithSet->getValue());
-        $this->assertEquals($set, $resolvedValueWithSet->getSet());
-    }
 }

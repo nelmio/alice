@@ -53,27 +53,6 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $decoratedFixtureProphecy->getSpecs()->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
-     * @depends Nelmio\Alice\Definition\FlagBagTest::testIsImmutable
-     */
-    public function testIsImmutable()
-    {
-        $specs = SpecificationBagFactory::create();
-        $decoratedFixture = new MutableFixture('mutable', 'Mutable', $specs);
-        $flags = new FlagBag('something');
-        $fixture = new FixtureWithFlags($decoratedFixture, $flags);
-
-        $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
-        $decoratedFixture->setSpecs($newSpecs);
-
-        $this->assertEquals($specs, $fixture->getSpecs());
-    }
-
-    /**
-     * @depends Nelmio\Alice\Definition\SpecificationBagTest::testIsImmutable
-     * @depends Nelmio\Alice\Definition\FlagBagTest::testIsImmutable
-     */
     public function testWithersReturnNewModifiedInstance()
     {
         $specs = SpecificationBagFactory::create();

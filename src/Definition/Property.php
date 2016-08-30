@@ -33,7 +33,7 @@ final class Property
     public function __construct(string $name, $value)
     {
         $this->name = $name;
-        $this->value = deep_clone($value);
+        $this->value = $value;
     }
 
     /**
@@ -44,7 +44,7 @@ final class Property
     public function withValue($value): self
     {
         $clone = clone $this;
-        $clone->value = deep_clone($value);
+        $clone->value = $value;
 
         return $clone;
     }
@@ -59,6 +59,6 @@ final class Property
      */
     public function getValue()
     {
-        return deep_clone($this->value);
+        return $this->value;
     }
 }
