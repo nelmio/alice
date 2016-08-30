@@ -123,6 +123,7 @@ use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
@@ -380,7 +381,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new DynamicArrayValueResolver(),
             new FakerFunctionCallValueResolver($this->fakerGenerator),
             new FixturePropertyReferenceResolver(
-                PropertyAccess::createPropertyAccessor()
+                $this->getPropertyAccessor()
             ),
             new FixtureReferenceResolver(),
             new FixtureWildcardReferenceResolver(),
@@ -395,7 +396,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function _getBuiltInPropertyHydrator(): PropertyHydratorInterface
     {
         return new SymfonyPropertyAccessorHydrator(
-            PropertyAccess::createPropertyAccessor()
+            $this->getPropertyAccessor()
         );
     }
 
@@ -461,5 +462,10 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         $this->cache[$method] = $service;
 
         return $service;
+    }
+
+    protected function getPropertyAccessor(): PropertyAccessorInterface
+    {
+        return PropertyAccess::createPropertyAccessorBuilder()->enableMagicCall()->getPropertyAccessor();
     }
 }

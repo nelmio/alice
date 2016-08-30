@@ -159,7 +159,11 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 $this->fail('Expected exception to be thrown.');
             }
         } catch (InstantiationThrowable $exception) {
-            return;
+            if (null === $expected) {
+                return;
+            }
+
+            throw $exception;
         }
 
         $this->assertCount(1, $objects);
@@ -177,7 +181,11 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 $this->fail('Expected exception to be thrown.');
             }
         } catch (HydrationThrowable $exception) {
-            return;
+            if (null === $expected) {
+                return;
+            }
+
+            throw $exception;
         }
 
         $this->assertEquals(count($expected), count($objects));
@@ -195,7 +203,11 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 $this->fail('Expected exception to be thrown.');
             }
         } catch (GenerationThrowable $exception) {
-            return;
+            if (null === $expected) {
+                return;
+            }
+
+            throw $exception;
         }
 
         $expectedParameters = $expected['parameters'];
@@ -518,7 +530,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 DummyWithRequiredParameterInConstructor::class => [
                     'dummy' => [
-                        100,
+                        '__construct' => [100],
                     ],
                 ],
             ],
@@ -816,7 +828,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'dummy' => (function (MagicCallDummy $dummy) {
-                    $dummy->magicProperty('bob');
+                    $dummy->setMagicProperty('bob');
 
                     return $dummy;
                 })(new MagicCallDummy())
@@ -825,7 +837,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 
         yield 'magic call snake_case property' => [
             [
-                SnakeCaseDummy::class => [
+                MagicCallDummy::class => [
                     'dummy' => [
                         'magic_property' => 'bob',
                     ],
@@ -833,7 +845,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'dummy' => (function (MagicCallDummy $dummy) {
-                    $dummy->magic_property('bob');
+                    $dummy->setMagicProperty('bob');
 
                     return $dummy;
                 })(new MagicCallDummy())
@@ -850,7 +862,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'dummy' => (function (MagicCallDummy $dummy) {
-                    $dummy->MagicProperty('bob');
+                    $dummy->setMagicProperty('bob');
 
                     return $dummy;
                 })(new MagicCallDummy())
