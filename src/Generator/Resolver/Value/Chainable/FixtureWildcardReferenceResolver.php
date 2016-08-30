@@ -17,7 +17,6 @@ use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
-use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
