@@ -1352,6 +1352,30 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        yield '[identity] has access to variables' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '<(@dummy->foo)>'
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
     }
 
     //TODO: test with circular reference

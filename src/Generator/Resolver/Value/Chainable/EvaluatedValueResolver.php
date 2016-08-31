@@ -48,6 +48,7 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
     ): ResolvedValueWithFixtureSet
     {
         $_scope = $scope;
+        $expression = $this->replacePlaceholders($value->getValue());
         $evaluateExpression = function ($_expression) use ($_scope) {
             foreach ($_scope as $_scopeVariableName => $_scopeVariableValue) {
                 $$_scopeVariableName = $_scopeVariableValue;
@@ -57,7 +58,7 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         };
 
         try {
-            $evaluatedExpression = $evaluateExpression($value->getValue());
+            $evaluatedExpression = $evaluateExpression($expression);
         } catch (\Throwable $throwable) {
             throw new UnresolvableValueException(
                 sprintf(
@@ -70,5 +71,10 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         }
 
         return new ResolvedValueWithFixtureSet($evaluatedExpression, $fixtureSet);
+    }
+
+    private function replacePlaceholders(string $expression): string
+    {
+        return preg_replace('/(@(?<id>[^\ @\-]+))/', '\$_instances[\'$2\']', $expression);
     }
 }
