@@ -158,7 +158,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $setAfterFirstResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 1]), $fixtures);
         $resolverProphecy
-            ->resolve($usernameValue, $fixture, $set, [])
+            ->resolve($usernameValue, $fixture, $set, ['_instances' => $set->getObjects()->toArray()])
             ->willReturn(
                 new ResolvedValueWithFixtureSet('Bob', $setAfterFirstResolution)
             )
@@ -166,7 +166,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
 
         $setAfterSecondResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 2]), $fixtures);
         $resolverProphecy
-            ->resolve($groupValue, $fixture, $setAfterFirstResolution, ['username' => 'Bob'])
+            ->resolve($groupValue, $fixture, $setAfterFirstResolution, ['_instances' => $set->getObjects()->toArray(), 'username' => 'Bob'])
             ->willReturn(
                 new ResolvedValueWithFixtureSet('Badass', $setAfterSecondResolution)
             )
