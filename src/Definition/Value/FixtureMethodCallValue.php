@@ -64,7 +64,7 @@ final class FixtureMethodCallValue implements ValueInterface
             '%s->%s(%s)',
             $this->reference,
             $this->function->getName(),
-            [] === $this->function->getArguments() ? '' : 'args'
+            [] === $this->function->getArguments() ? '' : var_export($this->function->getArguments(), true)
         );
     }
 }

@@ -72,7 +72,7 @@ final class UniqueValue implements ValueInterface
             '(unique) %s',
             $this->value instanceof ValueInterface
                 ? $this->value
-                : is_scalar($this->value) ? $this->value : 'vals'
+                : var_export($this->value, true)
         );
     }
 }

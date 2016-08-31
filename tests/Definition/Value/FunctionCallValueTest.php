@@ -69,6 +69,6 @@ class FunctionCallValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<foo()>', (string) $value);
 
         $value = new FunctionCallValue('foo', ['bar']);
-        $this->assertEquals('<foo(args)>', (string) $value);
+        $this->assertEquals("<foo(array (\n  0 => 'bar',\n))>", (string) $value);
     }
 }

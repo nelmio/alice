@@ -59,6 +59,9 @@ class ChoiceListValueTest extends \PHPUnit_Framework_TestCase
     public function testIsCastableIntoAString()
     {
         $value = new ChoiceListValue([]);
-        $this->assertEquals('(choice) vals', (string) $value);
+        $this->assertEquals("(choice) array (\n)", (string) $value);
+
+        $value = new ChoiceListValue(['foo', 'bar']);
+        $this->assertEquals("(choice) array (\n  0 => 'foo',\n  1 => 'bar',\n)", (string) $value);
     }
 }

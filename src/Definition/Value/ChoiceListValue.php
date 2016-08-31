@@ -46,6 +46,6 @@ final class ChoiceListValue implements ValueInterface
      */
     public function __toString(): string
     {
-        return '(choice) vals';
+        return sprintf('(choice) %s', var_export($this->values, true));
     }
 }
