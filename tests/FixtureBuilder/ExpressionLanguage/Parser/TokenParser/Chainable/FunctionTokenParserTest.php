@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
@@ -190,11 +191,12 @@ class FunctionTokenParserTest extends \PHPUnit_Framework_TestCase
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $expected = new FunctionCallValue('identity', [' arg0 , arg1 ']);
+        $expected = new FunctionCallValue('identity', [new EvaluatedValue(' arg0 , arg1 ')]);
 
         $parser = new FunctionTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
         $this->assertEquals($expected, $actual);
+        $this->assertInstanceOf(EvaluatedValue::class, $actual->getArguments()[0]);
     }
 }

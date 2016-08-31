@@ -1312,6 +1312,46 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
             null,
         ];
+
+        yield '[identity] evaluate the argument as if it was a plain PHP function' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<("Hello"." "."world!")>',
+                        'bar' => '<(str_replace("_", " ", "Hello_world!"))>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'Hello world!',
+                        'bar' => 'Hello world!',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[identity] has access to variables' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'foz' => '<($foo)>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                        'foz' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
     }
 
     //TODO: test with circular reference

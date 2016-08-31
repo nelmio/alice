@@ -13,6 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
+use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
@@ -249,7 +250,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             new FunctionCallValue(
                 'identity',
                 [
-                    'function()'
+                    new EvaluatedValue('function()'),
                 ]
             ),
         ];
@@ -258,7 +259,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             new FunctionCallValue(
                 'identity',
                 [
-                    'function(echo("hello"))'
+                    new EvaluatedValue('function(echo("hello"))'),
                 ]
             ),
         ];
@@ -267,7 +268,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             new FunctionCallValue(
                 'identity',
                 [
-                    'function(echo(<{param}>)'
+                    new EvaluatedValue('function(echo(<{param}>)'),
                 ]
             ),
         ];
@@ -279,7 +280,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 new FunctionCallValue(
                     'identity',
                     [
-                        'echo("hello")',
+                        new EvaluatedValue('echo("hello")'),
                     ]
                 ),
                 '<escaped_value>',
@@ -422,7 +423,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             new FunctionCallValue(
                 'identity',
                 [
-                    'function($foo, $arg)',
+                    new EvaluatedValue('function($foo, $arg)'),
                 ]
             ),
         ];
@@ -431,7 +432,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             new FunctionCallValue(
                 'identity',
                 [
-                    'function(echo("hello"))',
+                    new EvaluatedValue('function(echo("hello"))'),
                 ]
             ),
         ];
@@ -440,7 +441,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             new FunctionCallValue(
                 'identity',
                 [
-                    'function(echo(<{param}>)',
+                    new EvaluatedValue('function(echo(<{param}>)'),
                 ]
             ),
         ];
@@ -453,7 +454,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 new FunctionCallValue(
                     'identity',
                     [
-                        'echo("hello")',
+                        new EvaluatedValue('echo("hello")'),
                     ]
                 ),
                 '<escaped_value>',

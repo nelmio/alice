@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
@@ -47,7 +48,7 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
 
         $function = $matches['function'];
         $arguments = ('identity' === $function)
-            ? [$matches['arguments']]
+            ? [new EvaluatedValue($matches['arguments'])]
             : $this->parseArguments($this->parser, trim($matches['arguments']))
         ;
 

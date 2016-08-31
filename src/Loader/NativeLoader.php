@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Loader;
 use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
-use Nelmio\Alice\Definition\Value\VariableValue;
+use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer;
@@ -93,6 +93,7 @@ use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
 use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver;
@@ -186,7 +187,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     public function __construct(FakerGenerator $fakerGenerator = null)
     {
-        $this->fakerGenerator = (null === $fakerGenerator) ? FakerGeneratorFactory::create() : $fakerGenerator;
+        $this->fakerGenerator = (null === $fakerGenerator) ? $this->getFakerGenerator() : $fakerGenerator;
         $this->dataLoader = $this->getBuiltInDataLoader();
         $this->fileLoader = new SimpleFileLoader(
             $this->getBuiltInParser(),
@@ -383,6 +384,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     {
         return new ValueResolverRegistry([
             new DynamicArrayValueResolver(),
+            new EvaluatedValueResolver(),
             new FakerFunctionCallValueResolver($this->fakerGenerator),
             new FixturePropertyReferenceResolver(
                 $this->getPropertyAccessor()
@@ -476,5 +478,13 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function getPropertyAccessor(): PropertyAccessorInterface
     {
         return PropertyAccess::createPropertyAccessorBuilder()->enableMagicCall()->getPropertyAccessor();
+    }
+
+    protected function getFakerGenerator(): FakerGenerator
+    {
+        $generator = FakerGeneratorFactory::create();
+        $generator->addProvider(new AliceProvider());
+
+        return $generator;
     }
 }
