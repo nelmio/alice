@@ -1265,6 +1265,53 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        yield '[variable] nominal' => [
+            [
+                \Nelmio\Alice\Entity\DummyWithGetter::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'fooVal' => '$foo',
+                    ],
+                    'another_dummy' => [
+                        'foo' => 'bar',
+                        'fooVal' => '@self->foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
+                        $dummy->setFoo('bar');
+                        $dummy->fooVal = 'bar';
+
+                        return $dummy;
+                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
+                    'another_dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
+                        $dummy->setFoo('bar');
+                        $dummy->fooVal = 'rab';
+
+                        return $dummy;
+                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
+                ],
+            ],
+        ];
+
+        yield '[variable] variables are scoped to the fixture' => [
+            [
+                \Nelmio\Alice\Entity\DummyWithGetter::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'fooVal' => '$foo',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '$foo',
+                    ],
+                ],
+            ],
+            null,
+        ];
     }
 
     //TODO: test with circular reference
