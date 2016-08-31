@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
+use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\FixtureBag;
@@ -190,11 +191,11 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not resolve value Nelmio\Alice\Definition\Value\FixtureReferenceValue.
+     * @expectedExceptionMessage Could not resolve value "@dummy".
      */
     public function testIfTheResolvedReferenceIsInvalidThenAnExceptionIsThrown()
     {
-        $value = new FixtureReferenceValue(new FakeValue());
+        $value = new FixtureReferenceValue(new DummyValue('dummy'));
 
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy

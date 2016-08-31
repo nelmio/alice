@@ -83,10 +83,10 @@ class UniqueValueTest extends \PHPUnit_Framework_TestCase
     public function testIsCastableIntoAString()
     {
         $value = new UniqueValue('', 'foo');
-        $this->assertEquals('(unique) foo', (string) $value);
+        $this->assertEquals('(unique) \'foo\'', (string) $value);
 
         $value = new UniqueValue('', new \stdClass());
-        $this->assertEquals('(unique) vals', (string) $value);
+        $this->assertEquals("(unique) stdClass::__set_state(array(\n))", (string) $value);
 
         $value = new UniqueValue('', new DummyValue('foo'));
         $this->assertEquals('(unique) foo', (string) $value);

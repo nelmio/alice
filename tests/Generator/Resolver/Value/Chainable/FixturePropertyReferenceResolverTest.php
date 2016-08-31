@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
+use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
@@ -115,11 +116,12 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+     * @expectedExceptionMessage Could not resolve value "dummy->prop".
      */
     public function testCatchesAccessorExceptionsToThrowResolverException()
     {
         $value = new FixturePropertyValue(
-            $reference = new FakeValue(),
+            $reference = new DummyValue('dummy'),
             $property = 'prop'
         );
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
@@ -178,11 +180,12 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+     * @expectedExceptionMessage Could not resolve value "dummy->publicProperty".
      */
     public function testThrowsAnExceptionIfReferenceResolvedIsNotAnObject()
     {
         $value = new FixturePropertyValue(
-            $reference = new FakeValue(),
+            $reference = new DummyValue('dummy'),
             $property = 'publicProperty'
         );
 

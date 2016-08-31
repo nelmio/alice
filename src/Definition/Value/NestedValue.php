@@ -43,6 +43,6 @@ final class NestedValue implements ValueInterface
      */
     public function __toString(): string
     {
-        return '(nested) vals';
+        return sprintf('(nested) %s', var_export($this->values, true));
     }
 }

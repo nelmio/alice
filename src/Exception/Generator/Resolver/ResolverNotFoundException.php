@@ -30,7 +30,7 @@ class ResolverNotFoundException extends \LogicException
         return new static(
             sprintf(
                 'No resolver found to resolve value "%s".',
-                get_class($value)
+                $value
             )
         );
     }

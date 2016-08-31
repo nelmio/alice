@@ -20,8 +20,8 @@ class UnresolvableValueException extends \RuntimeException implements Resolution
     {
         return new static(
             sprintf(
-                'Could not resolve value %s.',
-                get_class($value)
+                'Could not resolve value "%s".',
+                $value
             ),
             $code,
             $previous

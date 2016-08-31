@@ -56,6 +56,6 @@ class FixtureMethodCallValueTest extends \PHPUnit_Framework_TestCase
             new FixtureReferenceValue('dummy'),
             new FunctionCallValue('foo', ['bar'])
         );
-        $this->assertEquals('@dummy->foo(args)', (string) $value);
+        $this->assertEquals("@dummy->foo(array (\n  0 => 'bar',\n))", (string) $value);
     }
 }

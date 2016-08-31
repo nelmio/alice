@@ -67,6 +67,6 @@ final class FunctionCallValue implements ValueInterface
      */
     public function __toString(): string
     {
-        return sprintf('<%s(%s)>', $this->name, [] === $this->arguments ? '' : 'args');
+        return sprintf('<%s(%s)>', $this->name, [] === $this->arguments ? '' : var_export($this->arguments, true));
     }
 }

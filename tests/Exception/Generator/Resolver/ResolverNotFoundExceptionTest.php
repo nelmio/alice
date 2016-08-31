@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Exception\Generator\Resolver;
 
-use Nelmio\Alice\Definition\Value\FakeValue;
+use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
@@ -41,10 +41,10 @@ class ResolverNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 
     public function testTestCreateNewExceptionWithFactoryForValue()
     {
-        $exception = ResolverNotFoundException::createForValue(new FakeValue());
+        $exception = ResolverNotFoundException::createForValue(new DummyValue('dummy'));
 
         $this->assertEquals(
-            'No resolver found to resolve value "Nelmio\Alice\Definition\Value\FakeValue".',
+            'No resolver found to resolve value "dummy".',
             $exception->getMessage()
         );
     }
