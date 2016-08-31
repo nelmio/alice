@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -95,7 +96,7 @@ class ValueResolverRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage No resolver found to resolve value "Nelmio\Alice\Definition\Value\FakeValue".
+     * @expectedExceptionMessage No resolver found to resolve value "foo".
      */
     public function testThrowExceptionIfNoSuitableParserIsFound()
     {
@@ -104,6 +105,6 @@ class ValueResolverRegistryTest extends \PHPUnit_Framework_TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $registry = new ValueResolverRegistry([]);
-        $registry->resolve(new FakeValue(), $fixture, $set);
+        $registry->resolve(new DummyValue('foo'), $fixture, $set);
     }
 }

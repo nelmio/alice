@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Exception\Generator\Resolver;
 
-use Nelmio\Alice\Definition\Value\FakeValue;
+use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
@@ -31,10 +31,10 @@ class UnresolvableValueExceptionTest extends \PHPUnit_Framework_TestCase
 
     public function testTestCreateNewExceptionWithFactory()
     {
-        $exception = UnresolvableValueException::create(new FakeValue());
+        $exception = UnresolvableValueException::create(new DummyValue('dummy'));
 
         $this->assertEquals(
-            'Could not resolve value Nelmio\Alice\Definition\Value\FakeValue.',
+            'Could not resolve value "dummy".',
             $exception->getMessage()
         );
     }
