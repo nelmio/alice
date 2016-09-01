@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Definition\Fixture;
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
+use Nelmio\Alice\Entity\Hydrator\Dummy;
 use Nelmio\Alice\FixtureInterface;
 
 /**
@@ -48,13 +49,14 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($specs, $fixture->getSpecs());
         $this->assertEquals($flags, $fixture->getFlags());
 
-        $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
+        $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(2);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
         $decoratedFixtureProphecy->getSpecs()->shouldHaveBeenCalledTimes(1);
     }
 
     public function testWithersReturnNewModifiedInstance()
     {
+        $reference = 'user0';
         $specs = SpecificationBagFactory::create();
         $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
 
@@ -64,6 +66,7 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $newDecoratedFixture = $newDecoratedFixtureProphecy->reveal();
 
         $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $decoratedFixtureProphecy->getId()->willReturn($reference);
         $decoratedFixtureProphecy->withSpecs($newSpecs)->willReturn($newDecoratedFixture);
         $decoratedFixtureProphecy->getSpecs()->willReturn($specs);
         /** @var FixtureInterface $decoratedFixture */
@@ -81,5 +84,17 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($flags, $fixture->getFlags());
         $this->assertEquals($newSpecs, $newFixture->getSpecs());
         $this->assertEquals($flags, $newFixture->getFlags());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Expected the fixture ID and the flags key to be the same. Got "foo" and "bar" instead.
+     */
+    public function testThrowsAnExceptionIfFixtureIdAndFlagKeyMistmatch()
+    {
+        $fixture = new DummyFixture('foo');
+        $flags = new FlagBag('bar');
+
+        new FixtureWithFlags($fixture, $flags);
     }
 }
