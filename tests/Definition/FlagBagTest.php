@@ -13,6 +13,8 @@ namespace Nelmio\Alice\Definition;
 
 use Nelmio\Alice\Definition\Flag\AnotherDummyFlag;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
+use Nelmio\Alice\Definition\Flag\ElementFlag;
+use Nelmio\Alice\Definition\Flag\ElementWithToStringFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\MutableFlag;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
@@ -80,6 +82,100 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $newFlags->mergeWith($anotherBag),
             $mergedBag
+        );
+
+        $renamedBag = $anotherBag->withKey('dummy');
+        $this->assertEquals(
+            (new FlagBag('user2'))->withFlag(new MutableFlag('another_flag0')),
+            $anotherBag
+        );
+        $this->assertEquals(
+            (new FlagBag('dummy'))->withFlag(new MutableFlag('another_flag0')),
+            $renamedBag
+        );
+    }
+
+    public function testMergingTwoBagsIsImmutable()
+    {
+        $firstBag = (new FlagBag('first'))
+            ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
+            ->withFlag(new ElementFlag('foz'))
+        ;
+        $secondBag = (new FlagBag('second'))
+            ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
+            ->withFlag(new ElementFlag('baz'))
+        ;
+
+        $mergeFirstWithSecond = $firstBag->mergeWith($secondBag);
+        $mergeSecondWithFirst = $secondBag->mergeWith($firstBag);
+
+        $this->assertEquals(
+            (new FlagBag('first'))
+                ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
+                ->withFlag(new ElementFlag('foz')),
+            $firstBag
+        );
+        $this->assertEquals(
+            (new FlagBag('second'))
+                ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
+                ->withFlag(new ElementFlag('baz')),
+            $secondBag
+        );
+        $this->assertEquals(
+            (new FlagBag('first'))
+                ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
+                ->withFlag(new ElementFlag('foz'))
+                ->withFlag(new ElementFlag('baz')),
+            $mergeFirstWithSecond
+        );
+        $this->assertEquals(
+            (new FlagBag('second'))
+                ->withFlag(new ElementFlag('baz'))
+                ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
+                ->withFlag(new ElementFlag('foz')),
+            $mergeSecondWithFirst
+        );
+    }
+
+    public function testCanMergeTwoBagsWithoutOverriddingExistingValues()
+    {
+        $firstBag = (new FlagBag('first'))
+            ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
+            ->withFlag(new ElementFlag('foz'))
+        ;
+        $secondBag = (new FlagBag('second'))
+            ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
+            ->withFlag(new ElementFlag('baz'))
+        ;
+
+        $mergeFirstWithSecond = $firstBag->mergeWith($secondBag, false);
+        $mergeSecondWithFirst = $secondBag->mergeWith($firstBag, false);
+
+        $this->assertEquals(
+            (new FlagBag('first'))
+                ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
+                ->withFlag(new ElementFlag('foz')),
+            $firstBag
+        );
+        $this->assertEquals(
+            (new FlagBag('second'))
+                ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
+                ->withFlag(new ElementFlag('baz')),
+            $secondBag
+        );
+        $this->assertEquals(
+            (new FlagBag('first'))
+                ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
+                ->withFlag(new ElementFlag('foz'))
+                ->withFlag(new ElementFlag('baz')),
+            $mergeFirstWithSecond
+        );
+        $this->assertEquals(
+            (new FlagBag('second'))
+                ->withFlag(new ElementFlag('baz'))
+                ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
+                ->withFlag(new ElementFlag('foz')),
+            $mergeSecondWithFirst
         );
     }
 
