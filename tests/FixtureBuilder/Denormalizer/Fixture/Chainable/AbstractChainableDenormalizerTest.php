@@ -21,6 +21,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FakeFixtureDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Prophecy\Argument;
 
 /**
@@ -38,14 +39,9 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(AbstractChainableDenormalizer::class, FixtureDenormalizerAwareInterface::class, true));
     }
 
-    public function testCanBeInstantiatedWithADenormalizer()
+    public function testIsFlagParserAware()
     {
-        new FakeAbstractChainableDenormalizer(new FakeFixtureDenormalizer());
-    }
-
-    public function testCanBeInstantiatedWithoutADenormalizer()
-    {
-        new FakeAbstractChainableDenormalizer();
+        $this->assertTrue(is_a(AbstractChainableDenormalizer::class, FlagParserAwareInterface::class, true));
     }
 
     /**
@@ -69,7 +65,17 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalizeTemporaryFixture" to be called only if it has a denormalizer.
      */
-    public function testCannotDenormalizerIfHasNoDenormalizer()
+    public function testCannotDenormalizeIfHasNoDenormalizer()
+    {
+        $denormalizer = new FakeAbstractChainableDenormalizer();
+        $denormalizer->denormalizeTemporaryFixture(new FixtureBag(), 'Dummy', [], new FlagBag(''));
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalizeTemporaryFixture" to be called only if it has a denormalizer.
+     */
+    public function testCannotDenormalizeIfHasNoFlagParser()
     {
         $denormalizer = new FakeAbstractChainableDenormalizer();
         $denormalizer->denormalizeTemporaryFixture(new FixtureBag(), 'Dummy', [], new FlagBag(''));

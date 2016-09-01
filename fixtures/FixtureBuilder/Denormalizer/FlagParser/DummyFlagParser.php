@@ -24,6 +24,6 @@ class DummyFlagParser implements FlagParserInterface
      */
     public function parse(string $element): FlagBag
     {
-        return new FlagBag('');
+        return new FlagBag($element);
     }
 }

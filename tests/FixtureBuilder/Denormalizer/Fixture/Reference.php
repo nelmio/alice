@@ -11,7 +11,10 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
+use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
+use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 
 /**
@@ -49,37 +52,37 @@ final class Reference
                 'nominal' => [
                     'user_{alice, bob}',
                     [
-                        FixtureFactory::create('user_alice', 'alice'),
-                        FixtureFactory::create('user_bob', 'bob'),
+                        FixtureFactory::createTemplating('user_alice', 'alice'),
+                        FixtureFactory::createTemplating('user_bob', 'bob'),
                     ],
                 ],
                 'nominal with flag' => [
                     'user_{alice, bob} (dummy_flag)',
                     [
-                        FixtureFactory::create('user_alice (dummy_flag)', 'alice'),
-                        FixtureFactory::create('user_bob (dummy_flag)', 'bob'),
+                        FixtureFactory::createTemplating('user_alice (dummy_flag)', 'alice'),
+                        FixtureFactory::createTemplating('user_bob (dummy_flag)', 'bob'),
                     ],
                 ],
                 'nominal with three elements' => [
                     'user_{alice, bob, steve}',
                     [
-                        FixtureFactory::create('user_alice', 'alice'),
-                        FixtureFactory::create('user_bob', 'bob'),
-                        FixtureFactory::create('user_steve', 'steve'),
+                        FixtureFactory::createTemplating('user_alice', 'alice'),
+                        FixtureFactory::createTemplating('user_bob', 'bob'),
+                        FixtureFactory::createTemplating('user_steve', 'steve'),
                     ],
                 ],
                 'nominal with digits' => [
                     'user_{0, 1}',
                     [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
+                        FixtureFactory::createTemplating('user_0', '0'),
+                        FixtureFactory::createTemplating('user_1', '1'),
                     ],
                 ],
                 'nominal with special characters' => [
                     'user_{0./_, 1./_}',
                     [
-                        FixtureFactory::create('user_0./_', '0./_'),
-                        FixtureFactory::create('user_1./_', '1./_'),
+                        FixtureFactory::createTemplating('user_0./_', '0./_'),
+                        FixtureFactory::createTemplating('user_1./_', '1./_'),
                     ],
                 ],
             ],
@@ -257,7 +260,7 @@ final class Reference
     }
 }
 
-final class FixtureFactory
+class FixtureFactory
 {
     private function __construct()
     {
@@ -269,6 +272,20 @@ final class FixtureFactory
             $id,
             'Dummy',
             SpecificationBagFactory::create()
+        );
+    }
+
+    public static function createTemplating(string $id, $valueForCurrent)
+    {
+        return new TemplatingFixture(
+            new FixtureWithFlags(
+                new SimpleFixture(
+                    $id,
+                    'Dummy',
+                    SpecificationBagFactory::create()
+                ),
+                new FlagBag($id)
+            )
         );
     }
 }

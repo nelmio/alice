@@ -22,4 +22,14 @@ class FlagParserNotFoundException extends \LogicException
             )
         );
     }
+
+    public static function createUnexpectedCall(string $method)
+    {
+        return new static(
+            sprintf(
+                'Expected method "%s" to be called only if it has a flag parser.',
+                $method
+            )
+        );
+    }
 }
