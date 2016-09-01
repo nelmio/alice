@@ -33,6 +33,6 @@ final class TemplateFlagParser implements ChainableFlagParserInterface
      */
     public function parse(string $element): FlagBag
     {
-        return (new FlagBag(''))->with(new TemplateFlag());
+        return (new FlagBag(''))->withFlag(new TemplateFlag());
     }
 }

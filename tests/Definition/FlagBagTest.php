@@ -41,7 +41,7 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
     {
         $flag = new MutableFlag('flag0');
         $flags = new FlagBag('user0');
-        $newFlags = $flags->with($flag);
+        $newFlags = $flags->withFlag($flag);
 
         $this->assertInstanceOf(FlagBag::class, $flags);
         $this->assertNotSame($flags, $newFlags);
@@ -58,11 +58,11 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals(
-            $flags->with(new MutableFlag('flag0')),
+            $flags->withFlag(new MutableFlag('flag0')),
             $newFlags
         );
 
-        $anotherBag = (new FlagBag('user2'))->with(new MutableFlag('another_flag0'));
+        $anotherBag = (new FlagBag('user2'))->withFlag(new MutableFlag('another_flag0'));
         $mergedBag = $newFlags->mergeWith($anotherBag);
 
         $this->assertInstanceOf(FlagBag::class, $mergedBag);
@@ -88,17 +88,17 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $flags = new FlagBag('user0');
         $this->assertEquals(0, count($flags));
 
-        $flags = $flags->with(new DummyFlag());
+        $flags = $flags->withFlag(new DummyFlag());
         $this->assertEquals(1, count($flags));
     }
 
     public function testDoesNotDuplicateFlags()
     {
         $flags = (new FlagBag('user0'))
-            ->with(new DummyFlag())
-            ->with(new DummyFlag())
-            ->with(new AnotherDummyFlag())
-            ->with(new AnotherDummyFlag())
+            ->withFlag(new DummyFlag())
+            ->withFlag(new DummyFlag())
+            ->withFlag(new AnotherDummyFlag())
+            ->withFlag(new AnotherDummyFlag())
         ;
 
         $this->assertCount(2, $flags);
@@ -110,8 +110,8 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $flag2 = new AnotherDummyFlag();
 
         $flags = (new FlagBag('user0'))
-            ->with($flag1)
-            ->with($flag2)
+            ->withFlag($flag1)
+            ->withFlag($flag2)
         ;
 
         $this->assertSameFlags(
@@ -129,8 +129,8 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $extendFlag2 = new ExtendFlag(new FixtureReference('user_with_owner'));
 
         $flags = (new FlagBag('user0'))
-            ->with($extendFlag1)
-            ->with($extendFlag2)
+            ->withFlag($extendFlag1)
+            ->withFlag($extendFlag2)
         ;
 
         $this->assertSameFlags(
@@ -148,8 +148,8 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $optionalFlag2 = new OptionalFlag(60);
 
         $flags = (new FlagBag('user0'))
-            ->with($optionalFlag1)
-            ->with($optionalFlag2)
+            ->withFlag($optionalFlag1)
+            ->withFlag($optionalFlag2)
         ;
 
         $this->assertSameFlags(
@@ -166,8 +166,8 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $templateFlag2 = new TemplateFlag();
 
         $flags = (new FlagBag('user0'))
-            ->with($templateFlag1)
-            ->with($templateFlag2)
+            ->withFlag($templateFlag1)
+            ->withFlag($templateFlag2)
         ;
 
         $this->assertSameFlags(
@@ -184,8 +184,8 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
         $uniqueFlag2 = new UniqueFlag();
 
         $flags = (new FlagBag('user0'))
-            ->with($uniqueFlag1)
-            ->with($uniqueFlag2)
+            ->withFlag($uniqueFlag1)
+            ->withFlag($uniqueFlag2)
         ;
 
         $this->assertSameFlags(

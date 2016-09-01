@@ -110,7 +110,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $specsDenormalizerProphecy->reveal();
 
-        $denormalizer = (new SimpleDenormalizer($specsDenormalizer))->withParser($flagParser);
+        $denormalizer = (new SimpleDenormalizer($specsDenormalizer))->withFlagParser($flagParser);
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
         $expected = $fixtures->with(
@@ -144,7 +144,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $flagParserProphecy
             ->parse($reference)
             ->willReturn(
-                (new FlagBag('user_base'))->with(new TemplateFlag())
+                (new FlagBag('user_base'))->withFlag(new TemplateFlag())
             )
         ;
         /** @var FlagParserInterface $flagParser */
@@ -159,7 +159,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $specsDenormalizerProphecy->reveal();
 
-        $denormalizer = (new SimpleDenormalizer($specsDenormalizer))->withParser($flagParser);
+        $denormalizer = (new SimpleDenormalizer($specsDenormalizer))->withFlagParser($flagParser);
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
         $expected = $fixtures->with(
@@ -169,7 +169,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
                     $className,
                     $expectedSpecs
                 ),
-                (new FlagBag('user_base'))->with(new TemplateFlag())
+                (new FlagBag('user_base'))->withFlag(new TemplateFlag())
             )
         );
 

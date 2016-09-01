@@ -48,8 +48,8 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $flag2 = new ExtendFlag($extendedFixtureReference);
 
         $flags = (new FlagBag($reference))
-            ->with($flag1)
-            ->with($flag2)
+            ->withFlag($flag1)
+            ->withFlag($flag2)
         ;
 
         $fixtureWithFlags = new FixtureWithFlags($decoratedFixture, $flags);
@@ -116,38 +116,38 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
 
         yield 'flagbag with one non template element' => [
             (new FlagBag('user0'))
-                ->with(new ElementFlag('dummy_flag'))
+                ->withFlag(new ElementFlag('dummy_flag'))
             ,
             (new FlagBag('user0'))
-                ->with(new ElementFlag('dummy_flag'))
+                ->withFlag(new ElementFlag('dummy_flag'))
             ,
         ];
 
         yield 'flagbag with one template flag' => [
             (new FlagBag('user0'))
-                ->with(new TemplateFlag())
+                ->withFlag(new TemplateFlag())
             ,
             new FlagBag('user0'),
         ];
 
         yield 'flagbag with one extend flag' => [
             (new FlagBag('user0'))
-                ->with(new ExtendFlag(new FixtureReference('user_base')))
+                ->withFlag(new ExtendFlag(new FixtureReference('user_base')))
             ,
             new FlagBag('user0'),
         ];
 
         yield 'flagbag with multiple flags' => [
             (new FlagBag('user0'))
-                ->with(new TemplateFlag())
-                ->with(new ExtendFlag(new FixtureReference('user_base')))
-                ->with(new ExtendFlag(new FixtureReference('random_user_template')))
-                ->with(new ElementFlag('dummy_flag'))
-                ->with(new ElementFlag('another_dummy_flag'))
+                ->withFlag(new TemplateFlag())
+                ->withFlag(new ExtendFlag(new FixtureReference('user_base')))
+                ->withFlag(new ExtendFlag(new FixtureReference('random_user_template')))
+                ->withFlag(new ElementFlag('dummy_flag'))
+                ->withFlag(new ElementFlag('another_dummy_flag'))
             ,
             (new FlagBag('user0'))
-                ->with(new ElementFlag('dummy_flag'))
-                ->with(new ElementFlag('another_dummy_flag'))
+                ->withFlag(new ElementFlag('dummy_flag'))
+                ->withFlag(new ElementFlag('another_dummy_flag'))
             ,
         ];
     }

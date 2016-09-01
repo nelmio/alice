@@ -22,6 +22,6 @@ final class ElementParser implements FlagParserInterface
      */
     public function parse(string $element): FlagBag
     {
-        return (new FlagBag($element))->with(new ElementFlag($element));
+        return (new FlagBag($element))->withFlag(new ElementFlag($element));
     }
 }

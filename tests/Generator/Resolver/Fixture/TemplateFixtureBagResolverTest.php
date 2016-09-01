@@ -76,7 +76,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         SpecificationBagFactory::create()
                     ),
                     (new FlagBag('group2'))
-                        ->with(new ElementFlag('dummy_flag'))
+                        ->withFlag(new ElementFlag('dummy_flag'))
                 )
             )
             ->with(
@@ -92,9 +92,9 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user1'))
-                            ->with(new ExtendFlag(new FixtureReference('user2')))
-                            ->with(new ExtendFlag(new FixtureReference('user3')))
-                            ->with(new ElementFlag('dummy_flag'))
+                            ->withFlag(new ExtendFlag(new FixtureReference('user2')))
+                            ->withFlag(new ExtendFlag(new FixtureReference('user3')))
+                            ->withFlag(new ElementFlag('dummy_flag'))
                     )
                 )
             )
@@ -112,7 +112,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user2'))
-                            ->with(new TemplateFlag())
+                            ->withFlag(new TemplateFlag())
                     )
                 )
             )
@@ -131,7 +131,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user3'))
-                            ->with(new ExtendFlag(new FixtureReference('user4')))
+                            ->withFlag(new ExtendFlag(new FixtureReference('user4')))
                     )
                 )
             )
@@ -151,7 +151,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user4'))
-                            ->with(new TemplateFlag())
+                            ->withFlag(new TemplateFlag())
                     )
                 )
             )
@@ -163,7 +163,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         SpecificationBagFactory::create()
                     ),
                     (new FlagBag('user5'))
-                        ->with(new TemplateFlag())
+                        ->withFlag(new TemplateFlag())
                 )
             )
         ;
@@ -188,7 +188,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         $this->getDecoratedFixturesFlag($user1)
                     ),
                     (new FlagBag('user1'))
-                        ->with(new ElementFlag('dummy_flag'))
+                        ->withFlag(new ElementFlag('dummy_flag'))
                 )
             )
             ->with(
@@ -237,7 +237,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user4'))
-                            ->with(new TemplateFlag())
+                            ->withFlag(new TemplateFlag())
                     )
                 )
             )
@@ -256,7 +256,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user3'))
-                            ->with(new ExtendFlag(new FixtureReference('user4')))
+                            ->withFlag(new ExtendFlag(new FixtureReference('user4')))
                     )
                 )
             )
@@ -274,7 +274,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user2'))
-                            ->with(new TemplateFlag())
+                            ->withFlag(new TemplateFlag())
                     )
                 )
             )
@@ -291,9 +291,9 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user1'))
-                            ->with(new ExtendFlag(new FixtureReference('user2')))
-                            ->with(new ExtendFlag(new FixtureReference('user3')))
-                            ->with(new ElementFlag('dummy_flag'))
+                            ->withFlag(new ExtendFlag(new FixtureReference('user2')))
+                            ->withFlag(new ExtendFlag(new FixtureReference('user3')))
+                            ->withFlag(new ElementFlag('dummy_flag'))
                     )
                 )
             )
@@ -317,7 +317,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         $this->getDecoratedFixturesFlag($user1)
                     ),
                     (new FlagBag('user1'))
-                        ->with(new ElementFlag('dummy_flag'))
+                        ->withFlag(new ElementFlag('dummy_flag'))
                 )
             )
             ->with(
@@ -363,7 +363,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             SpecificationBagFactory::create()
                         ),
                         (new FlagBag('user0'))
-                            ->with(
+                            ->withFlag(
                                 new ExtendFlag(
                                     new FixtureReference('user_base')
                                 )
@@ -391,7 +391,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             SpecificationBagFactory::create()
                         ),
                         (new FlagBag('user0'))
-                            ->with(
+                            ->withFlag(
                                 new ExtendFlag(
                                     new FixtureReference('user_base')
                                 )

@@ -59,7 +59,7 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
     public function testWithersReturnNewModifiedInstance()
     {
         $denormalizer = new FakeAbstractChainableDenormalizer();
-        $newDenormalizer = $denormalizer->with(new FakeFixtureDenormalizer());
+        $newDenormalizer = $denormalizer->withFixtureDenormalizer(new FakeFixtureDenormalizer());
 
         $this->assertEquals(new FakeAbstractChainableDenormalizer(), $denormalizer);
         $this->assertEquals(new FakeAbstractChainableDenormalizer(new FakeFixtureDenormalizer()), $newDenormalizer);

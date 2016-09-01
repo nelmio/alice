@@ -70,7 +70,7 @@ class SimpleFixtureBagDenormalizerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $userFlags = (new FlagBag('Nelmio\Alice\Entity\User'))->with(new ElementFlag('dummy_flag'));
+        $userFlags = (new FlagBag('Nelmio\Alice\Entity\User'))->withFlag(new ElementFlag('dummy_flag'));
         $flagParserProphecy
             ->parse('Nelmio\Entity\User (dummy_flag)')
             ->willReturn($userFlags)

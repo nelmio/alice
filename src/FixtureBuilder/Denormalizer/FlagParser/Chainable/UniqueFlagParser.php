@@ -33,6 +33,6 @@ final class UniqueFlagParser implements ChainableFlagParserInterface
      */
     public function parse(string $element): FlagBag
     {
-        return (new FlagBag(''))->with(new UniqueFlag());
+        return (new FlagBag(''))->withFlag(new UniqueFlag());
     }
 }

@@ -54,7 +54,7 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
             [],
         ];
 
-        $flagBagWithNonTemplateFlag = $emptyFlagBag->with(new DummyFlag());
+        $flagBagWithNonTemplateFlag = $emptyFlagBag->withFlag(new DummyFlag());
         yield 'flagbag with non-templating element' => [
             $this->createFixtureWithFlags($flagBagWithNonTemplateFlag),
             false,
@@ -62,7 +62,7 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
             [],
         ];
 
-        $templateFlagBag = $emptyFlagBag->with(new TemplateFlag());
+        $templateFlagBag = $emptyFlagBag->withFlag(new TemplateFlag());
         yield 'flagbag with template' => [
             $this->createFixtureWithFlags($templateFlagBag),
             true,
@@ -71,8 +71,8 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
         ];
 
         $extendsFlagBag = $emptyFlagBag
-            ->with(new ExtendFlag(new FixtureReference('user_base0')))
-            ->with(new ExtendFlag(new FixtureReference('user_base1')))
+            ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
+            ->withFlag(new ExtendFlag(new FixtureReference('user_base1')))
         ;
         yield 'flagbag with extends' => [
             $this->createFixtureWithFlags($extendsFlagBag),
@@ -85,10 +85,10 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
         ];
 
         $templateAndExtendsFlagBag = $emptyFlagBag
-            ->with(new TemplateFlag())
-            ->with(new ExtendFlag(new FixtureReference('user_base0')))
-            ->with(new ExtendFlag(new FixtureReference('user_base1')))
-            ->with(new DummyFlag())
+            ->withFlag(new TemplateFlag())
+            ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
+            ->withFlag(new ExtendFlag(new FixtureReference('user_base1')))
+            ->withFlag(new DummyFlag())
         ;
         yield 'flagbag with template, extends and non templating flags' => [
             $this->createFixtureWithFlags($templateAndExtendsFlagBag),

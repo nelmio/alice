@@ -41,6 +41,6 @@ final class ExtendFlagParser implements ChainableFlagParserInterface
         $this->canParse($element, $matches);
         $extended = new FixtureReference($matches['reference']);
         
-        return (new FlagBag(''))->with(new ExtendFlag($extended));
+        return (new FlagBag(''))->withFlag(new ExtendFlag($extended));
     }
 }

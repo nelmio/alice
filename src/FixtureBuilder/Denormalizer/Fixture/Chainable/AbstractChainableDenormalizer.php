@@ -11,15 +11,25 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
+use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\NotClonableTrait;
 
-abstract class AbstractChainableDenormalizer implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterface
+/**
+ * @internal
+ */
+abstract class AbstractChainableDenormalizer
+implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterface, FlagParserAwareInterface
 {
     use NotClonableTrait;
 
@@ -28,17 +38,31 @@ abstract class AbstractChainableDenormalizer implements ChainableFixtureDenormal
      */
     private $denormalizer;
 
-    public function __construct(FixtureDenormalizerInterface $denormalizer = null)
+    /**
+     * @var FlagParserInterface|null
+     */
+    protected $parser;
+
+    public function __construct(FixtureDenormalizerInterface $denormalizer = null, FlagParserInterface $parser = null)
     {
         $this->denormalizer = $denormalizer;
+        $this->parser = $parser;
     }
 
     /**
      * @inheritdoc
      */
-    public function with(FixtureDenormalizerInterface $denormalizer)
+    public function withFlagParser(FlagParserInterface $parser): self
     {
-        return new static($denormalizer);
+        return new static($this->denormalizer, $parser);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
+    {
+        return new static($denormalizer, $this->parser);
     }
 
     /**
@@ -73,5 +97,19 @@ abstract class AbstractChainableDenormalizer implements ChainableFixtureDenormal
         $builtFixtures = $builtFixtures->without($tempFixture);
 
         return [$tempFixture, $builtFixtures];
+    }
+
+    //TODO: check exceptions
+    protected function checkFlagParser(string $method)
+    {
+        //TODO: should throw flag parser not found instead
+        if (null === $this->parser) {
+            throw new \LogicException(
+                sprintf(
+                    'Expected method "%s" to be called only if it has a flag parser.',
+                    $method
+                )
+            );
+        }
     }
 }

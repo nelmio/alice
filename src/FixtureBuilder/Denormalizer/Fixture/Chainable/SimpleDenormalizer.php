@@ -13,6 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\PropertyBag;
@@ -47,7 +48,7 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
     /**
      * @inheritdoc
      */
-    public function withParser(FlagParserInterface $parser): self
+    public function withFlagParser(FlagParserInterface $parser): self
     {
         return new self($this->specsDenormalizer, $parser);
     }
@@ -65,7 +66,7 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
      */
     public function denormalize(FixtureBag $builtFixtures, string $className, string $unparsedFixtureId, array $specs, FlagBag $flags): FixtureBag
     {
-        $this->checkFlagParser();
+        $this->checkFlagParser(__METHOD__);
         
         $idFlags = $this->flagParser->parse($unparsedFixtureId);
         $fixture = new SimpleFixture(
@@ -78,20 +79,22 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
         );
 
         return $builtFixtures->with(
-            new FixtureWithFlags(
-                $fixture,
-                $idFlags->mergeWith($flags)
+            new TemplatingFixture(
+                new FixtureWithFlags(
+                    $fixture,
+                    $idFlags->mergeWith($flags)
+                )
             )
         );
     }
 
-    private function checkFlagParser()
+    private function checkFlagParser(string $method)
     {
         if (null === $this->flagParser) {
             throw new \LogicException(
                 sprintf(
                     'Expected method "%s" to be called only if it has a flag parser.',
-                    __METHOD__
+                    $method
                 )
             );
         }

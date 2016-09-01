@@ -34,6 +34,7 @@ final class FixtureWithFlags implements FixtureInterface
     {
         $this->fixture = clone $fixture;
         $this->flags = $flags;
+        //TODO: check flag key and fixture id inconsistencies
     }
 
     /**

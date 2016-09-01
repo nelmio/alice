@@ -37,7 +37,7 @@ class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
         $template = new TemplatingFixture(
             new FixtureWithFlags(
                 new DummyFixture($templateId),
-                (new FlagBag('user_base'))->with(new TemplateFlag())
+                (new FlagBag('user_base'))->withFlag(new TemplateFlag())
             )
         );
         
@@ -93,7 +93,7 @@ class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
         $template = new TemplatingFixture(
             new FixtureWithFlags(
                 new DummyFixture('user_base'),
-                (new FlagBag('user_base'))->with(new TemplateFlag())
+                (new FlagBag('user_base'))->withFlag(new TemplateFlag())
             )
         );
 
