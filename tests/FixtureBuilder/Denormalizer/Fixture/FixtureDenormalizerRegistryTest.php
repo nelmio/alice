@@ -81,7 +81,7 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
         $chainableDenormalizer2 = new FakeChainableDenormalizer();
 
         $flagParserAwareProphecy = $this->prophesize(FlagParserAwareInterface::class);
-        $flagParserAwareProphecy->withParser($flagParser)->shouldBeCalled();
+        $flagParserAwareProphecy->withFlagParser($flagParser)->shouldBeCalled();
         /** @var FlagParserAwareInterface $flagParserAware */
         $flagParserAware = $flagParserAwareProphecy->reveal();
 

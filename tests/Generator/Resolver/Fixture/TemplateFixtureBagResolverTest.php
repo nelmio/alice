@@ -18,11 +18,9 @@ use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
-use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 
@@ -92,8 +90,8 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user1'))
-                            ->withFlag(new ExtendFlag(new FixtureReference('user2')))
                             ->withFlag(new ExtendFlag(new FixtureReference('user3')))
+                            ->withFlag(new ExtendFlag(new FixtureReference('user2')))
                             ->withFlag(new ElementFlag('dummy_flag'))
                     )
                 )
@@ -132,6 +130,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         ),
                         (new FlagBag('user3'))
                             ->withFlag(new ExtendFlag(new FixtureReference('user4')))
+                            ->withFlag(new TemplateFlag())
                     )
                 )
             )
@@ -171,7 +170,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
             ->with($group1)
             ->with($group2)
             ->with(
-                new FixtureWithFlags(
+                new TemplatingFixture(
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user1',
@@ -189,26 +188,6 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                     ),
                     (new FlagBag('user1'))
                         ->withFlag(new ElementFlag('dummy_flag'))
-                )
-            )
-            ->with(
-                new FixtureWithFlags(
-                    new FixtureWithFlags(
-                        new SimpleFixture(
-                            'user3',
-                            'Nelmio\Alice\Entity\User',
-                            SpecificationBagFactory::create(
-                                null,
-                                (new PropertyBag())
-                                    ->with(new Property('p1', 'v31'))
-                                    ->with(new Property('p2', 'v32'))
-                                    ->with(new Property('p3', 'v33'))
-                                    ->with(new Property('p4', 'v44'))
-                            )
-                        ),
-                        $this->getDecoratedFixturesFlag($user3)
-                    ),
-                    new FlagBag('user3')
                 )
             )
             ->with($user5)
@@ -257,6 +236,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         ),
                         (new FlagBag('user3'))
                             ->withFlag(new ExtendFlag(new FixtureReference('user4')))
+                            ->withFlag(new TemplateFlag())
                     )
                 )
             )
@@ -291,8 +271,8 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                             )
                         ),
                         (new FlagBag('user1'))
-                            ->withFlag(new ExtendFlag(new FixtureReference('user2')))
                             ->withFlag(new ExtendFlag(new FixtureReference('user3')))
+                            ->withFlag(new ExtendFlag(new FixtureReference('user2')))
                             ->withFlag(new ElementFlag('dummy_flag'))
                     )
                 )
@@ -300,7 +280,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
         ;
         $expected = (new FixtureBag())
             ->with(
-                new FixtureWithFlags(
+                new TemplatingFixture(
                     new FixtureWithFlags(
                         new SimpleFixture(
                             'user1',
@@ -317,28 +297,6 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                         $this->getDecoratedFixturesFlag($user1)
                     ),
                     (new FlagBag('user1'))
-                        ->withFlag(new ElementFlag('dummy_flag'))
-                )
-            )
-            ->with(
-                new FixtureWithFlags(
-                    new FixtureWithFlags(
-                        new SimpleFixture(
-                            'user3',
-                            'Nelmio\Alice\Entity\User',
-                            SpecificationBagFactory::create(
-                                null,
-                                (new PropertyBag())
-                                    ->with(new Property('p1', 'v31'))
-                                    ->with(new Property('p2', 'v32'))
-                                    ->with(new Property('p3', 'v33'))
-                                    ->with(new Property('p4', 'v44'))
-
-                            )
-                        ),
-                        $this->getDecoratedFixturesFlag($user3)
-                    ),
-                    new FlagBag('user3')
                 )
             )
         ;

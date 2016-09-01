@@ -62,7 +62,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($fixture->extendsFixtures());
         $this->assertEquals([new FixtureReference('user_base')], $fixture->getExtendedFixturesReferences());
 
-        $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(1);
+        $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(2);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
         $decoratedFixtureProphecy->getSpecs()->shouldHaveBeenCalledTimes(1);
     }
@@ -73,11 +73,13 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
 
         $newDecoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $newDecoratedFixtureProphecy->getId()->willReturn('user0');
         $newDecoratedFixtureProphecy->getSpecs()->willReturn($newSpecs);
         /** @var FixtureInterface $newDecoratedFixture */
         $newDecoratedFixture = $newDecoratedFixtureProphecy->reveal();
 
         $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
+        $decoratedFixtureProphecy->getId()->willReturn('user0');
         $decoratedFixtureProphecy->withSpecs($newSpecs)->willReturn($newDecoratedFixture);
         $decoratedFixtureProphecy->getSpecs()->willReturn($specs);
         /** @var FixtureInterface $decoratedFixture */
