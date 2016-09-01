@@ -54,12 +54,26 @@ final class TemplatingFixtureBag
         return $this->fixtures->has($id) || $this->templates->has($id);
     }
 
+    public function hasTemplate(string $id): bool
+    {
+        return $this->templates->has($id);
+    }
+
     public function get(string $id): FixtureInterface
     {
         if ($this->fixtures->has($id)) {
             return $this->fixtures->get($id);
         }
 
+        if ($this->templates->has($id)) {
+            return $this->templates->get($id);
+        }
+
+        throw FixtureNotFoundException::create($id);
+    }
+
+    public function getTemplate(string $id): FixtureInterface
+    {
         if ($this->templates->has($id)) {
             return $this->templates->get($id);
         }

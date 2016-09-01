@@ -13,13 +13,20 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
+use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\NotClonableTrait;
 
-abstract class AbstractChainableDenormalizer implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterface
+/**
+ * @internal
+ */
+abstract class AbstractChainableDenormalizer
+implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterface, FlagParserAwareInterface
 {
     use NotClonableTrait;
 
@@ -28,17 +35,31 @@ abstract class AbstractChainableDenormalizer implements ChainableFixtureDenormal
      */
     private $denormalizer;
 
-    public function __construct(FixtureDenormalizerInterface $denormalizer = null)
+    /**
+     * @var FlagParserInterface|null
+     */
+    protected $parser;
+
+    public function __construct(FixtureDenormalizerInterface $denormalizer = null, FlagParserInterface $parser = null)
     {
         $this->denormalizer = $denormalizer;
+        $this->parser = $parser;
     }
 
     /**
      * @inheritdoc
      */
-    public function with(FixtureDenormalizerInterface $denormalizer)
+    public function withFlagParser(FlagParserInterface $parser): self
     {
-        return new static($denormalizer);
+        return new static($this->denormalizer, $parser);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
+    {
+        return new static($denormalizer, $this->parser);
     }
 
     /**
@@ -73,5 +94,17 @@ abstract class AbstractChainableDenormalizer implements ChainableFixtureDenormal
         $builtFixtures = $builtFixtures->without($tempFixture);
 
         return [$tempFixture, $builtFixtures];
+    }
+
+    /**
+     * @param string $method
+     *
+     * @throws FlagParserNotFoundException
+     */
+    protected function checkFlagParser(string $method)
+    {
+        if (null === $this->parser) {
+            throw FlagParserNotFoundException::createUnexpectedCall($method);
+        }
     }
 }

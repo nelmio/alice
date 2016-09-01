@@ -13,6 +13,8 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
+use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCallBag;
@@ -47,21 +49,6 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $this->assertTrue(is_a(SimpleDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
     }
 
-    public function testIsAFlagParserAwareDenormalizer()
-    {
-        $this->assertTrue(is_a(SimpleDenormalizer::class, FlagParserAwareInterface::class, true));
-    }
-
-    public function testCanBeInstantiatedWithAFlagParser()
-    {
-        new SimpleDenormalizer(new FakeSpecificationBagDenormalizer(), new FakeFlagParser());
-    }
-
-    public function testCanBeInstantiatedWithoutAFlagParser()
-    {
-        new SimpleDenormalizer(new FakeSpecificationBagDenormalizer());
-    }
-
     /**
      * @expectedException \DomainException
      */
@@ -71,8 +58,8 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer::checkFlagParser" to be called only if it has a flag parser.
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer::denormalize" to be called only if it has a flag parser.
      */
     public function testCannotDenormalizeFixtureIfHasNoFlagParser()
     {
@@ -110,17 +97,19 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $specsDenormalizerProphecy->reveal();
 
-        $denormalizer = (new SimpleDenormalizer($specsDenormalizer))->withParser($flagParser);
+        $denormalizer = (new SimpleDenormalizer($specsDenormalizer))->withFlagParser($flagParser);
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
         $expected = $fixtures->with(
-            new FixtureWithFlags(
-                new SimpleFixture(
-                    $reference,
-                    $className,
-                    $expectedSpecs
-                ),
-                new FlagBag('user_base')
+            new TemplatingFixture(
+                new FixtureWithFlags(
+                    new SimpleFixture(
+                        $reference,
+                        $className,
+                        $expectedSpecs
+                    ),
+                    new FlagBag('user_base')
+                )
             )
         );
 
@@ -130,7 +119,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testDenormalizationKeepsFlagsInIds()
+    public function testDenormalizationRemovesFlagsInIds()
     {
         $fixtures = new FixtureBag();
         $className = 'Nelmio\Alice\Entity\User';
@@ -138,13 +127,13 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $specs = [
             'username' => '<name()>',
         ];
-        $flags = new FlagBag('');
+        $flags = (new FlagBag(''))->withFlag(new ElementFlag('injected_flag'));
 
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
         $flagParserProphecy
             ->parse($reference)
             ->willReturn(
-                (new FlagBag('user_base'))->with(new TemplateFlag())
+                (new FlagBag('user_base'))->withFlag(new TemplateFlag())
             )
         ;
         /** @var FlagParserInterface $flagParser */
@@ -159,17 +148,21 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $specsDenormalizerProphecy->reveal();
 
-        $denormalizer = (new SimpleDenormalizer($specsDenormalizer))->withParser($flagParser);
+        $denormalizer = (new SimpleDenormalizer($specsDenormalizer))->withFlagParser($flagParser);
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
         $expected = $fixtures->with(
-            new FixtureWithFlags(
-                new SimpleFixture(
-                    'user_base',
-                    $className,
-                    $expectedSpecs
-                ),
-                (new FlagBag('user_base'))->with(new TemplateFlag())
+            new TemplatingFixture(
+                new FixtureWithFlags(
+                    new SimpleFixture(
+                        'user_base',
+                        $className,
+                        $expectedSpecs
+                    ),
+                    (new FlagBag('user_base'))
+                        ->withFlag(new ElementFlag('injected_flag'))
+                        ->withFlag(new TemplateFlag())
+                )
             )
         );
 
@@ -212,14 +205,6 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     }
 
     /**
-     * @dataProvider provideDeprecatedSegmentFixtures
-     */
-    public function testCanBuildDeprecatedSegmentFixtures($name)
-    {
-        $this->assertCannotBuild($name);
-    }
-
-    /**
      * @dataProvider provideMalformedSegmentFixtures
      */
     public function testCanBuildMalformedSegmentFixtures($name)
@@ -255,14 +240,6 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
      * @dataProvider provideSegmentFixtures
      */
     public function testBuildSegmentFixtures($name, $expected)
-    {
-        $this->markAsInvalidCase();
-    }
-
-    /**
-     * @dataProvider provideDeprecatedSegmentFixtures
-     */
-    public function testBuildDeprecatedSegmentFixtures($name, $expected)
     {
         $this->markAsInvalidCase();
     }

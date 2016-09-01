@@ -18,5 +18,5 @@ interface FlagParserAwareInterface
      *
      * @return static
      */
-    public function withParser(FlagParserInterface $parser);
+    public function withFlagParser(FlagParserInterface $parser);
 }

@@ -41,22 +41,22 @@ final class Reference
                 ],
                 'string with 1 flag' => [
                     'user (dummy_flag)',
-                    (new FlagBag('user'))->with(new ElementFlag('dummy_flag')),
+                    (new FlagBag('user'))->withFlag(new ElementFlag('dummy_flag')),
                 ],
                 'string with 1 flag and extra space' => [
                     'user ( dummy_flag )',
-                    (new FlagBag('user'))->with(new ElementFlag('dummy_flag')),
+                    (new FlagBag('user'))->withFlag(new ElementFlag('dummy_flag')),
                 ],
                 'string with 2 flags' => [
                     'user (dummy_flag, another_dummy_flag)',
                     (new FlagBag('user'))
-                        ->with(new ElementFlag('dummy_flag'))
-                        ->with(new ElementFlag('another_dummy_flag'))
+                        ->withFlag(new ElementFlag('dummy_flag'))
+                        ->withFlag(new ElementFlag('another_dummy_flag'))
                     ,
                 ],
                 'with an index' => [
                     '0 (dummy_flag)',
-                    (new FlagBag('0'))->with(new ElementFlag('dummy_flag')),
+                    (new FlagBag('0'))->withFlag(new ElementFlag('dummy_flag')),
                 ],
                 'with an index with no flags' => [
                     '0',
@@ -143,7 +143,7 @@ final class Reference
                 'with 1 extend' => [
                     'extends user_base',
                     (new FlagBag(''))
-                        ->with(new ExtendFlag(new FixtureReference('user_base')))
+                        ->withFlag(new ExtendFlag(new FixtureReference('user_base')))
                     ,
                 ],
             ],
@@ -156,7 +156,7 @@ final class Reference
             'optional' => [
                 'nominal' => [
                     '60%?',
-                    (new FlagBag(''))->with(new OptionalFlag(60)),
+                    (new FlagBag(''))->withFlag(new OptionalFlag(60)),
                 ],
             ],
             'malformed-optional' => [
@@ -180,13 +180,13 @@ final class Reference
             'template' => [
                 'nominal' => [
                     'template',
-                    (new FlagBag(''))->with(new TemplateFlag()),
+                    (new FlagBag(''))->withFlag(new TemplateFlag()),
                 ],
             ],
             'unique' => [
                 'nominal' => [
                     'unique',
-                    (new FlagBag(''))->with(new UniqueFlag()),
+                    (new FlagBag(''))->withFlag(new UniqueFlag()),
                 ],
             ],
         ];

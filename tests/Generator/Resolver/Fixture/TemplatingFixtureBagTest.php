@@ -37,7 +37,7 @@ class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
         $template = new TemplatingFixture(
             new FixtureWithFlags(
                 new DummyFixture($templateId),
-                (new FlagBag('user_base'))->with(new TemplateFlag())
+                (new FlagBag('user_base'))->withFlag(new TemplateFlag())
             )
         );
         
@@ -47,19 +47,29 @@ class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertTrue($bag->has($fixtureId));
+        $this->assertFalse($bag->hasTemplate($fixtureId));
         $this->assertEquals($fixture, $bag->get($fixtureId));
 
         $this->assertTrue($bag->has($templateId));
+        $this->assertTrue($bag->hasTemplate($templateId));
         $this->assertEquals($template, $bag->get($templateId));
 
         $this->assertFalse($bag->has('foo'));
         try {
             $bag->get('foo');
+            $this->fail('Expected exception to be thrown.');
         } catch (FixtureNotFoundException $exception) {
             $this->assertEquals(
                 'Could not find the fixture "foo".',
                 $exception->getMessage()
             );
+        }
+
+        try {
+            $bag->getTemplate($fixtureId);
+            $this->fail('Expected exception to be thrown.');
+        } catch (FixtureNotFoundException $exception) {
+            // expected result
         }
 
         $this->assertEquals(
@@ -93,7 +103,7 @@ class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
         $template = new TemplatingFixture(
             new FixtureWithFlags(
                 new DummyFixture('user_base'),
-                (new FlagBag('user_base'))->with(new TemplateFlag())
+                (new FlagBag('user_base'))->withFlag(new TemplateFlag())
             )
         );
 

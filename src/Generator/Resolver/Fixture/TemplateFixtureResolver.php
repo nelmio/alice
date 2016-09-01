@@ -93,8 +93,19 @@ final class TemplateFixtureResolver
             }
 
             if ($resolvedFixtures->has($fixtureId)) {
+                if (false === $resolvedFixtures->hasTemplate($fixtureId)) {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'Fixture "%s" extends "%s" but "%s" is not a template.',
+                            $fixture->getId(),
+                            $fixtureId,
+                            $fixtureId
+                        )
+                    );
+                }
+
                 $fixtures = $fixtures->with(
-                    $resolvedFixtures->get($fixtureId)
+                    $resolvedFixtures->getTemplate($fixtureId)
                 );
 
                 continue;
@@ -137,7 +148,6 @@ final class TemplateFixtureResolver
 
         return $fixture
             ->withSpecs($specs)
-            ->getStrippedFixture()
         ;
     }
 }

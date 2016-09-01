@@ -44,7 +44,7 @@ class SimpleArgumentsDenormalizerTest extends \PHPUnit_Framework_TestCase
         $flagParserProphecy
             ->parse('2 (dummy_flag)')
             ->willReturn(
-                $arg2Flags = (new FlagBag('2'))->with(new ElementFlag('dummy_flag'))
+                $arg2Flags = (new FlagBag('2'))->withFlag(new ElementFlag('dummy_flag'))
             )
         ;
         /** @var FlagParserInterface $flagParser */

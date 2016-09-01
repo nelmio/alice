@@ -53,6 +53,4 @@ class FakeAbstractChainableDenormalizer extends AbstractChainableDenormalizer
     {
         return parent::denormalizeTemporaryFixture($builtFixtures, $className, $specs, $flags);
     }
-
-
 }

@@ -11,11 +11,14 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
+use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\RangeName;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 
 final class RangeNameDenormalizer extends AbstractChainableDenormalizer
@@ -28,9 +31,9 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
      */
     private $token;
 
-    public function __construct(FixtureDenormalizerInterface $denormalizer = null)
+    public function __construct(FixtureDenormalizerInterface $denormalizer = null, FlagParserInterface $parser = null)
     {
-        parent::__construct($denormalizer);
+        parent::__construct($denormalizer, $parser);
 
         $this->token = uniqid(__CLASS__);
     }
@@ -51,8 +54,13 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
         string $className,
         string $fixtureId,
         array $specs,
-        FlagBag $flags): FixtureBag
+        FlagBag $flags
+    ): FixtureBag
     {
+        $this->checkFlagParser(__METHOD__);
+        $flags = $this->parser->parse($fixtureId)->mergeWith($flags, false);
+        $fixtureId = $flags->getKey();
+
         /**
          * @var FixtureInterface $tempFixture
          * @var FixtureBag       $builtFixtures
@@ -69,10 +77,15 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
             $fixtureId = str_replace($this->token, $currentIndex, $range->getName());
 
             $builtFixtures = $builtFixtures->with(
-                new SimpleFixture(
-                    $fixtureId,
-                    $tempFixture->getClassName(),
-                    $tempFixture->getSpecs()
+                new TemplatingFixture(
+                    new FixtureWithFlags(
+                        new SimpleFixture(
+                            $fixtureId,
+                            $tempFixture->getClassName(),
+                            $tempFixture->getSpecs()
+                        ),
+                        $flags->withKey($fixtureId)
+                    )
                 )
             );
         }

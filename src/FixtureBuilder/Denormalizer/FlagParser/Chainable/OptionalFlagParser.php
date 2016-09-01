@@ -40,6 +40,6 @@ final class OptionalFlagParser implements ChainableFlagParserInterface
         $this->canParse($element, $matches);
         $percentage = (int) $matches['percentage'];
         
-        return (new FlagBag(''))->with(new OptionalFlag($percentage));
+        return (new FlagBag(''))->withFlag(new OptionalFlag($percentage));
     }
 }

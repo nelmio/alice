@@ -33,11 +33,6 @@ trait ReferenceProviderTrait
         return Reference::getSegmentFixtures();
     }
 
-    public function provideDeprecatedSegmentFixtures()
-    {
-        return Reference::getDeprecatedSegmentFixtures();
-    }
-
     public function provideMalformedSegmentFixtures()
     {
         return Reference::getMalformedSegmentFixtures();

@@ -34,6 +34,14 @@ final class FlagBag implements \IteratorAggregate, \Countable
         $this->key = $key;
     }
 
+    public function withKey(string $key): self
+    {
+        $clone = deep_clone($this);
+        $clone->key = $key;
+
+        return $clone;
+    }
+
     /**
      * Creates a new instance of the bag with the given flag. If a flag with the same identifier already exists, the
      * existing value will be replaced.
@@ -42,7 +50,7 @@ final class FlagBag implements \IteratorAggregate, \Countable
      *
      * @return FlagBag
      */
-    public function with(FlagInterface $flag): self
+    public function withFlag(FlagInterface $flag): self
     {
         $clone = clone $this;
         $clone->flags[$flag->__toString()] = clone $flag;
@@ -51,21 +59,31 @@ final class FlagBag implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Creates a new instance with the two bags merged together. If some flags overlaps, the existing one are
-     * overridden.
+     * Creates a new instance with the two bags merged together.
      * 
      * The original key is kept.
      *
      * @param self $flags
+     * @param bool $override If some flags overlaps, the existing one are overridden if the value is true, and left
+     *                       untouched otherwise.
      *
      * @return self
      */
-    public function mergeWith(self $flags): self
+    public function mergeWith(self $flags, bool $override = true): self
     {
-        $clone = clone $this;
-        foreach ($flags as $stringFlag => $flag) {
-            /** @var FlagInterface $flag */
-            $clone->flags[$flag->__toString()] = clone $flag;
+        if ($override) {
+            $clone = clone $this;
+            foreach ($flags as $stringFlag => $flag) {
+                /** @var FlagInterface $flag */
+                $clone->flags[$flag->__toString()] = clone $flag;
+            }
+        } else {
+            $clone = clone $flags;
+            $clone->key = $this->key;
+            foreach ($this as $stringFlag => $flag) {
+                /** @var FlagInterface $flag */
+                $clone->flags[$flag->__toString()] = clone $flag;
+            }
         }
 
         return $clone;

@@ -11,7 +11,10 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
+use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
+use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 
 /**
@@ -49,37 +52,37 @@ final class Reference
                 'nominal' => [
                     'user_{alice, bob}',
                     [
-                        FixtureFactory::create('user_alice', 'alice'),
-                        FixtureFactory::create('user_bob', 'bob'),
+                        FixtureFactory::createTemplating('user_alice', 'alice'),
+                        FixtureFactory::createTemplating('user_bob', 'bob'),
                     ],
                 ],
                 'nominal with flag' => [
                     'user_{alice, bob} (dummy_flag)',
                     [
-                        FixtureFactory::create('user_alice (dummy_flag)', 'alice'),
-                        FixtureFactory::create('user_bob (dummy_flag)', 'bob'),
+                        FixtureFactory::createTemplating('user_alice (dummy_flag)', 'alice'),
+                        FixtureFactory::createTemplating('user_bob (dummy_flag)', 'bob'),
                     ],
                 ],
                 'nominal with three elements' => [
                     'user_{alice, bob, steve}',
                     [
-                        FixtureFactory::create('user_alice', 'alice'),
-                        FixtureFactory::create('user_bob', 'bob'),
-                        FixtureFactory::create('user_steve', 'steve'),
+                        FixtureFactory::createTemplating('user_alice', 'alice'),
+                        FixtureFactory::createTemplating('user_bob', 'bob'),
+                        FixtureFactory::createTemplating('user_steve', 'steve'),
                     ],
                 ],
                 'nominal with digits' => [
                     'user_{0, 1}',
                     [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
+                        FixtureFactory::createTemplating('user_0', '0'),
+                        FixtureFactory::createTemplating('user_1', '1'),
                     ],
                 ],
                 'nominal with special characters' => [
                     'user_{0./_, 1./_}',
                     [
-                        FixtureFactory::create('user_0./_', '0./_'),
-                        FixtureFactory::create('user_1./_', '1./_'),
+                        FixtureFactory::createTemplating('user_0./_', '0./_'),
+                        FixtureFactory::createTemplating('user_1./_', '1./_'),
                     ],
                 ],
             ],
@@ -121,69 +124,55 @@ final class Reference
                 'nominal' => [
                     'user_{0..2}',
                     [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                        FixtureFactory::create('user_2', '2'),
+                        FixtureFactory::createTemplating('user_0', '0'),
+                        FixtureFactory::createTemplating('user_1', '1'),
+                        FixtureFactory::createTemplating('user_2', '2'),
                     ],
                 ],
                 'nominal with flag' => [
                     'user_{0..2} (dummy_flag)',
                     [
-                        FixtureFactory::create('user_0 (dummy_flag)', '0'),
-                        FixtureFactory::create('user_1 (dummy_flag)', '1'),
-                        FixtureFactory::create('user_2 (dummy_flag)', '2'),
+                        FixtureFactory::createTemplating('user_0 (dummy_flag)', '0'),
+                        FixtureFactory::createTemplating('user_1 (dummy_flag)', '1'),
+                        FixtureFactory::createTemplating('user_2 (dummy_flag)', '2'),
                     ],
                 ],
                 'only 1 value' => [
                     'user_{2..2}',
                     [
-                        FixtureFactory::create('user_2', '2'),
+                        FixtureFactory::createTemplating('user_2', '2'),
                     ],
                 ],
                 'with inverted values' => [
                     'user_{2..0}',
                     [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                        FixtureFactory::create('user_2', '2'),
+                        FixtureFactory::createTemplating('user_0', '0'),
+                        FixtureFactory::createTemplating('user_1', '1'),
+                        FixtureFactory::createTemplating('user_2', '2'),
                     ],
-                ],
-            ],
-            'segment-deprecated' => [
-                'with three dots' => [
-                    'user_{0...2}',
-                    [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                    ],
-                ],
-                'with more than three dots' => [
-                    'user_{0....2}',
-                    [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                    ],
-                ],
-                'with three dots and flag ' => [
-                    'user_{0...2} (dummy_flag)',
-                    [
-                        FixtureFactory::create('user_0 (dummy_flag)', '0'),
-                        FixtureFactory::create('user_1 (dummy_flag)', '1'),
-                    ],
-                ],
-                'with inverted values' => [
-                    'user_{2...0}',
-                    [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                    ],
-                ],
-                'only 1 value' => [
-                    'user_{2...2}',
-                    [],
                 ],
             ],
             'malformed-segment' => [
+                '[deprecated in 2.x] with three dots' => [
+                    'user_{0...2}',
+                    null,
+                ],
+                '[deprecated in 2.x] with more than three dots' => [
+                    'user_{0....2}',
+                    null,
+                ],
+                '[deprecated in 2.x] with three dots and flag ' => [
+                    'user_{0...2} (dummy_flag)',
+                    null,
+                ],
+                '[deprecated in 2.x] with inverted values' => [
+                    'user_{2...0}',
+                    null,
+                ],
+                '[deprecated in 2.x] only 1 value' => [
+                    'user_{2...2}',
+                    null,
+                ],
                 'with only one dot' => [
                     'user_{0.2}',
                     null,
@@ -232,11 +221,6 @@ final class Reference
         return self::getList('segment');
     }
 
-    public static function getDeprecatedSegmentFixtures()
-    {
-        return self::getList('segment-deprecated');
-    }
-
     public static function getMalformedSegmentFixtures()
     {
         return self::getList('malformed-segment');
@@ -257,7 +241,7 @@ final class Reference
     }
 }
 
-final class FixtureFactory
+class FixtureFactory
 {
     private function __construct()
     {
@@ -269,6 +253,20 @@ final class FixtureFactory
             $id,
             'Dummy',
             SpecificationBagFactory::create()
+        );
+    }
+
+    public static function createTemplating(string $id, $valueForCurrent)
+    {
+        return new TemplatingFixture(
+            new FixtureWithFlags(
+                new SimpleFixture(
+                    $id,
+                    'Dummy',
+                    SpecificationBagFactory::create()
+                ),
+                new FlagBag($id)
+            )
         );
     }
 }

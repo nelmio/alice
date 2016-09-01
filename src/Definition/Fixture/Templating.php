@@ -44,7 +44,7 @@ final class Templating
 
             if ($flag instanceof ExtendFlag) {
                 // Potential flag duplication is handled at the flagbag level
-                $this->extends[] = $flag->getExtendedFixture();
+                array_unshift($this->extends, $flag->getExtendedFixture());
             }
         }
     }

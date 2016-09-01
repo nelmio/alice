@@ -70,7 +70,7 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
     {
         $expected = $parserCalled ? 'parsed_value' : $value;
 
-        $flags = (new FlagBag(''))->with(new UniqueFlag());
+        $flags = (new FlagBag(''))->withFlag(new UniqueFlag());
 
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse('1')->willReturn('parsed_value');
@@ -92,7 +92,7 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'string value';
         $parsedValue = new DynamicArrayValue(10, 'parsed_value');
-        $flags = (new FlagBag(''))->with(new UniqueFlag());
+        $flags = (new FlagBag(''))->withFlag(new UniqueFlag());
 
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse($value)->willReturn($parsedValue);
@@ -140,7 +140,7 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
         $flagBags = [
             'null' => null,
             'empty' => new FlagBag(''),
-            'with random flag' => (new FlagBag(''))->with(new DummyFlag()),
+            'with random flag' => (new FlagBag(''))->withFlag(new DummyFlag()),
         ];
 
         foreach ($flagBags as $flagName => $flags) {

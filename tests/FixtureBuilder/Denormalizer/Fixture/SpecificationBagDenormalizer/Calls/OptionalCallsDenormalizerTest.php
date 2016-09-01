@@ -116,17 +116,17 @@ class OptionalCallsDenormalizerTest extends \PHPUnit_Framework_TestCase
         ];
 
         yield 'dummy flag' => [
-            $this->createFlagParser($flags->with(new DummyFlag())),
+            $this->createFlagParser($flags->withFlag(new DummyFlag())),
             false,
         ];
 
         yield 'optional flag' => [
-            $this->createFlagParser($flags->with(new OptionalFlag(80))),
+            $this->createFlagParser($flags->withFlag(new OptionalFlag(80))),
             true,
         ];
 
         yield 'optional and dummy flag' => [
-            $this->createFlagParser($flags->with(new DummyFlag())->with(new OptionalFlag(80))),
+            $this->createFlagParser($flags->withFlag(new DummyFlag())->withFlag(new OptionalFlag(80))),
             true,
         ];
     }

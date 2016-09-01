@@ -65,9 +65,9 @@ class DummyChainableParserAwareDenormalizer implements ChainableFixtureDenormali
     /**
      * @inheritdoc
      */
-    public function withParser(FlagParserInterface $parser)
+    public function withFlagParser(FlagParserInterface $parser)
     {
-        $this->decoratedFlagAware->withParser($parser);
+        $this->decoratedFlagAware->withFlagParser($parser);
         $clone = clone $this;
         $clone->parser = $parser;
         

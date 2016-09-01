@@ -41,7 +41,8 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
  */
 class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 {
-    const FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
+    const PARSER_FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
+    const FIXTURES_FILES_DIR = __DIR__.'/../../fixtures/Integration';
 
     /**
      * @var FileLoaderInterface|DataLoaderInterface
@@ -68,7 +69,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadUnsupportedFileFormat()
     {
-        $this->loader->loadFile(self::FILES_DIR.'/unsupported/plain_file');
+        $this->loader->loadFile(self::PARSER_FILES_DIR.'/unsupported/plain_file');
     }
 
     /**
@@ -77,7 +78,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadPhpFileWhichDoesNotReturnAnything()
     {
-        $this->loader->loadFile(self::FILES_DIR.'/php/no_return.php');
+        $this->loader->loadFile(self::PARSER_FILES_DIR.'/php/no_return.php');
     }
 
     public function testLoadEmptyData()
@@ -451,6 +452,151 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $objects = $set->getObjects();
         $this->assertEquals(2, count($objects));
+    }
+
+    public function testTemplatesAreKeptBetweenFiles()
+    {
+        $expected = new ObjectSet(
+            new ParameterBag(),
+            new ObjectBag([
+                'dummy' => StdClassFactory::create([
+                    'foo' => 'bar',
+                ]),
+            ])
+        );
+        $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/template_in_another_file/dummy.yml');
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testTemplateCanExtendOtherTemplateObjectsCombinedWithRange()
+    {
+        $data = [
+            \stdClass::class => [
+                'base_{du, yu}mmy (template)' => [
+                    'base' => 'true',
+                ],
+                'dummy{1..2} (template, extends base_dummy)' => [
+                    'foo' => 'bar',
+                ],
+                'y{u, U}mmy (extends dummy2)' => [
+                    'foo' => 'baz',
+                ],
+            ],
+        ];
+        $expected = new ObjectSet(
+            new ParameterBag(),
+            new ObjectBag([
+                'yummy' => StdClassFactory::create([
+                    'base' => 'true',
+                    'foo' => 'baz',
+                ]),
+                'yUmmy' => StdClassFactory::create([
+                    'base' => 'true',
+                    'foo' => 'baz',
+                ]),
+            ])
+        );
+        $actual = $this->loader->loadData($data);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testMultipleInheritanceInTemplates()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy_minimal (template)' => [
+                    'foo' => 'bar',
+                ],
+                'favorite_dummy (template)' => [
+                    'foo' => 'baz',
+                    'name' => 'favorite',
+                    'favoriteNumber' => 2,
+                ],
+                'dummy_full (template, extends dummy_minimal, extends favorite_dummy)' => [
+                    'name' => 'full',
+                    'friends' => 'none',
+                ],
+                'dummy (extends dummy_full)' => [
+                    'friends' => 'plenty',
+                ],
+            ],
+        ];
+        $expected = new ObjectSet(
+            new ParameterBag(),
+            new ObjectBag([
+                'dummy' => StdClassFactory::create([
+                    'foo' => 'baz',
+                    'name' => 'full',
+                    'favoriteNumber' => 2,
+                    'friends' => 'plenty',
+                ]),
+            ])
+        );
+        $actual = $this->loader->loadData($data);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testMultipleInheritanceInInstance()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy1 (template)' => [
+                    'number' => '1',
+                ],
+                'dummy2 (template)' => [
+                    'number' => 2,
+                ],
+                'dummy3 (template)' => [
+                    'number' => 3,
+                ],
+                'dummy (extends dummy1, extends dummy2, extends dummy3)' => [
+                    'number' => 3,
+                ],
+            ],
+        ];
+        $expected = new ObjectSet(
+            new ParameterBag(),
+            new ObjectBag([
+                'dummy' => StdClassFactory::create([
+                    'number' => 3,
+                ]),
+            ])
+        );
+        $actual = $this->loader->loadData($data);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\FixtureNotFoundException
+     * @expectedExceptionMessage Could not find the fixture "unknown".
+     */
+    public function testThrowsAnExceptionIfInheritFromAnNonExistingFixture()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy (extends unknown)' => [],
+            ],
+        ];
+        $this->loader->loadData($data);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Fixture "dummy" extends "another_dummy" but "another_dummy" is not a template.
+     */
+    public function testThrowsAnExceptionIfInheritFromAnInexistingTemplate()
+    {
+        $data = [
+            \stdClass::class => [
+                'another_dummy' => [],
+                'dummy (extends another_dummy)' => [],
+            ],
+        ];
+        $this->loader->loadData($data);
     }
 
     public function provideFixturesToInstantiate()
@@ -1372,6 +1518,67 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                     ]),
                     'another_dummy' => StdClassFactory::create([
                         'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[templating] templates are not returned' => [
+            [
+                \stdClass::class => [
+                    'base_dummy (template)' => [],
+                    'dummy' => [],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new \stdClass(),
+                ],
+            ],
+        ];
+
+        //TODO: check
+//        yield '[templating] cannot extend a non template fixture' => [
+//            [
+//                \stdClass::class => [
+//                    'base_dummy' => [],
+//                    'dummy (extends base_dummy)' => [],
+//                ],
+//            ],
+//            null,
+//        ];
+//
+        yield '[templating] nominal' => [
+            [
+                \stdClass::class => [
+                    'base_dummy (template)' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_base_dummy (template)' => [
+                        'foo' => 'baz',
+                        'ping' => 'pong',
+                    ],
+                    'dummy0 (extends base_dummy, extends another_base_dummy)' => [
+                        'foo' => 'baz',
+                        'ping' => 'pong',
+                    ],
+                    'dummy1 (extends another_base_dummy, extends base_dummy)' => [
+                        'foo' => 'bar',
+                        'ping' => 'pong',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy0' => StdClassFactory::create([
+                        'foo' => 'baz',
+                        'ping' => 'pong',
+                    ]),
+                    'dummy1' => StdClassFactory::create([
+                        'foo' => 'bar',
+                        'ping' => 'pong',
                     ]),
                 ],
             ],

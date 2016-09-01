@@ -46,11 +46,11 @@ final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
             }
 
             if ($denormalizer instanceof FixtureDenormalizerAwareInterface) {
-                $denormalizer = $denormalizer->with($this);
+                $denormalizer = $denormalizer->withFixtureDenormalizer($this);
             }
             
             if ($denormalizer instanceof FlagParserAwareInterface) {
-                $denormalizer = $denormalizer->withParser($flagParser);
+                $denormalizer = $denormalizer->withFlagParser($flagParser);
             }
             
             $this->denormalizers[] = $denormalizer;

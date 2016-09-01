@@ -32,6 +32,16 @@ final class FixtureWithFlags implements FixtureInterface
 
     public function __construct(FixtureInterface $fixture, FlagBag $flags)
     {
+        if ($fixture->getId() !== $flags->getKey()) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Expected the fixture ID and the flags key to be the same. Got "%s" and "%s" instead.',
+                    $fixture->getId(),
+                    $flags->getKey()
+                )
+            );
+        }
+
         $this->fixture = clone $fixture;
         $this->flags = $flags;
     }

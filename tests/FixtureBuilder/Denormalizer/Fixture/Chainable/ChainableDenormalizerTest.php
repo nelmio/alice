@@ -41,8 +41,6 @@ abstract class ChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
 
     abstract public function testCanBuildSegmentFixtures($name);
 
-    abstract public function testCanBuildDeprecatedSegmentFixtures($name);
-
     abstract public function testCanBuildMalformedSegmentFixtures($name);
 
     abstract public function testBuildSimpleFixtures($name, $expected);
@@ -52,8 +50,6 @@ abstract class ChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
     abstract public function testBuildMalformedListFixtures($name, $expected);
 
     abstract public function testBuildSegmentFixtures($name, $expected);
-
-    abstract public function testBuildDeprecatedSegmentFixtures($name, $expected);
 
     abstract public function testBuildMalformedSegmentFixtures($name, $expected);
 
