@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
@@ -32,7 +33,7 @@ final class Templating
      */
     private $extends = [];
 
-    public function __construct(FixtureWithFlags $fixture)
+    public function __construct(FixtureWithFlagsInterface $fixture)
     {
         $flags = $fixture->getFlags();
         foreach ($flags as $flag) {

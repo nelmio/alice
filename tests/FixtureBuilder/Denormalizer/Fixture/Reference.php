@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
-use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
@@ -259,7 +259,7 @@ class FixtureFactory
     public static function createTemplating(string $id, $valueForCurrent)
     {
         return new TemplatingFixture(
-            new FixtureWithFlags(
+            new SimpleFixtureWithFlags(
                 new SimpleFixture(
                     $id,
                     'Dummy',

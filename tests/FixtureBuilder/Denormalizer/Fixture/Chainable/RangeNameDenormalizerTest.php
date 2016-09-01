@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
@@ -144,7 +144,7 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
         $expected = (new FixtureBag())
             ->with(
                 new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture('user_1', $className, SpecificationBagFactory::create()),
                         new FlagBag('user_1')
                     )
@@ -152,7 +152,7 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
             )
             ->with(
                 new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture('user_2', $className, SpecificationBagFactory::create()),
                         new FlagBag('user_2')
                     )
@@ -220,7 +220,7 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
                 function ($args) use ($className, $specs) {
                     return (new FixtureBag())->with(
                         new TemplatingFixture(
-                            new FixtureWithFlags(
+                            new SimpleFixtureWithFlags(
                                 new SimpleFixture($args[2], $className, SpecificationBagFactory::create()),
                                 (new FlagBag($args[2]))
                                     ->withFlag(new DummyFlag())
@@ -237,7 +237,7 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
         $expected = (new FixtureBag())
             ->with(
                 new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture('user_1', $className, SpecificationBagFactory::create()),
                         (new FlagBag('user_1'))
                             ->withFlag(new DummyFlag())
@@ -247,7 +247,7 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
             )
             ->with(
                 new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture('user_2', $className, SpecificationBagFactory::create()),
                         (new FlagBag('user_2'))
                             ->withFlag(new DummyFlag())

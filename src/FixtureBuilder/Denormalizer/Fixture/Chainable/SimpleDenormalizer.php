@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
@@ -83,7 +83,7 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
 
         return $builtFixtures->with(
             new TemplatingFixture(
-                new FixtureWithFlags(
+                new SimpleFixtureWithFlags(
                     $fixture,
                     $idFlags->mergeWith($flags)
                 )

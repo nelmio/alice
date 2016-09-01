@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
@@ -64,7 +64,7 @@ final class ListNameDenormalizer extends AbstractChainableDenormalizer
         foreach ($fixtureIds as $fixtureId) {
             $builtFixtures = $builtFixtures->with(
                 new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             $fixtureId,
                             $tempFixture->getClassName(),

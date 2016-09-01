@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
@@ -102,7 +102,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
 
         $expected = $fixtures->with(
             new TemplatingFixture(
-                new FixtureWithFlags(
+                new SimpleFixtureWithFlags(
                     new SimpleFixture(
                         $reference,
                         $className,
@@ -153,7 +153,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
 
         $expected = $fixtures->with(
             new TemplatingFixture(
-                new FixtureWithFlags(
+                new SimpleFixtureWithFlags(
                     new SimpleFixture(
                         'user_base',
                         $className,

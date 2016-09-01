@@ -52,7 +52,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
             ->withFlag($flag2)
         ;
 
-        $fixtureWithFlags = new FixtureWithFlags($decoratedFixture, $flags);
+        $fixtureWithFlags = new SimpleFixtureWithFlags($decoratedFixture, $flags);
         $fixture = new TemplatingFixture($fixtureWithFlags);
 
         $this->assertEquals($reference, $fixture->getId());
@@ -87,7 +87,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
 
         $flags = new FlagBag('user0');
 
-        $fixtureWithFlags = new FixtureWithFlags($decoratedFixture, $flags);
+        $fixtureWithFlags = new SimpleFixtureWithFlags($decoratedFixture, $flags);
         $fixture = new TemplatingFixture($fixtureWithFlags);
         $newFixture = $fixture->withSpecs($newSpecs);
 

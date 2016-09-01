@@ -35,7 +35,7 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideFlags
      */
-    public function testDetectTemplateFlags(FixtureWithFlags $fixture, bool $isATemplate, bool $extendsFixtures, array $extendedFixtures)
+    public function testDetectTemplateFlags(SimpleFixtureWithFlags $fixture, bool $isATemplate, bool $extendsFixtures, array $extendedFixtures)
     {
         $templating = new Templating($fixture);
 
@@ -129,9 +129,9 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    private function createFixtureWithFlags(FlagBag $flags): FixtureWithFlags
+    private function createFixtureWithFlags(FlagBag $flags): SimpleFixtureWithFlags
     {
-        return new FixtureWithFlags(
+        return new SimpleFixtureWithFlags(
             new SimpleFixture(
                 $flags->getKey(),
                 'Dummy',

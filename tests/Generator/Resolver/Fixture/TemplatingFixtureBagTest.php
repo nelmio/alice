@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
-use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\MutableFixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
@@ -35,7 +35,7 @@ class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
 
         $templateId = 'user_base';
         $template = new TemplatingFixture(
-            new FixtureWithFlags(
+            new SimpleFixtureWithFlags(
                 new DummyFixture($templateId),
                 (new FlagBag('user_base'))->withFlag(new TemplateFlag())
             )
@@ -101,7 +101,7 @@ class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
     {
         $fixture = new DummyFixture('user0');
         $template = new TemplatingFixture(
-            new FixtureWithFlags(
+            new SimpleFixtureWithFlags(
                 new DummyFixture('user_base'),
                 (new FlagBag('user_base'))->withFlag(new TemplateFlag())
             )

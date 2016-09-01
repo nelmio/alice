@@ -75,175 +75,175 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function provideValues()
     {
-//        // Simple values
-//        yield 'empty string' => [
-//            '',
-//            '',
-//        ];
-//
-//        yield 'regular string value' => [
-//            'dummy',
-//            'dummy',
-//        ];
-//
-//        yield 'string value with quotes' => [
-//            '\'dummy\'',
-//            '\'dummy\'',
-//        ];
-//
-//        yield 'string value with double quotes' => [
-//            '"dummy"',
-//            '"dummy"',
-//        ];
-//
-//        // Escaped arrow
-//        yield '[Escaped arrow] nominal (1)' => [
-//            '<<',
-//            '<',
-//        ];
-//        yield '[Escaped arrow] nominal (2)' => [
-//            '>>',
-//            '>',
-//        ];
-//        yield '[Escaped arrow] parameter' => [
-//            '<<{param}>>',
-//            '<{param}>',
-//        ];
-//        yield '[Escaped arrow] function' => [
-//            '<<f()>>',
-//            '<f()>',
-//        ];
-//        yield '[Escaped arrow] surrounded' => [
-//            'foo << bar >> baz',
-//            'foo < bar > baz',
-//        ];
-//
-//        // Parameters
-//        yield '[Parameter] nominal' => [
-//            '<{dummy_param}>',
-//            new ParameterValue('dummy_param'),
-//        ];
-//        yield '[Parameter] unbalanced (1)' => [
-//            '<{dummy_param>',
-//            null,
-//        ];
-//        yield '[Parameter] escaped unbalanced (1)' => [
-//            '<<{dummy_param>>',
-//            '<{dummy_param>',
-//        ];
-//        yield '[Parameter] unbalanced (2)' => [
-//            '<{dummy_param',
-//            null,
-//        ];
-//        yield '[Parameter] escaped unbalanced (2)' => [
-//            '<<{dummy_param',
-//            '<{dummy_param',
-//        ];
-//        yield '[Parameter] unbalanced (3)' => [
-//            '<dummy_param}>',
-//            null,
-//        ];
-//        yield '[Parameter] escaped unbalanced (3)' => [
-//            '<<dummy_param}>>',
-//            '<dummy_param}>',
-//        ];
-//        yield '[Parameter] unbalanced (4)' => [
-//            'dummy_param}>',
-//            null,
-//        ];
-//        yield '[Parameter] escaped unbalanced (4)' => [
-//            'dummy_param}>>',
-//            'dummy_param}>',
-//        ];
-//        yield '[Parameter] successive' => [
-//            '<{param1}><{param2}>',
-//            new ListValue([
-//                new ParameterValue('param1'),
-//                new ParameterValue('param2'),
-//            ]),
-//        ];
-//        yield '[Parameter] nested' => [
-//            '<{value_<{nested_param}>}>',
-//            null,
-//        ];
-//        yield '[Parameter] nested escape' => [
-//            '<{value_<<{nested_param}>>}>',
-//            null,
-//        ];
-//        yield '[Parameter] surrounded - nested' => [
-//            'foo <{value_<{nested_param}>}> bar',
-//            null,
-//        ];
-//
-//        // Functions
-//        yield '[Function] nominal' => [
-//            '<function()>',
-//            new FunctionCallValue('function'),
-//        ];
-//        yield '[Function] unbalanced (1)' => [
-//            '<function()',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced (1)' => [
-//            '<<function()',
-//            '<function()',
-//        ];
-//        yield '[Function] unbalanced (2)' => [
-//            'function()>',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced (2)' => [
-//            'function()>>',
-//            'function()>',
-//        ];
-//        yield '[Function] unbalanced (3)' => [
-//            '<function(>',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced (3)' => [
-//            '<<function(>>',
-//            '<function(>',
-//        ];
-//        yield '[Function] unbalanced (4)' => [
-//            '<function)>',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced (4)' => [
-//            '<<function)>>',
-//            '<function)>',
-//        ];
-//        yield '[Function] successive functions' => [
-//            '<f()><g()>',
-//            new ListValue([
-//                new FunctionCallValue('f'),
-//                new FunctionCallValue('g'),
-//            ]),
-//        ];
-//        yield '[Function] correct successive functions' => [
-//            '<f()> <g()>',
-//            new ListValue([
-//                new FunctionCallValue('f'),
-//                ' ',
-//                new FunctionCallValue('g'),
-//            ]),
-//        ];
-//        yield '[Function] nested functions' => [
-//            '<f(<g()>)>',
-//            new FunctionCallValue(
-//                'f',
-//                [
-//                    new FunctionCallValue('g'),
-//                ]
-//            ),
-//        ];
-//        yield '[Function] nominal surrounded' => [
-//            'foo <function()> bar',
-//            new ListValue([
-//                'foo ',
-//                new FunctionCallValue('function'),
-//                ' bar',
-//            ]),
-//        ];
+        // Simple values
+        yield 'empty string' => [
+            '',
+            '',
+        ];
+
+        yield 'regular string value' => [
+            'dummy',
+            'dummy',
+        ];
+
+        yield 'string value with quotes' => [
+            '\'dummy\'',
+            '\'dummy\'',
+        ];
+
+        yield 'string value with double quotes' => [
+            '"dummy"',
+            '"dummy"',
+        ];
+
+        // Escaped arrow
+        yield '[Escaped arrow] nominal (1)' => [
+            '<<',
+            '<',
+        ];
+        yield '[Escaped arrow] nominal (2)' => [
+            '>>',
+            '>',
+        ];
+        yield '[Escaped arrow] parameter' => [
+            '<<{param}>>',
+            '<{param}>',
+        ];
+        yield '[Escaped arrow] function' => [
+            '<<f()>>',
+            '<f()>',
+        ];
+        yield '[Escaped arrow] surrounded' => [
+            'foo << bar >> baz',
+            'foo < bar > baz',
+        ];
+
+        // Parameters
+        yield '[Parameter] nominal' => [
+            '<{dummy_param}>',
+            new ParameterValue('dummy_param'),
+        ];
+        yield '[Parameter] unbalanced (1)' => [
+            '<{dummy_param>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (1)' => [
+            '<<{dummy_param>>',
+            '<{dummy_param>',
+        ];
+        yield '[Parameter] unbalanced (2)' => [
+            '<{dummy_param',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (2)' => [
+            '<<{dummy_param',
+            '<{dummy_param',
+        ];
+        yield '[Parameter] unbalanced (3)' => [
+            '<dummy_param}>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (3)' => [
+            '<<dummy_param}>>',
+            '<dummy_param}>',
+        ];
+        yield '[Parameter] unbalanced (4)' => [
+            'dummy_param}>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (4)' => [
+            'dummy_param}>>',
+            'dummy_param}>',
+        ];
+        yield '[Parameter] successive' => [
+            '<{param1}><{param2}>',
+            new ListValue([
+                new ParameterValue('param1'),
+                new ParameterValue('param2'),
+            ]),
+        ];
+        yield '[Parameter] nested' => [
+            '<{value_<{nested_param}>}>',
+            null,
+        ];
+        yield '[Parameter] nested escape' => [
+            '<{value_<<{nested_param}>>}>',
+            null,
+        ];
+        yield '[Parameter] surrounded - nested' => [
+            'foo <{value_<{nested_param}>}> bar',
+            null,
+        ];
+
+        // Functions
+        yield '[Function] nominal' => [
+            '<function()>',
+            new FunctionCallValue('function'),
+        ];
+        yield '[Function] unbalanced (1)' => [
+            '<function()',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (1)' => [
+            '<<function()',
+            '<function()',
+        ];
+        yield '[Function] unbalanced (2)' => [
+            'function()>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (2)' => [
+            'function()>>',
+            'function()>',
+        ];
+        yield '[Function] unbalanced (3)' => [
+            '<function(>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (3)' => [
+            '<<function(>>',
+            '<function(>',
+        ];
+        yield '[Function] unbalanced (4)' => [
+            '<function)>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (4)' => [
+            '<<function)>>',
+            '<function)>',
+        ];
+        yield '[Function] successive functions' => [
+            '<f()><g()>',
+            new ListValue([
+                new FunctionCallValue('f'),
+                new FunctionCallValue('g'),
+            ]),
+        ];
+        yield '[Function] correct successive functions' => [
+            '<f()> <g()>',
+            new ListValue([
+                new FunctionCallValue('f'),
+                ' ',
+                new FunctionCallValue('g'),
+            ]),
+        ];
+        yield '[Function] nested functions' => [
+            '<f(<g()>)>',
+            new FunctionCallValue(
+                'f',
+                [
+                    new FunctionCallValue('g'),
+                ]
+            ),
+        ];
+        yield '[Function] nominal surrounded' => [
+            'foo <function()> bar',
+            new ListValue([
+                'foo ',
+                new FunctionCallValue('function'),
+                ' bar',
+            ]),
+        ];
 
         yield '[Function] nominal identity' => [
             '<(function())>',
