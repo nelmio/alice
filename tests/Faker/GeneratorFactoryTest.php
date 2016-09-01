@@ -108,6 +108,8 @@ class GeneratorFactoryTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->assertGeneratorLocaleIs($locale, $generator);
+
+            return;
         } catch (\Exception $exception) {
             if ($exception->getMessage() === sprintf('Generator has not been initialised with the locale "%s".', $locale)) {
                 return;
