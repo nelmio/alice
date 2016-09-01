@@ -16,6 +16,7 @@ use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
 
 /**
@@ -42,6 +43,33 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($extendsFixtures, $templating->extendsFixtures());
         $this->assertEquals($extendedFixtures, $templating->getExtendedFixtures());
         $this->assertEquals(count($extendedFixtures), count($templating->getExtendedFixtures()));
+    }
+
+    /**
+     * As the specs are not overridden and starting the from loaded fixture, when resolving a fixture to inherit the
+     * properties of the extended fixtures, the specs should be merged with the last extended fixture to the first one.
+     * For this purpose, the list of extended fixtures is given in the right order right away.
+     */
+    public function testExtendedFixturesOrderIsInversed()
+    {
+        $templating = new Templating(
+            $this->createFixtureWithFlags(
+                (new FlagBag(''))
+                    ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
+                    ->withFlag(new ExtendFlag(new FixtureReference('user_base1')))
+            )
+        );
+
+        $expected = [
+            new FixtureReference('user_base1'),
+            new FixtureReference('user_base0'),
+        ];
+        $actual = $templating->getExtendedFixtures();
+
+        $this->assertEquals(count($expected), count($actual));
+        foreach ($expected as $index => $expectedReference) {
+            $this->assertEquals($expectedReference, $actual[$index]);
+        }
     }
 
     public function provideFlags()
@@ -79,8 +107,8 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             [
-                new FixtureReference('user_base0'),
                 new FixtureReference('user_base1'),
+                new FixtureReference('user_base0'),
             ],
         ];
 
@@ -95,19 +123,21 @@ class TemplatingTest extends \PHPUnit_Framework_TestCase
             true,
             true,
             [
-                new FixtureReference('user_base0'),
                 new FixtureReference('user_base1'),
+                new FixtureReference('user_base0'),
             ],
         ];
     }
 
     private function createFixtureWithFlags(FlagBag $flags): FixtureWithFlags
     {
-        $fixtureProphecy = $this->prophesize(FixtureInterface::class);
-        $fixtureProphecy->getClassName()->willReturn('Nelmio\Alice\Entity\User');
-        /** @var FixtureInterface $fixture */
-        $fixture = $fixtureProphecy->reveal();
-
-        return new FixtureWithFlags($fixture, $flags);
+        return new FixtureWithFlags(
+            new SimpleFixture(
+                $flags->getKey(),
+                'Dummy',
+                SpecificationBagFactory::create()
+            ),
+            $flags
+        );
     }
 }
