@@ -212,14 +212,6 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     }
 
     /**
-     * @dataProvider provideDeprecatedSegmentFixtures
-     */
-    public function testCanBuildDeprecatedSegmentFixtures($name)
-    {
-        $this->assertCannotBuild($name);
-    }
-
-    /**
      * @dataProvider provideMalformedSegmentFixtures
      */
     public function testCanBuildMalformedSegmentFixtures($name)
@@ -255,14 +247,6 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
      * @dataProvider provideSegmentFixtures
      */
     public function testBuildSegmentFixtures($name, $expected)
-    {
-        $this->markAsInvalidCase();
-    }
-
-    /**
-     * @dataProvider provideDeprecatedSegmentFixtures
-     */
-    public function testBuildDeprecatedSegmentFixtures($name, $expected)
     {
         $this->markAsInvalidCase();
     }

@@ -124,69 +124,55 @@ final class Reference
                 'nominal' => [
                     'user_{0..2}',
                     [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                        FixtureFactory::create('user_2', '2'),
+                        FixtureFactory::createTemplating('user_0', '0'),
+                        FixtureFactory::createTemplating('user_1', '1'),
+                        FixtureFactory::createTemplating('user_2', '2'),
                     ],
                 ],
                 'nominal with flag' => [
                     'user_{0..2} (dummy_flag)',
                     [
-                        FixtureFactory::create('user_0 (dummy_flag)', '0'),
-                        FixtureFactory::create('user_1 (dummy_flag)', '1'),
-                        FixtureFactory::create('user_2 (dummy_flag)', '2'),
+                        FixtureFactory::createTemplating('user_0 (dummy_flag)', '0'),
+                        FixtureFactory::createTemplating('user_1 (dummy_flag)', '1'),
+                        FixtureFactory::createTemplating('user_2 (dummy_flag)', '2'),
                     ],
                 ],
                 'only 1 value' => [
                     'user_{2..2}',
                     [
-                        FixtureFactory::create('user_2', '2'),
+                        FixtureFactory::createTemplating('user_2', '2'),
                     ],
                 ],
                 'with inverted values' => [
                     'user_{2..0}',
                     [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                        FixtureFactory::create('user_2', '2'),
+                        FixtureFactory::createTemplating('user_0', '0'),
+                        FixtureFactory::createTemplating('user_1', '1'),
+                        FixtureFactory::createTemplating('user_2', '2'),
                     ],
-                ],
-            ],
-            'segment-deprecated' => [
-                'with three dots' => [
-                    'user_{0...2}',
-                    [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                    ],
-                ],
-                'with more than three dots' => [
-                    'user_{0....2}',
-                    [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                    ],
-                ],
-                'with three dots and flag ' => [
-                    'user_{0...2} (dummy_flag)',
-                    [
-                        FixtureFactory::create('user_0 (dummy_flag)', '0'),
-                        FixtureFactory::create('user_1 (dummy_flag)', '1'),
-                    ],
-                ],
-                'with inverted values' => [
-                    'user_{2...0}',
-                    [
-                        FixtureFactory::create('user_0', '0'),
-                        FixtureFactory::create('user_1', '1'),
-                    ],
-                ],
-                'only 1 value' => [
-                    'user_{2...2}',
-                    [],
                 ],
             ],
             'malformed-segment' => [
+                '[deprecated in 2.x] with three dots' => [
+                    'user_{0...2}',
+                    null,
+                ],
+                '[deprecated in 2.x] with more than three dots' => [
+                    'user_{0....2}',
+                    null,
+                ],
+                '[deprecated in 2.x] with three dots and flag ' => [
+                    'user_{0...2} (dummy_flag)',
+                    null,
+                ],
+                '[deprecated in 2.x] with inverted values' => [
+                    'user_{2...0}',
+                    null,
+                ],
+                '[deprecated in 2.x] only 1 value' => [
+                    'user_{2...2}',
+                    null,
+                ],
                 'with only one dot' => [
                     'user_{0.2}',
                     null,
@@ -233,11 +219,6 @@ final class Reference
     public static function getSegmentFixtures()
     {
         return self::getList('segment');
-    }
-
-    public static function getDeprecatedSegmentFixtures()
-    {
-        return self::getList('segment-deprecated');
     }
 
     public static function getMalformedSegmentFixtures()

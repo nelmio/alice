@@ -21,10 +21,8 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FakeFixtureDenormalizer;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\DummyFlagParser;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\Argument;
 
@@ -65,7 +63,7 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer::denormalize" to be called only if it has a flag parser.
      */
-    public function testCannotDenormalizerIfHasNoFlagParser()
+    public function testCannotDenormalizeIfHasNoFlagParser()
     {
         $denormalizer = new ListNameDenormalizer(new FakeFixtureDenormalizer());
         $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Alice\Entity\User', 'user{alice, bob}', [], new FlagBag(''));
@@ -298,14 +296,6 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
     }
 
     /**
-     * @dataProvider provideDeprecatedSegmentFixtures
-     */
-    public function testCanBuildDeprecatedSegmentFixtures($name)
-    {
-        $this->assertCannotBuild($name);
-    }
-
-    /**
      * @dataProvider provideMalformedSegmentFixtures
      */
     public function testCanBuildMalformedSegmentFixtures($name)
@@ -341,14 +331,6 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
      * @dataProvider provideSegmentFixtures
      */
     public function testBuildSegmentFixtures($name, $expected)
-    {
-        $this->markAsInvalidCase();
-    }
-
-    /**
-     * @dataProvider provideDeprecatedSegmentFixtures
-     */
-    public function testBuildDeprecatedSegmentFixtures($name, $expected)
     {
         $this->markAsInvalidCase();
     }
