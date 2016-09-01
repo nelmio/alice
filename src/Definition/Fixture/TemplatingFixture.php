@@ -74,25 +74,6 @@ final class TemplatingFixture implements FixtureInterface
         return $clone;
     }
 
-    /**
-     * Gets the decorated fixture stripped of its templating flags (they are simply removed, no side-effect caused).
-     *
-     * @return FixtureWithFlags
-     * TODO: check if is still useful
-     */
-    public function getStrippedFixture(): FixtureWithFlags
-    {
-        $fixtureFlags = $this->fixture->getFlags();
-        $newflags = new FlagBag($fixtureFlags->getKey());
-        foreach ($fixtureFlags as $flag) {
-            if (false === $flag instanceof TemplateFlag && false === $flag instanceof ExtendFlag) {
-                $newflags = $newflags->withFlag($flag);
-            }
-        }
-
-        return new FixtureWithFlags($this->fixture, $newflags);
-    }
-
     public function isATemplate(): bool
     {
         return $this->templating->isATemplate();
