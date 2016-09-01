@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
@@ -18,7 +19,7 @@ use Nelmio\Alice\Definition\SpecificationBag;
 /**
  * Decorates a fixture to add it flags.
  */
-final class FixtureWithFlags implements FixtureInterface
+final class SimpleFixtureWithFlags implements FixtureWithFlagsInterface
 {
     /**
      * @var FixtureInterface

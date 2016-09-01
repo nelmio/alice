@@ -11,20 +11,18 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
-use Nelmio\Alice\Definition\Flag\ExtendFlag;
-use Nelmio\Alice\Definition\Flag\TemplateFlag;
-use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
- * Decorates FixtureWithFlags to provide helpers regarding templates related flags.
+ * Decorates SimpleFixtureWithFlags to provide helpers regarding templates related flags.
  */
 final class TemplatingFixture implements FixtureInterface
 {
     /**
-     * @var FixtureWithFlags
+     * @var SimpleFixtureWithFlags
      */
     private $fixture;
 
@@ -33,7 +31,7 @@ final class TemplatingFixture implements FixtureInterface
      */
     private $templating;
 
-    public function __construct(FixtureWithFlags $fixture)
+    public function __construct(FixtureWithFlagsInterface $fixture)
     {
         $this->fixture = clone $fixture;
         $this->templating = new Templating($fixture);

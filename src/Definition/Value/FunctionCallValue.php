@@ -43,10 +43,7 @@ final class FunctionCallValue implements ValueInterface
         return $this->name;
     }
 
-    /**
-     * @return array|null
-     */
-    public function getArguments()
+    public function getArguments(): array
     {
         return deep_clone($this->arguments);
     }

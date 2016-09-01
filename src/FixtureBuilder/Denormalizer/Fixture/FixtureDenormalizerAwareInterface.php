@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
-//TODO: make sure all the withX() methods in *Aware interfaces are with a name to avoid naming conflicts
 interface FixtureDenormalizerAwareInterface
 {
     /**

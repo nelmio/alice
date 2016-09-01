@@ -75,7 +75,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function provideValues()
     {
-        // simple values
+        // Simple values
         yield 'empty string' => [
             '',
             '',

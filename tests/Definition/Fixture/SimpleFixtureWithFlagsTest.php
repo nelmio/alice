@@ -12,19 +12,19 @@
 namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\FakeMethodCall;
+use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
-use Nelmio\Alice\Entity\Hydrator\Dummy;
 use Nelmio\Alice\FixtureInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Fixture\FixtureWithFlags
+ * @covers Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags
  */
-class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
+class SimpleFixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
 {
-    public function testIsAFixture()
+    public function testIsAFixtureWithFlags()
     {
-        $this->assertTrue(is_a(FixtureWithFlags::class, FixtureInterface::class, true));
+        $this->assertTrue(is_a(SimpleFixtureWithFlags::class, FixtureWithFlagsInterface::class, true));
     }
     
     public function testReadAccessorsReturnPropertiesValues()
@@ -42,7 +42,7 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
 
         $flags = new FlagBag($reference);
 
-        $fixture = new FixtureWithFlags($decoratedFixture, $flags);
+        $fixture = new SimpleFixtureWithFlags($decoratedFixture, $flags);
 
         $this->assertEquals($reference, $fixture->getId());
         $this->assertEquals($className, $fixture->getClassName());
@@ -74,10 +74,10 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
 
         $flags = new FlagBag('user0');
 
-        $fixture = new FixtureWithFlags($decoratedFixture, $flags);
+        $fixture = new SimpleFixtureWithFlags($decoratedFixture, $flags);
         $newFixture = $fixture->withSpecs($newSpecs);
 
-        $this->assertInstanceOf(FixtureWithFlags::class, $newFixture);
+        $this->assertInstanceOf(SimpleFixtureWithFlags::class, $newFixture);
         $this->assertNotSame($fixture, $newFixture);
 
         $this->assertEquals($specs, $fixture->getSpecs());
@@ -95,6 +95,6 @@ class FixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $fixture = new DummyFixture('foo');
         $flags = new FlagBag('bar');
 
-        new FixtureWithFlags($fixture, $flags);
+        new SimpleFixtureWithFlags($fixture, $flags);
     }
 }

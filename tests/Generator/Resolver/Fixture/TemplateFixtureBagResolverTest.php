@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
-use Nelmio\Alice\Definition\Fixture\FixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
@@ -67,7 +67,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->with(
-                $group2 = new FixtureWithFlags(
+                $group2 = new SimpleFixtureWithFlags(
                     new SimpleFixture(
                         'group2',
                         'Nelmio\Entity\Group',
@@ -79,7 +79,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->with(
                 $user1 = new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user1',
                             'Nelmio\Alice\Entity\User',
@@ -98,7 +98,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->with(
                 $user2 = new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user2',
                             'Nelmio\Alice\Entity\User',
@@ -116,7 +116,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->with(
                 $user3 = new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user3',
                             'Nelmio\Alice\Entity\User',
@@ -136,7 +136,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->with(
                 $user4 = new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user4',
                             'Nelmio\Alice\Entity\User',
@@ -155,7 +155,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
                 )
             )
             ->with(
-                $user5 = new FixtureWithFlags(  // has a template flag but is not a templating fixture!
+                $user5 = new SimpleFixtureWithFlags(  // has a template flag but is not a templating fixture!
                     new SimpleFixture(
                         'user5',
                         'Nelmio\Alice\Entity\User',
@@ -171,7 +171,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
             ->with($group2)
             ->with(
                 new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user1',
                             'Nelmio\Alice\Entity\User',
@@ -202,7 +202,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
         $unresolvedFixtures = (new FixtureBag())
             ->with(
                 $user4 = new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user4',
                             'Nelmio\Alice\Entity\User',
@@ -222,7 +222,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->with(
                 $user3 = new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user3',
                             'Nelmio\Alice\Entity\User',
@@ -242,7 +242,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->with(
                 $user2 = new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user2',
                             'Nelmio\Alice\Entity\User',
@@ -260,7 +260,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
             )
             ->with(
                 $user1 = new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user1',
                             'Nelmio\Alice\Entity\User',
@@ -281,7 +281,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
         $expected = (new FixtureBag())
             ->with(
                 new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user1',
                             'Nelmio\Alice\Entity\User',
@@ -314,7 +314,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
         $unresolvedFixtures = (new FixtureBag())
             ->with(
                 new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user0',
                             'Nelmio\Alice\Entity\User',
@@ -342,7 +342,7 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
         $unresolvedFixtures = (new FixtureBag())
             ->with(
                 new TemplatingFixture(
-                    new FixtureWithFlags(
+                    new SimpleFixtureWithFlags(
                         new SimpleFixture(
                             'user0',
                             'Nelmio\Alice\Entity\User',

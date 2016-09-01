@@ -15,7 +15,7 @@
             <file>tests/Definition/SpecificationBagTest.php</file>
             <file>tests/Definition/FlagBagTest.php</file>
             <file>tests/Definition/Fixture/SimpleFixtureTest.php</file>
-            <file>tests/Definition/Fixture/FixtureWithFlagsTest.php</file>
+            <file>tests/Definition/Fixture/SimpleFixtureWithFlagsTest.php</file>
             <file>tests/Definition/Fixture/TemplatingFixtureTest.php</file>
             <file>tests/Definition/ServiceReference/FixtureReferenceTest.php</file>
             <file>tests/Definition/Fixture/TemplatingTest.php</file>
