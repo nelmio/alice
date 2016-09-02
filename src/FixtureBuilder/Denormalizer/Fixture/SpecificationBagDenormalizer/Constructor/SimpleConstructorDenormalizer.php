@@ -47,7 +47,11 @@ final class SimpleConstructorDenormalizer implements ConstructorDenormalizerInte
     {
         /** @var int|string|null $firstKey */
         $firstKey = key($unparsedConstructor);
-        if (null === $firstKey || is_int($firstKey) || count($unparsedConstructor) > 1) {
+        if (null === $firstKey
+            || is_int($firstKey)
+            || count($unparsedConstructor) > 1
+            || (is_string($firstKey) && preg_match('/\(.*\)/', $firstKey))
+        ) {
             return new SimpleMethodCall(
                 '__construct',
                 $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)

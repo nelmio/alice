@@ -100,14 +100,14 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
         $parser = $parserProphecy->reveal();
 
         $denormalizer = new UniqueValueDenormalizer($parser);
-        $actual = $denormalizer->denormalize(new DummyFixture('dummy_id'), $flags, $value);
+        $result = $denormalizer->denormalize(new DummyFixture('dummy_id'), $flags, $value);
 
-        $this->assertInstanceOf(DynamicArrayValue::class, $actual);
-        /** @var DynamicArrayValue $actual */
-        $this->assertEquals(10, $actual->getQuantifier());
-        $this->assertInstanceOf(UniqueValue::class, $actual->getElement());
-        $this->stringContains('dummy_id', $actual->getElement()->getId());
-        $this->stringContains('parsed_value', $actual->getElement()->getValue());
+        $this->assertInstanceOf(DynamicArrayValue::class, $result);
+        /** @var DynamicArrayValue $result */
+        $this->assertEquals(10, $result->getQuantifier());
+        $this->assertInstanceOf(UniqueValue::class, $result->getElement());
+        $this->stringContains('dummy_id', $result->getElement()->getId());
+        $this->assertEquals('parsed_value', $result->getElement()->getValue());
     }
 
     public function testWhenParserThrowsExceptionDenormalizerAExceptionIsThrown()

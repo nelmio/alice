@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Entity\Instantiator;
+namespace Nelmio\Alice\Entity;
 
-class DummyWithRequiredParameterInConstructor
+class DummyWithConstructorParam
 {
-    public $requiredParam;
+    public $val;
 
-    public function __construct(int $requiredParam)
+    public function __construct($val)
     {
-        $this->requiredParam = $requiredParam;
+        $this->val = $val;
     }
 }
