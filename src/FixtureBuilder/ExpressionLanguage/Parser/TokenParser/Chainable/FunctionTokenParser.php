@@ -13,6 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
@@ -47,10 +48,13 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
         }
 
         $function = $matches['function'];
-        $arguments = ('identity' === $function)
-            ? [new EvaluatedValue($matches['arguments'])]
-            : $this->parseArguments($this->parser, trim($matches['arguments']))
-        ;
+        if ('identity' === $function) {
+            $arguments = [new EvaluatedValue($matches['arguments'])];
+        } elseif ('current' === $function) {
+            $arguments = [new ValueForCurrentValue()];
+        } else {
+            $arguments = $this->parseArguments($this->parser, trim($matches['arguments']));
+        }
 
         return new FunctionCallValue($function, $arguments);
     }

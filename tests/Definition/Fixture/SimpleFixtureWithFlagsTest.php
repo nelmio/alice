@@ -32,11 +32,13 @@ class SimpleFixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $reference = 'user0';
         $className = 'Nelmio\Alice\Entity\User';
         $specs = SpecificationBagFactory::create();
+        $valueForCurrent = 'alice';
 
         $decoratedFixtureProphecy = $this->prophesize(FixtureInterface::class);
         $decoratedFixtureProphecy->getId()->willReturn($reference);
         $decoratedFixtureProphecy->getClassName()->willReturn($className);
         $decoratedFixtureProphecy->getSpecs()->willReturn($specs);
+        $decoratedFixtureProphecy->getValueForCurrent()->willReturn($valueForCurrent);
         /** @var FixtureInterface $decoratedFixture */
         $decoratedFixture = $decoratedFixtureProphecy->reveal();
 
@@ -47,11 +49,13 @@ class SimpleFixtureWithFlagsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($reference, $fixture->getId());
         $this->assertEquals($className, $fixture->getClassName());
         $this->assertEquals($specs, $fixture->getSpecs());
+        $this->assertEquals($valueForCurrent, $fixture->getValueForCurrent());
         $this->assertEquals($flags, $fixture->getFlags());
 
         $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(2);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
         $decoratedFixtureProphecy->getSpecs()->shouldHaveBeenCalledTimes(1);
+        $decoratedFixtureProphecy->getValueForCurrent()->shouldHaveBeenCalledTimes(1);
     }
 
     public function testWithersReturnNewModifiedInstance()

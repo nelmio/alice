@@ -12,14 +12,14 @@
 namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
+use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
-use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
 
 /**
  * Decorates SimpleFixtureWithFlags to provide helpers regarding templates related flags.
  */
-final class TemplatingFixture implements FixtureInterface
+final class TemplatingFixture implements FixtureWithFlagsInterface
 {
     /**
      * @var SimpleFixtureWithFlags
@@ -64,6 +64,14 @@ final class TemplatingFixture implements FixtureInterface
     /**
      * @inheritdoc
      */
+    public function getValueForCurrent()
+    {
+        return $this->fixture->getValueForCurrent();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function withSpecs(SpecificationBag $specs): self
     {
         $clone = clone $this;
@@ -88,5 +96,13 @@ final class TemplatingFixture implements FixtureInterface
     public function getExtendedFixturesReferences(): array
     {
         return $this->templating->getExtendedFixtures();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFlags(): FlagBag
+    {
+        return $this->fixture->getFlags();
     }
 }

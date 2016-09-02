@@ -252,7 +252,8 @@ class FixtureFactory
         return new SimpleFixture(
             $id,
             'Dummy',
-            SpecificationBagFactory::create()
+            SpecificationBagFactory::create(),
+            $valueForCurrent
         );
     }
 
@@ -263,7 +264,8 @@ class FixtureFactory
                 new SimpleFixture(
                     $id,
                     'Dummy',
-                    SpecificationBagFactory::create()
+                    SpecificationBagFactory::create(),
+                    $valueForCurrent
                 ),
                 new FlagBag($id)
             )

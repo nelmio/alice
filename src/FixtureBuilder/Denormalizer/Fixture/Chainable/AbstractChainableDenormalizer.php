@@ -11,6 +11,9 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
 use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
@@ -20,6 +23,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInt
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\NotClonableTrait;
 
 /**
@@ -38,7 +42,7 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
     /**
      * @var FlagParserInterface|null
      */
-    protected $parser;
+    private $parser;
 
     public function __construct(FixtureDenormalizerInterface $denormalizer = null, FlagParserInterface $parser = null)
     {
@@ -49,7 +53,7 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
     /**
      * @inheritdoc
      */
-    public function withFlagParser(FlagParserInterface $parser): self
+    public final function withFlagParser(FlagParserInterface $parser): self
     {
         return new static($this->denormalizer, $parser);
     }
@@ -57,9 +61,61 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
     /**
      * @inheritdoc
      */
-    public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
+    public final function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
     {
         return new static($denormalizer, $this->parser);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public final function denormalize(
+        FixtureBag $builtFixtures,
+        string $className,
+        string $fixtureId,
+        array $specs,
+        FlagBag $flags
+    ): FixtureBag
+    {
+        if (null === $this->denormalizer) {
+            throw DenormalizerNotFoundException::createUnexpectedCall(__METHOD__);
+        }
+        if (null === $this->parser) {
+            throw FlagParserNotFoundException::createUnexpectedCall(__METHOD__);
+        }
+
+        $flags = $this->parser->parse($fixtureId)->mergeWith($flags, false);
+        $fixtureId = $flags->getKey();
+
+        /**
+         * @var FixtureInterface $tempFixture
+         * @var FixtureBag       $builtFixtures
+         */
+        list($tempFixture, $builtFixtures) = $this->denormalizeTemporaryFixture(
+            $builtFixtures,
+            $className,
+            $specs,
+            $flags
+        );
+
+        $fixtureIds = $this->buildIds($fixtureId);
+        foreach ($fixtureIds as $fixtureId => $valueForCurrent) {
+            $builtFixtures = $builtFixtures->with(
+                new TemplatingFixture(
+                    new SimpleFixtureWithFlags(
+                        new SimpleFixture(
+                            $fixtureId,
+                            $tempFixture->getClassName(),
+                            $tempFixture->getSpecs(),
+                            $valueForCurrent
+                        ),
+                        $flags->withKey($fixtureId)
+                    )
+                )
+            );
+        }
+
+        return $builtFixtures;
     }
 
     /**
@@ -70,7 +126,7 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
      * IDs from the list or the range, and then denormalizing as many time as needed, the denormalization is done only
      * once.
      */
-    protected function denormalizeTemporaryFixture(
+    private function denormalizeTemporaryFixture(
         FixtureBag $builtFixtures,
         string $className,
         array $specs,
@@ -97,14 +153,16 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
     }
 
     /**
-     * @param string $method
+     * @param string $id
      *
-     * @throws FlagParserNotFoundException
+     * @return string[]
+     *
+     * @example
+     *  'user_{alice, bob}' will result in:
+     *  [
+     *      'user_alice' => 'alice',
+     *      'user_bob' => 'bob',
+     *  ]
      */
-    protected function checkFlagParser(string $method)
-    {
-        if (null === $this->parser) {
-            throw FlagParserNotFoundException::createUnexpectedCall($method);
-        }
-    }
+    public abstract function buildIds(string $id): array;
 }

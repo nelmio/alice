@@ -13,6 +13,10 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
+use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
+use Nelmio\Alice\Definition\Flag\DummyFlag;
+use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
@@ -22,6 +26,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FakeFixtureDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\Argument;
 
 /**
@@ -49,50 +54,56 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new FakeAbstractChainableDenormalizer();
+        clone new DummyAbstractChainableDenormalizer();
     }
 
     public function testWithersReturnNewModifiedInstance()
     {
-        $denormalizer = new FakeAbstractChainableDenormalizer();
+        $denormalizer = new DummyAbstractChainableDenormalizer();
         $newDenormalizer = $denormalizer->withFixtureDenormalizer(new FakeFixtureDenormalizer());
 
-        $this->assertEquals(new FakeAbstractChainableDenormalizer(), $denormalizer);
-        $this->assertEquals(new FakeAbstractChainableDenormalizer(new FakeFixtureDenormalizer()), $newDenormalizer);
+        $this->assertEquals(new DummyAbstractChainableDenormalizer(), $denormalizer);
+        $this->assertEquals(new DummyAbstractChainableDenormalizer(new FakeFixtureDenormalizer()), $newDenormalizer);
     }
 
     /**
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalizeTemporaryFixture" to be called only if it has a denormalizer.
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalize" to be called only if it has a denormalizer.
      */
     public function testCannotDenormalizeIfHasNoDenormalizer()
     {
-        $denormalizer = new FakeAbstractChainableDenormalizer();
-        $denormalizer->denormalizeTemporaryFixture(new FixtureBag(), 'Dummy', [], new FlagBag(''));
+        $denormalizer = new DummyAbstractChainableDenormalizer();
+        $denormalizer->denormalize(new FixtureBag(), 'Dummy', 'dummy', [], new FlagBag(''));
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalizeTemporaryFixture" to be called only if it has a denormalizer.
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalize" to be called only if it has a flag parser.
      */
     public function testCannotDenormalizeIfHasNoFlagParser()
     {
-        $denormalizer = new FakeAbstractChainableDenormalizer();
-        $denormalizer->denormalizeTemporaryFixture(new FixtureBag(), 'Dummy', [], new FlagBag(''));
+        $denormalizer = new DummyAbstractChainableDenormalizer(new FakeFixtureDenormalizer());
+        $denormalizer->denormalize(new FixtureBag(), 'Dummy', 'dummy', [], new FlagBag(''));
     }
 
     public function testDenormalizeTemporaryFixturesReturnsTemporaryFixtureAndSet()
     {
         $fixtures = (new FixtureBag())->with(new DummyFixture('foo'));
         $className = 'Nelmio\Alice\Entity\User';
+        $id = 'unparsed_user_id';
         $specs = [
             'username' => '<name()>',
         ];
-        $flags = new FlagBag('f');
+        $flags = (new FlagBag('original'))->withFlag(new ElementFlag('injected_flag'));
 
-        $denormalizerProphecy = $this->prophesize(FixtureDenormalizerInterface::class);
+        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
+        $flagParserProphecy->parse('unparsed_user_id')->willReturn((new FlagBag('user'))->withFlag(new DummyFlag()));
+        /** @var FlagParserInterface $flagParser */
+        $flagParser = $flagParserProphecy->reveal();
+
+        $decoratedDenormalizerProphecy = $this->prophesize(FixtureDenormalizerInterface::class);
         $temporaryId = null;
-        $denormalizerProphecy
+        $decoratedDenormalizerProphecy
             ->denormalize(
                 $fixtures,
                 $className,
@@ -104,7 +115,9 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
                     }
                 ),
                 $specs,
-                $flags
+                (new FlagBag('user'))
+                    ->withFlag(new ElementFlag('injected_flag'))
+                    ->withFlag(new DummyFlag())
             )
             ->will(
                 function ($args) use ($fixtures, $className, $specs) {
@@ -119,22 +132,37 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
                 }
             )
         ;
-        /** @var FixtureDenormalizerInterface $denormalizer */
-        $denormalizer = $denormalizerProphecy->reveal();
+        /** @var FixtureDenormalizerInterface $decoratedDenormalizer */
+        $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
-        $denormalizer = new FakeAbstractChainableDenormalizer($denormalizer);
-        $actual = $denormalizer->denormalizeTemporaryFixture($fixtures, $className, $specs, $flags);
+        $denormalizer = new DummyAbstractChainableDenormalizer($decoratedDenormalizer, $flagParser);
+        $actual = $denormalizer->denormalize($fixtures, $className, $id, $specs, $flags);
 
-        $expected = [
-            new SimpleFixture($actual[0]->getId(), $className, SpecificationBagFactory::create()),
-            $fixtures->with(
+        $expected = (new FixtureBag())
+            ->with(
+                new TemplatingFixture(
+                    new SimpleFixtureWithFlags(
+                        new SimpleFixture(
+                            'user',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            'resu'
+                        ),
+                        (new FlagBag('user'))
+                            ->withFlag(new ElementFlag('injected_flag'))
+                            ->withFlag(new DummyFlag())
+                    )
+                )
+            )
+            ->with(new DummyFixture('foo'))
+            ->with(
                 new SimpleFixture('bar', 'Dummy', SpecificationBagFactory::create(new NoMethodCall()))
-            ),
-        ];
+            )
+        ;
 
         $this->assertEquals($expected, $actual);
         $this->stringContains('temporary_id', $temporaryId);
 
-        $denormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 }

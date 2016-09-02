@@ -11,15 +11,9 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
-use Nelmio\Alice\Definition\Fixture\SimpleFixture;
-use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
-use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\RangeName;
-use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
-use Nelmio\Alice\FixtureInterface;
 
 final class RangeNameDenormalizer extends AbstractChainableDenormalizer
 {
@@ -47,50 +41,32 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
     }
 
     /**
-     * @inheritdoc
+     * @param string $id
+     *
+     * @return string[]
+     *
+     * @example
+     *  'user_{alice, bob}' => [
+     *      'user_alice',
+     *      'user_bob',
+     *  ]
      */
-    public function denormalize(
-        FixtureBag $builtFixtures,
-        string $className,
-        string $fixtureId,
-        array $specs,
-        FlagBag $flags
-    ): FixtureBag
+    public function buildIds(string $id): array
     {
-        $this->checkFlagParser(__METHOD__);
-        $flags = $this->parser->parse($fixtureId)->mergeWith($flags, false);
-        $fixtureId = $flags->getKey();
+        $ids = [];
+        $range = $this->buildRange($id);
 
-        /**
-         * @var FixtureInterface $tempFixture
-         * @var FixtureBag       $builtFixtures
-         */
-        list($tempFixture, $builtFixtures) = $this->denormalizeTemporaryFixture(
-            $builtFixtures,
-            $className,
-            $specs,
-            $flags
-        );
-
-        $range = $this->buildRange($fixtureId);
         for ($currentIndex = $range->getFrom(); $currentIndex <= $range->getTo(); $currentIndex++) {
-            $fixtureId = str_replace($this->token, $currentIndex, $range->getName());
-
-            $builtFixtures = $builtFixtures->with(
-                new TemplatingFixture(
-                    new SimpleFixtureWithFlags(
-                        new SimpleFixture(
-                            $fixtureId,
-                            $tempFixture->getClassName(),
-                            $tempFixture->getSpecs()
-                        ),
-                        $flags->withKey($fixtureId)
-                    )
+            $ids[
+                str_replace(
+                    $this->token,
+                    $currentIndex,
+                    $range->getName()
                 )
-            );
+            ] = $currentIndex;
         }
 
-        return $builtFixtures;
+        return $ids;
     }
 
     /**
@@ -112,7 +88,11 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
                 )
             );
         }
-        $reference = str_replace(sprintf('{%s}', $matches['range']), $this->token, $name);
+        $reference = str_replace(
+            sprintf('{%s}', $matches['range']),
+            $this->token,
+            $name
+        );
 
         return new RangeName($reference, $matches['from'], $matches['to']);
     }
