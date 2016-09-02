@@ -13,8 +13,6 @@ namespace Nelmio\Alice\Entity\Instantiator;
 
 class DummyWithRequiredParameterInConstructor
 {
-    public $requiredParam;
-
     public function __construct(int $requiredParam)
     {
         $this->requiredParam = $requiredParam;

@@ -246,7 +246,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
             $resolver->resolve($value, $fixture, $set);
             $this->fail('Expected exception to be thrown.');
         } catch (UniqueValueGenerationLimitReachedException $exception) {
-            $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(5);
+            $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(150);
         }
     }
 }
