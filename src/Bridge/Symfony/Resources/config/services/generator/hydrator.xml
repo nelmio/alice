@@ -13,14 +13,18 @@
 
     <services>
 
+        <service id="nelmio_alice.generator.hydrator"
+                 alias="nelmio_alice.generator.hydrator.simple" />
+
         <service id="nelmio_alice.generator.hydrator.simple"
-                 alias="nelmio_alice.generator.hydrator"
                  class="Nelmio\Alice\Generator\Hydrator\SimpleHydrator">
             <argument type="service" id="nelmio_alice.generator.hydrator.property" />
         </service>
 
+        <service id="nelmio_alice.generator.hydrator.property"
+                 alias="nelmio_alice.generator.hydrator.property.symfony_property_access" />
+
         <service id="nelmio_alice.generator.hydrator.property.symfony_property_access"
-                 alias="nelmio_alice.generator.hydrator.property"
                  class="Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator">
             <argument type="service" id="nelmio_alice.generator.hydrator.property_accessor" />
         </service>

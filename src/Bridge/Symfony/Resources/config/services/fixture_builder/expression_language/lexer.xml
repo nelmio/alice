@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.fixture_builder.expression_language.lexer"
+                 alias="nelmio_alice.fixture_builder.expression_language.lexer.registry" />
+
         <service id="nelmio_alice.fixture_builder.expression_language.lexer.registry"
-                 alias="nelmio_alice.fixture_builder.expression_language.lexer"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerRegistry">
             <!-- Injected via a compiler pass -->
         </service>

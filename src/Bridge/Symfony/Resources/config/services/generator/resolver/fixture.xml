@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.generator.resolver.fixture_bag"
+                 alias="nelmio_alice.generator.resolver.fixture_bag.template_bag" />
+
         <service id="nelmio_alice.generator.resolver.fixture_bag.template_bag"
-                 alias="nelmio_alice.generator.resolver.fixture_bag"
                  class="Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver" />
 
     </services>

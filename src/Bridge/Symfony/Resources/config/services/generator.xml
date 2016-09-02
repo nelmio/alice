@@ -13,15 +13,19 @@
 
     <services>
 
+        <service id="nelmio_alice.generator"
+                 alias="nelmio_alice.generator.double_pass" />
+
         <service id="nelmio_alice.generator.double_pass"
-                 alias="nelmio_alice.generator"
                  class="Nelmio\Alice\Generator\DoublePassGenerator">
             <argument type="service" id="nelmio_alice.generator.resolver.fixture_set" />
             <argument type="service" id="nelmio_alice.generator.object_generator" />
         </service>
 
+        <service id="nelmio_alice.generator.object_generator"
+                 alias="nelmio_alice.generator.object_generator.simple" />
+
         <service id="nelmio_alice.generator.object_generator.simple"
-                 alias="nelmio_alice.generator.object_generator"
                  class="Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator">
             <argument type="service" id="nelmio_alice.generator.resolver.value" />
             <argument type="service" id="nelmio_alice.generator.instantiator" />

@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.file_locator"
+                 alias="nelmio_alice.file_locator.default" />
+
         <service id="nelmio_alice.file_locator.default"
-                 alias="nelmio_alice.file_locator"
                  class="Nelmio\Alice\FileLocator\DefaultFileLocator" />
 
     </services>

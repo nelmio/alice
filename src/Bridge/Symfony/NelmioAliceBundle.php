@@ -11,8 +11,8 @@
 
 namespace Nelmio\Alice\Bridge\Symfony;
 
-use Nelmio\Alice\Bridge\Symfony\DependecyInjection\Compiler\RegisterFakerProvidersPass;
-use Nelmio\Alice\Bridge\Symfony\DependecyInjection\Compiler\RegisterTagServicesPass;
+use Nelmio\Alice\Bridge\Symfony\DependencyInjection\Compiler\RegisterFakerProvidersPass;
+use Nelmio\Alice\Bridge\Symfony\DependencyInjection\Compiler\RegisterTagServicesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

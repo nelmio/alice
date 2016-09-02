@@ -1,0 +1,15 @@
+framework:
+    secret:                  NelmioAliceBundleSecret
+    router:
+        resource:            ~
+        strict_requirements: '%kernel.debug%'
+    trusted_proxies:         ~
+    test:                    ~
+    session:
+        storage_id:          session.storage.mock_file
+
+nelmio_alice:
+    locale: 'fr_FR'
+    seed: 100
+    loading_limit: 50
+    max_unique_values_retries: 15

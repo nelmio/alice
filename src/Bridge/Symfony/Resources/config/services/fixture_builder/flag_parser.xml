@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser"
+                 alias="nelmio_alice.fixture_builder.denormalizer.flag_parser.element" />
+
         <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser.element"
-                 alias="nelmio_alice.fixture_builder.denormalizer.flag_parser"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser">
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.flag_parser.registry" />
         </service>

@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.generator.resolver.fixture_set"
+                 alias="nelmio_alice.generator.resolver.fixture_set.simple" />
+
         <service id="nelmio_alice.generator.resolver.fixture_set.simple"
-                 alias="nelmio_alice.generator.resolver.fixture_set"
                  class="Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver">
             <argument type="service" id="nelmio_alice.generator.resolver.parameter_bag" />
             <argument type="service" id="nelmio_alice.generator.resolver.fixture_bag" />

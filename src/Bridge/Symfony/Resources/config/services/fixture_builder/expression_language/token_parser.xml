@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.fixture_builder.expression_language.parser.token_parser"
+                 alias="nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry" />
+
         <service id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry"
-                 alias="nelmio_alice.fixture_builder.expression_language.parser.token_parser"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\TokenParserRegistry">
             <!-- Injected via compiler pass -->
         </service>

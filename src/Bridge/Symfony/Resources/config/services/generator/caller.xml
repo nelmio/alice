@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.generator.caller"
+                 alias="nelmio_alice.generator.caller.dummy" />
+
         <service id="nelmio_alice.generator.caller.dummy"
-                 alias="nelmio_alice.generator.caller"
                  class="Nelmio\Alice\Generator\Caller\DummyCaller" />
 
     </services>

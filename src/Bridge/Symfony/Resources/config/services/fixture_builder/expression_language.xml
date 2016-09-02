@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.fixture_builder.expression_language.parser"
+                 alias="nelmio_alice.fixture_builder.expression_language.parser.function_fixture_reference_parser" />
+
         <service id="nelmio_alice.fixture_builder.expression_language.parser.function_fixture_reference_parser"
-                 alias="nelmio_alice.fixture_builder.expression_language.parser"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser">
             <argument type="service" id="nelmio_alice.fixture_builder.expression_language.parser.string_parser" />
         </service>

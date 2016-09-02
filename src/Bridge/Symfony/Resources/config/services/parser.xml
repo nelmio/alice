@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.file_parser"
+                 alias="nelmio_alice.file_parser.runtime_cache" />
+
         <service id="nelmio_alice.file_parser.runtime_cache"
-                 alias="nelmio_alice.file_parser"
                  class="Nelmio\Alice\Parser\RuntimeCacheParser" >
             <argument type="service" id="nelmio_alice.file_parser.registry" />
         </service>

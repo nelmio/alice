@@ -13,15 +13,19 @@
 
     <services>
 
+        <service id="nelmio_alice.data_loader"
+                 alias="nelmio_alice.data_loader.simple" />
+
         <service id="nelmio_alice.data_loader.simple"
-                 alias="nelmio_alice.data_loader"
                  class="Nelmio\Alice\Loader\SimpleDataLoader">
             <argument type="service" id="nelmio_alice.fixture_builder" />
             <argument type="service" id="nelmio_alice.generator" />
         </service>
 
+        <service id="nelmio_alice.file_loader"
+                 alias="nelmio_alice.file_loader.simple" />
+
         <service id="nelmio_alice.file_loader.simple"
-                 alias="nelmio_alice.file_loader"
                  class="Nelmio\Alice\Loader\SimpleDataLoader">
             <argument type="service" id="nelmio_alice.file_parser" />
             <argument type="service" id="nelmio_alice.data_loader" />

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Bridge\Symfony\DependecyInjection\Compiler;
+namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

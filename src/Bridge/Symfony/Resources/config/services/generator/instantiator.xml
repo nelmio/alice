@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.generator.instantiator"
+                 alias="nelmio_alice.generator.instantiator.resolver" />
+
         <service id="nelmio_alice.generator.instantiator.resolver"
-                 alias="nelmio_alice.generator.instantiator"
                  class="Nelmio\Alice\Generator\Instantiator\InstantiatorResolver">
             <argument type="service" id="nelmio_alice.generator.instantiator.registry" />
         </service>

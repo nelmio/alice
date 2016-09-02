@@ -13,8 +13,10 @@
 
     <services>
 
+        <service id="nelmio_alice.generator.resolver.parameter_bag"
+                 alias="nelmio_alice.generator.resolver.parameter_bag.simple" />
+
         <service id="nelmio_alice.generator.resolver.parameter_bag.simple"
-                 alias="nelmio_alice.generator.resolver.parameter_bag"
                  class="Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver">
             <argument type="service" id="nelmio_alice.generator.resolver.parameter.registry" />
         </service>
@@ -39,6 +41,7 @@
         <service id="nelmio_alice.generator.resolver.parameter.chainable.recursive_parameter_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver">
             <argument type="service" id="nelmio_alice.generator.resolver.parameter.chainable.string_parameter_resolver" />
+            <argument>%nelmio_alice.loading_limit%</argument>
 
             <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
         </service>

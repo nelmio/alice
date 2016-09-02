@@ -14,16 +14,20 @@
     <services>
 
         <!-- Fixture Builder -->
+        <service id="nelmio_alice.fixture_builder"
+                 alias="nelmio_alice.fixture_builder.simple" />
+
         <service id="nelmio_alice.fixture_builder.simple"
-                 alias="nelmio_alice.c"
                  class="Nelmio\Alice\FixtureBuilder\SimpleBuilder">
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer" />
         </service>
 
 
         <!-- Denormalizer -->
+        <service id="nelmio_alice.fixture_builder.denormalizer"
+                 alias="nelmio_alice.fixture_builder.denormalizer.simple" />
+
         <service id="nelmio_alice.fixture_builder.denormalizer.simple"
-                 alias="nelmio_alice.fixture_builder.denormalizer"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer">
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.parameter_bag" />
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture_bag" />
@@ -31,8 +35,10 @@
 
 
         <!-- Parameter Denormalizer -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.parameter_bag"
+                 alias="nelmio_alice.fixture_builder.denormalizer.parameter.simple_parameter_bag_denormalizer" />
+
         <service id="nelmio_alice.fixture_builder.denormalizer.parameter.simple_parameter_bag_denormalizer"
-                 alias="nelmio_alice.fixture_builder.denormalizer.parameter_bag"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer" />
     </services>
 
