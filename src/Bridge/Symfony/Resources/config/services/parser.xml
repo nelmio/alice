@@ -1,0 +1,45 @@
+<!--
+  ~ This file is part of the Alice package.
+  ~
+  ~ (c) Nelmio <hello@nelm.io>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="nelmio_alice.file_parser.runtime_cache"
+                 alias="nelmio_alice.file_parser"
+                 class="Nelmio\Alice\Parser\RuntimeCacheParser" >
+            <argument type="service" id="nelmio_alice.file_parser.registry" />
+        </service>
+
+        <service id="nelmio_alice.file_parser.symfony_yaml" class="Symfony\Component\Yaml\Yaml" public="false" />
+
+        <service id="nelmio_alice.file_parser.default_include_processor" class="Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor" >
+            <argument type="service" id="nelmio_alice.file_locator" />
+        </service>
+
+        <service id="nelmio_alice.file_parser.registry" class="Nelmio\Alice\Parser\ParserRegistry" >
+            <!-- Injected via compiler pass -->
+        </service>
+
+        <!-- Chainables -->
+        <service id="nelmio_alice.file_parser.chainable.yaml" class="Nelmio\Alice\Parser\Chainable\YamlParser">
+            <argument type="service" id="nelmio_alice.file_parser.symfony_yaml" />
+
+            <tag name="nelmio_alice.file_parser" />
+        </service>
+
+        <service id="nelmio_alice.file_parser.chainable.php" class="Nelmio\Alice\Parser\Chainable\PhpParser">
+            <tag name="nelmio_alice.file_parser" />
+        </service>
+
+    </services>
+
+</container>
