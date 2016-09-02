@@ -51,7 +51,7 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalizeTemporaryFixture" to be called only if it has a denormalizer.
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalize" to be called only if it has a denormalizer.
      */
     public function testCannotDenormalizeIfHasNoDenormalizer()
     {
@@ -61,7 +61,7 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer::denormalize" to be called only if it has a flag parser.
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalize" to be called only if it has a flag parser.
      */
     public function testCannotDenormalizeIfHasNoFlagParser()
     {
@@ -144,7 +144,12 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
             ->with(
                 new TemplatingFixture(
                     new SimpleFixtureWithFlags(
-                        new SimpleFixture('user_alice', $className, SpecificationBagFactory::create()),
+                        new SimpleFixture(
+                            'user_alice',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            'alice'
+                        ),
                         new FlagBag('user_alice')
                     )
                 )
@@ -152,7 +157,12 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
             ->with(
                 new TemplatingFixture(
                     new SimpleFixtureWithFlags(
-                        new SimpleFixture('user_bob', $className, SpecificationBagFactory::create()),
+                        new SimpleFixture(
+                            'user_bob',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            'bob'
+                        ),
                         new FlagBag('user_bob')
                     )
                 )
@@ -238,7 +248,12 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
             ->with(
                 new TemplatingFixture(
                     new SimpleFixtureWithFlags(
-                        new SimpleFixture('user_alice', $className, SpecificationBagFactory::create()),
+                        new SimpleFixture(
+                            'user_alice',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            'alice'
+                        ),
                         (new FlagBag('user_alice'))
                             ->withFlag(new DummyFlag())
                             ->withFlag(new ElementFlag('injected_flag'))
@@ -248,7 +263,12 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
             ->with(
                 new TemplatingFixture(
                     new SimpleFixtureWithFlags(
-                        new SimpleFixture('user_bob', $className, SpecificationBagFactory::create()),
+                        new SimpleFixture(
+                            'user_bob',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            'bob'
+                        ),
                         (new FlagBag('user_bob'))
                             ->withFlag(new DummyFlag())
                             ->withFlag(new ElementFlag('injected_flag'))

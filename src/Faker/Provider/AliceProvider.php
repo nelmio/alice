@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Faker\Provider;
 
+use Nelmio\Alice\FixtureInterface;
+
 final class AliceProvider
 {
     /**
@@ -24,5 +26,16 @@ final class AliceProvider
     public static function identity($expression)
     {
         return $expression;
+    }
+
+    /**
+     * @param FixtureInterface $fixture
+     *
+     * @return string
+     *
+     */
+    public static function current(FixtureInterface $fixture)
+    {
+        return $fixture->getValueForCurrent();
     }
 }

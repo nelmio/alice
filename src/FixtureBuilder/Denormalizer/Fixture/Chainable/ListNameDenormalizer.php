@@ -11,18 +11,8 @@
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
-use Nelmio\Alice\Definition\Fixture\SimpleFixture;
-use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
-use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\NotClonableTrait;
-
 final class ListNameDenormalizer extends AbstractChainableDenormalizer
 {
-    use NotClonableTrait;
-
     /** @internal */
     const REGEX = '/\{(?<list>[^,\s]+(?:,\s[^,\s]+)+)\}/';
 
@@ -32,51 +22,6 @@ final class ListNameDenormalizer extends AbstractChainableDenormalizer
     public function canDenormalize(string $reference, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $reference, $matches);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function denormalize(
-        FixtureBag $builtFixtures,
-        string $className,
-        string $fixtureId,
-        array $specs,
-        FlagBag $flags
-    ): FixtureBag
-    {
-        $this->checkFlagParser(__METHOD__);
-        $flags = $this->parser->parse($fixtureId)->mergeWith($flags, false);
-        $fixtureId = $flags->getKey();
-
-        /**
-         * @var FixtureInterface $tempFixture
-         * @var FixtureBag       $builtFixtures
-         */
-        list($tempFixture, $builtFixtures) = $this->denormalizeTemporaryFixture(
-            $builtFixtures,
-            $className,
-            $specs,
-            $flags->withKey($fixtureId)
-        );
-        $fixtureIds = $this->buildIds($fixtureId);
-
-        foreach ($fixtureIds as $fixtureId) {
-            $builtFixtures = $builtFixtures->with(
-                new TemplatingFixture(
-                    new SimpleFixtureWithFlags(
-                        new SimpleFixture(
-                            $fixtureId,
-                            $tempFixture->getClassName(),
-                            $tempFixture->getSpecs()
-                        ),
-                        $flags->withKey($fixtureId)
-                    )
-                )
-            );
-        }
-
-        return $builtFixtures;
     }
 
     /**
@@ -90,7 +35,7 @@ final class ListNameDenormalizer extends AbstractChainableDenormalizer
      *      'user_bob',
      *  ]
      */
-    private function buildIds(string $id): array
+    public function buildIds(string $id): array
     {
         $matches = [];
         if (false === $this->canDenormalize($id, $matches)) {
@@ -106,11 +51,13 @@ final class ListNameDenormalizer extends AbstractChainableDenormalizer
 
         $ids = [];
         foreach ($listElements as $element) {
-            $ids[] = str_replace(
-                sprintf('{%s}', $matches['list']),
-                $element,
-                $id
-            );
+            $ids[
+                str_replace(
+                    sprintf('{%s}', $matches['list']),
+                    $element,
+                    $id
+                )
+            ] = $element;
         }
 
         return $ids;

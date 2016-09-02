@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
+use Nelmio\Alice\Exception\NoValueForCurrentException;
 use Nelmio\Alice\FixtureInterface;
 
 /**
@@ -36,6 +37,22 @@ class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($reference, $fixture->getId());
         $this->assertEquals($className, $fixture->getClassName());
         $this->assertEquals($specs, $fixture->getSpecs());
+        try {
+            $fixture->getValueForCurrent();
+            $this->fail('Expected exception to be thrown.');
+        } catch (NoValueForCurrentException $exception) {
+            $this->assertEquals(
+                'No value for \'<current()>\' found for the fixture "user0".',
+                $exception->getMessage()
+            );
+        }
+
+        $fixture = new SimpleFixture($reference, $className, $specs, 'alice');
+
+        $this->assertEquals($reference, $fixture->getId());
+        $this->assertEquals($className, $fixture->getClassName());
+        $this->assertEquals($specs, $fixture->getSpecs());
+        $this->assertEquals('alice', $fixture->getValueForCurrent());
     }
 
     public function testWithersReturnNewModifiedInstance()

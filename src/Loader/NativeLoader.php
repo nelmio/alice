@@ -103,6 +103,7 @@ use Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\SelfFixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\ValueForCurrentValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry;
 use Nelmio\Alice\Generator\ValueResolverInterface;
@@ -400,6 +401,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new UniqueValueResolver(
                 $this->getBuiltInUniqueValuesPool()
             ),
+            new ValueForCurrentValueResolver(),
             new VariableValueResolver(),
         ]);
     }

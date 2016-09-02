@@ -51,7 +51,7 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalizeTemporaryFixture" to be called only if it has a denormalizer.
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalize" to be called only if it has a denormalizer.
      */
     public function testCannotDenormalizeIfHasNoDenormalizer()
     {
@@ -61,7 +61,7 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormalizer::denormalize" to be called only if it has a flag parser.
+     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer::denormalize" to be called only if it has a flag parser.
      */
     public function testCannotDenormalizeIfHasNoFlagParser()
     {
@@ -145,7 +145,12 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
             ->with(
                 new TemplatingFixture(
                     new SimpleFixtureWithFlags(
-                        new SimpleFixture('user_1', $className, SpecificationBagFactory::create()),
+                        new SimpleFixture(
+                            'user_1',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            '1'
+                        ),
                         new FlagBag('user_1')
                     )
                 )
@@ -153,7 +158,12 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
             ->with(
                 new TemplatingFixture(
                     new SimpleFixtureWithFlags(
-                        new SimpleFixture('user_2', $className, SpecificationBagFactory::create()),
+                        new SimpleFixture(
+                            'user_2',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            '2'
+                        ),
                         new FlagBag('user_2')
                     )
                 )
@@ -238,7 +248,12 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
             ->with(
                 new TemplatingFixture(
                     new SimpleFixtureWithFlags(
-                        new SimpleFixture('user_1', $className, SpecificationBagFactory::create()),
+                        new SimpleFixture(
+                            'user_1',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            '1'
+                        ),
                         (new FlagBag('user_1'))
                             ->withFlag(new DummyFlag())
                             ->withFlag(new ElementFlag('injected_flag'))
@@ -248,7 +263,12 @@ class RangeNameDenormalizerTest extends ChainableDenormalizerTest
             ->with(
                 new TemplatingFixture(
                     new SimpleFixtureWithFlags(
-                        new SimpleFixture('user_2', $className, SpecificationBagFactory::create()),
+                        new SimpleFixture(
+                            'user_2',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            '2'
+                        ),
                         (new FlagBag('user_2'))
                             ->withFlag(new DummyFlag())
                             ->withFlag(new ElementFlag('injected_flag'))

@@ -12,6 +12,7 @@
 namespace Nelmio\Alice;
 
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\Exception\NoValueForCurrentException;
 
 /**
  * A fixture is a value object representing an object to be built.
@@ -29,6 +30,13 @@ interface FixtureInterface
     public function getClassName(): string;
 
     public function getSpecs(): SpecificationBag;
+
+    /**
+     * @return string|int
+     *
+     * @throws NoValueForCurrentException
+     */
+    public function getValueForCurrent();
 
     /**
      * Creates a new instance with the given specs.

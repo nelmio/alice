@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use Nelmio\Alice\Exception\NoValueForCurrentException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
 
@@ -34,11 +35,17 @@ final class SimpleFixture implements FixtureInterface
      */
     private $specs;
 
-    public function __construct(string $id, string $className, SpecificationBag $specs)
+    /**
+     * @var string
+     */
+    private $valueForCurrent;
+
+    public function __construct(string $id, string $className, SpecificationBag $specs, string $valueForCurrent = null)
     {
         $this->id = $id;
         $this->className = $className;
         $this->specs = $specs;
+        $this->valueForCurrent = $valueForCurrent;
     }
 
     /**
@@ -68,11 +75,23 @@ final class SimpleFixture implements FixtureInterface
     /**
      * @inheritdoc
      */
+    public function getValueForCurrent()
+    {
+        if (null === $this->valueForCurrent) {
+            throw NoValueForCurrentException::create($this);
+        }
+
+        return $this->valueForCurrent;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function withSpecs(SpecificationBag $specs): self
     {
         $clone = clone $this;
         $clone->specs = $specs;
-        
+
         return $clone;
     }
 }
