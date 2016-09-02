@@ -1,0 +1,113 @@
+<!--
+  ~ This file is part of the Alice package.
+  ~
+  ~ (c) Nelmio <hello@nelm.io>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture_bag"
+                 alias="nelmio_alice.fixture_builder.denormalizer.fixture.simple_fixture_bag_denormalizer" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.simple_fixture_bag_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SimpleFixtureBagDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture" />
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.flag_parser" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture"
+                 alias="nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.flag_parser" />
+            <!-- Injected via a compiler pass -->
+        </service>
+
+
+        <!-- Chainables -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.list"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer">
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.range"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormalizer">
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.simple"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.flag_parser" />
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor" />
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.property" />
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls" />
+
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer" />
+        </service>
+
+
+        <!-- Specifications Constructors Denormalizer -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor"
+                 alias="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.constructor_with_caller_denormalizer" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.constructor_with_caller_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorWithCallerDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.simple_constructor_denormalizer" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.simple_constructor_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\SimpleConstructorDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments" />
+        </service>
+
+
+        <!-- Specifications Arguments Denormalizer -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments"
+                 alias="nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments.simple_arguments_denormalizer" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments.simple_arguments_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\SimpleArgumentsDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.value" />
+        </service>
+
+
+        <!-- Specifications Values Denormalizer -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.value"
+                 alias="nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.unique_value_denormalizer" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.unique_value_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.parser" />
+        </service>
+
+
+        <!-- Specifications Properties Denormalizer -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.property"
+                 alias="nelmio_alice.fixture_builder.denormalizer.fixture.specs.property.simple_denormalizer" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.property.simple_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\SimplePropertyDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.value" />
+        </service>
+
+
+        <!-- Specifications Calls Denormalizer -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls"
+                 alias="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.simple_denormalizer" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.simple_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\OptionalCallsDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments" />
+        </service>
+
+    </services>
+
+</container>

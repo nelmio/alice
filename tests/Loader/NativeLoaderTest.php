@@ -16,12 +16,32 @@ namespace Nelmio\Alice\Loader;
  */
 class NativeLoaderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException \BadMethodCallException
+     * @expectedExceptionMessage Unknown method "foo".
+     */
+    public function testThrowsAnExceptionIfCallUnknownMethod()
+    {
+        $loader = new NativeLoader();
+        $loader->foo();
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     * @expectedExceptionMessage Unknown method "createFoo".
+     */
+    public function testThrowsAnExceptionIfCallUnknownGetMethod()
+    {
+        $loader = new NativeLoader();
+        $loader->getFoo();
+    }
+
     public function testAlwaysReturnsTheSameService()
     {
         $loader = new NativeLoader();
-        $pool1 = $loader->getBuiltInUniqueValuesPool();
-        $pool2 = $loader->getBuiltInUniqueValuesPool();
+        $fileLoader1 = $loader->getBuiltInFileLoader();
+        $fileLoader2 = $loader->getBuiltInFileLoader();
 
-        $this->assertSame($pool1, $pool2);
+        $this->assertSame($fileLoader1, $fileLoader2);
     }
 }

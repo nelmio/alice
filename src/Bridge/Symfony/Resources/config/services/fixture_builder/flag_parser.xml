@@ -1,0 +1,52 @@
+<!--
+  ~ This file is part of the Alice package.
+  ~
+  ~ (c) Nelmio <hello@nelm.io>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser"
+                 alias="nelmio_alice.fixture_builder.denormalizer.flag_parser.element" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser.element"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.flag_parser.registry" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser.registry"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry">
+            <!-- Injected via a compiler pass -->
+        </service>
+
+
+        <!-- Chainables -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.extend"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ExtendFlagParser">
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.optional"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\OptionalFlagParser">
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.template"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\TemplateFlagParser">
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.unique"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\UniqueFlagParser">
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser" />
+        </service>
+    </services>
+
+</container>

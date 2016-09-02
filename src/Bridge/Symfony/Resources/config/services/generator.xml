@@ -1,0 +1,38 @@
+<!--
+  ~ This file is part of the Alice package.
+  ~
+  ~ (c) Nelmio <hello@nelm.io>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="nelmio_alice.generator"
+                 alias="nelmio_alice.generator.double_pass" />
+
+        <service id="nelmio_alice.generator.double_pass"
+                 class="Nelmio\Alice\Generator\DoublePassGenerator">
+            <argument type="service" id="nelmio_alice.generator.resolver.fixture_set" />
+            <argument type="service" id="nelmio_alice.generator.object_generator" />
+        </service>
+
+        <service id="nelmio_alice.generator.object_generator"
+                 alias="nelmio_alice.generator.object_generator.simple" />
+
+        <service id="nelmio_alice.generator.object_generator.simple"
+                 class="Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator">
+            <argument type="service" id="nelmio_alice.generator.resolver.value" />
+            <argument type="service" id="nelmio_alice.generator.instantiator" />
+            <argument type="service" id="nelmio_alice.generator.hydrator" />
+            <argument type="service" id="nelmio_alice.generator.caller" />
+        </service>
+
+    </services>
+
+</container>
