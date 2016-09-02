@@ -12,10 +12,8 @@
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
-use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
-use Nelmio\Alice\Definition\ServiceReference\DummyReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Entity\Instantiator\AbstractDummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;

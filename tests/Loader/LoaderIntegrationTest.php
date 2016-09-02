@@ -12,6 +12,8 @@
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
+use Nelmio\Alice\Entity\DummyWithConstructorParam;
+use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use Nelmio\Alice\Entity\Hydrator\CamelCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
 use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
@@ -28,6 +30,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Entity\ValueResolver\DummyWithGetter;
+use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
@@ -570,6 +573,172 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testUniqueValueGeneration()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy{1..10}' => [
+                    'number (unique)' => '<numberBetween(1, 10)>',
+                ],
+            ],
+        ];
+
+        $result = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($result->getParameters()));
+        $this->assertEquals(10, count($result->getObjects()));
+
+        $objects = $result->getObjects();
+        $value = [];
+        foreach ($objects as $object) {
+            $this->assertTrue(1 <= $object->number);
+            $this->assertTrue(10 >= $object->number);
+            $value[$object->number] = true;
+        }
+
+        $this->assertCount(10, $value);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
+     * @expectedExceptionMessageRegExp /^Could not generate a unique value after 150 attempts for ".*"\.$/
+     */
+    public function testUniqueValueGenerationFailure()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy{1..10}' => [
+                    'number (unique)' => '<numberBetween(1, 2)>',
+                ],
+            ],
+        ];
+
+        $this->loader->loadData($data);
+    }
+
+    public function testUniqueValueGenerationInAFunctionCall()
+    {
+        $data = [
+            DummyWithRequiredParameterInConstructor::class => [
+                'dummy{1..10}' => [
+                    '__construct' => [
+                        '0 (unique)' => '<numberBetween(1, 10)>',
+                    ],
+                ],
+            ],
+        ];
+
+        $result = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($result->getParameters()));
+        $this->assertEquals(10, count($result->getObjects()));
+
+        $objects = $result->getObjects();
+        $value = [];
+        foreach ($objects as $object) {
+            $this->assertTrue(1 <= $object->requiredParam);
+            $this->assertTrue(10 >= $object->requiredParam);
+            $value[$object->requiredParam] = true;
+        }
+
+        $this->assertCount(10, $value);
+
+        try {
+            $this->loader->loadData([
+                DummyWithRequiredParameterInConstructor::class => [
+                    'dummy{1..10}' => [
+                        '__construct' => [
+                            '0 (unique)' => '<numberBetween(1, 2)>',
+                        ],
+                    ],
+                ],
+            ]);
+            $this->fail('Expected exception to be thrown.');
+        } catch (UniqueValueGenerationLimitReachedException $exception) {
+            // Expected result
+        }
+    }
+
+    public function testUniqueValueGenerationWithDynamicArray()
+    {
+        $data = [
+            \stdClass::class => [
+                'related_dummy{1..2}' => [
+                    'name' => '<current()>',
+                ],
+                'dummy' => [
+                    'relatedDummies (unique)' => '2x @related_dummy*',
+                ],
+            ],
+        ];
+
+        $result = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($result->getParameters()));
+        $this->assertEquals(3, count($result->getObjects()));
+
+        $dummy = $result->getObjects()['dummy'];
+        $this->assertCount(2, $dummy->relatedDummies);
+        foreach ($dummy->relatedDummies as $relatedDummy) {
+            $this->assertEquals($relatedDummy, $result->getObjects()['related_dummy'.$relatedDummy->name]);
+        }
+        $this->assertNotEquals($dummy->relatedDummies[0], $dummy->relatedDummies[1]);
+        
+        try {
+            $this->loader->loadData([
+                \stdClass::class => [
+                    'related_dummy' => [
+                        'name' => 'unique',
+                    ],
+                    'dummy' => [
+                        'relatedDummies (unique)' => '2x @related_dummy*',
+                    ],
+                ],
+            ]);
+            $this->fail('Expected exception to be thrown.');
+        } catch (UniqueValueGenerationLimitReachedException $exception) {
+            // expected result
+        }
+    }
+
+    public function testUniqueValuesAreUniqueAcrossAClass()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy{1..5}' => [
+                    'val (unique)' => '<numberBetween(1, 10)>',
+                ],
+                'dummy{6..10}' => [
+                    'val (unique)' => '<numberBetween(1, 10)>',
+                ],
+            ],
+            DummyWithPublicProperty::class => [
+                'dummy_with_public_property{1..10}' => [
+                    'val (unique)' => '<numberBetween(1, 10)>',
+                ],
+            ],
+        ];
+
+        $result = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($result->getParameters()));
+        $this->assertEquals(20, count($result->getObjects()));
+
+        $objects = $result->getObjects();
+        $value = [
+            \stdClass::class => [],
+            DummyWithPublicProperty::class => [],
+        ];
+        foreach ($objects as $object) {
+            $this->assertTrue(1 <= $object->val);
+            $this->assertTrue(10 >= $object->val);
+            $value[get_class($object)][$object->val] = true;
+        }
+
+        $this->assertCount(10, $value[\stdClass::class]);
+        $this->assertCount(10, $value[DummyWithPublicProperty::class]);
+    }
+
     /**
      * @expectedException \Nelmio\Alice\Exception\FixtureNotFoundException
      * @expectedExceptionMessage Could not find the fixture "unknown".
@@ -699,6 +868,19 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             new DummyWithRequiredParameterInConstructor(100),
         ];
 
+        yield 'with default constructor and required parameters with parameters and unique value - use constructor function' => [
+            [
+                DummyWithRequiredParameterInConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '0 (unique)' => 100,
+                        ],
+                    ],
+                ],
+            ],
+            new DummyWithRequiredParameterInConstructor(100),
+        ];
+
         yield 'with named constructor and optional parameters with no parameters - use factory function' => [
             [
                 DummyWithNamedConstructorAndOptionalParameters::class => [
@@ -719,6 +901,21 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                         '__construct' => [
                             'namedConstruct' => [
                                 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and optional parameters with parameters and unique value - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                '0 (unique)' => 100,
                             ],
                         ],
                     ],
@@ -753,6 +950,19 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'with unknown named constructor' => [
+            [
+                DummyWithDefaultConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'unknown' => [],
+                        ],
+                    ],
+                ],
+            ],
+            null,
         ];
 
         yield 'with private constructor – throw exception' => [
@@ -1720,6 +1930,28 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                     'dummy_bob' => StdClassFactory::create([
                         'val' => 'bob',
                     ]),
+                ],
+            ],
+        ];
+
+        yield '[current] in constructor' => [
+            [
+                DummyWithConstructorParam::class => [
+                    'dummy{1..2}' => [
+                        '__construct' => ['<current()>'],
+                    ],
+                    'dummy_{alice, bob}' => [
+                        '__construct' => ['<current()>'],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy1' => new DummyWithConstructorParam(1),
+                    'dummy2' => new DummyWithConstructorParam(2),
+                    'dummy_alice' => new DummyWithConstructorParam('alice'),
+                    'dummy_bob' => new DummyWithConstructorParam('bob'),
                 ],
             ],
         ];

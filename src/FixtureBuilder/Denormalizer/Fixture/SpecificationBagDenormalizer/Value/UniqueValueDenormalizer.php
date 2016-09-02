@@ -50,11 +50,11 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
             return $value;
         }
 
-        $uniqueId = uniqid($scope->getId());
+        $uniqueId = sprintf('%s#%s', $scope->getClassName(), $flags->getKey());
         if ($value instanceof DynamicArrayValue) {
             return new DynamicArrayValue(
                 $value->getQuantifier(),
-                new UniqueValue($uniqueId, $value->getValue())
+                new UniqueValue($uniqueId, $value->getElement())
             );
         }
 

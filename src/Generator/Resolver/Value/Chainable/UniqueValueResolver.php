@@ -43,7 +43,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
      */
     private $limit;
 
-    public function __construct(UniqueValuesPool $pool, ValueResolverInterface $resolver = null, int $limit = 5)
+    public function __construct(UniqueValuesPool $pool, ValueResolverInterface $resolver = null, int $limit = 150)
     {
         $this->pool = $pool;
         $this->resolver = $resolver;

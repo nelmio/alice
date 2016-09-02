@@ -13,9 +13,11 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Exception\RootParseException;
@@ -68,6 +70,7 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReturnsUniqueValueIfUniqueFlagsFound($value, bool $parserCalled)
     {
+        $fixture = new SimpleFixture('dummy_id', 'Dummy', SpecificationBagFactory::create());
         $expected = $parserCalled ? 'parsed_value' : $value;
 
         $flags = (new FlagBag(''))->withFlag(new UniqueFlag());
@@ -78,7 +81,7 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
         $parser = $parserProphecy->reveal();
 
         $denormalizer = new UniqueValueDenormalizer($parser);
-        $actual = $denormalizer->denormalize(new DummyFixture('dummy_id'), $flags, $value);
+        $actual = $denormalizer->denormalize($fixture, $flags, $value);
 
         $this->assertInstanceOf(UniqueValue::class, $actual);
         /** @var UniqueValue $actual */
@@ -90,6 +93,7 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
 
     public function testIfParsedValueIsDynamicArrayUniqueFlagAppliesToItsElementInstead()
     {
+        $fixture = new SimpleFixture('dummy_id', 'Dummy', SpecificationBagFactory::create());
         $value = 'string value';
         $parsedValue = new DynamicArrayValue(10, 'parsed_value');
         $flags = (new FlagBag(''))->withFlag(new UniqueFlag());
@@ -100,14 +104,14 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
         $parser = $parserProphecy->reveal();
 
         $denormalizer = new UniqueValueDenormalizer($parser);
-        $actual = $denormalizer->denormalize(new DummyFixture('dummy_id'), $flags, $value);
+        $result = $denormalizer->denormalize($fixture, $flags, $value);
 
-        $this->assertInstanceOf(DynamicArrayValue::class, $actual);
-        /** @var DynamicArrayValue $actual */
-        $this->assertEquals(10, $actual->getQuantifier());
-        $this->assertInstanceOf(UniqueValue::class, $actual->getElement());
-        $this->stringContains('dummy_id', $actual->getElement()->getId());
-        $this->stringContains('parsed_value', $actual->getElement()->getValue());
+        $this->assertInstanceOf(DynamicArrayValue::class, $result);
+        /** @var DynamicArrayValue $result */
+        $this->assertEquals(10, $result->getQuantifier());
+        $this->assertInstanceOf(UniqueValue::class, $result->getElement());
+        $this->stringContains('dummy_id', $result->getElement()->getId());
+        $this->assertEquals('parsed_value', $result->getElement()->getValue());
     }
 
     public function testWhenParserThrowsExceptionDenormalizerAExceptionIsThrown()
