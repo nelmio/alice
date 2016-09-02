@@ -1006,6 +1006,15 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             'foo @user0->@user1->getUsername() bar',
             null,
         ];
+        yield '[Reference] current' => [
+            'foo @user0<current()> bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('<current()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
 
         // Variables
         yield '[Variable] empty variable' => [

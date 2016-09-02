@@ -22,6 +22,7 @@ use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\Definition\Value\ListValue;
+use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\Loader\NativeLoader;
@@ -1074,22 +1075,22 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             ]),
         ];
         yield '[Reference] reference function' => [
-            '@user0<current()>',
+            '@user0<foo()>',
             new FixtureReferenceValue(
                 new ListValue([
                     'user0',
-                    new FunctionCallValue('current')
+                    new FunctionCallValue('foo')
                 ])
             ),
         ];
         yield '[Reference] surrounded reference function' => [
-            'foo @user0<current()> bar',
+            'foo @user0<foo()> bar',
             new ListValue([
                 'foo ',
                 new FixtureReferenceValue(
                     new ListValue([
                         'user0',
-                        new FunctionCallValue('current')
+                        new FunctionCallValue('foo')
                     ])
                 ),
                 ' bar',
@@ -1144,6 +1145,19 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Reference] function nested with function surrounded' => [
             'foo @user0->@user1->getUsername() bar',
             null,
+        ];
+        yield '[Reference] current' => [
+            'foo @user0<current()> bar',
+            new ListValue([
+                'foo ',
+                new FixtureReferenceValue(
+                    new ListValue([
+                        'user0',
+                        new FunctionCallValue('current', [new ValueForCurrentValue()])
+                    ])
+                ),
+                ' bar',
+            ]),
         ];
 
         // Variables
