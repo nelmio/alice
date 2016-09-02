@@ -13,6 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
@@ -186,17 +187,26 @@ class FunctionTokenParserTest extends \PHPUnit_Framework_TestCase
     {
         $token = new Token('<identity( arg0 , arg1 )>', new TokenType(TokenType::FUNCTION_TYPE));
 
-        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /** @var ParserInterface $decoratedParser */
-        $decoratedParser = $decoratedParserProphecy->reveal();
-
         $expected = new FunctionCallValue('identity', [new EvaluatedValue(' arg0 , arg1 ')]);
 
-        $parser = new FunctionTokenParser($decoratedParser);
+        $parser = new FunctionTokenParser(new FakeParser());
         $actual = $parser->parse($token);
 
         $this->assertEquals($expected, $actual);
         $this->assertInstanceOf(EvaluatedValue::class, $actual->getArguments()[0]);
+    }
+
+    public function testCanParseArgumentsForCurrentValue()
+    {
+        // Arguments should be discarded
+        $token = new Token('<current( arg0 , arg1 )>', new TokenType(TokenType::FUNCTION_TYPE));
+
+        $expected = new FunctionCallValue('current', [new ValueForCurrentValue()]);
+
+        $parser = new FunctionTokenParser(new FakeParser());
+        $actual = $parser->parse($token);
+
+        $this->assertEquals($expected, $actual);
+        $this->assertInstanceOf(ValueForCurrentValue::class, $actual->getArguments()[0]);
     }
 }
