@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -1958,6 +1958,166 @@ abstract class AbstractLoaderIntegrationTestCase extends \PHPUnit_Framework_Test
                     'dummy_alice' => new DummyWithConstructorParam('alice'),
                     'dummy_bob' => new DummyWithConstructorParam('bob'),
                 ],
+            ],
+        ];
+
+        //TODO: make this pass
+//        yield 'at literal is not resolved' => [
+//            [
+//                \stdClass::class => [
+//                    'dummy' => [
+//                        'atValues' => [
+//                            '\\@<("hello")>',
+//                            '\\\\@foo',
+//                            '\\\\\\@foo',
+//                            '\\foo',
+//                            '\\\\foo',
+//                            '\\\\\\foo',
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            [
+//                'parameters' => [],
+//                'objects' => [
+//                    'dummy' => StdClassFactory::create([
+//                        'atValues' => [
+//                            '@hello',
+//                            '\\@foo',
+//                            '\\\\@foo',
+//                            '\\foo',
+//                            '\\\\foo',
+//                            '\\\\\\foo',
+//                        ]
+//                    ]),
+//                ],
+//            ],
+//        ];
+
+        yield '[parameter] simple' => [
+            [
+                'parameters' => [
+                    'foo' => 'bar',
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<{foo}>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'foo' => 'bar',
+                ],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[parameter] array parameter' => [
+            [
+                'parameters' => [
+                    'foo' => ['bar'],
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<randomElement(<{foo}>)>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'foo' => ['bar'],
+                ],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[parameter] composite parameter' => [
+            [
+                'parameters' => [
+                    'foo' => 'NaN',
+                    'bar' => 'Bat',
+                    'composite' => '<{foo}> <{bar}>!',
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<{foo}> <{bar}>!',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '<{composite}>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'foo' => 'NaN',
+                    'bar' => 'Bat',
+                    'composite' => 'NaN Bat!',
+                ],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'NaN Bat!',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'NaN Bat!',
+                    ]),
+                ],
+            ],
+        ];
+
+        //TODO; see LoaderTest::testDynamicParametersLoading in v2
+//        yield '[parameter] dynamic parameter' => [
+//            [
+//                'parameters' => [
+//                    'username_alice' => 'Alice',
+//                    'username_bob' => 'Bob',
+//                ],
+//                \stdClass::class => [
+//                    'user_{alice, bob}' => [
+//                        'username' => '<{username_<current()>}>',
+//                    ],
+//                ],
+//            ],
+//            [
+//                'parameters' => [
+//                    'username_alice' => 'Alice',
+//                    'username_bob' => 'Bob',
+//                ],
+//                'objects' => [
+//                    'user_alice' => StdClassFactory::create([
+//                        'username' => 'Alice',
+//                    ]),
+//                    'another_dummy' => StdClassFactory::create([
+//                        'username' => 'Bob',
+//                    ]),
+//                ],
+//            ],
+//        ];
+
+        yield '[parameter] nested parameter' => [
+            [
+                'parameters' => [
+                    'param1' => 2,
+                    'param2' => 1,
+                    'param3' => '<{param<{param2}>}>',
+                ],
+                'objects' => [],
+            ],
+            [
+                'parameters' => [
+                    'param1' => 2,
+                    'param2' => 1,
+                    'param3' => '2',
+                ],
+                'objects' => [],
             ],
         ];
     }
