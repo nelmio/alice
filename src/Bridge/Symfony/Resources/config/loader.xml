@@ -26,7 +26,7 @@
                  alias="nelmio_alice.file_loader.simple" />
 
         <service id="nelmio_alice.file_loader.simple"
-                 class="Nelmio\Alice\Loader\SimpleDataLoader">
+                 class="Nelmio\Alice\Loader\SimpleFileLoader">
             <argument type="service" id="nelmio_alice.file_parser" />
             <argument type="service" id="nelmio_alice.data_loader" />
         </service>

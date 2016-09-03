@@ -47,7 +47,7 @@ class IsolatedSymfonyLoader implements FileLoaderInterface, DataLoaderInterface
      */
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
-        return $this->load('nelmio_alice.file_loader', 'loadData', [$file, $parameters, $objects]);
+        return $this->load('nelmio_alice.file_loader', 'loadFile', [$file, $parameters, $objects]);
     }
 
     private function load(string $loaderId, string $method, array $arguments): ObjectSet

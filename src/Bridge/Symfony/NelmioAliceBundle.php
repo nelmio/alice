@@ -74,7 +74,7 @@ final class NelmioAliceBundle extends Bundle
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.generator.resolver.value.registry',
-                'nelmio_alice.generator.resolver.parameter.chainable_resolver'
+                'nelmio_alice.generator.resolver.value.chainable_resolver'
             )
         );
     }
