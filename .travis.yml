@@ -27,7 +27,10 @@ matrix:
 
 install:
   - set -eo pipefail
-  - phpenv config-rm xdebug.ini
+  - |
+    if [ "nightly" != "$TRAVIS_PHP_VERSION" ]; then
+        phpenv config-rm xdebug.ini
+    fi
   - PHPUNIT_CONFIG='phpunit.xml.dist'
   - PHPUNIT_FLAGS='--stop-on-failure --verbose'
   - composer install --prefer-dist $COMPOSER_FLAGS
@@ -53,7 +56,7 @@ script:
         else
             vendor/bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure --exclude-group=symfony
         fi
-    fi;
+    fi
 
 notifications:
     email: false
