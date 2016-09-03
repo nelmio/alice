@@ -10,10 +10,6 @@ php:
   - '7.0'
   - nightly
 
-env:
-  - PHPUNIT_CONFIG='phpunit.xml.dist'
-  - PHPUNIT_FLAGS='--stop-on-failure --verbose'
-
 matrix:
   fast_finish: true
   include:
@@ -32,6 +28,8 @@ matrix:
 install:
   - set -eo pipefail
   - phpenv config-rm xdebug.ini
+  - PHPUNIT_CONFIG='phpunit.xml.dist'
+  - PHPUNIT_FLAGS='--stop-on-failure --verbose'
   - composer install --prefer-dist $COMPOSER_FLAGS
   - |
     if [ -n "$SYMFONY_VERSION" ]; then
