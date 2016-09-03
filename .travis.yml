@@ -34,9 +34,10 @@ install:
   - composer install --prefer-dist $COMPOSER_FLAGS
   - |
     if [ -n "$SYMFONY_VERSION" ]; then
-        composer bin symfony require symfony/symfony "symfony/symfony:${SYMFONY_VERSION}"
+        composer bin symfony require --no-update symfony/symfony "symfony/symfony:${SYMFONY_VERSION}"
         PHPUNIT_CONFIG='phpunit_symfony.xml.dist'
     fi
+  - composer bin all installg
 
 script:
   - |
