@@ -3,7 +3,15 @@
 This guide is for those who wants to have a better understand on the library internals and how to get started if you
 want to contribute.
 
-### Differences between 2.x and 3.x
+1. [Differences between 2.x and 3.x](#differences-between-2x-and-3x)
+1. [Architecture](#architecture)
+    1. [FixtureBuilder](#fixturebuilder)
+    1. [Generator](#generator)
+1. [Expression Language](#expression-language)
+1. [Contributing](#contributing)
+
+
+## Differences between 2.x and 3.x
 
 Main differences between 2.x and 3.x:
 
@@ -12,7 +20,7 @@ Main differences between 2.x and 3.x:
 - Change in the architecture to address some limitations found in 2.x
 
 
-### Architecture
+## Architecture
 
 The two entry points of the library are the `DataLoader` and `FileLoader`:
 
@@ -29,7 +37,7 @@ In `DataLoader`, you can start to see the two second biggest components:
 - `Generator`: responsible to generate the objects and resolve the parameters described in `FixtureSet` to generate an `ObjectSet`
 
 
-#### FixtureBuilder
+### FixtureBuilder
 
 `FixtureBuilder` is composed of two components: `Denormalizer` and `ExpressionLanguage`. The first one is in charged of
 transforming the input data array with the injected values in a collection of `Fixture` which describes an object to
@@ -42,7 +50,7 @@ The result `FixtureSet` is always invariant: reloading the same set of data will
 is cacheable.
 
 
-#### Generator
+### Generator
 
 The `Generator` is responsible to transform a `FixtureSet` which is composed of `Fixture`, parameters, injected objects
 injected parameters into an `ObjectSet` which is a collection of PHP objects and parameters. Because some data are
@@ -81,7 +89,7 @@ To see more about the fixture lifecycle, please check [#388](https://github.com/
 
 To have more detail regarding a class, the easiest way is to check the code itself and the tests."
 
-#### Expression Language
+## Expression Language
 
 As already mentionned, alice ship with an Expression Language, responsible to interpret values such as `@user*` or
 `<curent()>`. The complete list of supported features can be found in [ParserIntegrationTest](tests/FixtureBuilder/ExpressionLanguage/Parser/ParserIntegrationTest.php)
