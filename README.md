@@ -40,6 +40,9 @@ to edit way, so that everyone on your team can tweak the fixtures if needed.
   1. [Custom Faker Data Providers](doc/customizing-data-generation.md#custom-faker-data-providers)
 1. [Event handling with Processors](doc/processors.md)
 1. [Third-party libraries](#third-party-libraries)
+1. [Contribute](#contribute)
+1. [Upgrade](#upgrade)
+1. [License](#license)
 
 Other references:
   - [Tutorial: Using Alice in Symfony](https://knpuniversity.com/screencast/symfony-doctrine/fixtures-alice)
@@ -94,6 +97,16 @@ For more information, refer to [the documentation](#table-of-contents).
   * [ma-si/aist-alice-fixtures](https://github.com/ma-si/aist-alice-fixtures)
 * Framework Agnostic
   * [trappar/AliceGenerator](https://github.com/trappar/AliceGenerator)
+
+
+## Contribute
+
+Check the [contribution guide](CONTRIBUTING.md).
+
+
+## Upgrade
+
+Check the [upgrade guide](UPGRADE.md).
 
 
 ## License
