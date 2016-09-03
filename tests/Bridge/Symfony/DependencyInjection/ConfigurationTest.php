@@ -11,13 +11,13 @@
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
-use Nelmio\Alice\Bridge\Symfony\Application\AppKernel;
-use Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration;
 use Nelmio\Alice\Symfony\KernelFactory;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
- * @coversNothing
+ * @covers Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
+ * @group integration
+ * @group symfony
  */
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
