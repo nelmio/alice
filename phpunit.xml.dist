@@ -46,6 +46,12 @@
         </testsuite>
     </testsuites>
 
+    <groups>
+        <exclude>
+            <group>symfony</group>
+        </exclude>
+    </groups>
+
     <filter>
         <whitelist>
             <directory>src</directory>
