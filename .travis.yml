@@ -48,7 +48,11 @@ script:
             phpdbg -qrr vendor/bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=integration,symfony
         fi
     else
-        vendor/bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure
+        if [ -n "$SYMFONY_VERSION" ]; then
+            vendor/bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure
+        else
+            vendor/bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure --exclude-group=symfony
+        fi
     fi;
 
 notifications:
