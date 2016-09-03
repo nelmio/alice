@@ -1,6 +1,7 @@
 {
     "require": {
         "phpunit/phpunit": "^5.5",
-        "symfony/phpunit-bridge": "^3.1"
+        "symfony/phpunit-bridge": "^3.1",
+        "brianium/paratest": "^0.14.0"
     }
 }

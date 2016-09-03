@@ -46,13 +46,13 @@ script:
     if [ -n "$COVERAGE" ]; then
         phpdbg -qrr vendor/bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration,symfony
         if [ -n "$SYMFONY_VERSION" ]; then
-            phpdbg -qrr vendor/bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=integration
+            phpdbg -qrr vendor/bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=symfony
         else
             phpdbg -qrr vendor/bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=integration --exclude-group=symfony
         fi
     else
         if [ -n "$SYMFONY_VERSION" ]; then
-            vendor/bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure
+            vendor/bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure --group=symfony
         else
             vendor/bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure --exclude-group=symfony
         fi
