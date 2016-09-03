@@ -30,6 +30,7 @@ matrix:
     - env: SYMFONY_VERSION='^3.2@dev'
 
 install:
+  - set -eo pipefail
   - phpenv config-rm xdebug.ini
   - composer install --prefer-dist $COMPOSER_FLAGS
   - |
@@ -37,7 +38,7 @@ install:
         composer bin symfony require --no-update symfony/symfony "symfony/symfony:${SYMFONY_VERSION}"
         PHPUNIT_CONFIG='phpunit_symfony.xml.dist'
     fi
-  - composer bin all installg
+  - composer bin all install
 
 script:
   - |
