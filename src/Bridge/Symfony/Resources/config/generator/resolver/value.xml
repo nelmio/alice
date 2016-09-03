@@ -33,26 +33,26 @@
             <argument>null</argument>
             <argument>%nelmio_alice.loading_limit%</argument>
 
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.evaluated_value_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver">
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.faker_value_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver">
             <argument type="service" id="nelmio_alice.faker.generator" />
 
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.fixture_property_reference_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver">
             <argument type="service" id="nelmio_alice.generator.resolver.value.property_accessor" />
 
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.fixture_reference_resolver"
@@ -65,22 +65,24 @@
 
         <service id="nelmio_alice.generator.resolver.value.chainable.unresolved_fixture_reference_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceResolver">
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <argument type="service" id="nelmio_alice.generator.resolver.value.chainable.self_fixture_reference_resolver" />
+
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.fixture_wildcard_reference_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver">
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.list_value_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver">
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.optional_value_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver">
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.unique_value_resolver"
@@ -89,17 +91,17 @@
             <argument>null</argument>
             <argument>%nelmio_alice.max_unique_values_retries%</argument>
 
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.value_for_current_value_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\ValueForCurrentValueResolver">
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.variable_value_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver">
-            <tag name="nelmio_alice.generator.resolver.parameter.chainable_resolver" />
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
     </services>

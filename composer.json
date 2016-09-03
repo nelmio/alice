@@ -22,14 +22,14 @@
         "php": "^7.0",
         "fzaninotto/faker": "^1.0",
         "symfony/yaml": "^2.0||^3.0",
+        "symfony/property-access": "^2.2||^3.0",
         "myclabs/deep-copy": "^1.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.2",
-        "symfony/phpunit-bridge": "^3.0",
-        "symfony/property-access": "^2.2||^3.0",
-        "symfony/framework-bundle": "^3.1",
-        "symfony/symfony": "^3.1"
+        "bamarni/composer-bin-plugin": "^0.0.1"
+    },
+    "scripts": {
+        "post-install-cmd": ["@composer bin all install --ansi"]
     },
     "autoload": {
         "files": [
@@ -51,5 +51,9 @@
         "branch-alias": {
             "dev-master": "3.0.x-dev"
         }
+    },
+    "config": {
+        "bin-dir": "bin",
+        "sort-packages": true
     }
 }

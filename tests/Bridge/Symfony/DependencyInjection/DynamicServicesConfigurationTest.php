@@ -21,6 +21,9 @@ use Nelmio\Alice\Symfony\KernelFactory;
 
 /**
  * @coversNothing
+ *
+ * @group integration
+ * @group symfony
  */
 class DynamicServicesConfigurationTest extends \PHPUnit_Framework_TestCase
 {

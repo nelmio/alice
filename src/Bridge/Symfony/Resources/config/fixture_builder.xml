@@ -28,7 +28,7 @@
                  alias="nelmio_alice.fixture_builder.denormalizer.simple" />
 
         <service id="nelmio_alice.fixture_builder.denormalizer.simple"
-                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer">
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer">
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.parameter_bag" />
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture_bag" />
         </service>

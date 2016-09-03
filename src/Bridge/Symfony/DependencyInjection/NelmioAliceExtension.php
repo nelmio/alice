@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 final class NelmioAliceExtension extends Extension
 {
-    const SERVICES_DIR = __DIR__.'/../Resources/config/services';
+    const SERVICES_DIR = __DIR__.'/../Resources/config';
 
     /**
      * @inheritdoc

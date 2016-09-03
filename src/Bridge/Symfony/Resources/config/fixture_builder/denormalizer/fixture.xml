@@ -45,12 +45,21 @@
 
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.simple"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer">
-            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.flag_parser" />
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.specs" />
+
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer" />
+        </service>
+
+
+        <!-- Specification Denormalizer -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.specs"
+                 alias="nelmio_alice.fixture_builder.denormalizer.specs.simple" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.specs.simple"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer">
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor" />
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.property" />
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls" />
-
-            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer" />
         </service>
 
 
