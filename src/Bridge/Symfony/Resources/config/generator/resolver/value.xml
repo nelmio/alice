@@ -85,6 +85,11 @@
             <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
+        <service id="nelmio_alice.generator.resolver.value.chainable.parameter_value_resolver"
+                 class="Nelmio\Alice\Generator\Resolver\Value\Chainable\ParameterValueResolver">
+            <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
+        </service>
+
         <service id="nelmio_alice.generator.resolver.value.chainable.unique_value_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver">
             <argument type="service" id="nelmio_alice.generator.resolver.value.unique_values_pool" />

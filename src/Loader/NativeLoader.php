@@ -100,6 +100,7 @@ use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\ParameterValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\SelfFixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceResolver;
@@ -434,6 +435,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new FixtureWildcardReferenceResolver(),
             new ListValueResolver(),
             new OptionalValueResolver(),
+            new ParameterValueResolver(),
             new UniqueValueResolver(
                 new UniqueValuesPool()
             ),

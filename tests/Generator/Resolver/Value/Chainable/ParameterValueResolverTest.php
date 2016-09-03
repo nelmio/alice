@@ -8,25 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
-use Nelmio\Alice\Definition\Value\VariableValue;
+use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver
+ * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\ParameterValueResolver
  */
-class VariableValueResolverTest extends \PHPUnit_Framework_TestCase
+class ParameterValueResolverTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAChainableResolver()
     {
-        $this->assertTrue(is_a(VariableValueResolver::class, ChainableValueResolverInterface::class, true));
+        $this->assertTrue(is_a(ParameterValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     /**
@@ -34,43 +33,42 @@ class VariableValueResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new VariableValueResolver();
+        clone new ParameterValueResolver();
     }
 
     public function testCanResolveVariableValues()
     {
-        $resolver = new VariableValueResolver();
+        $resolver = new ParameterValueResolver();
 
-        $this->assertTrue($resolver->canResolve(new VariableValue('')));
+        $this->assertTrue($resolver->canResolve(new ParameterValue('')));
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testGetsTheVariableFromTheScope()
+    public function testReturnsParameterFromTheFixtureSet()
     {
-        $value = new VariableValue('ping');
+        $value = new ParameterValue('foo');
         $set = ResolvedFixtureSetFactory::create(
             new ParameterBag(['foo' => 'bar'])
         );
-        $scope = ['ping' => 'pong'];
 
-        $expected = new ResolvedValueWithFixtureSet('pong', $set);
+        $expected = new ResolvedValueWithFixtureSet('bar', $set);
 
-        $resolver = new VariableValueResolver();
-        $actual = $resolver->resolve($value, new FakeFixture(), $set, $scope);
+        $resolver = new ParameterValueResolver();
+        $actual = $resolver->resolve($value, new FakeFixture(), $set);
 
         $this->assertEquals($expected, $actual);
     }
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not find a variable "foo".
+     * @expectedExceptionMessage Could not find the parameter "foo".
      */
     public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope()
     {
-        $value = new VariableValue('foo');
+        $value = new ParameterValue('foo');
         $set = ResolvedFixtureSetFactory::create();
 
-        $resolver = new VariableValueResolver();
+        $resolver = new ParameterValueResolver();
         $resolver->resolve($value, new FakeFixture(), $set);
     }
 }
