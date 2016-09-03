@@ -43,14 +43,14 @@ install:
 script:
   - |
     if [ -n "$COVERAGE" ]; then
-        phpdbg -qrr vendor/bin/phpunit -c PHPUNIT_CONFIG PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration,symfony
+        phpdbg -qrr vendor/bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration,symfony
         if [ -n "$SYMFONY_VERSION" ]; then
-            phpdbg -qrr vendor/bin/phpunit -c PHPUNIT_CONFIG PHPUNIT_FLAGS --coverage-text --group=integration
+            phpdbg -qrr vendor/bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=integration
         else
-            phpdbg -qrr vendor/bin/phpunit -c PHPUNIT_CONFIG PHPUNIT_FLAGS --coverage-text --group=integration,symfony
+            phpdbg -qrr vendor/bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=integration,symfony
         fi
     else
-        vendor/bin/phpunit -c PHPUNIT_CONFIG --stop-on-failure
+        vendor/bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure
     fi;
 
 notifications:
