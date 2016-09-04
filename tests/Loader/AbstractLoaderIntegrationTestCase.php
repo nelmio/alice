@@ -2158,6 +2158,24 @@ abstract class AbstractLoaderIntegrationTestCase extends \PHPUnit_Framework_Test
                 'objects' => [],
             ],
         ];
+
+        yield 'dynamic array with scalar value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '5x bar',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => ['bar', 'bar', 'bar', 'bar', 'bar']
+                    ]),
+                ],
+            ],
+        ];
     }
 
     //TODO: test with circular reference
