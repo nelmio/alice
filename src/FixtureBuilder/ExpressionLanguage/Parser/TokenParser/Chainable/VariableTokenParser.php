@@ -29,7 +29,7 @@ final class VariableTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::VARIABLE_TYPE;
+        return $token->getType() === TokenType::VARIABLE_TYPE;
     }
 
     /**

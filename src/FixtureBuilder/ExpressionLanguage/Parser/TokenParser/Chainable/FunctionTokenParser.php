@@ -29,7 +29,7 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::FUNCTION_TYPE;
+        return $token->getType() === TokenType::FUNCTION_TYPE;
     }
 
     /**

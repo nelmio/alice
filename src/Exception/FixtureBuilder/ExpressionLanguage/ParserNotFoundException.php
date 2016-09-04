@@ -24,7 +24,7 @@ class ParserNotFoundException extends \LogicException
             sprintf(
                 'No suitable token parser found to handle the token "%s" (type: %s).',
                 $token->getValue(),
-                $token->getType()->getValue()
+                $token->getType()
             ),
             $code,
             $previous

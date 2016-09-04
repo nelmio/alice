@@ -24,7 +24,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $token = new Token($value, $type);
 
         $this->assertEquals($value, $token->getValue());
-        $this->assertEquals($type, $token->getType());
+        $this->assertEquals($type->getValue(), $token->getType());
         $this->assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
     }
 
@@ -46,10 +46,10 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $newToken = $token->withValue($newValue);
 
         $this->assertEquals($value, $token->getValue());
-        $this->assertEquals($type, $token->getType());
+        $this->assertEquals($type->getValue(), $token->getType());
 
         $this->assertInstanceOf(Token::class, $newToken);
         $this->assertEquals($newValue, $newToken->getValue());
-        $this->assertEquals($type, $newToken->getType());
+        $this->assertEquals($type->getValue(), $newToken->getType());
     }
 }

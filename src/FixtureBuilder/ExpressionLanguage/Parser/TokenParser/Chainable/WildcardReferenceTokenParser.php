@@ -27,7 +27,7 @@ final class WildcardReferenceTokenParser implements ChainableTokenParserInterfac
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::WILDCARD_REFERENCE_TYPE;
+        return $token->getType() === TokenType::WILDCARD_REFERENCE_TYPE;
     }
 
     /**

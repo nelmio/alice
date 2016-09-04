@@ -29,7 +29,7 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::SIMPLE_REFERENCE_TYPE;
+        return $token->getType() === TokenType::SIMPLE_REFERENCE_TYPE;
     }
 
     /**

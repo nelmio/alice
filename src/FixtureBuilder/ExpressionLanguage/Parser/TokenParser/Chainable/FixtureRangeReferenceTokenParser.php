@@ -43,7 +43,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::RANGE_REFERENCE_TYPE;
+        return $token->getType() === TokenType::RANGE_REFERENCE_TYPE;
     }
 
     /**

@@ -42,7 +42,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::LIST_REFERENCE_TYPE;
+        return $token->getType() === TokenType::LIST_REFERENCE_TYPE;
     }
 
     /**

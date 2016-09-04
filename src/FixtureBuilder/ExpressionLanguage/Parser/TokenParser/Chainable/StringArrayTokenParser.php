@@ -25,7 +25,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::STRING_ARRAY_TYPE;
+        return $token->getType() === TokenType::STRING_ARRAY_TYPE;
     }
 
     /**

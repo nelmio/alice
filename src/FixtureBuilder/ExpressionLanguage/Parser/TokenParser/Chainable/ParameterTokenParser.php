@@ -29,7 +29,7 @@ final class ParameterTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::PARAMETER_TYPE;
+        return $token->getType() === TokenType::PARAMETER_TYPE;
     }
 
     /**
