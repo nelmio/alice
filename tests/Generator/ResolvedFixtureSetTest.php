@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator;
 
+use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
@@ -31,5 +32,50 @@ class ResolvedFixtureSetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($parameters, $set->getParameters());
         $this->assertEquals($fixtures, $set->getFixtures());
         $this->assertEquals($objects, $set->getObjects());
+    }
+
+    public function testWithersReturnANewModifiedInstance()
+    {
+        $parameters = new ParameterBag();
+        $fixtures = new FixtureBag();
+        $objects = new ObjectBag();
+
+        $set = new ResolvedFixtureSet($parameters, $fixtures, $objects);
+
+        $newParameters = new ParameterBag(['foo' => 'bar']);
+        $newSet = $set->withParameters($newParameters);
+
+        $this->assertEquals(
+            new ResolvedFixtureSet($parameters, $fixtures, $objects),
+            $set
+        );
+        $this->assertEquals(
+            new ResolvedFixtureSet($newParameters, $fixtures, $objects),
+            $newSet
+        );
+
+        $newFixtures = new FixtureBag(['foo' => new DummyFixture('foo')]);
+        $newSet = $set->withFixtures($newFixtures);
+
+        $this->assertEquals(
+            new ResolvedFixtureSet($parameters, $fixtures, $objects),
+            $set
+        );
+        $this->assertEquals(
+            new ResolvedFixtureSet($parameters, $newFixtures, $objects),
+            $newSet
+        );
+
+        $newObjects = new ObjectBag(['foo' => new \stdClass()]);
+        $newSet = $set->withObjects($newObjects);
+
+        $this->assertEquals(
+            new ResolvedFixtureSet($parameters, $fixtures, $objects),
+            $set
+        );
+        $this->assertEquals(
+            new ResolvedFixtureSet($parameters, $fixtures, $newObjects),
+            $newSet
+        );
     }
 }

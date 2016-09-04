@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
+use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
@@ -248,42 +249,22 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
 
         yield '[Function] nominal identity' => [
             '<(function())>',
-            new FunctionCallValue(
-                'identity',
-                [
-                    new EvaluatedValue('function()'),
-                ]
-            ),
+            IdentityFactory::create('function()'),
         ];
         yield '[Function] identity with args' => [
             '<(function(echo("hello")))>',
-            new FunctionCallValue(
-                'identity',
-                [
-                    new EvaluatedValue('function(echo("hello"))'),
-                ]
-            ),
+            IdentityFactory::create('function(echo("hello"))'),
         ];
         yield '[Function] identity with params' => [
             '<(function(echo(<{param}>))>',
-            new FunctionCallValue(
-                'identity',
-                [
-                    new EvaluatedValue('function(echo(<{param}>)'),
-                ]
-            ),
+            IdentityFactory::create('function(echo(<{param}>)'),
         ];
         yield '[X] parameter, function, identity and escaped' => [
             '<{param}><function()><(echo("hello"))><<escaped_value>>',
             new ListValue([
                 new ParameterValue('param'),
                 new FunctionCallValue('function'),
-                new FunctionCallValue(
-                    'identity',
-                    [
-                        new EvaluatedValue('echo("hello")'),
-                    ]
-                ),
+                IdentityFactory::create('echo("hello")'),
                 '<escaped_value>',
             ]),
         ];
@@ -421,43 +402,22 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
 
         yield '[Function] nominal identity with arguments' => [
             '<(function($foo, $arg))>',
-            new FunctionCallValue(
-                'identity',
-                [
-                    new EvaluatedValue('function($foo, $arg)'),
-                ]
-            ),
+            IdentityFactory::create('function($foo, $arg)'),
         ];
         yield '[Function] identity with args' => [
             '<(function(echo("hello")))>',
-            new FunctionCallValue(
-                'identity',
-                [
-                    new EvaluatedValue('function(echo("hello"))'),
-                ]
-            ),
+            IdentityFactory::create('function(echo("hello"))'),
         ];
         yield '[Function] identity with params' => [
             '<(function(echo(<{param}>))>',
-            new FunctionCallValue(
-                'identity',
-                [
-                    new EvaluatedValue('function(echo(<{param}>)'),
-                ]
-            ),
+            IdentityFactory::create('function(echo(<{param}>)'),
         ];
         yield '[X] parameter, function, identity and escaped' => [
             '<{param}><function()><(echo("hello"))><<escaped_value>>',
             new ListValue([
                 new ParameterValue('param'),
                 new FunctionCallValue('function'),
-                //TODO: refactor identity call by making a factory...
-                new FunctionCallValue(
-                    'identity',
-                    [
-                        new EvaluatedValue('echo("hello")'),
-                    ]
-                ),
+                IdentityFactory::create('echo("hello")'),
                 '<escaped_value>',
             ]),
         ];

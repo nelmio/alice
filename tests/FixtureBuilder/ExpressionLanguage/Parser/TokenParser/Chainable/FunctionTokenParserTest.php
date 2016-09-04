@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
@@ -187,7 +188,7 @@ class FunctionTokenParserTest extends \PHPUnit_Framework_TestCase
     {
         $token = new Token('<identity( arg0 , arg1 )>', new TokenType(TokenType::FUNCTION_TYPE));
 
-        $expected = new FunctionCallValue('identity', [new EvaluatedValue(' arg0 , arg1 ')]);
+        $expected = IdentityFactory::create(' arg0 , arg1 ');
 
         $parser = new FunctionTokenParser(new FakeParser());
         $actual = $parser->parse($token);

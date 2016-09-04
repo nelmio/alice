@@ -45,11 +45,7 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
             )
         );
 
-        return new ResolvedFixtureSet(
-            $fixtureSet->getParameters(),
-            $fixtureSet->getFixtures(),
-            $objects
-        );
+        return $fixtureSet->withObjects($objects);;
     }
 
     /**

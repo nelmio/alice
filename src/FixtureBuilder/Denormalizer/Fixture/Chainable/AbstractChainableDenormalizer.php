@@ -53,7 +53,7 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
     /**
      * @inheritdoc
      */
-    public final function withFlagParser(FlagParserInterface $parser): self
+    final public function withFlagParser(FlagParserInterface $parser): self
     {
         return new static($this->denormalizer, $parser);
     }
@@ -61,7 +61,7 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
     /**
      * @inheritdoc
      */
-    public final function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
+    final public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
     {
         return new static($denormalizer, $this->parser);
     }
@@ -69,7 +69,7 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
     /**
      * @inheritdoc
      */
-    public final function denormalize(
+    final public function denormalize(
         FixtureBag $builtFixtures,
         string $className,
         string $fixtureId,
@@ -164,5 +164,5 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
      *      'user_bob' => 'bob',
      *  ]
      */
-    public abstract function buildIds(string $id): array;
+    abstract public function buildIds(string $id): array;
 }
