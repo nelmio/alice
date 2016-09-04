@@ -25,7 +25,7 @@ final class StringTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::STRING_TYPE;
+        return $token->getType() === TokenType::STRING_TYPE;
     }
 
     /**

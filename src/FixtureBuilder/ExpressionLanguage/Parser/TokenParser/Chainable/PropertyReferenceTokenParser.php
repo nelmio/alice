@@ -24,7 +24,7 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::PROPERTY_REFERENCE_TYPE;
+        return $token->getType() === TokenType::PROPERTY_REFERENCE_TYPE;
     }
 
     /**

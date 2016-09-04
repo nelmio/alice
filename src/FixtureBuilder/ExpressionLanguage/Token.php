@@ -42,9 +42,9 @@ final class Token
         return $this->value;
     }
 
-    public function getType(): TokenType
+    public function getType(): string
     {
-        return $this->type;
+        return $this->type->getValue();
     }
 
     public function __toString()

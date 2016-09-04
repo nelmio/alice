@@ -26,7 +26,7 @@ final class FixtureMethodReferenceTokenParser extends AbstractChainableParserAwa
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::METHOD_REFERENCE_TYPE;
+        return $token->getType() === TokenType::METHOD_REFERENCE_TYPE;
     }
 
     /**

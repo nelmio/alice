@@ -32,7 +32,7 @@ final class EscapedTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return isset(self::SUPPORTED_TYPES[$token->getType()->getValue()]);
+        return isset(self::SUPPORTED_TYPES[$token->getType()]);
     }
 
     /**

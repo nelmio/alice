@@ -25,7 +25,7 @@ class ParseException extends \Exception implements ExpressionLanguageParseThrowa
             sprintf(
                 'Could not parse the token "%s" (type: %s).',
                 $token->getValue(),
-                $token->getType()->getValue()
+                $token->getType()
             ),
             $code,
             $previous

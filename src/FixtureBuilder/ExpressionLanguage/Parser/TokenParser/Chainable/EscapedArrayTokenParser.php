@@ -28,7 +28,7 @@ final class EscapedArrayTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::ESCAPED_ARRAY_TYPE;
+        return $token->getType() === TokenType::ESCAPED_ARRAY_TYPE;
     }
 
     /**

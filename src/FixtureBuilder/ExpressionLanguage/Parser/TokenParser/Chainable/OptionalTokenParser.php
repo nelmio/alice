@@ -27,7 +27,7 @@ final class OptionalTokenParser extends AbstractChainableParserAwareParser
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType()->getValue() === TokenType::OPTIONAL_TYPE;
+        return $token->getType() === TokenType::OPTIONAL_TYPE;
     }
 
     /**
