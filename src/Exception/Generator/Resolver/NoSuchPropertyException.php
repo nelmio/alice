@@ -16,8 +16,15 @@ use Nelmio\Alice\FixtureInterface;
 
 class NoSuchPropertyException extends UnresolvableValueException
 {
-    public static function createForFixture(FixtureInterface $fixture, FixturePropertyValue $value, int $code = 0, \Throwable $previous = null)
-    {
+    /**
+     * @return static
+     */
+    public static function createForFixture(
+        FixtureInterface $fixture,
+        FixturePropertyValue $value,
+        int $code = 0,
+        \Throwable $previous = null
+    ) {
         return new static(
             sprintf(
                 'Could not find the property "%s" of the object "%s" (class: %s).',

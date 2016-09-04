@@ -16,8 +16,15 @@ use Nelmio\Alice\ObjectInterface;
 
 class HydratorNotFoundException extends \LogicException
 {
-    public static function create(ObjectInterface $object, Property $property, int $code = 0, \Throwable $previous = null)
-    {
+    /**
+     * @return static
+     */
+    public static function create(
+        ObjectInterface $object,
+        Property $property,
+        int $code = 0,
+        \Throwable $previous = null
+    ) {
         return new static(
             sprintf(
                 'Could not find the property "%s" for the object "%s" (class: %s).',

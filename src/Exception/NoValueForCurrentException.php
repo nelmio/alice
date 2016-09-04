@@ -15,13 +15,18 @@ use Nelmio\Alice\FixtureInterface;
 
 class NoValueForCurrentException extends \RuntimeException
 {
-    public static function create(FixtureInterface $fixture)
+    /**
+     * @return static
+     */
+    public static function create(FixtureInterface $fixture, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'No value for \'<current()>\' found for the fixture "%s".',
                 $fixture->getId()
-            )
+            ),
+            $code,
+            $previous
         );
     }
 }

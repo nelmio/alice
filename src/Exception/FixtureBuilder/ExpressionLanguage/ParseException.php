@@ -16,6 +16,9 @@ use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 class ParseException extends \Exception implements ExpressionLanguageParseThrowable
 {
+    /**
+     * @return static
+     */
     public static function createForToken(Token $token, int $code = 0, \Throwable $previous = null)
     {
         return new static(

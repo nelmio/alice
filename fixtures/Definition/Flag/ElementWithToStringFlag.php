@@ -13,7 +13,6 @@ namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
 
-//TODO: remove the final keyword in fixtures and tests
 class ElementWithToStringFlag implements FlagInterface
 {
     /**

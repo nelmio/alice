@@ -35,7 +35,7 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
         } catch (InstantiationThrowable $throwable) {
             throw $throwable;
         } catch (\Throwable $throwable) {
-            throw InstantiationException::create($fixture, $throwable);
+            throw InstantiationException::create($fixture, 0, $throwable);
         }
 
         $objects = $fixtureSet->getObjects()->with(

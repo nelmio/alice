@@ -16,14 +16,17 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 class InstantiationException extends \RuntimeException implements InstantiationThrowable
 {
-    public static function create(FixtureInterface $fixture, \Throwable $previous = null)
+    /**
+     * @return static
+     */
+    public static function create(FixtureInterface $fixture, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'Could not instantiate fixture "%s".',
                 $fixture->getId()
             ),
-            0,
+            $code,
             $previous
         );
     }

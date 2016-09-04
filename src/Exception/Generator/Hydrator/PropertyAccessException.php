@@ -19,8 +19,12 @@ class PropertyAccessException extends HydrationException
     /**
      * @inheritdoc
      */
-    public static function create(ObjectInterface $object, Property $property, int $code = 0, \Throwable $previous = null)
-    {
+    public static function create(
+        ObjectInterface $object,
+        Property $property,
+        int $code = 0,
+        \Throwable $previous = null
+    ) {
         return new static(
             sprintf(
                 'Could not access to the property "%s" of the object "%s" (class: %s).',

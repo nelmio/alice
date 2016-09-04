@@ -15,13 +15,18 @@ use Nelmio\Alice\FixtureInterface;
 
 class InstantiatorNotFoundException extends \LogicException
 {
-    public static function create(FixtureInterface $fixture): self
+    /**
+     * @return static
+     */
+    public static function create(FixtureInterface $fixture, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'No suitable instantiator found for the fixture "%s".',
                 $fixture->getId()
-            )
+            ),
+            $code,
+            $previous
         );
     }
 }
