@@ -117,7 +117,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
         $objects = $fixtureSet->getObjects();
         foreach ($objects as $object) {
             /** @var ObjectInterface $object */
-            $id = $object->getReference();
+            $id = $object->getId();
             if ($value->match($id)) {
                 $ids[$id] = true;
             }

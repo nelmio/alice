@@ -42,7 +42,7 @@ class SimpleObjectTest extends \PHPUnit_Framework_TestCase
 
         $object = new SimpleObject($reference, $instance);
 
-        $this->assertEquals($reference, $object->getReference());
+        $this->assertEquals($reference, $object->getId());
         $this->assertEquals($instance, $object->getInstance());
     }
 

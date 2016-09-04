@@ -24,7 +24,7 @@ class InvalidArgumentException extends HydrationException
         return new static(
             sprintf(
                 'Invalid value given for the property "%s" of the object "%s" (class: %s).',
-                $object->getReference(),
+                $object->getId(),
                 $property->getName(),
                 get_class($object->getInstance())
             ),

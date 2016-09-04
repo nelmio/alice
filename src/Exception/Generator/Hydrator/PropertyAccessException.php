@@ -28,7 +28,7 @@ class PropertyAccessException extends HydrationException
         return new static(
             sprintf(
                 'Could not access to the property "%s" of the object "%s" (class: %s).',
-                $object->getReference(),
+                $object->getId(),
                 $property->getName(),
                 get_class($object->getInstance())
             ),
