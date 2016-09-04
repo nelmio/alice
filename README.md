@@ -7,7 +7,8 @@ or testing your project. It gives you a few essential tools to make it
 very easy to generate complex data with constraints in a readable and easy
 to edit way, so that everyone on your team can tweak the fixtures if needed.
 
-*Note*: [v3 is on its way](https://github.com/nelmio/alice/issues/265), get involved!
+**Warning**: this doc is behind updated for alice 3.0. If you want to check the documentation for 2.x, head
+[this way](https://github.com/nelmio/alice/tree/2.x).
 
 ## Table of Contents
 

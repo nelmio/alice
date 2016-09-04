@@ -1,7 +1,8 @@
 # Contribution Guide
 
-This guide is for those who wants to have a better understand on the library internals and how to get started if you
-want to contribute.
+This guide is for those who wants to have a better understand on the library internals and how to get started to
+contribute. The code and the tests are the best documentation you will find, this guide aims at introducing the higher
+picture of the library mechanisms only.
 
 1. [Differences between 2.x and 3.x](#differences-between-2x-and-3x)
 1. [Architecture](#architecture)
