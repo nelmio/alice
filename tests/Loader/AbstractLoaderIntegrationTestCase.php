@@ -789,6 +789,44 @@ abstract class AbstractLoaderIntegrationTestCase extends \PHPUnit_Framework_Test
         $this->loader->loadData($data);
     }
 
+    public function testInjectedParametersAndObjectsAreOverriddenByLocalParameters()
+    {
+        $this->markTestSkipped('TODO');
+        $set = $this->loader->loadData(
+            [
+                'parameters' => [
+                    'foo' => 'baz',
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'injected' => false,
+                    ],
+                ],
+            ],
+            [
+                'foo' => 'bar',
+            ],
+            [
+                'dummy' => StdClassFactory::create([
+                    'injected' => true,
+                ])
+            ]
+        );
+
+        $expected = new ObjectSet(
+            new ParameterBag([
+                'foo' => 'baz',
+            ]),
+            new ObjectBag([
+                'dummy' => StdClassFactory::create([
+                    'injected' => false,
+                ])
+            ])
+        );
+
+        $this->assertEquals($expected, $set);
+    }
+
     public function provideFixturesToInstantiate()
     {
         yield 'with default constructor – use default constructor' => [
