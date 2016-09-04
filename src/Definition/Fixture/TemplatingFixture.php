@@ -22,7 +22,7 @@ use Nelmio\Alice\Definition\SpecificationBag;
 final class TemplatingFixture implements FixtureWithFlagsInterface
 {
     /**
-     * @var SimpleFixtureWithFlags
+     * @var FixtureWithFlagsInterface
      */
     private $fixture;
 

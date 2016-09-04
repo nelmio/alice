@@ -77,9 +77,7 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
             $object = $this->hydrator->hydrate($object, $property);
         }
 
-        return new ResolvedFixtureSet(
-            $fixtureSet->getParameters(),
-            $fixtureSet->getFixtures(),
+        return $fixtureSet->withObjects(
             $fixtureSet->getObjects()->with($object)
         );
     }

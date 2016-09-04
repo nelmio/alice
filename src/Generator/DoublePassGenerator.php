@@ -56,11 +56,7 @@ final class DoublePassGenerator implements GeneratorInterface
         $fixtures = $set->getFixtures();
         foreach ($fixtures as $fixture) {
             $objects = $this->generator->generate($fixture, $set, $context);
-            $set = new ResolvedFixtureSet(
-                $set->getParameters(),
-                $set->getFixtures(),
-                $objects
-            );
+            $set = $set->withObjects($objects);
         }
 
         return $set;

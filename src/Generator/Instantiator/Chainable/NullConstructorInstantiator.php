@@ -55,7 +55,7 @@ final class NullConstructorInstantiator extends AbstractChainableInstantiator
         } catch (\ReflectionException $exception) {
             // Thrown when __construct does not exist, i.e. is default constructor
             if (1 !== preg_match('/Method (.+)__construct\(.*\) does not exist/', $exception->getMessage())) {
-                throw InstantiationException::create($fixture, $exception);
+                throw InstantiationException::create($fixture, 0, $exception);
             }
 
             // Continue

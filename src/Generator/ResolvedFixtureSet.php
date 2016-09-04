@@ -19,8 +19,6 @@ use Nelmio\Alice\ParameterBag;
  * Another version {@see Nelmio\Alice\FixtureSet} where loaded parameters have been resolved and injected parameters
  * have been merged in the process; And the fixtures flags have been resolved (i.e. fixtures no longer have flags
  * although their specs may still have some).
- *
- * @TODO: add withers
  */
 final class ResolvedFixtureSet
 {
@@ -47,6 +45,30 @@ final class ResolvedFixtureSet
         $this->parameters = $parameters;
         $this->fixtures = $fixtures;
         $this->objects = $injectedObjects;
+    }
+
+    public function withParameters(ParameterBag $parameters): self
+    {
+        $clone = clone $this;
+        $clone->parameters = $parameters;
+
+        return $clone;
+    }
+
+    public function withFixtures(FixtureBag $fixtures): self
+    {
+        $clone = clone $this;
+        $clone->fixtures = $fixtures;
+
+        return $clone;
+    }
+
+    public function withObjects(ObjectBag $objects): self
+    {
+        $clone = clone $this;
+        $clone->objects = $objects;
+
+        return $clone;
     }
 
     public function getParameters(): ParameterBag
