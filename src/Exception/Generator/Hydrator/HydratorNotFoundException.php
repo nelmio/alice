@@ -28,7 +28,7 @@ class HydratorNotFoundException extends \LogicException
         return new static(
             sprintf(
                 'Could not find the property "%s" for the object "%s" (class: %s).',
-                $object->getReference(),
+                $object->getId(),
                 $property->getName(),
                 get_class($object->getInstance())
             ),

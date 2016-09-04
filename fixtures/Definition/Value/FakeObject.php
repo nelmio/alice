@@ -21,7 +21,7 @@ class FakeObject implements ObjectInterface
     /**
      * @inheritdoc
      */
-    public function getReference(): string
+    public function getId(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }

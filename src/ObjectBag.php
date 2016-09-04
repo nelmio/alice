@@ -26,23 +26,23 @@ final class ObjectBag implements \IteratorAggregate, \Countable
 
     public function __construct(array $objects = [])
     {
-        foreach ($objects as $reference => $object) {
+        foreach ($objects as $id => $object) {
             if ($object instanceof ObjectInterface) {
-                if ($reference !== $object->getReference()) {
+                if ($id !== $object->getId()) {
                     throw new \InvalidArgumentException(
                         sprintf(
                             'Reference key mismatch, the keys "%s" and "%s" refers to the same fixture.',
-                            $reference,
-                            $object->getReference()
+                            $id,
+                            $object->getId()
                         )
                     );
                 }
-                $this->objects[$reference] = $object;
+                $this->objects[$id] = $object;
 
                 continue;
             }
 
-            $this->objects[$reference] = new SimpleObject($reference, $object);
+            $this->objects[$id] = new SimpleObject($id, $object);
         }
     }
 
@@ -57,7 +57,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     public function with(ObjectInterface $object): self
     {
         $clone = clone $this;
-        $clone->objects[$object->getReference()] = $object;
+        $clone->objects[$object->getId()] = $object;
 
         return $clone;
     }

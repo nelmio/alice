@@ -67,6 +67,6 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
             throw HydrationException::create($object, $property, 0, $exception);
         }
 
-        return new SimpleObject($object->getReference(), $instance);
+        return new SimpleObject($object->getId(), $instance);
     }
 }

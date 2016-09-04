@@ -58,7 +58,7 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
             throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
         }
 
-        $fixture = $fixtureSet->getFixtures()->get($object->getReference());
+        $fixture = $fixtureSet->getFixtures()->get($object->getId());
         $properties = $fixture->getSpecs()->getProperties();
 
         $scope = [

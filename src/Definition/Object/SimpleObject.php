@@ -63,7 +63,7 @@ final class SimpleObject implements ObjectInterface
     /**
      * @inheritdoc
      */
-    public function getReference(): string
+    public function getId(): string
     {
         return $this->reference;
     }
