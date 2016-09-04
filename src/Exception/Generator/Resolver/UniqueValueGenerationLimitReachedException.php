@@ -16,14 +16,19 @@ use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 class UniqueValueGenerationLimitReachedException extends \RuntimeException implements ResolutionThrowable
 {
-    public static function create(UniqueValue $value, int $limit): self
+    /**
+     * @return static
+     */
+    public static function create(UniqueValue $value, int $limit, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'Could not generate a unique value after %d attempts for "%s".',
                 $limit,
                 $value->getId()
-            )
+            ),
+            $code,
+            $previous
         );
     }
 }

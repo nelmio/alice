@@ -32,17 +32,19 @@ class InstantiationExceptionTest extends \PHPUnit_Framework_TestCase
     public function testTestCreateNewExceptionWithFactory()
     {
         $exception0 = InstantiationException::create(new DummyFixture('foo'));
-        $exception1 = InstantiationException::create(new DummyFixture('foo'), $previous = new \Exception());
+        $exception1 = InstantiationException::create(new DummyFixture('foo'), 10, $previous = new \Exception());
 
         $this->assertEquals(
             'Could not instantiate fixture "foo".',
             $exception0->getMessage()
         );
         $this->assertNull($exception0->getPrevious());
+
         $this->assertEquals(
             'Could not instantiate fixture "foo".',
             $exception1->getMessage()
         );
+        $this->assertEquals(10, $exception1->getCode());
         $this->assertSame($previous, $exception1->getPrevious());
     }
 }

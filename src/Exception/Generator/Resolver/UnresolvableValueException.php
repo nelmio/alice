@@ -16,7 +16,10 @@ use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 class UnresolvableValueException extends \RuntimeException implements ResolutionThrowable
 {
-    public static function create(ValueInterface $value, int $code = 0, \Throwable $previous = null): self
+    /**
+     * @return static
+     */
+    public static function create(ValueInterface $value, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(

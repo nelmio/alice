@@ -15,14 +15,19 @@ use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 class CircularReferenceException extends \RuntimeException implements ResolutionThrowable
 {
-    public static function createForParameter(string $key, array $resolving)
+    /**
+     * @return static
+     */
+    public static function createForParameter(string $key, array $resolving, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'Circular reference detected for the parameter "%s" while resolving ["%s"].',
                 $key,
                 implode('", "', array_keys($resolving))
-            )
+            ),
+            $code,
+            $previous
         );
     }
 }

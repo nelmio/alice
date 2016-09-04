@@ -13,13 +13,18 @@ namespace Nelmio\Alice\Exception;
 
 class FixtureNotFoundException extends \UnexpectedValueException
 {
-    public static function create(string $id)
+    /**
+     * @return static
+     */
+    public static function create(string $id, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'Could not find the fixture "%s".',
                 $id
-            )
+            ),
+            $code,
+            $previous
         );
     }
 }

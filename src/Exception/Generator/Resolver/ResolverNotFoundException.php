@@ -15,33 +15,48 @@ use Nelmio\Alice\Definition\ValueInterface;
 
 class ResolverNotFoundException extends \LogicException
 {
-    public static function createForParameter(string $parameterKey)
+    /**
+     * @return static
+     */
+    public static function createForParameter(string $parameterKey, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'No resolver found to resolve parameter "%s".',
                 $parameterKey
-            )
+            ),
+            $code,
+            $previous
         );
     }
 
-    public static function createForValue(ValueInterface $value)
+    /**
+     * @return static
+     */
+    public static function createForValue(ValueInterface $value, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'No resolver found to resolve value "%s".',
                 $value
-            )
+            ),
+            $code,
+            $previous
         );
     }
 
-    public static function createUnexpectedCall(string $method)
+    /**
+     * @return static
+     */
+    public static function createUnexpectedCall(string $method, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'Expected method "%s" to be called only if it has a resolver.',
                 $method
-            )
+            ),
+            $code,
+            $previous
         );
     }
 }

@@ -13,23 +13,33 @@ namespace Nelmio\Alice\Exception\FixtureBuilder\Denormalizer;
 
 class DenormalizerNotFoundException extends \LogicException
 {
-    public static function createForFixture(string $fixtureId)
+    /**
+     * @return static
+     */
+    public static function createForFixture(string $fixtureId, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'No suitable fixture denormalizer found to handle the fixture with the reference "%s".',
                 $fixtureId
-            )
+            ),
+            $code,
+            $previous
         );
     }
 
-    public static function createUnexpectedCall(string $method)
+    /**
+     * @return static
+     */
+    public static function createUnexpectedCall(string $method, int $code = 0, \Throwable $previous = null)
     {
         return new static(
             sprintf(
                 'Expected method "%s" to be called only if it has a denormalizer.',
                 $method
-            )
+            ),
+            $code,
+            $previous
         );
     }
 }
