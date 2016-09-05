@@ -34,14 +34,8 @@ class DynamicServicesConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $kernel = KernelFactory::createKernel(AppKernel::class, uniqid());
-        if (false === $kernel instanceof AppKernel) {
-            throw new \InvalidArgumentException('Wrong kernel used');
-        }
-        /** @var AppKernel $kernel */
-        $kernel->setConfigurationResource(__DIR__.'/../Application/config_custom.yml');
-        $kernel->boot();
-        $this->kernel = $kernel;
+        $this->kernel = KernelFactory::createKernel(__DIR__.'/../Application/config_custom.yml');
+        $this->kernel->boot();
     }
 
     public function tearDown()

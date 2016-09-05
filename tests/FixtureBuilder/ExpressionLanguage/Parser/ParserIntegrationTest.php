@@ -14,7 +14,6 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
-use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
@@ -35,7 +34,7 @@ use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ParserInterface */
-    private $parser;
+    protected $parser;
 
     public function setUp()
     {

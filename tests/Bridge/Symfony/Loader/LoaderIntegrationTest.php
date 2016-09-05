@@ -11,24 +11,16 @@
 
 namespace Nelmio\Alice\Bridge\Symfony\Loader;
 
-use Nelmio\Alice\Bridge\Symfony\Application\AppKernel;
-use Nelmio\Alice\DataLoaderInterface;
-use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\Loader\IsolatedSymfonyLoader;
-use Nelmio\Alice\Loader\AbstractLoaderIntegrationTestCase;
 
 /**
- * {@inheritdoc}
- *
+ * @group integration
  * @group symfony
  */
-class LoaderIntegrationTest extends AbstractLoaderIntegrationTestCase
+class LoaderIntegrationTest extends \Nelmio\Alice\Loader\LoaderIntegrationTest
 {
-    /**
-     * @return FileLoaderInterface|DataLoaderInterface
-     */
-    public function getLoader()
+    public function setUp()
     {
-        return new IsolatedSymfonyLoader(AppKernel::class);
+        $this->loader = new IsolatedSymfonyLoader();
     }
 }

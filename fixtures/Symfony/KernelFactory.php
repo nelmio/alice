@@ -16,12 +16,29 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class KernelFactory
 {
+    static $environments = [];
+
     public static function createKernel(
+        string $config = null,
         string $kernelClass = AppKernel::class,
         string $environment = 'test',
         $debug = true
     ): KernelInterface
     {
-        return new $kernelClass($environment, $debug);
+        if (null !== $config) {
+            if (false === array_key_exists($config, static::$environments)) {
+                static::$environments[$config] = uniqid();
+            }
+
+            $environment = static::$environments[$config];
+        }
+
+        $kernel = new $kernelClass($environment, $debug);
+        /** @var AppKernel $kernel */
+        if (null !== $config) {
+            $kernel->setConfigurationResource($config);
+        }
+
+        return $kernel;
     }
 }
