@@ -99,64 +99,6 @@ abstract class AbstractLoaderIntegrationTestCase extends \PHPUnit_Framework_Test
         );
     }
 
-    public function testLoadEmptyInstances()
-    {
-        $set = $this->loader->loadData([
-            \stdClass::class => [
-                'alice' => [],
-                'bob' => [],
-            ],
-        ]);
-        $objects = $set->getObjects();
-
-        $this->assertCount(0, $set->getParameters());
-        $this->assertCount(2, $objects);
-
-        $this->assertInstanceOf(\stdClass::class, $objects['alice']);
-        $this->assertInstanceOf(\stdClass::class, $objects['bob']);
-    }
-
-    public function testLoadASequencedOfItems()
-    {
-        $set = $this->loader->loadData([
-            \stdClass::class => [
-                'dummy{1..10}' => [],
-            ],
-        ]);
-        $objects = $set->getObjects();
-
-        $this->assertCount(0, $set->getParameters());
-        $this->assertCount(10, $objects);
-
-        for ($i = 1; $i <= 10; $i++) {
-            $this->assertInstanceOf(\stdClass::class, $objects['dummy'.$i]);
-            // TODO: test value for current
-        }
-    }
-
-    public function testLoadAListOfItems()
-    {
-        $set = $this->loader->loadData([
-            \stdClass::class => [
-                'user_{alice, bob, fred}' => [],
-            ],
-        ]);
-        $objects = $set->getObjects();
-
-        $this->assertCount(0, $set->getParameters());
-        $this->assertCount(3, $objects);
-
-        $this->assertSame(
-            [
-                'user_alice',
-                'user_bob',
-                'user_fred',
-            ],
-            array_keys($objects)
-        );
-        // TODO: test value for current
-    }
-
     /**
      * @dataProvider provideFixturesToInstantiate
      */
@@ -1287,6 +1229,20 @@ abstract class AbstractLoaderIntegrationTestCase extends \PHPUnit_Framework_Test
 
     public function provideFixturesToGenerate()
     {
+        yield 'empty instance' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new \stdClass(),
+                ],
+            ],
+        ];
+
         yield 'static value' => [
             [
                 \stdClass::class => [

@@ -57,21 +57,4 @@ class AppKernel extends Kernel
     {
         $this->config = $resource;
     }
-
-    /**
-     * @inheritdoc
-     */
-    protected function initializeContainer()
-    {
-        $class = $this->getContainerClass();
-        $cache = new ConfigCache($this->getCacheDir().'/'.$class.'.php', $this->debug);
-        $container = $this->buildContainer();
-        $container->compile();
-        $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
-
-        require_once $cache->getPath();
-
-        $this->container = new $class();
-        $this->container->set('kernel', $this);
-    }
 }

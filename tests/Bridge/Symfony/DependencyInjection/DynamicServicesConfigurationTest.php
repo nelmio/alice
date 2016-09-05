@@ -34,8 +34,6 @@ class DynamicServicesConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->tearDown();
-
         $kernel = KernelFactory::createKernel(AppKernel::class, uniqid());
         if (false === $kernel instanceof AppKernel) {
             throw new \InvalidArgumentException('Wrong kernel used');
