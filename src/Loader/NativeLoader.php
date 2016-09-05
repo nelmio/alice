@@ -90,7 +90,9 @@ use Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator;
 use Nelmio\Alice\Generator\Hydrator\SimpleHydrator;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
-use Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver;
+use Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver;
+use Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver;
+use Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver;
@@ -401,9 +403,11 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createBuiltInFixtureSetResolver(): FixtureSetResolverInterface
     {
-        return new SimpleFixtureSetResolver(
-            $this->getBuiltInParameterResolver(),
-            new TemplateFixtureBagResolver()
+        return new RemoveConflictingObjectsResolver(
+            new SimpleFixtureSetResolver(
+                $this->getBuiltInParameterResolver(),
+                new TemplateFixtureBagResolver()
+            )
         );
     }
 
@@ -415,7 +419,9 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new RecursiveParameterResolver(new StringParameterResolver()),
         ]);
 
-        return new SimpleParameterBagResolver($registry);
+        return new RemoveConflictingParametersParameterBagResolver(
+            new SimpleParameterBagResolver($registry)
+        );
     }
 
     protected function createBuiltInValueResolver(): ValueResolverInterface
