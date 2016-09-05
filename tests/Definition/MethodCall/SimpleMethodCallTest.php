@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
+use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
  * @covers Nelmio\Alice\Definition\MethodCall\SimpleMethodCall
@@ -43,7 +44,7 @@ class SimpleMethodCallTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($method, $definition->__toString());
     }
 
-    public function testIsImmutable()
+    public function testIsMutable()
     {
         $arguments = [
             $arg0 = new \stdClass(),
@@ -54,11 +55,14 @@ class SimpleMethodCallTest extends \PHPUnit_Framework_TestCase
         $arg0->foo = 'bar';
 
         // Mutate retrieved values
-        $definition->getArguments()[0]->foo = 'baz';
+        $definition->getArguments()[0]->foz = 'baz';
 
         $this->assertEquals(
             [
-                new \stdClass(),
+                StdClassFactory::create([
+                    'foo' => 'bar',
+                    'foz' => 'baz',
+                ]),
             ],
             $definition->getArguments()
         );
@@ -111,7 +115,9 @@ class SimpleMethodCallTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($method, $newDefinition->getMethod());
         $this->assertEquals(
             [
-                new \stdClass(),
+                StdClassFactory::create([
+                    'foo' => 'bar',
+                ]),
             ],
             $newDefinition->getArguments()
         );

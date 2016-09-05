@@ -83,6 +83,7 @@ use Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator
 use Nelmio\Alice\Generator\Instantiator\Chainable\NoMethodCallInstantiator;
 use Nelmio\Alice\Generator\Instantiator\Chainable\NullConstructorInstantiator;
 use Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator;
+use Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorResolver;
 use Nelmio\Alice\Generator\InstantiatorInterface;
@@ -460,13 +461,15 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createBuiltInInstantiator(): InstantiatorInterface
     {
-        return new InstantiatorResolver(
-            new InstantiatorRegistry([
-                new NoCallerMethodCallInstantiator(),
-                new NullConstructorInstantiator(),
-                new NoMethodCallInstantiator(),
-                new StaticFactoryInstantiator(),
-            ])
+        return new ExistingInstanceInstantiator(
+            new InstantiatorResolver(
+                new InstantiatorRegistry([
+                    new NoCallerMethodCallInstantiator(),
+                    new NullConstructorInstantiator(),
+                    new NoMethodCallInstantiator(),
+                    new StaticFactoryInstantiator(),
+                ])
+            )
         );
     }
 

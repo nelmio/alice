@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Definition\MethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\MutableReference;
+use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
  * @covers Nelmio\Alice\Definition\MethodCall\MethodCallWithReference
@@ -46,7 +47,7 @@ class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('user.factorysetUsername', $definition->__toString());
     }
 
-    public function testIsImmutable()
+    public function testIsMutable()
     {
         $caller = new MutableReference();
         $method = 'setUsername';
@@ -65,12 +66,15 @@ class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
         $caller = $definition->getCaller();
         $caller->setId('user.factory');
         $arguments = $definition->getArguments();
-        $arguments[0]->foo = 'bar';
+        $arguments[0]->foz = 'baz';
 
         $this->assertEquals(new MutableReference(), $definition->getCaller());
         $this->assertEquals(
             [
-                new \stdClass(),
+                StdClassFactory::create([
+                    'foo' => 'bar',
+                    'foz' => 'baz',
+                ]),
             ],
             $definition->getArguments()
         );
@@ -110,7 +114,6 @@ class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
         $newDefinition = $definition->withArguments($newArguments);
 
         // Mutate argument before reading it
-        // Test done to ensure we are keeping the immutability
         $arg0->foo = 'bar';
 
         $this->assertInstanceOf(MethodCallWithReference::class, $newDefinition);
@@ -123,7 +126,7 @@ class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($method, $newDefinition->getMethod());
         $this->assertEquals(
             [
-                new \stdClass(),
+                StdClassFactory::create(['foo' => 'bar']),
             ],
             $newDefinition->getArguments()
         );

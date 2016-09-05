@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\MutableReference;
+use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
  * @covers Nelmio\Alice\Definition\MethodCall\OptionalMethodCall
@@ -57,10 +58,7 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
         $methodCallProphecy->getArguments()->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @depends Nelmio\Alice\Definition\FlagBagTest::testIsImmutable
-     */
-    public function testIsImmutable()
+    public function testIsMutable()
     {
         $caller = new MutableMethodCall(
             new MutableReference(),
@@ -79,12 +77,15 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
 
         // Mutate retrieved values
         $definition->getCaller()->setId('mutated');
-        $definition->getArguments()[0]->foo = 'baz';
+        $definition->getArguments()[0]->foz = 'baz';
 
         $this->assertEquals(new MutableReference(), $definition->getCaller());
         $this->assertEquals(
             [
-                new \stdClass(),
+                StdClassFactory::create([
+                    'foo' => 'bar',
+                    'foz' => 'baz',
+                ]),
             ],
             $definition->getArguments()
         );
@@ -112,9 +113,6 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($newArguments, $newDefinition->getArguments());
     }
 
-    /**
-     * @depends Nelmio\Alice\Definition\FlagBagTest::testIsImmutable
-     */
     public function testCanCreateANewInstanceWithArguments()
     {
         $methodCall = new SimpleMethodCall('getUsername', null);
@@ -140,7 +138,7 @@ class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($methodCall->getMethod(), $newDefinition->getMethod());
         $this->assertEquals(
             [
-                new \stdClass(),
+                StdClassFactory::create(['foo' => 'bar']),
             ],
             $newDefinition->getArguments()
         );

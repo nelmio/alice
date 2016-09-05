@@ -48,7 +48,7 @@ final class OptionalMethodCall implements MethodCallInterface
     public function withArguments(array $arguments = null): self
     {
         $clone = clone $this;
-        $clone->methodCall = $clone->methodCall->withArguments(deep_clone($arguments));
+        $clone->methodCall = $clone->methodCall->withArguments($arguments);
 
         return $clone;
     }
@@ -58,7 +58,7 @@ final class OptionalMethodCall implements MethodCallInterface
      */
     public function getCaller()
     {
-        return deep_clone($this->methodCall->getCaller());
+        return $this->methodCall->getCaller();
     }
 
     /**
@@ -74,7 +74,7 @@ final class OptionalMethodCall implements MethodCallInterface
      */
     public function getArguments()
     {
-        return deep_clone($this->methodCall->getArguments());
+        return $this->methodCall->getArguments();
     }
 
     /**
