@@ -15,7 +15,6 @@ use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureSetFactory;
-use Nelmio\Alice\Generator\FakeFixtureSetResolver;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\ObjectBag;

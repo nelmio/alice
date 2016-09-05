@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator;
+namespace Nelmio\Alice\Generator\Resolver\FixtureSet;
 
 use Nelmio\Alice\FixtureSet;
+use Nelmio\Alice\Generator\FixtureSetResolverInterface;
+use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\NotCallableTrait;
 
 class FakeFixtureSetResolver implements FixtureSetResolverInterface

@@ -68,6 +68,40 @@ class RemoveConflictingParametersParameterBagResolverTest extends \PHPUnit_Frame
         $actual = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
         $this->assertEquals($expected, $actual);
+
+        $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testCanHandleTheCaseWhereNoParameterIsInjected()
+    {
+        $unresolvedParameters = new ParameterBag([
+            'foo' => '(unresolved) bar',
+            'ping' => '(unresolved) pong',
+        ]);
+        $injectedParameters = null;
+
+
+        $decoratedResolverProphecy = $this->prophesize(ParameterBagResolverInterface::class);
+        $decoratedResolverProphecy
+            ->resolve(
+                $unresolvedParameters,
+                new ParameterBag()
+            )
+            ->willReturn(
+                $expected = new ParameterBag([
+                    'foo' => '(resolved) bar',
+                    'ping' => '(resolved) pong',
+                    'foz' => 'baz',
+                ])
+            );
+        /* @var ParameterBagResolverInterface $decoratedResolver */
+        $decoratedResolver = $decoratedResolverProphecy->reveal();
+
+        $resolver = new RemoveConflictingParametersParameterBagResolver($decoratedResolver);
+        $actual = $resolver->resolve($unresolvedParameters, $injectedParameters);
+
+        $this->assertEquals($expected, $actual);
+
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 }

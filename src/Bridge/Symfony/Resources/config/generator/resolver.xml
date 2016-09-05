@@ -14,10 +14,15 @@
     <services>
 
         <service id="nelmio_alice.generator.resolver.fixture_set"
-                 alias="nelmio_alice.generator.resolver.fixture_set.simple" />
+                 alias="nelmio_alice.generator.resolver.fixture_set.remove_conflicting_objects" />
+
+        <service id="nelmio_alice.generator.resolver.fixture_set.remove_conflicting_objects"
+                 class="Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver">
+            <argument type="service" id="nelmio_alice.generator.resolver.fixture_set.simple" />
+        </service>
 
         <service id="nelmio_alice.generator.resolver.fixture_set.simple"
-                 class="Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver">
+                 class="Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver">
             <argument type="service" id="nelmio_alice.generator.resolver.parameter_bag" />
             <argument type="service" id="nelmio_alice.generator.resolver.fixture_bag" />
         </service>

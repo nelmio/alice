@@ -40,6 +40,10 @@ final class RemoveConflictingParametersParameterBagResolver implements Parameter
         ParameterBag $injectedParameters = null
     ): ParameterBag
     {
+        if (null === $injectedParameters) {
+            $injectedParameters = new ParameterBag();
+        }
+
         foreach ($injectedParameters as $injectedParameterKey => $injectedParameterValue) {
             if ($unresolvedParameters->has($injectedParameterKey)) {
                 $injectedParameters = $injectedParameters->without($injectedParameterKey);
