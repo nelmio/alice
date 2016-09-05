@@ -764,9 +764,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 'dummy' => $dummy = StdClassFactory::create([
                     'injected' => false,
                 ]),
-                'another_dummy' => new DummyWithConstructorParam(new \stdClass()),
-                //TODO: fix that
-                //'another_dummy' => new DummyWithConstructorParam($dummy),
+                'another_dummy' => new DummyWithConstructorParam($dummy),
             ])
         );
 

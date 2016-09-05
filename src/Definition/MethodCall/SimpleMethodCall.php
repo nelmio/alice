@@ -36,7 +36,7 @@ final class SimpleMethodCall implements MethodCallInterface
     public function __construct(string $method, array $arguments = null)
     {
         $this->method = $method;
-        $this->arguments = deep_clone($arguments);
+        $this->arguments = $arguments;
     }
 
     /**
@@ -45,7 +45,7 @@ final class SimpleMethodCall implements MethodCallInterface
     public function withArguments(array $arguments = null): self
     {
         $clone = clone $this;
-        $clone->arguments = deep_clone($arguments);
+        $clone->arguments = $arguments;
 
         return $clone;
     }
@@ -71,7 +71,7 @@ final class SimpleMethodCall implements MethodCallInterface
      */
     public function getArguments()
     {
-        return deep_clone($this->arguments);
+        return $this->arguments;
     }
 
     /**

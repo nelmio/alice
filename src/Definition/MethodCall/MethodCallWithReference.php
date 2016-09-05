@@ -49,7 +49,7 @@ final class MethodCallWithReference implements MethodCallInterface
     {
         $this->caller = clone $caller;
         $this->method = $method;
-        $this->arguments = deep_clone($arguments);
+        $this->arguments = $arguments;
         $this->stringValue = $caller->getId().$method;
     }
 
@@ -59,7 +59,7 @@ final class MethodCallWithReference implements MethodCallInterface
     public function withArguments(array $arguments = null): self
     {
         $clone = clone $this;
-        $clone->arguments = deep_clone($arguments);
+        $clone->arguments = $arguments;
 
         return $clone;
     }
@@ -85,7 +85,7 @@ final class MethodCallWithReference implements MethodCallInterface
      */
     public function getArguments()
     {
-        return deep_clone($this->arguments);
+        return $this->arguments;
     }
 
     /**

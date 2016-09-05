@@ -37,6 +37,14 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(InstantiatorResolver::class, InstantiatorInterface::class, true));
     }
 
+    public function testIsResolverAware()
+    {
+        $this->assertEquals(
+            new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver()),
+            (new InstantiatorResolver(new FakeInstantiator()))->withResolver(new FakeValueResolver())
+        );
+    }
+
     /**
      * @expectedException \DomainException
      */
@@ -45,14 +53,6 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
         clone new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver());
     }
 
-    public function testIsResolverAware()
-    {
-        $this->assertEquals(
-            new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver()),
-            (new InstantiatorResolver(new FakeInstantiator()))->withResolver(new FakeValueResolver())
-        );
-    }
-    
     public function testResolvesAllArguments()
     {
         $specs = SpecificationBagFactory::create(
@@ -74,7 +74,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
             )
         );
         $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
-        $set = new ResolvedFixtureSet(new ParameterBag(), new FixtureBag(), new ObjectBag());
+        $set = ResolvedFixtureSetFactory::create();
 
         $expected = ResolvedFixtureSetFactory::create(
             null,

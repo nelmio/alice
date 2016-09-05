@@ -21,6 +21,10 @@ use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * Resolves each argument to be passed to the constructor when is relevant before handling over the updated fixture to
+ * instantiate to the decorated instantiator.
+ */
 final class InstantiatorResolver implements InstantiatorInterface, ValueResolverAwareInterface
 {
     use NotClonableTrait;
