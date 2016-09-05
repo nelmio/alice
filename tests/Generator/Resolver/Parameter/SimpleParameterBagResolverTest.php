@@ -40,14 +40,14 @@ class SimpleParameterBagResolverTest extends \PHPUnit_Framework_TestCase
     public function testDecoratesResolverToResolveParameterBag()
     {
         $unresolvedParameters = new ParameterBag([
-            'foo' => 'unresolved(bar)',
-            'ping' => 'unresolved(pong)',
+            'foo' => '(unresolved) bar',
+            'ping' => '(unresolved) pong',
         ]);
 
         $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
         $injectedResolverProphecy
             ->resolve(
-                new Parameter('foo', 'unresolved(bar)'),
+                new Parameter('foo', '(unresolved) bar'),
                 $unresolvedParameters,
                 new ParameterBag(),
                 new ResolvingContext('foo')
@@ -61,7 +61,7 @@ class SimpleParameterBagResolverTest extends \PHPUnit_Framework_TestCase
         ;
         $injectedResolverProphecy
             ->resolve(
-                new Parameter('ping', 'unresolved(pong)'),
+                new Parameter('ping', '(unresolved) pong'),
                 $unresolvedParameters,
                 $firstResolveResult,
                 new ResolvingContext('ping')
@@ -94,8 +94,8 @@ class SimpleParameterBagResolverTest extends \PHPUnit_Framework_TestCase
     public function testDoesNotResolveAlreadyResolvedParameters()
     {
         $unresolvedParameters = new ParameterBag([
-            'foo' => 'unresolved(bar)',
-            'ping' => 'unresolved(pong)',
+            'foo' => '(unresolved) bar',
+            'ping' => '(unresolved) pong',
         ]);
         $resolvedParameters = new ParameterBag([
             'foo' => 'bar',
@@ -116,17 +116,17 @@ class SimpleParameterBagResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolvesBagWithInjectedParameters()
     {
         $unresolvedParameters = new ParameterBag([
-            'foo' => 'unresolved(bar)',
-            'ping' => 'unresolved(pong)',
+            'foo' => '(unresolved) bar',
+            'ping' => '(unresolved) pong',
         ]);
         $injectedParameters = new ParameterBag([
             'other_param' => 'oï',
         ]);
 
-        $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
-        $injectedResolverProphecy
+        $decoratedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
+        $decoratedResolverProphecy
             ->resolve(
-                new Parameter('foo', 'unresolved(bar)'),
+                new Parameter('foo', '(unresolved) bar'),
                 $unresolvedParameters,
                 $injectedParameters,
                 new ResolvingContext('foo')
@@ -138,9 +138,9 @@ class SimpleParameterBagResolverTest extends \PHPUnit_Framework_TestCase
                 ])
             )
         ;
-        $injectedResolverProphecy
+        $decoratedResolverProphecy
             ->resolve(
-                new Parameter('ping', 'unresolved(pong)'),
+                new Parameter('ping', '(unresolved) pong'),
                 $unresolvedParameters,
                 new ParameterBag([
                     'other_param' => 'yo',
@@ -156,10 +156,10 @@ class SimpleParameterBagResolverTest extends \PHPUnit_Framework_TestCase
                 ])
             )
         ;
-        /* @var ParameterResolverInterface $injectedResolver */
-        $injectedResolver = $injectedResolverProphecy->reveal();
+        /* @var ParameterResolverInterface $decoratedResolver */
+        $decoratedResolver = $decoratedResolverProphecy->reveal();
 
-        $resolver = new SimpleParameterBagResolver($injectedResolver);
+        $resolver = new SimpleParameterBagResolver($decoratedResolver);
         $result = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
         $this->assertEquals(

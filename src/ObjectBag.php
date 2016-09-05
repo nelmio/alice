@@ -63,6 +63,21 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     }
 
     /**
+     * Creates a new instance which will no longer contain the given object.
+     *
+     * @param FixtureInterface|ObjectInterface $objectOrFixture
+     *
+     * @return self
+     */
+    public function without($objectOrFixture): self
+    {
+        $clone = clone $this;
+        unset($clone->objects[$objectOrFixture->getId()]);
+
+        return $clone;
+    }
+
+    /**
      * Creates a new instance with the new objects. If objects with the same reference already exists, they will be
      * overridden by the new ones.
      * 

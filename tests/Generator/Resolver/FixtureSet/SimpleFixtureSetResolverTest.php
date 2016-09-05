@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Generator\Resolver;
+namespace Nelmio\Alice\Generator\Resolver\FixtureSet;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
@@ -17,11 +17,15 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
+use Nelmio\Alice\Generator\Resolver\FakeFixtureBagResolver;
+use Nelmio\Alice\Generator\Resolver\FakeParameterBagResolver;
+use Nelmio\Alice\Generator\Resolver\FixtureBagResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver
+ * @covers Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
  */
 class SimpleFixtureSetResolverTest extends \PHPUnit_Framework_TestCase
 {

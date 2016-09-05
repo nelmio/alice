@@ -14,7 +14,12 @@
     <services>
 
         <service id="nelmio_alice.generator.resolver.parameter_bag"
-                 alias="nelmio_alice.generator.resolver.parameter_bag.simple" />
+                 alias="nelmio_alice.generator.resolver.parameter_bag.remove_conflicting_parameters" />
+
+        <service id="nelmio_alice.generator.resolver.parameter_bag.remove_conflicting_parameters"
+                 class="Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver">
+            <argument type="service" id="nelmio_alice.generator.resolver.parameter_bag.simple" />
+        </service>
 
         <service id="nelmio_alice.generator.resolver.parameter_bag.simple"
                  class="Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver">

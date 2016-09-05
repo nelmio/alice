@@ -733,11 +733,16 @@ abstract class AbstractLoaderIntegrationTestCase extends \PHPUnit_Framework_Test
 
     public function testInjectedParametersAndObjectsAreOverriddenByLocalParameters()
     {
-        $this->markTestSkipped('TODO');
         $set = $this->loader->loadData(
             [
                 'parameters' => [
+                    'foz' => '<{foo}>',
                     'foo' => 'baz',
+                ],
+                DummyWithConstructorParam::class => [
+                    'another_dummy' => [
+                        '__construct' => ['@dummy'],
+                    ],
                 ],
                 \stdClass::class => [
                     'dummy' => [
@@ -758,11 +763,15 @@ abstract class AbstractLoaderIntegrationTestCase extends \PHPUnit_Framework_Test
         $expected = new ObjectSet(
             new ParameterBag([
                 'foo' => 'baz',
+                'foz' => 'baz',
             ]),
             new ObjectBag([
-                'dummy' => StdClassFactory::create([
+                'dummy' => $dummy = StdClassFactory::create([
                     'injected' => false,
-                ])
+                ]),
+                'another_dummy' => new DummyWithConstructorParam(new \stdClass()),
+                //TODO: fix that
+                //'another_dummy' => new DummyWithConstructorParam($dummy),
             ])
         );
 
