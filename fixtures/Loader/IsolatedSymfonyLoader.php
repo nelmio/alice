@@ -14,9 +14,7 @@ namespace Nelmio\Alice\Loader;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\ObjectSet;
-use Nelmio\Alice\Symfony\KernelFactory;
-use Symfony\Component\DependencyInjection\ResettableContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Nelmio\Alice\Symfony\KernelIsolatedServiceCall;
 
 /**
  * Make use of NativeLoader for easy usage but ensure than no state is kept between each usage, perfect for isolated
@@ -25,21 +23,16 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class IsolatedSymfonyLoader implements FileLoaderInterface, DataLoaderInterface
 {
     /**
-     * @var string
-     */
-    private $kernelClass;
-
-    public function __construct(string $kernelClass)
-    {
-        $this->kernelClass = $kernelClass;
-    }
-
-    /**
      * @inheritdoc
      */
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
-        return $this->load('nelmio_alice.data_loader', 'loadData', [$data, $parameters, $objects]);
+        return KernelIsolatedServiceCall::call(
+            'nelmio_alice.data_loader',
+            function (DataLoaderInterface $loader) use ($data, $parameters, $objects) {
+                return $loader->loadData($data, $parameters, $objects);
+            }
+        );
     }
 
     /**
@@ -47,24 +40,11 @@ class IsolatedSymfonyLoader implements FileLoaderInterface, DataLoaderInterface
      */
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
-        return $this->load('nelmio_alice.file_loader', 'loadFile', [$file, $parameters, $objects]);
-    }
-
-    private function load(string $loaderId, string $method, array $arguments): ObjectSet
-    {
-        $kernel = KernelFactory::createKernel($this->kernelClass);
-        $kernel->boot();
-
-        $container = $kernel->getContainer();
-        $loader = $container->get($loaderId);
-
-        $result = $loader->$method(...$arguments);
-
-        $kernel->shutdown();
-        if ($container instanceof ResettableContainerInterface) {
-            $container->reset();
-        }
-
-        return $result;
+        return KernelIsolatedServiceCall::call(
+            'nelmio_alice.file_loader',
+            function (FileLoaderInterface $loader) use ($file, $parameters, $objects) {
+                return $loader->loadFile($file, $parameters, $objects);
+            }
+        );
     }
 }

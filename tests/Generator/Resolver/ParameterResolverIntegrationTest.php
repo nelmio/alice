@@ -23,7 +23,7 @@ class ParameterResolverIntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SimpleParameterBagResolver
      */
-    private $resolver;
+    protected $resolver;
 
     public function setUp()
     {

@@ -24,7 +24,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var LexerRegistry
      */
-    private $lexer;
+    protected $lexer;
 
     public function setUp()
     {
