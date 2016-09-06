@@ -78,6 +78,15 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         return $this->instantiator->instantiate($fixture, $fixtureSet, $context);
     }
 
+    /**
+     * @param FixtureInterface   $fixture
+     * @param ResolvedFixtureSet $set
+     * @param GenerationContext  $context
+     *
+     * @throws UnresolvableValueDuringGenerationException
+     *
+     * @return array
+     */
     private function resolveFixtureConstructor(
         FixtureInterface $fixture,
         ResolvedFixtureSet $set,
