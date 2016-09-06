@@ -25,14 +25,17 @@ matrix:
     - php: nightly
     - env: SYMFONY_VERSION='^3.2@dev'
 
-install:
+before_install:
   - set -eo pipefail
+  - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - |
     if [ "nightly" != "$TRAVIS_PHP_VERSION" ]; then
         phpenv config-rm xdebug.ini
     fi
   - PHPUNIT_CONFIG='phpunit.xml.dist'
   - PHPUNIT_FLAGS='--stop-on-failure --verbose'
+
+install:
   - composer install --prefer-dist $COMPOSER_FLAGS
   - |
     if [ -n "$SYMFONY_VERSION" ]; then
