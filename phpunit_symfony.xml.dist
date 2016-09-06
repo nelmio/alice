@@ -11,7 +11,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.2/phpunit.xsd"
          backupGlobals="false"
-         bootstrap="tests/Bridge/Symfony/autoload.php"
+         bootstrap="vendor-bin/symfony/vendor/autoload.php"
          colors="true"
          enforceTimeLimit="true"
 >
