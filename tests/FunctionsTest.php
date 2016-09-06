@@ -25,7 +25,6 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
 
     public function testDeepCloneObjects()
     {
-        $this->markTestIncomplete('TODO: https://github.com/myclabs/DeepCopy/pull/43');
         $foo = new \stdClass();
         $bar = new \stdClass();
 
