@@ -16,6 +16,7 @@ use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Generator\Caller\FakeCaller;
 use Nelmio\Alice\Generator\CallerInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\FakeInstantiator;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
@@ -52,12 +53,14 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('TODO');
         $fixture = new SimpleFixture('dummy', \stdClass::class, SpecificationBagFactory::create());
         $set = ResolvedFixtureSetFactory::create();
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
         $instance = new \stdClass();
         $instantiatedObject = new SimpleObject($fixture->getId(), $instance);
 
         $instantiatorProphecy = $this->prophesize(InstantiatorInterface::class);
         $instantiatorProphecy
-            ->instantiate($fixture, $set)
+            ->instantiate($fixture, $set, $context)
             ->willReturn(
                 $setWithInstantiatedObject = ResolvedFixtureSetFactory::create(
                     null,
@@ -76,7 +79,7 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $hydratorProphecy = $this->prophesize(HydratorInterface::class);
         $hydratorProphecy
-            ->hydrate($instantiatedObject, $setWithInstantiatedObject)
+            ->hydrate($instantiatedObject, $setWithInstantiatedObject, $context)
             ->willReturn(
                 $setWithHydratedObject = ResolvedFixtureSetFactory::create(
                     null,
@@ -108,7 +111,7 @@ class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
         $caller = $callerProphecy->reveal();
 
         $generator = new SimpleObjectGenerator(new FakeValueResolver(), $instantiator, $hydrator, $caller);
-        $objects = $generator->generate($fixture, $set);
+        $objects = $generator->generate($fixture, $set, $context);
 
         $this->assertEquals($setWithObjectAfterCalls->getObjects(), $objects);
 

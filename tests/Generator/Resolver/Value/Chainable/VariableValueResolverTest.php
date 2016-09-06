@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\VariableValue;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -56,7 +57,7 @@ class VariableValueResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedValueWithFixtureSet('pong', $set);
 
         $resolver = new VariableValueResolver();
-        $actual = $resolver->resolve($value, new FakeFixture(), $set, $scope);
+        $actual = $resolver->resolve($value, new FakeFixture(), $set, $scope, new GenerationContext());
 
         $this->assertEquals($expected, $actual);
     }
@@ -71,6 +72,6 @@ class VariableValueResolverTest extends \PHPUnit_Framework_TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new VariableValueResolver();
-        $resolver->resolve($value, new FakeFixture(), $set);
+        $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
     }
 }

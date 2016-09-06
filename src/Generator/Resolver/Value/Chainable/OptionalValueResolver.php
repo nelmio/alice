@@ -16,6 +16,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -64,8 +65,8 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = [],
-        int $tryCounter = 0
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
@@ -74,7 +75,7 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
 
         $quantifier = $value->getQuantifier();
         if ($quantifier instanceof ValueInterface) {
-            $resolvedSet = $this->resolver->resolve($quantifier, $fixture, $fixtureSet, $scope);
+            $resolvedSet = $this->resolver->resolve($quantifier, $fixture, $fixtureSet, $scope, $context);
             list($quantifier, $fixtureSet) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
 
             if (is_int($quantifier)) {
@@ -94,7 +95,7 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
             : $value->getSecondMember()
         ;
         if ($realValue instanceof ValueInterface) {
-            return $this->resolver->resolve($realValue, $fixture, $fixtureSet, $scope);
+            return $this->resolver->resolve($realValue, $fixture, $fixtureSet, $scope, $context);
         }
 
         return new ResolvedValueWithFixtureSet($realValue, $fixtureSet);

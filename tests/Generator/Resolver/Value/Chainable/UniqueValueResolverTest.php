@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
@@ -103,7 +104,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
     public function testCannotResolveValueIfHasNoResolver()
     {
         $resolver = new UniqueValueResolver(new UniqueValuesPool());
-        $resolver->resolve(new UniqueValue('', ''), new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $resolver->resolve(new UniqueValue('', ''), new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
     /**
@@ -117,7 +118,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new UniqueValueResolver(new UniqueValuesPool(), new FakeValueResolver(), 1);
-        $resolver->resolve($value, $fixture, $set, [], 1);
+        $resolver->resolve($value, $fixture, $set, [], new GenerationContext(), 1);
     }
 
     public function testReturnsResultIfResultDoesNotAlreadyExists()
@@ -127,7 +128,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new UniqueValueResolver(new UniqueValuesPool(), new FakeValueResolver());
-        $result = $resolver->resolve($value, $fixture, $set);
+        $result = $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
         $this->assertEquals(10, $result->getValue());
         $this->assertEquals($set, $result->getSet());
@@ -139,10 +140,13 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new UniqueValue('uniqid', $realValue);
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
+        $scope = ['scope' => 'epocs'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $decoratedResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $decoratedResolverProphecy
-            ->resolve($realValue, $fixture, $set, [])
+            ->resolve($realValue, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     10,
@@ -154,7 +158,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new UniqueValueResolver(new UniqueValuesPool(), $decoratedResolver);
-        $result = $resolver->resolve($value, $fixture, $set);
+        $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertEquals(10, $result->getValue());
         $this->assertEquals($newSet, $result->getSet());
@@ -169,6 +173,9 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new UniqueValue($uniqueId, $realValue);
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
+        $scope = ['scope' => 'epocs'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $pool = new UniqueValuesPool();
         $pool->add(new UniqueValue($uniqueId, 10));
@@ -179,7 +186,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         $setAfterResolution1 = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 1]));
         $setAfterResolution2 = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 2]));
         $decoratedResolverProphecy
-            ->resolve($realValue, $fixture, $set, [])
+            ->resolve($realValue, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     10,
@@ -188,7 +195,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
             )
         ;
         $decoratedResolverProphecy
-            ->resolve($realValue, $fixture, $setAfterResolution0, [])
+            ->resolve($realValue, $fixture, $setAfterResolution0, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     11,
@@ -197,7 +204,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
             )
         ;
         $decoratedResolverProphecy
-            ->resolve($realValue, $fixture, $setAfterResolution1, [])
+            ->resolve($realValue, $fixture, $setAfterResolution1, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     12,
@@ -210,7 +217,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
 
 
         $resolver = new UniqueValueResolver($pool, $decoratedResolver);
-        $result = $resolver->resolve($value, $fixture, $set);
+        $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertEquals(12, $result->getValue());
         $this->assertEquals($setAfterResolution2, $result->getSet());
@@ -225,6 +232,9 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new UniqueValue($uniqueId, $realValue);
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
+        $scope = ['scope' => 'epocs'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $pool = new UniqueValuesPool();
         $pool->add(new UniqueValue($uniqueId, 10));
@@ -232,7 +242,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
 
         $decoratedResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $decoratedResolverProphecy
-            ->resolve($realValue, $fixture, $set, [])
+            ->resolve($realValue, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(10, $set)
             )
@@ -243,7 +253,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new UniqueValueResolver($pool, $decoratedResolver);
         try {
-            $resolver->resolve($value, $fixture, $set);
+            $resolver->resolve($value, $fixture, $set, $scope, $context);
             $this->fail('Expected exception to be thrown.');
         } catch (UniqueValueGenerationLimitReachedException $exception) {
             $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(150);

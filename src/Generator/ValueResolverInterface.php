@@ -25,6 +25,7 @@ interface ValueResolverInterface
      * @param FixtureInterface   $fixture Fixture to which belongs the arguments.
      * @param ResolvedFixtureSet $fixtureSet
      * @param array              $scope   List of variables accessible while resolving the arguments.
+     * @param GenerationContext  $context
      *
      * @throws ResolutionThrowable
      *
@@ -34,6 +35,7 @@ interface ValueResolverInterface
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = []
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet;
 }

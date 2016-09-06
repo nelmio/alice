@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Definition\Value\OptionalValue;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
@@ -62,7 +63,7 @@ class OptionalValueResolverTest extends \PHPUnit_Framework_TestCase
     {
         $value = new FixturePropertyValue(new FakeValue(), '');
         $resolver = new OptionalValueResolver();
-        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
     public function testReturnsSetWithResolvedValue()

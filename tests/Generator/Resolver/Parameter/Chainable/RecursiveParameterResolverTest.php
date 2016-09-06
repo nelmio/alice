@@ -14,9 +14,7 @@ namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 use Nelmio\Alice\Exception\Generator\Resolver\RecursionLimitReachedException;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
-use Nelmio\Alice\Generator\Resolver\Parameter\ImmutableDummyChainableResolverAwareResolver;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
@@ -96,7 +94,7 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
         $parameter = new Parameter('foo', null);
         $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
         $resolvedParameters = new ParameterBag(['place' => 'Wonderlands']);
-        $context = new \Nelmio\Alice\Generator\Resolver\ResolvingContext('foo');
+        $context = new ResolvingContext('foo');
         $expected = new ParameterBag(['foo' => 'bar']);
 
         $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
@@ -133,7 +131,7 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
         $parameter = new Parameter('foo', null);
         $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
         $resolvedParameters = new ParameterBag(['place' => 'Wonderlands']);
-        $context = new \Nelmio\Alice\Generator\Resolver\ResolvingContext('foo');
+        $context = new ResolvingContext('foo');
 
         $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $decoratedResolverProphecy
@@ -320,10 +318,15 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
                 null,
             ],
             'empty context' => [
-                new \Nelmio\Alice\Generator\Resolver\ResolvingContext(),
+                new ResolvingContext(),
             ],
             'context with random value' => [
-                (new \Nelmio\Alice\Generator\Resolver\ResolvingContext())->with('name'),
+                (function () {
+                    $context = new ResolvingContext();
+                    $context->add('name');
+
+                    return $context;
+                })(),
             ],
         ];
     }

@@ -31,6 +31,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Entity\ValueResolver\DummyWithGetter;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
@@ -541,10 +542,6 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(10, $value);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
-     * @expectedExceptionMessageRegExp /^Could not generate a unique value after 150 attempts for ".*"\.$/
-     */
     public function testUniqueValueGenerationFailure()
     {
         $data = [
@@ -555,7 +552,20 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->loader->loadData($data);
+        try {
+            $this->loader->loadData($data);
+            $this->fail('Expected exception to be thrown.');
+        } catch (UnresolvableValueDuringGenerationException $exception) {
+            $previous = $exception->getPrevious();
+
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
+            $this->assertTrue(
+                1 === preg_match(
+                    '/^Could not generate a unique value after 150 attempts for ".*"\.$/',
+                    $previous->getMessage()
+                )
+            );
+        }
     }
 
     public function testUniqueValueGenerationInAFunctionCall()
@@ -596,8 +606,8 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
             $this->fail('Expected exception to be thrown.');
-        } catch (UniqueValueGenerationLimitReachedException $exception) {
-            // Expected result
+        } catch (UnresolvableValueDuringGenerationException $exception) {
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $exception->getPrevious());
         }
     }
 
@@ -638,8 +648,8 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
             $this->fail('Expected exception to be thrown.');
-        } catch (UniqueValueGenerationLimitReachedException $exception) {
-            // expected result
+        } catch (UnresolvableValueDuringGenerationException $exception) {
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $exception->getPrevious());
         }
     }
 
@@ -1859,17 +1869,6 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        //TODO: check
-//        yield '[templating] cannot extend a non template fixture' => [
-//            [
-//                \stdClass::class => [
-//                    'base_dummy' => [],
-//                    'dummy (extends base_dummy)' => [],
-//                ],
-//            ],
-//            null,
-//        ];
-//
         yield '[templating] nominal' => [
             [
                 \stdClass::class => [
@@ -2117,6 +2116,16 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        yield '[parameter] circular reference' => [
+            [
+                'parameters' => [
+                    'foo' => '<{bar}>',
+                    'bar' => '<{foo}>',
+                ],
+            ],
+            null,
+        ];
+
         yield 'dynamic array with scalar value' => [
             [
                 \stdClass::class => [
@@ -2134,7 +2143,23 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
-    }
 
-    //TODO: test with circular reference
+        yield 'object circular reference' => [
+            [
+                DummyWithConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '@another_dummy',
+                        ],
+                    ],
+                    'another_dummy' => [
+                        '__construct' => [
+                            '@dummy',
+                        ],
+                    ],
+                ],
+            ],
+            null,
+        ];
+    }
 }

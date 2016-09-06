@@ -106,12 +106,13 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
         $context = new ResolvingContext();
 
         $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
+        $context->add('array_param');
         $injectedResolverProphecy
             ->resolve(
                 new Parameter('0', 'foo'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context->with('array_param')
+                $context
             )
             ->willReturn(
                 new ParameterBag([
@@ -120,12 +121,13 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
                 ])
             )
         ;
+        $context->add('array_param');
         $injectedResolverProphecy
             ->resolve(
                 new Parameter('1', 'bar'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context->with('array_param')
+                $context
             )
             ->willReturn(
                 new ParameterBag([
@@ -263,11 +265,26 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
             ],
             'context that does not contain the parameter being resolved' => [
                 new ResolvingContext('unrelated'),
-                (new ResolvingContext('unrelated'))->with('array_param'),
+                (function () {
+                    $context = new ResolvingContext('unrelated');
+                    $context->add('array_param');
+
+                    return $context;
+                })(),
             ],
             'context that contains the parameter being resolved' => [
-                (new ResolvingContext('unrelated'))->with('array_param'),
-                (new ResolvingContext('unrelated'))->with('array_param'),
+                (function () {
+                    $context = new ResolvingContext('unrelated');
+                    $context->add('array_param');
+
+                    return $context;
+                })(),
+                (function () {
+                    $context = new ResolvingContext('unrelated');
+                    $context->add('array_param');
+
+                    return $context;
+                })()
             ],
         ];
     }

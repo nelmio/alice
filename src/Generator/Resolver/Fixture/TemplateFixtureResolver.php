@@ -65,6 +65,7 @@ final class TemplateFixtureResolver
     }
 
     /**
+     * @param TemplatingFixture    $fixture
      * @param FixtureReference[]   $extendedFixtureReferences
      * @param FixtureBag           $unresolvedFixtures
      * @param TemplatingFixtureBag $resolvedFixtures
@@ -86,7 +87,7 @@ final class TemplateFixtureResolver
         $fixtures = new FixtureBag();
         foreach ($extendedFixtureReferences as $reference) {
             $fixtureId = $reference->getId();
-            $context = $context->with($fixtureId);
+            $context->add($fixtureId);
 
             if (false === $unresolvedFixtures->has($fixtureId)) {
                 throw FixtureNotFoundException::create($fixtureId);
@@ -146,8 +147,6 @@ final class TemplateFixtureResolver
             $specs = $specs->mergeWith($extendedFixture->getSpecs());
         }
 
-        return $fixture
-            ->withSpecs($specs)
-        ;
+        return $fixture->withSpecs($specs);
     }
 }

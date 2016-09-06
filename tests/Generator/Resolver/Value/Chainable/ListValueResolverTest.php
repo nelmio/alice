@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\ListValue;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -65,7 +66,7 @@ class ListValueResolverTest extends \PHPUnit_Framework_TestCase
     {
         $value = new ListValue([]);
         $resolver = new ListValueResolver();
-        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
     public function testImplodesTheGivenArrayOfValues()
@@ -74,7 +75,7 @@ class ListValueResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedValueWithFixtureSet('abc', ResolvedFixtureSetFactory::create());
 
         $resolver = new ListValueResolver(new FakeValueResolver());
-        $actual = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $actual = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
         $this->assertEquals($expected, $actual);
     }
@@ -85,10 +86,12 @@ class ListValueResolverTest extends \PHPUnit_Framework_TestCase
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
         $scope = ['scope' => 'epocs'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy
-            ->resolve(new FakeValue(), $fixture, $set, $scope)
+            ->resolve(new FakeValue(), $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     'b',
@@ -97,7 +100,7 @@ class ListValueResolverTest extends \PHPUnit_Framework_TestCase
             )
         ;
         $valueResolverProphecy
-            ->resolve(new FakeValue(), $fixture, $newSet, $scope)
+            ->resolve(new FakeValue(), $fixture, $newSet, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     'd',
@@ -111,7 +114,7 @@ class ListValueResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedValueWithFixtureSet('abcd', $newSet2);
 
         $resolver = new ListValueResolver($valueResolver);
-        $actual = $resolver->resolve($value, $fixture, $set, $scope);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertEquals($expected, $actual);
 

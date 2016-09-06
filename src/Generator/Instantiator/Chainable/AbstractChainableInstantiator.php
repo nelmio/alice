@@ -14,11 +14,15 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
+/**
+ * @internal
+ */
 abstract class AbstractChainableInstantiator implements ChainableInstantiatorInterface
 {
     use NotClonableTrait;
@@ -28,7 +32,11 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
      *
      * @throws InstantiationException
      */
-    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
+    public function instantiate(
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): ResolvedFixtureSet
     {
         try {
             $instance = $this->createInstance($fixture);
@@ -45,7 +53,7 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
             )
         );
 
-        return $fixtureSet->withObjects($objects);;
+        return $fixtureSet->withObjects($objects);
     }
 
     /**

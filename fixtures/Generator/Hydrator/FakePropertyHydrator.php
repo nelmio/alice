@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Generator\Hydrator;
 
 use Nelmio\Alice\Definition\Property;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\NotCallableTrait;
 use Nelmio\Alice\ObjectInterface;
 
@@ -22,7 +23,7 @@ class FakePropertyHydrator implements PropertyHydratorInterface
     /**
      * @inheritdoc
      */
-    public function hydrate(ObjectInterface $object, Property $property): ObjectInterface
+    public function hydrate(ObjectInterface $object, Property $property, GenerationContext $context): ObjectInterface
     {
         $this->__call(__METHOD__, func_get_args());
     }

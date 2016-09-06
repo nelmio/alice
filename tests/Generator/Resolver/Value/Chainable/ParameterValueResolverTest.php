@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\ParameterValue;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -54,7 +55,7 @@ class ParameterValueResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedValueWithFixtureSet('bar', $set);
 
         $resolver = new ParameterValueResolver();
-        $actual = $resolver->resolve($value, new FakeFixture(), $set);
+        $actual = $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
 
         $this->assertEquals($expected, $actual);
     }
@@ -69,6 +70,6 @@ class ParameterValueResolverTest extends \PHPUnit_Framework_TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new ParameterValueResolver();
-        $resolver->resolve($value, new FakeFixture(), $set);
+        $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
     }
 }

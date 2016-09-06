@@ -193,7 +193,12 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
                 new Parameter('bar', 'unresolved(bar)'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                (new \Nelmio\Alice\Generator\Resolver\ResolvingContext('foo'))->with('bar')
+                (function () {
+                    $context = new ResolvingContext('foo');
+                    $context->add('bar');
+
+                    return $context;
+                })()
             )
             ->willReturn(
                 new ParameterBag([
@@ -223,6 +228,7 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
         ]);
         $resolvedParameters = new ParameterBag();
         $context = new ResolvingContext('ping');
+        $context->add('foo');
         $expected = new ParameterBag([
             'bar' => 'Mad Hatter',
             'foo' => 'Mad Hatter',
@@ -235,8 +241,6 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
                 $unresolvedParameters,
                 $resolvedParameters,
                 $context
-                    ->with('foo')
-                    ->with('bar')
             )
             ->willReturn(
                 new ParameterBag([

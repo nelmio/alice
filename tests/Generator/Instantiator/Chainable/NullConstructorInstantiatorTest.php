@@ -19,6 +19,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructorThrowing
 use Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 
@@ -60,7 +61,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testIfCannotGetConstructorReflectionTriesToInstantiateObjectWithoutArguments()
     {
         $fixture = new SimpleFixture('dummy', DummyWithDefaultConstructor::class, SpecificationBagFactory::create());
-        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $expected = new DummyWithDefaultConstructor();
         $actual = $set->getObjects()->get($fixture)->getInstance();
@@ -75,7 +76,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfInstantiatingObjectWithoutArgumentsFails()
     {
         $fixture = new SimpleFixture('dummy', AbstractDummy::class, SpecificationBagFactory::create());
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     /**
@@ -85,7 +86,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfReflectionFailsWithAnotherErrorThanMethodNotExisting()
     {
         $fixture = new SimpleFixture('dummy', 'Unknown', SpecificationBagFactory::create());
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     /**
@@ -95,7 +96,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfObjectConstructorHasMandatoryParameters()
     {
         $fixture = new SimpleFixture('dummy', DummyWithRequiredParameterInConstructor::class, SpecificationBagFactory::create());
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     /**
@@ -105,7 +106,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfObjectInstantiationFailsUnderNominalConditions()
     {
         $fixture = new SimpleFixture('dummy', DummyWithExplicitDefaultConstructorThrowingException::class, SpecificationBagFactory::create());
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     /**
@@ -115,7 +116,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfObjectConstructorIsPrivate()
     {
         $fixture = new SimpleFixture('dummy', DummyWithPrivateConstructor::class, SpecificationBagFactory::create());
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     /**
@@ -125,6 +126,6 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfObjectConstructorIsProtected()
     {
         $fixture = new SimpleFixture('dummy', DummyWithProtectedConstructor::class, SpecificationBagFactory::create());
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 }

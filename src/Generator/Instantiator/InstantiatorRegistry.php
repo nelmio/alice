@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Generator\Instantiator;
 
 use Nelmio\Alice\Exception\Generator\Instantiator\InstantiatorNotFoundException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
@@ -64,11 +65,15 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
      *
      * @throws InstantiatorNotFoundException
      */
-    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
+    public function instantiate(
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): ResolvedFixtureSet
     {
         foreach ($this->instantiators as $instantiator) {
             if ($instantiator->canInstantiate($fixture)) {
-                return $instantiator->instantiate($fixture, $fixtureSet);
+                return $instantiator->instantiate($fixture, $fixtureSet, $context);
             }
         }
 

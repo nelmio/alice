@@ -12,10 +12,10 @@
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
-use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\NoValueForCurrentException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -44,8 +44,8 @@ final class ValueForCurrentValueResolver implements ChainableValueResolverInterf
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = [],
-        int $tryCounter = 0
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         return new ResolvedValueWithFixtureSet(

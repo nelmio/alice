@@ -16,6 +16,7 @@ use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
@@ -59,6 +60,9 @@ class ValueResolverRegistryTest extends \PHPUnit_Framework_TestCase
         $value = new FakeValue();
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
+        $scope = ['scope' => 'epocs'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
         $expected = new ResolvedValueWithFixtureSet(
             10,
             ResolvedFixtureSetFactory::create(null, null, (new ObjectBag())->with(new SimpleObject('dummy', new \stdClass())))
@@ -71,7 +75,7 @@ class ValueResolverRegistryTest extends \PHPUnit_Framework_TestCase
 
         $instantiator2Prophecy = $this->prophesize(ChainableValueResolverInterface::class);
         $instantiator2Prophecy->canResolve($value)->willReturn(true);
-        $instantiator2Prophecy->resolve($value, $fixture, $set, [])->willReturn($expected);
+        $instantiator2Prophecy->resolve($value, $fixture, $set, $scope, $context)->willReturn($expected);
         /* @var ChainableValueResolverInterface $instantiator2 */
         $instantiator2 = $instantiator2Prophecy->reveal();
 
@@ -85,7 +89,7 @@ class ValueResolverRegistryTest extends \PHPUnit_Framework_TestCase
             $instantiator2,
             $instantiator3,
         ]);
-        $actual = $registry->resolve($value, $fixture, $set);
+        $actual = $registry->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertSame($expected, $actual);
 
@@ -105,6 +109,6 @@ class ValueResolverRegistryTest extends \PHPUnit_Framework_TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $registry = new ValueResolverRegistry([]);
-        $registry->resolve(new DummyValue('foo'), $fixture, $set);
+        $registry->resolve(new DummyValue('foo'), $fixture, $set, [], new GenerationContext());
     }
 }

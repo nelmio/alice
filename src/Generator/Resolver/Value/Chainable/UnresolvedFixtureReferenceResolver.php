@@ -20,6 +20,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -89,7 +90,8 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = []
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
@@ -104,7 +106,13 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
             $scope
         );
 
-        return $this->decoratedResolver->resolve(new FixtureReferenceValue($referredFixtureId), $fixture, $fixtureSet, $scope);
+        return $this->decoratedResolver->resolve(
+            new FixtureReferenceValue($referredFixtureId),
+            $fixture,
+            $fixtureSet,
+            $scope,
+            $context
+        );
     }
 
     private function getReferredFixtureId(

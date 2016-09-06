@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Generator\Instantiator;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
@@ -57,7 +58,7 @@ class ExistingInstanceInstantiatorTest extends \PHPUnit_Framework_TestCase
         );
 
         $instantiator = new ExistingInstanceInstantiator(new FakeInstantiator());
-        $actual = $instantiator->instantiate($fixture, $set);
+        $actual = $instantiator->instantiate($fixture, $set, new GenerationContext());
 
         $this->assertSame($expected, $actual);
     }
@@ -66,10 +67,12 @@ class ExistingInstanceInstantiatorTest extends \PHPUnit_Framework_TestCase
     {
         $fixture = new DummyFixture('dummy');
         $set = ResolvedFixtureSetFactory::create();
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $decoratedInstantiatorProphecy = $this->prophesize(InstantiatorInterface::class);
         $decoratedInstantiatorProphecy
-            ->instantiate($fixture, $set)
+            ->instantiate($fixture, $set, $context)
             ->willReturn(
                 $expected = $set->withObjects(
                     (new ObjectBag())->with(
@@ -85,7 +88,7 @@ class ExistingInstanceInstantiatorTest extends \PHPUnit_Framework_TestCase
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
         $instantiator = new ExistingInstanceInstantiator($decoratedInstantiator);
-        $actual = $instantiator->instantiate($fixture, $set);
+        $actual = $instantiator->instantiate($fixture, $set, $context);
 
         $this->assertSame($expected, $actual);
 

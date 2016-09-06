@@ -27,57 +27,43 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($context->has('foo'));
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testMutator()
     {
         $context = new ResolvingContext();
-        $newContext = $context->with('foo');
 
-        $this->assertInstanceOf(ResolvingContext::class, $newContext);
-        $this->assertNotSame($newContext, $context);
         $this->assertFalse($context->has('foo'));
-        $this->assertTrue($newContext->has('foo'));
+        $context->add('foo');
+        $this->assertTrue($context->has('foo'));
     }
 
-    public function testStaticFactoryMethodCreatesANewInstance()
+    public function testStaticFactoryMethodReturnsExistingInstance()
     {
         $context = ResolvingContext::createFrom(null, 'foo');
         $this->assertTrue($context->has('foo'));
 
-        $newContext = ResolvingContext::createFrom($context->with('bar'), 'ping');
-        $this->assertFalse($context->has('bar'));
-        $this->assertFalse($context->has('ping'));
-        $this->assertTrue($newContext->has('foo'));
-        $this->assertTrue($newContext->has('bar'));
-        $this->assertTrue($newContext->has('ping'));
-        $this->assertNotSame($newContext, $context);
-
-        $newContext = ResolvingContext::createFrom($context, 'bar');
-        $this->assertFalse($context->has('bar'));
-        $this->assertTrue($newContext->has('foo'));
-        $this->assertTrue($newContext->has('bar'));
-        $this->assertNotSame($newContext, $context);
+        $newContext = ResolvingContext::createFrom($context, 'ping');
+        $this->assertSame($context, $newContext);
+        $this->assertTrue($context->has('foo'));
+        $this->assertTrue($context->has('ping'));
     }
 
     public function testFactoryMethodCannotTriggerACircularReference()
     {
         $context = new ResolvingContext('foo');
         $context->checkForCircularReference('foo');
-        $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
         $context = ResolvingContext::createFrom($context, 'foo');
         $context->checkForCircularReference('foo');
-        $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
         $context = ResolvingContext::createFrom($context, 'foo');
         $context->checkForCircularReference('foo');
-        $this->assertTrue(true, 'Did not expect exception to be thrown.');
 
-        $context = $context->with('foo');
+        $context->add('foo');
         try {
             $context->checkForCircularReference('foo');
             $this->fail('Expected exception to be thrown.');
         } catch (CircularReferenceException $exception) {
-            // expected result
+            // Expected result
         }
     }
 
@@ -86,10 +72,10 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $context = new ResolvingContext('bar');
         $context->checkForCircularReference('foo');
 
-        $context = $context->with('foo');
+        $context->add('foo');
         $context->checkForCircularReference('foo');
 
-        $context = $context->with('foo');
+        $context->add('foo');
         try {
             $context->checkForCircularReference('foo');
             $this->fail('Expected exception to be thrown.');
@@ -103,7 +89,7 @@ class ResolvingContextTest extends \PHPUnit_Framework_TestCase
         $context = new ResolvingContext('foo');
         $context->checkForCircularReference('foo');
 
-        $context = $context->with('foo');
+        $context->add('foo');
         try {
             $context->checkForCircularReference('foo');
             $this->fail('Expected exception to be thrown.');

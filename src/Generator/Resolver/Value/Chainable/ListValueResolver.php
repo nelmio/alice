@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -61,8 +62,8 @@ final class ListValueResolver implements ChainableValueResolverInterface, ValueR
         ValueInterface $list,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = [],
-        int $tryCounter = 0
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
@@ -72,7 +73,7 @@ final class ListValueResolver implements ChainableValueResolverInterface, ValueR
         $values = $list->getValue();
         foreach ($values as $index => $value) {
             if ($value instanceof ValueInterface) {
-                $resolvedSet = $this->resolver->resolve($value, $fixture, $fixtureSet, $scope);
+                $resolvedSet = $this->resolver->resolve($value, $fixture, $fixtureSet, $scope, $context);
 
                 $values[$index] = $resolvedSet->getValue();
                 $fixtureSet = $resolvedSet->getSet();

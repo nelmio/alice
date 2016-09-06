@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Generator\Instantiator;
 
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\NotCallableTrait;
@@ -23,7 +24,7 @@ class FakeInstantiator implements InstantiatorInterface
     /**
      * @inheritdoc
      */
-    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
+    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
     {
         $this->__call(__METHOD__, func_get_args());
     }

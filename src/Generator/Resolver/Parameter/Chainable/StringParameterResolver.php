@@ -126,7 +126,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         }
 
         $context->checkForCircularReference($key);
-        $context = $context->with($key);
+        $context->add($key);
 
         if (null === $resolver) {
             throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);

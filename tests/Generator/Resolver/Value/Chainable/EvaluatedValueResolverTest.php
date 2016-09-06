@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -50,7 +51,6 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new EvaluatedValue('"Hello"." "."world!"');
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
-        $scope = ['val' => 'scopie'];
 
         $expected = new ResolvedValueWithFixtureSet(
             'Hello world!',
@@ -58,7 +58,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $resolver = new EvaluatedValueResolver();
-        $actual = $resolver->resolve($value, $fixture, $set, $scope);
+        $actual = $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
         $this->assertEquals($expected, $actual);
     }
@@ -74,7 +74,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new EvaluatedValueResolver();
-        $resolver->resolve($value, $fixture, $set);
+        $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
     }
 
     /**
@@ -88,7 +88,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new EvaluatedValueResolver();
-        $resolver->resolve($value, $fixture, $set);
+        $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
     }
 
     public function testTheEvaluatedExpressionCanContainScopeFunctions()
@@ -106,7 +106,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $resolver = new EvaluatedValueResolver();
-        $actual = $resolver->resolve($value, $fixture, $set, $scope);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
 
         $this->assertEquals($expected, $actual);
     }
@@ -133,13 +133,13 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $resolver = new EvaluatedValueResolver();
-        $actual = $resolver->resolve($value, $fixture, $set, $scope);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
 
         $this->assertEquals($expected, $actual);
 
         $value = new EvaluatedValue('$scope');
         try {
-            $resolver->resolve($value, $fixture, $set, $scope);
+            $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
             $this->fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
             $this->assertEquals(

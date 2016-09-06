@@ -14,23 +14,25 @@ namespace Nelmio\Alice\Generator\Resolver;
 use Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException;
 
 /**
- * Counter to keep track of the parameters being resolved and detect circular references.
+ * Counter to keep track of the parameters, fixtures etc. being resolved and detect circular references.
  */
 final class ResolvingContext
 {
     /**
      * @var array
      */
-    private $resolving;
+    private $resolving = [];
 
     public function __construct(string $key = null)
     {
-        $this->resolving = isset($key) ? $this->add([], $key) : [];
+        if (null !== $key) {
+            $this->add($key);
+        }
     }
 
     /**
-     * Creates a new instance from the given one and ensure it has the given key. If the key is already present, will
-     * not increment the counter (unlike the ::with() method).
+     * Returns the existing instance if is an object or create a new one otherwise. It also ensure that the key will be
+     * added also it won't increment the counter if already present.
      *
      * @param self|null $resolving
      * @param string    $key
@@ -39,9 +41,9 @@ final class ResolvingContext
      */
     public static function createFrom(self $resolving = null, string $key): self
     {
-        $instance = null === $resolving ? new self() : clone $resolving;
+        $instance = null === $resolving ? new self() : $resolving;
         if (false === $instance->has($key)) {
-            $instance = $instance->with($key);
+            $instance->add($key);
         }
 
         return $instance;
@@ -52,21 +54,16 @@ final class ResolvingContext
         return array_key_exists($key, $this->resolving);
     }
 
-    /**
-     * @param string $key Parameter key
-     *
-     * @return self
-     */
-    public function with(string $key): self
+    public function add(string $key)
     {
-        $clone = clone $this;
-        $clone->resolving = $this->add($clone->resolving, $key);
-
-        return $clone;
+        $this->resolving[$key] = array_key_exists($key, $this->resolving)
+            ? $this->resolving[$key] + 1
+            : 1
+        ;
     }
 
     /**
-     * @param string $key Parameter key
+     * @param string $key
      *
      * @throws CircularReferenceException
      */
@@ -75,15 +72,5 @@ final class ResolvingContext
         if (true === $this->has($key) && 1 < $this->resolving[$key]) {
             throw CircularReferenceException::createForParameter($key, $this->resolving);
         }
-    }
-
-    private function add(array $resolving, string $key): array
-    {
-        $resolving[$key] = array_key_exists($key, $resolving)
-            ? $resolving[$key] + 1
-            : 1
-        ;
-
-        return $resolving;
     }
 }

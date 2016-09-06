@@ -14,12 +14,15 @@ namespace Nelmio\Alice\Generator\Hydrator;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectInterface;
+use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInterface
 {
@@ -52,7 +55,11 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
     /**
      * @inheritdoc
      */
-    public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
+    public function hydrate(
+        ObjectInterface $object,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): ResolvedFixtureSet
     {
         if (null === $this->resolver) {
             throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
@@ -68,13 +75,17 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
             /** @var Property $property */
             $propertyValue = $property->getValue();
             if ($propertyValue instanceof ValueInterface) {
-                $result = $this->resolver->resolve($propertyValue, $fixture, $fixtureSet, $scope);
+                try {
+                    $result = $this->resolver->resolve($propertyValue, $fixture, $fixtureSet, $scope, $context);
+                } catch (ResolutionThrowable $throwable) {
+                    throw UnresolvableValueDuringGenerationException::createFromResolutionThrowable($throwable);
+                }
                 list($propertyValue, $fixtureSet) = [$result->getValue(), $result->getSet()];
                 $property = $property->withValue($propertyValue);
             }
             $scope[$property->getName()] = $propertyValue;
 
-            $object = $this->hydrator->hydrate($object, $property);
+            $object = $this->hydrator->hydrate($object, $property, $context);
         }
 
         return $fixtureSet->withObjects(

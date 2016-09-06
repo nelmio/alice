@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\NotCallableTrait;
@@ -36,7 +37,9 @@ class FakeChainableValueResolver implements ChainableValueResolverInterface
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = []): ResolvedValueWithFixtureSet
+        array $scope,
+        GenerationContext $context
+    ): ResolvedValueWithFixtureSet
     {
         $this->__call(__METHOD__, func_get_args());
     }

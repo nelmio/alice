@@ -12,11 +12,11 @@
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
-use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Dummy;
 use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
@@ -67,7 +67,7 @@ class AbstractChainableInstantiatorTest extends \PHPUnit_Framework_TestCase
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
         $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
-        $instantiator->instantiate($fixture, $set);
+        $instantiator->instantiate($fixture, $set, new GenerationContext());
     }
 
     /**
@@ -85,7 +85,7 @@ class AbstractChainableInstantiatorTest extends \PHPUnit_Framework_TestCase
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
         $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
-        $instantiator->instantiate($fixture, $set);
+        $instantiator->instantiate($fixture, $set, new GenerationContext());
     }
 
     public function testReturnsNewSetWithInstantiatedObject()
@@ -112,7 +112,7 @@ class AbstractChainableInstantiatorTest extends \PHPUnit_Framework_TestCase
         );
 
         $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
-        $actual = $instantiator->instantiate($fixture, $set);
+        $actual = $instantiator->instantiate($fixture, $set, new GenerationContext());
 
         $this->assertEquals($expected, $actual);
 

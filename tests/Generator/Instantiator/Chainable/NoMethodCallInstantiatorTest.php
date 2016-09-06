@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Entity\Instantiator\AbstractDummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 
@@ -69,7 +70,7 @@ class NoMethodCallInstantiatorTest extends \PHPUnit_Framework_TestCase
             DummyWithRequiredParameterInConstructor::class,
             SpecificationBagFactory::create()
         );
-        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $instance = $set->getObjects()->get($fixture)->getInstance();
         $this->assertInstanceOf(DummyWithRequiredParameterInConstructor::class, $instance);
@@ -99,6 +100,6 @@ class NoMethodCallInstantiatorTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 }
