@@ -26,7 +26,6 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
-use Nelmio\Alice\Throwable\GenerationThrowable;
 use Prophecy\Argument;
 
 /**

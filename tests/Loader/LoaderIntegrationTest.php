@@ -2240,7 +2240,14 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
-            null,
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => ['bar', 'bar', 'bar', 'bar', 'bar']
+                    ]),
+                ],
+            ],
         ];
     }
 }

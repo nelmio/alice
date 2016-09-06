@@ -78,15 +78,6 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         return $this->instantiator->instantiate($fixture, $fixtureSet, $context);
     }
 
-    /**
-     * @param FixtureInterface   $fixture
-     * @param ResolvedFixtureSet $set
-     * @param GenerationContext  $context
-     *
-     * @throws UnresolvableValueDuringGenerationException
-     *
-     * @return array
-     */
     private function resolveFixtureConstructor(
         FixtureInterface $fixture,
         ResolvedFixtureSet $set,
@@ -144,11 +135,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     {
         foreach ($arguments as $index => $argument) {
             if ($argument instanceof ValueInterface) {
-                try {
-                    $result = $resolver->resolve($argument, $fixture, $fixtureSet, [], $context);
-                } catch (ResolutionThrowable $throwable) {
-                    throw UnresolvableValueDuringGenerationException::createFromResolutionThrowable($throwable);
-                }
+                $result = $resolver->resolve($argument, $fixture, $fixtureSet, [], $context);
 
                 $fixtureSet = $result->getSet();
                 $arguments[$index] = $result->getValue();
