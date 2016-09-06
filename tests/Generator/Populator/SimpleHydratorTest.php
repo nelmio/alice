@@ -19,6 +19,7 @@ use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Definition\Value\FakeObject;
 use Nelmio\Alice\Definition\Value\FakeValue;
+use Nelmio\Alice\Exception\RootResolutionException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\HydratorInterface;
@@ -29,6 +30,7 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\GenerationThrowable;
 use Prophecy\Argument;
 
 /**
@@ -219,5 +221,43 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
         $actual = $hydrator->hydrate($object, $set, $context);
 
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testThrowsAGenerationThrowableIfResolutionFails()
+    {
+        $object = new SimpleObject('dummy', new \stdClass());
+        $set = ResolvedFixtureSetFactory::create(
+            null,
+            $fixtures = (new FixtureBag())->with(
+                $fixture = new SimpleFixture(
+                    'dummy',
+                    \stdClass::class,
+                    new SpecificationBag(
+                        null,
+                        (new PropertyBag())
+                            ->with(new Property('username', $usernameValue = new FakeValue()))
+                            ->with(new Property('group', $groupValue = new FakeValue()))
+                        ,
+                        new MethodCallBag()
+                    )
+                )
+            )
+        );
+
+        $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
+        $resolverProphecy
+            ->resolve(Argument::cetera())
+            ->willThrow(RootResolutionException::class)
+        ;
+        /** @var ValueResolverInterface $resolver */
+        $resolver = $resolverProphecy->reveal();
+
+        $hydrator = new SimpleHydrator(new FakePropertyHydrator(), $resolver);
+        try {
+            $hydrator->hydrate($object, $set, new GenerationContext());
+            $this->fail('Expected exception to be thrown.');
+        } catch (GenerationThrowable $throwable) {
+            // Expected result
+        }
     }
 }

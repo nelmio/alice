@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Generator\Hydrator;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -21,6 +22,7 @@ use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectInterface;
+use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInterface
 {
@@ -73,7 +75,11 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
             /** @var Property $property */
             $propertyValue = $property->getValue();
             if ($propertyValue instanceof ValueInterface) {
-                $result = $this->resolver->resolve($propertyValue, $fixture, $fixtureSet, $scope, $context);
+                try {
+                    $result = $this->resolver->resolve($propertyValue, $fixture, $fixtureSet, $scope, $context);
+                } catch (ResolutionThrowable $throwable) {
+                    throw UnresolvableValueDuringGenerationException::createFromResolutionThrowable($throwable);
+                }
                 list($propertyValue, $fixtureSet) = [$result->getValue(), $result->getSet()];
                 $property = $property->withValue($propertyValue);
             }

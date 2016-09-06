@@ -16,6 +16,7 @@ use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\VariableValue;
+use Nelmio\Alice\Exception\RootResolutionException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
@@ -25,6 +26,7 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\Throwable\GenerationThrowable;
 use Prophecy\Argument;
 
 /**
@@ -132,6 +134,37 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
         $decoratedInstantiatorProphecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testThrowsAGenerationThrowableIfResolutionFails()
+    {
+        $specs = SpecificationBagFactory::create(
+            new SimpleMethodCall(
+                '__construct',
+                [
+                    $firstArg = new VariableValue('firstArg'),
+                    $secondArg = new VariableValue('secondArg'),
+                ]
+            )
+        );
+        $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
+        $set = ResolvedFixtureSetFactory::create();
+
+        $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
+        $resolverProphecy
+            ->resolve(Argument::cetera())
+            ->willThrow(RootResolutionException::class)
+        ;
+        /** @var ValueResolverInterface $resolver */
+        $resolver = $resolverProphecy->reveal();
+
+        $instantiator = new InstantiatorResolver(new FakeInstantiator(), $resolver);
+        try {
+            $instantiator->instantiate($fixture, $set, new GenerationContext());
+            $this->fail('Expected exception to be thrown.');
+        } catch (GenerationThrowable $throwable) {
+            // Expected result.
+        }
     }
 
     public function testDoesNotResolveArgumentsIfNoConstructorGiven()

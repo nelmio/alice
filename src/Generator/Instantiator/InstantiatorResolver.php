@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Generator\Instantiator;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
@@ -21,6 +22,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
  * Resolves each argument to be passed to the constructor when is relevant before handling over the updated fixture to
@@ -128,7 +130,11 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     {
         foreach ($arguments as $index => $argument) {
             if ($argument instanceof ValueInterface) {
-                $result = $resolver->resolve($argument, $fixture, $fixtureSet, [], $context);
+                try {
+                    $result = $resolver->resolve($argument, $fixture, $fixtureSet, [], $context);
+                } catch (ResolutionThrowable $throwable) {
+                    throw UnresolvableValueDuringGenerationException::createFromResolutionThrowable($throwable);
+                }
 
                 $fixtureSet = $result->getSet();
                 $arguments[$index] = $result->getValue();
