@@ -55,9 +55,9 @@ script:
         fi
     else
         if [ -n "$SYMFONY_VERSION" ]; then
-            bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure --group=symfony
+            bin/phpunit -c $PHPUNIT_CONFIG --group=symfony
         else
-            bin/phpunit -c $PHPUNIT_CONFIG --stop-on-failure --exclude-group=symfony
+            bin/phpunit -c $PHPUNIT_CONFIG --exclude-group=symfony
         fi
     fi
 
