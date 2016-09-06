@@ -135,7 +135,11 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     {
         foreach ($arguments as $index => $argument) {
             if ($argument instanceof ValueInterface) {
-                $result = $resolver->resolve($argument, $fixture, $fixtureSet, [], $context);
+                try {
+                    $result = $resolver->resolve($argument, $fixture, $fixtureSet, [], $context);
+                } catch (ResolutionThrowable $throwable) {
+                    throw UnresolvableValueDuringGenerationException::createFromResolutionThrowable($throwable);
+                }
 
                 $fixtureSet = $result->getSet();
                 $arguments[$index] = $result->getValue();
