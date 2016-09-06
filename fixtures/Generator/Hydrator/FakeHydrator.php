@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Generator\Hydrator;
 
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\NotCallableTrait;
@@ -23,7 +24,7 @@ class FakeHydrator implements HydratorInterface
     /**
      * @inheritdoc
      */
-    public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
+    public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
     {
         $this->__call(__METHOD__, func_get_args());
     }

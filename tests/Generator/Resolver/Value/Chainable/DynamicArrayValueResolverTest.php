@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -79,7 +80,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
     {
         $value = new DynamicArrayValue('', '');
         $resolver = new DynamicArrayValueResolver();
-        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
     /**
@@ -97,10 +98,13 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new DynamicArrayValue($quantifier, '');
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
+        $scope = ['injected' => true];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('bar');
 
         $decoratedResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $decoratedResolverProphecy
-            ->resolve($quantifier, $fixture, $set, [])
+            ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(10, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
             )
@@ -109,7 +113,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
-        $resolver->resolve($value, $fixture, $set);
+        $resolver->resolve($value, $fixture, $set, $scope, $context);
     }
 
     /**
@@ -122,10 +126,13 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new DynamicArrayValue($quantifier, '');
         $fixture = new DummyFixture('dummy');
         $set = ResolvedFixtureSetFactory::create();
+        $scope = ['injected' => true];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('bar');
 
         $decoratedResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $decoratedResolverProphecy
-            ->resolve($quantifier, $fixture, $set, [])
+            ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(1, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
             )
@@ -134,7 +141,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
-        $resolver->resolve($value, $fixture, $set);
+        $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -145,10 +152,13 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new DynamicArrayValue($quantifier, 'static val');
         $fixture = new DummyFixture('dummy');
         $set = ResolvedFixtureSetFactory::create();
+        $scope = ['injected' => true];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('bar');
 
         $decoratedResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $decoratedResolverProphecy
-            ->resolve($quantifier, $fixture, $set, [])
+            ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(2, $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
             )
@@ -157,7 +167,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
-        $result = $resolver->resolve($value, $fixture, $set);
+        $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertSame(['static val', 'static val'], $result->getValue());
         $this->assertEquals($newSet, $result->getSet());
@@ -170,18 +180,21 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new DynamicArrayValue($quantifier, $element);
         $fixture = new DummyFixture('dummy');
         $set = ResolvedFixtureSetFactory::create();
+        $scope = ['injected' => true];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('bar');
 
         $decoratedResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $setAfterFirstResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 0]));
         $decoratedResolverProphecy
-            ->resolve($element, $fixture, $set, [])
+            ->resolve($element, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(10, $setAfterFirstResolution)
             )
         ;
         $setAfterSecondResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 1]));
         $decoratedResolverProphecy
-            ->resolve($element, $fixture, $setAfterFirstResolution, [])
+            ->resolve($element, $fixture, $setAfterFirstResolution, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(100, $setAfterSecondResolution)
             )
@@ -190,7 +203,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
-        $result = $resolver->resolve($value, $fixture, $set);
+        $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertSame([10, 100], $result->getValue());
         $this->assertEquals($setAfterSecondResolution, $result->getSet());

@@ -22,10 +22,15 @@ interface HydratorInterface
      *
      * @param ObjectInterface    $object Object to hydrate
      * @param ResolvedFixtureSet $fixtureSet
+     * @param GenerationContext  $context
      *
      * @throws HydrationThrowable
      *
      * @return ResolvedFixtureSet
      */
-    public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet;
+    public function hydrate(
+        ObjectInterface $object,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): ResolvedFixtureSet;
 }

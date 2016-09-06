@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -67,7 +68,7 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
     {
         $value = new FixturePropertyValue(new FakeValue(), '');
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
-        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
     public function testReturnsSetWithResolvedValue()
@@ -76,6 +77,8 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
         $scope = ['val' => 'scopie'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $fakerGeneratorProphecy = $this->prophesize(FakerGenerator::class);
         $fakerGeneratorProphecy->format('foo', [])->willReturn('bar');
@@ -85,7 +88,7 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
         $expected = new ResolvedValueWithFixtureSet('bar', $set);
 
         $resolver = new FakerFunctionCallValueResolver($fakerGenerator, new FakeValueResolver());
-        $actual = $resolver->resolve($value, $fixture, $set, $scope);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertEquals($expected, $actual);
     }
@@ -103,10 +106,12 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
         $scope = ['val' => 'scopie'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy
-            ->resolve(new FakeValue(), $fixture, $set, $scope)
+            ->resolve(new FakeValue(), $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     $instance = new \stdClass(),
@@ -134,7 +139,7 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
         $expected = new ResolvedValueWithFixtureSet('bar', $newSet);
 
         $resolver = new FakerFunctionCallValueResolver($fakerGenerator, $valueResolver);
-        $actual = $resolver->resolve($value, $fixture, $set, $scope);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertEquals($expected, $actual);
     }
@@ -146,7 +151,7 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver());
-        $result = $resolver->resolve($value, $fixture, $set);
+        $result = $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
         $this->assertEquals(9, strlen($result->getValue()));
         $this->assertEquals('Hello ', substr($result->getValue(), 0, 6));
@@ -163,6 +168,6 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver());
-        $resolver->resolve($value, $fixture, $set);
+        $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
     }
 }

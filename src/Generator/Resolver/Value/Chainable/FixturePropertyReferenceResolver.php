@@ -17,6 +17,7 @@ use Nelmio\Alice\Exception\Generator\Resolver\NoSuchPropertyException;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -78,15 +79,15 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = [],
-        int $tryCounter = 0
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
             throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
         }
 
-        $fixtureReferenceResult = $this->resolver->resolve($value->getReference(), $fixture, $fixtureSet, $scope);
+        $fixtureReferenceResult = $this->resolver->resolve($value->getReference(), $fixture, $fixtureSet, $scope, $context);
         /** @var ResolvedFixtureSet $fixtureSet */
         list($instance, $fixtureSet) = [$fixtureReferenceResult->getValue(), $fixtureReferenceResult->getSet()];
 

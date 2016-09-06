@@ -22,6 +22,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructorThrowing
 use Nelmio\Alice\Entity\Instantiator\DummyWithFakeNamedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndOptionalParameters;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 
@@ -101,7 +102,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $expected = DummyWithNamedConstructor::namedConstruct();
         $actual = $set->getObjects()->get($fixture)->getInstance();
@@ -122,7 +123,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $expected = DummyWithNamedConstructorAndOptionalParameters::namedConstruct(10);
         $actual = $set->getObjects()->get($fixture)->getInstance();
@@ -147,7 +148,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     /**
@@ -167,7 +168,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     /**
@@ -187,7 +188,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     /**
@@ -208,7 +209,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     /**
@@ -228,7 +229,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $expected = DummyWithNamedConstructorAndOptionalParameters::namedConstruct(10);
         $actual = $set->getObjects()->get($fixture)->getInstance();
@@ -253,6 +254,6 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create());
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 }

@@ -16,6 +16,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
@@ -85,7 +86,8 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = [],
+        array $scope,
+        GenerationContext $context,
         int $tryCounter = 0
     ): ResolvedValueWithFixtureSet
     {
@@ -96,10 +98,10 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
          * @var UniqueValue        $generatedValue
          * @var ResolvedFixtureSet $fixtureSet
          */
-        list($generatedValue, $fixtureSet) = $this->generateValue($value, $fixture, $fixtureSet, $scope);
+        list($generatedValue, $fixtureSet) = $this->generateValue($value, $fixture, $fixtureSet, $scope, $context);
 
         if ($this->pool->has($generatedValue)) {
-            return $this->resolve($value, $fixture, $fixtureSet, $scope, $tryCounter);
+            return $this->resolve($value, $fixture, $fixtureSet, $scope, $context, $tryCounter);
         }
         $this->pool->add($generatedValue);
 
@@ -127,12 +129,13 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         UniqueValue $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = []
+        array $scope,
+        GenerationContext $context
     ): array
     {
         $realValue = $value->getValue();
         if ($realValue instanceof ValueInterface) {
-            $result = $this->resolver->resolve($value->getValue(), $fixture, $fixtureSet, $scope);
+            $result = $this->resolver->resolve($value->getValue(), $fixture, $fixtureSet, $scope, $context);
 
             return [$value->withValue($result->getValue()), $result->getSet()];
         }

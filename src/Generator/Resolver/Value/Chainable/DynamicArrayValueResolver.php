@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -75,14 +76,15 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = []
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         $this->checkResolver(__METHOD__);
 
         $quantifier = $value->getQuantifier();
         if ($quantifier instanceof ValueInterface) {
-            $result = $this->resolver->resolve($quantifier, $fixture, $fixtureSet, $scope);
+            $result = $this->resolver->resolve($quantifier, $fixture, $fixtureSet, $scope, $context);
             list($quantifier, $fixtureSet) = [$result->getValue(), $result->getSet()];
         }
 
@@ -106,7 +108,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
 
         $array = [];
         for ($i = 0; $i < $quantifier; $i++) {
-            $result = $this->resolver->resolve($element, $fixture, $fixtureSet, $scope);
+            $result = $this->resolver->resolve($element, $fixture, $fixtureSet, $scope, $context);
 
             $array[] = $result->getValue();
             $fixtureSet = $result->getSet();

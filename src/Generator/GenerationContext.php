@@ -11,6 +11,9 @@
 
 namespace Nelmio\Alice\Generator;
 
+use Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException;
+use Nelmio\Alice\Generator\Resolver\ResolvingContext;
+
 final class GenerationContext
 {
     /**
@@ -18,9 +21,15 @@ final class GenerationContext
      */
     private $isFirstPass;
 
+    /**
+     * @var ResolvingContext
+     */
+    private $resolving;
+
     public function __construct()
     {
         $this->isFirstPass = true;
+        $this->resolving = new ResolvingContext();
     }
 
     public function isFirstPass(): bool
@@ -31,5 +40,16 @@ final class GenerationContext
     public function setToSecondPass()
     {
         $this->isFirstPass = false;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @throws CircularReferenceException
+     */
+    public function markIsResolvingFixture(string $id)
+    {
+        $this->resolving->add($id);
+        $this->resolving->checkForCircularReference($id);
     }
 }

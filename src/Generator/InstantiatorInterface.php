@@ -22,10 +22,15 @@ interface InstantiatorInterface
      *
      * @param FixtureInterface   $fixture
      * @param ResolvedFixtureSet $fixtureSet
+     * @param GenerationContext  $context
      *
      * @throws InstantiationThrowable
      *
      * @return ResolvedFixtureSet
      */
-    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet;
+    public function instantiate(
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): ResolvedFixtureSet;
 }

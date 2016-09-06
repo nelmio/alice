@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Generator\Instantiator;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\ObjectBag;
@@ -54,6 +55,8 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
         $expected = ResolvedFixtureSetFactory::create(
             null,
             null,
@@ -68,7 +71,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
 
         $instantiator2Prophecy = $this->prophesize(ChainableInstantiatorInterface::class);
         $instantiator2Prophecy->canInstantiate($fixture)->willReturn(true);
-        $instantiator2Prophecy->instantiate($fixture, $set)->willReturn($expected);
+        $instantiator2Prophecy->instantiate($fixture, $set, $context)->willReturn($expected);
         /* @var ChainableInstantiatorInterface $instantiator2 */
         $instantiator2 = $instantiator2Prophecy->reveal();
 
@@ -82,7 +85,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
             $instantiator2,
             $instantiator3,
         ]);
-        $actual = $registry->instantiate($fixture, $set);
+        $actual = $registry->instantiate($fixture, $set, $context);
 
         $this->assertSame($expected, $actual);
 
@@ -102,6 +105,6 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $registry = new InstantiatorRegistry([]);
-        $registry->instantiate($fixture, $set);
+        $registry->instantiate($fixture, $set, new GenerationContext());
     }
 }

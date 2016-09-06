@@ -1859,17 +1859,6 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        //TODO: check
-//        yield '[templating] cannot extend a non template fixture' => [
-//            [
-//                \stdClass::class => [
-//                    'base_dummy' => [],
-//                    'dummy (extends base_dummy)' => [],
-//                ],
-//            ],
-//            null,
-//        ];
-//
         yield '[templating] nominal' => [
             [
                 \stdClass::class => [
@@ -2117,6 +2106,16 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        yield '[parameter] circular reference' => [
+            [
+                'parameters' => [
+                    'foo' => '<{bar}>',
+                    'bar' => '<{foo}>',
+                ],
+            ],
+            null,
+        ];
+
         yield 'dynamic array with scalar value' => [
             [
                 \stdClass::class => [
@@ -2134,7 +2133,30 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
-    }
 
-    //TODO: test with circular reference
+        yield 'object circular reference' => [
+            [
+                DummyWithConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '@another_dummy',
+                        ],
+                    ],
+                    'another_dummy' => [
+                        '__construct' => [
+                            '@dummy',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => ['bar', 'bar', 'bar', 'bar', 'bar']
+                    ]),
+                ],
+            ],
+        ];
+    }
 }

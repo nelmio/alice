@@ -17,6 +17,7 @@ use Nelmio\Alice\Exception\Generator\Hydrator\HydrationException;
 use Nelmio\Alice\Exception\Generator\Hydrator\InvalidArgumentException;
 use Nelmio\Alice\Exception\Generator\Hydrator\NoSuchPropertyException;
 use Nelmio\Alice\Exception\Generator\Hydrator\PropertyAccessException;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectInterface;
@@ -48,7 +49,7 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
      * @throws InvalidArgumentException When the typehint does not match for example
      * @throws HydrationException
      */
-    public function hydrate(ObjectInterface $object, Property $property): ObjectInterface
+    public function hydrate(ObjectInterface $object, Property $property, GenerationContext $context): ObjectInterface
     {
         $instance = $object->getInstance();
         try {

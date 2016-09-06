@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -67,8 +68,8 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = [],
-        int $tryCounter = 0
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
@@ -90,14 +91,16 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
             new FixtureReferenceValue($id),
             $fixture,
             $fixtureSet,
-            $scope
+            $scope,
+            $context
         );
     }
 
     /**
      * Gets all the fixture IDs suitable for the given value.
      *
-     * @param ResolvedFixtureSet $fixtureSet
+     * @param FixtureMatchReferenceValue $value
+     * @param ResolvedFixtureSet         $fixtureSet
      *
      * @return string[]
      */

@@ -15,6 +15,7 @@ use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
@@ -62,14 +63,22 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
      *
      * {@inheritdoc}
      */
-    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
+    public function instantiate(
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): ResolvedFixtureSet
     {
-        list($fixture, $fixtureSet) = $this->resolveFixtureConstructor($fixture, $fixtureSet);
+        list($fixture, $fixtureSet) = $this->resolveFixtureConstructor($fixture, $fixtureSet, $context);
 
-        return $this->instantiator->instantiate($fixture, $fixtureSet);
+        return $this->instantiator->instantiate($fixture, $fixtureSet, $context);
     }
 
-    private function resolveFixtureConstructor(FixtureInterface $fixture, ResolvedFixtureSet $set): array
+    private function resolveFixtureConstructor(
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $set,
+        GenerationContext $context
+    ): array
     {
         $specs = $fixture->getSpecs();
         $constructor = $specs->getConstructor();
@@ -86,7 +95,8 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
             $constructor->getArguments(),
             $this->valueResolver,
             $fixture,
-            $set
+            $set,
+            $context
         );
 
         return [
@@ -112,12 +122,13 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         array $arguments,
         ValueResolverInterface $resolver,
         FixtureInterface $fixture,
-        ResolvedFixtureSet $fixtureSet
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
     ): array
     {
         foreach ($arguments as $index => $argument) {
             if ($argument instanceof ValueInterface) {
-                $result = $resolver->resolve($argument, $fixture, $fixtureSet);
+                $result = $resolver->resolve($argument, $fixture, $fixtureSet, [], $context);
 
                 $fixtureSet = $result->getSet();
                 $arguments[$index] = $result->getValue();

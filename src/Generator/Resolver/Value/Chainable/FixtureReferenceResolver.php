@@ -69,7 +69,8 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = []
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->generator) {
@@ -83,7 +84,8 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
 
         $referredFixture = $this->getReferredFixture($referredFixtureId, $fixtureSet);
         if (false === $fixtureSet->getObjects()->has($referredFixture)) {
-            $objects = $this->generator->generate($referredFixture, $fixtureSet, new GenerationContext());
+            $context->markIsResolvingFixture($referredFixtureId);
+            $objects = $this->generator->generate($referredFixture, $fixtureSet, $context);
 
             $fixtureSet = $fixtureSet->withObjects($objects);
         }

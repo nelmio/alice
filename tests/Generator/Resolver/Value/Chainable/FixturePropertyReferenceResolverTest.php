@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -72,7 +73,7 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
     {
         $value = new FixturePropertyValue(new FakeValue(), '');
         $resolver = new FixturePropertyReferenceResolver(new FakePropertyAccessor());
-        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
     public function testReturnsSetWithResolvedValue()
@@ -84,10 +85,12 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
         $scope = ['val' => 'scopie'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy
-            ->resolve($reference, $fixture, $set, $scope)
+            ->resolve($reference, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     $instance = new \stdClass(),
@@ -106,7 +109,7 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedValueWithFixtureSet('yo', $newSet);
 
         $resolver = new FixturePropertyReferenceResolver($propertyAccessor, $valueResolver);
-        $actual = $resolver->resolve($value, $fixture, $set, $scope);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertEquals($expected, $actual);
 
@@ -145,7 +148,7 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $propertyAccessor = $propertyAccessorProphecy->reveal();
 
         $resolver = new FixturePropertyReferenceResolver($propertyAccessor, $valueResolver);
-        $resolver->resolve($value, new FakeFixture(), $set);
+        $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
     }
 
     public function testTestResolutionWithSymfonyPropertyAccessor()
@@ -173,7 +176,7 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $expected = new ResolvedValueWithFixtureSet('foo', $set);
 
         $resolver = new FixturePropertyReferenceResolver(PropertyAccess::createPropertyAccessor(), $valueResolver);
-        $actual = $resolver->resolve($value, new FakeFixture(), $set);
+        $actual = $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
 
         $this->assertEquals($expected, $actual);
     }
@@ -205,7 +208,7 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixturePropertyReferenceResolver(PropertyAccess::createPropertyAccessor(), $valueResolver);
-        $resolver->resolve($value, new FakeFixture(), $set);
+        $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
     }
 
     /**
@@ -234,6 +237,12 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixturePropertyReferenceResolver(PropertyAccess::createPropertyAccessor(), $valueResolver);
-        $resolver->resolve($value, new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create()), $set);
+        $resolver->resolve(
+            $value,
+            new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create()),
+            $set,
+            [],
+            new GenerationContext()
+        );
     }
 }

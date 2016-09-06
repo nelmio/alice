@@ -14,6 +14,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -71,12 +72,13 @@ final class ValueResolverRegistry implements ValueResolverInterface, ObjectGener
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = []
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         foreach ($this->resolvers as $resolver) {
             if ($resolver->canResolve($value)) {
-                return $resolver->resolve($value, $fixture, $fixtureSet, $scope);
+                return $resolver->resolve($value, $fixture, $fixtureSet, $scope, $context);
             }
         }
 

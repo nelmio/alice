@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Faker\GeneratorFactory;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -69,8 +70,8 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        array $scope = [],
-        int $tryCounter = 0
+        array $scope,
+        GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
@@ -80,7 +81,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
         $arguments = $value->getArguments();
         foreach ($arguments as $index => $argument) {
             if ($argument instanceof ValueInterface) {
-                $resolvedSet = $this->resolver->resolve($argument, $fixture, $fixtureSet, $scope);
+                $resolvedSet = $this->resolver->resolve($argument, $fixture, $fixtureSet, $scope, $context);
 
                 $arguments[$index] = $resolvedSet->getValue();
                 $fixtureSet = $resolvedSet->getSet();

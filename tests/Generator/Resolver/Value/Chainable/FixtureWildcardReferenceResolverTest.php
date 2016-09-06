@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -69,7 +70,7 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
     public function testCannotResolveValueIfHasNoResolver()
     {
         $resolver = new FixtureWildcardReferenceResolver();
-        $resolver->resolve(new FakeValue(), new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $resolver->resolve(new FakeValue(), new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
     public function testReturnsARandomMatchingFixture()
@@ -81,10 +82,12 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
                 ->with($fixture = new DummyFixture('dummy'))
         );
         $scope = ['val' => 'scopie'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy
-            ->resolve(new FixtureReferenceValue('dummy'), $fixture, $set, $scope)
+            ->resolve(new FixtureReferenceValue('dummy'), $fixture, $set, $scope, $context)
             ->willReturn(
                 $expected = new ResolvedValueWithFixtureSet(
                     'dummy',
@@ -99,7 +102,7 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixtureWildcardReferenceResolver($valueResolver);
-        $actual = $resolver->resolve($value, $fixture, $set, $scope);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertSame($expected, $actual);
 
@@ -115,10 +118,13 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
             (new FixtureBag())
                 ->with(new DummyFixture('dummy'))
         );
+        $scope = ['foo' => 'bar'];
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy
-            ->resolve(new FixtureReferenceValue('dummy'), $fixture, $set, [])
+            ->resolve(new FixtureReferenceValue('dummy'), $fixture, $set, $scope, $context)
             ->willReturn(
                 $expected = new ResolvedValueWithFixtureSet(
                     'dummy',
@@ -133,7 +139,7 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixtureWildcardReferenceResolver($valueResolver);
-        $actual = $resolver->resolve($value, $fixture, $set);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertSame($expected, $actual);
     }
@@ -148,10 +154,12 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
             (new ObjectBag())
                 ->with(new SimpleObject('dummy', new \stdClass()))
         );
+        $scope = [];
+        $context = new GenerationContext();
 
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy
-            ->resolve(new FixtureReferenceValue('dummy'), $fixture, $set, [])
+            ->resolve(new FixtureReferenceValue('dummy'), $fixture, $set, $scope, $context)
             ->willReturn(
                 $expected = new ResolvedValueWithFixtureSet(
                     'dummy',
@@ -166,7 +174,7 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixtureWildcardReferenceResolver($valueResolver);
-        $actual = $resolver->resolve($value, $fixture, $set);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertSame($expected, $actual);
     }
@@ -180,8 +188,10 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $value = FixtureMatchReferenceValue::createWildcardReference('dummy');
         $fixture = new DummyFixture('injected_fixture');
         $set = ResolvedFixtureSetFactory::create();
+        $scope = [];
+        $context = new GenerationContext();
 
         $resolver = new FixtureWildcardReferenceResolver(new FakeValueResolver());
-        $resolver->resolve($value, $fixture, $set);
+        $resolver->resolve($value, $fixture, $set, $scope, $context);
     }
 }

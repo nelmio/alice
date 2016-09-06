@@ -16,6 +16,7 @@ use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Entity\DummyWithDate;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
 use Nelmio\Alice\Exception\Symfony\PropertyAccess\RootException as GenericPropertyAccessException;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
 use Prophecy\Argument;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
@@ -68,7 +69,7 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         $accessor = $accessorProphecy->reveal();
 
         $hydrator = new SymfonyPropertyAccessorHydrator($accessor);
-        $result = $hydrator->hydrate($object, $property);
+        $result = $hydrator->hydrate($object, $property, new GenerationContext());
 
         $this->assertEquals($object, $result);
 
@@ -91,7 +92,7 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         $accessor = $accessorProphecy->reveal();
 
         $hydrator = new SymfonyPropertyAccessorHydrator($accessor);
-        $result = $hydrator->hydrate($object, $property);
+        $result = $hydrator->hydrate($object, $property, new GenerationContext());
 
         $this->assertEquals($object, $result);
     }
@@ -104,7 +105,7 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
     {
         $object = new SimpleObject('dummy', new \Nelmio\Alice\Dummy());
         $property = new Property('foo', 'bar');
-        $this->hydrator->hydrate($object, $property);
+        $this->hydrator->hydrate($object, $property, new GenerationContext());
     }
 
     /**
@@ -115,7 +116,7 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
     {
         $object = new SimpleObject('dummy', new DummyWithDate());
         $property = new Property('immutableDateTime', 'bar');
-        $this->hydrator->hydrate($object, $property);
+        $this->hydrator->hydrate($object, $property, new GenerationContext());
     }
 
     /**
@@ -136,7 +137,7 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         $accessor = $accessorProphecy->reveal();
 
         $hydrator = new SymfonyPropertyAccessorHydrator($accessor);
-        $hydrator->hydrate($object, $property);
+        $hydrator->hydrate($object, $property, new GenerationContext());
     }
 
     public function testCanHydrateStdClassObjects()
@@ -148,7 +149,7 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         $std->foo = 'bar';
         $expected = new SimpleObject('dummy', $std);
 
-        $actual = $this->hydrator->hydrate($object, $property);
+        $actual = $this->hydrator->hydrate($object, $property, new GenerationContext());
 
         $this->assertEquals($expected, $actual);
     }
@@ -160,7 +161,7 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
     {
         $instance = new Dummy();
         $object = new SimpleObject('dummy', $instance);
-        $hydratedObject = $this->hydrator->hydrate($object , $property);
+        $hydratedObject = $this->hydrator->hydrate($object , $property, new GenerationContext());
 
         $expected = $property->getValue();
         $actual = $this->propertyAccessor->getValue($hydratedObject->getInstance(), $property->getName());

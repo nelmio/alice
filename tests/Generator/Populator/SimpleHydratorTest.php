@@ -20,6 +20,7 @@ use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Definition\Value\FakeObject;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
@@ -55,7 +56,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfDoesNotHaveAResolver()
     {
         $hydrator = new SimpleHydrator(new FakePropertyHydrator());
-        $hydrator->hydrate(new FakeObject(), ResolvedFixtureSetFactory::create());
+        $hydrator->hydrate(new FakeObject(), ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     public function testAddsObjectToFixtureSet()
@@ -82,7 +83,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $hydrator = new SimpleHydrator(new FakePropertyHydrator(), new FakeValueResolver());
-        $actual = $hydrator->hydrate($object, $set);
+        $actual = $hydrator->hydrate($object, $set, new GenerationContext());
 
         $this->assertEquals($expected, $actual);
     }
@@ -106,17 +107,19 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $hydratorProphecy = $this->prophesize(PropertyHydratorInterface::class);
         $newInstance = new \stdClass();
         $newInstance->username = 'Bob';
         $newObject = $object->withInstance($newInstance);
-        $hydratorProphecy->hydrate($object, $username)->willReturn($newObject);
+        $hydratorProphecy->hydrate($object, $username, $context)->willReturn($newObject);
 
         $secondNewInstance = clone $newInstance;
         $secondNewInstance->group = 'Badass';
         $secondNewObject = $object->withInstance($secondNewInstance);
-        $hydratorProphecy->hydrate($newObject, $group)->willReturn($secondNewObject);
+        $hydratorProphecy->hydrate($newObject, $group, $context)->willReturn($secondNewObject);
         /** @var PropertyHydratorInterface $hydrator */
         $hydrator = $hydratorProphecy->reveal();
 
@@ -127,7 +130,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $hydrator = new SimpleHydrator($hydrator, new FakeValueResolver());
-        $actual = $hydrator->hydrate($object, $set);
+        $actual = $hydrator->hydrate($object, $set, $context);
 
         $this->assertEquals($expected, $actual);
 
@@ -154,11 +157,21 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('foo');
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $setAfterFirstResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 1]), $fixtures);
         $resolverProphecy
-            ->resolve($usernameValue, $fixture, $set, ['_instances' => $set->getObjects()->toArray()])
+            ->resolve(
+                $usernameValue,
+                $fixture,
+                $set,
+                [
+                    '_instances' => $set->getObjects()->toArray(),
+                ],
+                $context
+            )
             ->willReturn(
                 new ResolvedValueWithFixtureSet('Bob', $setAfterFirstResolution)
             )
@@ -166,7 +179,16 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
 
         $setAfterSecondResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 2]), $fixtures);
         $resolverProphecy
-            ->resolve($groupValue, $fixture, $setAfterFirstResolution, ['_instances' => $set->getObjects()->toArray(), 'username' => 'Bob'])
+            ->resolve(
+                $groupValue,
+                $fixture,
+                $setAfterFirstResolution,
+                [
+                    '_instances' => $set->getObjects()->toArray(),
+                    'username' => 'Bob',
+                ],
+                $context
+            )
             ->willReturn(
                 new ResolvedValueWithFixtureSet('Badass', $setAfterSecondResolution)
             )
@@ -178,12 +200,12 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
         $newInstance = new \stdClass();
         $newInstance->username = 'Bob';
         $newObject = $object->withInstance($newInstance);
-        $hydratorProphecy->hydrate($object, $username->withValue('Bob'))->willReturn($newObject);
+        $hydratorProphecy->hydrate($object, $username->withValue('Bob'), $context)->willReturn($newObject);
 
         $secondNewInstance = clone $newInstance;
         $secondNewInstance->group = 'Badass';
         $secondNewObject = $object->withInstance($secondNewInstance);
-        $hydratorProphecy->hydrate($newObject, $group->withValue('Badass'))->willReturn($secondNewObject);
+        $hydratorProphecy->hydrate($newObject, $group->withValue('Badass'), $context)->willReturn($secondNewObject);
         /** @var PropertyHydratorInterface $hydrator */
         $hydrator = $hydratorProphecy->reveal();
 
@@ -194,7 +216,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $hydrator = new SimpleHydrator($hydrator, $resolver);
-        $actual = $hydrator->hydrate($object, $set);
+        $actual = $hydrator->hydrate($object, $set, $context);
 
         $this->assertEquals($expected, $actual);
     }

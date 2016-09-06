@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\Generator\Hydrator;
 
 use Nelmio\Alice\Definition\Property;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\ObjectInterface;
 
 interface PropertyHydratorInterface
@@ -24,5 +25,5 @@ interface PropertyHydratorInterface
      *
      * @return ObjectInterface
      */
-    public function hydrate(ObjectInterface $object, Property $property): ObjectInterface;
+    public function hydrate(ObjectInterface $object, Property $property, GenerationContext $context): ObjectInterface;
 }
