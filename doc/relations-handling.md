@@ -18,11 +18,14 @@ Nelmio\Entity\Group:
         owner: '@user1'
 ```
 
-**Warning:** References (e.g. here `group1`) should always be composed of letters, digits, periods (`.`), underscores
-(`_`) and slashes (`/`). Other characters such as `{`, `}`, `(`, `)` are still allowed but hold a special meaning (e.g.
-for [ranged fixtures](complete-reference.md#fixture-ranges)).
+**Warning:** References (e.g. here `group1`) should always be composed of
+letters, digits, periods (`.`), underscores (`_`) and slashes (`/`). Other
+characters such as `{`, `}`, `(`, `)` are still allowed but hold a special
+meaning (e.g. for [ranged fixtures](complete-reference.md#fixture-ranges)).
 
-Alice also allows you to directly reference objects' properties using the ```@name->property``` notation.
+Alice also allows you to directly reference objects' properties using
+the `@name->property` notation or calling an object method
+`@name->getProperty()`.
 
 ```yaml
 Nelmio\Entity\User:
@@ -36,8 +39,12 @@ Nelmio\Entity\Group:
 
 To be able to use this feature, your entities have to match some requirements :
 * You can reference public properties
-* You can reference properties reachable through a getter (i.e : ```@name->property``` will call ```$name->getProperty()``` if ```property``` is not public)
-* You can reference entities' ID but you will then have to split fixtures in multiple files (this is because objects are persisted at the end of each file processing) :
+* You can reference properties reachable through a getter (i.e :
+`@name->property` will call `$name->getProperty()` if ```property``` is not
+public)
+* You can reference entities' ID but you will then have to split fixtures in
+multiple files (this is because objects are persisted at the end of each file
+processing) :
 
 ```yaml
 # fixture_user.yml
@@ -54,7 +61,7 @@ Nelmio\Entity\Group:
 ```
 
 If you want to create ten users and ten groups and have each user own one
-group, you can use `<current()>` which is replaced with the current id of
+group, you can use `<current()>` which is replaced with the current ID of
 each iteration when using fixture ranges:
 
 ```yaml
@@ -82,23 +89,12 @@ Nelmio\Entity\Group:
 It will then pick any object whose name matches `user*` where `*` can be any
 string.
 
-There is one limitation, you can only refer to objects that are defined above
-in the file. If you want to use an existing object that is already present in
-your database you can also provide the id of the object. For this to work
-however the setter method for that property must have a type hint.
-
-```yaml
-Nelmio\Entity\Group:
-    group1:
-        owner: 1 # this will try to fetch the User (as typehinted in Group::setOwner) with id 1
-```
-
 It is also possible to create a relation to a random object by id:
 
 ```yaml
 Nelmio\Entity\Group:
     group1:
-        owner: '<numberBetween(1, 200)>'
+        owner: '@user<numberBetween(1, 200)>'
 ```
 
 > **Note**: To create a string `@foo` that is not a reference you can escape it
@@ -159,6 +155,7 @@ Nelmio\Entity\Group:
 > **Note**: You do not need to define multi-references inside an array, since
 > they are automatically translated to an array of objects.
 
+
 ## Self reference
 
 The `@self` reference is assigned to the current fixture instance.
@@ -171,10 +168,11 @@ You can pass references to providers much like you can pass [variables](#variabl
 Nelmio\Entity\Group:
     group1:
         owner: '<numberBetween(1, 200)>'
-        
+
     group2:
         owner: '<numberBetween(@group1->owner, 200)>'
 ```
+
 
 Next chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)<br />
 Previous chapter: [Complete Reference](complete-reference.md)

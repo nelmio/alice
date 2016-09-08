@@ -1,66 +1,162 @@
 # Getting Started
 
+
 ## Basic Usage
 
-The easiest way to use this is to call the static `Nelmio\Alice\Fixtures::load`
-method. It will bootstrap everything for you and return you a set of persisted
-objects in the container you give it.
+The easiest way to use this is to call the `Nelmio\Alice\Loader\NativeLoader`
+loader. It is ready to use and do not require any framework integration. It
+allows you to load any file or an array of data.
 
-Examples:
+```yaml
+# Example of YAML file
 
-```php
-// Load a yaml file into a Doctrine\Common\Persistence\ObjectManager object
-$objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager);
+Nelmio\Entity\User:
+    user{1..10}:
+        username: '<username()>'
+        fullname: '<firstName()> <lastName()>'
+        birthDate: '<date()>'
+        email: '<email()>'
+        favoriteNumber: '50%? <numberBetween(1, 200)>'
 
-// Load a php file into a Doctrine\Common\Persistence\ObjectManager object
-$objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.php', $objectManager);
+Nelmio\Entity\Group:
+    group1:
+        name: Admins
+        owner: '@user1'
+        members: '<numberBetween(1, 10)>x @user*'
+        created: '<dateTimeBetween("-200 days", "now")>'
+        updated: '<dateTimeBetween($created, "now")>'
 ```
 
-Note: You can also pass an array of filenames if you have multiple files with
-references spanning more than one.
-
-### Options
-
-`Fixtures::load` accepts a third `$options` argument that is an array
-with the following keys:
-
-- locale: the default locale
-- providers: an array of additional Faker providers
-- seed: a seed to make sure Faker generates data consistently across runs, set
-  to null to disable (defaults to 1)
-- logger: a callable or `Psr\Log\LoggerInterface` object that will receive progress
-  information during the loading of the fixtures
-- persist_once: only persist objects once if multiple files are passed, by default
-  objects are persisted after each file
-
-## Detailed Usage
-
-If you want a bit more control you can instantiate the various object yourself
-and make it work just as easily:
-
 ```php
-// Load objects from a yaml file
-$loader = new \Nelmio\Alice\Fixtures\Loader();
-$objects = $loader->load(__DIR__.'/fixtures.yml');
+<?php>
+// Example of PHP file
 
-// Optionally persist them into the doctrine object manager
-// you can also do that yourself or persist them in another way
-// if you do not use doctrine
-$persister = new \Nelmio\Alice\Persister\Doctrine($objectManager);
-$persister->persist($objects);
+return [
+    \Nelmio\Entity\User::class => [
+        'user{1..10}' => [
+            'username' => '<username()>',
+            'fullname' => '<firstName()> <lastName()>',
+            'birthDate' => '<date()>',
+            'email' => '<email()>',
+            'favoriteNumber' => '50%? <numberBetween(1, 200)>',
+        ],
+    ],
+    \Nelmio\Entity\Group::class => [
+        'group1' => [
+            'name' => Admins,
+            'owner' => '@user1',
+            'members' => '<numberBetween(1, 10)>x @user*',
+            'created' => '<dateTimeBetween("-200 days", "now")>',
+            'updated' => '<dateTimeBetween($created, "now")>',
+        ],
+    ],
+];
 ```
 
-This loader maintains its list of built objects, so `load` can be called multiple times with different files if your fixture file starts growing unmanageably large.
+```php
+$loader = new Nelmio\Alice\Loader\NativeLoader();
+$objectSet = $loader->loadFile(__DIR__.'/fixtures.yml');
+// or
+$objectSet = $loader->loadFile(__DIR__.'/fixtures.php');
+```
 
-Using the `Loader` class directly also allows you to add more customization to how your objects are instantiated, properties are set, and what kinds of files you can parse. The following methods are all available for these purposes:
+```php
+$loader = new Nelmio\Alice\Loader\NativeLoader();
+$objectSet = $loader->loadData([
+    \Nelmio\Entity\User::class => [
+        'user{1..10}' => [
+            'username' => '<username()>',
+            'fullname' => '<firstName()> <lastName()>',
+            'birthDate' => '<date()>',
+            'email' => '<email()>',
+            'favoriteNumber' => '50%? <numberBetween(1, 200)>',
+        ],
+    ],
+    \Nelmio\Entity\Group::class => [
+        'group1' => [
+            'name' => Admins,
+            'owner' => '@user1',
+            'members' => '<numberBetween(1, 10)>x @user*',
+            'created' => '<dateTimeBetween("-200 days", "now")>',
+            'updated' => '<dateTimeBetween($created, "now")>',
+        ],
+    ],
+]);
+```
 
-* `addParser`: Parsers handle new types of files
-* `addProcessor`: Processors handle new ways to generate properties
-* `addBuilder`: Builders handle the generation of fixtures themselves
-* `addInstantiator`: Instantiators handle creating instances
-* `addPopulator`: Populators handle setting properties on instances
+When loading a file or an array of data, you can injected parameters and objects:
 
-> **Note**: To load plain PHP files, the files must return an array containing the same structure as the yaml files have.
+```php
+$loader = new Nelmio\Alice\Loader\NativeLoader();
+$objectSet = $loader->loadData(
+    [
+        \Nelmio\Entity\Group::class => [
+            'group1' => [
+                'name' => <{name}>,
+                'owner' => '@user1',
+            ],
+        ],
+    ],
+    ['name' => 'Admins'],
+    ['user1' => $user1]
+);
+```
+
+This, among other things, allows you to load several files successively even if
+they are dependent (you can also make use of the
+[include directive](fixtures-refactoring.md#including-files)):
+
+```php
+$loader = new Nelmio\Alice\Loader\NativeLoader();
+
+$objectSet = $loader->loadFile(__DIR__.'/users.yml');
+$objectSet = $loader->loadFile(
+    __DIR__.'/groups.yml',
+    $objectSet->getParameters(),
+    $objectSet->getObjects()
+);
+```
+
+## Framework integration
+
+### Symfony
+
+Alice comes with a Symfony Bundle `NelmioAliceBundle`. To enabled it, update
+your application kernel:
+
+```php
+<?php
+// app/AppKernel.php
+
+public function registerBundles()
+{
+    //...
+    if (in_array($this->getEnvironment(), ['dev', 'test'])) {
+        //...
+        $bundles[] = new Hautelook\AliceBundle\HautelookAliceBundle();
+    }
+
+    return $bundles;
+}
+```
+
+You can then configure the bundle to your needs:
+
+```yaml
+# app/config/config_dev.yml
+
+nelmio_alice:
+    locale: 'en_US' # Default locale for the Faker Generator
+    seed: 1 # Value used make sure Faker generates data consistently across
+            # runs, set to null to disable.
+    loading_limit: 5 # Alice may do some recursion to resolve certain values.
+                     # This parameter defines a limit which will stop the
+                     # resolution once reached.
+    max_unique_values_retries: 150 # Maximum number of time Alice can try to
+                                   # generate a unique value before stopping and
+                                   # failing.
+```
+
 
 Next chapter: [Complete Reference](complete-reference.md)<br />
 Previous chapter: [Installation](../README.md#installation)
