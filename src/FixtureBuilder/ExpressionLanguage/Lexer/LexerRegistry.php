@@ -45,7 +45,7 @@ final class LexerRegistry implements LexerInterface
                 return $lexer->lex($value);
             } catch (LexException $exception) {
                 $lastException = $exception;
-                // continue (try the next one)
+                // Continue (try the next one)
             }
         }
 

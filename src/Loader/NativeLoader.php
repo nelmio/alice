@@ -16,6 +16,7 @@ use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerRegistry;
@@ -363,8 +364,10 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         return new LexerRegistry([
             new EmptyValueLexer(),
             new GlobalPatternsLexer(),
-            new SubPatternsLexer(
-                new ReferenceLexer()
+            new FunctionLexer(
+                new SubPatternsLexer(
+                    new ReferenceLexer()
+                )
             ),
         ]);
     }
