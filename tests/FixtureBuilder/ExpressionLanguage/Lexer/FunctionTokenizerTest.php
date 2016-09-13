@@ -50,7 +50,7 @@ class FunctionTokenizerTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($expected, $actual);
         } catch (ExpressionLanguageParseThrowable $exception) {
             if (null !== $expected) {
-                throw $expected;
+                throw $exception;
             }
         }
     }
@@ -64,47 +64,47 @@ class FunctionTokenizerTest extends \PHPUnit_Framework_TestCase
 
         yield 'single function' => [
             '<foo()>',
-            '<aliceTokenizedFunction(FUNCTION_START_foo_IDENTITY_OR_FUNCTION_END)>',
+            '<aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)>',
         ];
 
         yield 'surrounded single function' => [
             'ping <foo()> pong',
-            'ping <aliceTokenizedFunction(FUNCTION_START_foo_IDENTITY_OR_FUNCTION_END)> pong',
+            'ping <aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'single function with 1 arg' => [
             '<foo(bar)>',
-            '<aliceTokenizedFunction(FUNCTION_START_foo_barIDENTITY_OR_FUNCTION_END)>',
+            '<aliceTokenizedFunction(FUNCTION_START__foo__barIDENTITY_OR_FUNCTION_END)>',
         ];
 
         yield 'surrounded single function with 1 arg' => [
             'ping <foo(bar)> pong',
-            'ping <aliceTokenizedFunction(FUNCTION_START_foo_barIDENTITY_OR_FUNCTION_END)> pong',
+            'ping <aliceTokenizedFunction(FUNCTION_START__foo__barIDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'single function with 2 args' => [
             '<foo(bar, baz)>',
-            '<aliceTokenizedFunction(FUNCTION_START_foo_bar, bazIDENTITY_OR_FUNCTION_END)>',
+            '<aliceTokenizedFunction(FUNCTION_START__foo__bar, bazIDENTITY_OR_FUNCTION_END)>',
         ];
 
         yield 'surrounded single function with 2 args' => [
             'ping <foo(bar, baz)> pong',
-            'ping <aliceTokenizedFunction(FUNCTION_START_foo_bar, bazIDENTITY_OR_FUNCTION_END)> pong',
+            'ping <aliceTokenizedFunction(FUNCTION_START__foo__bar, bazIDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'single function with 1 nested function' => [
             '<foo(<bar()>)>',
-            '<aliceTokenizedFunction(FUNCTION_START_foo_FUNCTION_START_bar_IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)>',
+            '<aliceTokenizedFunction(FUNCTION_START__foo__FUNCTION_START__bar__IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)>',
         ];
 
         yield 'surrounded single function with 1 nested function' => [
             'ping <foo(<bar()>)> pong',
-            'ping <aliceTokenizedFunction(FUNCTION_START_foo_FUNCTION_START_bar_IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)> pong',
+            'ping <aliceTokenizedFunction(FUNCTION_START__foo__FUNCTION_START__bar__IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'complex function' => [
             'ping <foo($foo, <bar()>, <baz($arg1, <baw($arg2)>)>)> pong',
-            'ping <aliceTokenizedFunction(FUNCTION_START_foo_$foo, FUNCTION_START_bar_IDENTITY_OR_FUNCTION_END, FUNCTION_START_baz_$arg1, FUNCTION_START_baw_$arg2IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)> pong',
+            'ping <aliceTokenizedFunction(FUNCTION_START__foo__$foo, FUNCTION_START__bar__IDENTITY_OR_FUNCTION_END, FUNCTION_START__baz__$arg1, FUNCTION_START__baw__$arg2IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'complex identities' => [

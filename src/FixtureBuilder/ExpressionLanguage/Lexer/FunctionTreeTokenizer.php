@@ -32,8 +32,8 @@ final class FunctionTreeTokenizer
      *  will result in:
      *  [
      *      'foo ',
-     *      'FUNCTION_START_f_',
-     *      'FUNCTION_START_g_',
+     *      'FUNCTION_START__f__',
+     *      'FUNCTION_START__g__',
      *      'IDENTITY_OR_FUNCTION_END',
      *      'IDENTITY_OR_FUNCTION_END',
      *      ' bar',
@@ -46,8 +46,8 @@ final class FunctionTreeTokenizer
     public function tokenize(string $value): array
     {
         $value = preg_replace(
-            '/(.*?)<(\p{L}+?)\((.*?)/',
-            sprintf('$1%1$sFUNCTION_START_$2_%1$s$3', self::DELIMITER),
+            '/(.*?)<((?:.*?:)?\p{L}+?)\((.*?)/',
+            sprintf('$1%1$sFUNCTION_START__$2__%1$s$3', self::DELIMITER),
             $value
         );
         $value = preg_replace(
@@ -76,7 +76,7 @@ final class FunctionTreeTokenizer
         $count = 1;
         while ($count !== 0) {
             $value = preg_replace(
-                '/FUNCTION_START_(.*?)_/',
+                '/FUNCTION_START__(.*?)__/',
                 '<$1(',
                 $value,
                 1,
@@ -99,7 +99,7 @@ final class FunctionTreeTokenizer
 
     public function isOpeningToken(string $value): bool
     {
-        return 'FUNCTION_START_' === substr($value, 0, 15) || 'IDENTITY_START' === substr($value, 0, 14);
+        return 'FUNCTION_START__' === substr($value, 0, 16) || 'IDENTITY_START' === substr($value, 0, 14);
     }
 
     public function isClosingToken(string $value): bool

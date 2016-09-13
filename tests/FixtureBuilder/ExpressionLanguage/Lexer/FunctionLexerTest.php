@@ -11,9 +11,11 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
+use Prophecy\Argument;
 
 /**
  * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer
@@ -43,119 +45,51 @@ class FunctionLexerTest extends \PHPUnit_Framework_TestCase
         clone new FunctionLexer(new FakeLexer());
     }
 
-    /**
-     * @dataProvider provideValues
-     */
-    public function testLexValues($value, $expected)
+    public function testTokenizeValueBeforePassingItToTheDecoratedLexer()
     {
-        try {
-            $actual = $this->lexer->lex($value);
-            if (null === $expected) {
-                $this->fail('Expected exception to be thrown.');
-            }
-            $this->assertEquals($expected, $actual);
-        } catch (ExpressionLanguageParseThrowable $exception) {
-            if (null !== $expected) {
-                throw $expected;
-            }
-        }
+        $value = '<foo()>';
+
+        $decoratedLexerProphecy = $this->prophesize(LexerInterface::class);
+        $decoratedLexerProphecy
+            ->lex('<aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)>')
+            ->willReturn(
+                $expected = [
+                    new Token('something', new TokenType(TokenType::FUNCTION_TYPE))
+                ]
+            )
+        ;
+        /** @var LexerInterface $decoratedLexer */
+        $decoratedLexer = $decoratedLexerProphecy->reveal();
+
+        $lexer = new FunctionLexer($decoratedLexer);
+        $actual = $lexer->lex($value);
+
+        $this->assertEquals($expected, $actual);
+
+        $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function provideValues()
+    public function testIfTheValueHasAlreadyBeenTokenizedThenItWillNotBeTokenizedAgain()
     {
-        yield 'non function' => [
-            'foo',
-            [
-                'foo',
-            ]
-        ];
+        $value = '<aliceTokenizedFunction(something)>';
 
-        yield 'single function' => [
-            '<foo()>',
-            [
-                '<foo()>',
-            ]
-        ];
+        $decoratedLexerProphecy = $this->prophesize(LexerInterface::class);
+        $decoratedLexerProphecy
+            ->lex($value)
+            ->willReturn(
+                $expected = [
+                    new Token('something', new TokenType(TokenType::FUNCTION_TYPE))
+                ]
+            )
+        ;
+        /** @var LexerInterface $decoratedLexer */
+        $decoratedLexer = $decoratedLexerProphecy->reveal();
 
-        yield 'surrounded single function' => [
-            'ping <foo()> pong',
-            [
-                'ping ',
-                '<foo()>',
-                ' pong',
-            ]
-        ];
+        $lexer = new FunctionLexer($decoratedLexer);
+        $actual = $lexer->lex($value);
 
-        yield 'single function with 1 arg' => [
-            '<foo(bar)>',
-            [
-                '<foo(bar)>',
-            ]
-        ];
+        $this->assertEquals($expected, $actual);
 
-        yield 'surrounded single function with 1 arg' => [
-            'ping <foo(bar)> pong',
-            [
-                'ping ',
-                '<foo(bar)>',
-                ' pong',
-            ]
-        ];
-
-        yield 'single function with 2 args' => [
-            '<foo(bar, baz)>',
-            [
-                '<foo(bar, baz)>',
-            ]
-        ];
-
-        yield 'surrounded single function with 2 args' => [
-            'ping <foo(bar, baz)> pong',
-            [
-                'ping ',
-                '<foo(bar, baz)>',
-                ' pong',
-            ]
-        ];
-
-        yield 'single function with 1 nested function' => [
-            '<foo(<bar()>)>',
-            [
-                '<foo(<bar()>)>',
-            ]
-        ];
-
-        yield 'surrounded single function with 1 nested function' => [
-            'ping <foo(<bar()>)> pong',
-            [
-                'ping ',
-                '<foo(<bar()>)>',
-                ' pong',
-            ]
-        ];
-
-        yield 'complex function' => [
-            'ping <foo($foo, <bar()>, <baz($arg1, <baw($arg2)>)>)> pong',
-            [
-                'ping ',
-                '<foo($foo, <bar()>, <baz($arg1, <baw($arg2)>)>)>',
-                ' pong',
-            ]
-        ];
-
-        yield 'complex identities' => [
-            'ping <($foo, <(bar)>, <($arg1, <($arg2)>)>)> pong',
-            [
-                'ping ',
-                '<($foo, <(bar)>, <($arg1, <($arg2)>)>)>',
-                ' pong',
-            ]
-        ];
-
-        yield 'unclosed function' => [
-            '<foo(>',
-            null,
-        ];
-
+        $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 }

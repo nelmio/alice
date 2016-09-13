@@ -19,9 +19,12 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Nelmio\Alice\NotClonableTrait;
 
 final class IdentityTokenParser implements ChainableTokenParserInterface, ParserAwareInterface
 {
+    use NotClonableTrait;
+
     /**
      * @var ChainableTokenParserInterface
      */

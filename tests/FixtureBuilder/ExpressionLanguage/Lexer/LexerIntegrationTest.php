@@ -70,597 +70,594 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     public function provideValues()
     {
-//        // simple values
-//        yield 'empty string' => [
-//            '',
-//            [
-//                new Token('', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//
-//        yield 'regular string value' => [
-//            'dummy',
-//            [
-//                new Token('dummy', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//
-//        yield 'string value with quotes' => [
-//            '\'dummy\'',
-//            [
-//                new Token('\'dummy\'', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//
-//        yield 'string value with double quotes' => [
-//            '"dummy"',
-//            [
-//                new Token('"dummy"', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//
-//        // Escaped arrow
-//        yield '[Escaped arrow] nominal (1)' => [
-//            '\<',
-//            [
-//                new Token('\<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Escaped arrow] nominal (2)' => [
-//            '\>',
-//            [
-//                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Escaped arrow] parameter' => [
-//            '\<{param}>',
-//            [
-//                new Token('\<{param}>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Escaped arrow] function' => [
-//            '\<f()>',
-//            [
-//                new Token('\<f()>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Escaped arrow] surrounded' => [
-//            'foo \< bar \> baz',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//                new Token(' bar ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//                new Token(' baz', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//
-//        // Parameters
-//        yield '[Parameter] nominal' => [
-//            '<{dummy_param}>',
-//            [
-//                new Token('<{dummy_param}>', new TokenType(TokenType::PARAMETER_TYPE)),
-//            ],
-//        ];
-//        yield '[Parameter] unbalanced (1)' => [
-//            '<{dummy_param>',
-//            null,
-//        ];
-//        yield '[Parameter] escaped unbalanced (1)' => [
-//            '\<{dummy_param\>',
-//            [
-//                new Token('\<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//                new Token('{dummy_param', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Parameter] unbalanced (2)' => [
-//            '<{dummy_param',
-//            null,
-//        ];
-//        yield '[Parameter] escaped unbalanced (2)' => [
-//            '\<{dummy_param',
-//            [
-//                new Token('\<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//                new Token('{dummy_param', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//        yield '[Parameter] unbalanced (3)' => [
-//            '<dummy_param}>',
-//            null,
-//        ];
-//        yield '[Parameter] escaped unbalanced (3)' => [
-//            '\<dummy_param}\>',
-//            [
-//                new Token('\<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//                new Token('dummy_param}', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Parameter] unbalanced (4)' => [
-//            'dummy_param}>',
-//            null,
-//        ];
-//        yield '[Parameter] escaped unbalanced (4)' => [
-//            'dummy_param}\>',
-//            [
-//                new Token('dummy_param}', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Parameter] successive' => [
-//            '<{param1}><{param2}>',
-//            [
-//                new Token('<{param1}>', new TokenType(TokenType::PARAMETER_TYPE)),
-//                new Token('<{param2}>', new TokenType(TokenType::PARAMETER_TYPE)),
-//            ],
-//        ];
-//        yield '[Parameter] nested' => [
-//            '<{value_<{nested_param}>}>',
-//            null,
-//        ];
-//        yield '[Parameter] nested escape' => [
-//            '<{value_\<{nested_param}>}>',
-//            null,
-//        ];
-//        yield '[Parameter] surrounded - nested' => [
-//            'foo <{value_<{nested_param}>}> bar',
-//            null,
-//        ];
-//
-//        // Functions
-//        yield '[Function] nominal' => [
-//            '<function()>',
-//            [
-//                new Token('<function()>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] unbalanced (1)' => [
-//            '<function()',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced (1)' => [
-//            '\<function()',
-//            null,
-//        ];
-//        yield '[Function] unbalanced (2)' => [
-//            'function()>',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced (2)' => [
-//            'function()\>',
-//            [
-//                new Token('function()', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] unbalanced (3)' => [
-//            '<function(>',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced (3)' => [
-//            '\<function(\>',
-//            null,
-//        ];
-//        yield '[Function] unbalanced (4)' => [
-//            '<function)>',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced (4)' => [
-//            '\<function)\>',
-//            [
-//                new Token('\<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//                new Token('function)', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] successive functions' => [
-//            '<f()><g()>',
-//            [
-//                new Token('<f()>', new TokenType(TokenType::FUNCTION_TYPE)),
-//                new Token('<g()>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] correct successive functions' => [
-//            '<f()> <g()>',
-//            [
-//                new Token('<f()>', new TokenType(TokenType::FUNCTION_TYPE)),
-//                new Token(' ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('<g()>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] nested functions' => [
-//            '<f(<g()>)>',
-//            [
-//                new Token('<f(<g()>)>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] nominal surrounded' => [
-//            'foo <function()> bar',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('<function()>', new TokenType(TokenType::FUNCTION_TYPE)),
-//                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//
-//        yield '[Function] nominal identity' => [
-//            '<(function())>',
-//            [
-//                new Token('<(function())>', new TokenType(TokenType::IDENTITY_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] identity with args' => [
-//            '<(function(echo("hello")))>',
-//            [
-//                new Token('<(function(echo("hello")))>', new TokenType(TokenType::IDENTITY_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] identity with params' => [
-//            '<(function(echo(<{param}>))>',
-//            [
-//                new Token('<(function(echo(<{param}>))>', new TokenType(TokenType::IDENTITY_TYPE)),
-//            ],
-//        ];
-//        yield '[X] parameter, function, identity and escaped' => [
-//            '<{param}><function()><(echo("hello"))>\<escaped_value\>',
-//            [
-//                new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
-//                new Token('<function()>', new TokenType(TokenType::FUNCTION_TYPE)),
-//                new Token('<(echo("hello"))>', new TokenType(TokenType::IDENTITY_TYPE)),
-//                new Token('\<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//                new Token('escaped_value', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] nominal with arguments' => [
-//            '<function($foo, $arg)>',
-//            [
-//                new Token('<function($foo, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] nominal with string arguments which contains quotes' => [
-//            '<function(\'foo\', "bar")>',
-//            [
-//                new Token('<function(\'foo\', "bar")>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] unbalanced with arguments (1)' => [
-//            '<function($foo, $arg)',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced with arguments (1)' => [
-//            '\<function($foo, $arg)',
-//            null,
-//        ];
-//        yield '[Function] unbalanced with arguments (2)' => [
-//            'function($foo, $arg)>',
-//            null,
-//        ];
-//        yield '[Function] escaped unbalanced with arguments (2)' => [
-//            'function($foo, $arg)\>',
-//            [
-//                new Token('function(', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
-//                new Token(', ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('$arg', new TokenType(TokenType::VARIABLE_TYPE)),
-//                new Token(')', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] escaped unbalanced with arguments (4)' => [
-//            '\<function$foo, $arg)>',
-//            null,
-//        ];
-//        yield '[Function] successive functions with arguments' => [
-//            '<f($foo, $arg)><g($baz, $faz)>',
-//            [
-//                new Token('<f($foo, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
-//                new Token('<g($baz, $faz)>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] correct successive functions with arguments' => [
-//            '<f($foo, $arg)> <g($baz, $faz)>',
-//            [
-//                new Token('<f($foo, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
-//                new Token(' ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('<g($baz, $faz)>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] nested functions with arguments' => [
-//            '<f(<g($baz)>, $arg)>',
-//            [
-//                new Token('<f(<g($baz)>, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] nested functions with multiple arguments' => [
-//            '<f(<g($baz, $faz)>, $arg)>',
-//            [
-//                new Token('<f(<g($baz, $faz)>, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] nominal surrounded with arguments' => [
-//            'foo <function($foo, $arg)> bar',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('<function($foo, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
-//                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//
-//        yield '[Function] nominal identity with arguments' => [
-//            '<(function($foo, $arg))>',
-//            [
-//                new Token('<(function($foo, $arg))>', new TokenType(TokenType::IDENTITY_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] identity with args' => [
-//            '<(function(echo("hello")))>',
-//            [
-//                new Token('<(function(echo("hello")))>', new TokenType(TokenType::IDENTITY_TYPE)),
-//            ],
-//        ];
-//        yield '[Function] identity with params' => [
-//            '<(function(echo(<{param}>))>',
-//            [
-//                new Token('<(function(echo(<{param}>))>', new TokenType(TokenType::IDENTITY_TYPE)),
-//            ],
-//        ];
-//
-//        // Arrays
-//        yield '[Array] nominal string array' => [
-//            '10x @user',
-//            [
-//                new Token('10x @user', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
-//            ],
-//        ];
-//        yield '[Array] string array with negative number' => [
-//            '-10x @user',
-//            null,
-//        ];
-//        yield '[Array] string array with left member' => [
-//            'foo 10x @user',
-//            null,
-//        ];
-//        yield '[Array] string array with right member' => [
-//            '10x @user bar',
-//            [
-//                new Token('10x @user bar', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
-//            ],
-//        ];
-//        yield '[Array] string array with P1' => [
-//            '<dummy>x 50x <hello>',
-//            [
-//                new Token('<dummy>x 50x <hello>', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
-//            ],
-//        ];
-//        yield '[Array] string array with string array' => [
-//            '10x [@user*->name, @group->name]',
-//            [
-//                new Token('10x [@user*->name, @group->name]', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
-//            ],
-//        ];
-//        yield '[Array] escaped array' => [
-//            '\[X]',
-//            [
-//                new Token('\[X]', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//            ],
-//        ];
-//        yield '[Array] malformed escaped array 1' => [
-//            '[X\]',
-//            [
-//                new Token('[X\]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
-//            ],
-//        ];
-//        yield '[Array] surrounded escaped array' => [
-//            'foo [[X]] bar',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY_TYPE)),
-//                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//        yield '[Array] surrounded escaped array with param' => [
-//            'foo \[X] yo <{param}> bar',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('\[X]', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-//                new Token(' yo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
-//                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//        yield '[Array] simple string array' => [
-//            '[@user*->name, @group->name]',
-//            [
-//                new Token('[@user*->name, @group->name]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
-//            ],
-//        ];
-//
-//        // Optional
-//        yield '[Optional] nominal' => [
-//            '80%? Y',
-//            [
-//                new Token('80%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with negative number' => [
-//            '-50%? Y',
-//            [
-//                new Token('-', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('50%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with float' => [
-//            '0.5%? Y',
-//            [
-//                new Token('0.5%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with <X>' => [
-//            '<dummy>%? Y',
-//            [
-//                new Token('<dummy>%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] complete' => [
-//            '80%? Y: Z',
-//            [
-//                new Token('80%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] complete with superfluous space' => [
-//            '80%?  Y :  Z  ',
-//            [
-//                new Token('80%?  Y :  Z', new TokenType(TokenType::OPTIONAL_TYPE)),
-//                new Token('  ', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] complete with negative number' => [
-//            '-50%? Y: Z',
-//            [
-//                new Token('-', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('50%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] complete with float' => [
-//            '0.5%? Y: Z',
-//            [
-//                new Token('0.5%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] complete with <X>' => [
-//            '<dummy>%? Y: Z',
-//            [
-//                new Token('<dummy>%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] nominal with left member' => [
-//            'foo 80%? Y',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('80%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with negative number and left member' => [
-//            'foo -50%? Y',
-//            [
-//                new Token('foo -', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('50%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with float and left member' => [
-//            'foo 0.5%? Y',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('0.5%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with <X> and left member' => [
-//            'foo <dummy>%? Y',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('<dummy>%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] complete with left member' => [
-//            'foo 80%? Y: Z',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('80%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] complete with negative number and left member' => [
-//            'foo -50%? Y: Z',
-//            [
-//                new Token('foo -', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('50%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] complete with float and left member' => [
-//            'foo 0.5%? Y: Z',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('0.5%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] complete with <X> and left member' => [
-//            'foo <dummy>%? Y: Z',
-//            [
-//                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-//                new Token('<dummy>%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] without members' => [
-//            '80%? ',
-//            null,
-//        ];
-//        yield '[Optional] without members 2' => [
-//            '80%?',
-//            null,
-//        ];
-//        yield '[Optional] without first member but with second' => [
-//            '80%? :Z',
-//            null,
-//        ];
-//        yield '[Optional] with first member containing a string' => [
-//            '80%? foo bar',
-//            [
-//                new Token('80%? foo bar', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with first member containing a space and second member' => [
-//            '80%? foo bar: baz',
-//            [
-//                new Token('80%? foo bar: baz', new TokenType(TokenType::OPTIONAL_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with first member containing a space and second member too' => [
-//            '80%? foo bar: baz faz',
-//            [
-//                new Token('80%? foo bar: baz', new TokenType(TokenType::OPTIONAL_TYPE)),
-//                new Token(' faz', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with second member containing a space' => [
-//            '80%? foo: bar baz',
-//            [
-//                new Token('80%? foo: bar', new TokenType(TokenType::OPTIONAL_TYPE)),
-//                new Token(' baz', new TokenType(TokenType::STRING_TYPE)),
-//            ],
-//        ];
-//        yield '[Optional] with second member without the space after semicolon' => [
-//            '80%? foo:bar baz',
-//            null,
-//        ];
-//        yield '[Optional] without space after quantifier' => [
-//            '80%?foo bar',
-//            null,
-//        ];
-//        yield '[Optional] without space after quantifier with second member' => [
-//            '80%?foo: bar baz',
-//            null,
-//        ];
+        // simple values
+        yield 'empty string' => [
+            '',
+            [
+                new Token('', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        yield 'regular string value' => [
+            'dummy',
+            [
+                new Token('dummy', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        yield 'string value with quotes' => [
+            '\'dummy\'',
+            [
+                new Token('\'dummy\'', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        yield 'string value with double quotes' => [
+            '"dummy"',
+            [
+                new Token('"dummy"', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        // Escaped arrow
+        yield '[Escaped arrow] nominal (1)' => [
+            '\<',
+            [
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Escaped arrow] nominal (2)' => [
+            '\>',
+            [
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Escaped arrow] parameter' => [
+            '\<{param}>',
+            [
+                new Token('\<{param}>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Escaped arrow] function' => [
+            '\<f()>',
+            [
+                new Token('\<aliceTokenizedFunction(FUNCTION_START__f__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Escaped arrow] surrounded' => [
+            'foo \< bar \> baz',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token(' bar ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token(' baz', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        // Parameters
+        yield '[Parameter] nominal' => [
+            '<{dummy_param}>',
+            [
+                new Token('<{dummy_param}>', new TokenType(TokenType::PARAMETER_TYPE)),
+            ],
+        ];
+        yield '[Parameter] unbalanced (1)' => [
+            '<{dummy_param>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (1)' => [
+            '\<{dummy_param\>',
+            [
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('{dummy_param', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Parameter] unbalanced (2)' => [
+            '<{dummy_param',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (2)' => [
+            '\<{dummy_param',
+            [
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('{dummy_param', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Parameter] unbalanced (3)' => [
+            '<dummy_param}>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (3)' => [
+            '\<dummy_param}\>',
+            [
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('dummy_param}', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Parameter] unbalanced (4)' => [
+            'dummy_param}>',
+            null,
+        ];
+        yield '[Parameter] escaped unbalanced (4)' => [
+            'dummy_param}\>',
+            [
+                new Token('dummy_param}', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Parameter] successive' => [
+            '<{param1}><{param2}>',
+            [
+                new Token('<{param1}>', new TokenType(TokenType::PARAMETER_TYPE)),
+                new Token('<{param2}>', new TokenType(TokenType::PARAMETER_TYPE)),
+            ],
+        ];
+        yield '[Parameter] nested' => [
+            '<{value_<{nested_param}>}>',
+            null,
+        ];
+        yield '[Parameter] nested escape' => [
+            '<{value_\<{nested_param}>}>',
+            null,
+        ];
+        yield '[Parameter] surrounded - nested' => [
+            'foo <{value_<{nested_param}>}> bar',
+            null,
+        ];
+
+        // Functions
+        yield '[Function] nominal' => [
+            '<function()>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] localized nominal' => [
+            '<fr_FR:function()>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__fr_FR:function__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] unbalanced (1)' => [
+            '<function()',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (1)' => [
+            '\<function()',
+            null,
+        ];
+        yield '[Function] unbalanced (2)' => [
+            'function()>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (2)' => [
+            'function()\>',
+            [
+                new Token('function()', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Function] unbalanced (3)' => [
+            '<function(>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (3)' => [
+            '\<function(\>',
+            null,
+        ];
+        yield '[Function] unbalanced (4)' => [
+            '<function)>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced (4)' => [
+            '\<function)\>',
+            [
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('function)', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Function] successive functions' => [
+            '<f()><g()>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__IDENTITY_OR_FUNCTION_END)><aliceTokenizedFunction(FUNCTION_START__g__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] correct successive functions' => [
+            '<f()> <g()>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__IDENTITY_OR_FUNCTION_END)> <aliceTokenizedFunction(FUNCTION_START__g__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nested functions' => [
+            '<f(<g()>)>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__FUNCTION_START__g__IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nominal surrounded' => [
+            'foo <function()> bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        yield '[Function] nominal identity' => [
+            '<(function())>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction()IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] identity with args' => [
+            '<(function(echo("hello")))>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction(echo("hello"))IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] identity with params' => [
+            '<(function(echo(<{param}>))>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction(echo(<{param}>)IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[X] parameter, function, identity and escaped' => [
+            '<{param}><function()><(echo("hello"))>\<escaped_value\>',
+            [
+                new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__IDENTITY_OR_FUNCTION_END)><aliceTokenizedFunction(IDENTITY_STARTecho("hello")IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('escaped_value', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Function] nominal with arguments' => [
+            '<function($foo, $arg)>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__$foo, $argIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nominal with string arguments which contains quotes' => [
+            '<function(\'foo\', "bar")>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\', "bar"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] unbalanced with arguments (1)' => [
+            '<function($foo, $arg)',
+            null,
+        ];
+        yield '[Function] escaped unbalanced with arguments (1)' => [
+            '\<function($foo, $arg)',
+            null,
+        ];
+        yield '[Function] unbalanced with arguments (2)' => [
+            'function($foo, $arg)>',
+            null,
+        ];
+        yield '[Function] escaped unbalanced with arguments (2)' => [
+            'function($foo, $arg)\>',
+            [
+                new Token('function(', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(', ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('$arg', new TokenType(TokenType::VARIABLE_TYPE)),
+                new Token(')', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Function] escaped unbalanced with arguments (4)' => [
+            '\<function$foo, $arg)>',
+            null,
+        ];
+        yield '[Function] successive functions with arguments' => [
+            '<f($foo, $arg)><g($baz, $faz)>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__$foo, $argIDENTITY_OR_FUNCTION_END)><aliceTokenizedFunction(FUNCTION_START__g__$baz, $fazIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] correct successive functions with arguments' => [
+            '<f($foo, $arg)> <g($baz, $faz)>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__$foo, $argIDENTITY_OR_FUNCTION_END)> <aliceTokenizedFunction(FUNCTION_START__g__$baz, $fazIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nested functions with arguments' => [
+            '<f(<g($baz)>, $arg)>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__FUNCTION_START__g__$bazIDENTITY_OR_FUNCTION_END, $argIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nested functions with multiple arguments' => [
+            '<f(<g($baz, $faz)>, $arg)>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__FUNCTION_START__g__$baz, $fazIDENTITY_OR_FUNCTION_END, $argIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] nominal surrounded with arguments' => [
+            'foo <function($foo, $arg)> bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__$foo, $argIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        yield '[Function] nominal identity with arguments' => [
+            '<(function($foo, $arg))>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction($foo, $arg)IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] identity with params' => [
+            '<(function(echo(<{param}>))>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction(echo(<{param}>)IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+
+        // Arrays
+        yield '[Array] nominal string array' => [
+            '10x @user',
+            [
+                new Token('10x @user', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
+            ],
+        ];
+        yield '[Array] string array with negative number' => [
+            '-10x @user',
+            null,
+        ];
+        yield '[Array] string array with left member' => [
+            'foo 10x @user',
+            null,
+        ];
+        yield '[Array] string array with right member' => [
+            '10x @user bar',
+            [
+                new Token('10x @user bar', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
+            ],
+        ];
+        yield '[Array] string array with P1' => [
+            '<dummy>x 50x <hello>',
+            [
+                new Token('<dummy>x 50x <hello>', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
+            ],
+        ];
+        yield '[Array] string array with string array' => [
+            '10x [@user*->name, @group->name]',
+            [
+                new Token('10x [@user*->name, @group->name]', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
+            ],
+        ];
+        yield '[Array] escaped array' => [
+            '\[X]',
+            [
+                new Token('\[X]', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Array] malformed escaped array 1' => [
+            '[X\]',
+            [
+                new Token('[X\]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
+            ],
+        ];
+        yield '[Array] malformed escaped array 2' => [
+            '[X\]',
+            [
+                new Token('[X\]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
+            ],
+        ];
+        yield '[Array] surrounded escaped array' => [
+            'foo \[X] bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\[X]', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Array] surrounded escaped array with param' => [
+            'foo \[X] yo <{param}> bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\[X]', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token(' yo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Array] simple string array' => [
+            '[@user*->name, @group->name]',
+            [
+                new Token('[@user*->name, @group->name]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
+            ],
+        ];
+
+        // Optional
+        yield '[Optional] nominal' => [
+            '80%? Y',
+            [
+                new Token('80%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] with negative number' => [
+            '-50%? Y',
+            [
+                new Token('-', new TokenType(TokenType::STRING_TYPE)),
+                new Token('50%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] with float' => [
+            '0.5%? Y',
+            [
+                new Token('0.5%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] with <X>' => [
+            '<dummy>%? Y',
+            [
+                new Token('<dummy>%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] complete' => [
+            '80%? Y: Z',
+            [
+                new Token('80%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] complete with superfluous space' => [
+            '80%?  Y :  Z  ',
+            [
+                new Token('80%?  Y :  Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+                new Token('  ', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Optional] complete with negative number' => [
+            '-50%? Y: Z',
+            [
+                new Token('-', new TokenType(TokenType::STRING_TYPE)),
+                new Token('50%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] complete with float' => [
+            '0.5%? Y: Z',
+            [
+                new Token('0.5%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] complete with <X>' => [
+            '<dummy>%? Y: Z',
+            [
+                new Token('<dummy>%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] nominal with left member' => [
+            'foo 80%? Y',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('80%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] with negative number and left member' => [
+            'foo -50%? Y',
+            [
+                new Token('foo -', new TokenType(TokenType::STRING_TYPE)),
+                new Token('50%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] with float and left member' => [
+            'foo 0.5%? Y',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('0.5%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] with <X> and left member' => [
+            'foo <dummy>%? Y',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<dummy>%? Y', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] complete with left member' => [
+            'foo 80%? Y: Z',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('80%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] complete with negative number and left member' => [
+            'foo -50%? Y: Z',
+            [
+                new Token('foo -', new TokenType(TokenType::STRING_TYPE)),
+                new Token('50%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] complete with float and left member' => [
+            'foo 0.5%? Y: Z',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('0.5%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] complete with <X> and left member' => [
+            'foo <dummy>%? Y: Z',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('<dummy>%? Y: Z', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] without members' => [
+            '80%? ',
+            null,
+        ];
+        yield '[Optional] without members 2' => [
+            '80%?',
+            null,
+        ];
+        yield '[Optional] without first member but with second' => [
+            '80%? :Z',
+            null,
+        ];
+        yield '[Optional] with first member containing a string' => [
+            '80%? foo bar',
+            [
+                new Token('80%? foo bar', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] with first member containing a space and second member' => [
+            '80%? foo bar: baz',
+            [
+                new Token('80%? foo bar: baz', new TokenType(TokenType::OPTIONAL_TYPE)),
+            ],
+        ];
+        yield '[Optional] with first member containing a space and second member too' => [
+            '80%? foo bar: baz faz',
+            [
+                new Token('80%? foo bar: baz', new TokenType(TokenType::OPTIONAL_TYPE)),
+                new Token(' faz', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Optional] with second member containing a space' => [
+            '80%? foo: bar baz',
+            [
+                new Token('80%? foo: bar', new TokenType(TokenType::OPTIONAL_TYPE)),
+                new Token(' baz', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Optional] with second member without the space after semicolon' => [
+            '80%? foo:bar baz',
+            null,
+        ];
+        yield '[Optional] without space after quantifier' => [
+            '80%?foo bar',
+            null,
+        ];
+        yield '[Optional] without space after quantifier with second member' => [
+            '80%?foo: bar baz',
+            null,
+        ];
         yield '[Optional] surrounded with params' => [
             'foo 80%? <{dummy}>: <another()> baz',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('80%? <{dummy}>: <another>', new TokenType(TokenType::OPTIONAL_TYPE)),
+                new Token('80%? <{dummy}>: <aliceTokenizedFunction(FUNCTION_START__another__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::OPTIONAL_TYPE)),
                 new Token(' baz', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Optional] surrounded with params and nested' => [
             '<foo()> -80%? <{dum10}>%? y: z my: \<another\> <baz()>',
             [
-                new Token('<foo()>', new TokenType(TokenType::FUNCTION_TYPE)),
-                new Token(' -', new TokenType(TokenType::STRING_TYPE)),
-                new Token('80%? <{dum10}>%? y: z', new TokenType(TokenType::OPTIONAL_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)> -80%? <{dum10}>%? y: z', new TokenType(TokenType::OPTIONAL_TYPE)),
                 new Token(' my: ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('\<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('another', new TokenType(TokenType::STRING_TYPE)),
-                new Token('\>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<baz()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__baz__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
 
@@ -670,9 +667,9 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Reference] empty escaped reference' => [
-            '@@',
+            '\@',
             [
-                new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Reference] empty reference with second member' => [
@@ -680,9 +677,9 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Reference] escaped empty reference with second member' => [
-            '@@ foo',
+            '\@ foo',
             [
-                new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' foo', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -693,9 +690,9 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         yield '[Reference] escaped alone with strings' => [
-            '@@user0',
+            '\@user0',
             [
-                new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('user', new TokenType(TokenType::STRING_TYPE)),
                 new Token('0', new TokenType(TokenType::STRING_TYPE)),
             ],
@@ -922,7 +919,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             '@user0<current()>',
             [
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<current()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Reference] surrounded reference function' => [
@@ -930,7 +927,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<current()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -938,7 +935,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             '@user0<f($foo, $bar)>',
             [
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<f($foo, $bar)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__$foo, $barIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Reference] surrounded reference function with args' => [
@@ -946,7 +943,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<f($foo, $bar)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__$foo, $barIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -977,7 +974,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<current()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -1028,22 +1025,22 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         yield '[Variable] empty escaped variable' => [
-            '$$',
+            '\$',
             [
-                new Token('$$', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+                new Token('\$', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Variable] escaped empty variable with second member' => [
-            '$$ foo',
+            '\$ foo',
             [
-                new Token('$$', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+                new Token('\$', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' foo', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Variable] alone with strings' => [
-            '$$username',
+            '\$username',
             [
-                new Token('$$', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+                new Token('\$', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('username', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];

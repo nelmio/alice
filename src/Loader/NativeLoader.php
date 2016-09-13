@@ -25,8 +25,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\StringMergerParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedArrayTokenParser;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedTokenParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedValueTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureListReferenceTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureMethodReferenceTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureRangeReferenceTokenParser;
@@ -376,8 +375,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     {
         return new TokenParserRegistry([
             new DynamicArrayTokenParser(),
-            new EscapedArrayTokenParser(),
-            new EscapedTokenParser(),
+            new EscapedValueTokenParser(),
             new FixtureListReferenceTokenParser(),
             new FixtureMethodReferenceTokenParser(),
             new FixtureRangeReferenceTokenParser(),

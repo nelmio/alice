@@ -9,43 +9,49 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
-
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\NotClonableTrait;
 
-final class EscapedArrayTokenParser implements ChainableTokenParserInterface
+final class EscapedValueTokenParser implements ChainableTokenParserInterface
 {
     use NotClonableTrait;
+
+    /**
+     * @var FunctionTokenizer
+     */
+    private $tokenizer;
+
+    public function __construct()
+    {
+        $this->tokenizer = new FunctionTokenizer();
+    }
 
     /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::ESCAPED_ARRAY_TYPE;
+        return TokenType::ESCAPED_VALUE_TYPE === $token->getType();
     }
 
     /**
-     * Parses '[[X]]'.
+     * Parses '<<', '@@'...
      *
      * {@inheritdoc}
-     *
-     * @throws ParseException
      */
     public function parse(Token $token): string
     {
         $value = $token->getValue();
-
-        try {
-            return substr($value, 1, strlen($value) - 2);
-        } catch (\TypeError $error) {
-            throw ParseException::createForToken($token, 0, $error);
+        if ('' === $value) {
+            throw ParseException::createForToken($token);
         }
+
+        return $this->tokenizer->detokenize(substr($value, 1));
     }
 }

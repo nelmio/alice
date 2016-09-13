@@ -181,6 +181,10 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '<function()>',
             new FunctionCallValue('function'),
         ];
+        yield '[Function] localized nominal' => [
+            '<fr_FR:function()>',
+            new FunctionCallValue('fr_FR:function'),
+        ];
         yield '[Function] unbalanced (1)' => [
             '<function()',
             null,
@@ -391,10 +395,6 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '<(function($foo, $arg))>',
             IdentityFactory::create('function($foo, $arg)'),
         ];
-        yield '[Function] identity with args' => [
-            '<(function(echo("hello")))>',
-            IdentityFactory::create('function(echo("hello"))'),
-        ];
         yield '[Function] identity with params' => [
             '<(function(echo(<{param}>))>',
             IdentityFactory::create('function(echo(<{param}>)'),
@@ -452,13 +452,9 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] malformed escaped array 1' => [
             '\[X]',
-            new ListValue([
-                [
-                    '[X]'
-                ]
-            ]),
+            '[X]',
         ];
-        yield '[Array] malformed escaped array 1' => [
+        yield '[Array] malformed escaped array 2' => [
             '[X\]',
             ['X\\'],
         ];
@@ -724,7 +720,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             ]),
         ];
         yield '[Optional] surrounded with params and nested' => [
-            '<foo()> -80%? <dum10%? y: z my>: <<another>> <baz()>',
+            '<foo()> -80%? <{dum10}>%? y: z my>: \<another\> <baz()>',
             null,
         ];
 
