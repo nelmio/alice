@@ -381,7 +381,6 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new FixtureListReferenceTokenParser(),
             new FixtureMethodReferenceTokenParser(),
             new FixtureRangeReferenceTokenParser(),
-            new IdentityTokenParser(),
             new MethodReferenceTokenParser(),
             new OptionalTokenParser(),
             new ParameterTokenParser(),
@@ -389,7 +388,11 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new SimpleReferenceTokenParser(),
             new StringArrayTokenParser(),
             new StringTokenParser(),
-            new TolerantFunctionTokenParser(new FunctionTokenParser()),
+            new TolerantFunctionTokenParser(
+                new IdentityTokenParser(
+                    new FunctionTokenParser()
+                )
+            ),
             new VariableTokenParser(),
             new WildcardReferenceTokenParser(),
         ]);

@@ -1,7 +1,7 @@
 {
     "name": "nelmio/alice",
     "description": "Expressive fixtures generator",
-    "keywords": ["fixture", "data", "test", "orm"],
+    "keywords": ["fixture", "data", "test", "faker"],
     "type": "library",
     "license": "MIT",
     "authors": [

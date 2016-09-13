@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -26,6 +27,16 @@ final class EscapedTokenParser implements ChainableTokenParserInterface
         TokenType::ESCAPED_REFERENCE_TYPE => true,
         TokenType::ESCAPED_VARIABLE_TYPE => true,
     ];
+
+    /**
+     * @var FunctionTokenizer
+     */
+    private $tokenizer;
+
+    public function __construct()
+    {
+        $this->tokenizer = new FunctionTokenizer();
+    }
 
     /**
      * @inheritdoc
@@ -47,6 +58,6 @@ final class EscapedTokenParser implements ChainableTokenParserInterface
             throw ParseException::createForToken($token);
         }
 
-        return $value[0];
+        return $this->tokenizer->detokenize(substr($value, 1));
     }
 }

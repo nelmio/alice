@@ -11,28 +11,22 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer
+ * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer
+ * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTreeTokenizer
  */
-class FunctionLexerTest extends \PHPUnit_Framework_TestCase
+class FunctionTokenizerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var FunctionLexer
+     * @var FunctionTokenizer
      */
-    private $lexer;
+    private $tokenizer;
 
     public function setUp()
     {
-        $this->lexer = new FunctionLexer(new DummyLexer());
-    }
-
-    public function testIsALexer()
-    {
-        $this->assertTrue(is_a(FunctionLexer::class, LexerInterface::class, true));
+        $this->tokenizer = new FunctionTokenizer();
     }
 
     /**
@@ -40,16 +34,16 @@ class FunctionLexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new FunctionLexer(new FakeLexer());
+        clone $this->tokenizer;
     }
 
     /**
      * @dataProvider provideValues
      */
-    public function testLexValues($value, $expected)
+    public function testTokenizeValues($value, $expected)
     {
         try {
-            $actual = $this->lexer->lex($value);
+            $actual = $this->tokenizer->tokenize($value);
             if (null === $expected) {
                 $this->fail('Expected exception to be thrown.');
             }
@@ -65,91 +59,57 @@ class FunctionLexerTest extends \PHPUnit_Framework_TestCase
     {
         yield 'non function' => [
             'foo',
-            [
-                'foo',
-            ]
+            'foo',
         ];
 
         yield 'single function' => [
             '<foo()>',
-            [
-                '<foo()>',
-            ]
+            '<aliceTokenizedFunction(FUNCTION_START_foo_IDENTITY_OR_FUNCTION_END)>',
         ];
 
         yield 'surrounded single function' => [
             'ping <foo()> pong',
-            [
-                'ping ',
-                '<foo()>',
-                ' pong',
-            ]
+            'ping <aliceTokenizedFunction(FUNCTION_START_foo_IDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'single function with 1 arg' => [
             '<foo(bar)>',
-            [
-                '<foo(bar)>',
-            ]
+            '<aliceTokenizedFunction(FUNCTION_START_foo_barIDENTITY_OR_FUNCTION_END)>',
         ];
 
         yield 'surrounded single function with 1 arg' => [
             'ping <foo(bar)> pong',
-            [
-                'ping ',
-                '<foo(bar)>',
-                ' pong',
-            ]
+            'ping <aliceTokenizedFunction(FUNCTION_START_foo_barIDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'single function with 2 args' => [
             '<foo(bar, baz)>',
-            [
-                '<foo(bar, baz)>',
-            ]
+            '<aliceTokenizedFunction(FUNCTION_START_foo_bar, bazIDENTITY_OR_FUNCTION_END)>',
         ];
 
         yield 'surrounded single function with 2 args' => [
             'ping <foo(bar, baz)> pong',
-            [
-                'ping ',
-                '<foo(bar, baz)>',
-                ' pong',
-            ]
+            'ping <aliceTokenizedFunction(FUNCTION_START_foo_bar, bazIDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'single function with 1 nested function' => [
             '<foo(<bar()>)>',
-            [
-                '<foo(<bar()>)>',
-            ]
+            '<aliceTokenizedFunction(FUNCTION_START_foo_FUNCTION_START_bar_IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)>',
         ];
 
         yield 'surrounded single function with 1 nested function' => [
             'ping <foo(<bar()>)> pong',
-            [
-                'ping ',
-                '<foo(<bar()>)>',
-                ' pong',
-            ]
+            'ping <aliceTokenizedFunction(FUNCTION_START_foo_FUNCTION_START_bar_IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'complex function' => [
             'ping <foo($foo, <bar()>, <baz($arg1, <baw($arg2)>)>)> pong',
-            [
-                'ping ',
-                '<foo($foo, <bar()>, <baz($arg1, <baw($arg2)>)>)>',
-                ' pong',
-            ]
+            'ping <aliceTokenizedFunction(FUNCTION_START_foo_$foo, FUNCTION_START_bar_IDENTITY_OR_FUNCTION_END, FUNCTION_START_baz_$arg1, FUNCTION_START_baw_$arg2IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'complex identities' => [
             'ping <($foo, <(bar)>, <($arg1, <($arg2)>)>)> pong',
-            [
-                'ping ',
-                '<($foo, <(bar)>, <($arg1, <($arg2)>)>)>',
-                ' pong',
-            ]
+            'ping <aliceTokenizedFunction(IDENTITY_START$foo, IDENTITY_STARTbarIDENTITY_OR_FUNCTION_END, IDENTITY_START$arg1, IDENTITY_START$arg2IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)> pong',
         ];
 
         yield 'unclosed function' => [

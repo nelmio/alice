@@ -13,7 +13,7 @@ namespace Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage;
 
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
-class UnclosedFunctionException extends \InvalidArgumentException implements ExpressionLanguageParseThrowable
+class MalformedFunctionException extends \InvalidArgumentException implements ExpressionLanguageParseThrowable
 {
     /**
      * @return static

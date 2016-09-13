@@ -12,11 +12,43 @@
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
-final class IdentityTokenParser extends AbstractChainableParserAwareParser
+final class IdentityTokenParser implements ChainableTokenParserInterface, ParserAwareInterface
 {
+    /**
+     * @var ChainableTokenParserInterface
+     */
+    private $decoratedTokenParser;
+
+    /**
+     * @var FunctionTokenizer
+     */
+    private $tokenizer;
+
+    public function __construct(ChainableTokenParserInterface $decoratedTokenParser, ParserInterface $parser = null)
+    {
+        if (null !== $parser && $decoratedTokenParser instanceof ParserAwareInterface) {
+            $decoratedTokenParser = $decoratedTokenParser->withParser($parser);
+        }
+        $this->decoratedTokenParser = $decoratedTokenParser;
+        $this->tokenizer = new FunctionTokenizer();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withParser(ParserInterface $parser): self
+    {
+        return new static($this->decoratedTokenParser, $parser);
+    }
+
     /**
      * @inheritdoc
      */
@@ -34,13 +66,14 @@ final class IdentityTokenParser extends AbstractChainableParserAwareParser
      */
     public function parse(Token $token)
     {
-        parent::parse($token);
-
-        $realValue = preg_replace('/<\((.*)\)>/', '<identity($1)>', $token->getValue());
+        $value = $this->tokenizer->detokenize($token->getValue());
+        $realValue = preg_replace('/^<\((.*)\)>$/', '<identity($1)>', $value);
         if (null === $realValue) {
             throw ParseException::createForToken($token);
         }
 
-        return $this->parser->parse($realValue);
+        return $this->decoratedTokenParser->parse(
+            new Token($realValue, new TokenType(TokenType::FUNCTION_TYPE))
+        );
     }
 }

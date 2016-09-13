@@ -27,7 +27,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
     use NotClonableTrait;
 
     /** @internal */
-    const REGEX = '/(\)>)(\ *<)/';
+    const REGEX = '/(\)>)(\ *)</';
 
     /**
      * @var ChainableTokenParserInterface
@@ -77,33 +77,45 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
     {
         parent::parse($token);
 
-        try {
+        $split = preg_split(self::REGEX, $token->getValue(), 2, PREG_SPLIT_DELIM_CAPTURE + PREG_SPLIT_NO_EMPTY);
+        $splitSize = count($split);
+        if (1 === $splitSize) {
             return $this->functionTokenParser->parse($token);
-        } catch (LexException $exception) {
-            // Continue
         }
 
-        $split = preg_split(self::REGEX, $token->getValue(), 2, PREG_SPLIT_DELIM_CAPTURE);
-        if (4 !== count($split)) {
-            throw $exception;
+        if (3 !== count($split) && 4 !== count($split)) {
+            throw LexException::create($token->getValue());
         }
 
-        $firstValue = $this->parser->parse($split[0].$split[1]);
-        $secondValue = $this->parser->parse($split[2].$split[3]);
+        $values = [
+            $this->parser->parse($split[0].$split[1]),
+        ];
+        if (3 === $splitSize) {
+            $values[] = $this->parser->parse('<'.$split[2]);
+        }
+        if (4 === $splitSize) {
+            $values[] = $this->parser->parse($split[2]);
+            $values[] = $this->parser->parse('<'.$split[3]);
+        }
 
-        return $this->mergeValues($firstValue, $secondValue);
+        return $this->mergeValues($values);
     }
 
-    private function mergeValues($firstValue, $secondValue): NestedValue
+    private function mergeValues(array $values): NestedValue
     {
-        $parsedValues = [$firstValue];
+        $parsedValues = [];
 
-        $secondValue = ($secondValue instanceof ListValue || $secondValue instanceof NestedValue)
-            ? $secondValue->getValue()
-            : [$secondValue]
-        ;
-        foreach ($secondValue as $value) {
-            $parsedValues[] = $value;
+        foreach ($values as $value) {
+            if (false === ($value instanceof ListValue || $value instanceof NestedValue)) {
+                $parsedValues[] = $value;
+
+                continue;
+            }
+
+            $valuesList = $value->getValue();
+            foreach ($valuesList as $value) {
+                $parsedValues[] = $value;
+            }
         }
 
         return new NestedValue($parsedValues);

@@ -27,23 +27,25 @@ final class SubPatternsLexer implements LexerInterface
         '/^((?:\d+|<.+>)%\? [^:]+:[^\ ]+)/' => null,
         '/^((?:\d+|\d*\.\d+|<.+>)%\? [^:]+(?:\: +\S+)?)/' => TokenType::OPTIONAL_TYPE,
         '/^((?:\d+|\d*\.\d+|<.+>)%\? : ?[^\ ]+?)/' => null,
-        '/^(<<|>>)/' => TokenType::ESCAPED_ARROW_TYPE,
+        '/^(\\\<{[^\ <]+}>)/' => TokenType::ESCAPED_ARROW_TYPE,
+        '/^(\\\<\S+\(.*\)>)/' => TokenType::ESCAPED_ARROW_TYPE,
+        '/^(\\\\\[[^\[\]]+\])/' => TokenType::ESCAPED_ARROW_TYPE,
+        '/^(\\\<|\\\>)/' => TokenType::ESCAPED_ARROW_TYPE,
+        '/^(\\\[@$])/' => TokenType::ESCAPED_ARROW_TYPE,
         '/^(<{[^\ <]+}>)/' => TokenType::PARAMETER_TYPE,
         '/^(<\(.+\)>)/' => TokenType::IDENTITY_TYPE,
         '/^(<\S+\(.*\)>)/' => TokenType::FUNCTION_TYPE,
         '/^(<\S+>)/' => null,
         '/^(\[\[.*\]\])/' => TokenType::ESCAPED_ARRAY_TYPE,
         '/^(\[[^\[\]]+\])/' => TokenType::STRING_ARRAY_TYPE,
-        '/^(@@)[^\ @]*/' => TokenType::ESCAPED_REFERENCE_TYPE,
         '/^(@[^\ @\{\<]+\(.*\))/' => self::REFERENCE_LEXER, // function
         '/^(@[^\ @\<]+\{.*\}->\S+\(.*\))/' => self::REFERENCE_LEXER, // range or list with function
         '/^(@[^\ @\<]+\{.*\}->[^\(\)\ \{]+)/' => self::REFERENCE_LEXER, // range or list with property
         '/^(@[^\ @\<]+\{.*\})/' => self::REFERENCE_LEXER,   // range or list
         '/^(@[^\ @\{\<]+)/' => self::REFERENCE_LEXER,
-        '/^(\${2})/' => TokenType::ESCAPED_VARIABLE_TYPE,
         '/^(\$[\p{L}_]+)/' => TokenType::VARIABLE_TYPE,
-        '/^([^<>\[\d\%\$@]+)/' => TokenType::STRING_TYPE,
-        '/^([^<>\[\%\$@]+)/' => TokenType::STRING_TYPE,
+        '/^([^\\\<>\[\d\%\$@\]]+)/' => TokenType::STRING_TYPE,
+        '/^([^\\\<>\[\%\$@\]]+)/' => TokenType::STRING_TYPE,
     ];
 
     /**
