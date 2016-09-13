@@ -15,16 +15,14 @@ final class TokenType
 {
     const STRING_TYPE = 'STRING_TYPE';
     const PARAMETER_TYPE = 'PARAMETER_TYPE';
-    const ESCAPED_ARROW_TYPE = 'ESCAPED_ARROW_TYPE';
+    const ESCAPED_VALUE_TYPE = 'ESCAPED_VALUE_TYPE';
     const FUNCTION_TYPE = 'FUNCTION_TYPE';
     const IDENTITY_TYPE = 'IDENTITY_TYPE';
     const OPTIONAL_TYPE = 'OPTIONAL_TYPE';
 
     const DYNAMIC_ARRAY_TYPE = 'DYNAMIC_ARRAY_TYPE';
-    const ESCAPED_ARRAY_TYPE = 'ESCAPED_ARRAY_TYPE';
     const STRING_ARRAY_TYPE = 'STRING_ARRAY_TYPE';
 
-    const ESCAPED_REFERENCE_TYPE = 'ESCAPED_REFERENCE_TYPE';
     const SIMPLE_REFERENCE_TYPE = 'SIMPLE_REFERENCE_TYPE';
     const LIST_REFERENCE_TYPE = 'LIST_REFERENCE_TYPE';
     const WILDCARD_REFERENCE_TYPE = 'WILDCARD_REFERENCE_TYPE';
@@ -33,19 +31,16 @@ final class TokenType
     const METHOD_REFERENCE_TYPE = 'METHOD_REFERENCE_TYPE';
 
     const VARIABLE_TYPE = 'VARIABLE_TYPE';
-    const ESCAPED_VARIABLE_TYPE = 'ESCAPED_VARIABLE_TYPE';
-    
+
     private static $values = [
         self::STRING_TYPE => true,
         self::PARAMETER_TYPE => true,
-        self::ESCAPED_ARROW_TYPE => true,
+        self::ESCAPED_VALUE_TYPE => true,
         self::FUNCTION_TYPE => true,
         self::IDENTITY_TYPE => true,
         self::OPTIONAL_TYPE => true,
         self::DYNAMIC_ARRAY_TYPE => true,
-        self::ESCAPED_ARRAY_TYPE => true,
         self::STRING_ARRAY_TYPE => true,
-        self::ESCAPED_REFERENCE_TYPE => true,
         self::SIMPLE_REFERENCE_TYPE => true,
         self::LIST_REFERENCE_TYPE => true,
         self::WILDCARD_REFERENCE_TYPE => true,
@@ -53,7 +48,6 @@ final class TokenType
         self::PROPERTY_REFERENCE_TYPE => true,
         self::METHOD_REFERENCE_TYPE => true,
         self::VARIABLE_TYPE => true,
-        self::ESCAPED_VARIABLE_TYPE => true,
     ];
 
     /**

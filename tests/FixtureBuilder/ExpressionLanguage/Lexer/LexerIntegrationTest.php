@@ -101,40 +101,36 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
 
         // Escaped arrow
         yield '[Escaped arrow] nominal (1)' => [
-            '<<',
+            '\<',
             [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Escaped arrow] nominal (2)' => [
-            '>>',
+            '\>',
             [
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Escaped arrow] parameter' => [
-            '<<{param}>>',
+            '\<{param}>',
             [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-                new Token('{param}', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<{param}>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Escaped arrow] function' => [
-            '<<f()>>',
+            '\<f()>',
             [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-                new Token('f()', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<aliceTokenizedFunction(FUNCTION_START__f__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Escaped arrow] surrounded' => [
-            'foo << bar >> baz',
+            'foo \< bar \> baz',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' bar ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' baz', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -151,11 +147,11 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Parameter] escaped unbalanced (1)' => [
-            '<<{dummy_param>>',
+            '\<{dummy_param\>',
             [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('{dummy_param', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Parameter] unbalanced (2)' => [
@@ -163,9 +159,9 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Parameter] escaped unbalanced (2)' => [
-            '<<{dummy_param',
+            '\<{dummy_param',
             [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('{dummy_param', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -174,11 +170,11 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Parameter] escaped unbalanced (3)' => [
-            '<<dummy_param}>>',
+            '\<dummy_param}\>',
             [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('dummy_param}', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Parameter] unbalanced (4)' => [
@@ -186,10 +182,10 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Parameter] escaped unbalanced (4)' => [
-            'dummy_param}>>',
+            'dummy_param}\>',
             [
                 new Token('dummy_param}', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Parameter] successive' => [
@@ -204,7 +200,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Parameter] nested escape' => [
-            '<{value_<<{nested_param}>>}>',
+            '<{value_\<{nested_param}>}>',
             null,
         ];
         yield '[Parameter] surrounded - nested' => [
@@ -216,7 +212,13 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Function] nominal' => [
             '<function()>',
             [
-                new Token('<function()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] localized nominal' => [
+            '<fr_FR:function()>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__fr_FR:function__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] unbalanced (1)' => [
@@ -224,21 +226,18 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Function] escaped unbalanced (1)' => [
-            '<<function()',
-            [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-                new Token('function()', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            '\<function()',
+            null,
         ];
         yield '[Function] unbalanced (2)' => [
             'function()>',
             null,
         ];
         yield '[Function] escaped unbalanced (2)' => [
-            'function()>>',
+            'function()\>',
             [
                 new Token('function()', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Function] unbalanced (3)' => [
@@ -246,48 +245,44 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Function] escaped unbalanced (3)' => [
-            '<<function(>>',
-            [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-                new Token('function(', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-            ],
+            '\<function(\>',
+            null,
         ];
         yield '[Function] unbalanced (4)' => [
             '<function)>',
             null,
         ];
         yield '[Function] escaped unbalanced (4)' => [
-            '<<function)>>',
+            '\<function)\>',
             [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('function)', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Function] successive functions' => [
             '<f()><g()>',
             [
-                new Token('<f()><g()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__IDENTITY_OR_FUNCTION_END)><aliceTokenizedFunction(FUNCTION_START__g__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] correct successive functions' => [
             '<f()> <g()>',
             [
-                new Token('<f()> <g()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__IDENTITY_OR_FUNCTION_END)> <aliceTokenizedFunction(FUNCTION_START__g__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] nested functions' => [
             '<f(<g()>)>',
             [
-                new Token('<f(<g()>)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__FUNCTION_START__g__IDENTITY_OR_FUNCTION_ENDIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] nominal surrounded' => [
             'foo <function()> bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<function()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -295,41 +290,41 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Function] nominal identity' => [
             '<(function())>',
             [
-                new Token('<(function())>', new TokenType(TokenType::IDENTITY_TYPE)),
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction()IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] identity with args' => [
             '<(function(echo("hello")))>',
             [
-                new Token('<(function(echo("hello")))>', new TokenType(TokenType::IDENTITY_TYPE)),
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction(echo("hello"))IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] identity with params' => [
             '<(function(echo(<{param}>))>',
             [
-                new Token('<(function(echo(<{param}>))>', new TokenType(TokenType::IDENTITY_TYPE)),
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction(echo(<{param}>)IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[X] parameter, function, identity and escaped' => [
-            '<{param}><function()><(echo("hello"))><<escaped_value>>',
+            '<{param}><function()><(echo("hello"))>\<escaped_value\>',
             [
                 new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
-                new Token('<function()><(echo("hello"))>', new TokenType(TokenType::FUNCTION_TYPE)),
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__IDENTITY_OR_FUNCTION_END)><aliceTokenizedFunction(IDENTITY_STARTecho("hello")IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('escaped_value', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Function] nominal with arguments' => [
             '<function($foo, $arg)>',
             [
-                new Token('<function($foo, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__$foo, $argIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] nominal with string arguments which contains quotes' => [
             '<function(\'foo\', "bar")>',
             [
-                new Token('<function(\'foo\', "bar")>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\', "bar"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] unbalanced with arguments (1)' => [
@@ -337,72 +332,57 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Function] escaped unbalanced with arguments (1)' => [
-            '<<function($foo, $arg)',
-            [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-                new Token('function(', new TokenType(TokenType::STRING_TYPE)),
-                new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
-                new Token(', ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('$arg', new TokenType(TokenType::VARIABLE_TYPE)),
-                new Token(')', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            '\<function($foo, $arg)',
+            null,
         ];
         yield '[Function] unbalanced with arguments (2)' => [
             'function($foo, $arg)>',
             null,
         ];
         yield '[Function] escaped unbalanced with arguments (2)' => [
-            'function($foo, $arg)>>',
+            'function($foo, $arg)\>',
             [
                 new Token('function(', new TokenType(TokenType::STRING_TYPE)),
                 new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
                 new Token(', ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('$arg', new TokenType(TokenType::VARIABLE_TYPE)),
                 new Token(')', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Function] escaped unbalanced with arguments (4)' => [
-            '<<function$foo, $arg)>>',
-            [
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-                new Token('function', new TokenType(TokenType::STRING_TYPE)),
-                new Token('$foo', new TokenType(TokenType::VARIABLE_TYPE)),
-                new Token(', ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('$arg', new TokenType(TokenType::VARIABLE_TYPE)),
-                new Token(')', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-            ],
+            '\<function$foo, $arg)>',
+            null,
         ];
         yield '[Function] successive functions with arguments' => [
             '<f($foo, $arg)><g($baz, $faz)>',
             [
-                new Token('<f($foo, $arg)><g($baz, $faz)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__$foo, $argIDENTITY_OR_FUNCTION_END)><aliceTokenizedFunction(FUNCTION_START__g__$baz, $fazIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] correct successive functions with arguments' => [
             '<f($foo, $arg)> <g($baz, $faz)>',
             [
-                new Token('<f($foo, $arg)> <g($baz, $faz)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__$foo, $argIDENTITY_OR_FUNCTION_END)> <aliceTokenizedFunction(FUNCTION_START__g__$baz, $fazIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] nested functions with arguments' => [
             '<f(<g($baz)>, $arg)>',
             [
-                new Token('<f(<g($baz)>, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__FUNCTION_START__g__$bazIDENTITY_OR_FUNCTION_END, $argIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] nested functions with multiple arguments' => [
             '<f(<g($baz, $faz)>, $arg)>',
             [
-                new Token('<f(<g($baz, $faz)>, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__FUNCTION_START__g__$baz, $fazIDENTITY_OR_FUNCTION_END, $argIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] nominal surrounded with arguments' => [
             'foo <function($foo, $arg)> bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<function($foo, $arg)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__$foo, $argIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -410,29 +390,13 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Function] nominal identity with arguments' => [
             '<(function($foo, $arg))>',
             [
-                new Token('<(function($foo, $arg))>', new TokenType(TokenType::IDENTITY_TYPE)),
-            ],
-        ];
-        yield '[Function] identity with args' => [
-            '<(function(echo("hello")))>',
-            [
-                new Token('<(function(echo("hello")))>', new TokenType(TokenType::IDENTITY_TYPE)),
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction($foo, $arg)IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] identity with params' => [
             '<(function(echo(<{param}>))>',
             [
-                new Token('<(function(echo(<{param}>))>', new TokenType(TokenType::IDENTITY_TYPE)),
-            ],
-        ];
-        yield '[X] parameter, function, identity and escaped' => [
-            '<{param}><function()><(echo("hello"))><<escaped_value>>',
-            [
-                new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
-                new Token('<function()><(echo("hello"))>', new TokenType(TokenType::FUNCTION_TYPE)),
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-                new Token('escaped_value', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction(echo(<{param}>)IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
 
@@ -470,37 +434,36 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         yield '[Array] escaped array' => [
-            '[[X]]',
+            '\[X]',
             [
-                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY_TYPE)),
+                new Token('\[X]', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Array] malformed escaped array 1' => [
-            '[[X]',
+            '[X\]',
             [
-                new Token('[[X]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
+                new Token('[X\]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
             ],
         ];
-        yield '[Array] malformed escaped array 1' => [
-            '[X]]',
+        yield '[Array] malformed escaped array 2' => [
+            '[X\]',
             [
-                new Token('[X]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
-                new Token(']', new TokenType(TokenType::STRING_TYPE)),
+                new Token('[X\]', new TokenType(TokenType::STRING_ARRAY_TYPE)),
             ],
         ];
         yield '[Array] surrounded escaped array' => [
-            'foo [[X]] bar',
+            'foo \[X] bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY_TYPE)),
+                new Token('\[X]', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Array] surrounded escaped array with param' => [
-            'foo [[X]] yo <{param}> bar',
+            'foo \[X] yo <{param}> bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('[[X]]', new TokenType(TokenType::ESCAPED_ARRAY_TYPE)),
+                new Token('\[X]', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' yo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
@@ -678,23 +641,23 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Optional] surrounded with params' => [
-            'foo 80%? <dummy>: <another> baz',
+            'foo 80%? <{dummy}>: <another()> baz',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('80%? <dummy>: <another>', new TokenType(TokenType::OPTIONAL_TYPE)),
+                new Token('80%? <{dummy}>: <aliceTokenizedFunction(FUNCTION_START__another__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::OPTIONAL_TYPE)),
                 new Token(' baz', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Optional] surrounded with params and nested' => [
-            '<foo()> -80%? <{dum10}>%? y: z my: <<another>> <baz()>',
+            '<foo()> -80%? <{dum10}>%? y: z my: \<another\> <baz()>',
             [
-                new Token('<foo()> -80%? <{dum10}>%? y: z', new TokenType(TokenType::OPTIONAL_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)> -80%? <{dum10}>%? y: z', new TokenType(TokenType::OPTIONAL_TYPE)),
                 new Token(' my: ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('another', new TokenType(TokenType::STRING_TYPE)),
-                new Token('>>', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
+                new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' ', new TokenType(TokenType::STRING_TYPE)),
-                new Token('<baz()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__baz__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
 
@@ -704,9 +667,9 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Reference] empty escaped reference' => [
-            '@@',
+            '\@',
             [
-                new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Reference] empty reference with second member' => [
@@ -714,9 +677,9 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Reference] escaped empty reference with second member' => [
-            '@@ foo',
+            '\@ foo',
             [
-                new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' foo', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -727,9 +690,9 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         yield '[Reference] escaped alone with strings' => [
-            '@@user0',
+            '\@user0',
             [
-                new Token('@@', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('user', new TokenType(TokenType::STRING_TYPE)),
                 new Token('0', new TokenType(TokenType::STRING_TYPE)),
             ],
@@ -956,7 +919,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             '@user0<current()>',
             [
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<current()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Reference] surrounded reference function' => [
@@ -964,7 +927,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<current()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -972,7 +935,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             '@user0<f($foo, $bar)>',
             [
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<f($foo, $bar)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__$foo, $barIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Reference] surrounded reference function with args' => [
@@ -980,7 +943,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<f($foo, $bar)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__$foo, $barIDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -1011,7 +974,7 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
-                new Token('<current()>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
@@ -1062,22 +1025,22 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         yield '[Variable] empty escaped variable' => [
-            '$$',
+            '\$',
             [
-                new Token('$$', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+                new Token('\$', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Variable] escaped empty variable with second member' => [
-            '$$ foo',
+            '\$ foo',
             [
-                new Token('$$', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+                new Token('\$', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token(' foo', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Variable] alone with strings' => [
-            '$$username',
+            '\$username',
             [
-                new Token('$$', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+                new Token('\$', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('username', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];

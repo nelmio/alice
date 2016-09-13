@@ -99,23 +99,23 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
 
         // Escaped arrow
         yield '[Escaped arrow] nominal (1)' => [
-            '<<',
+            '\<',
             '<',
         ];
         yield '[Escaped arrow] nominal (2)' => [
-            '>>',
+            '\>',
             '>',
         ];
         yield '[Escaped arrow] parameter' => [
-            '<<{param}>>',
+            '\<{param}>',
             '<{param}>',
         ];
         yield '[Escaped arrow] function' => [
-            '<<f()>>',
+            '\<f()>',
             '<f()>',
         ];
         yield '[Escaped arrow] surrounded' => [
-            'foo << bar >> baz',
+            'foo \< bar \> baz',
             'foo < bar > baz',
         ];
 
@@ -129,15 +129,15 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Parameter] escaped unbalanced (1)' => [
-            '<<{dummy_param>>',
-            '<{dummy_param>',
+            '\<{dummy_param>',
+            null,
         ];
         yield '[Parameter] unbalanced (2)' => [
             '<{dummy_param',
             null,
         ];
         yield '[Parameter] escaped unbalanced (2)' => [
-            '<<{dummy_param',
+            '\<{dummy_param',
             '<{dummy_param',
         ];
         yield '[Parameter] unbalanced (3)' => [
@@ -145,7 +145,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Parameter] escaped unbalanced (3)' => [
-            '<<dummy_param}>>',
+            '\<dummy_param}\>',
             '<dummy_param}>',
         ];
         yield '[Parameter] unbalanced (4)' => [
@@ -153,7 +153,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Parameter] escaped unbalanced (4)' => [
-            'dummy_param}>>',
+            'dummy_param}\>',
             'dummy_param}>',
         ];
         yield '[Parameter] successive' => [
@@ -168,7 +168,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Parameter] nested escape' => [
-            '<{value_<<{nested_param}>>}>',
+            '<{value_\<{nested_param}>}>',
             null,
         ];
         yield '[Parameter] surrounded - nested' => [
@@ -181,20 +181,24 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '<function()>',
             new FunctionCallValue('function'),
         ];
+        yield '[Function] localized nominal' => [
+            '<fr_FR:function()>',
+            new FunctionCallValue('fr_FR:function'),
+        ];
         yield '[Function] unbalanced (1)' => [
             '<function()',
             null,
         ];
         yield '[Function] escaped unbalanced (1)' => [
-            '<<function()',
-            '<function()',
+            '\<function()',
+            null,
         ];
         yield '[Function] unbalanced (2)' => [
             'function()>',
             null,
         ];
         yield '[Function] escaped unbalanced (2)' => [
-            'function()>>',
+            'function()\>',
             'function()>',
         ];
         yield '[Function] unbalanced (3)' => [
@@ -202,15 +206,15 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Function] escaped unbalanced (3)' => [
-            '<<function(>>',
-            '<function(>',
+            '\<function(\>',
+            null,
         ];
         yield '[Function] unbalanced (4)' => [
             '<function)>',
             null,
         ];
         yield '[Function] escaped unbalanced (4)' => [
-            '<<function)>>',
+            '\<function)\>',
             '<function)>',
         ];
         yield '[Function] successive functions' => [
@@ -259,7 +263,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             IdentityFactory::create('function(echo(<{param}>)'),
         ];
         yield '[X] parameter, function, identity and escaped' => [
-            '<{param}><function()><(echo("hello"))><<escaped_value>>',
+            '<{param}><function()><(echo("hello"))>\<escaped_value\>',
             new ListValue([
                 new ParameterValue('param'),
                 new FunctionCallValue('function'),
@@ -292,21 +296,15 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Function] escaped unbalanced with arguments (1)' => [
-            '<<function($foo, $arg)',
-            new ListValue([
-                '<function(',
-                new VariableValue('foo'),
-                ', ',
-                new VariableValue('arg'),
-                ')',
-            ]),
+            '\<function($foo, $arg)',
+            null,
         ];
         yield '[Function] unbalanced with arguments (2)' => [
             'function($foo, $arg)>',
             null,
         ];
         yield '[Function] escaped unbalanced with arguments (2)' => [
-            'function($foo, $arg)>>',
+            'function($foo, $arg)\>',
             new ListValue([
                 'function(',
                 new VariableValue('foo'),
@@ -316,14 +314,8 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             ]),
         ];
         yield '[Function] escaped unbalanced with arguments (4)' => [
-            '<<function$foo, $arg)>>',
-            new ListValue([
-                '<function',
-                new VariableValue('foo'),
-                ', ',
-                new VariableValue('arg'),
-                ')>',
-            ]),
+            '\<function$foo, $arg)>',
+            null,
         ];
         yield '[Function] successive functions with arguments' => [
             '<f($foo, $arg)><g($baz, $faz)>',
@@ -403,22 +395,9 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '<(function($foo, $arg))>',
             IdentityFactory::create('function($foo, $arg)'),
         ];
-        yield '[Function] identity with args' => [
-            '<(function(echo("hello")))>',
-            IdentityFactory::create('function(echo("hello"))'),
-        ];
         yield '[Function] identity with params' => [
             '<(function(echo(<{param}>))>',
             IdentityFactory::create('function(echo(<{param}>)'),
-        ];
-        yield '[X] parameter, function, identity and escaped' => [
-            '<{param}><function()><(echo("hello"))><<escaped_value>>',
-            new ListValue([
-                new ParameterValue('param'),
-                new FunctionCallValue('function'),
-                IdentityFactory::create('echo("hello")'),
-                '<escaped_value>',
-            ]),
         ];
 
         // Arrays
@@ -468,30 +447,23 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             ),
         ];
         yield '[Array] escaped array' => [
-            '[[X]]',
+            '\[X]',
             '[X]',
         ];
         yield '[Array] malformed escaped array 1' => [
-            '[[X]',
-            new ListValue([
-                [
-                    '[X'
-                ]
-            ]),
+            '\[X]',
+            '[X]',
         ];
-        yield '[Array] malformed escaped array 1' => [
-            '[X]]',
-            new ListValue([
-                ['X'],
-                ']',
-            ]),
+        yield '[Array] malformed escaped array 2' => [
+            '[X\]',
+            ['X\\'],
         ];
         yield '[Array] surrounded escaped array' => [
-            'foo [[X]] bar',
+            'foo \[X] bar',
             'foo [X] bar',
         ];
         yield '[Array] surrounded escaped array with param' => [
-            'foo [[X]] yo <{param}> bar',
+            'foo \[X] yo <{param}> bar',
             new ListValue([
                 'foo [X] yo ',
                 new ParameterValue('param'),
@@ -748,7 +720,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             ]),
         ];
         yield '[Optional] surrounded with params and nested' => [
-            '<foo()> -80%? <dum10%? y: z my>: <<another>> <baz()>',
+            '<foo()> -80%? <{dum10}>%? y: z my>: \<another\> <baz()>',
             null,
         ];
 
@@ -758,7 +730,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Reference] empty escaped reference' => [
-            '@@',
+            '\@',
             '@',
         ];
         yield '[Reference] empty reference with second member' => [
@@ -766,7 +738,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Reference] escaped empty reference with second member' => [
-            '@@ foo',
+            '\@ foo',
             '@ foo',
         ];
         yield '[Reference] alone with strings' => [
@@ -774,7 +746,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             new FixtureReferenceValue('user0'),
         ];
         yield '[Reference] escaped alone with strings' => [
-            '@@user0',
+            '\@user0',
             '@user0',
         ];
         yield '[Reference] left with strings' => [
@@ -1163,15 +1135,15 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             ]),
         ];
         yield '[Variable] empty escaped variable' => [
-            '$$',
+            '\$',
             '$',
         ];
         yield '[Variable] escaped empty variable with second member' => [
-            '$$ foo',
+            '\$ foo',
             '$ foo',
         ];
         yield '[Variable] alone with strings' => [
-            '$$username',
+            '\$username',
             '$username',
         ];
     }

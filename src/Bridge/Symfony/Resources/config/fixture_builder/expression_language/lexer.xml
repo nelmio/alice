@@ -33,11 +33,16 @@
             <tag name="nelmio_alice.fixture_builder.expression_language.lexer" />
         </service>
 
+        <service id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.function_lexer"
+                 class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer">
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.sub_patterns_lexer" />
+
+            <tag name="nelmio_alice.fixture_builder.expression_language.lexer" />
+        </service>
+
         <service id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.sub_patterns_lexer"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer">
             <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.reference_lexer" />
-
-            <tag name="nelmio_alice.fixture_builder.expression_language.lexer" />
         </service>
 
         <service id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.reference_lexer"

@@ -16,13 +16,13 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedTokenParser
+ * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedValueTokenParser
  */
-class EscapedTokenParserTest extends \PHPUnit_Framework_TestCase
+class EscapedValueTokenParserTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAChainableTokenParser()
     {
-        $this->assertTrue(is_a(EscapedTokenParser::class, ChainableTokenParserInterface::class, true));
+        $this->assertTrue(is_a(EscapedValueTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     /**
@@ -30,7 +30,7 @@ class EscapedTokenParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new EscapedTokenParser();
+        clone new EscapedValueTokenParser();
     }
 
     /**
@@ -38,7 +38,7 @@ class EscapedTokenParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanParseEscapedTokens(Token $token, bool $expected)
     {
-        $parser = new EscapedTokenParser();
+        $parser = new EscapedValueTokenParser();
         $actual = $parser->canParse($token);
 
         $this->assertEquals($expected, $actual);
@@ -46,22 +46,33 @@ class EscapedTokenParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: ESCAPED_ARROW_TYPE).
+     * @expectedExceptionMessage Could not parse the token "" (type: ESCAPED_VALUE_TYPE).
      */
     public function testThrowsAnExceptionIfAMalformedTokenIsGiven()
     {
-        $token = new Token('', new TokenType(TokenType::ESCAPED_ARROW_TYPE));
+        $token = new Token('', new TokenType(TokenType::ESCAPED_VALUE_TYPE));
 
-        $parser = new EscapedTokenParser();
+        $parser = new EscapedValueTokenParser();
         $parser->parse($token);
     }
 
     public function testReturnsEscapedValue()
     {
-        $token = new Token('<<', new TokenType(TokenType::ESCAPED_ARROW_TYPE));
+        $token = new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE));
         $expected = '<';
 
-        $parser = new EscapedTokenParser();
+        $parser = new EscapedValueTokenParser();
+        $actual = $parser->parse($token);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testTheEscapedValueIsDetokenizedBeforeBeingReturned()
+    {
+        $token = new Token('\<aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::ESCAPED_VALUE_TYPE));
+        $expected = '<foo()>';
+
+        $parser = new EscapedValueTokenParser();
         $actual = $parser->parse($token);
 
         $this->assertEquals($expected, $actual);
@@ -75,15 +86,7 @@ class EscapedTokenParserTest extends \PHPUnit_Framework_TestCase
                 false,
             ],
             [
-                new Token('', new TokenType(TokenType::ESCAPED_ARROW_TYPE)),
-                true,
-            ],
-            [
-                new Token('', new TokenType(TokenType::ESCAPED_REFERENCE_TYPE)),
-                true,
-            ],
-            [
-                new Token('', new TokenType(TokenType::ESCAPED_VARIABLE_TYPE)),
+                new Token('', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 true,
             ],
         ];

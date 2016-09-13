@@ -16,6 +16,7 @@ use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerRegistry;
@@ -24,8 +25,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\StringMergerParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedArrayTokenParser;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedTokenParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedValueTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureListReferenceTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureMethodReferenceTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureRangeReferenceTokenParser;
@@ -363,8 +363,10 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         return new LexerRegistry([
             new EmptyValueLexer(),
             new GlobalPatternsLexer(),
-            new SubPatternsLexer(
-                new ReferenceLexer()
+            new FunctionLexer(
+                new SubPatternsLexer(
+                    new ReferenceLexer()
+                )
             ),
         ]);
     }
@@ -373,12 +375,10 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     {
         return new TokenParserRegistry([
             new DynamicArrayTokenParser(),
-            new EscapedArrayTokenParser(),
-            new EscapedTokenParser(),
+            new EscapedValueTokenParser(),
             new FixtureListReferenceTokenParser(),
             new FixtureMethodReferenceTokenParser(),
             new FixtureRangeReferenceTokenParser(),
-            new IdentityTokenParser(),
             new MethodReferenceTokenParser(),
             new OptionalTokenParser(),
             new ParameterTokenParser(),
@@ -386,7 +386,11 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new SimpleReferenceTokenParser(),
             new StringArrayTokenParser(),
             new StringTokenParser(),
-            new TolerantFunctionTokenParser(new FunctionTokenParser()),
+            new TolerantFunctionTokenParser(
+                new IdentityTokenParser(
+                    new FunctionTokenParser()
+                )
+            ),
             new VariableTokenParser(),
             new WildcardReferenceTokenParser(),
         ]);
