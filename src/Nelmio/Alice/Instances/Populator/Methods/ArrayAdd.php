@@ -112,6 +112,7 @@ class ArrayAdd implements MethodInterface
             'Symfony\Component\Inflector\Inflector' => 'singularize',
             'Symfony\Component\PropertyAccess\StringUtil' => 'singularify',
             'Symfony\Component\Form\Util\FormUtil' => 'singularify',
+            'Doctrine\Common\Inflector\Inflector' => 'singularize',
         ];
 
         foreach ($classes as $class => $method) {
