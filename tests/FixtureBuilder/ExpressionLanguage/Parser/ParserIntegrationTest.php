@@ -97,6 +97,39 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '"dummy"',
         ];
 
+        // Escaped character
+        yield '[Escape character] nominal (1)' => [
+            '\\',
+            null,
+        ];
+        yield '[Escape character] nominal (2)' => [
+            '\\\\',
+            '\\',
+        ];
+        yield '[Escape character] with empty reference' => [
+            '\\@',
+            '@',
+        ];
+        yield '[Escape character] with reference' => [
+            '\\@user0',
+            '@user0',
+        ];
+        yield '[Escape character] with function reference' => [
+            '\\@<foo()>',
+            new ListValue([
+                '@',
+                new FunctionCallValue('foo'),
+            ])
+        ];
+        yield '[Escape character] double escape with reference' => [
+            '\\\\@',
+            null,
+        ];
+        yield '[Escape character] with empty reference' => [
+            '\\\\\\@',
+            '\\@',
+        ];
+
         // Escaped arrow
         yield '[Escaped arrow] nominal (1)' => [
             '\<',
@@ -456,7 +489,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         ];
         yield '[Array] malformed escaped array 2' => [
             '[X\]',
-            ['X\\'],
+            null,
         ];
         yield '[Array] surrounded escaped array' => [
             'foo \[X] bar',

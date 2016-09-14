@@ -24,7 +24,7 @@ final class GlobalPatternsLexer implements LexerInterface
     const PATTERNS = [
         '/^((?:\d+|<.*>)x .*)/' => TokenType::DYNAMIC_ARRAY_TYPE,
         '/^.*(?:\d+|<.*>)x .*/' => null,
-        '/^([^<>\[\%\$@]+)$/' => TokenType::STRING_TYPE,
+        '/^([^<>\[\%\$@\\\]+)$/' => TokenType::STRING_TYPE,
     ];
 
     /**
