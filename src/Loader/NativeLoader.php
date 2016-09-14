@@ -15,6 +15,7 @@ use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer;
@@ -95,6 +96,7 @@ use Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver;
 use Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver;
 use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\ArrayValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver;
@@ -171,6 +173,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  * @method InstantiatorInterface getBuiltInInstantiator()
  * @method HydratorInterface getBuiltInHydrator()
  * @method PropertyHydratorInterface getBuiltInPropertyHydrator()
+ * @method PropertyAccessorInterface getPropertyAccessor()
  * @method CallerInterface getBuiltInCaller()
  */
 final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
@@ -342,7 +345,9 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function createBuiltInValueDenormalizer(): ValueDenormalizerInterface
     {
         return new UniqueValueDenormalizer(
-            $this->getBuiltInExpressionLanguageParser()
+            new SimpleValueDenormalizer(
+                $this->getBuiltInExpressionLanguageParser()
+            )
         );
     }
 
@@ -432,6 +437,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function createBuiltInValueResolver(): ValueResolverInterface
     {
         return new ValueResolverRegistry([
+            new ArrayValueResolver(),
             new DynamicArrayValueResolver(),
             new EvaluatedValueResolver(),
             new FakerFunctionCallValueResolver($this->fakerGenerator),

@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
+use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Exception\RootParseException;
@@ -41,68 +42,71 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new UniqueValueDenormalizer(new FakeParser());
+        clone new UniqueValueDenormalizer(new FakeValueDenormalizer());
     }
 
-    /**
-     * @dataProvider provideValues
-     */
-    public function testReturnsParsedValueIfNoUniqueFlagsHasBeenFound($value, bool $parserCalled, FlagBag $flags = null)
+    public function testReturnsParsedValueIfNoUniqueFlagsHasBeenFound()
     {
-        $expected = $parserCalled ? 'parsed_value' : $value;
+        $fixture = new FakeFixture();
+        $flags = new FlagBag('');
+        $value = 'foo';
 
-        $parserProphecy = $this->prophesize(ParserInterface::class);
-        $parserProphecy->parse('1')->willReturn('parsed_value');
-        /** @var ParserInterface $parser */
-        $parser = $parserProphecy->reveal();
+        $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
+        $decoratedDenormalizerProphecy
+            ->denormalize($fixture, $flags, $value)
+            ->willReturn($expected = 'denormalized_value')
+        ;
+        /** @var ValueDenormalizerInterface $decoratedDenormalizer */
+        $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
-        $denormalizer = new UniqueValueDenormalizer($parser);
-        $actual = $denormalizer->denormalize(new FakeFixture(), $flags, $value);
+        $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
+        $actual = $denormalizer->denormalize($fixture, $flags, $value);
 
         $this->assertEquals($expected, $actual);
 
-        $parserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes($parserCalled);
+        $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @dataProvider provideValues
-     */
-    public function testReturnsUniqueValueIfUniqueFlagsFound($value, bool $parserCalled)
+    public function testReturnsUniqueValueIfUniqueFlagsFound()
     {
         $fixture = new SimpleFixture('dummy_id', 'Dummy', SpecificationBagFactory::create());
-        $expected = $parserCalled ? 'parsed_value' : $value;
-
         $flags = (new FlagBag(''))->withFlag(new UniqueFlag());
+        $value = 'foo';
 
-        $parserProphecy = $this->prophesize(ParserInterface::class);
-        $parserProphecy->parse('1')->willReturn('parsed_value');
-        /** @var ParserInterface $parser */
-        $parser = $parserProphecy->reveal();
+        $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
+        $decoratedDenormalizerProphecy
+            ->denormalize($fixture, $flags, $value)
+            ->willReturn('denormalized_value')
+        ;
+        /** @var ValueDenormalizerInterface $decoratedDenormalizer */
+        $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
-        $denormalizer = new UniqueValueDenormalizer($parser);
-        $actual = $denormalizer->denormalize($fixture, $flags, $value);
+        $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
+        $result = $denormalizer->denormalize($fixture, $flags, $value);
 
-        $this->assertInstanceOf(UniqueValue::class, $actual);
-        /** @var UniqueValue $actual */
-        $this->assertEquals($expected, $actual->getValue());
-        $this->stringContains('dummy_id', $actual->getId());
+        $this->assertInstanceOf(UniqueValue::class, $result);
+        $this->stringContains('dummy_id', $result->getId());
+        $this->assertEquals('denormalized_value', $result->getValue());
 
-        $parserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes($parserCalled);
+        $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testIfParsedValueIsDynamicArrayUniqueFlagAppliesToItsElementInstead()
+    public function testIfParsedValueIsDynamicArrayThenUniqueFlagAppliesToItsElementInstead()
     {
         $fixture = new SimpleFixture('dummy_id', 'Dummy', SpecificationBagFactory::create());
         $value = 'string value';
-        $parsedValue = new DynamicArrayValue(10, 'parsed_value');
+        $denormalizedValue = new DynamicArrayValue(10, 'parsed_value');
         $flags = (new FlagBag(''))->withFlag(new UniqueFlag());
 
-        $parserProphecy = $this->prophesize(ParserInterface::class);
-        $parserProphecy->parse($value)->willReturn($parsedValue);
-        /** @var ParserInterface $parser */
-        $parser = $parserProphecy->reveal();
+        $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
+        $decoratedDenormalizerProphecy
+            ->denormalize($fixture, $flags, $value)
+            ->willReturn($denormalizedValue)
+        ;
+        /** @var ValueDenormalizerInterface $decoratedDenormalizer */
+        $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
-        $denormalizer = new UniqueValueDenormalizer($parser);
+        $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
         $result = $denormalizer->denormalize($fixture, $flags, $value);
 
         $this->assertInstanceOf(DynamicArrayValue::class, $result);
@@ -113,20 +117,33 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('parsed_value', $result->getElement()->getValue());
     }
 
-    public function testWhenParserThrowsExceptionDenormalizerAExceptionIsThrown()
+    public function testIfParsedValueIsArrayValueThenUniqueFlagAppliesToItsElementInstead()
     {
-        $parserProphecy = $this->prophesize(ParserInterface::class);
-        $parserProphecy->parse(Argument::any())->willThrow(new RootParseException());
-        /** @var ParserInterface $parser */
-        $parser = $parserProphecy->reveal();
+        $fixture = new SimpleFixture('dummy_id', 'Dummy', SpecificationBagFactory::create());
+        $value = 'string value';
+        $denormalizedValue = new ArrayValue(['foo', 'bar']);
+        $flags = (new FlagBag(''))->withFlag(new UniqueFlag());
 
-        $denormalizer = new UniqueValueDenormalizer($parser);
-        try {
-            $denormalizer->denormalize(new FakeFixture(), null, '');
-            $this->fail('Expected throwable to be thrown.');
-        } catch (DenormalizationThrowable $throwable) {
-            // expected result
-        }
+        $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
+        $decoratedDenormalizerProphecy
+            ->denormalize($fixture, $flags, $value)
+            ->willReturn($denormalizedValue)
+        ;
+        /** @var ValueDenormalizerInterface $decoratedDenormalizer */
+        $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
+
+        $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
+        $result = $denormalizer->denormalize($fixture, $flags, $value);
+
+        $this->assertInstanceOf(ArrayValue::class, $result);
+        /** @var ArrayValue $result */
+        $this->assertInstanceOf(UniqueValue::class, $result->getValue()[0]);
+        $this->stringContains('dummy_id', $result->getValue()[0]->getId());
+        $this->assertEquals('foo', $result->getValue()[0]->getValue());
+
+        $this->assertInstanceOf(UniqueValue::class, $result->getValue()[1]);
+        $this->stringContains('dummy_id', $result->getValue()[1]->getId());
+        $this->assertEquals('bar', $result->getValue()[1]->getValue());
     }
 
     public function provideValues()
