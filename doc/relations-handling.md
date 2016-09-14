@@ -162,7 +162,7 @@ The `@self` reference is assigned to the current fixture instance.
 
 ## Passing references to providers
 
-You can pass references to providers much like you can pass [variables](#variables):
+You can pass references to providers much like you can pass [variables](fixtures-refactoring.md#variables):
 
 ```yaml
 Nelmio\Entity\Group:
