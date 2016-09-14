@@ -121,8 +121,6 @@ Nelmio\Entity\User:
 
 ## Specifying Constructor Arguments
 
-**TODO: update with https://github.com/nelmio/alice/issues/388**
-
 When a constructor has mandatory arguments you must define it as explained
 above, for example if the User required a username in the constructor you
 could do the following:
@@ -140,6 +138,14 @@ specify a hash as the constructor:
 Nelmio\Entity\User:
     user1:
         __construct: { create: ['<username()>'] }
+```
+
+If the static factory belongs to another class, you can call it as follows:
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        __construct: { Nelmio\User\UserFactory::create: ['<username()>'] }
 ```
 
 If you specify `false` in place of constructor arguments, Alice will
