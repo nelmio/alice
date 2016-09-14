@@ -1409,6 +1409,30 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
+        yield 'array value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummies' => ['@dummy', '@dummy', '@dummy'],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummies' => [$dummy, $dummy, $dummy]
+                    ]),
+                ],
+            ],
+        ];
+
         yield 'wildcard reference value' => [
             [
                 \stdClass::class => [

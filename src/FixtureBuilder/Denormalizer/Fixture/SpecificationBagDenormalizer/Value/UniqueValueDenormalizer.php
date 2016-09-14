@@ -13,28 +13,26 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\NotClonableTrait;
-use Nelmio\Alice\Throwable\ParseThrowable;
 
 final class UniqueValueDenormalizer implements ValueDenormalizerInterface
 {
     use NotClonableTrait;
 
     /**
-     * @var ParserInterface
+     * @var ValueDenormalizerInterface
      */
-    private $parser;
+    private $denormalizer;
 
-    public function __construct(ParserInterface $parser)
+    public function __construct(ValueDenormalizerInterface $decoratedDenormalizer)
     {
-        $this->parser = $parser;
+        $this->denormalizer = $decoratedDenormalizer;
     }
 
     /**
@@ -42,44 +40,14 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
      */
     public function denormalize(FixtureInterface $scope, FlagBag $flags = null, $value)
     {
-        if (is_string($value)) {
-            $value = $this->parseValue($this->parser, $value);
-        }
+       $value = $this->denormalizer->denormalize($scope, $flags, $value);
 
         if (false === $this->requiresUnique($flags)) {
             return $value;
         }
-
         $uniqueId = sprintf('%s#%s', $scope->getClassName(), $flags->getKey());
-        if ($value instanceof DynamicArrayValue) {
-            return new DynamicArrayValue(
-                $value->getQuantifier(),
-                new UniqueValue($uniqueId, $value->getElement())
-            );
-        }
 
-        return new UniqueValue($uniqueId, $value);
-    }
-
-    /**
-     * @param ParserInterface $parser
-     * @param string          $value
-     *
-     * @return mixed|ValueInterface
-     */
-    private function parseValue(ParserInterface $parser, string $value)
-    {
-        try {
-            return $parser->parse($value);
-        } catch (ParseThrowable $throwable) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Could not parse value "%s".',
-                    0,
-                    $throwable
-                )
-            );
-        }
+        return $this->generateValue($uniqueId, $value);
     }
 
     private function requiresUnique(FlagBag $flags = null): bool
@@ -95,5 +63,32 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param string               $uniqueId
+     * @param mixed|ValueInterface $value
+     *
+     * @return ValueInterface
+     */
+    private function generateValue(string $uniqueId, $value): ValueInterface
+    {
+        if ($value instanceof DynamicArrayValue) {
+            return new DynamicArrayValue(
+                $value->getQuantifier(),
+                new UniqueValue($uniqueId, $value->getElement())
+            );
+        }
+
+        if ($value instanceof ArrayValue) {
+            $elements = $value->getValue();
+            foreach ($elements as $key => $element) {
+                $elements[$key] = new UniqueValue($uniqueId, $element);
+            }
+
+            return new ArrayValue($elements);
+        }
+
+        return new UniqueValue($uniqueId, $value);
     }
 }
