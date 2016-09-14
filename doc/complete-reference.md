@@ -15,7 +15,7 @@ Nelmio\Entity\User:
         birthDate: 1980-10-10
         email: bob@example.org
         favoriteNumber: 42
-        
+
     user1:
         username: alice
         fullname: Alice
@@ -33,7 +33,8 @@ still have to do most of the work. Let's see how to make this more interesting.
 
 ### PHP
 
-You can also specify fixtures in PHP by returing an array where each key with the following structure:
+You can also specify fixtures in PHP by returing an array where each key with
+the following structure:
 
 ```php
 <?php
@@ -41,18 +42,17 @@ You can also specify fixtures in PHP by returing an array where each key with th
 return [
     'Nelmio\Alice\support\models\User' => [
         'user1' => [
-            'username' => '<identity($fake("upperCaseProvider", null, "John Doe"))>',
-            'fullname' => '<upperCaseProvider("John Doe")>',
+            'username' => 'bob',
+            'fullname' => 'Bob',
         ],
         'user2' => [
-            'username' => $fake('identity', null, $fake('upperCaseProvider', null, 'John Doe')),
-            'fullname' => $fake('upperCaseProvider', null, 'John Doe'),
+            'username' => 'alice',
+            'fullname' => 'Alice',
         ],
     ],
 ];
 ```
 
-**Warning**: the usage of the `$fake` closure has been deprecated since in v2.2.0 and will be removed in v3.0.0.
 
 ## Fixture Ranges
 
@@ -71,7 +71,7 @@ Nelmio\Entity\User:
         favoriteNumber: 42
 ```
 
-Now it will generate ten users, with names user1 to user10. Pretty good but
+Now it will generate ten users, with IDs `user1` to `user10`. Pretty good but
 we only have 10 bobs with the same name, username and email, which is not
 so fancy yet.
 
@@ -79,7 +79,7 @@ You can also specify a list of values instead of a range:
 
 ```yaml
 Nelmio\Entity\User:
-    user{alice, bob}:
+    user_{alice, bob}:
         username: '<current()>'
         fullname: '<current()>'
         birthDate: 1980-10-10
@@ -87,10 +87,24 @@ Nelmio\Entity\User:
         favoriteNumber: 42
 ```
 
-To go further we can just randomize data.
+>The `<current()>` function is a bit special as it can only be called in the
+>context of a collection (list of values or a range).
+
+>In the case of a list of values like the example above, it will return for the
+>first fixture `user_alice` the value `alice`, and `bob` for the fixture
+>`user_bob`.
+
+>In the case of a range (e.g. `user{1..10}`), `<current()>` will return `1` for
+>`user1`, `2` for `user2` etc.
+
+>Using this function outside of this case will cause an exception.
+
+To go further we the example above, we can just randomize data.
 
 
 ## Calling Methods
+
+**TODO: update with https://github.com/nelmio/alice/issues/388**
 
 Sometimes though you need to call a method to initialize some more data, you
 can do this just like with properties but instead using the method name and
@@ -126,6 +140,14 @@ Nelmio\Entity\User:
         __construct: { create: ['<username()>'] }
 ```
 
+If the static factory belongs to another class, you can call it as follows:
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        __construct: { Nelmio\User\UserFactory::create: ['<username()>'] }
+```
+
 If you specify `false` in place of constructor arguments, Alice will
 instantiate the object without executing the constructor:
 
@@ -135,29 +157,9 @@ Nelmio\Entity\User:
         __construct: false
 ```
 
-Note: If you are using a private constructor without any mandatory arguments you can omit the constructor altogether.
-Private constructors with mandatory arguments should use the static factory method described above.
-
-
-## Custom Setter
-
-In case, you want to specify a custom function that will be used to set all the values,
-you can specify a `__set` value:
-
-```yaml
-Nelmio\Data\Geopoint:
-    geo1:
-        __set: customSetter
-        foo: bar
-```
-
-When the objects are populated, the `customSetter` function will be called, with the first parameter
-being the `key`, the second one being the `value` (so similar to the magic PHP setter). In the above
-example, the following call will be made on the instance when populating:
-
-```php
-$geopoint->customSetter('foo', 'bar');
-```
+Note: If you are using a private constructor without any mandatory arguments you
+can omit the constructor altogether. Private constructors with mandatory
+arguments should use the static factory method described above.
 
 
 ## Optional Data
@@ -200,6 +202,17 @@ Nelmio\Entity\User:
     user{1..10}:
         username (unique): '<username()>'
 ```
+
+In a case of a method call or a constructor, you can specify the unique flag
+like so:
+
+```yaml
+Nelmio\Entity\User:
+    user{1..10}:
+        __construct:
+            0 (unique): '<username()>'
+```
+
 
 Next chapter: [Handling Relations](relations-handling.md)<br />
 Previous chapter: [Getting Started](getting-started.md)

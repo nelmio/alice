@@ -21,124 +21,42 @@ Nelmio\Entity\User:
 As you see in the last line, you can also pass arguments to those just as if
 you were calling a function.
 
-To pass Faker Data to another Faker provider, you can use the `$fake()` closure
-within faker calls. For example use `$fake('firstName', 'de_DE')` or
-`$fake('numberBetween', null, 1, 200)` to call Faker. Pass the provider to call
-followed by the locale (or null) and then the arguments to the provider. Here
-is a detailed yaml example.
-
-```yaml
-Nelmio\Entity\User:
-    user{1..10}:
-        username: 'User<identity($fake("numberBetween", 1, 100) / 2 + 5)>'
-```
-
-In plain PHP fixtures the `$fake` closure is also available.
-
-**Warning**: the usage of the `$fake` closure has been deprecated since in v2.2.0 and will be removed in v3.0.0.
-
 
 ### Localized Fake Data
 
 Faker can create localized data for addresses, phone numbers and so on. You can
-set the default locale to use by passing a `locale` value in the `$options`
-array of `Fixtures::load`.
+set the default locale to use by configuring the `locale` value used by Faker
+generator. With `NativeLoader`, this can be done by overridding the
+`createFakerGenerator()` method. In Symfony, override the
+`nelmio_alice.faker.generator` service.
 
 Additionally, you can mix locales by adding a locale prefix to the faker key,
 i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
 
+
 ### Default Providers
 
+### Identity
+
 Alice includes a default identity provider, `<identity()>`, that
-simply returns whatever is passed to it. This allows you among other
-things to use a PHP expression while still benefitting from
-[variable replacement](#variables). This is similar to an `eval()`
-call, allowing you to do things like math or similar, e.g.
-`<identity(1 + $favoriteNumber)>`.
+simply returns whatever is passed to it. It's content is evaluated so you can
+use arithmetic operations for example: `<identity(1 * 2)>`. You can also make
+use of the variables and references in it:
+`<identity($favoriteNumber * @user1->favoriteNumber)>`.
 
 Some syntactic sugar is provided for this as well, and `<($whatever)>`
 is an alias for `<identity($whatever)>`.
 
 
-## Reuse generated data using objects value
-
-Sometimes you require value objects that are not persisted by an ORM, but
-are just stored on other objects. You can use the `(local)` flag on the class
-or the instance name to mark them as non-persistable. They will be available
-as references to use in other objects, but will not be returned by the
-`LoaderInterface::load` call.
-
-For example this avoids getting an error because Geopoint is not an Entity
-if you use the Doctrine persister.
-
-```yaml
-Nelmio\Data\Geopoint (local):
-    geo1:
-        __construct: ['<latitude()>', '<longitude()>']
-
-Nelmio\Entity\Location:
-    loc{1..100}:
-        name: '<city()>'
-        geopoint: '@geo1'
-```
-
-
 ## Custom Faker Data Providers
 
-Sometimes you need more than what Faker and Alice provide you natively, and
-there are three ways to solve the problem:
-
-#### Embed PHP code in the yaml file
-
-It is included by the loader so you can add arbitrary PHP as long as it outputs
-valid yaml. That said, this is like PHP templates, it quickly ends up very messy
-if you do too much logic, so it's best to extract logic out of the templates.
-  
-#### Public method in the Loader
-
-All the public methods are available as `<method()>` in the Alice fixture files.
-For example if you want a custom group name generator and you use the standard
-Doctrine Fixtures package in a Symfony2 project, you could do the following:
+Sometimes you need more than what Faker and Alice provide you natively. For
+that, you can register a custom [Faker Provider](https://github.com/fzaninotto/Faker/tree/master/src/Faker/Provider) class:
 
 ```php
 <?php
 
-namespace AppBundle\DataFixtures\ORM;
-
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Nelmio\Alice\Fixtures;
-
-final class LoadFixtureData implements FixtureInterface
-{
-   const NAMES = [
-       'Group A',
-       'Group B',
-       'Group C',
-   ]
-
-   public function load(ObjectManager $manager)
-   {
-       // Pass $this as an additional faker provider to make the "groupName"
-       // method available as a data provider
-       Fixtures::load(__DIR__.'/fixtures.yml', $manager, ['providers' => [$this]]);
-   }
-
-   public function groupName()
-   {
-       return \Faker\Provider\Base::randomElement(self::NAMES);
-   }
-}
-```
-
-That way you can now use `name: '<groupName()>'` to generate specific group names.
-   
-#### Add a custom [Faker Provider](https://github.com/fzaninotto/Faker/tree/master/src/Faker/Provider) class
-
-```php
-<?php
-
-namespace AppBundle\DataFixtures\ORM;
+namespace App\Faker\Provider;
 
 use Faker\Provider\Base as BaseProvider;
 
@@ -207,10 +125,10 @@ final class JobProvider extends BaseProvider
            ),
            self::randomElement(self::TITLE_PROVIDER['fullname']),
        ];
-       
+
        return self::randomElement($names);
    }
-   
+
    /**
     * @return string Random job abbreviation title
     */
@@ -221,11 +139,11 @@ final class JobProvider extends BaseProvider
 }
 ```
 
-You will need to inject a Faker generator instance, which you can get thanks to
-[`Nelmio\Alice\Instances\Processor\Methods\Faker`](../src/Nelmio/Alice/Instances/Processor/Methods/Faker.php).
+Then you can add it to the Faker Generator used by Alice by either overridding
+the `NativeLoader::createFakerGenerator()` method or the
+`nelmio_alice.faker.generator` service if you are using a Dependency Injection
+Container.
 
-Then, inject your provider to the [`Nelmio\Alice\Fixtures\Loader`](../src/Nelmio/Alice/Fixtures/Loader.php) or when
-calling [`Nelmio\Alice\Fixtures::load()`](../src/Nelmio/Alice/Fixtures.php#L55).
 
-Next chapter: [Event handling with Processors](processors.md)<br />
-Previous chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)
+Previous chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)<br />
+Go back to [Table of Contents](../README.md#table-of-contents)

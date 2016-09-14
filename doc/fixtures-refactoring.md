@@ -29,7 +29,7 @@ Nelmio\Entity\User:
     user (template):
         username: '<username()>'
         age: '<numberBetween(1, 20)>'
-        
+
     user1 (extends user):
         name: '<firstName()>'
         lastname: '<lastName()>'
@@ -37,23 +37,23 @@ Nelmio\Entity\User:
         age: '<numberBetween(1, 50)>'
 ```
 
-Inheritance also allows to extend from several templates. The last declared `extends`
-will always override values from previous declared `extends` templates. However,
-extension properties will never override values set explicitly in the fixture spec
-itself.
+Inheritance also allows to extend from several templates. The last declared
+`extends` will always override values from previous declared `extends`
+templates. However, extension properties will never override values set
+explicitly in the fixture spec itself.
 
-In the following example, the age from `user_young` will override the age from `user`
-in `user1`, while username will remain `user1`:
+In the following example, the age from `user_young` will override the age from
+`user` in `user1`, while username will remain `user1`:
 
 ```yaml
 Nelmio\Entity\User:
     user (template):
         username: '<username()>'
         age: '<numberBetween(1, 40)>'
-        
+
     user_young (template):
         age: '<numberBetween(1, 20)>'
-        
+
     user1 (extends user, extends user_young):
         username: user1
         name: '<firstName()>'
@@ -69,8 +69,8 @@ You may include other files from your fixtures using the top-level `include` key
 ```yaml
 include:
     - relative/path/to/file.yml
-    - relative/path/to/another/file.yml
-    
+    - /absolute/path/to/another/file.yml
+
 Nelmio\Entity\User:
     user1 (extends user, extends user_young):
         name: '<firstName()>'
@@ -87,7 +87,7 @@ Nelmio\Entity\User:
         age: '<numberBetween(1, 40)>'
 ```
 
-In `relative/path/to/another/file.yml`:
+In `/absolute/path/to/another/file.yml`:
 
 ```yaml
 Nelmio\Entity\User:
@@ -95,8 +95,8 @@ Nelmio\Entity\User:
         age: '<numberBetween(1, 20)>'
 ```
 
-All files are merged in one data set before generation, and the includer's content
-takes precedence over included files' fixtures in case of duplicate keys.
+All files are merged in one data set before generation, and the includer's
+content takes precedence over included files' fixtures in case of duplicate keys.
 
 
 ## Variables
@@ -128,21 +128,23 @@ date and the current time, which ensure the data will look real enough.
 
 ## Parameters
 
-When using the Yaml loader, you can also set global parameters that will be inserted everywhere those values are used to help with readability. For example:
+When using the Yaml loader, you can also set global parameters that will be
+inserted everywhere those values are used to help with readability. For example:
 
 ```yaml
 parameters:
-  ebay_domain_name: ebay.us
+    ebay_domain_name: ebay.us
 
 Nelmio\Entity\Shop:
-  shop1:
-    domain: '<{ebay_domain_name}>'
+    shop1:
+        domain: '<{ebay_domain_name}>'
 ```
 
-Additionally, you can pass in a list of defined parameters as the last argument to the `Loader` class to prepare the initial set of values.
+**TODO**: add doc regarding dynamic parameters cf. #354
 
+Additionally, you can pass in a list of defined parameters as the second
+argument of `{File,Data}LoaderInterface::load{File,Data}()`.
 
-**Warning**: Parameters cannot be composite or dynamic. See #354 for more information.
 
 Next chapter: [Customize Data Generation](customizing-data-generation.md)<br />
 Previous chapter: [Handling Relations](relations-handling.md)

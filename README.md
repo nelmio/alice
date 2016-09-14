@@ -7,8 +7,8 @@ or testing your project. It gives you a few essential tools to make it
 very easy to generate complex data with constraints in a readable and easy
 to edit way, so that everyone on your team can tweak the fixtures if needed.
 
-**Warning**: this doc is behind updated for alice 3.0. If you want to check the documentation for 2.x, head
-[this way](https://github.com/nelmio/alice/tree/2.x).
+**Warning**: this doc is behind updated for alice 3.0. If you want to check the
+documentation for 2.x, head [this way](https://github.com/nelmio/alice/tree/2.x).
 
 ## Table of Contents
 
@@ -16,13 +16,13 @@ to edit way, so that everyone on your team can tweak the fixtures if needed.
 1. [Example](#example)
 1. [Getting Started](doc/getting-started.md)
   1. [Basic Usage](doc/getting-started.md#basic-usage)
-  2. [Detailed Usage](doc/getting-started.md#detailed-usage)
+  1. [Framework integration](doc/getting-started.md#)
+    1. [Symfony](doc/getting-started.md#)
 1. [Complete Reference](doc/complete-reference.md)
   1. [Creating Fixtures](doc/complete-reference.md#creating-fixtures)
   1. [Fixture Ranges](doc/complete-reference.md#fixture-ranges)
   1. [Calling Methods](doc/complete-reference.md#calling-methods)
   1. [Specifying Constructor Arguments](doc/complete-reference.md#specifying-constructor-arguments)
-  1. [Custom Setter](doc/complete-reference.md#custom-setter)
   1. [Optional Data](doc/complete-reference.md#optional-data)
   1. [Handling Unique Constraints](doc/complete-reference.md#handling-unique-constraints)
 1. [Handling Relations](doc/relations-handling.md)
@@ -37,9 +37,12 @@ to edit way, so that everyone on your team can tweak the fixtures if needed.
   1. [Parameters](doc/fixtures-refactoring.md#parameters)
 1. [Customize Data Generation](doc/customizing-data-generation.md)
   1. [Faker Data](doc/customizing-data-generation.md#faker-data)
+  1. [Localized Fake Data]() **TODO: port that change to v2**
+  1. [Default Providers]()
+    1. [Identity]()
   1. [Reuse generated data using objects value](doc/customizing-data-generation.md#reuse-generated-data-using-objects-value)
   1. [Custom Faker Data Providers](doc/customizing-data-generation.md#custom-faker-data-providers)
-1. [Event handling with Processors](doc/processors.md)
+    1. [Identity]()
 1. [Third-party libraries](#third-party-libraries)
 1. [Contribute](#contribute)
 1. [Upgrade](#upgrade)
@@ -50,9 +53,10 @@ Other references:
 
 ## Installation
 
-This is installable via [Composer](https://getcomposer.org/) as [nelmio/alice](https://packagist.org/packages/nelmio/alice):
+This is installable via [Composer](https://getcomposer.org/) as
+[nelmio/alice](https://packagist.org/packages/nelmio/alice):
 
-    composer require nelmio/alice
+    composer require --dev nelmio/alice
 
 
 ## Example
@@ -80,7 +84,34 @@ Nelmio\Entity\Group:
 You can then load them easily with:
 
 ```php
-$objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager);
+$loader = new Nelmio\Alice\Loader\NativeLoader();
+$objectSet = $loader->loadFile(__DIR__.'/fixtures.yml');
+```
+
+Or load an array right away:
+
+```php
+$loader = new Nelmio\Alice\Loader\NativeLoader();
+$objectSet = $loader->loadData([
+    \Nelmio\Entity\User::class => [
+        'user{1..10}' => [
+            'username' => '<username()>',
+            'fullname' => '<firstName()> <lastName()>',
+            'birthDate' => '<date()>',
+            'email' => '<email()>',
+            'favoriteNumber' => '50%? <numberBetween(1, 200)>',
+        ],
+    ],
+    \Nelmio\Entity\Group::class => [
+        'group1' => [
+            'name' => Admins,
+            'owner' => '@user1',
+            'members' => '<numberBetween(1, 10)>x @user*',
+            'created' => '<dateTimeBetween("-200 days", "now")>',
+            'updated' => '<dateTimeBetween($created, "now")>',
+        ],
+    ],
+]);
 ```
 
 For more information, refer to [the documentation](#table-of-contents).
