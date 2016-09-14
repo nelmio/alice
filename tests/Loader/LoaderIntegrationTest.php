@@ -653,6 +653,37 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testUniqueOnArray()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy' => [
+                    'numbers (unique)' => [
+                        1,
+                        2
+                    ],
+                ],
+            ],
+        ];
+        $this->loader->loadData($data);
+
+        try {
+            $this->loader->loadData([
+                \stdClass::class => [
+                    'dummy' => [
+                        'numbers (unique)' => [
+                            1,
+                            1
+                        ],
+                    ],
+                ],
+            ]);
+            $this->fail('Expected exception to be thrown.');
+        } catch (UnresolvableValueDuringGenerationException $exception) {
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $exception->getPrevious());
+        }
+    }
+
     public function testUniqueValuesAreUniqueAcrossAClass()
     {
         $data = [
@@ -1505,6 +1536,30 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        yield 'array value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummies' => ['@dummy', '@dummy', '@dummy'],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummies' => [$dummy, $dummy, $dummy]
+                    ]),
+                ],
+            ],
+        ];
+
         yield 'dynamic array value with wildcard' => [
             [
                 \stdClass::class => [
@@ -1987,38 +2042,33 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        //TODO: make this pass
-//        yield 'at literal is not resolved' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'atValues' => [
-//                            '\\@<("hello")>',
-//                            '\\\\@foo',
-//                            '\\\\\\@foo',
-//                            '\\foo',
-//                            '\\\\foo',
-//                            '\\\\\\foo',
-//                        ],
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'atValues' => [
-//                            '@hello',
-//                            '\\@foo',
-//                            '\\\\@foo',
-//                            '\\foo',
-//                            '\\\\foo',
-//                            '\\\\\\foo',
-//                        ]
-//                    ]),
-//                ],
-//            ],
-//        ];
+        yield 'at literal is not resolved' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'atValues' => [
+                            '\\@<("hello")>',
+                            '\\\\',
+                            '\\\\\\@foo',
+                            '\\\\foo',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'atValues' => [
+                            '@hello',
+                            '\\',
+                            '\\@foo',
+                            '\\foo',
+                        ]
+                    ]),
+                ],
+            ],
+        ];
 
         yield '[parameter] simple' => [
             [

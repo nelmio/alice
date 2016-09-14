@@ -99,6 +99,50 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        // Escaped character
+        yield '[Escape character] nominal (1)' => [
+            '\\',
+            null,
+        ];
+        yield '[Escape character] nominal (2)' => [
+            '\\\\',
+            [
+                new Token('\\\\', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Escape character] with empty reference' => [
+            '\\@',
+            [
+                new Token('\\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Escape character] with reference' => [
+            '\\@user0',
+            [
+                new Token('\\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('user', new TokenType(TokenType::STRING_TYPE)),
+                new Token('0', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Escape character] with function reference' => [
+            '\\@<foo()>',
+            [
+                new Token('\\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Escape character] double escape with reference' => [
+            '\\\\@',
+            null,
+        ];
+        yield '[Escape character] with empty reference' => [
+            '\\\\\\@',
+            [
+                new Token('\\\\', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('\\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+
         // Escaped arrow
         yield '[Escaped arrow] nominal (1)' => [
             '\<',

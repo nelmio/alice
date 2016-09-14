@@ -32,6 +32,8 @@ final class SubPatternsLexer implements LexerInterface
         '/^(\\\\\[[^\[\]]+\])/' => TokenType::ESCAPED_VALUE_TYPE,
         '/^(\\\<|\\\>)/' => TokenType::ESCAPED_VALUE_TYPE,
         '/^(\\\[@$])/' => TokenType::ESCAPED_VALUE_TYPE,
+        '/^(\\\{2})/' => TokenType::ESCAPED_VALUE_TYPE,
+        '/^\\\$/' => null,
         '/^(<{[^\ <]+}>)/' => TokenType::PARAMETER_TYPE,
         '/^(<\(.+\)>)/' => TokenType::IDENTITY_TYPE,
         '/^(<\S+\(.*\)>)/' => TokenType::FUNCTION_TYPE,
