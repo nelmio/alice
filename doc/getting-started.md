@@ -121,8 +121,9 @@ $objectSet = $loader->loadFile(
 
 ### Symfony
 
-Alice comes with a Symfony Bundle `NelmioAliceBundle`. To enabled it, update
-your application kernel:
+Alice comes with a Symfony Bundle
+[`NelmioAliceBundle`](src/Bridge/Symfony/NelmioAliceBundle.php). To enabled it,
+update your application kernel:
 
 ```php
 <?php
@@ -156,7 +157,6 @@ nelmio_alice:
                                    # generate a unique value before stopping and
                                    # failing.
 ```
-
 
 Next chapter: [Complete Reference](complete-reference.md)<br />
 Previous chapter: [Installation](../README.md#installation)
