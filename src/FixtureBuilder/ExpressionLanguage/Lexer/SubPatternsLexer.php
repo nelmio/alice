@@ -37,11 +37,12 @@ final class SubPatternsLexer implements LexerInterface
         '/^(<\S+\(.*\)>)/' => TokenType::FUNCTION_TYPE,
         '/^(<\S+>)/' => null,
         '/^(\[[^\[\]]+\])/' => TokenType::STRING_ARRAY_TYPE,
-        '/^(@[^\ @\{\<]+\(.*\))/' => self::REFERENCE_LEXER, // function
-        '/^(@[^\ @\<]+\{.*\}->\S+\(.*\))/' => self::REFERENCE_LEXER, // range or list with function
-        '/^(@[^\ @\<]+\{.*\}->[^\(\)\ \{]+)/' => self::REFERENCE_LEXER, // range or list with property
-        '/^(@[^\ @\<]+\{.*\})/' => self::REFERENCE_LEXER,   // range or list
+        '/^(@[^\ @\{\<]+\(.*\))/' => self::REFERENCE_LEXER, // Function with text
+        '/^(@[^\ @\<]+\{.*\}->\S+\(.*\))/' => self::REFERENCE_LEXER, // Range or list with function
+        '/^(@[^\ @\<]+\{.*\}->[^\(\)\ \{]+)/' => self::REFERENCE_LEXER, // Range or list with property
+        '/^(@[^\ @\<]+\{.*\})/' => self::REFERENCE_LEXER,   // Range or list
         '/^(@[^\ @\{\<]+)/' => self::REFERENCE_LEXER,
+        '/^(@)<\S+\(.*\)>/' => self::REFERENCE_LEXER,
         '/^(\$[\p{L}_]+)/' => TokenType::VARIABLE_TYPE,
         '/^([^\\\<>\[\d\%\$@\]]+)/' => TokenType::STRING_TYPE,
         '/^([^\\\<>\[\%\$@\]]+)/' => TokenType::STRING_TYPE,

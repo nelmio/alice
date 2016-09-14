@@ -922,6 +922,13 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
                 new Token('<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
+        yield '[Reference] reference which is entirely a function' => [
+            '@<current()>',
+            [
+                new Token('@', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
         yield '[Reference] surrounded reference function' => [
             'foo @user0<current()> bar',
             [

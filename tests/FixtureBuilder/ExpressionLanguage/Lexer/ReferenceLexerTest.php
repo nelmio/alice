@@ -42,15 +42,6 @@ class ReferenceLexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException
-     * @expectedExceptionMessage Could not lex the value "@ ".
-     */
-    public function testThrowsAnExceptionIfCannotLexValue()
-    {
-        $this->lexer->lex('@ ');
-    }
-
-    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid token "@u->" found.
      */
