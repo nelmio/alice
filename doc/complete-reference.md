@@ -213,6 +213,8 @@ Nelmio\Entity\User:
             0 (unique): '<username()>'
 ```
 
+**TODO**: add notes on the scope and the arrays
+
 
 Next chapter: [Handling Relations](relations-handling.md)<br />
 Previous chapter: [Getting Started](getting-started.md)
