@@ -55,9 +55,9 @@ script:
         fi
     else
         if [ -n "$SYMFONY_VERSION" ]; then
-            bin/phpunit -c $PHPUNIT_CONFIG --group=symfony
+            bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --group=symfony
         else
-            bin/phpunit -c $PHPUNIT_CONFIG --exclude-group=symfony
+            bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --exclude-group=symfony
         fi
     fi
 
