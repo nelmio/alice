@@ -1014,6 +1014,15 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                 ])
             ),
         ];
+        yield '[Reference] reference which is entirely a function' => [
+            '@<foo()>',
+            new FixtureReferenceValue(
+                new ListValue([
+                    '',
+                    new FunctionCallValue('foo'),
+                ])
+            ),
+        ];
         yield '[Reference] surrounded reference function' => [
             'foo @user0<foo()> bar',
             new ListValue([

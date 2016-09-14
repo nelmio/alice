@@ -29,6 +29,7 @@ final class ReferenceLexer implements LexerInterface
         '/^(@.*\*)/' => TokenType::WILDCARD_REFERENCE_TYPE,
         '/^(@.*->.*)/' => null,
         '/^(@\S+)/' => TokenType::SIMPLE_REFERENCE_TYPE,
+        '/^(@)/' => TokenType::SIMPLE_REFERENCE_TYPE,
     ];
 
     /**

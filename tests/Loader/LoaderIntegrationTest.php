@@ -1297,6 +1297,36 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        yield 'reference value with function' => [
+            [
+                \stdClass::class => [
+                    'dummy{1..2}' => [
+                        'name' => '<current()>',
+                    ],
+                    'another_dummy{1..2}' => [
+                        'dummy' => '@dummy<current()>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy1' => $dummy1 = StdClassFactory::create([
+                        'name' => '1',
+                    ]),
+                    'dummy2' => $dummy2 = StdClassFactory::create([
+                        'name' => '2',
+                    ]),
+                    'another_dummy1' => StdClassFactory::create([
+                        'dummy' => $dummy1,
+                    ]),
+                    'another_dummy2' => StdClassFactory::create([
+                        'dummy' => $dummy2,
+                    ]),
+                ],
+            ],
+        ];
+
         yield 'inverted reference value' => [
             [
                 \stdClass::class => [
@@ -1604,27 +1634,26 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-// TODO
-//        yield '[self reference] alone' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'itself' => '@<("self")>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (function() {
-//                        $dummy = new \stdClass();
-//                        $dummy->itself = $dummy;
-//
-//                        return $dummy;
-//                    })(),
-//                ],
-//            ],
-//        ];
+        yield '[self reference] evaluated with a function' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'itself' => '@<("self")>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function() {
+                        $dummy = new \stdClass();
+                        $dummy->itself = $dummy;
+
+                        return $dummy;
+                    })(),
+                ],
+            ],
+        ];
 
         yield '[self reference] property' => [
             [
@@ -1697,28 +1726,6 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
-
-// TODO
-//        yield '[self reference] alone' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'itself' => '@<("self")>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (function() {
-//                        $dummy = new \stdClass();
-//                        $dummy->itself = $dummy;
-//
-//                        return $dummy;
-//                    })(),
-//                ],
-//            ],
-//        ];
 
         yield '[self reference] property' => [
             [

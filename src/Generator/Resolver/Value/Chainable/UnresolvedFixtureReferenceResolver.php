@@ -103,7 +103,8 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
             $value,
             $fixture,
             $fixtureSet,
-            $scope
+            $scope,
+            $context
         );
 
         return $this->decoratedResolver->resolve(
@@ -120,12 +121,13 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         ValueInterface $value,
         FixtureInterface $fixture,
         ResolvedFixtureSet $set,
-        array $scope
+        array $scope,
+        GenerationContext $context
     ): array
     {
         $referredFixtureId = $value->getValue();
         if ($referredFixtureId instanceof ValueInterface) {
-            $resolvedSet = $resolver->resolve($referredFixtureId, $fixture, $set, $scope);
+            $resolvedSet = $resolver->resolve($referredFixtureId, $fixture, $set, $scope, $context);
 
             list($referredFixtureId, $set) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
             if (false === is_string($referredFixtureId)) {
