@@ -94,6 +94,11 @@
 
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.unique_value_denormalizer"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.simple_value_denormalizer" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.value.simple_value_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer">
             <argument type="service" id="nelmio_alice.fixture_builder.expression_language.parser" />
         </service>
 
