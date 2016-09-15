@@ -38,14 +38,17 @@ i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
 
 ### Identity
 
-Alice includes a default identity provider, `<identity()>`, that
-simply returns whatever is passed to it. It's content is evaluated so you can
-use arithmetic operations for example: `<identity(1 * 2)>`. You can also make
-use of the variables and references in it:
-`<identity($favoriteNumber * @user1->favoriteNumber)>`.
+Alice includes a default identity provider, `<identity()>`, that evaluates whatever
+is passed to it and returns the evaluated value. As a result, you can use it to do
+arithmetic operations such as `<identity(1 * 2)>` or use PHP expressions like
+`<identity(new \DateTimeImmutable('2016-09-16'))>`.
 
-Some syntactic sugar is provided for this as well, and `<($whatever)>`
-is an alias for `<identity($whatever)>`.
+The identity function supports still references and variables so you can still do
+`<identity($favoriteNumber * @user1->favoriteNumber)>`. The value of current,
+usually used with `<current()>`, is accessible via the `$current` variable.
+
+Some syntactic sugar is provided for this as well, and `<($whatever)>` is an alias
+for `<identity($whatever)>`.
 
 
 ## Custom Faker Data Providers
