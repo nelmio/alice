@@ -812,6 +812,23 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $set);
     }
 
+    /**
+     * @expectedException \Nelmio\Alice\Exception\ObjectNotFoundException
+     */
+    public function testLoadParsesReferencesInQuotes()
+    {
+        $this->loader->loadData([
+            \stdClass::class => [
+                'dummy1' => [
+                    'name' => 'foo',
+                ],
+                'dummy2' => [
+                    'dummy' => '\'@dummy1\''
+                ],
+            ],
+        ]);
+    }
+
     public function provideFixturesToInstantiate()
     {
         yield 'with default constructor – use default constructor' => [
