@@ -25,7 +25,7 @@
     },
     "require-dev": {
         "doctrine/common": "^2.3",
-        "phpunit/phpunit": "^5.0||^4.0",
+        "phpunit/phpunit": "^5.0",
         "symfony/phpunit-bridge": "^3.0",
         "symfony/property-access": "^2.2||^3.0"
     },
