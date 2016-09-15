@@ -360,6 +360,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bob', $members[1]->username);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadParsesReferencesInQuotes()
     {
         $result = $this->loadData([

@@ -109,9 +109,14 @@ class Reference implements MethodInterface
     {
         $clone = clone $processable;
         if (false === $clone->valueMatches(self::$REGEX)) {
-            trigger_error(
-                'A quoted reference "%s" has been given. This '
-            )
+            @trigger_error(
+                sprintf(
+                    'A quoted reference "%s" has been given. This is deprecated since 2.3.0 and will throw an exception'
+                    .'in 3.0. Unquote the reference intead.',
+                    $processable->getValue()
+                ),
+                E_USER_DEPRECATED
+            );
         }
     }
 }
