@@ -52,12 +52,16 @@ i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
 Alice includes a default identity provider, `<identity()>`, that
 simply returns whatever is passed to it. This allows you among other
 things to use a PHP expression while still benefitting from
-[variable replacement](#variables). This is similar to an `eval()`
+[variable replacement](fixtures-refactoring.md#variables). This is similar to an `eval()`
 call, allowing you to do things like math or similar, e.g.
 `<identity(1 + $favoriteNumber)>`.
 
 Some syntactic sugar is provided for this as well, and `<($whatever)>`
 is an alias for `<identity($whatever)>`.
+
+**Note:** the behaviour of identity will change in 3.0. It will strictly be equivalent to
+an eval at the exception of being able to use references (e.g. `<(@user->name . '!')>`
+and variables (e.g. `<($name)>`).
 
 
 ## Reuse generated data using objects value

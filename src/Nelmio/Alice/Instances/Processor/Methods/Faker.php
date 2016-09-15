@@ -147,7 +147,7 @@ class Faker implements MethodInterface
     {
         $args = array_key_exists('args', $matches) && '' !== $matches['args'] ? $matches['args'] : null;
 
-        if (trim($matches['name']) == '') {
+        if ('' === trim($matches['name'])) {
             $matches['name'] = 'identity';
         }
 
