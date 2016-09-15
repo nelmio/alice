@@ -673,10 +673,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('name', $this->loader->getReference('user3')->username);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadCoercesDatesForDateTimeHints()
     {
-        $res = $this->loadData([
-            self::GROUP => [
+        $result = $this->loadData([
+            Group::class => [
                 'group0' => [
                     'creationDate' => '2012-01-05',
                 ],
@@ -686,9 +689,32 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertInstanceOf('DateTime', $res['group0']->getCreationDate());
-        $this->assertEquals('2012-01-05', $res['group0']->getCreationDate()->format('Y-m-d'));
-        $this->assertInstanceOf('DateTime', $res['group1']->getCreationDate());
+        /** @var Group $group0 */
+        $group0 = $result['group0'];
+        /** @var Group $group1 */
+        $group1 = $result['group1'];
+
+        $this->assertInstanceOf(\DateTime::class, $group0->getCreationDate());
+        $this->assertEquals('2012-01-05', $group0->getCreationDate()->format('Y-m-d'));
+
+        $this->assertInstanceOf(\DateTime::class, $group1->getCreationDate());
+    }
+
+    public function testCreatesDateTimeWithIdentity()
+    {
+        $result = $this->loadData([
+            Group::class => [
+                'group' => [
+                    'name' => '<(new \DateTime("2012-01-05"))>',
+                ],
+            ],
+        ]);
+
+        /** @var Group $group */
+        $group = $result['group'];
+
+        $this->assertInstanceOf(\DateTime::class, $group->getName());
+        $this->assertEquals('2012-01-05', $group->getName()->format('Y-m-d'));
     }
 
     public function testLoadParsesFakerData()

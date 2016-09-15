@@ -54,24 +54,7 @@ class TypeHintChecker
 
         $hintedClass = $params[$parameterNumber]->getClass()->getName();
         if ('DateTime' === $hintedClass) {
-            try {
-                if (preg_match('/^[0-9]+$/', $value)) {
-                    $value = '@'.$value;
-                }
-
-                return new \DateTime($value);
-            } catch (\Exception $exception) {
-                throw new \UnexpectedValueException(
-                    sprintf(
-                        'Could not convert %s to DateTime for %s::%s',
-                        $value,
-                        $reflection->getDeclaringClass()->getName(),
-                        $method
-                    ),
-                    0,
-                    $exception
-                );
-            }
+            return $this->createDate($value, $reflection, $method);
         }
 
         if ($hintedClass) {
@@ -83,5 +66,41 @@ class TypeHintChecker
         }
 
         return $value;
+    }
+
+    /**
+     * @param string            $value
+     * @param \ReflectionMethod $reflectionMethod
+     * @param string            $method
+     *
+     * @return \DateTime
+     */
+    private function createDate($value, \ReflectionMethod $reflectionMethod, $method)
+    {
+        @trigger_error(
+            'Casting a string date into a DateTime object is deprecated since 2.3.0 and will be removed in 3.0. Create'
+            .'a DateTime object directly by using the identity function like "<(new \DateTime(\'2012-01-05\'))>" '
+            .'instead.',
+            E_USER_DEPRECATED
+        );
+
+        try {
+            if (preg_match('/^[0-9]+$/', $value)) {
+                $value = '@'.$value;
+            }
+
+            return new \DateTime($value);
+        } catch (\Exception $exception) {
+            throw new \UnexpectedValueException(
+                sprintf(
+                    'Could not convert %s to DateTime for %s::%s',
+                    $value,
+                    $reflectionMethod->getDeclaringClass()->getName(),
+                    $method
+                ),
+                0,
+                $exception
+            );
+        }
     }
 }
