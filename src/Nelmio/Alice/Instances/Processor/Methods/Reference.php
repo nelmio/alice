@@ -16,12 +16,20 @@ use Nelmio\Alice\Instances\Processor\ProcessableInterface;
 
 class Reference implements MethodInterface
 {
-    private static $regex = '/^[\',\"]?'
+    private static $LEGACY_REGEX = '/^[\',\"]?'
         .'(?:(?<multi>\d+)x\ )?'
         .'@(?<reference>[\p{L}\d\_\.\*\/\-]+)'
         .'(?<sequence>\{(?P<from>\d+)\.\.(?P<to>\d+)\})?'
         .'(?:\->(?<property>[\p{L}\d_.*\/-]+))?'
         .'[\',\"]?$'
+        .'/xi'
+    ;
+    private static $REGEX = '/^' // modified line
+        .'(?:(?<multi>\d+)x\ )?'
+        .'@(?<reference>[\p{L}\d\_\.\*\/\-]+)'
+        .'(?<sequence>\{(?P<from>\d+)\.\.(?P<to>\d+)\})?'
+        .'(?:\->(?<property>[\p{L}\d_.*\/-]+))?'
+        .'$' // modified line
         .'/xi'
     ;
 
@@ -47,7 +55,7 @@ class Reference implements MethodInterface
     {
         return
             is_string($processable->getValue())
-            && $processable->valueMatches(static::$regex)
+            && $processable->valueMatches(static::$LEGACY_REGEX)
         ;
     }
 
@@ -56,13 +64,23 @@ class Reference implements MethodInterface
      */
     public function process(ProcessableInterface $processable, array $variables)
     {
-        $multi = ('' !== $processable->getMatch('multi')) ? (int) $processable->getMatch('multi') : null;
-        $property = null !== ($processable->getMatch('property')) ? $processable->getMatch('property') : null;
-        $sequence = null !== ($processable->getMatch('sequence')) ? $processable->getMatch('sequence') : null;
-        $reference = null !== $processable->getMatch('escaped_reference')
+        $multi = ('' !== $processable->getMatch('multi'))
+            ? (int) $processable->getMatch('multi')
+            : null
+        ;
+        $property = (null !== $processable->getMatch('property'))
+            ? $processable->getMatch('property')
+            : null
+        ;
+        $sequence = (null !== $processable->getMatch('sequence'))
+            ? $processable->getMatch('sequence')
+            : null
+        ;
+        $reference = (null !== $processable->getMatch('escaped_reference'))
             ? $processable->getMatch('escaped_reference')
             : $processable->getMatch('reference')
         ;
+        $this->checkEscapedReference($processable);
 
         if (strpos($reference, '*')) {
             return $this->objects->random($reference, $multi, $property);
@@ -85,5 +103,20 @@ class Reference implements MethodInterface
         }
 
         return $this->objects->find($reference, $property);
+    }
+
+    private function checkEscapedReference(ProcessableInterface $processable)
+    {
+        $clone = clone $processable;
+        if (false === $clone->valueMatches(self::$REGEX)) {
+            @trigger_error(
+                sprintf(
+                    'A quoted reference "%s" has been given. This is deprecated since 2.3.0 and will throw an exception'
+                    .'in 3.0. Unquote the reference intead.',
+                    $processable->getValue()
+                ),
+                E_USER_DEPRECATED
+            );
+        }
     }
 }

@@ -360,24 +360,27 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bob', $members[1]->username);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadParsesReferencesInQuotes()
     {
-        $res = $this->loadData([
-            self::USER => [
+        $result = $this->loadData([
+            User::class => [
                 'user1' => [
                     'username' => 'alice',
                 ],
             ],
-            self::GROUP => [
-                'a' => [
+            Group::class => [
+                'group' => [
                     'members' => ['\'@user1\'']
                 ],
             ],
         ]);
         /** @var Group $group */
-        $group = $res['a'];
+        $group = $result['group'];
 
-        $this->assertInstanceOf(self::USER, current($group->getMembers()));
+        $this->assertInstanceOf(User::class, current($group->getMembers()));
         $this->assertEquals('alice', current($group->getMembers())->username);
     }
 
