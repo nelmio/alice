@@ -633,25 +633,40 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
                 'user1' => [
                     'username' => '50%? name : nothing',
                 ],
-                'user2' => [
-                    'username' => '0%? name : nothing',
-                ],
-                'user3' => [
-                    'username' => '100%? name : nothing',
-                ],
             ],
         ]);
 
         $this->assertContains($this->loader->getReference('user0')->username, ['name', null]);
         $this->assertContains($this->loader->getReference('user1')->username, ['name', 'nothing']);
-        $this->assertEquals('nothing', $this->loader->getReference('user2')->username);
-        $this->assertEquals('name', $this->loader->getReference('user3')->username);
     }
 
-    public function testLoadParsesOptionalValuesWithFloats()
+    /**
+     * @group legacy
+     */
+    public function testLoadParsesOptionalValuesWithPercentsLimits()
     {
         $this->loadData([
             self::USER => [
+                'user0' => [
+                    'username' => '0%? name',
+                ],
+                'user1' => [
+                    'username' => '100%? hello',
+                ],
+            ],
+        ]);
+
+        $this->assertEquals($this->loader->getReference('user0')->username, null);
+        $this->assertEquals($this->loader->getReference('user1')->username, 'hello');
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testLoadParsesOptionalValuesWithFloats()
+    {
+        $this->loadData([
+            User::class => [
                 'user0' => [
                     'username' => '0.5? name',
                 ],
@@ -1794,9 +1809,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new Loader('en_US', [new FakerProvider]);
         $loader->load([
-            self::USER => [
+            User::class => [
                 'user' => [
-                    'username' => '0%? adrien',
+                    'username' => '<null()>',
                     'fullname' => '<noop($username)>',
                 ],
             ],
@@ -2117,5 +2132,10 @@ class FakerProvider
     public function upperCaseProvider($arg)
     {
         return strtoupper($arg);
+    }
+
+    public function null()
+    {
+        return null;
     }
 }
