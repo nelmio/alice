@@ -32,6 +32,9 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('user', $fixture->getName());
     }
 
+    /**
+     * @group legacy
+     */
     public function testIsLocalWithLocalClassFlag()
     {
         $fixture = new Fixture(self::USER.' (local)', 'user', [], null);
@@ -39,6 +42,9 @@ class FixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($fixture->isLocal());
     }
 
+    /**
+     * @group legacy
+     */
     public function testIsLocalWithLocalNameFlag()
     {
         $fixture = new Fixture(self::USER, 'user (local)', [], null);

@@ -1042,30 +1042,44 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo bar', $res['user_foo bar']->username);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLocalObjectsAreNotReturned()
     {
-        $res = $this->loadData([
-            self::GROUP.' (local)' => [
-                'group' => [
+        $result = $this->loadData([
+            sprintf('%s (local)', Group::class) => [
+                'foo_group' => [
                     'name' => 'foo',
                 ],
             ],
-            self::USER => [
-                'user' => [
-                    'email' => '@group',
+            User::class => [
+                'user1' => [
+                    'email' => '@foo_group',
                 ],
                 'user2 (local)' => [
-                    'email' => '@group',
+                    'email' => '@foo_group',
                 ],
             ],
         ]);
 
-        $this->assertCount(1, $res);
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user2'));
-        $this->assertInstanceOf(self::GROUP, $this->loader->getReference('group'));
-        $this->assertSame($this->loader->getReference('user')->email, $this->loader->getReference('group'));
-        $this->assertSame($this->loader->getReference('user2')->email, $this->loader->getReference('group'));
+        // The loader has still the reference of each fixtures
+        $user1 = $this->loader->getReference('user1');
+        $user2 = $this->loader->getReference('user2');
+        $group = $this->loader->getReference('foo_group');
+        $this->assertInstanceOf(User::class, $user1);
+        $this->assertInstanceOf(User::class, $user2);
+        $this->assertInstanceOf(Group::class, $group);
+        $this->assertSame($user1->email, $group);
+        $this->assertSame($user2->email, $group);
+
+        $this->assertCount(1, $result);
+        $this->assertSame(
+            [
+                'user1' => $user1,
+            ],
+            $result
+        );
     }
 
     public function testTemplateObjectsAreNotReturned()
@@ -1698,6 +1712,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($dummy0->data, $relatedDummy0);
     }
 
+    /**
+     * @group legacy
+     */
     public function testUseTypehintInSetterWithLocalFlag()
     {
         $loader = $this->createLoader();
@@ -1746,6 +1763,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($dummy0->data, $relatedDummy0);
     }
 
+    /**
+     * @group legacy
+     */
     public function testUseTypehintInSetterWithInterfaceAndLocalFlag()
     {
         $loader = $this->createLoader();

@@ -84,7 +84,16 @@ class Fixture
      */
     public function isLocal()
     {
-        return $this->hasClassFlag('local') || $this->hasNameFlag('local');
+        $isLocal = $this->hasClassFlag('local') || $this->hasNameFlag('local');
+        if ($isLocal) {
+            @trigger_error(
+                'The local flag is deprecated since 2.3.0 and will no longer be supported in 3.0. See '
+                .'https://github.com/nelmio/alice/issues/514 for more details.',
+                E_USER_DEPRECATED
+            );
+        }
+
+        return $isLocal;
     }
 
     /**
