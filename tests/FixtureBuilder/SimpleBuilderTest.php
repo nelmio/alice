@@ -20,7 +20,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\SimpleBuilder
+ * @covers \Nelmio\Alice\FixtureBuilder\SimpleBuilder
  */
 class SimpleBuilderTest extends \PHPUnit_Framework_TestCase
 {

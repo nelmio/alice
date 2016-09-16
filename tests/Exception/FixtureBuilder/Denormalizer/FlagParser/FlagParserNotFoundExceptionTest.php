@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
+ * @covers \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
  */
 class FlagParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

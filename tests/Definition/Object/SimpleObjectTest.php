@@ -15,7 +15,7 @@ use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Object\SimpleObject
+ * @covers \Nelmio\Alice\Definition\Object\SimpleObject
  */
 class SimpleObjectTest extends \PHPUnit_Framework_TestCase
 {

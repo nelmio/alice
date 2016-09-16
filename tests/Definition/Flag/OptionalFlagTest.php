@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Flag;
 use Nelmio\Alice\Definition\FlagInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Flag\OptionalFlag
+ * @covers \Nelmio\Alice\Definition\Flag\OptionalFlag
  */
 class OptionalFlagTest extends \PHPUnit_Framework_TestCase
 {

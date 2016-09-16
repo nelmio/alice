@@ -17,7 +17,7 @@ use Nelmio\Alice\Exception\NoValueForCurrentException;
 use Nelmio\Alice\FixtureInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Fixture\SimpleFixture
+ * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixture
  */
 class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
 {

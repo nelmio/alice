@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\Parser;
 use Nelmio\Alice\Throwable\ParseThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\Parser\ParseException
+ * @covers \Nelmio\Alice\Exception\Parser\ParseException
  */
 class ParseExceptionTest extends \PHPUnit_Framework_TestCase
 {

@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Value\ListValue
+ * @covers \Nelmio\Alice\Definition\Value\ListValue
  */
 class ListValueTest extends \PHPUnit_Framework_TestCase
 {

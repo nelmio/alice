@@ -21,7 +21,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
  */
 class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
 {

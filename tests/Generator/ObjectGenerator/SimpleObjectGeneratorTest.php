@@ -28,7 +28,7 @@ use Nelmio\Alice\ObjectBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator
+ * @covers \Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator
  */
 class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
 {

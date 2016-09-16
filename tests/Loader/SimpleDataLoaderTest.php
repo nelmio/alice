@@ -21,7 +21,7 @@ use Nelmio\Alice\ObjectSetFactory;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Loader\SimpleDataLoader
+ * @covers \Nelmio\Alice\Loader\SimpleDataLoader
  */
 class SimpleDataLoaderTest extends \PHPUnit_Framework_TestCase
 {

@@ -23,7 +23,7 @@ use Nelmio\Alice\FixtureInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry
  */
 class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
 {

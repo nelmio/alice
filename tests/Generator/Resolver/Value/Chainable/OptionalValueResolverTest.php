@@ -21,7 +21,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
  */
 class OptionalValueResolverTest extends \PHPUnit_Framework_TestCase
 {

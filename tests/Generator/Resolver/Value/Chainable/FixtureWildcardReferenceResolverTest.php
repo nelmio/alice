@@ -29,7 +29,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver
  */
 class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
 {

@@ -17,7 +17,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer
+ * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer
  */
 class SubPatternsLexerTest extends \PHPUnit_Framework_TestCase
 {

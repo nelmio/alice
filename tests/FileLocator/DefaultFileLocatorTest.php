@@ -14,7 +14,7 @@ namespace Nelmio\Alice\FileLocator;
 use Nelmio\Alice\FileLocatorInterface;
 
 /**
- * @covers Nelmio\Alice\FileLocator\DefaultFileLocator
+ * @covers \Nelmio\Alice\FileLocator\DefaultFileLocator
  */
 class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
 {

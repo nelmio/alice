@@ -12,7 +12,7 @@
 namespace Nelmio\Alice;
 
 /**
- * @covers Nelmio\Alice\ParameterBag
+ * @covers \Nelmio\Alice\ParameterBag
  */
 class ParameterBagTest extends \PHPUnit_Framework_TestCase
 {

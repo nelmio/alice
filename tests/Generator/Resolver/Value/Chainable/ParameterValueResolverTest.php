@@ -20,7 +20,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\ParameterValueResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\ParameterValueResolver
  */
 class ParameterValueResolverTest extends \PHPUnit_Framework_TestCase
 {

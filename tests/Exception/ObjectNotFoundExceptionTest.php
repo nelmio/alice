@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Exception;
 
 /**
- * @covers Nelmio\Alice\Exception\ObjectNotFoundException
+ * @covers \Nelmio\Alice\Exception\ObjectNotFoundException
  */
 class ObjectNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

@@ -14,7 +14,7 @@ namespace Nelmio\Alice;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 
 /**
- * @covers Nelmio\Alice\ObjectBag
+ * @covers \Nelmio\Alice\ObjectBag
  */
 class ObjectBagTest extends \PHPUnit_Framework_TestCase
 {

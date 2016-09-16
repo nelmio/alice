@@ -19,7 +19,7 @@ use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Loader\SimpleFileLoader
+ * @covers \Nelmio\Alice\Loader\SimpleFileLoader
  */
 class SimpleFileLoaderTest extends \PHPUnit_Framework_TestCase
 {

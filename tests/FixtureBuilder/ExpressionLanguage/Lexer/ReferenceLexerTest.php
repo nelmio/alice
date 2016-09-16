@@ -14,7 +14,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer
+ * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer
  */
 class ReferenceLexerTest extends \PHPUnit_Framework_TestCase
 {

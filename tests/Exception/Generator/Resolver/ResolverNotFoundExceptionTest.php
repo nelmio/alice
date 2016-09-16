@@ -15,7 +15,7 @@ use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
+ * @covers \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
  */
 class ResolverNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

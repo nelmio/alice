@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Flag;
 use Nelmio\Alice\Definition\FlagInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Flag\TemplateFlag
+ * @covers \Nelmio\Alice\Definition\Flag\TemplateFlag
  */
 class TemplateFlagTest extends \PHPUnit_Framework_TestCase
 {

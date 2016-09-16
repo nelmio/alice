@@ -15,7 +15,7 @@ use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
- * @covers Nelmio\Alice\Definition\MethodCall\SimpleMethodCall
+ * @covers \Nelmio\Alice\Definition\MethodCall\SimpleMethodCall
  */
 class SimpleMethodCallTest extends \PHPUnit_Framework_TestCase
 {

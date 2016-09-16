@@ -23,7 +23,7 @@ use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 
 /**
- * @covers Nelmio\Alice\Definition\FlagBag
+ * @covers \Nelmio\Alice\Definition\FlagBag
  */
 class FlagBagTest extends \PHPUnit_Framework_TestCase
 {

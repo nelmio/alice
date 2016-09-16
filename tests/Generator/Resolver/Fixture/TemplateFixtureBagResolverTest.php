@@ -25,8 +25,8 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver
- * @covers Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
  */
 class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
 {

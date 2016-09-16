@@ -21,7 +21,7 @@ use Nelmio\Alice\FixtureInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SimpleFixtureBagDenormalizer
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SimpleFixtureBagDenormalizer
  */
 class SimpleFixtureBagDenormalizerTest extends \PHPUnit_Framework_TestCase
 {

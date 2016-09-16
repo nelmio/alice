@@ -21,7 +21,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer
  */
 class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
 {

@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Value\ChoiceListValue
+ * @covers \Nelmio\Alice\Definition\Value\ChoiceListValue
  */
 class ChoiceListValueTest extends \PHPUnit_Framework_TestCase
 {

@@ -28,7 +28,7 @@ use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer
  */
 class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
 {

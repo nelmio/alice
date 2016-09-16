@@ -15,7 +15,7 @@ use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
+ * @covers \Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
  */
 class UniqueValueGenerationLimitReachedExceptionTest extends \PHPUnit_Framework_TestCase
 {

@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition;
 use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
- * @covers Nelmio\Alice\Definition\Property
+ * @covers \Nelmio\Alice\Definition\Property
  */
 class PropertyTest extends \PHPUnit_Framework_TestCase
 {

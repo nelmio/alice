@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Throwable;
 use Nelmio\Alice\Exception\RootResolutionException;
 
 /**
- * @covers Nelmio\Alice\Throwable\ResolutionThrowable
+ * @covers \Nelmio\Alice\Throwable\ResolutionThrowable
  */
 class ResolutionThrowableTest extends \PHPUnit_Framework_TestCase
 {

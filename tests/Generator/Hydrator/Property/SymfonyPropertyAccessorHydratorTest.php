@@ -24,7 +24,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @covers Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator
+ * @covers \Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator
  */
 class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
 {

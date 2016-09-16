@@ -25,7 +25,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Instantiator\Chainable\AbstractChainableInstantiator
+ * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\AbstractChainableInstantiator
  */
 class AbstractChainableInstantiatorTest extends \PHPUnit_Framework_TestCase
 {

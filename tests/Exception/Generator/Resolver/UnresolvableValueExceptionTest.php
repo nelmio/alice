@@ -15,7 +15,7 @@ use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+ * @covers \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
  */
 class UnresolvableValueExceptionTest extends \PHPUnit_Framework_TestCase
 {

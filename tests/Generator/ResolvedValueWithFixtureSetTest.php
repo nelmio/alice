@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Generator;
 
 /**
- * @covers Nelmio\Alice\Generator\ResolvedValueWithFixtureSet
+ * @covers \Nelmio\Alice\Generator\ResolvedValueWithFixtureSet
  */
 class ResolvedValueWithFixtureSetTest extends \PHPUnit_Framework_TestCase
 {

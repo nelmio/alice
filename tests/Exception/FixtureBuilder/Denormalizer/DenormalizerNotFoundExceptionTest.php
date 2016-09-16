@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\FixtureBuilder\Denormalizer;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
+ * @covers \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
  */
 class DenormalizerNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

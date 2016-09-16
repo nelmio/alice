@@ -15,7 +15,7 @@ use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 
 /**
- * @covers Nelmio\Alice\Definition\MethodCallBag
+ * @covers \Nelmio\Alice\Definition\MethodCallBag
  */
 class MethodCallBagTest extends \PHPUnit_Framework_TestCase
 {

@@ -20,7 +20,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver
  */
 class SimpleParameterBagResolverTest extends \PHPUnit_Framework_TestCase
 {

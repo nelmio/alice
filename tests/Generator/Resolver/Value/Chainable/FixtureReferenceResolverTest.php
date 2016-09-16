@@ -31,7 +31,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver
  */
 class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
 {

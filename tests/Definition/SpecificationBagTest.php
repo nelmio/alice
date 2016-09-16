@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 
 /**
- * @covers Nelmio\Alice\Definition\SpecificationBag
+ * @covers \Nelmio\Alice\Definition\SpecificationBag
  */
 class SpecificationBagTest extends \PHPUnit_Framework_TestCase
 {

@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Throwable;
 use Nelmio\Alice\Exception\RootExpressionLanguageParseException;
 
 /**
- * @covers Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable
+ * @covers \Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable
  */
 class ExpressionLanguageParseThrowableTest extends \PHPUnit_Framework_TestCase
 {

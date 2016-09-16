@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Value\UniqueValue
+ * @covers \Nelmio\Alice\Definition\Value\UniqueValue
  */
 class UniqueValueTest extends \PHPUnit_Framework_TestCase
 {

@@ -17,7 +17,7 @@ use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\BareFixtureSet
+ * @covers \Nelmio\Alice\FixtureBuilder\BareFixtureSet
  */
 class BareFixtureSetTest extends \PHPUnit_Framework_TestCase
 {

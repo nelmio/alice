@@ -24,7 +24,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver
  */
 class ListValueResolverTest extends \PHPUnit_Framework_TestCase
 {

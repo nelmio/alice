@@ -21,7 +21,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver
  */
 class RemoveConflictingObjectsResolverTest extends \PHPUnit_Framework_TestCase
 {

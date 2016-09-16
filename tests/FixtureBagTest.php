@@ -19,7 +19,7 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Exception\FixtureNotFoundException;
 
 /**
- * @covers Nelmio\Alice\FixtureBag
+ * @covers \Nelmio\Alice\FixtureBag
  */
 class FixtureBagTest extends \PHPUnit_Framework_TestCase
 {

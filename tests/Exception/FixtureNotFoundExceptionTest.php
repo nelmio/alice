@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Exception;
 
 /**
- * @covers Nelmio\Alice\Exception\FixtureNotFoundException
+ * @covers \Nelmio\Alice\Exception\FixtureNotFoundException
  */
 class FixtureNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

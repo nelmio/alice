@@ -24,7 +24,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser
+ * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser
  */
 class SimpleParserTest extends \PHPUnit_Framework_TestCase
 {

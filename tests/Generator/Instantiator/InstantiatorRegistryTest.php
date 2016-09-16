@@ -21,7 +21,7 @@ use Nelmio\Alice\ObjectBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry
+ * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry
  */
 class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
 {

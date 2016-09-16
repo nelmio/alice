@@ -16,7 +16,7 @@ use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Faker\Provider\DummyProvider;
 
 /**
- * @covers Nelmio\Alice\Faker\GeneratorFactory
+ * @covers \Nelmio\Alice\Faker\GeneratorFactory
  * @group integration
  */
 class GeneratorFactoryTest extends \PHPUnit_Framework_TestCase

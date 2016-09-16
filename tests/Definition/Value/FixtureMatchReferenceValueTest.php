@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue
+ * @covers \Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue
  */
 class FixtureMatchReferenceValueTest extends \PHPUnit_Framework_TestCase
 {

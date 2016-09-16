@@ -26,7 +26,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver
  */
 class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
 {

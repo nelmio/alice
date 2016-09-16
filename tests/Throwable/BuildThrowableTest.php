@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Throwable;
 use Nelmio\Alice\Exception\RootBuildException;
 
 /**
- * @covers Nelmio\Alice\Throwable\BuildThrowable
+ * @covers \Nelmio\Alice\Throwable\BuildThrowable
  */
 class BuildThrowableTest extends \PHPUnit_Framework_TestCase
 {
