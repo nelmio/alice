@@ -18,7 +18,7 @@ use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer
+ * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer
  */
 class FunctionLexerTest extends \PHPUnit_Framework_TestCase
 {

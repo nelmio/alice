@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\ServiceReference;
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\ServiceReference\StaticReference
+ * @covers \Nelmio\Alice\Definition\ServiceReference\StaticReference
  */
 class StaticReferenceTest extends \PHPUnit_Framework_TestCase
 {

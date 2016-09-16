@@ -23,7 +23,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FunctionTokenParser
+ * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FunctionTokenParser
  */
 class FunctionTokenParserTest extends \PHPUnit_Framework_TestCase
 {

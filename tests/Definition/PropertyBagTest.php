@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Definition;
 
 /**
- * @covers Nelmio\Alice\Definition\PropertyBag
+ * @covers \Nelmio\Alice\Definition\PropertyBag
  */
 class PropertyBagTest extends \PHPUnit_Framework_TestCase
 {

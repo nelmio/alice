@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Generator\Resolver;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\UniqueValuesPool
+ * @covers \Nelmio\Alice\Generator\Resolver\UniqueValuesPool
  */
 class UniqueValuesPoolTest extends \PHPUnit_Framework_TestCase
 {

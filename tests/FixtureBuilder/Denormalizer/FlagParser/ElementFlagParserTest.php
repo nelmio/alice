@@ -16,7 +16,7 @@ use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser
  */
 class ElementFlagParserTest extends FlagParserTestCase
 {

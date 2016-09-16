@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Throwable;
 use Nelmio\Alice\Exception\RootDenormalizationException;
 
 /**
- * @covers Nelmio\Alice\Throwable\DenormalizationThrowable
+ * @covers \Nelmio\Alice\Throwable\DenormalizationThrowable
  */
 class DenormalizationThrowableTest extends \PHPUnit_Framework_TestCase
 {

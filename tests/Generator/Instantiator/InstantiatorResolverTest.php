@@ -30,7 +30,7 @@ use Nelmio\Alice\Throwable\GenerationThrowable;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Instantiator\InstantiatorResolver
+ * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorResolver
  */
 class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
 {

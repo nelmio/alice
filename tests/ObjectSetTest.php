@@ -12,7 +12,7 @@
 namespace Nelmio\Alice;
 
 /**
- * @covers Nelmio\Alice\ObjectSet
+ * @covers \Nelmio\Alice\ObjectSet
  */
 class ObjectSetTest extends \PHPUnit_Framework_TestCase
 {

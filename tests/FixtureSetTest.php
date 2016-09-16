@@ -12,7 +12,7 @@
 namespace Nelmio\Alice;
 
 /**
- * @covers Nelmio\Alice\FixtureSet
+ * @covers \Nelmio\Alice\FixtureSet
  */
 class FixtureSetTest extends \PHPUnit_Framework_TestCase
 {

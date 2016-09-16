@@ -15,7 +15,7 @@ use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+ * @covers \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
  */
 class InstantiationExceptionTest extends \PHPUnit_Framework_TestCase
 {

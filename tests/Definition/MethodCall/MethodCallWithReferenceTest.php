@@ -17,7 +17,7 @@ use Nelmio\Alice\Definition\ServiceReference\MutableReference;
 use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
- * @covers Nelmio\Alice\Definition\MethodCall\MethodCallWithReference
+ * @covers \Nelmio\Alice\Definition\MethodCall\MethodCallWithReference
  */
 class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
 {

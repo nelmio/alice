@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException
+ * @covers \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException
  */
 class LexExceptionTest extends \PHPUnit_Framework_TestCase
 {

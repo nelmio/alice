@@ -25,7 +25,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
  */
 class SimpleFixtureSetResolverTest extends \PHPUnit_Framework_TestCase
 {

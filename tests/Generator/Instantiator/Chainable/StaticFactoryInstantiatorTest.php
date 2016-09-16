@@ -27,7 +27,7 @@ use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 
 /**
- * @covers Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator
+ * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator
  */
 class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
 {

@@ -24,7 +24,7 @@ use Nelmio\Alice\ObjectBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
  */
 class ValueResolverRegistryTest extends \PHPUnit_Framework_TestCase
 {

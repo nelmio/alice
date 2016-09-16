@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Value\NestedValue
+ * @covers \Nelmio\Alice\Definition\Value\NestedValue
  */
 class NestedValueTest extends \PHPUnit_Framework_TestCase
 {

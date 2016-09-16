@@ -31,7 +31,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver
  */
 class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
 {

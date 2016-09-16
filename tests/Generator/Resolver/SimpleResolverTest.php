@@ -22,7 +22,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\SimpleFixtureSetResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
  */
 class SimpleResolverTest extends \PHPUnit_Framework_TestCase
 {

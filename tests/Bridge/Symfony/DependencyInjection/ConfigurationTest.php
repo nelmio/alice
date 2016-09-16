@@ -15,7 +15,7 @@ use Nelmio\Alice\Symfony\KernelFactory;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
- * @covers Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
+ * @covers \Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
  * @group integration
  * @group symfony
  */

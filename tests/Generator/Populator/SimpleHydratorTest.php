@@ -34,7 +34,7 @@ use Nelmio\Alice\Throwable\GenerationThrowable;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Hydrator\SimpleHydrator
+ * @covers \Nelmio\Alice\Generator\Hydrator\SimpleHydrator
  */
 class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
 {

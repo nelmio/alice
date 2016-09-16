@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\MethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\MethodCall\NoMethodCall
+ * @covers \Nelmio\Alice\Definition\MethodCall\NoMethodCall
  */
 class NoMethodCallTest extends \PHPUnit_Framework_TestCase
 {

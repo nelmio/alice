@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
- * @covers Nelmio\Alice\Parser\Chainable\YamlParser
+ * @covers \Nelmio\Alice\Parser\Chainable\YamlParser
  */
 class YamlParserTest extends \PHPUnit_Framework_TestCase
 {

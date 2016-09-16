@@ -20,7 +20,7 @@ use Nelmio\Alice\NotClonableTrait;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerRegistry
+ * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerRegistry
  */
 class LexerRegistryTest extends \PHPUnit_Framework_TestCase
 {

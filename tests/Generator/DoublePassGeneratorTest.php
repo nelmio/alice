@@ -25,7 +25,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\DoublePassGenerator
+ * @covers \Nelmio\Alice\Generator\DoublePassGenerator
  */
 class DoublePassGeneratorTest extends \PHPUnit_Framework_TestCase
 {

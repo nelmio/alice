@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\ServiceReference;
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\ServiceReference\FixtureReference
+ * @covers \Nelmio\Alice\Definition\ServiceReference\FixtureReference
  */
 class FixtureReferenceTest extends \PHPUnit_Framework_TestCase
 {

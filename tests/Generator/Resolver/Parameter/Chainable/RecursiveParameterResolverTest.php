@@ -21,7 +21,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver
  */
 class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
 {

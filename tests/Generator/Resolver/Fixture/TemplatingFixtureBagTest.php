@@ -24,7 +24,7 @@ use Nelmio\Alice\Exception\FixtureNotFoundException;
 use Nelmio\Alice\FixtureBag;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Fixture\TemplatingFixtureBag
+ * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplatingFixtureBag
  */
 class TemplatingFixtureBagTest extends \PHPUnit_Framework_TestCase
 {

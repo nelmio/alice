@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\Generator\ObjectGenerator;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
+ * @covers \Nelmio\Alice\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
  */
 class ObjectGeneratorNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

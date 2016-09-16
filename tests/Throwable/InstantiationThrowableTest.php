@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Throwable;
 use Nelmio\Alice\Exception\RootInstantiationException;
 
 /**
- * @covers Nelmio\Alice\Throwable\InstantiationThrowable
+ * @covers \Nelmio\Alice\Throwable\InstantiationThrowable
  */
 class InstantiationThrowableTest extends \PHPUnit_Framework_TestCase
 {

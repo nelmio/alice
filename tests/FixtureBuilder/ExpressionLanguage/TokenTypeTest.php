@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType
+ * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType
  */
 class TokenTypeTest extends \PHPUnit_Framework_TestCase
 {

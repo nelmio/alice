@@ -17,7 +17,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry
  */
 class FlagParserRegistryTest extends \PHPUnit_Framework_TestCase
 {

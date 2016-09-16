@@ -15,7 +15,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer
  */
 class SimpleParameterBagDenormalizerTest extends \PHPUnit_Framework_TestCase
 {

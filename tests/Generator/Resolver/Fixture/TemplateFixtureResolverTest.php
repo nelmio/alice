@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
  *
  * More tests in:
  *

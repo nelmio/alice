@@ -17,7 +17,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * @covers Nelmio\Alice\Generator\ResolvedFixtureSet
+ * @covers \Nelmio\Alice\Generator\ResolvedFixtureSet
  */
 class ResolvedFixtureSetTest extends \PHPUnit_Framework_TestCase
 {

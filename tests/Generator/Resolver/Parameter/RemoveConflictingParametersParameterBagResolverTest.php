@@ -17,7 +17,7 @@ use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver
  */
 class RemoveConflictingParametersParameterBagResolverTest extends \PHPUnit_Framework_TestCase
 {

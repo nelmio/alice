@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Value\DynamicArrayValue
+ * @covers \Nelmio\Alice\Definition\Value\DynamicArrayValue
  */
 class DynamicArrayValueTest extends \PHPUnit_Framework_TestCase
 {

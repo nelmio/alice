@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Flag;
 use Nelmio\Alice\Definition\FlagInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Flag\UniqueFlag
+ * @covers \Nelmio\Alice\Definition\Flag\UniqueFlag
  */
 class UniqueFlagTest extends \PHPUnit_Framework_TestCase
 {

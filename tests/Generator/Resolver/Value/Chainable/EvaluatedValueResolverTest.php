@@ -21,7 +21,7 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver
  */
 class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
 {

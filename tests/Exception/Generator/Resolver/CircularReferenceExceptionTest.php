@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\Generator\Resolver;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
+ * @covers \Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
  */
 class CircularReferenceExceptionTest extends \PHPUnit_Framework_TestCase
 {

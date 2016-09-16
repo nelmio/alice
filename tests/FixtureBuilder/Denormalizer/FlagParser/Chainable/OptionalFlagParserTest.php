@@ -16,7 +16,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInter
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserTestCase;
 
 /**
- * @covers Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\OptionalFlagParser
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\OptionalFlagParser
  */
 class OptionalFlagParserTest extends FlagParserTestCase
 {

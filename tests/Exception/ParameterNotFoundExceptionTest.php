@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Exception;
 
 /**
- * @covers Nelmio\Alice\Exception\ParameterNotFoundException
+ * @covers \Nelmio\Alice\Exception\ParameterNotFoundException
  */
 class ParameterNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

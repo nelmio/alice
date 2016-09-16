@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Loader;
 
 /**
- * @covers Nelmio\Alice\Loader\NativeLoader
+ * @covers \Nelmio\Alice\Loader\NativeLoader
  */
 class NativeLoaderTest extends \PHPUnit_Framework_TestCase
 {

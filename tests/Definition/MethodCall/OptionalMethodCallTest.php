@@ -18,7 +18,7 @@ use Nelmio\Alice\Definition\ServiceReference\MutableReference;
 use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
- * @covers Nelmio\Alice\Definition\MethodCall\OptionalMethodCall
+ * @covers \Nelmio\Alice\Definition\MethodCall\OptionalMethodCall
  */
 class OptionalMethodCallTest extends \PHPUnit_Framework_TestCase
 {

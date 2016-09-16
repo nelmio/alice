@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Definition;
 
 /**
- * @covers Nelmio\Alice\Definition\RangeName
+ * @covers \Nelmio\Alice\Definition\RangeName
  */
 class RangeNameTest extends \PHPUnit_Framework_TestCase
 {

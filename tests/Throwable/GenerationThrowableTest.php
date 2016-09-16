@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Throwable;
 use Nelmio\Alice\Exception\RootGenerationException;
 
 /**
- * @covers Nelmio\Alice\Throwable\GenerationThrowable
+ * @covers \Nelmio\Alice\Throwable\GenerationThrowable
  */
 class GenerationThrowableTest extends \PHPUnit_Framework_TestCase
 {

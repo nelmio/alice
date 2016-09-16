@@ -16,7 +16,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
+ * @covers \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
  */
 class ParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

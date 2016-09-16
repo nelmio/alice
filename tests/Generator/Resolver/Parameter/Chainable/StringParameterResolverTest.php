@@ -23,7 +23,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver
  */
 class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
 {

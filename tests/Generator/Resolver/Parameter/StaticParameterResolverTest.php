@@ -17,7 +17,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
  */
 class StaticParameterResolverTest extends \PHPUnit_Framework_TestCase
 {

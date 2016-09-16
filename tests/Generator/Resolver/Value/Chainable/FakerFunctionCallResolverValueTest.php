@@ -26,7 +26,7 @@ use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * @covers Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver
+ * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver
  */
 class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCase
 {

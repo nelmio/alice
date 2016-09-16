@@ -20,7 +20,7 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Fixture\Templating
+ * @covers \Nelmio\Alice\Definition\Fixture\Templating
  */
 class TemplatingTest extends \PHPUnit_Framework_TestCase
 {

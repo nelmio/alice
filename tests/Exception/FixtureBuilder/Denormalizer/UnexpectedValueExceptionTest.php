@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\FixtureBuilder\Denormalizer;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
 /**
- * @covers Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
+ * @covers \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
  */
 class UnexpectedValueExceptionTest extends \PHPUnit_Framework_TestCase
 {

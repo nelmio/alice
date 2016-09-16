@@ -15,7 +15,7 @@ use Nelmio\Alice\Definition\FlagInterface;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 
 /**
- * @covers Nelmio\Alice\Definition\Flag\ExtendFlag
+ * @covers \Nelmio\Alice\Definition\Flag\ExtendFlag
  */
 class ExtendFlagTest extends \PHPUnit_Framework_TestCase
 {

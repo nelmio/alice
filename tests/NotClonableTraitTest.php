@@ -12,7 +12,7 @@
 namespace Nelmio\Alice;
 
 /**
- * @covers Nelmio\Alice\NotClonableTrait
+ * @covers \Nelmio\Alice\NotClonableTrait
  */
 class NotClonableTraitTest extends \PHPUnit_Framework_TestCase
 {

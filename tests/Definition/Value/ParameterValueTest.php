@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * @covers Nelmio\Alice\Definition\Value\ParameterValue
+ * @covers \Nelmio\Alice\Definition\Value\ParameterValue
  */
 class ParameterValueTest extends \PHPUnit_Framework_TestCase
 {
