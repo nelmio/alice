@@ -16,22 +16,36 @@ namespace Nelmio\Alice\Definition;
  */
 class RangeNameTest extends \PHPUnit_Framework_TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    /**
+     * @dataProvider provideRanges
+     */
+    public function testReadAccessorsReturnPropertiesValues(array $input, array $expected)
     {
         $name = 'user';
-        $from = 10;
-        $to = 100;
+        list($from, $to) = $input;
         
         $range = new RangeName($name, $from, $to);
         
         $this->assertEquals($name, $range->getName());
-        $this->assertEquals($from, $range->getFrom());
-        $this->assertEquals($to, $range->getTo());
-        
-        $range = new RangeName($name, $to, $from);
+        $this->assertEquals($expected[0], $range->getFrom());
+        $this->assertEquals($expected[1], $range->getTo());
+    }
 
-        $this->assertEquals($name, $range->getName());
-        $this->assertEquals($from, $range->getFrom());
-        $this->assertEquals($to, $range->getTo());
+    public function provideRanges()
+    {
+        yield [
+            [10, 11],
+            [10, 11],
+        ];
+
+        yield [
+            [11, 10],
+            [10, 11],
+        ];
+
+        yield [
+            [10, 10],
+            [10, 10],
+        ];
     }
 }

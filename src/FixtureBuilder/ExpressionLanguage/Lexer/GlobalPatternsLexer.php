@@ -22,9 +22,9 @@ final class GlobalPatternsLexer implements LexerInterface
     use NotClonableTrait;
 
     const PATTERNS = [
-        '/^((?:\d+|<.*>)x .*)/' => TokenType::DYNAMIC_ARRAY_TYPE,
+        '/^(?:\d+|<.*>)x .*/' => TokenType::DYNAMIC_ARRAY_TYPE,
         '/^.*(?:\d+|<.*>)x .*/' => null,
-        '/^([^<>\[\%\$@\\\]+)$/' => TokenType::STRING_TYPE,
+        '/^[^<>\[\%\$@\\\]+$/' => TokenType::STRING_TYPE,
     ];
 
     /**
@@ -45,7 +45,7 @@ final class GlobalPatternsLexer implements LexerInterface
                     );
                 }
 
-                return [new Token($matches[1], new TokenType($tokenTypeConstant))];
+                return [new Token($matches[0], new TokenType($tokenTypeConstant))];
             }
         }
 

@@ -11,10 +11,6 @@
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\SimpleFixture;
-use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\PropertyBag;
-use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
@@ -30,7 +26,11 @@ use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
-final class UnresolvedFixtureReferenceResolver
+/**
+ * Resolves the fixture reference ID first if it is itself a value before handing over the resolution to the decorated
+ * resolver.
+ */
+final class UnresolvedFixtureReferenceIdResolver
 implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, ValueResolverAwareInterface
 {
     use NotClonableTrait;
@@ -54,21 +54,27 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
     /**
      * @inheritdoc
      */
-    public function withGenerator(ObjectGeneratorInterface $generator): self
+    public function withObjectGenerator(ObjectGeneratorInterface $generator): self
     {
-        if ($this->decoratedResolver instanceof ObjectGeneratorAwareInterface) {
-            $this->decoratedResolver = $this->decoratedResolver->withGenerator($generator);
-        }
+        $decoratedResolver = ($this->decoratedResolver instanceof ObjectGeneratorAwareInterface)
+            ? $this->decoratedResolver->withObjectGenerator($generator)
+            : $this->decoratedResolver
+        ;
 
-        return new self($this->decoratedResolver, $this->resolver);
+        return new self($decoratedResolver, $this->resolver);
     }
 
     /**
      * @inheritdoc
      */
-    public function withResolver(ValueResolverInterface $resolver): self
+    public function withValueResolver(ValueResolverInterface $resolver): self
     {
-        return new self($this->decoratedResolver, $resolver);
+        $decoratedResolver = ($this->decoratedResolver instanceof ValueResolverAwareInterface)
+            ? $this->decoratedResolver->withValueResolver($resolver)
+            : $this->decoratedResolver
+        ;
+
+        return new self($decoratedResolver, $resolver);
     }
 
     /**
@@ -131,28 +137,10 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
 
             list($referredFixtureId, $set) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
             if (false === is_string($referredFixtureId)) {
-                throw UnresolvableValueException::create($value);
+                throw UnresolvableValueException::createForInvalidReferenceId($value, $referredFixtureId);
             }
         }
 
         return [$referredFixtureId, $set];
-    }
-
-    private function getReferredFixture(string $id, ResolvedFixtureSet $set): FixtureInterface
-    {
-        $fixtures = $set->getFixtures();
-        if ($fixtures->has($id)) {
-            return $fixtures->get($id);
-        }
-
-        return new SimpleFixture(
-            $id,
-            '',
-            new SpecificationBag(
-                null,
-                new PropertyBag(),
-                new MethodCallBag()
-            )
-        );
     }
 }

@@ -62,7 +62,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
     /**
      * @inheritdoc
      */
-    public function withResolver(ValueResolverInterface $resolver): self
+    public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->pool, $resolver);
     }

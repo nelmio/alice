@@ -18,6 +18,8 @@ use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
+use Nelmio\Alice\Exception\Generator\Resolver\NoSuchPropertyException;
+use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -51,7 +53,7 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
     public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new FixturePropertyReferenceResolver(new FakePropertyAccessor());
-        $newResolver = $resolver->withResolver(new FakeValueResolver());
+        $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
         $this->assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor()), $resolver);
         $this->assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor(), new FakeValueResolver()), $newResolver);
@@ -117,38 +119,45 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $propertyAccessorProphecy->getValue(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not resolve value "dummy->prop".
-     */
     public function testCatchesAccessorExceptionsToThrowResolverException()
     {
-        $value = new FixturePropertyValue(
-            $reference = new DummyValue('dummy'),
-            $property = 'prop'
-        );
-        $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
+        try {
+            $value = new FixturePropertyValue(
+                $reference = new DummyValue('dummy'),
+                $property = 'prop'
+            );
+            $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
 
-        $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
-        $valueResolverProphecy
-            ->resolve(Argument::cetera())
-            ->willReturn(
-                new ResolvedValueWithFixtureSet(
-                    $instance = new \stdClass(),
-                    $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
+            $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
+            $valueResolverProphecy
+                ->resolve(Argument::cetera())
+                ->willReturn(
+                    new ResolvedValueWithFixtureSet(
+                        $instance = new \stdClass(),
+                        $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
+                    )
                 )
-            )
-        ;
-        /** @var ValueResolverInterface $valueResolver */
-        $valueResolver = $valueResolverProphecy->reveal();
+            ;
+            /** @var ValueResolverInterface $valueResolver */
+            $valueResolver = $valueResolverProphecy->reveal();
 
-        $propertyAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
-        $propertyAccessorProphecy->getValue(Argument::cetera())->willThrow(\Exception::class);
-        /** @var PropertyAccessorInterface $propertyAccessor */
-        $propertyAccessor = $propertyAccessorProphecy->reveal();
+            $propertyAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
+            $propertyAccessorProphecy->getValue(Argument::cetera())->willThrow(\Exception::class);
+            /** @var PropertyAccessorInterface $propertyAccessor */
+            $propertyAccessor = $propertyAccessorProphecy->reveal();
 
-        $resolver = new FixturePropertyReferenceResolver($propertyAccessor, $valueResolver);
-        $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
+            $resolver = new FixturePropertyReferenceResolver($propertyAccessor, $valueResolver);
+            $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (UnresolvableValueException $exception) {
+            $this->assertEquals(
+                'Could not resolve value "dummy->prop".',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
     public function testTestResolutionWithSymfonyPropertyAccessor()
@@ -211,38 +220,47 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\NoSuchPropertyException
-     */
     public function testThrowsAnExceptionIfResolvedReferenceHasNoSuchProperty()
     {
-        $value = new FixturePropertyValue(
-            $reference = new FakeValue(),
-            $property = 'prop'
-        );
+        try {
+            $value = new FixturePropertyValue(
+                $reference = new FakeValue(),
+                $property = 'prop'
+            );
 
-        $instance = new \stdClass();
-        $instance->prop = 'foo';
+            $instance = new \stdClass();
+            $instance->prop = 'foo';
 
-        $set = ResolvedFixtureSetFactory::create();
+            $set = ResolvedFixtureSetFactory::create();
 
-        $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
-        $valueResolverProphecy
-            ->resolve(Argument::cetera())
-            ->willReturn(
-                new ResolvedValueWithFixtureSet(new \stdClass(), $set)
-            )
-        ;
-        /** @var ValueResolverInterface $valueResolver */
-        $valueResolver = $valueResolverProphecy->reveal();
+            $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
+            $valueResolverProphecy
+                ->resolve(Argument::cetera())
+                ->willReturn(
+                    new ResolvedValueWithFixtureSet(new \stdClass(), $set)
+                )
+            ;
+            /** @var ValueResolverInterface $valueResolver */
+            $valueResolver = $valueResolverProphecy->reveal();
 
-        $resolver = new FixturePropertyReferenceResolver(PropertyAccess::createPropertyAccessor(), $valueResolver);
-        $resolver->resolve(
-            $value,
-            new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create()),
-            $set,
-            [],
-            new GenerationContext()
-        );
+            $resolver = new FixturePropertyReferenceResolver(PropertyAccess::createPropertyAccessor(), $valueResolver);
+            $resolver->resolve(
+                $value,
+                new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create()),
+                $set,
+                [],
+                new GenerationContext()
+            );
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (NoSuchPropertyException $exception) {
+            $this->assertEquals(
+                'Could not find the property "prop" of the object "dummy" (class: Dummy).',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
+
     }
 }

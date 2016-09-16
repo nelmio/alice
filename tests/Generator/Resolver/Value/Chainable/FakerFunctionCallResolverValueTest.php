@@ -46,7 +46,7 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
     public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
-        $newResolver = $resolver->withResolver(new FakeValueResolver());
+        $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
         $this->assertEquals(new FakerFunctionCallValueResolver(FakerGeneratorFactory::create()), $resolver);
         $this->assertEquals(new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver()), $newResolver);

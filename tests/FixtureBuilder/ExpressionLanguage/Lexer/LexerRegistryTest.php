@@ -15,7 +15,6 @@ use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\NotClonableTrait;
 use Prophecy\Argument;
 
@@ -74,13 +73,39 @@ class LexerRegistryTest extends \PHPUnit_Framework_TestCase
         $lexer2Prophecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException
-     * @expectedExceptionMessage Could not lex the value "".
-     */
     public function testThrowsAnExceptionIfNoLexerCanLexTheValue()
     {
-        $lexer = new LexerRegistry([]);
-        $lexer->lex('');
+        try {
+            $lexer = new LexerRegistry([]);
+            $lexer->lex('');
+            $this->fail('Expected exception to be thrown.');
+        } catch (LexException $exception) {
+            $this->assertEquals('Could not lex the value "".', $exception->getMessage());
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNull($exception->getPrevious());
+        }
+    }
+
+    public function testUseTheLastThrownExceptionWhenPossibleWhenCannotLexTheValue()
+    {
+        $firstDecoratedLexerProphecy = $this->prophesize(LexerInterface::class);
+        $firstDecoratedLexerProphecy->lex(Argument::any())->willThrow($firstException = new LexException('foo'));
+        /** @var LexerInterface $firstDecoratedLexer */
+        $firstDecoratedLexer = $firstDecoratedLexerProphecy->reveal();
+
+        $secondDecoratedLexerProphecy = $this->prophesize(LexerInterface::class);
+        $secondDecoratedLexerProphecy->lex(Argument::any())->willThrow($secondException = new LexException('bar'));
+        /** @var LexerInterface $firstDecoratedLexer */
+        $secondDecoratedLexer = $secondDecoratedLexerProphecy->reveal();
+
+        try {
+            $lexer = new LexerRegistry([$firstDecoratedLexer, $secondDecoratedLexer]);
+            $lexer->lex('');
+            $this->fail('Expected exception to be thrown.');
+        } catch (LexException $exception) {
+            $this->assertEquals('Could not lex the value "".', $exception->getMessage());
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertSame($secondException, $exception->getPrevious());
+        }
     }
 }

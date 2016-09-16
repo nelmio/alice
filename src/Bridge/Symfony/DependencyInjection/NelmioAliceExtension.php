@@ -18,7 +18,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * @internal
+ * @private
  */
 final class NelmioAliceExtension extends Extension
 {

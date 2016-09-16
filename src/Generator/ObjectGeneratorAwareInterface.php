@@ -18,5 +18,5 @@ interface ObjectGeneratorAwareInterface
      *
      * @return static
      */
-    public function withGenerator(ObjectGeneratorInterface $generator);
+    public function withObjectGenerator(ObjectGeneratorInterface $generator);
 }

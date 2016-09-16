@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use Nelmio\Alice\Exception\Parser\ParseException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 use Prophecy\Argument;
@@ -162,37 +163,45 @@ EOF;
         $this->assertSame([], $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\ParseException
-     * @expectedExceptionMessageRegExp /^The file ".+\/basic\.yml" does not contain valid YAML\.$/
-     */
     public function testThrowsAnExceptionIfFileNotParsable()
     {
-        $file = self::$dir.'/basic.yml';
+        try {
+            $file = self::$dir.'/basic.yml';
 
-        $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
-        $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(SymfonyParseException::class);
-        /* @var SymfonyYamlParser $symfonyYamlParser */
-        $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
+            $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
+            $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(SymfonyParseException::class);
+            /* @var SymfonyYamlParser $symfonyYamlParser */
+            $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
 
-        $parser = new YamlParser($symfonyYamlParser);
-        $parser->parse($file);
+            $parser = new YamlParser($symfonyYamlParser);
+            $parser->parse($file);
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (ParseException $exception) {
+            $this->assertRegExp('/^The file ".+\/basic\.yml" does not contain valid YAML\.$/', $exception->getMessage());
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\ParseException
-     * @expectedExceptionMessageRegExp /^Could not parse the file ".+\/basic\.yml"\.$/
-     */
     public function testThrowsAnExceptionOnUnexpectedParseException()
     {
-        $file = self::$dir.'/basic.yml';
+        try {
+            $file = self::$dir.'/basic.yml';
 
-        $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
-        $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(\Exception::class);
-        /* @var SymfonyYamlParser $symfonyYamlParser */
-        $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
+            $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
+            $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(\Exception::class);
+            /* @var SymfonyYamlParser $symfonyYamlParser */
+            $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
 
-        $parser = new YamlParser($symfonyYamlParser);
-        $parser->parse($file);
+            $parser = new YamlParser($symfonyYamlParser);
+            $parser->parse($file);
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (ParseException $exception) {
+            $this->assertRegExp('/^Could not parse the file ".+\/basic\.yml"\.$/', $exception->getMessage());
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 }

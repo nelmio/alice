@@ -30,4 +30,37 @@ class UnresolvableValueException extends \RuntimeException implements Resolution
             $previous
         );
     }
+
+    /**
+     * @return static
+     */
+    public static function createForInvalidReferenceId(ValueInterface $value, $result, int $code = 0, \Throwable $previous = null)
+    {
+        return new static(
+            sprintf(
+                'Expected fixture reference value "%s" to be resolved into a string. Got "%s" instead.',
+                $value,
+                is_object($result)
+                    ? get_class($result)
+                    : sprintf('(%s) %s', gettype($result), $result)
+            ),
+            $code,
+            $previous
+        );
+    }
+
+    /**
+     * @return static
+     */
+    public static function couldNotEvaluateExpression(ValueInterface $value, int $code = 0, \Throwable $previous = null)
+    {
+        return new static(
+            sprintf(
+                'Could not evaluate the expression "%s".',
+                $value->getValue()
+            ),
+            $code,
+            $previous
+        );
+    }
 }

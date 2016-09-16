@@ -18,8 +18,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
 final class OptionalTokenParser extends AbstractChainableParserAwareParser
 {
-    //TODO: review those kinds of constants and consider making them internals
-    /** @internal */
+    /** @private */
     const REGEX = '/^(?<quantifier>\d+|\d*\.\d+|<.+>)%\? \ *?(?<first_member>[^:]+)(?:\: +(?<second_member>[^\ ]+))?/';
 
     /**

@@ -31,7 +31,7 @@ class EvaluatedValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expression, $value->getValue());
     }
 
-    public function testIsCastableIntoAString()
+    public function testCanBeCastedIntoAString()
     {
         $value = new EvaluatedValue('"Hello"." "."world!"');
 

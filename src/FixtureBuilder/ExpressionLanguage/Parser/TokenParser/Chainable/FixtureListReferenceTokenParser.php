@@ -24,7 +24,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
 {
     use NotClonableTrait;
 
-    /** @internal */
+    /** @private */
     const REGEX = ListNameDenormalizer::REGEX;
 
     /**
@@ -64,7 +64,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
      *
      * @throws ParseException
      *
-     * @return array
+     * @return string[]
      *
      * @example
      *  "@user_{alice, bob}" => ['user_alice', 'user_bob']
@@ -72,10 +72,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
     private function buildReferences(Token $token): array
     {
         $matches = [];
-        $name = substr($token->getValue(), 1);
-        if (false === $name) {
-            throw ParseException::createForToken($token);
-        }
+        $name = (string) substr($token->getValue(), 1);
 
         if (1 !== preg_match(self::REGEX, $name, $matches)) {
             throw ParseException::createForToken($token);

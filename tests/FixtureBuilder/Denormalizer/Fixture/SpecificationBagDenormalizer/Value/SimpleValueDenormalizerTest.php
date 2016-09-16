@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -12,14 +12,8 @@
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value;
 
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
-use Nelmio\Alice\Definition\Fixture\SimpleFixture;
-use Nelmio\Alice\Definition\Flag\DummyFlag;
-use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\ArrayValue;
-use Nelmio\Alice\Definition\Value\DynamicArrayValue;
-use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Exception\RootParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
@@ -102,16 +96,26 @@ class SimpleValueDenormalizerTest extends \PHPUnit_Framework_TestCase
     public function testWhenParserThrowsExceptionDenormalizerAExceptionIsThrown()
     {
         $parserProphecy = $this->prophesize(ParserInterface::class);
-        $parserProphecy->parse(Argument::any())->willThrow(new RootParseException());
+        $parserProphecy
+            ->parse(Argument::any())
+            ->willThrow(
+                $thrownException = new RootParseException('hello world', 10)
+            )
+        ;
         /** @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
         $denormalizer = new SimpleValueDenormalizer($parser);
         try {
-            $denormalizer->denormalize(new FakeFixture(), null, '');
+            $denormalizer->denormalize(new FakeFixture(), null, 'foo');
             $this->fail('Expected throwable to be thrown.');
         } catch (DenormalizationThrowable $throwable) {
-            // expected result
+            $this->assertEquals(
+                'Could not parse value "foo".',
+                $throwable->getMessage()
+            );
+            $this->assertEquals(0, $throwable->getCode());
+            $this->assertEquals($thrownException, $throwable->getPrevious());
         }
     }
 }

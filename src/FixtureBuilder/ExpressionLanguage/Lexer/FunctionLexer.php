@@ -19,7 +19,7 @@ final class FunctionLexer implements LexerInterface
 {
     use NotClonableTrait;
 
-    /** @internal */
+    /** @private */
     const DELIMITER= '___##';
 
     /**

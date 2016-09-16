@@ -70,9 +70,10 @@ final class SimpleValueDenormalizer implements ValueDenormalizerInterface
             throw new UnexpectedValueException(
                 sprintf(
                     'Could not parse value "%s".',
-                    0,
-                    $throwable
-                )
+                    $value
+                ),
+                0,
+                $throwable
             );
         }
     }

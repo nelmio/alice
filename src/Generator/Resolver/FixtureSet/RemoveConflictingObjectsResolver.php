@@ -11,12 +11,18 @@
 
 namespace Nelmio\Alice\Generator\Resolver\FixtureSet;
 
+use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Generator\Resolver\FixtureBagResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * Resolver handing over the resolution to a decorated resolver to then remove any object which has a fixture. This
+ * ensures that when a fixture will refer to another, e.g. "@dummy", it will pick the object "dummy" described by
+ * the fixture and not the injected one if it exists.
+ */
 final class RemoveConflictingObjectsResolver implements FixtureSetResolverInterface
 {
     use NotClonableTrait;
@@ -40,19 +46,9 @@ final class RemoveConflictingObjectsResolver implements FixtureSetResolverInterf
 
         $fixtures = $resolvedFixtureSet->getFixtures();
         $objects = $resolvedFixtureSet->getObjects();
-        if (count($fixtures) < count($objects)) {
-            foreach ($fixtures as $fixture) {
-                if ($objects->has($fixture)) {
-                    $objects = $objects->without($fixture);
-                }
-            }
-
-            return $resolvedFixtureSet->withObjects($objects);
-        }
-        foreach ($objects as $object) {
-            $objectId = $object->getId();
-            if ($fixtures->has($objectId)) {
-                $objects = $objects->without($object);
+        foreach ($fixtures as $fixture) {
+            if ($objects->has($fixture)) {
+                $objects = $objects->without($fixture);
             }
         }
 

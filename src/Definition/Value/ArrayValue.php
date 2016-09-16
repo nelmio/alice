@@ -35,7 +35,7 @@ final class ArrayValue implements ValueInterface
      */
     public function getValue(): array
     {
-        return $this->values;
+        return deep_clone($this->values);
     }
 
     /**
@@ -43,6 +43,6 @@ final class ArrayValue implements ValueInterface
      */
     public function __toString(): string
     {
-        return sprintf('array(%s)', implode('', $this->values));
+        return var_export($this->values, true);
     }
 }

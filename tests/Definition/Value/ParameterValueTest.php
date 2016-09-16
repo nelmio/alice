@@ -63,7 +63,7 @@ class ParameterValueTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame(new MutableValue('v0'), $value->getValue());
     }
 
-    public function testIsCastableIntoAString()
+    public function testCanBeCastedIntoAString()
     {
         $value = new ParameterValue('foo');
         $this->assertEquals('<{foo}>', $value);

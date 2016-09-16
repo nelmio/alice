@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -44,16 +45,22 @@ class SimpleReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($parser->canParse($anotherToken));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: SIMPLE_REFERENCE_TYPE).
-     */
     public function testThrowsAnErrorIfAMalformedTokenIsGiven()
     {
-        $token = new Token('', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE));
+        try {
+            $token = new Token('', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE));
 
-        $parser = new SimpleReferenceTokenParser();
-        $parser->parse($token);
+            $parser = new SimpleReferenceTokenParser();
+            $parser->parse($token);
+            $this->fail('Expected exception to be thrown.');
+        } catch (ParseException $exception) {
+            $this->assertEquals(
+                'Could not parse the token "" (type: SIMPLE_REFERENCE_TYPE).',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
     public function testReturnsAFixtureReferenceValueIfCanParseToken()

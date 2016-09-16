@@ -20,7 +20,7 @@ class ChoiceListValueTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsAValue()
     {
-        $this->assertTrue(is_a(ListValue::class, ValueInterface::class, true));
+        $this->assertTrue(is_a(ChoiceListValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues()
@@ -56,7 +56,7 @@ class ChoiceListValueTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testIsCastableIntoAString()
+    public function testCanBeCastedIntoAString()
     {
         $value = new ChoiceListValue([]);
         $this->assertEquals("(choice) array (\n)", (string) $value);

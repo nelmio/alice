@@ -11,7 +11,9 @@
 
 namespace Nelmio\Alice\Parser;
 
-use Nelmio\Alice\FileLocator\DefaultFileLocator;
+use Nelmio\Alice\Exception\FileLocator\FileNotFoundException;
+use Nelmio\Alice\FileLocator\FakeFileLocator;
+use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
 use Nelmio\Alice\Parser\IncludeProcessor\FakeIncludeProcessor;
 use Nelmio\Alice\ParserInterface;
@@ -39,24 +41,27 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone new RuntimeCacheParser(new FakeParser(), new FakeIncludeProcessor());
+        clone new RuntimeCacheParser(new FakeParser(), new FakeFileLocator(), new FakeIncludeProcessor());
     }
 
-    /**
-     * @dataProvider provideParsableFile
-     */
-    public function testCanParseFile(string $file)
+    public function testCanParseFile()
     {
+        $file = 'foo.php';
         $expected = [new \stdClass()];
 
+        $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
+        $fileLocatorProphecy->locate($file)->willReturn('/path/to/foo.php');
+        /** @var FileLocatorInterface $fileLocator */
+        $fileLocator = $fileLocatorProphecy->reveal();
+
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse($file)->willReturn($expected);
+        $decoratedParserProphecy->parse('/path/to/foo.php')->willReturn($expected);
         /* @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
         $includeProcessor = new FakeIncludeProcessor();
 
-        $parser = new RuntimeCacheParser($decoratedParser, $includeProcessor);
+        $parser = new RuntimeCacheParser($decoratedParser, $fileLocator, $includeProcessor);
         $actual = $parser->parse($file);
 
         $this->assertSame($expected, $actual);
@@ -67,55 +72,83 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testCacheParseResult()
+    public function testParsesTheResultAndCacheIt()
     {
-        $realFilePath = __FILE__;
-        $file1 = $realFilePath;
-        $file2 = __DIR__.'/../Parser/'.basename($realFilePath);
-        $expected = [new \stdClass()];
+        $file1 = 'foo.php';
+        $file2 = '/another/path/to/foo.php';
+        $file3 = 'bar.yml';
+
+        $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
+        $fileLocatorProphecy->locate($file1)->willReturn('/path/to/foo.php');
+        $fileLocatorProphecy->locate($file2)->willReturn('/path/to/foo.php');
+        $fileLocatorProphecy->locate($file3)->willReturn('/path/to/bar.php');
+        /** @var FileLocatorInterface $fileLocator */
+        $fileLocator = $fileLocatorProphecy->reveal();
 
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse($realFilePath)->willReturn($expected);
+        $decoratedParserProphecy
+            ->parse('/path/to/foo.php')
+            ->willReturn(
+                $file1Result = [
+                    'parameters' => [
+                        'foo',
+                    ],
+                ]
+            )
+        ;
+        $decoratedParserProphecy
+            ->parse('/path/to/bar.php')
+            ->willReturn(
+                $file3Result = [
+                    'parameters' => [
+                        'bar',
+                    ],
+                ]
+            )
+        ;
         /* @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
         $includeProcessor = new FakeIncludeProcessor();
 
-        $parser = new RuntimeCacheParser($decoratedParser, $includeProcessor);
+        $parser = new RuntimeCacheParser($decoratedParser, $fileLocator, $includeProcessor);
         $actual1 = $parser->parse($file1);
         $actual2 = $parser->parse($file2);
+        $actual3 = $parser->parse($file3);
 
-        $this->assertSame($expected, $actual1);
-        $this->assertSame($actual1, $actual2);
+        $this->assertSame($file1Result, $actual1);
+        $this->assertSame($file1Result, $actual2);
+        $this->assertSame($file3Result, $actual3);
 
-        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
+        $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(3);
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testDoesntCacheParseResultIfNoAbsolutePathCouldBeRetrieved()
+    public function testThrowsAnExceptionIfFileCouldNotBeFound()
     {
-        $file = 'https://example.com/script.php';
-        $expected = [new \stdClass()];
+        $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
+        $fileLocatorProphecy->locate(Argument::any())->willThrow(FileNotFoundException::class);
+        /** @var FileLocatorInterface $fileLocator */
+        $fileLocator = $fileLocatorProphecy->reveal();
 
-        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse($file)->willReturn($expected);
-        /* @var ParserInterface $decoratedParser */
-        $decoratedParser = $decoratedParserProphecy->reveal();
+        $parser = new RuntimeCacheParser(new FakeParser(), $fileLocator, new FakeIncludeProcessor());
+        try {
+            $parser->parse('/nowhere');
 
-        $includeProcessor = new FakeIncludeProcessor();
-
-        $parser = new RuntimeCacheParser($decoratedParser, $includeProcessor);
-        $actual1 = $parser->parse($file);
-        $actual2 = $parser->parse($file);
-
-        $this->assertSame($expected, $actual1);
-        $this->assertSame($actual1, $actual2);
-
-        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
+            $this->fail('Expected exception to be thrown.');
+        } catch (\InvalidArgumentException $exception) {
+            $this->assertEquals(
+                'The file "/nowhere" could not be found.',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
     public function testProcessesIncludesAndCacheTheResultOfEachIncludedFile()
     {
-        $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
+        $mainFile = '/path/to/main.yml';
         $parsedMainFileContent = [
             'include' => [
                 'file1.yml',
@@ -132,7 +165,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         ];
         $parsedFile2Content = [
             'include' => [
-                self::$dir.'/file3.yml',
+                '/path/to/file3.yml',
             ],
             'Nelmio\Alice\Model\User' => [
                 'user_file2' => [],
@@ -158,20 +191,39 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
+        $fileLocatorProphecy->locate($mainFile)->willReturn($mainFile);
+        $fileLocatorProphecy->locate('file1.yml', '/path/to')->willReturn('/path/to/file1.yml');
+        $fileLocatorProphecy->locate('/path/to/file1.yml')->willReturn('/path/to/file1.yml');
+        $fileLocatorProphecy->locate('another_level/file2.yml', '/path/to')->willReturn('/path/to/file2.yml');
+        $fileLocatorProphecy->locate('/path/to/file2.yml')->willReturn('/path/to/file2.yml');
+        $fileLocatorProphecy->locate('/path/to/file3.yml', '/path/to')->willReturn('/path/to/file3.yml');
+        $fileLocatorProphecy->locate('/path/to/file3.yml')->willReturn('/path/to/file3.yml');
+        /** @var FileLocatorInterface $fileLocator */
+        $fileLocator = $fileLocatorProphecy->reveal();
+
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse(Argument::containingString('main.yml'))->willReturn($parsedMainFileContent);
-        $decoratedParserProphecy->parse(Argument::containingString('file1.yml'))->willReturn($parsedFile1Content);
-        $decoratedParserProphecy->parse(Argument::containingString('file2.yml'))->willReturn($parsedFile2Content);
-        $decoratedParserProphecy->parse(Argument::containingString('file3.yml'))->willReturn($parsedFile3Content);
+        $decoratedParserProphecy->parse('/path/to/main.yml')->willReturn($parsedMainFileContent);
+        $decoratedParserProphecy->parse('/path/to/file1.yml')->willReturn($parsedFile1Content);
+        $decoratedParserProphecy->parse('/path/to/file2.yml')->willReturn($parsedFile2Content);
+        $decoratedParserProphecy->parse('/path/to/file3.yml')->willReturn($parsedFile3Content);
         /* @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $parser = new RuntimeCacheParser($decoratedParser, new DefaultIncludeProcessor(new DefaultFileLocator()));
+        $parser = new RuntimeCacheParser($decoratedParser, $fileLocator, new DefaultIncludeProcessor($fileLocator));
         $actual = $parser->parse($mainFile);
 
         $this->assertSame($expected, $actual);
 
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(4);
+        $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(4);
+
+
         // As the parser cache the results, parsing each file does not re-trigger a parse call
+        $fileLocatorProphecy->locate('file1.yml')->willReturn('/path/to/file1.yml');
+        $fileLocatorProphecy->locate('file2.yml')->willReturn('/path/to/file2.yml');
+        $fileLocatorProphecy->locate('file3.yml')->willReturn('/path/to/file3.yml');
+
         $actual = $parser->parse($mainFile);
         $actualFile1 = $parser->parse('file1.yml');
         $actualFile2 = $parser->parse('file2.yml');
@@ -182,17 +234,7 @@ class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedFile2, $actualFile2);
         $this->assertSame($parsedFile3Content, $actualFile3);
 
-        $decoratedParserProphecy->parse(Argument::containingString('main.yml'))->shouldHaveBeenCalledTimes(1);
-        $decoratedParserProphecy->parse('file1.yml')->shouldHaveBeenCalledTimes(1);
-        $decoratedParserProphecy->parse('file2.yml')->shouldHaveBeenCalledTimes(1);
-        $decoratedParserProphecy->parse('file3.yml')->shouldHaveBeenCalledTimes(1);
-    }
-
-    public function provideParsableFile()
-    {
-        return [
-            'real existing file' => [__FILE__],
-            'inexisting file' => ['/nowhere'],
-        ];
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(4);
+        $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(4 + 4);
     }
 }

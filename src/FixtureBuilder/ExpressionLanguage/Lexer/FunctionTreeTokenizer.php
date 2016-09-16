@@ -14,13 +14,13 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 use Nelmio\Alice\NotClonableTrait;
 
 /**
- * @internal
+ * @private
  */
 final class FunctionTreeTokenizer
 {
     use NotClonableTrait;
 
-    /** @internal */
+    /** @private */
     const DELIMITER= '___##';
 
     /**
@@ -61,7 +61,7 @@ final class FunctionTreeTokenizer
             $value
         );
 
-        return preg_split(sprintf('/%s/', self::DELIMITER), $value, -1, PREG_SPLIT_NO_EMPTY);
+        return preg_split(sprintf('/%s/', self::DELIMITER), $value, null, PREG_SPLIT_NO_EMPTY);
     }
 
     /**

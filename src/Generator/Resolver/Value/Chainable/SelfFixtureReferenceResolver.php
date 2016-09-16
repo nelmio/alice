@@ -43,23 +43,27 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
     /**
      * @inheritdoc
      */
-    public function withGenerator(ObjectGeneratorInterface $generator): self
+    public function withObjectGenerator(ObjectGeneratorInterface $generator): self
     {
-        if ($this->decoratedResolver instanceof ObjectGeneratorAwareInterface) {
-            $this->decoratedResolver = $this->decoratedResolver->withGenerator($generator);
-        }
-        return new self($this->decoratedResolver);
+        $decoratedResolver = ($this->decoratedResolver instanceof ObjectGeneratorAwareInterface)
+            ? $this->decoratedResolver->withObjectGenerator($generator)
+            : $this->decoratedResolver
+        ;
+
+        return new self($decoratedResolver);
     }
 
     /**
      * @inheritdoc
      */
-    public function withResolver(ValueResolverInterface $resolver): self
+    public function withValueResolver(ValueResolverInterface $resolver): self
     {
-        if ($this->decoratedResolver instanceof ValueResolverAwareInterface) {
-            $this->decoratedResolver = $this->decoratedResolver->withResolver($resolver);
-        }
-        return new self($this->decoratedResolver);
+        $decoratedResolver = ($this->decoratedResolver instanceof ValueResolverAwareInterface)
+            ? $this->decoratedResolver->withValueResolver($resolver)
+            : $this->decoratedResolver
+        ;
+
+        return new self($decoratedResolver);
     }
 
     /**

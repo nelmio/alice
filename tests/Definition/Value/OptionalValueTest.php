@@ -102,7 +102,7 @@ class OptionalValueTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testIsCastableIntoAString()
+    public function testCanBeCastedIntoAString()
     {
         $value = new OptionalValue(10, 'foo');
         $this->assertEquals('10%? foo : null', (string) $value);

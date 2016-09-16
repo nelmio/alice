@@ -29,8 +29,8 @@ class HydrationException extends \RuntimeException implements HydrationThrowable
         return new static(
             sprintf(
                 'Could not hydrate the property "%s" of the object "%s" (class: %s).',
-                $object->getId(),
                 $property->getName(),
+                $object->getId(),
                 get_class($object->getInstance())
             ),
             $code,

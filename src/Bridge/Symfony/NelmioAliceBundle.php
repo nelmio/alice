@@ -16,9 +16,6 @@ use Nelmio\Alice\Bridge\Symfony\DependencyInjection\Compiler\RegisterTagServices
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * @internal
- */
 final class NelmioAliceBundle extends Bundle
 {
     /**

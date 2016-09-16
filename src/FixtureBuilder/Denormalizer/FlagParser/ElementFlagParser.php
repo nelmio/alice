@@ -22,7 +22,7 @@ final class ElementFlagParser implements FlagParserInterface
 {
     use NotClonableTrait;
 
-    /** @internal */
+    /** @private */
     const REGEX = '/\s*(?<reference>.+?)\s\((?<stringFlags>.+).*\)$/';
 
     /**

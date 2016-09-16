@@ -19,6 +19,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructorThrowing
 use Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
+use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
@@ -79,14 +80,21 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate fixture "dummy".
-     */
     public function testThrowsAnExceptionIfReflectionFailsWithAnotherErrorThanMethodNotExisting()
     {
-        $fixture = new SimpleFixture('dummy', 'Unknown', SpecificationBagFactory::create());
-        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
+        try {
+            $fixture = new SimpleFixture('dummy', 'Unknown', SpecificationBagFactory::create());
+            $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (InstantiationException $exception) {
+            $this->assertEquals(
+                'Could not instantiate fixture "dummy".',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
     /**

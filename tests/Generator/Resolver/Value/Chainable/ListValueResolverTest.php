@@ -44,7 +44,7 @@ class ListValueResolverTest extends \PHPUnit_Framework_TestCase
     public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new ListValueResolver();
-        $newResolver = $resolver->withResolver(new FakeValueResolver());
+        $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
         $this->assertEquals(new ListValueResolver(), $resolver);
         $this->assertEquals(new ListValueResolver(new FakeValueResolver(), new FakeValueResolver()), $newResolver);

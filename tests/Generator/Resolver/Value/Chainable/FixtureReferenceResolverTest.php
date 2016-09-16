@@ -56,10 +56,10 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
     public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new FixtureReferenceResolver();
-        $newResolverWithGenerator = $resolver->withGenerator(new FakeObjectGenerator());
+        $newResolverWithGenerator = $resolver->withObjectGenerator(new FakeObjectGenerator());
         $newResolverWithResolver = $resolver->withResolver(new FakeValueResolver());
         $newResolverWithBoth = $resolver
-            ->withGenerator(new FakeObjectGenerator())
+            ->withObjectGenerator(new FakeObjectGenerator())
             ->withResolver(new FakeValueResolver())
         ;
 

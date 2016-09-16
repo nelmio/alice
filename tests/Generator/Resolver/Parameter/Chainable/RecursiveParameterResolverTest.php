@@ -43,13 +43,17 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
         clone new RecursiveParameterResolver(new FakeChainableParameterResolver());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected limit for recursive calls to be of at least 2. Got 1 instead.
-     */
     public function testThrowsExceptionIfInvalidRecursionLimitGiven()
     {
-        new RecursiveParameterResolver(new FakeChainableParameterResolver(), 1);
+        try {
+            new RecursiveParameterResolver(new FakeChainableParameterResolver(), 1);
+            $this->fail('Expected exception to be thrown.');
+        } catch (\InvalidArgumentException $exception) {
+            $this->assertEquals(
+                'Expected limit for recursive calls to be of at least 2. Got 1 instead.',
+                $exception->getMessage()
+            );
+        }
     }
 
     public function testWithersReturnNewModifiedInstance()
@@ -308,6 +312,18 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
                 $exception->getMessage()
             );
             $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(5);
+        }
+
+        $resolver = new RecursiveParameterResolver($decoratedResolver, 10);
+        try {
+            $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
+            $this->fail('Expected exception to be thrown.');
+        } catch (RecursionLimitReachedException $exception) {
+            $this->assertEquals(
+                'Recursion limit (10 tries) reached while resolving the parameter "foo"',
+                $exception->getMessage()
+            );
+            $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(15);
         }
     }
 

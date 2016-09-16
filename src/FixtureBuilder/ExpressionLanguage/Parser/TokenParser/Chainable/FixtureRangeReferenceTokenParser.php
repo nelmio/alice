@@ -25,7 +25,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
 {
     use NotClonableTrait;
 
-    /** @internal */
+    /** @private */
     const REGEX = RangeNameDenormalizer::REGEX;
 
     /**
@@ -79,9 +79,6 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
     {
         $matches = [];
         $name = substr($token->getValue(), 1);
-        if (false === $name) {
-            throw ParseException::createForToken($token);
-        }
 
         if (1 !== preg_match(self::REGEX, $name, $matches)) {
             throw ParseException::createForToken($token);

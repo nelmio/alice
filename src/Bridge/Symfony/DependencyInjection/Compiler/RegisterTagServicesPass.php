@@ -13,10 +13,9 @@ namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @internal
+ * @private
  */
 final class RegisterTagServicesPass implements CompilerPassInterface
 {

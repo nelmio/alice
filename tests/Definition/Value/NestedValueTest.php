@@ -45,7 +45,7 @@ class NestedValueTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($arg0, $value->getValue()[0]);
     }
 
-    public function testIsCastableIntoAString()
+    public function testCanBeCastedIntoAString()
     {
         $this->assertEquals("(nested) array (\n)", (string) (new NestedValue([])));
     }

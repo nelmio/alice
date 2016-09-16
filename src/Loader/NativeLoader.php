@@ -108,7 +108,7 @@ use Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\ParameterValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\SelfFixtureReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
-use Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\ValueForCurrentValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry;
@@ -263,7 +263,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new PhpParser(),
         ]);
 
-        return new RuntimeCacheParser($registry, new DefaultIncludeProcessor(new DefaultFileLocator()));
+        return new RuntimeCacheParser($registry, new DefaultFileLocator(), new DefaultIncludeProcessor(new DefaultFileLocator()));
     }
 
     protected function createBuiltInDenormalizer(): DenormalizerInterface
@@ -384,6 +384,9 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new FixtureListReferenceTokenParser(),
             new FixtureMethodReferenceTokenParser(),
             new FixtureRangeReferenceTokenParser(),
+            new IdentityTokenParser(
+                new FunctionTokenParser()
+            ),
             new MethodReferenceTokenParser(),
             new OptionalTokenParser(),
             new ParameterTokenParser(),
@@ -444,7 +447,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new FixturePropertyReferenceResolver(
                 $this->getPropertyAccessor()
             ),
-            new UnresolvedFixtureReferenceResolver(
+            new UnresolvedFixtureReferenceIdResolver(
                 new SelfFixtureReferenceResolver(
                     new FixtureReferenceResolver()
                 )

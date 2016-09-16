@@ -48,7 +48,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
     /**
      * @inheritdoc
      */
-    public function withResolver(ValueResolverInterface $resolver): self
+    public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->generatorFactory->getSeedGenerator(), $resolver);
     }
