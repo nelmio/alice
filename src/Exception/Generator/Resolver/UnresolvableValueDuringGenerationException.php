@@ -21,6 +21,6 @@ class UnresolvableValueDuringGenerationException extends UnresolvableValueExcept
      */
     public static function createFromResolutionThrowable(ResolutionThrowable $previous, int $code = 0)
     {
-        return new static('Could not resolve value during the genration process.', $code, $previous);
+        return new static('Could not resolve value during the generation process.', $code, $previous);
     }
 }
