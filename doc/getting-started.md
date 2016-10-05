@@ -122,7 +122,7 @@ $objectSet = $loader->loadFile(
 ### Symfony
 
 Alice comes with a Symfony Bundle
-[`NelmioAliceBundle`](src/Bridge/Symfony/NelmioAliceBundle.php). To enabled it,
+[`NelmioAliceBundle`](/src/Bridge/Symfony/NelmioAliceBundle.php). To enabled it,
 update your application kernel:
 
 ```php
