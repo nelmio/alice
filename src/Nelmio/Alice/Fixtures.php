@@ -117,7 +117,7 @@ class Fixtures
 
         // glob strings to filenames
         if (!is_array($files)) {
-            $matches = glob($files, GLOB_BRACE);
+            $matches = glob($files, (defined('GLOB_BRACE') ? GLOB_BRACE : 0));
             if (!$matches && !file_exists($files)) {
                 throw new \InvalidArgumentException('The file could not be found: '.$files);
             }
