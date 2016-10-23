@@ -143,9 +143,8 @@ final class JobProvider extends BaseProvider
 ```
 
 Then you can add it to the Faker Generator used by Alice by either overridding
-the `NativeLoader::createFakerGenerator()` method or the
-`nelmio_alice.faker.generator` service if you are using a Dependency Injection
-Container.
+the `NativeLoader::createFakerGenerator()` method or register it as a service
+with the tag `nelmio_alice.faker.provider`.
 
 
 Previous chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)<br />
