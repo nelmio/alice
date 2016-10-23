@@ -134,7 +134,7 @@ public function registerBundles()
     //...
     if (in_array($this->getEnvironment(), ['dev', 'test'])) {
         //...
-        $bundles[] = new Hautelook\AliceBundle\HautelookAliceBundle();
+        $bundles[] = new Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle();
     }
 
     return $bundles;
