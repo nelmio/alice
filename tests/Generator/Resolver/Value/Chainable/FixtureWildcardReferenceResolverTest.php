@@ -49,7 +49,7 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
     public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new FixtureWildcardReferenceResolver();
-        $newResolver = $resolver->withResolver(new FakeValueResolver());
+        $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
         $this->assertEquals(new FixtureWildcardReferenceResolver(), $resolver);
         $this->assertEquals(new FixtureWildcardReferenceResolver(new FakeValueResolver()), $newResolver);

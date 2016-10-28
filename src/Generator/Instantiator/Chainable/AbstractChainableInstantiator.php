@@ -21,7 +21,7 @@ use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 /**
- * @internal
+ * @private
  */
 abstract class AbstractChainableInstantiator implements ChainableInstantiatorInterface
 {

@@ -27,7 +27,7 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\NotClonableTrait;
 
 /**
- * @internal
+ * @private
  */
 abstract class AbstractChainableDenormalizer
 implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterface, FlagParserAwareInterface

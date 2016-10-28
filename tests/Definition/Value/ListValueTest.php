@@ -56,7 +56,7 @@ class ListValueTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testIsCastableIntoAString()
+    public function testCanBeCastedIntoAString()
     {
         $value = new ListValue(['a', 'b', new DummyValue('c')]);
         $this->assertEquals('abc', (string) $value);

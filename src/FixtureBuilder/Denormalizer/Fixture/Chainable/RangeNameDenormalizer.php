@@ -17,7 +17,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 
 final class RangeNameDenormalizer extends AbstractChainableDenormalizer
 {
-    /** @internal */
+    /** @private */
     const REGEX = '/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+))\}/';
 
     /**

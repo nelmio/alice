@@ -63,7 +63,7 @@ final class StringMergerParser implements ParserInterface
         }
 
         $lastElement = end($values);
-        if (false === $lastElement || false === is_string($lastElement)) {
+        if (false === is_string($lastElement)) {
             $values[] = $value;
 
             return $values;

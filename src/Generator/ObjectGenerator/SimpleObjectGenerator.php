@@ -50,19 +50,19 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
         CallerInterface $caller
     ) {
         if ($valueResolver instanceof ObjectGeneratorAwareInterface) {
-            $valueResolver = $valueResolver->withGenerator($this);
+            $valueResolver = $valueResolver->withObjectGenerator($this);
         }
 
         if ($instantiator instanceof ValueResolverAwareInterface) {
-            $instantiator = $instantiator->withResolver($valueResolver);
+            $instantiator = $instantiator->withValueResolver($valueResolver);
         }
 
         if ($hydrator instanceof ValueResolverAwareInterface) {
-            $hydrator = $hydrator->withResolver($valueResolver);
+            $hydrator = $hydrator->withValueResolver($valueResolver);
         }
 
         if ($caller instanceof ValueResolverAwareInterface) {
-            $caller = $caller->withResolver($valueResolver);
+            $caller = $caller->withValueResolver($valueResolver);
         }
 
         $this->instantiator = $instantiator;

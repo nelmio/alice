@@ -26,6 +26,54 @@ class IncludeDataMergerTest extends \PHPUnit_Framework_TestCase
         $this->merger = new IncludeDataMerger();
     }
 
+    public function testMergesNonArrayData()
+    {
+        $data = [
+            'parameters' => 'foo',
+        ];
+        $include = [
+            'parameters' => 'bar',
+        ];
+        $expected = [
+            'parameters' => 'foo',
+        ];
+
+        $actual = $this->merger->mergeInclude($data, $include);
+        $this->assertSame($expected, $actual);
+
+
+        $data = [
+            'parameters' => [
+                'foo',
+            ],
+        ];
+        $include = [
+            'parameters' => 'bar',
+        ];
+        $expected = [
+            'parameters' => [
+                'foo',
+            ],
+        ];
+
+        $actual = $this->merger->mergeInclude($data, $include);
+        $this->assertSame($expected, $actual);
+
+
+        $data = [
+            'parameters' => 'foo',
+        ];
+        $include = [
+            'parameters' => ['bar'],
+        ];
+        $expected = [
+            'parameters' => 'foo',
+        ];
+
+        $actual = $this->merger->mergeInclude($data, $include);
+        $this->assertSame($expected, $actual);
+    }
+
     public function testMergesParametersAndReturnTheResult()
     {
         $data = [

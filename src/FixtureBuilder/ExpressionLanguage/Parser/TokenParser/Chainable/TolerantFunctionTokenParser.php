@@ -26,7 +26,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
 {
     use NotClonableTrait;
 
-    /** @internal */
+    /** @private */
     const REGEX = '/(\)>)(\ *)</';
 
     /**
@@ -50,7 +50,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
     /**
      * @inheritdoc
      */
-    public function withParser(ParserInterface $parser)
+    public function withParser(ParserInterface $parser): self
     {
         return new self($this->functionTokenParser, $parser);
     }

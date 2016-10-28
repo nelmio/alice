@@ -11,6 +11,8 @@
 
 namespace Nelmio\Alice\Parser;
 
+use Nelmio\Alice\Exception\FileLocator\FileNotFoundException;
+use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\NotClonableTrait;
 
@@ -35,13 +37,19 @@ final class RuntimeCacheParser implements ParserInterface
     private $parser;
 
     /**
+     * @var FileLocatorInterface
+     */
+    private $fileLocator;
+
+    /**
      * @var IncludeProcessorInterface
      */
     private $includeProcessor;
 
-    public function __construct(ParserInterface $parser, IncludeProcessorInterface $includeProcessor)
+    public function __construct(ParserInterface $parser, FileLocatorInterface $fileLocator, IncludeProcessorInterface $includeProcessor)
     {
         $this->parser = $parser;
+        $this->fileLocator = $fileLocator;
         $this->includeProcessor = $includeProcessor;
     }
 
@@ -50,30 +58,25 @@ final class RuntimeCacheParser implements ParserInterface
      */
     public function parse(string $file): array
     {
-        $cacheResult = true;
-        $realPath = realpath($file);
-
-        // If realpath() returns false, $realPath is safely casted into an integer (i.e. an array key)
-        if (isset($this->cache[$realPath])) {
-            return $this->cache[$realPath];
+        try {
+            $realPath = $this->fileLocator->locate($file);
+        } catch (FileNotFoundException $exception) {
+            throw new \InvalidArgumentException(
+                sprintf('The file "%s" could not be found.', $file),
+                0,
+                $exception
+            );
         }
 
-        // $file could not be resolved. This either means the file does not exist or is not local.
-        // This doesn't mean the file is impossible to parse, hence it is passed to the decorated
-        // parser without caching the result.
-        if (false === $realPath) {
-            $cacheResult = false;
-            $realPath = $file;
+        if (array_key_exists($realPath, $this->cache)) {
+            return $this->cache[$realPath];
         }
 
         $data = $this->parser->parse($realPath);
         if (array_key_exists('include', $data)) {
             $data = $this->includeProcessor->process($this, $file, $data);
         }
-
-        if ($cacheResult) {
-            $this->cache[$realPath] = $data;
-        }
+        $this->cache[$realPath] = $data;
 
         return $data;
     }

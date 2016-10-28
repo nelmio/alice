@@ -40,7 +40,7 @@ final class ArrayValueResolver implements ChainableValueResolverInterface, Value
     /**
      * @inheritdoc
      */
-    public function withResolver(ValueResolverInterface $resolver): self
+    public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }

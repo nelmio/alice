@@ -31,7 +31,7 @@ class VariableValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($variable, $value->getValue());
     }
 
-    public function testIsCastableIntoAString()
+    public function testCanBeCastedIntoAString()
     {
         $value = new VariableValue('username');
 

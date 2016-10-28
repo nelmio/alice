@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\VariableValue;
+use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
@@ -45,16 +46,22 @@ class VariableTokenParserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($parser->canParse($anotherToken));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: VARIABLE_TYPE).
-     */
     public function testThrowsAnExceptionIfCouldNotParseToken()
     {
-        $token = new Token('', new TokenType(TokenType::VARIABLE_TYPE));
-        $parser = new VariableTokenParser(new FakeParser());
+        try {
+            $token = new Token('', new TokenType(TokenType::VARIABLE_TYPE));
+            $parser = new VariableTokenParser(new FakeParser());
 
-        $parser->parse($token);
+            $parser->parse($token);
+            $this->fail('Expected exception to be thrown.');
+        } catch (ParseException $exception) {
+            $this->assertEquals(
+                'Could not parse the token "" (type: VARIABLE_TYPE).',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
     public function testReturnsADynamicArrayIfCanParseToken()

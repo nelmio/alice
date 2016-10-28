@@ -35,7 +35,7 @@ final class ExistingInstanceInstantiator implements InstantiatorInterface, Value
     public function __construct(InstantiatorInterface $decoratedInstantiator, ValueResolverInterface $resolver = null)
     {
         if ($resolver !== null && $decoratedInstantiator instanceof ValueResolverAwareInterface) {
-            $decoratedInstantiator = $decoratedInstantiator->withResolver($resolver);
+            $decoratedInstantiator = $decoratedInstantiator->withValueResolver($resolver);
         }
 
         $this->instantiator = $decoratedInstantiator;
@@ -44,7 +44,7 @@ final class ExistingInstanceInstantiator implements InstantiatorInterface, Value
     /**
      * @inheritdoc
      */
-    public function withResolver(ValueResolverInterface $resolver): self
+    public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->instantiator, $resolver);
     }

@@ -17,6 +17,8 @@ use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
+use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
+use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\ObjectBag;
 use Prophecy\Argument;
 
@@ -49,6 +51,49 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
     public function testIsNotClonable()
     {
         clone new InstantiatorRegistry([]);
+    }
+
+    public function testPassValueResolverAwarenessPropertyToItsInstantiator()
+    {
+        $resolver = new FakeValueResolver();
+
+        $registry = new InstantiatorRegistry([]);
+        $newRegistry = $registry->withValueResolver($resolver);
+
+        $this->assertEquals(new InstantiatorRegistry([]), $registry);
+        $this->assertEquals(new InstantiatorRegistry([], $resolver), $newRegistry);
+
+
+        $registry = new InstantiatorRegistry([new FakeChainableInstantiator()]);
+        $newRegistry = $registry->withValueResolver($resolver);
+
+        $this->assertEquals(new InstantiatorRegistry([new FakeChainableInstantiator()]), $registry);
+        $this->assertEquals(
+            new InstantiatorRegistry([new FakeChainableInstantiator()], $resolver),
+            $newRegistry
+        );
+
+
+
+        $nonAwareInstantiator = new FakeChainableInstantiator();
+        $nonAwareInstantiator->foo = 'bar';
+
+        $instantiatorProphecy = $this->prophesize(ChainableInstantiatorInterface::class);
+        $instantiatorProphecy->willImplement(ValueResolverAwareInterface::class);
+        $instantiatorProphecy->withValueResolver($resolver)->willReturn(new FakeChainableInstantiator());
+        /** @var ChainableInstantiatorInterface $instantiator */
+        $instantiator = $instantiatorProphecy->reveal();
+
+        $registry = new InstantiatorRegistry([$nonAwareInstantiator, $instantiator]);
+        $newRegistry = $registry->withValueResolver($resolver);
+
+        $this->assertEquals(new InstantiatorRegistry([$nonAwareInstantiator, $instantiator]), $registry);
+        $this->assertEquals(
+            new InstantiatorRegistry([$nonAwareInstantiator, new FakeChainableInstantiator()], $resolver),
+            $newRegistry
+        );
+
+        $instantiatorProphecy->withValueResolver(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
     public function testIterateOverEveryInstantiatorAndUseTheFirstValidOne()

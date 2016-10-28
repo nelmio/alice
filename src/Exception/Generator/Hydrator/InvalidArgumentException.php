@@ -13,8 +13,14 @@ namespace Nelmio\Alice\Exception\Generator\Hydrator;
 
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\ObjectInterface;
+use Nelmio\Alice\Throwable\HydrationThrowable;
 
-class InvalidArgumentException extends HydrationException
+/**
+ * Unlike most InvalidArgumentException thrown, this one is not a LogicException as in the context of hydration, this
+ * exception can be thrown because the wrong accessor is used and hence should be catchable to try another accessor
+ * for example.
+ */
+class InvalidArgumentException extends \RuntimeException implements HydrationThrowable
 {
     /**
      * @inheritdoc
@@ -24,8 +30,8 @@ class InvalidArgumentException extends HydrationException
         return new static(
             sprintf(
                 'Invalid value given for the property "%s" of the object "%s" (class: %s).',
-                $object->getId(),
                 $property->getName(),
+                $object->getId(),
                 get_class($object->getInstance())
             ),
             $code,

@@ -61,14 +61,7 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         try {
             $evaluatedExpression = $evaluateExpression($expression);
         } catch (\Throwable $throwable) {
-            throw new UnresolvableValueException(
-                sprintf(
-                    'Could not evaluate the expression "%s".',
-                    $value->getValue()
-                ),
-                0,
-                $throwable
-            );
+            throw UnresolvableValueException::couldNotEvaluateExpression($value, 0, $throwable);
         }
 
         return new ResolvedValueWithFixtureSet($evaluatedExpression, $fixtureSet);

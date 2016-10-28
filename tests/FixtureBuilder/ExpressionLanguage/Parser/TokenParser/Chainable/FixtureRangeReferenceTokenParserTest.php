@@ -13,7 +13,6 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
-use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -67,6 +66,18 @@ class FixtureRangeReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
         $token = new Token('@user{1..10', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
         $parser = new FixtureRangeReferenceTokenParser();
 
+        $parser->parse($token);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedExceptionMessage Could not parse the token "" (type: RANGE_REFERENCE_TYPE).
+     */
+    public function testThrowsAnExceptionIfAMalformedTokenIsGiven()
+    {
+        $token = new Token('', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
+
+        $parser = new FixtureListReferenceTokenParser();
         $parser->parse($token);
     }
 

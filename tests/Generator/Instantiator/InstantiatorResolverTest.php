@@ -43,7 +43,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver()),
-            (new InstantiatorResolver(new FakeInstantiator()))->withResolver(new FakeValueResolver())
+            (new InstantiatorResolver(new FakeInstantiator()))->withValueResolver(new FakeValueResolver())
         );
     }
 

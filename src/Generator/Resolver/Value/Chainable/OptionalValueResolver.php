@@ -41,7 +41,7 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
     /**
      * @inheritdoc
      */
-    public function withResolver(ValueResolverInterface $resolver): self
+    public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }

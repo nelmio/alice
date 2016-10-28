@@ -15,7 +15,7 @@ use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionEx
 use Nelmio\Alice\NotClonableTrait;
 
 /**
- * @internal
+ * @private
  */
 final class FunctionTokenizer
 {
@@ -82,7 +82,7 @@ final class FunctionTokenizer
 
         foreach ($tokens as $key => $value) {
             if ($this->tokenizer->isOpeningToken($value)) {
-                $functions[$key] = true;
+                $functions[$key] = null;    // The value here is ignored
 
                 continue;
             }

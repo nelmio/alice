@@ -13,7 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 final class ListNameDenormalizer extends AbstractChainableDenormalizer
 {
-    /** @internal */
+    /** @private */
     const REGEX = '/\{(?<list>[^,\s]+(?:,\s[^,\s]+)+)\}/';
 
     /**

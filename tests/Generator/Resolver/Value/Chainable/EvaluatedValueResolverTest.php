@@ -63,18 +63,25 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not evaluate the expression ""unclosed string".
-     */
     public function testThrowsAnExceptionIfInvalidExpression()
     {
-        $value = new EvaluatedValue('"unclosed string');
-        $fixture = new FakeFixture();
-        $set = ResolvedFixtureSetFactory::create();
+        try {
+            $value = new EvaluatedValue('"unclosed string');
+            $fixture = new FakeFixture();
+            $set = ResolvedFixtureSetFactory::create();
 
-        $resolver = new EvaluatedValueResolver();
-        $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
+            $resolver = new EvaluatedValueResolver();
+            $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (UnresolvableValueException $exception) {
+            $this->assertEquals(
+                'Could not evaluate the expression ""unclosed string".',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
     /**

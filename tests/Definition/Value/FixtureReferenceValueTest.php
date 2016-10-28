@@ -34,4 +34,13 @@ class FixtureReferenceValueTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(true, 'Nothing to do.');
     }
+
+    public function testCanBeCastedIntoAString()
+    {
+        $value = new FixtureReferenceValue('');
+        $this->assertEquals('@', (string) $value);
+
+        $value = new FixtureReferenceValue('user0');
+        $this->assertEquals('@user0', (string) $value);
+    }
 }

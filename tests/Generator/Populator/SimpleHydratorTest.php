@@ -46,7 +46,7 @@ class SimpleHydratorTest extends \PHPUnit_Framework_TestCase
     public function testIsValueResolverAware()
     {
         $this->assertEquals(
-            (new SimpleHydrator(new FakePropertyHydrator()))->withResolver(new FakeValueResolver()),
+            (new SimpleHydrator(new FakePropertyHydrator()))->withValueResolver(new FakeValueResolver()),
             new SimpleHydrator(new FakePropertyHydrator(), new FakeValueResolver())
         );
     }

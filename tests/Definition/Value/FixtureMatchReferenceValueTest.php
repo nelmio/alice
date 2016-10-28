@@ -48,7 +48,7 @@ class FixtureMatchReferenceValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testIsCastableIntoAString()
+    public function testCanBeCastedIntoAString()
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('dummy');
         $this->assertEquals('@(regex: /^dummy.*/)', (string) $value);

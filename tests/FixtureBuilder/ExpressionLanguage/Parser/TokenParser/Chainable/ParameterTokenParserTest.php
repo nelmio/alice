@@ -12,6 +12,7 @@
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\ParameterValue;
+use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -44,16 +45,22 @@ class ParameterTokenParserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($parser->canParse($anotherToken));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: PARAMETER_TYPE).
-     */
     public function testThrowsAnErrorIfPassedParameterIsMalformed()
     {
-        $token = new Token('', new TokenType(TokenType::PARAMETER_TYPE));
-        $parser = new ParameterTokenParser();
+        try {
+            $token = new Token('', new TokenType(TokenType::PARAMETER_TYPE));
+            $parser = new ParameterTokenParser();
 
-        $parser->parse($token);
+            $parser->parse($token);
+            $this->fail('Expected exception to be thrown.');
+        } catch (ParseException $exception) {
+            $this->assertEquals(
+                'Could not parse the token "" (type: PARAMETER_TYPE).',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
     public function testReturnsAParameterValueIfCanParseToken()

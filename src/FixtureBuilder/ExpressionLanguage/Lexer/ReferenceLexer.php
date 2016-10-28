@@ -22,14 +22,14 @@ final class ReferenceLexer implements LexerInterface
     use NotClonableTrait;
 
     const PATTERNS = [
-        '/^(@.*->\S+\(.*\))/' => TokenType::METHOD_REFERENCE_TYPE,
-        '/^(@.*->[^\(\)\ \{]+)/' => TokenType::PROPERTY_REFERENCE_TYPE,
-        '/^(@[^\ @\-]+\{\d+\.\.\d+\})/' => TokenType::RANGE_REFERENCE_TYPE,
-        '/^(@[^\ @]+\{.*,.*})/' => TokenType::LIST_REFERENCE_TYPE,
-        '/^(@.*\*)/' => TokenType::WILDCARD_REFERENCE_TYPE,
-        '/^(@.*->.*)/' => null,
-        '/^(@\S+)/' => TokenType::SIMPLE_REFERENCE_TYPE,
-        '/^(@)/' => TokenType::SIMPLE_REFERENCE_TYPE,
+        '/^@.*->\S+\(.*\)/' => TokenType::METHOD_REFERENCE_TYPE,
+        '/^@.*->[^\(\)\ \{]+/' => TokenType::PROPERTY_REFERENCE_TYPE,
+        '/^@[^\ @\-]+\{\d+\.\.\d+\}/' => TokenType::RANGE_REFERENCE_TYPE,
+        '/^@[^\ @]+\{.*,.*}/' => TokenType::LIST_REFERENCE_TYPE,
+        '/^@.*\*/' => TokenType::WILDCARD_REFERENCE_TYPE,
+        '/^@.*->.*/' => null,
+        '/^@\S+/' => TokenType::SIMPLE_REFERENCE_TYPE,
+        '/^@/' => TokenType::SIMPLE_REFERENCE_TYPE,
     ];
 
     /**
@@ -52,7 +52,7 @@ final class ReferenceLexer implements LexerInterface
                     );
                 }
 
-                return [new Token($matches[1], new TokenType($tokenTypeConstant))];
+                return [new Token($matches[0], new TokenType($tokenTypeConstant))];
             }
         }
 

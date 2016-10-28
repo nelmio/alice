@@ -77,7 +77,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
     public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new UniqueValueResolver(new UniqueValuesPool());
-        $newResolver = $resolver->withResolver(new FakeValueResolver());
+        $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
         $this->assertEquals(
             new UniqueValueResolver(new UniqueValuesPool()),

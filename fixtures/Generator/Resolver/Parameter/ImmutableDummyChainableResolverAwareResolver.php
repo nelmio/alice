@@ -18,7 +18,6 @@ use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
-
 final class ImmutableDummyChainableResolverAwareResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
     use NotCallableTrait;
@@ -50,4 +49,3 @@ final class ImmutableDummyChainableResolverAwareResolver implements ChainablePar
         $this->__call(__FUNCTION__, func_get_args());
     }
 }
-

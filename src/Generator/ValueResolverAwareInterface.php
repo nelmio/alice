@@ -18,5 +18,5 @@ interface ValueResolverAwareInterface
      *
      * @return static
      */
-    public function withResolver(ValueResolverInterface $resolver);
+    public function withValueResolver(ValueResolverInterface $resolver);
 }

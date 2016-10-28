@@ -52,22 +52,29 @@ class AbstractChainableInstantiatorTest extends \PHPUnit_Framework_TestCase
         clone $this->instantiator;
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate fixture "dummy".
-     */
     public function testThrowsExceptionIfCannotCreateInstance()
     {
-        $fixture = new DummyFixture('dummy');
-        $set = ResolvedFixtureSetFactory::create();
+        try {
+            $fixture = new DummyFixture('dummy');
+            $set = ResolvedFixtureSetFactory::create();
 
-        $decoratedInstantiatorProphecy = $this->prophesize(AbstractChainableInstantiator::class);
-        $decoratedInstantiatorProphecy->createInstance($fixture)->willThrow(\Error::class);
-        /** @var AbstractChainableInstantiator $decoratedInstantiator */
-        $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
+            $decoratedInstantiatorProphecy = $this->prophesize(AbstractChainableInstantiator::class);
+            $decoratedInstantiatorProphecy->createInstance($fixture)->willThrow(\Error::class);
+            /** @var AbstractChainableInstantiator $decoratedInstantiator */
+            $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
-        $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
-        $instantiator->instantiate($fixture, $set, new GenerationContext());
+            $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
+            $instantiator->instantiate($fixture, $set, new GenerationContext());
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (InstantiationException $exception) {
+            $this->assertEquals(
+                'Could not instantiate fixture "dummy".',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
     /**

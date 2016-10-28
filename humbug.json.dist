@@ -1,0 +1,21 @@
+{
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "fixtures",
+            "src/Bridge",
+            "src/FileLocator/DefaultFileLocator.php",
+            "src/FixtureBuilder/Denormalizer/Fixture/Chainable/RangeNameDenormalizer.php",
+            "src/functions.php",
+            "src/Generator/Resolver/Parameter/Chainable/RecursiveParameterResolver.php",
+            "tests",
+            "vendor"
+        ]
+    },
+    "timeout": 10,
+    "logs": {
+        "text": "humbuglog.txt"
+    }
+}

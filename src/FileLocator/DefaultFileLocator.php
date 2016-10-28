@@ -37,11 +37,11 @@ final class DefaultFileLocator implements FileLocatorInterface
             $file = (null === $currentPath) ? $name : $currentPath.DIRECTORY_SEPARATOR.$name;
         }
 
-        if (false === file_exists($file)) {
+        if (false === $path = realpath($file)) {
             throw new FileNotFoundException(sprintf('The file "%s" does not exist.', $file));
         }
 
-        return $file;
+        return $path;
     }
 
     private function isAbsolutePath(string $file): bool

@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
@@ -58,16 +59,22 @@ class StringArrayTokenParserTest extends \PHPUnit_Framework_TestCase
         $parser->parse($token);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: STRING_ARRAY_TYPE).
-     */
     public function testThrowsAnErrorIfCouldNotParseToken()
     {
-        $token = new Token('', new TokenType(TokenType::STRING_ARRAY_TYPE));
-        $parser = new StringArrayTokenParser(new FakeParser());
+        try {
+            $token = new Token('', new TokenType(TokenType::STRING_ARRAY_TYPE));
+            $parser = new StringArrayTokenParser(new FakeParser());
 
-        $parser->parse($token);
+            $parser->parse($token);
+            $this->fail('Expected exception to be thrown.');
+        } catch (ParseException $exception) {
+            $this->assertEquals(
+                'Could not parse the token "" (type: STRING_ARRAY_TYPE).',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNotNull($exception->getPrevious());
+        }
     }
 
     public function testParsesEachArrayElementAndReturnsTheConstructedArray()

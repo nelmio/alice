@@ -13,6 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\ListValue;
+use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Prophecy\Argument;
 
@@ -139,10 +140,10 @@ class StringMergerParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideOneElementValues
      */
-    public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($value, $expected)
+    public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($parsedValue, $expected)
     {
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse(Argument::any())->willReturn($expected);
+        $decoratedParserProphecy->parse(Argument::any())->willReturn($parsedValue);
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -157,6 +158,11 @@ class StringMergerParserTest extends \PHPUnit_Framework_TestCase
         yield 'one value' => [
             new FakeValue(),
             new FakeValue(),
+        ];
+
+        yield 'one string value' => [
+            'foo',
+            'foo',
         ];
 
         yield 'a list of one value' => [

@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
+use Nelmio\Alice\Definition\Flag\ElementWithToStringFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
@@ -28,6 +29,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterfac
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer
@@ -94,12 +96,14 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
         $specs = [
             'username' => '<name()>',
         ];
-        $flags = (new FlagBag('original'))->withFlag(new ElementFlag('injected_flag'));
+        $flags = new FlagBag('');
 
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse('unparsed_user_id')->willReturn((new FlagBag('user'))->withFlag(new DummyFlag()));
+        $flagParserProphecy->parse('unparsed_user_id')->willReturn(new FlagBag('user'));
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
+
+        $mergedFlags = new FlagBag('user');
 
         $decoratedDenormalizerProphecy = $this->prophesize(FixtureDenormalizerInterface::class);
         $temporaryId = null;
@@ -115,9 +119,92 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
                     }
                 ),
                 $specs,
+                $mergedFlags
+            )
+            ->will(
+                function ($args) use ($fixtures, $className, $specs) {
+                    return $fixtures
+                        ->with(
+                            new SimpleFixture($args[2], $className, SpecificationBagFactory::create())
+                        )
+                        ->with(
+                            new SimpleFixture('bar', 'Dummy', SpecificationBagFactory::create(new NoMethodCall()))
+                        )
+                    ;
+                }
+            )
+        ;
+        /** @var FixtureDenormalizerInterface $decoratedDenormalizer */
+        $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
+
+        $expected = (new FixtureBag())
+            ->with(
+                new TemplatingFixture(
+                    new SimpleFixtureWithFlags(
+                        new SimpleFixture(
+                            'user',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            'resu'
+                        ),
+                        $mergedFlags
+                    )
+                )
+            )
+            ->with(new DummyFixture('foo'))
+            ->with(
+                new SimpleFixture('bar', 'Dummy', SpecificationBagFactory::create(new NoMethodCall()))
+            )
+        ;
+
+        $denormalizer = new DummyAbstractChainableDenormalizer($decoratedDenormalizer, $flagParser);
+        $actual = $denormalizer->denormalize($fixtures, $className, $id, $specs, $flags);
+
+        $this->assertEquals($expected, $actual);
+        $this->stringContains('temporary_id', $temporaryId);
+
+        $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testTheFixtureFlagsWillPrevailOnTheInjectedOnes()
+    {
+        $fixtures = (new FixtureBag())->with(new DummyFixture('foo'));
+        $className = 'Nelmio\Alice\Entity\User';
+        $id = 'unparsed_user_id';
+        $specs = [
+            'username' => '<name()>',
+        ];
+        $flags = (new FlagBag('injected'))
+            ->withFlag(new DummyFlag())
+            ->withFlag(new ElementWithToStringFlag('foo', 'injected_flag'))
+        ;
+
+        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
+        $flagParserProphecy
+            ->parse('unparsed_user_id')
+            ->willReturn(
                 (new FlagBag('user'))
-                    ->withFlag(new ElementFlag('injected_flag'))
-                    ->withFlag(new DummyFlag())
+                    ->withFlag(new ElementFlag('foz'))
+                    ->withFlag(new ElementWithToStringFlag('bar', 'injected_flag'))
+            )
+        ;
+        /** @var FlagParserInterface $flagParser */
+        $flagParser = $flagParserProphecy->reveal();
+
+        $mergedFlags = (new FlagBag('user'))
+            ->withFlag(new ElementFlag('foz'))
+            ->withFlag(new ElementWithToStringFlag('bar', 'injected_flag'))
+            ->withFlag(new DummyFlag())
+        ;
+
+        $decoratedDenormalizerProphecy = $this->prophesize(FixtureDenormalizerInterface::class);
+        $decoratedDenormalizerProphecy
+            ->denormalize(
+                $fixtures,
+                $className,
+                Argument::any(),
+                $specs,
+                $mergedFlags
             )
             ->will(
                 function ($args) use ($fixtures, $className, $specs) {
@@ -148,9 +235,7 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
                             SpecificationBagFactory::create(),
                             'resu'
                         ),
-                        (new FlagBag('user'))
-                            ->withFlag(new ElementFlag('injected_flag'))
-                            ->withFlag(new DummyFlag())
+                        $mergedFlags
                     )
                 )
             )
@@ -161,8 +246,5 @@ class AbstractChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertEquals($expected, $actual);
-        $this->stringContains('temporary_id', $temporaryId);
-
-        $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 }

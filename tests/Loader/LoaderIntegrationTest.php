@@ -18,6 +18,7 @@ use Nelmio\Alice\Entity\Hydrator\CamelCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
 use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy;
+use Nelmio\Alice\Entity\ImmutableStd;
 use Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructor;
@@ -201,22 +202,24 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $set = $this->loader->loadData(
             [
-                \stdClass::class => [
+                ImmutableStd::class => [
                     'dummy' => [
-                        'injected' => false,
+                        '__construct' => [
+                            ['relatedDummy' => '@another_dummy'],
+                        ],
                     ],
-                    'dummy_with_constructor' => [
+                ],
+                \stdClass::class => [
+                    'another_dummy' => [
                         '__construct' => [
                             StdClassFactory::class.'::create' => [['injected' => false]],
                         ],
-                        'injected' => false,
                     ],
                 ],
             ],
             [],
             [
-                'dummy' => StdClassFactory::create(['injected' => true]),
-                'dummy_with_constructor' => StdClassFactory::create(['injected' => true]),
+                'another_dummy' => StdClassFactory::create(['injected' => true]),
             ]
         );
         $objects = $set->getObjects();
@@ -226,8 +229,10 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'dummy' => StdClassFactory::create(['injected' => false]),
-                'dummy_with_constructor' => StdClassFactory::create(['injected' => false]),
+                'dummy' => new ImmutableStd([
+                    'relatedDummy' => StdClassFactory::create(['injected' => false]),
+                ]),
+                'another_dummy' => StdClassFactory::create(['injected' => false]),
             ],
             $objects
         );
@@ -331,33 +336,33 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/^\d{3} \d{3} \d{3}$/', $user->siren);
     }
 
-    public function testLoadFakerFunctionWithPhpArguments()
-    {
-        $this->markTestIncomplete('TODO, see https://github.com/nelmio/alice/issues/498#issuecomment-242488332');
-        $data = [
-            \stdClass::class => [
-                'user' => [
-                    'updatedAt' => '<dateTimeBetween(<("yest"."erday")>, <(strrev("omot")."rrow"))>>',
-                ],
-            ],
-        ];
-
-        $set = $this->loader->loadData($data);
-
-        $this->assertEquals(0, count($set->getParameters()));
-
-        $objects = $set->getObjects();
-        $this->assertEquals(1, count($objects));
-
-        $user = $objects['user'];
-        $this->assertInstanceOf(\stdClass::class, $user);
-
-        $updatedAt = $user->updatedAt;
-        $this->assertInstanceOf(\DateTimeInterface::class, $updatedAt);
-        /** @var \DateTimeInterface $updatedAt */
-        $this->assertGreaterThanOrEqual(strtotime('yesterday'), $updatedAt->getTimestamp());
-        $this->assertLessThanOrEqual(strtotime('tomorrow'), $updatedAt->getTimestamp());
-    }
+//    public function testLoadFakerFunctionWithPhpArguments()
+//    {
+//        $this->markTestIncomplete('TODO, see https://github.com/nelmio/alice/issues/498#issuecomment-242488332');
+//        $data = [
+//            \stdClass::class => [
+//                'user' => [
+//                    'updatedAt' => '<dateTimeBetween(<("yest"."erday")>, <(strrev("omot")."rrow"))>>',
+//                ],
+//            ],
+//        ];
+//
+//        $set = $this->loader->loadData($data);
+//
+//        $this->assertEquals(0, count($set->getParameters()));
+//
+//        $objects = $set->getObjects();
+//        $this->assertEquals(1, count($objects));
+//
+//        $user = $objects['user'];
+//        $this->assertInstanceOf(\stdClass::class, $user);
+//
+//        $updatedAt = $user->updatedAt;
+//        $this->assertInstanceOf(\DateTimeInterface::class, $updatedAt);
+//        /** @var \DateTimeInterface $updatedAt */
+//        $this->assertGreaterThanOrEqual(strtotime('yesterday'), $updatedAt->getTimestamp());
+//        $this->assertLessThanOrEqual(strtotime('tomorrow'), $updatedAt->getTimestamp());
+//    }
 
     public function testLoadSelfReferencedFixture()
     {

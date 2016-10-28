@@ -13,8 +13,9 @@ namespace Nelmio\Alice\Exception\Generator\Hydrator;
 
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\ObjectInterface;
+use Nelmio\Alice\Throwable\HydrationThrowable;
 
-class NoSuchPropertyException extends HydrationException
+class NoSuchPropertyException extends \RuntimeException implements HydrationThrowable
 {
     /**
      * @inheritdoc
@@ -24,8 +25,8 @@ class NoSuchPropertyException extends HydrationException
         return new static(
             sprintf(
                 'Could not hydrate the property "%s" of the object "%s" (class: %s).',
-                $object->getId(),
                 $property->getName(),
+                $object->getId(),
                 get_class($object->getInstance())
             ),
             $code,

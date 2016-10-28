@@ -13,8 +13,9 @@ namespace Nelmio\Alice\Exception\Generator\Hydrator;
 
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\ObjectInterface;
+use Nelmio\Alice\Throwable\HydrationThrowable;
 
-class PropertyAccessException extends HydrationException
+class PropertyAccessException extends \RuntimeException implements HydrationThrowable
 {
     /**
      * @inheritdoc
@@ -28,8 +29,8 @@ class PropertyAccessException extends HydrationException
         return new static(
             sprintf(
                 'Could not access to the property "%s" of the object "%s" (class: %s).',
-                $object->getId(),
                 $property->getName(),
+                $object->getId(),
                 get_class($object->getInstance())
             ),
             $code,

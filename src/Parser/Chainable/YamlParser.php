@@ -64,18 +64,11 @@ final class YamlParser implements ChainableParserInterface
 
             // $data is null only if the YAML file was empty; otherwise an exception is thrown
             return (null === $data) ? [] : $data;
-        } catch (SymfonyParseException $exception) {
-            throw new ParseException(
-                sprintf('The file "%s" does not contain valid YAML.', $file),
-                0,
-                $exception
-            );
-        } catch (\Exception $error) {
-            throw new ParseException(
-                sprintf('Could not parse the file "%s".', $file),
-                0,
-                $error
-            );
+        } catch (\Exception $exception) {
+            if ($exception instanceof SymfonyParseException) {
+                throw ParseException::createForInvalidYaml($file, 0, $exception);
+            }
+            throw ParseException::createForUnparsableFile($file, 0, $exception);
         }
     }
 }

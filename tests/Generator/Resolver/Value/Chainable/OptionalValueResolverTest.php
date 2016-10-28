@@ -41,7 +41,7 @@ class OptionalValueResolverTest extends \PHPUnit_Framework_TestCase
     public function testWithersReturnNewModifiedInstance()
     {
         $resolver = new OptionalValueResolver();
-        $newResolver = $resolver->withResolver(new FakeValueResolver());
+        $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
         $this->assertEquals(new OptionalValueResolver(), $resolver);
         $this->assertEquals(new OptionalValueResolver(new FakeValueResolver(), new FakeValueResolver()), $newResolver);
