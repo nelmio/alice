@@ -25,9 +25,13 @@ Main differences between 2.x and 3.x:
 
 The two entry points of the library are the `DataLoader` and `FileLoader`:
 
-![FileLoader](doc/img/FileLoader.png)
+<a href="/nelmio/alice/blob/master/doc/img/FileLoader.png" target="_blank">
+    <img src="/nelmio/alice/raw/master/doc/img/FileLoader.png" alt="FileLoader" style="height: 300px; max-width:100%;">
+</a>
 
-![DataLoader](doc/img/DataLoader.png)
+<a href="/nelmio/alice/blob/master/doc/img/DataLoader.png" target="_blank">
+    <img src="/nelmio/alice/raw/master/doc/img/DataLoader.png" alt="DataLoader" style="height: 300px; max-width:100%;">
+</a>
 
 Alice's goal is to render a PHP array containing a description of objects and parameters (with support for injected external objects
 and parameters) into a set of objects called `ObjectSet`.
@@ -103,24 +107,19 @@ services with the right properties (like tags and configuration) to the framewor
 other framework special features should be handled in another library, bundle, module etc.
 
 To avoid any conflicts, the framework dependencies used by the bridges are installed in dedicated folders thanks to
-[bamarni composer plugin][3]. As a result, if you want to run the tests for Symfony, you must run the tests with
+[bamarni bin composer plugin][3] and [theofidry inheritance composer plugin][4]. As a result, if you want to run the tests for Symfony, you must run the tests with
 `phpunit_symfony.xml.dist` instead of `phpunit.xml.dist`.
 
-The test suite also uses the groups annotations:
-
-- `integration`: integration tests
-- `symfony`: Symfony bridge related tests
-- no group: any unit test
-
-For example to run only the Symfony bridge integration tests:
-
-`$ vendor/bin/phpunit -c phpunit_symfony.xml.dist --group=integration,symfony`
+To run the tests, simply run `bin/tests.sh`.
 
 The tests should be descriptive and are "testdox friendly" i.e. if you are using the testdox
 option, you will get something like:
 
-![Testdox](doc/img/testdox.png)
+<a href="/nelmio/alice/blob/master/doc/img/testdox.png" target="_blank">
+    <img src="/nelmio/alice/raw/master/doc/img/testdox.png" alt="Testdox" style="height: 250px; max-width:100%;">
+</a>
 
 [1]: https://github.com/fzaninotto/Faker
 [2]: https://github.com/sebastianbergmann/phpunit
 [3]: https://github.com/bamarni/composer-bin-plugin
+[4]: https://github.com/theofidry/composer-inheritance-plugin

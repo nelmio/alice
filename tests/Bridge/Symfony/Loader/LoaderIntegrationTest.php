@@ -15,7 +15,6 @@ use Nelmio\Alice\Loader\IsolatedSymfonyLoader;
 
 /**
  * @group integration
- * @group symfony
  */
 class LoaderIntegrationTest extends \Nelmio\Alice\Loader\LoaderIntegrationTest
 {

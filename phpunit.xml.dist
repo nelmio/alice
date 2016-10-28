@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ This file is part of the Alice package.
+  ~
+  ~ (c) Nelmio <hello@nelm.io>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.2/phpunit.xsd"
          backupGlobals="false"
@@ -42,19 +52,15 @@
             <file>tests/FixtureBuilder/ExpressionLanguage/TokenTest.php</file>
         </testsuite>
         <testsuite name="Independent tests">
-            <directory>tests/</directory>
+            <directory>tests</directory>
+            <exclude>tests/Bridge</exclude>
         </testsuite>
     </testsuites>
-
-    <groups>
-        <exclude>
-            <group>symfony</group>
-        </exclude>
-    </groups>
 
     <filter>
         <whitelist>
             <directory>src</directory>
+            <exclude>src/Bridge</exclude>
         </whitelist>
     </filter>
 

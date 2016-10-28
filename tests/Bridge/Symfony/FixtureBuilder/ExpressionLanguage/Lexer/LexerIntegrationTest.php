@@ -17,7 +17,6 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\IsolatedSymfonyBuiltInL
  * {@inheritdoc}
  *
  * @group integration
- * @group symfony
  */
 class LexerIntegrationTest extends \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerIntegrationTest
 {
