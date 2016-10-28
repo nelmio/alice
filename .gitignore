@@ -4,3 +4,4 @@ vendor/
 dist/
 bin/
 vendor-bin/*/vendor/
+humbuglog.txt

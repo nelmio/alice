@@ -1,6 +1,6 @@
 {
-    "require": {
+    "require-dev": {
         "symfony/symfony": "^3.1",
-        "nelmio/alice": "dev-master"
+        "theofidry/composer-inheritance-plugin": "^1.0@dev"
     }
 }
