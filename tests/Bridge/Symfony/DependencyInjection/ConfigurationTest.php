@@ -17,7 +17,6 @@ use Symfony\Component\Config\Definition\Processor;
 /**
  * @covers \Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
  * @group integration
- * @group symfony
  */
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {

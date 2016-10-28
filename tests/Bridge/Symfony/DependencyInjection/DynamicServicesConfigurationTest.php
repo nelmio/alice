@@ -23,7 +23,6 @@ use Nelmio\Alice\Symfony\KernelFactory;
  * @coversNothing
  *
  * @group integration
- * @group symfony
  */
 class DynamicServicesConfigurationTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +33,7 @@ class DynamicServicesConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->kernel = KernelFactory::createKernel(__DIR__.'/../Application/config_custom.yml');
+        $this->kernel = KernelFactory::createKernel(__DIR__.'/../../../../fixtures/Bridge/Symfony/Application/config_custom.yml');
         $this->kernel->boot();
     }
 

@@ -3,5 +3,6 @@ vendor/
 .php_cs.cache
 dist/
 bin/
+!bin/test.sh
 vendor-bin/*/vendor/
 humbuglog.txt

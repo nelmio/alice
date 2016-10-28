@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   ~ This file is part of the Alice package.
   ~
@@ -17,47 +18,14 @@
 >
 
     <testsuites>
-        <testsuite name="Dependent tests">
-            <file>tests/Definition/PropertyTest.php</file>
-            <file>tests/Definition/PropertyBagTest.php</file>
-            <file>tests/Definition/MethodCallBagTest.php</file>
-            <file>tests/Definition/SpecificationBagTest.php</file>
-            <file>tests/Definition/FlagBagTest.php</file>
-            <file>tests/Definition/Fixture/SimpleFixtureTest.php</file>
-            <file>tests/Definition/Fixture/SimpleFixtureWithFlagsTest.php</file>
-            <file>tests/Definition/Fixture/TemplatingFixtureTest.php</file>
-            <file>tests/Definition/ServiceReference/FixtureReferenceTest.php</file>
-            <file>tests/Definition/Fixture/TemplatingTest.php</file>
-            <file>tests/Definition/MethodCall/OptionalMethodCallTest.php</file>
-            <file>tests/Definition/Value/FunctionCallValueTest.php</file>
-            <file>tests/Definition/Value/FixtureMethodCallValueTest.php</file>
-            <file>tests/Definition/Value/FixtureReferenceValueTest.php</file>
-            <file>tests/Definition/Value/FixturePropertyValueTest.php</file>
-            <file>tests/Definition/Value/FixturePropertyValueTest.php</file>
-            <file>tests/Definition/Value/UniqueValueTest.php</file>
-            <file>tests/ParameterTest.php</file>
-            <file>tests/ParameterBagTest.php</file>
-            <file>tests/FixtureBagTest.php</file>
-            <file>tests/Definition/Object/SimpleObjectTest.php</file>
-            <file>tests/ObjectBagTest.php</file>
-            <file>tests/ObjectSetTest.php</file>
-            <file>tests/FixtureSetTest.php</file>
-            <file>tests/FixtureBuilder/BareFixtureSetTest.php</file>
-            <file>tests/Generator/ResolvedFixtureSetTest.php</file>
-            <file>tests/Generator/ResolvedValueWithFixtureSetTest.php</file>
-            <file>tests/Generator/Resolver/Fixture/TemplatingFixtureBagTest.php</file>
-            <file>tests/Generator/Resolver/UniqueValuesPoolTest.php</file>
-            <file>tests/FixtureBuilder/ExpressionLanguage/TokenTypeTest.php</file>
-            <file>tests/FixtureBuilder/ExpressionLanguage/TokenTest.php</file>
-        </testsuite>
         <testsuite name="Independent tests">
-            <directory>tests/</directory>
+            <directory>tests/Bridge/Symfony</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>src</directory>
+            <directory>src/Bridge/Symfony</directory>
         </whitelist>
     </filter>
 

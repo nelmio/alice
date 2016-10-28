@@ -70,7 +70,7 @@
         </service>
 
         <service id="nelmio_alice.generator.resolver.value.chainable.unresolved_fixture_reference_resolver"
-                 class="Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceResolver">
+                 class="Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver">
             <argument type="service" id="nelmio_alice.generator.resolver.value.chainable.self_fixture_reference_resolver" />
 
             <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
