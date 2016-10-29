@@ -13,6 +13,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\NestedValue;
+use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
@@ -68,7 +69,7 @@ final class SimpleParser implements ParserInterface
      * @param TokenParserInterface $parser
      * @param Token                $token
      *
-     * @return array<ValueInterface, string> Parsed tokens
+     * @return ValueInterface[]|string[] Parsed tokens
      */
     private function parseToken(array $parsedTokens, TokenParserInterface $parser, Token $token): array
     {

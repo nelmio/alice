@@ -12,12 +12,11 @@
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 
 class ProphecyChainableInstantiator extends AbstractChainableInstantiator
 {
     /**
-     * @var ChainableInstantiatorInterface
+     * @var AbstractChainableInstantiator
      */
     private $instantiator;
 

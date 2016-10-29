@@ -14,22 +14,4 @@ namespace Nelmio\Alice\Entity\Hydrator;
 class PascalCaseDummy
 {
     public $PublicProperty;
-    private $SetterProperty;
-    private $PropertyWithPrivateSetter;
-    private $PropertyWithProtectedSetter;
-
-    public function SetSetterProperty($val)
-    {
-        $this->SetterProperty = $val;
-    }
-
-    private function SetPropertyWithPrivateSetter($propertyWithPrivateSetter)
-    {
-        $this->PropertyWithPrivateSetter = $propertyWithPrivateSetter;
-    }
-
-    protected function SetPropertyWithProtectedSetter($propertyWithProtectedSetter)
-    {
-        $this->PropertyWithProtectedSetter = $propertyWithProtectedSetter;
-    }
 }

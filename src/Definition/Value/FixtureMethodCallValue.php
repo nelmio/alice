@@ -19,7 +19,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 final class FixtureMethodCallValue implements ValueInterface
 {
     /**
-     * @var FixtureReferenceValue
+     * @var ValueInterface
      */
     private $reference;
 

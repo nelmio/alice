@@ -19,7 +19,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 final class FixturePropertyValue implements ValueInterface
 {
     /**
-     * @var FixtureReferenceValue
+     * @var ValueInterface
      */
     private $reference;
 
@@ -28,10 +28,6 @@ final class FixturePropertyValue implements ValueInterface
      */
     private $property;
 
-    /**
-     * @param ValueInterface $reference e.g. 'user0'
-     * @param string         $property  e.g. 'username'
-     */
     public function __construct(ValueInterface $reference, string $property)
     {
         $this->reference = $reference;

@@ -14,7 +14,7 @@ namespace Nelmio\Alice\Exception\Generator\Resolver;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
-class UnresolvableValueDuringGenerationException extends UnresolvableValueException  implements GenerationThrowable
+class UnresolvableValueDuringGenerationException extends UnresolvableValueException implements GenerationThrowable
 {
     /**
      * @return static
