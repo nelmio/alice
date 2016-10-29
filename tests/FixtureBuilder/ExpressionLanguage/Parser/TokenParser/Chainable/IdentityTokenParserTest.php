@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Prophecy\Argument;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\IdentityTokenParser
@@ -45,5 +46,25 @@ class IdentityTokenParserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($parser->canParse($anotherToken));
     }
 
-    //TODO
+    public function testReplaceIdentityIntoAFunctionCallBeforeHandingItOverToItsDecorated()
+    {
+        $token = new Token('<(echo "hello world!")>', new TokenType(TokenType::IDENTITY_TYPE));
+
+        $decoratedParserProphecy = $this->prophesize(ChainableTokenParserInterface::class);
+        $decoratedParserProphecy
+            ->parse(
+                new Token('<identity(echo "hello world!")>', new TokenType(TokenType::FUNCTION_TYPE))
+            )
+            ->willReturn($expected = 'foo')
+        ;
+        /** @var ChainableTokenParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $parser = new IdentityTokenParser($decoratedParser);
+        $actual = $parser->parse($token);
+
+        $this->assertEquals($expected, $actual);
+
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
+    }
 }

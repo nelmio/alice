@@ -42,6 +42,9 @@ class NoSuchPropertyExceptionTest extends \PHPUnit_Framework_TestCase
             'Could not hydrate the property "foo" of the object "dummy" (class: stdClass).',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
 
         $code = 100;
         $previous = new \Error('hello');
@@ -61,12 +64,6 @@ class NoSuchPropertyExceptionTest extends \PHPUnit_Framework_TestCase
         $property = new Property('foo', 'bar');
 
         $exception = ChildNoSuchPropertyException::create($object, $property);
-        $this->assertInstanceOf(ChildNoSuchPropertyException::class, $exception);
-
-        $code = 100;
-        $previous = new \Error('hello');
-
-        $exception = ChildNoSuchPropertyException::create($object, $property, $code, $previous);
         $this->assertInstanceOf(ChildNoSuchPropertyException::class, $exception);
     }
 }

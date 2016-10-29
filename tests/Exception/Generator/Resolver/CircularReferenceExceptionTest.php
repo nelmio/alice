@@ -38,5 +38,30 @@ class CircularReferenceExceptionTest extends \PHPUnit_Framework_TestCase
             'Circular reference detected for the parameter "foo" while resolving ["bar", "baz"].',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
+
+        $code = 500;
+        $previous = new \Error();
+        $exception = CircularReferenceException::createForParameter('foo', ['bar' => 1, 'baz' => 0], $code, $previous);
+
+        $this->assertEquals(
+            'Circular reference detected for the parameter "foo" while resolving ["bar", "baz"].',
+            $exception->getMessage()
+        );
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
+    }
+
+    public function testIsExtensible()
+    {
+        $exception = ChildCircularReferenceException::createForParameter('foo', ['bar' => 1, 'baz' => 0]);
+        $this->assertInstanceOf(ChildCircularReferenceException::class, $exception);
     }
 }
+
+class ChildCircularReferenceException extends CircularReferenceException
+{
+}
+

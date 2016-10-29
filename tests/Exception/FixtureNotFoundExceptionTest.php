@@ -31,5 +31,28 @@ class FixtureNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
             'Could not find the fixture "foo".',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
+        $code = 500;
+        $previous = new \Error();
+        $exception = FixtureNotFoundException::create('foo', $code, $previous);
+
+        $this->assertEquals(
+            'Could not find the fixture "foo".',
+            $exception->getMessage()
+        );
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
     }
+
+    public function testIsExtensible()
+    {
+        $exception = ChildFixtureNotFoundException::create('foo');
+        $this->assertInstanceOf(ChildFixtureNotFoundException::class, $exception);
+    }
+}
+
+class ChildFixtureNotFoundException extends FixtureNotFoundException
+{
 }

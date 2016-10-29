@@ -1,5 +1,3 @@
-sudo: false
-
 language: php
 
 cache:
@@ -8,6 +6,7 @@ cache:
 
 php:
   - '7.0'
+  - '7.1'
   - nightly
 
 matrix:
@@ -29,10 +28,17 @@ before_install:
   - set -eo pipefail
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - |
-    if [ "nightly" != "$TRAVIS_PHP_VERSION" ]; then
+    if [ "nightly" != "$TRAVIS_PHP_VERSION" ] && [ "7.1" != "$TRAVIS_PHP_VERSION" ]; then
         phpenv config-rm xdebug.ini
     fi
-  - PHPUNIT_CONFIG='phpunit.xml.dist'
+  - |
+    if [ -n "$SYMFONY_VERSION" ]; then
+        PHPUNIT_BIN=vendor-bin/symfony/bin/phpunit
+        PHPUNIT_CONFIG=phpunit_symfony.xml.dist
+    else
+        PHPUNIT_BIN=bin/phpunit
+        PHPUNIT_CONFIG=phpunit.xml.dist
+    fi
   - PHPUNIT_FLAGS='--stop-on-failure --verbose'
 
 install:
@@ -40,25 +46,15 @@ install:
   - |
     if [ -n "$SYMFONY_VERSION" ]; then
         composer bin symfony require --no-update symfony/symfony "symfony/symfony:${SYMFONY_VERSION}"
-        PHPUNIT_CONFIG='phpunit_symfony.xml.dist'
     fi
   - composer bin all install
 
 script:
   - |
     if [ -n "$COVERAGE" ]; then
-        phpdbg -qrr bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration,symfony
-        if [ -n "$SYMFONY_VERSION" ]; then
-            phpdbg -qrr bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=symfony
-        else
-            phpdbg -qrr bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=integration --exclude-group=symfony
-        fi
+        phpdbg -qrr $PHPUNIT_BIN -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration
     else
-        if [ -n "$SYMFONY_VERSION" ]; then
-            bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --group=symfony
-        else
-            bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --exclude-group=symfony
-        fi
+        $PHPUNIT_BIN -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS
     fi
 
 notifications:

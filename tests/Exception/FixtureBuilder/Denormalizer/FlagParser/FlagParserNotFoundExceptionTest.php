@@ -33,14 +33,19 @@ class FlagParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
     public function testTestCreateNewException()
     {
         $exception = FlagParserNotFoundException::create('foo');
+
         $this->assertEquals(
             'No suitable flag parser found to handle the element "foo".',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
 
-        $code = 100;
-        $previous = new \Exception();
+
+        $code = 500;
+        $previous = new \Error();
         $exception = FlagParserNotFoundException::create('foo', $code, $previous);
+
         $this->assertEquals(
             'No suitable flag parser found to handle the element "foo".',
             $exception->getMessage()
@@ -52,14 +57,19 @@ class FlagParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
     public function testTestCreateNewExceptionForUnexpectedCall()
     {
         $exception = FlagParserNotFoundException::createUnexpectedCall('foo');
+
         $this->assertEquals(
             'Expected method "foo" to be called only if it has a flag parser.',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
 
-        $code = 100;
-        $previous = new \Exception();
+
+        $code = 500;
+        $previous = new \Error();
         $exception = FlagParserNotFoundException::createUnexpectedCall('foo', $code, $previous);
+
         $this->assertEquals(
             'Expected method "foo" to be called only if it has a flag parser.',
             $exception->getMessage()

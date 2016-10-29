@@ -42,6 +42,9 @@ class HydrationExceptionTest extends \PHPUnit_Framework_TestCase
             'Could not hydrate the property "foo" of the object "dummy" (class: stdClass).',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
 
         $code = 100;
         $previous = new \Error('hello');
@@ -61,12 +64,6 @@ class HydrationExceptionTest extends \PHPUnit_Framework_TestCase
         $property = new Property('foo', 'bar');
 
         $exception = ChildHydrationException::create($object, $property);
-        $this->assertInstanceOf(ChildHydrationException::class, $exception);
-
-        $code = 100;
-        $previous = new \Error('hello');
-
-        $exception = ChildHydrationException::create($object, $property, $code, $previous);
         $this->assertInstanceOf(ChildHydrationException::class, $exception);
     }
 }

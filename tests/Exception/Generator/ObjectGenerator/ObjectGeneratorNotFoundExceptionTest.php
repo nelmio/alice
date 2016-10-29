@@ -38,5 +38,30 @@ class ObjectGeneratorNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
             'Expected method "dummyMethod" to be called only if it has a generator.',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
+
+        $code = 500;
+        $previous = new \Error();
+        $exception = ObjectGeneratorNotFoundException::createUnexpectedCall('dummyMethod', $code, $previous);
+
+        $this->assertEquals(
+            'Expected method "dummyMethod" to be called only if it has a generator.',
+            $exception->getMessage()
+        );
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
+    }
+
+    public function testIsExtensible()
+    {
+        $exception = ChildObjectGeneratorNotFoundException::createUnexpectedCall('dummyMethod');
+        $this->assertInstanceOf(ChildObjectGeneratorNotFoundException::class, $exception);
     }
 }
+
+class ChildObjectGeneratorNotFoundException extends ObjectGeneratorNotFoundException
+{
+}
+

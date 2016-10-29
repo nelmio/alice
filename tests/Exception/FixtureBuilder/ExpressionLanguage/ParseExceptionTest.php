@@ -36,35 +36,36 @@ class ParseExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $exception = ParseException::createForToken($token);
+        
         $this->assertEquals(
             'Could not parse the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
             $exception->getMessage()
         );
         $this->assertEquals(0, $exception->getCode());
         $this->assertNull($exception->getPrevious());
-    }
 
-    public function testCanCreateExceptionWithTheFactoryWithASpecificCode()
-    {
-        $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-        $exception = ParseException::createForToken($token, 10);
+        
+        $code = 500;
+        $previous = new \Error('hello');
+
+        $exception = ParseException::createForToken($token, $code, $previous);
         $this->assertEquals(
             'Could not parse the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
             $exception->getMessage()
         );
-        $this->assertEquals(10, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-    }
-
-    public function testCanCreateExceptionWithTheFactoryAndAPreviousException()
-    {
-        $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-        $exception = ParseException::createForToken($token, 10, $previous = new \Exception());
-        $this->assertEquals(
-            'Could not parse the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
-            $exception->getMessage()
-        );
-        $this->assertEquals(10, $exception->getCode());
+        $this->assertEquals($code, $exception->getCode());
         $this->assertSame($previous, $exception->getPrevious());
     }
+
+    public function testIsExtensible()
+    {
+        $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
+
+        $exception = ChildParseException::createForToken($token);
+        $this->assertInstanceOf(ChildParseException::class, $exception);
+    }
+}
+
+class ChildParseException extends ParseException
+{
 }

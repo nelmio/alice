@@ -135,10 +135,6 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
         FlagBag $flags
     ): array
     {
-        if (null === $this->denormalizer) {
-            throw DenormalizerNotFoundException::createUnexpectedCall(__METHOD__);
-        }
-
         $tempFixtureId = uniqid('temporary_id');
         $builtFixtures = $this->denormalizer->denormalize(
             $builtFixtures,

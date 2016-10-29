@@ -38,6 +38,20 @@ class DenormalizerNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
             'No suitable fixture denormalizer found to handle the fixture with the reference "foo".',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+        
+        
+        $code = 500;
+        $previous = new \Error('hello');
+
+        $exception = DenormalizerNotFoundException::createForFixture('foo', $code, $previous);
+        $this->assertEquals(
+            'No suitable fixture denormalizer found to handle the fixture with the reference "foo".',
+            $exception->getMessage()
+        );
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
     }
 
     public function testTestCreateNewExceptionWithFactoryForUnexpectedCall()
@@ -48,5 +62,32 @@ class DenormalizerNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
             'Expected method "fake" to be called only if it has a denormalizer.',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
+
+        $code = 500;
+        $previous = new \Error('hello');
+
+        $exception = DenormalizerNotFoundException::createUnexpectedCall('fake', $code, $previous);
+        $this->assertEquals(
+            'Expected method "fake" to be called only if it has a denormalizer.',
+            $exception->getMessage()
+        );
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
     }
+
+    public function testIsExtensible()
+    {
+        $exception = ChildDenormalizerNotFoundException::createForFixture('foo');
+        $this->assertInstanceOf(ChildDenormalizerNotFoundException::class, $exception);
+
+        $exception = ChildDenormalizerNotFoundException::createUnexpectedCall('fake');
+        $this->assertInstanceOf(ChildDenormalizerNotFoundException::class, $exception);
+    }
+}
+
+class ChildDenormalizerNotFoundException extends DenormalizerNotFoundException
+{
 }

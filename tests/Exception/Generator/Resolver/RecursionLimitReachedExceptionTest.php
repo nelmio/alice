@@ -38,5 +38,30 @@ class RecursionLimitReachedExceptionTest extends \PHPUnit_Framework_TestCase
             'Recursion limit (10 tries) reached while resolving the parameter "foo"',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
+
+        $code = 500;
+        $previous = new \Error();
+        $exception = RecursionLimitReachedException::create(10, 'foo', $code, $previous);
+
+        $this->assertEquals(
+            'Recursion limit (10 tries) reached while resolving the parameter "foo"',
+            $exception->getMessage()
+        );
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
+    }
+
+    public function testIsExtensible()
+    {
+        $exception = ChildRecursionLimitReachedException::create(10, 'foo');
+        $this->assertInstanceOf(ChildRecursionLimitReachedException::class, $exception);
     }
 }
+
+class ChildRecursionLimitReachedException extends RecursionLimitReachedException
+{
+}
+

@@ -42,5 +42,36 @@ class UniqueValueGenerationLimitReachedExceptionTest extends \PHPUnit_Framework_
             'Could not generate a unique value after 10 attempts for "unique_id".',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
+        $code = 500;
+        $previous = new \Error();
+        $exception = UniqueValueGenerationLimitReachedException::create(
+            new UniqueValue('unique_id', new \stdClass()),
+            10,
+            $code,
+            $previous
+        );
+
+        $this->assertEquals(
+            'Could not generate a unique value after 10 attempts for "unique_id".',
+            $exception->getMessage()
+        );
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
     }
+
+    public function testIsExtensible()
+    {
+        $exception = ChildUniqueValueGenerationLimitReachedException::create(
+            new UniqueValue('unique_id', new \stdClass()),
+            10
+        );
+        $this->assertInstanceOf(ChildUniqueValueGenerationLimitReachedException::class, $exception);
+    }
+}
+
+class ChildUniqueValueGenerationLimitReachedException extends UniqueValueGenerationLimitReachedException
+{
 }

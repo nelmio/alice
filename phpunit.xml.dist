@@ -60,7 +60,9 @@
     <filter>
         <whitelist>
             <directory>src</directory>
-            <exclude>src/Bridge</exclude>
+            <exclude>
+                <directory>src/Bridge</directory>
+            </exclude>
         </whitelist>
     </filter>
 
