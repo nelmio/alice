@@ -1,5 +1,15 @@
-Alice - Expressive fixtures generator [![Build Status](https://travis-ci.org/nelmio/alice.svg?branch=2.x)](https://travis-ci.org/nelmio/alice)
+Alice - Expressive fixtures generator
 =====================================
+
+[![Package version](http://img.shields.io/packagist/vpre/nelmio/alice.svg?style=flat-square)](https://packagist.org/packages/nelmio/alice)
+[![Build Status](https://img.shields.io/travis/nelmio/alice.svg?branch=master&style=flat-square)](https://travis-ci.org/nelmio/alice?branch=master)
+[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/25fb7890-61cd-4b1b-96b8-33b4db7ec212.svg?style=flat-square)](https://insight.sensiolabs.com/projects/25fb7890-61cd-4b1b-96b8-33b4db7ec212)
+[![Dependency Status](https://www.versioneye.com/user/projects/5813cac941d4bc00128b57b3/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5813cac941d4bc00128b57b3)
+[![Gitter](https://img.shields.io/gitter/room/nelmio/alice.svg?style=flat)](https://gitter.im/hautelook/AliceBundle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+
+[![License](https://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](LICENSE)
+
 
 Relying on [fzaninotto/Faker](https://github.com/fzaninotto/Faker), Alice
 allows you to create a ton of fixtures/fake data for use while developing
