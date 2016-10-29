@@ -42,6 +42,9 @@ class PropertyAccessExceptionTest extends \PHPUnit_Framework_TestCase
             'Could not access to the property "foo" of the object "dummy" (class: stdClass).',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
 
         $code = 100;
         $previous = new \Error('hello');
@@ -61,12 +64,6 @@ class PropertyAccessExceptionTest extends \PHPUnit_Framework_TestCase
         $property = new Property('foo', 'bar');
 
         $exception = ChildPropertyAccessException::create($object, $property);
-        $this->assertInstanceOf(ChildPropertyAccessException::class, $exception);
-
-        $code = 100;
-        $previous = new \Error('hello');
-
-        $exception = ChildPropertyAccessException::create($object, $property, $code, $previous);
         $this->assertInstanceOf(ChildPropertyAccessException::class, $exception);
     }
 }

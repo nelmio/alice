@@ -16,7 +16,9 @@ matrix:
     - php: '7.0'
       env: COVERAGE='true'
     - php: '7.0'
-      env: SYMFONY_VERSION='^3.0'
+      env:
+        - COVERAGE='true'
+        - SYMFONY_VERSION='^3.0'
     - php: '7.0'
       env: SYMFONY_VERSION='^3.1'
     - php: '7.0'
@@ -47,18 +49,9 @@ install:
 script:
   - |
     if [ -n "$COVERAGE" ]; then
-        phpdbg -qrr bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration,symfony
-        if [ -n "$SYMFONY_VERSION" ]; then
-            phpdbg -qrr bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=symfony
-        else
-            phpdbg -qrr bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --coverage-text --group=integration --exclude-group=symfony
-        fi
+        phpdbg -qrr bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration
     else
-        if [ -n "$SYMFONY_VERSION" ]; then
-            bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --group=symfony
-        else
-            bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --exclude-group=symfony
-        fi
+        bin/phpunit -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS
     fi
 
 notifications:

@@ -42,6 +42,9 @@ class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
             'Invalid value given for the property "foo" of the object "dummy" (class: stdClass).',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
 
         $code = 100;
         $previous = new \Error('hello');
@@ -61,12 +64,6 @@ class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
         $property = new Property('foo', 'bar');
 
         $exception = ChildInvalidArgumentException::create($object, $property);
-        $this->assertInstanceOf(ChildInvalidArgumentException::class, $exception);
-
-        $code = 100;
-        $previous = new \Error('hello');
-
-        $exception = ChildInvalidArgumentException::create($object, $property, $code, $previous);
         $this->assertInstanceOf(ChildInvalidArgumentException::class, $exception);
     }
 }

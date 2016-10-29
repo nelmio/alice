@@ -39,27 +39,27 @@ class LexExceptionTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(0, $exception->getCode());
         $this->assertNull($exception->getPrevious());
-    }
 
-    public function testCanCreateExceptionWithTheFactoryWithASpecificCode()
-    {
-        $exception = LexException::create('foo', 10);
+
+        $code = 500;
+        $previous = new \Error('hello');
+
+        $exception = LexException::create('foo', $code, $previous);
         $this->assertEquals(
             'Could not lex the value "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(10, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-    }
-
-    public function testCanCreateExceptionWithTheFactoryAndAPreviousException()
-    {
-        $exception = LexException::create('foo', 10, $previous = new \Exception());
-        $this->assertEquals(
-            'Could not lex the value "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals(10, $exception->getCode());
+        $this->assertEquals($code, $exception->getCode());
         $this->assertSame($previous, $exception->getPrevious());
     }
+
+    public function testIsExtensible()
+    {
+        $exception = ChildLexException::create('foo');
+        $this->assertInstanceOf(ChildLexException::class, $exception);
+    }
+}
+
+class ChildLexException extends LexException
+{
 }

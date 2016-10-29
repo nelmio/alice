@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * Value object representing '<current()>'.
+ * Value object placeholder for '<current()>'.
  */
 final class ValueForCurrentValue implements ValueInterface
 {

@@ -33,20 +33,35 @@ class InstantiationExceptionTest extends \PHPUnit_Framework_TestCase
 
     public function testTestCreateNewExceptionWithFactory()
     {
-        $exception0 = InstantiationException::create(new DummyFixture('foo'));
-        $exception1 = InstantiationException::create(new DummyFixture('foo'), 10, $previous = new \Exception());
+        $exception = InstantiationException::create(new DummyFixture('foo'));
 
         $this->assertEquals(
             'Could not instantiate fixture "foo".',
-            $exception0->getMessage()
+            $exception->getMessage()
         );
-        $this->assertNull($exception0->getPrevious());
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
+
+        $code = 500;
+        $previous = new \Error();
+        $exception = InstantiationException::create(new DummyFixture('foo'), $code, $previous);
 
         $this->assertEquals(
             'Could not instantiate fixture "foo".',
-            $exception1->getMessage()
+            $exception->getMessage()
         );
-        $this->assertEquals(10, $exception1->getCode());
-        $this->assertSame($previous, $exception1->getPrevious());
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
     }
+
+    public function testIsExtensible()
+    {
+        $exception = ChildInstantiationException::create(new DummyFixture('foo'));
+        $this->assertInstanceOf(ChildInstantiationException::class, $exception);
+    }
+}
+
+class ChildInstantiationException extends InstantiationException
+{
 }

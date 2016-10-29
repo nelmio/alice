@@ -29,4 +29,14 @@ class UnexpectedValueExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(is_a(UnexpectedValueException::class, DenormalizationThrowable::class, true));
     }
+
+    public function testIsExtensible()
+    {
+        $exception = new ChildUnexpectedValueException();
+        $this->assertInstanceOf(ChildUnexpectedValueException::class, $exception);
+    }
+}
+
+class ChildUnexpectedValueException extends UnexpectedValueException
+{
 }

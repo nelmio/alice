@@ -41,6 +41,21 @@ class ParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
             'No suitable token parser found to handle the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
+
+        $code = 500;
+        $previous = new \Error('hello');
+
+        $exception = ParserNotFoundException::create($token, $code, $previous);
+        $this->assertEquals(
+            'No suitable token parser found to handle the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
+            $exception->getMessage()
+        );
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
+        
     }
 
     public function testTestCreateNewExceptionForUnexpectedCallWithTheFactory()
@@ -51,5 +66,34 @@ class ParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
             'Expected method "foo" to be called only if it has a parser.',
             $exception->getMessage()
         );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+
+
+        $code = 500;
+        $previous = new \Error('hello');
+
+        $exception = ParserNotFoundException::createUnexpectedCall('foo', $code, $previous);
+        $this->assertEquals(
+            'Expected method "foo" to be called only if it has a parser.',
+            $exception->getMessage()
+        );
+        $this->assertEquals($code, $exception->getCode());
+        $this->assertSame($previous, $exception->getPrevious());
     }
+
+    public function testIsExtensible()
+    {
+        $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
+
+        $exception = ChildParserNotFoundException::create($token);
+        $this->assertInstanceOf(ChildParserNotFoundException::class, $exception);
+
+        $exception = ChildParserNotFoundException::createUnexpectedCall('foo');
+        $this->assertInstanceOf(ChildParserNotFoundException::class, $exception);
+    }
+}
+
+class ChildParserNotFoundException extends ParserNotFoundException
+{
 }

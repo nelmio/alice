@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\FakeMethodCall;
+use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
@@ -65,6 +66,7 @@ class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($fixture->isATemplate());
         $this->assertTrue($fixture->extendsFixtures());
         $this->assertEquals([new FixtureReference('user_base')], $fixture->getExtendedFixturesReferences());
+        $this->assertEquals($flags, $fixture->getFlags());
 
         $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(2);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
