@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\NotClonableTrait;
@@ -61,7 +63,7 @@ final class FunctionTreeTokenizer
             $value
         );
 
-        return preg_split(sprintf('/%s/', self::DELIMITER), $value, null, PREG_SPLIT_NO_EMPTY);
+        return preg_split(sprintf('/%s/', self::DELIMITER), $value, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**

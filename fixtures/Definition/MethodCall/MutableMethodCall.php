@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
@@ -25,7 +27,7 @@ class MutableMethodCall implements MethodCallInterface
     private $caller;
 
     /**
-     * @var string
+     * @var mixed
      */
     private $method;
 
@@ -34,7 +36,7 @@ class MutableMethodCall implements MethodCallInterface
      */
     private $arguments;
 
-    public function __construct(ServiceReferenceInterface $caller = null, string $method, array $arguments = null)
+    public function __construct(ServiceReferenceInterface $caller = null, $method, array $arguments = null)
     {
         $this->caller = $caller;
         $this->method = $method;
@@ -70,7 +72,7 @@ class MutableMethodCall implements MethodCallInterface
         return $this->method;
     }
 
-    public function setMethod(string $method)
+    public function setMethod($method)
     {
         $this->method = $method;
     }

@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nelmio\Alice\Loader;
+declare(strict_types=1);
 
+namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\FixtureBuilderInterface;

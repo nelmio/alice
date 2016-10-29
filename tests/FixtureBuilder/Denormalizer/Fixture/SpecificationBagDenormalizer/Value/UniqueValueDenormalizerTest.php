@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value;
 
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
@@ -20,11 +22,7 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
-use Nelmio\Alice\Exception\RootParseException;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
-use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use Prophecy\Argument;
 
 /**

@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
 use Nelmio\Alice\Exception\Generator\Resolver\RecursionLimitReachedException;
@@ -133,7 +135,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
     {
         foreach ($previous as $key => $value) {
             $new = $new->with(
-                new Parameter($key, $value)
+                new Parameter((string) $key, $value)
             );
         }
 

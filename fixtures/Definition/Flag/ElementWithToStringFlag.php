@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
@@ -30,7 +32,7 @@ class ElementWithToStringFlag implements FlagInterface
         $this->element = $element;
         $this->toString = $toString;
     }
-    
+
     /**
      * @inheritdoc
      */

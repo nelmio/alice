@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
@@ -107,7 +109,7 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
                             $fixtureId,
                             $tempFixture->getClassName(),
                             $tempFixture->getSpecs(),
-                            $valueForCurrent
+                            (string) $valueForCurrent
                         ),
                         $flags->withKey($fixtureId)
                     )
