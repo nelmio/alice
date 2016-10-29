@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
 /**
@@ -16,7 +18,7 @@ namespace Nelmio\Alice\Generator\Resolver\Fixture;
  *
  * More tests in:
  *
- * @see Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolverTest
+ * @see \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolverTest
  */
 class TemplateFixtureResolverTest extends \PHPUnit_Framework_TestCase
 {

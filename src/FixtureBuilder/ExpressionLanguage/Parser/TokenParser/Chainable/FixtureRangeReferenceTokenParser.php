@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\RangeName;
@@ -80,11 +82,11 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
         $matches = [];
         $name = substr($token->getValue(), 1);
 
-        if (1 !== preg_match(self::REGEX, $name, $matches)) {
+        if (1 !== preg_match(self::REGEX, (string) $name, $matches)) {
             throw ParseException::createForToken($token);
         }
         $reference = str_replace(sprintf('{%s}', $matches['range']), $this->token, $name);
 
-        return new RangeName($reference, $matches['from'], $matches['to']);
+        return new RangeName($reference, (int) $matches['from'], (int) $matches['to']);
     }
 }

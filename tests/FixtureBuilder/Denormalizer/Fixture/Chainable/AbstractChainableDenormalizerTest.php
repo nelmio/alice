@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
@@ -29,7 +31,6 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterfac
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\AbstractChainableDenormalizer

@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\Parser;
 
 use Nelmio\Alice\Exception\FileLocator\FileNotFoundException;

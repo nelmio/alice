@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\RangeName;
@@ -96,6 +98,6 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
             $name
         );
 
-        return new RangeName($reference, $matches['from'], $matches['to']);
+        return new RangeName($reference, (int) $matches['from'], (int) $matches['to']);
     }
 }

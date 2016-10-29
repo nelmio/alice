@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 if (false === function_exists('deep_clone')) {
     /**
      * Deep clone the given value.

@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
@@ -75,14 +77,14 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
         foreach ($unresolvedArray as $index => $unresolvedValue) {
             // Iterate over all the values of the array to resolve each of them
             $resolvedParameters = $this->resolver->resolve(
-                new Parameter($index, $unresolvedValue),
+                new Parameter((string) $index, $unresolvedValue),
                 $unresolvedParameters,
                 $resolvedParameters,
                 $context
             );
 
-            $resolvedArray[$index] = $resolvedParameters->get($index);
-            $resolvedParameters = $resolvedParameters->without($index);
+            $resolvedArray[$index] = $resolvedParameters->get((string) $index);
+            $resolvedParameters = $resolvedParameters->without((string) $index);
         }
         $resolvedParameters = $resolvedParameters->with(
             $unresolvedArrayParameter->withValue($resolvedArray)

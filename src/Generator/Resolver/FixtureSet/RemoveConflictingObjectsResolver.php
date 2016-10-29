@@ -9,12 +9,13 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\Generator\Resolver\FixtureSet;
 
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
-use Nelmio\Alice\Generator\Resolver\FixtureBagResolverInterface;
 use Nelmio\Alice\NotClonableTrait;
 
 /**

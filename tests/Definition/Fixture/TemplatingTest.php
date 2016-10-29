@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\Flag\DummyFlag;
@@ -17,7 +19,6 @@ use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
-use Nelmio\Alice\FixtureInterface;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\Templating
