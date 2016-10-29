@@ -20,7 +20,7 @@ use Nelmio\Alice\Throwable\DenormalizationThrowable;
 interface FixtureDenormalizerInterface
 {
     /**
-     * A more specific version of {@see Nelmio\Alice\BuilderInterface} dedicated to fixtures.
+     * A more specific version of {@see \Nelmio\Alice\BuilderInterface} dedicated to fixtures.
      *
      * @param FixtureBag $builtFixtures
      * @param string     $className FQCN (no flags)

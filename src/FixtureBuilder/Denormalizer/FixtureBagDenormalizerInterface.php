@@ -19,7 +19,7 @@ use Nelmio\Alice\Throwable\DenormalizationThrowable;
 interface FixtureBagDenormalizerInterface
 {
     /**
-     * More specific version of {@see Nelmio\Alice\FixtureBuilder\BuilderInterface}.
+     * More specific version of {@see \Nelmio\Alice\FixtureBuilder\BuilderInterface}.
      *
      * Denormalizes the parsed data or a subset of it parsed into a list of fixtures.
      *

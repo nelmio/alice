@@ -18,7 +18,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 
 /**
- * More specific version of {@see Nelmio\Alice\GeneratorInterface}.
+ * More specific version of {@see \Nelmio\Alice\GeneratorInterface}.
  */
 interface ObjectGeneratorInterface
 {
