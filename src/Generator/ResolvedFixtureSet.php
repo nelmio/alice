@@ -18,7 +18,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 
 /**
- * Another version {@see Nelmio\Alice\FixtureSet} where loaded parameters have been resolved and injected parameters
+ * Another version {@see \Nelmio\Alice\FixtureSet} where loaded parameters have been resolved and injected parameters
  * have been merged in the process; And the fixtures flags have been resolved (i.e. fixtures no longer have flags
  * although their specs may still have some).
  */

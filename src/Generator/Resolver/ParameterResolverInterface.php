@@ -18,7 +18,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
- * More specific version of {@see Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface} to resolve a specific
+ * More specific version of {@see \Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface} to resolve a specific
  * parameter.
  */
 interface ParameterResolverInterface

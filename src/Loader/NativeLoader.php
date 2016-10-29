@@ -142,7 +142,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
  * Loader implementation made to be usable without any dependency injection for quick and easy usage. For more advanced
- * usages, use {@see Nelmio\Alice\Loader\SimpleFileLoader} instead or implement your own loader.
+ * usages, use {@see \Nelmio\Alice\Loader\SimpleFileLoader} instead or implement your own loader.
  *
  * @method DataLoaderInterface getBuiltInDataLoader()
  * @method FileLoaderInterface getBuiltInFileLoader()
