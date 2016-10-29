@@ -31,7 +31,7 @@ final class MethodCallWithReference implements MethodCallInterface
     private $method;
 
     /**
-     * @var array
+     * @var ValueInterface[]|array|null
      */
     private $arguments;
 

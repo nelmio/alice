@@ -18,6 +18,8 @@ namespace Nelmio\Alice\Definition;
 interface MethodCallInterface
 {
     /**
+     * @param ValueInterface[]|array|null $arguments
+     *
      * @return static
      */
     public function withArguments(array $arguments = null);

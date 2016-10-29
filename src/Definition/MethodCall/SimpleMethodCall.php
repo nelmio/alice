@@ -25,7 +25,7 @@ final class SimpleMethodCall implements MethodCallInterface
     private $method;
 
     /**
-     * @var array
+     * @var ValueInterface[]|array|null
      */
     private $arguments;
 

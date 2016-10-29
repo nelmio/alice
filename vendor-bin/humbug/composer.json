@@ -2,5 +2,9 @@
     "require-dev": {
         "humbug/humbug": "^1.0@dev",
         "theofidry/composer-inheritance-plugin": "^1.0@dev"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "sort-packages": true
     }
 }

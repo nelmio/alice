@@ -56,7 +56,9 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
         $ids = [];
         $range = $this->buildRange($id);
 
-        for ($currentIndex = $range->getFrom(); $currentIndex <= $range->getTo(); $currentIndex++) {
+        $from = $range->getFrom();
+        $to = $range->getTo();
+        for ($currentIndex = $from; $currentIndex <= $to; $currentIndex++) {
             $ids[
                 str_replace(
                     $this->token,

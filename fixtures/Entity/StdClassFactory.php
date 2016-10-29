@@ -11,8 +11,6 @@
 
 namespace Nelmio\Alice\Entity;
 
-use Entity\ImmutableStd;
-
 class StdClassFactory
 {
     /**

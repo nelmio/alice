@@ -20,6 +20,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Prophecy\Argument;
 
 /**

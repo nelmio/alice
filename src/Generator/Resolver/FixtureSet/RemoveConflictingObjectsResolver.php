@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Generator\Resolver\FixtureSet;
 
-use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
@@ -28,7 +27,7 @@ final class RemoveConflictingObjectsResolver implements FixtureSetResolverInterf
     use NotClonableTrait;
 
     /**
-     * @var FixtureBagResolverInterface
+     * @var FixtureSetResolverInterface
      */
     private $resolver;
 

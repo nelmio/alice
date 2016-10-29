@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class KernelFactory
 {
-    static $environments = [];
+    public static $environments = [];
 
     public static function createKernel(
         string $config = null,
