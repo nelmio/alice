@@ -19,13 +19,8 @@ use Nelmio\Alice\Exception\NoValueForCurrentException;
 /**
  * A fixture is a value object representing an object to be built.
  */
-interface FixtureInterface
+interface FixtureInterface extends FixtureIdInterface
 {
-    /**
-     * @return string e.g. 'dummy0'. May contain flags e.g. 'dummy (extends base_dummy)' depending of the implementation.
-     */
-    public function getId(): string;
-
     /**
      * @return string FQCN. May contain flags depending of the implementation.
      */

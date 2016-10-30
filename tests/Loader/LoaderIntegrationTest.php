@@ -820,7 +820,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\ObjectNotFoundException
+     * @expectedException \Nelmio\Alice\Exception\FixtureNotFoundException
      */
     public function testLoadParsesReferencesInQuotes()
     {
