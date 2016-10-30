@@ -15,6 +15,8 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
@@ -37,11 +39,6 @@ use Prophecy\Argument;
  */
 class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        $this->markTestIncomplete('TODO');
-    }
-
     public function testIsAChainableResolver()
     {
         $this->assertTrue(is_a(FixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));
@@ -55,23 +52,15 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
         clone new FixtureReferenceResolver();
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testIsGeneratorAware()
     {
+        $generator = new FakeObjectGenerator();
+
         $resolver = new FixtureReferenceResolver();
-        $newResolverWithGenerator = $resolver->withObjectGenerator(new FakeObjectGenerator());
-        $newResolverWithResolver = $resolver->withResolver(new FakeValueResolver());
-        $newResolverWithBoth = $resolver
-            ->withObjectGenerator(new FakeObjectGenerator())
-            ->withResolver(new FakeValueResolver())
-        ;
+        $newResolver = $resolver->withObjectGenerator($generator);
 
         $this->assertEquals(new FixtureReferenceResolver(), $resolver);
-        $this->assertEquals(new FixtureReferenceResolver(new FakeObjectGenerator()), $newResolverWithGenerator);
-        $this->assertEquals(new FixtureReferenceResolver(null, new FakeValueResolver()), $newResolverWithResolver);
-        $this->assertEquals(
-            new FixtureReferenceResolver(new FakeObjectGenerator(), new FakeValueResolver()),
-            $newResolverWithBoth
-        );
+        $this->assertEquals(new FixtureReferenceResolver($generator), $newResolver);
     }
 
     public function testCanResolveFixtureReferenceValues()
@@ -89,130 +78,109 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
     public function testCannotResolveValueIfHasNoGenerator()
     {
         $resolver = new FixtureReferenceResolver();
-        $resolver->resolve(new FakeValue(), new FakeFixture(), ResolvedFixtureSetFactory::create());
-    }
-
-    /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver::resolve" to be called only if it has a resolver.
-     */
-    public function testCannotResolveValueIfHasNoResolver()
-    {
-        $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
-        $resolver->resolve(new FakeValue(), new FakeFixture(), ResolvedFixtureSetFactory::create());
-    }
-
-    public function testGenerateTheFixtureAndReturnsTheResolvedSet()
-    {
-        $value = new FixtureReferenceValue('dummy');
-        $fixture = new DummyFixture('dummy');
-        $set = ResolvedFixtureSetFactory::create(
-            $parameters = new ParameterBag(['foo' => 'bar']),
-            $fixtures = (new FixtureBag())->with($fixture)
+        $resolver->resolve(
+            new FakeValue(),
+            new FakeFixture(),
+            ResolvedFixtureSetFactory::create(),
+            [],
+            new GenerationContext()
         );
-        $scope = ['val' => 'scopie'];
-
-        $objectGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
-        $objectGeneratorProphecy
-            ->generate($fixture, $set, new GenerationContext())
-            ->willReturn(
-                $objects = new ObjectBag(['dummy' => new \stdClass()])
-            );
-        /** @var ObjectGeneratorInterface $generator */
-        $generator = $objectGeneratorProphecy->reveal();
-
-        $expected = new ResolvedValueWithFixtureSet(
-            new \stdClass(),
-            new ResolvedFixtureSet(
-                $parameters,
-                (new FixtureBag())->with($fixture),
-                $objects
-            )
-        );
-
-        $resolver = new FixtureReferenceResolver($generator, new FakeValueResolver());
-        $actual = $resolver->resolve($value, new FakeFixture(), $set, $scope);
-
-        $this->assertEquals($expected, $actual);
-
-        $objectGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
-    }
-
-    public function testIfTheReferenceIsAValueThenItWillBeResolvedBeforeGenerateTheFixtureAndReturnsTheResolvedSet()
-    {
-        $value = new FixtureReferenceValue(new FakeValue());
-        $fixture = new DummyFixture('dummy');
-        $set = ResolvedFixtureSetFactory::create(
-            new ParameterBag(['foo' => 'bar']),
-            (new FixtureBag())->with($fixture)
-        );
-        $scope = ['val' => 'scopie'];
-
-        $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
-        $valueResolverProphecy
-            ->resolve(new FakeValue(), $fixture, $set, $scope)
-            ->willReturn(
-                new ResolvedValueWithFixtureSet(
-                    'dummy',
-                    $newSet = ResolvedFixtureSetFactory::create(
-                        $parameters = new ParameterBag(['ping' => 'pong']),
-                        (new FixtureBag())->with($fixture)
-                    )
-                )
-            )
-        ;
-        /** @var ValueResolverInterface $valueResolver */
-        $valueResolver = $valueResolverProphecy->reveal();
-
-        $objectGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
-        $objectGeneratorProphecy
-            ->generate($fixture, $newSet, new GenerationContext())
-            ->willReturn(
-                $objects = new ObjectBag(['dummy' => new \stdClass()])
-            );
-        /** @var ObjectGeneratorInterface $generator */
-        $generator = $objectGeneratorProphecy->reveal();
-
-        $expected = new ResolvedValueWithFixtureSet(
-            new \stdClass(),
-            new ResolvedFixtureSet(
-                $parameters,
-                (new FixtureBag())->with($fixture),
-                $objects
-            )
-        );
-
-        $resolver = new FixtureReferenceResolver($generator, $valueResolver);
-        $actual = $resolver->resolve($value, $fixture, $set, $scope);
-
-        $this->assertEquals($expected, $actual);
-
-        $valueResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
-        $objectGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
     /**
      * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not resolve value "@dummy".
+     * @expectedExceptionMessage Could not resolve value "@foo".
      */
-    public function testIfTheResolvedReferenceIsInvalidThenAnExceptionIsThrown()
+    public function testCannotResolveReferenceIsTheReferenceIsAValue()
     {
-        $value = new FixtureReferenceValue(new DummyValue('dummy'));
+        $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
+        $resolver->resolve(
+            new FixtureReferenceValue(new DummyValue('foo')),
+            new FakeFixture(),
+            ResolvedFixtureSetFactory::create(),
+            [],
+            new GenerationContext()
+        );
+    }
 
-        $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
-        $valueResolverProphecy
-            ->resolve(Argument::cetera())
+    public function testIfTheReferenceRefersToAnInstantiatedFixtureThenReturnsTheInstance()
+    {
+        $value = new FixtureReferenceValue('dummy');
+        $fixture = new FakeFixture();
+        $set = ResolvedFixtureSetFactory::create(
+            null,
+            null,
+            new ObjectBag(['dummy' => $expectedInstance = new \stdClass()])
+        );
+        $scope = [];
+        $context = new GenerationContext();
+
+        $expected = new ResolvedValueWithFixtureSet($expectedInstance, $set);
+
+        $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testIfTheReferenceRefersToANonInstantiatedFixtureThenGenerateItBeforeReturningTheInstance()
+    {
+        $value = new FixtureReferenceValue('dummy');
+        $fixture = new FakeFixture();
+        $set = ResolvedFixtureSetFactory::create(
+            null,
+            $fixtures = (new FixtureBag())->with(
+                $referredFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create())
+            ),
+            null
+        );
+        $scope = [];
+        $context = new GenerationContext();
+
+        $generatorContext = new GenerationContext();
+        $generatorContext->markIsResolvingFixture('dummy');
+
+        $generatorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
+        $generatorProphecy
+            ->generate($referredFixture, $set, $generatorContext)
             ->willReturn(
-                new ResolvedValueWithFixtureSet(
-                    10,
-                    ResolvedFixtureSetFactory::create()
-                )
+                $objects = new ObjectBag(['dummy' => $expectedInstance = new \stdClass()])
             )
         ;
-        /** @var ValueResolverInterface $valueResolver */
-        $valueResolver = $valueResolverProphecy->reveal();
+        /** @var ObjectGeneratorInterface $generator */
+        $generator = $generatorProphecy->reveal();
 
-        $resolver = new FixtureReferenceResolver(new FakeObjectGenerator(), $valueResolver);
-        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create());
+        $expected = new ResolvedValueWithFixtureSet(
+            $expectedInstance,
+            ResolvedFixtureSetFactory::create(
+                null,
+                $fixtures,
+                $objects
+            )
+        );
+
+        $resolver = new FixtureReferenceResolver($generator);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
+
+        $this->assertEquals($expected, $actual);
+        $this->assertEquals($context, $generatorContext);
+
+        $generatorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Exception\FixtureNotFoundException
+     * @expectedExceptionMessage Could not find the fixture "dummy".
+     */
+    public function testIfTheReferenceRefersToANonExistentFixtureAndNoInstanceIsAvailableThenThrowsAnException()
+    {
+        $value = new FixtureReferenceValue('dummy');
+        $fixture = new FakeFixture();
+        $set = ResolvedFixtureSetFactory::create();
+        $scope = [];
+        $context = new GenerationContext();
+
+        $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
+        $resolver->resolve($value, $fixture, $set, $scope, $context);
     }
 }

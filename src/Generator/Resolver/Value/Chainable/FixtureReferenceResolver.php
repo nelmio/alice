@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\SimpleFixture;
-use Nelmio\Alice\Definition\MethodCallBag;
-use Nelmio\Alice\Definition\PropertyBag;
-use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\Definition\Fixture\FixtureId;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Exception\FixtureNotFoundException;
 use Nelmio\Alice\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
+use Nelmio\Alice\FixtureIdInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
@@ -81,11 +80,15 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
 
         $referredFixtureId = $value->getValue();
         if ($referredFixtureId instanceof ValueInterface) {
-            throw new UnresolvableValueException($value);
+            throw UnresolvableValueException::create($value);
         }
 
         $referredFixture = $this->getReferredFixture($referredFixtureId, $fixtureSet);
         if (false === $fixtureSet->getObjects()->has($referredFixture)) {
+            if (false === $referredFixture instanceof FixtureInterface) {
+                throw FixtureNotFoundException::create($referredFixtureId);
+            }
+
             $context->markIsResolvingFixture($referredFixtureId);
             $objects = $this->generator->generate($referredFixture, $fixtureSet, $context);
 
@@ -98,21 +101,13 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         );
     }
 
-    private function getReferredFixture(string $id, ResolvedFixtureSet $set): FixtureInterface
+    private function getReferredFixture(string $id, ResolvedFixtureSet $set): FixtureIdInterface
     {
         $fixtures = $set->getFixtures();
         if ($fixtures->has($id)) {
             return $fixtures->get($id);
         }
 
-        return new SimpleFixture(
-            $id,
-            '',
-            new SpecificationBag(
-                null,
-                new PropertyBag(),
-                new MethodCallBag()
-            )
-        );
+        return new FixtureId($id);
     }
 }

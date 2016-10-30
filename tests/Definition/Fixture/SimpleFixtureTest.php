@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Definition\Fixture;
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Exception\NoValueForCurrentException;
+use Nelmio\Alice\FixtureIdInterface;
 use Nelmio\Alice\FixtureInterface;
 
 /**
@@ -23,6 +24,11 @@ use Nelmio\Alice\FixtureInterface;
  */
 class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
 {
+    public function testIsAFixtureId()
+    {
+        $this->assertTrue(is_a(SimpleFixture::class, FixtureIdInterface::class, true));
+    }
+
     public function testIsAFixture()
     {
         $this->assertTrue(is_a(SimpleFixture::class, FixtureInterface::class, true));
