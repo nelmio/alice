@@ -9,19 +9,25 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
+use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\NotClonableTrait;
 
-final class EmptyValueLexer implements LexerInterface
+/**
+ * Escapes references found in a string to avoid the user to have to manually escape references. For
+ * example will automatically escape the @ in "email@example.com".
+ */
+final class ReferenceEscaperLexer implements LexerInterface
 {
     use NotClonableTrait;
 
+    /**
+     * @var LexerInterface
+     */
     private $lexer;
 
     public function __construct(LexerInterface $decoratedLexer)
@@ -31,13 +37,13 @@ final class EmptyValueLexer implements LexerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws LexException
      */
     public function lex(string $value): array
     {
-        if ('' === $value) {
-            return [new Token('', new TokenType(TokenType::STRING_TYPE))];
-        }
+        $escapedValue = preg_replace('/(\\p{L})@/', '$1\\@', $value);
 
-        return $this->lexer->lex($value);
+        return $this->lexer->lex($escapedValue);
     }
 }

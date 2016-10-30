@@ -100,6 +100,9 @@ Nelmio\Entity\Group:
 > **Note**: To create a string `@foo` that is not a reference you can escape it
 > as `\@foo`
 
+> **Note**: When `@` is used in the middle of a word, e.g. `email@example.com`,
+it will be automatically escaped.
+
 
 ## Multiple References
 

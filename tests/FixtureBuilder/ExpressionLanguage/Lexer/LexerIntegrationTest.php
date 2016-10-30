@@ -873,10 +873,11 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Reference] with successive with prop surrounded' => [
-            'foo @user0->username@user1->name bar',
+            'foo @user0->username @user1->name bar',
             [
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+                new Token(' ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user1->name', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
             ],

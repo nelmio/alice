@@ -16,25 +16,16 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Prophecy\Argument;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer
  */
 class EmptyValueLexerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var EmptyValueLexer
-     */
-    private $lexer;
-
-    public function setUp()
-    {
-        $this->lexer = new EmptyValueLexer();
-    }
-
     public function testIsALexer()
     {
-        $this->assertInstanceOf(LexerInterface::class, $this->lexer);
+        $this->assertTrue(is_a(EmptyValueLexer::class, LexerInterface::class, true));
     }
 
     /**
@@ -42,26 +33,38 @@ class EmptyValueLexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotCLonable()
     {
-        clone $this->lexer;
+        clone new EmptyValueLexer(new FakeLexer());
     }
 
     public function testLexEmptyStringIntoAnEmptyStringToken()
     {
+        $value = '';
         $expected = [
             new Token('', new TokenType(TokenType::STRING_TYPE)),
         ];
-        $actual = $this->lexer->lex('');
+
+        $lexer = new EmptyValueLexer(new FakeLexer());
+        $actual = $lexer->lex('');
 
         $this->assertEquals(count($expected), count($actual));
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException
-     * @expectedExceptionMessage Could not lex the value "théo".
-     */
-    public function testCannotLexNonEmptyStringValue()
+    public function testHandOverTheLexificationToItsDecoratedLexerIfStringIsNotEmpty()
     {
-        $this->lexer->lex('théo');
+        $value = 'bob';
+
+        $decoratedLexerProphecy = $this->prophesize(LexerInterface::class);
+        $decoratedLexerProphecy->lex($value)->willReturn($expected = [new \stdClass()]);
+        /** @var LexerInterface $decoratedLexer */
+        $decoratedLexer = $decoratedLexerProphecy->reveal();
+
+        $lexer = new EmptyValueLexer($decoratedLexer);
+        $actual = $lexer->lex($value);
+
+        $this->assertEquals(count($expected), count($actual));
+        $this->assertEquals($expected, $actual);
+
+        $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 }

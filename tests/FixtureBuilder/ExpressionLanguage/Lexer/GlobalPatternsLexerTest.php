@@ -16,25 +16,16 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Prophecy\Argument;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer
  */
 class GlobalPatternsLexerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var GlobalPatternsLexer
-     */
-    private $lexer;
-
-    public function setUp()
-    {
-        $this->lexer = new GlobalPatternsLexer();
-    }
-
     public function testIsALexer()
     {
-        $this->assertInstanceOf(LexerInterface::class, $this->lexer);
+        $this->assertTrue(is_a(GlobalPatternsLexer::class, LexerInterface::class, true));
     }
 
     /**
@@ -42,7 +33,7 @@ class GlobalPatternsLexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNotClonable()
     {
-        clone $this->lexer;
+        clone new GlobalPatternsLexer(new FakeLexer());
     }
 
     public function testLexValueToReturnAToken()
@@ -50,19 +41,30 @@ class GlobalPatternsLexerTest extends \PHPUnit_Framework_TestCase
         $expected = [
             new Token('10x @users', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
         ];
-        $actual = $this->lexer->lex('10x @users');
+        
+        $lexer = new GlobalPatternsLexer(new FakeLexer());
+        $actual = $lexer->lex('10x @users');
 
         $this->assertEquals(count($expected), count($actual));
         $this->assertEquals($expected, $actual);
     }
-
-    /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException
-     * @expectedExceptionMessage Could not lex the value "th%éo".
-     */
-    public function testThrowsAnExceptionIfCannotLexValue()
+    
+    public function testHandOverTheLexificationToTheDecoratedLexerIfNoPatternsMatch()
     {
-        $this->lexer->lex('th%éo');
+        $value = 'ali%ce';
+
+        $decoratedLexerProphecy = $this->prophesize(LexerInterface::class);
+        $decoratedLexerProphecy->lex($value)->willReturn($expected = [new \stdClass()]);
+        /** @var LexerInterface $decoratedLexer */
+        $decoratedLexer = $decoratedLexerProphecy->reveal();
+
+        $lexer = new GlobalPatternsLexer($decoratedLexer);
+        $actual = $lexer->lex($value);
+
+        $this->assertEquals(count($expected), count($actual));
+        $this->assertEquals($expected, $actual);
+
+        $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
     /**
@@ -71,6 +73,7 @@ class GlobalPatternsLexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsAnExceptionWhenInvalidValue()
     {
-        $this->lexer->lex('foo 10x @users');
+        $lexer = new GlobalPatternsLexer(new FakeLexer());
+        $lexer->lex('foo 10x @users');
     }
 }

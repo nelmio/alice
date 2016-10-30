@@ -389,6 +389,30 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedDummy, $objects['dummy']);
     }
 
+    public function testLoadAutomaticallyEscapedReference()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy' => [
+                    'email' => 'email@example.com',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $this->assertEquals(0, count($set->getParameters()));
+
+        $objects = $set->getObjects();
+        $this->assertEquals(1, count($objects));
+
+        $expectedDummy = StdClassFactory::create([
+            'email' => 'email@example.com',
+        ]);
+
+        $this->assertEquals($expectedDummy, $objects['dummy']);
+    }
+
     public function testLoadSelfReferencedFixtures()
     {
         $data = [
