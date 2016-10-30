@@ -56,7 +56,7 @@
 
         <service id="nelmio_alice.generator.resolver.value.chainable.fixture_property_reference_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver">
-            <argument type="service" id="nelmio_alice.generator.resolver.value.property_accessor" />
+            <argument type="service" id="nelmio_alice.property_accessor" />
 
             <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>

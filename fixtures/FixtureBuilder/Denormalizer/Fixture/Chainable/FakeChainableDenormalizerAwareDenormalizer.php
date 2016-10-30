@@ -25,7 +25,7 @@ class FakeChainableDenormalizerAwareDenormalizer implements ChainableFixtureDeno
     use NotCallableTrait;
 
     /**
-     * @var ChainableFixtureDenormalizerInterface
+     * @var FixtureDenormalizerInterface
      */
     public $denormalizer;
 
@@ -46,7 +46,7 @@ class FakeChainableDenormalizerAwareDenormalizer implements ChainableFixtureDeno
      */
     public function canDenormalize(string $reference): bool
     {
-        return $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -60,6 +60,6 @@ class FakeChainableDenormalizerAwareDenormalizer implements ChainableFixtureDeno
         FlagBag $flags
     ): FixtureBag
     {
-        return $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

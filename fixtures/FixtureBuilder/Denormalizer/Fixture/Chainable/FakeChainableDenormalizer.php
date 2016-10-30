@@ -27,7 +27,7 @@ class FakeChainableDenormalizer implements ChainableFixtureDenormalizerInterface
      */
     public function canDenormalize(string $reference): bool
     {
-        return $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__FUNCTION__, func_get_args());
     }
 
     /**
@@ -41,6 +41,6 @@ class FakeChainableDenormalizer implements ChainableFixtureDenormalizerInterface
         FlagBag $flags
     ): FixtureBag
     {
-        return $this->__call(__FUNCTION__, func_get_args());
+        $this->__call(__FUNCTION__, func_get_args());
     }
 }

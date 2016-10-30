@@ -42,7 +42,7 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
      */
     public function denormalize(FixtureInterface $scope, FlagBag $flags = null, $value)
     {
-       $value = $this->denormalizer->denormalize($scope, $flags, $value);
+        $value = $this->denormalizer->denormalize($scope, $flags, $value);
 
         if (false === $this->requiresUnique($flags)) {
             return $value;
