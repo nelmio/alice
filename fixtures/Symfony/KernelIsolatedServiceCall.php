@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Symfony;
 
-use Symfony\Component\DependencyInjection\ResettableContainerInterface;
-
 class KernelIsolatedServiceCall
 {
     public static function call(string $serviceId, callable $getResult)
@@ -26,11 +24,7 @@ class KernelIsolatedServiceCall
         $service = $container->get($serviceId);
 
         $result = $getResult($service);
-
         $kernel->shutdown();
-        if ($container instanceof ResettableContainerInterface) {
-            $container->reset();
-        }
 
         return $result;
     }

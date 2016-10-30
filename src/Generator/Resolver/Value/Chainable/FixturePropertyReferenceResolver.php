@@ -20,7 +20,6 @@ use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
-use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
@@ -44,11 +43,8 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
      */
     private $resolver;
 
-    public function __construct(
-        PropertyAccessorInterface $propertyAccessor,
-        ValueResolverInterface $resolver = null,
-        ObjectGeneratorInterface $generator = null
-    ) {
+    public function __construct(PropertyAccessorInterface $propertyAccessor, ValueResolverInterface $resolver = null)
+    {
         $this->propertyAccessor = $propertyAccessor;
         $this->resolver = $resolver;
     }

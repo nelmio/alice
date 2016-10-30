@@ -26,10 +26,10 @@
 
         <service id="nelmio_alice.generator.hydrator.property.symfony_property_access"
                  class="Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator">
-            <argument type="service" id="nelmio_alice.generator.hydrator.property_accessor" />
+            <argument type="service" id="nelmio_alice.property_accessor" />
         </service>
 
-        <service id="nelmio_alice.generator.hydrator.property_accessor" alias="property_accessor" />
+        <service id="nelmio_alice.property_accessor" alias="property_accessor" />
 
     </services>
 
