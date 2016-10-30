@@ -14,38 +14,36 @@
     <services>
 
         <service id="nelmio_alice.fixture_builder.expression_language.lexer"
-                 alias="nelmio_alice.fixture_builder.expression_language.lexer.registry" />
+                 alias="nelmio_alice.fixture_builder.expression_language.lexer.empty_value_lexer" />
 
-        <service id="nelmio_alice.fixture_builder.expression_language.lexer.registry"
-                 class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerRegistry">
-            <!-- Injected via a compiler pass -->
-        </service>
-
-
-        <!-- Chainables -->
-        <service id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.empty_value_lexer"
+        <service id="nelmio_alice.fixture_builder.expression_language.lexer.empty_value_lexer"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer">
-            <tag name="nelmio_alice.fixture_builder.expression_language.lexer" />
+
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer" />
         </service>
 
-        <service id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.globals_patterns_lexer"
+        <service id="nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer"
+                 class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer">
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.globals_patterns_lexer" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.expression_language.lexer.globals_patterns_lexer"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer">
-            <tag name="nelmio_alice.fixture_builder.expression_language.lexer" />
+
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.function_lexer" />
         </service>
 
-        <service id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.function_lexer"
+        <service id="nelmio_alice.fixture_builder.expression_language.lexer.function_lexer"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer">
-            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.sub_patterns_lexer" />
-
-            <tag name="nelmio_alice.fixture_builder.expression_language.lexer" />
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.sub_patterns_lexer" />
         </service>
 
-        <service id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.sub_patterns_lexer"
+        <service id="nelmio_alice.fixture_builder.expression_language.lexer.sub_patterns_lexer"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer">
-            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.reference_lexer" />
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.reference_lexer" />
         </service>
 
-        <service id="nelmio_alice.fixture_builder.expression_language.lexer.chainable.reference_lexer"
+        <service id="nelmio_alice.fixture_builder.expression_language.lexer.reference_lexer"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer">
         </service>
 

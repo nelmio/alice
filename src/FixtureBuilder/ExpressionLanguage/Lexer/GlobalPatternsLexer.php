@@ -30,6 +30,16 @@ final class GlobalPatternsLexer implements LexerInterface
     ];
 
     /**
+     * @var LexerInterface
+     */
+    private $lexer;
+
+    public function __construct(LexerInterface $decoratedLexer)
+    {
+        $this->lexer = $decoratedLexer;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @throws LexException
@@ -51,6 +61,6 @@ final class GlobalPatternsLexer implements LexerInterface
             }
         }
 
-        throw LexException::create($value);
+        return $this->lexer->lex($value);
     }
 }

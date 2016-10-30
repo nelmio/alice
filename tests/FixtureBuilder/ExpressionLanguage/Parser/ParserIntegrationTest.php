@@ -937,13 +937,14 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             null,
         ];
         yield '[Reference] with successive with prop surrounded' => [
-            'foo @user0->username@user1->name bar',
+            'foo @user0->username @user1->name bar',
             new ListValue([
                 'foo ',
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user0'),
                     'username'
                 ),
+                ' ',
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user1'),
                     'name'

@@ -48,12 +48,6 @@ final class NelmioAliceBundle extends Bundle
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
-                'nelmio_alice.fixture_builder.expression_language.lexer.registry',
-                'nelmio_alice.fixture_builder.expression_language.lexer'
-            )
-        );
-        $container->addCompilerPass(
-            new RegisterTagServicesPass(
                 'nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry',
                 'nelmio_alice.fixture_builder.expression_language.chainable_token_parser'
             )

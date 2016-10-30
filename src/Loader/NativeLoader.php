@@ -21,8 +21,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerRegistry;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser;
@@ -367,15 +367,17 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createBuiltInLexer(): LexerInterface
     {
-        return new LexerRegistry([
-            new EmptyValueLexer(),
-            new GlobalPatternsLexer(),
-            new FunctionLexer(
-                new SubPatternsLexer(
-                    new ReferenceLexer()
+        return new EmptyValueLexer(
+            new ReferenceEscaperLexer(
+                new GlobalPatternsLexer(
+                    new FunctionLexer(
+                        new SubPatternsLexer(
+                            new ReferenceLexer()
+                        )
+                    )
                 )
-            ),
-        ]);
+            )
+        );
     }
 
     protected function createBuiltInExpressionLanguageTokenParser(): TokenParserInterface
