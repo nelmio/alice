@@ -172,20 +172,6 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testCanHydrateStdClassObjects()
-    {
-        $object = new SimpleObject('dummy', new \stdClass());
-        $property = new Property('foo', 'bar');
-
-        $std = new \stdClass();
-        $std->foo = 'bar';
-        $expected = new SimpleObject('dummy', $std);
-
-        $actual = $this->hydrator->hydrate($object, $property, new GenerationContext());
-
-        $this->assertEquals($expected, $actual);
-    }
-
     /**
      * @dataProvider provideProperties
      */

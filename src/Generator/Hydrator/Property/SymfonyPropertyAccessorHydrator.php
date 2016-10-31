@@ -55,11 +55,7 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
     {
         $instance = $object->getInstance();
         try {
-            if ($instance instanceof \stdClass) {
-                $instance->{$property->getName()} = $property->getValue();
-            } else {
-                $this->propertyAccessor->setValue($instance, $property->getName(), $property->getValue());
-            }
+            $this->propertyAccessor->setValue($instance, $property->getName(), $property->getValue());
         } catch (SymfonyNoSuchPropertyException $exception) {
             throw NoSuchPropertyException::create($object, $property, 0, $exception);
         } catch (SymfonyAccessException $exception) {
