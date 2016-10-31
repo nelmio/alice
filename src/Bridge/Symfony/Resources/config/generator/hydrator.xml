@@ -29,8 +29,6 @@
             <argument type="service" id="nelmio_alice.property_accessor" />
         </service>
 
-        <service id="nelmio_alice.property_accessor" alias="property_accessor" />
-
     </services>
 
 </container>

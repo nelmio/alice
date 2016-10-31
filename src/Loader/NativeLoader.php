@@ -136,6 +136,7 @@ use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\NotClonableTrait;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
+use Nelmio\Alice\PropertyAccess\StdPropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
@@ -265,7 +266,13 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new PhpParser(),
         ]);
 
-        return new RuntimeCacheParser($registry, new DefaultFileLocator(), new DefaultIncludeProcessor(new DefaultFileLocator()));
+        return new RuntimeCacheParser(
+            $registry,
+            new DefaultFileLocator(),
+            new DefaultIncludeProcessor(
+                new DefaultFileLocator()
+            )
+        );
     }
 
     protected function createBuiltInDenormalizer(): DenormalizerInterface
@@ -506,7 +513,11 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createPropertyAccessor(): PropertyAccessorInterface
     {
-        return PropertyAccess::createPropertyAccessorBuilder()->enableMagicCall()->getPropertyAccessor();
+        return new StdPropertyAccessor(
+            PropertyAccess::createPropertyAccessorBuilder()
+                ->enableMagicCall()
+                ->getPropertyAccessor()
+        );
     }
 
     protected function createBuiltInCaller(): CallerInterface
