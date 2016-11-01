@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Exception\ObjectNotFoundException;
 
@@ -44,7 +45,9 @@ final class ObjectBag implements \IteratorAggregate, \Countable
                 continue;
             }
 
-            $this->objects[$id] = new SimpleObject($id, $object);
+            $this->objects[$id] = new CompleteObject(
+                new SimpleObject($id, $object)
+            );
         }
     }
 

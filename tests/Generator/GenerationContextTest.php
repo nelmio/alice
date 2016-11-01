@@ -1,0 +1,58 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Nelmio\Alice\Generator;
+
+use Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException;
+
+/**
+ * @covers \Nelmio\Alice\Generator\GenerationContext
+ */
+class GenerationContextTest extends \PHPUnit_Framework_TestCase
+{
+    public function testAccessors()
+    {
+        $context = new GenerationContext();
+        $this->assertTrue($context->isFirstPass());
+        $this->assertFalse($context->needsCompleteGeneration());
+
+        $context->setToSecondPass();
+        $this->assertFalse($context->isFirstPass());
+        $this->assertFalse($context->needsCompleteGeneration());
+
+        $context->markAsNeedsCompleteGeneration();
+        $this->assertFalse($context->isFirstPass());
+        $this->assertTrue($context->needsCompleteGeneration());
+
+        $context->unmarkAsNeedsCompleteGeneration();
+        $this->assertFalse($context->isFirstPass());
+        $this->assertFalse($context->needsCompleteGeneration());
+    }
+
+    public function testThrowsAnExceptionWhenACircularReferenceIsDetected()
+    {
+        $context = new GenerationContext();
+        $context->markIsResolvingFixture('bar');
+        $context->markIsResolvingFixture('foo');
+
+        try {
+            $context->markIsResolvingFixture('foo');
+            $this->fail('Expected exception to be thrown.');
+        } catch (CircularReferenceException $exception) {
+            $this->assertEquals(
+                'Circular reference detected for the parameter "foo" while resolving ["bar", "foo"].',
+                $exception->getMessage()
+            );
+        }
+    }
+}

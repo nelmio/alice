@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
-/**
- * TODO: review this class (i.e. immutability) after Caller is implemented
- */
 final class MethodCallBag
 {
     /**
@@ -47,5 +44,10 @@ final class MethodCallBag
         }
 
         return $clone;
+    }
+
+    public function isEmpty(): bool
+    {
+        return [] === $this->methodCalls;
     }
 }
