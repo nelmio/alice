@@ -1376,7 +1376,31 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        yield 'reference value with function' => [
+        yield 'inverted reference value' => [
+            [
+                \stdClass::class => [
+                    'another_dummy' => [
+                        'dummy' => '@dummy',
+                    ],
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummy' => $dummy,
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'dynamic reference' => [
             [
                 \stdClass::class => [
                     'dummy{1..2}' => [
@@ -1406,25 +1430,31 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        yield 'inverted reference value' => [
+        yield 'inverted dynamic reference' => [
             [
                 \stdClass::class => [
-                    'another_dummy' => [
-                        'dummy' => '@dummy',
+                    'dummy{1..2}' => [
+                        'relatedDummy' => '@another_dummy<current()>',
                     ],
-                    'dummy' => [
-                        'foo' => 'bar',
+                    'another_dummy{1..2}' => [
+                        'name' => '<current()>',
                     ],
                 ],
             ],
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => $dummy = StdClassFactory::create([
-                        'foo' => 'bar',
+                    'another_dummy1' => $anotherDummy1 = StdClassFactory::create([
+                        'name' => '1',
                     ]),
-                    'another_dummy' => StdClassFactory::create([
-                        'dummy' => $dummy,
+                    'another_dummy2' => $anotherDummy2 = StdClassFactory::create([
+                        'name' => '2',
+                    ]),
+                    'dummy1' => StdClassFactory::create([
+                        'relatedDummy' => $anotherDummy1,
+                    ]),
+                    'dummy2' => StdClassFactory::create([
+                        'relatedDummy' => $anotherDummy2,
                     ]),
                 ],
             ],
@@ -1449,6 +1479,30 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                     ]),
                     'another_dummy' => StdClassFactory::create([
                         'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'inverted property reference value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'name' => '@another_dummy->name',
+                    ],
+                    'another_dummy' => [
+                        'name' => 'foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'name' => 'foo',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'name' => 'foo',
                     ]),
                 ],
             ],
@@ -1484,6 +1538,26 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 'objects' => [
                     'dummy' => $dummy = (new DummyWithGetter())->setName('foo'),
                     'another_dummy' => (new DummyWithGetter())->setName('__get__foo'),
+                ],
+            ]
+        ];
+
+        yield 'inverted property reference value with a getter' => [
+            [
+                DummyWithGetter::class => [
+                    'dummy' => [
+                        'name' => '@another_dummy->name',
+                    ],
+                    'another_dummy' => [
+                        'name' => 'foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = (new DummyWithGetter())->setName('__get__foo'),
+                    'another_dummy' => (new DummyWithGetter())->setName('foo'),
                 ],
             ]
         ];

@@ -13,25 +13,22 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\FakeObjectGenerator;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
-use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
-use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
-use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
-use Nelmio\Alice\ParameterBag;
 use Prophecy\Argument;
 
 /**
@@ -103,7 +100,7 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testIfTheReferenceRefersToAnInstantiatedFixtureThenReturnsTheInstance()
+    public function testIfTheReferenceRefersToACompletelyGeneratedFixtureThenReturnsTheInstance()
     {
         $value = new FixtureReferenceValue('dummy');
         $fixture = new FakeFixture();
@@ -121,6 +118,85 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testIfTheReferenceRefersToAnInstantiatedFixtureThatDoesNotRequireToBeCompleteThenReturnsItsInstance()
+    {
+        $value = new FixtureReferenceValue('dummy');
+        $fixture = new FakeFixture();
+        $set = ResolvedFixtureSetFactory::create(
+            null,
+            null,
+            (new ObjectBag())->with(
+                new SimpleObject(
+                    'dummy',
+                    $expectedInstance = new \stdClass())
+            )
+        );
+        $scope = [];
+        $context = new GenerationContext();
+
+        $expected = new ResolvedValueWithFixtureSet($expectedInstance, $set);
+
+        $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testIfTheReferenceRefersToAnInstantiatedFixtureAndRequiresToBeCompleteThenGenerateIt()
+    {
+        $value = new FixtureReferenceValue('dummy');
+        $fixture = new FakeFixture();
+        $set = ResolvedFixtureSetFactory::create(
+            null,
+            $fixtures = (new FixtureBag())->with(
+                $referredFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create())
+            ),
+            (new ObjectBag())->with(
+                new SimpleObject(
+                    'dummy',
+                    $expectedInstance = new \stdClass())
+            )
+        );
+        $scope = [];
+        $context = new GenerationContext();
+        $context->markAsNeedsCompleteGeneration();
+
+        $generatorContext = new GenerationContext();
+        $generatorContext->markIsResolvingFixture('dummy');
+        $generatorContext->markAsNeedsCompleteGeneration();
+
+        $generatorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
+        $generatorProphecy
+            ->generate($referredFixture, $set, $generatorContext)
+            ->willReturn(
+                $objects = new ObjectBag([
+                    'dummy' => $expectedInstance = StdClassFactory::create([
+                        'complete' => true,
+                    ])
+                ])
+            )
+        ;
+        /** @var ObjectGeneratorInterface $generator */
+        $generator = $generatorProphecy->reveal();
+
+        $expected = new ResolvedValueWithFixtureSet(
+            $expectedInstance,
+            ResolvedFixtureSetFactory::create(
+                null,
+                $fixtures,
+                $objects
+            )
+        );
+
+        $resolver = new FixtureReferenceResolver($generator);
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
+
+        $this->assertEquals($expected, $actual);
+        $this->assertEquals($context, $generatorContext);
+
+        $generatorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
     public function testIfTheReferenceRefersToANonInstantiatedFixtureThenGenerateItBeforeReturningTheInstance()

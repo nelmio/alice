@@ -28,6 +28,11 @@ final class GenerationContext
      */
     private $resolving;
 
+    /**
+     * @var bool
+     */
+    private $needsCompleteResolution = false;
+
     public function __construct()
     {
         $this->isFirstPass = true;
@@ -53,5 +58,20 @@ final class GenerationContext
     {
         $this->resolving->add($id);
         $this->resolving->checkForCircularReference($id);
+    }
+
+    public function markAsNeedsCompleteGeneration()
+    {
+        $this->needsCompleteResolution = true;
+    }
+
+    public function unmarkAsNeedsCompleteGeneration()
+    {
+        $this->needsCompleteResolution = false;
+    }
+
+    public function needsCompleteGeneration(): bool
+    {
+        return $this->needsCompleteResolution;
     }
 }

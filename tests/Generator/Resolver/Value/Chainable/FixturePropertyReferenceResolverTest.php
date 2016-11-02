@@ -92,9 +92,13 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $context = new GenerationContext();
         $context->markIsResolvingFixture('foo');
 
+        $valueResolverContext = new GenerationContext();
+        $valueResolverContext->markIsResolvingFixture('foo');
+        $valueResolverContext->markAsNeedsCompleteGeneration();
+
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy
-            ->resolve($reference, $fixture, $set, $scope, $context)
+            ->resolve($reference, $fixture, $set, $scope, $valueResolverContext)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     $instance = new \stdClass(),

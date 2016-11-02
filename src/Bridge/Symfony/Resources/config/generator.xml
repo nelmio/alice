@@ -23,7 +23,12 @@
         </service>
 
         <service id="nelmio_alice.generator.object_generator"
-                 alias="nelmio_alice.generator.object_generator.simple" />
+                 alias="nelmio_alice.generator.object_generator.complete" />
+
+        <service id="nelmio_alice.generator.object_generator.complete"
+                 class="Nelmio\Alice\Generator\ObjectGenerator\CompleteObjectGenerator">
+            <argument type="service" id="nelmio_alice.generator.object_generator.simple" />
+        </service>
 
         <service id="nelmio_alice.generator.object_generator.simple"
                  class="Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator">

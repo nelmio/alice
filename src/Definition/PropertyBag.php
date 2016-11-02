@@ -46,6 +46,11 @@ final class PropertyBag implements \IteratorAggregate, \Countable
         return $clone;
     }
 
+    public function isEmpty(): bool
+    {
+        return [] === $this->properties;
+    }
+
     /**
      * @inheritdoc
      */

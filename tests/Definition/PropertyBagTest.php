@@ -129,4 +129,13 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
         $bag = $bag->with(new Property('ping', 'pong'));
         $this->assertEquals(2, count($bag));
     }
+
+    public function testIsEmpty()
+    {
+        $bag = new PropertyBag();
+        $this->assertTrue($bag->isEmpty());
+
+        $bag = $bag->with(new Property('foo', null));
+        $this->assertFalse($bag->isEmpty());
+    }
 }

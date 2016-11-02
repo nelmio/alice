@@ -90,6 +90,7 @@ use Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorResolver;
 use Nelmio\Alice\Generator\InstantiatorInterface;
+use Nelmio\Alice\Generator\ObjectGenerator\CompleteObjectGenerator;
 use Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator;
 use Nelmio\Alice\Generator\Hydrator\SimpleHydrator;
 use Nelmio\Alice\Generator\HydratorInterface;
@@ -417,11 +418,13 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createBuiltInObjectGenerator(): ObjectGeneratorInterface
     {
-        return new SimpleObjectGenerator(
-            $this->getBuiltInValueResolver(),
-            $this->getBuiltInInstantiator(),
-            $this->getBuiltInHydrator(),
-            $this->getBuiltInCaller()
+        return new CompleteObjectGenerator(
+            new SimpleObjectGenerator(
+                $this->getBuiltInValueResolver(),
+                $this->getBuiltInInstantiator(),
+                $this->getBuiltInHydrator(),
+                $this->getBuiltInCaller()
+            )
         );
     }
 

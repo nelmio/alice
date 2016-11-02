@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 
 /**
@@ -43,8 +44,8 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSameObjects(
             [
-                'user1' => new SimpleObject('user1', $u1),
-                'user2' => new SimpleObject('user2', $u2),
+                'user1' => new CompleteObject(new SimpleObject('user1', $u1)),
+                'user2' => new CompleteObject(new SimpleObject('user2', $u2)),
             ],
             $bag
         );
@@ -58,14 +59,14 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         $u2->name = 'alice';
 
         $bag = new ObjectBag([
-            'user1' => new SimpleObject('user1', $u1),
-            'user2' => new SimpleObject('user2', $u2),
+            'user1' => new CompleteObject(new SimpleObject('user1', $u1)),
+            'user2' => new CompleteObject(new SimpleObject('user2', $u2)),
         ]);
 
         $this->assertSameObjects(
             [
-                'user1' => new SimpleObject('user1', $u1),
-                'user2' => new SimpleObject('user2', $u2),
+                'user1' => new CompleteObject(new SimpleObject('user1', $u1)),
+                'user2' => new CompleteObject(new SimpleObject('user2', $u2)),
             ],
             $bag
         );
@@ -78,7 +79,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfAReferenceMismatchIsFound()
     {
         new ObjectBag([
-            'foo' => new SimpleObject('bar', new \stdClass()),
+            'foo' => new CompleteObject(new SimpleObject('bar', new \stdClass())),
         ]);
     }
 
@@ -104,13 +105,13 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($bag->has($user1Fixture));
         $this->assertEquals(
-            new SimpleObject('user1', new \stdClass()),
+            new CompleteObject(new SimpleObject('user1', new \stdClass())),
             $bag->get($user1Fixture)
         );
 
         $this->assertTrue($bag->has($group1Fixture));
         $this->assertEquals(
-            new SimpleObject('group1', new \stdClass()),
+            new CompleteObject(new SimpleObject('group1', new \stdClass())),
             $bag->get($group1Fixture)
         );
 
@@ -132,7 +133,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         $bag = new ObjectBag(['foo' => new \stdClass()]);
         $std = new \stdClass();
         $std->ping = 'pong';
-        $newBag = $bag->with(new SimpleObject('bar', $std));
+        $newBag = $bag->with(new CompleteObject(new SimpleObject('bar', $std)));
 
         $this->assertEquals(
             new ObjectBag(['foo' => new \stdClass()]),
@@ -141,7 +142,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             new ObjectBag([
                 'foo' => new \stdClass(),
-                'bar' => new SimpleObject('bar', $std),
+                'bar' => new CompleteObject(new SimpleObject('bar', $std)),
             ]),
             $newBag
         );
@@ -160,10 +161,10 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
 
         $std4 = new Dummy();
 
-        $object1 = new SimpleObject('foo', $std1);
-        $object2 = new SimpleObject('bar', $std2);
-        $object3 = new SimpleObject('bar', $std3);
-        $object4 = new SimpleObject('baz', $std4);
+        $object1 = new CompleteObject(new SimpleObject('foo', $std1));
+        $object2 = new CompleteObject(new SimpleObject('bar', $std2));
+        $object3 = new CompleteObject(new SimpleObject('bar', $std3));
+        $object4 = new CompleteObject(new SimpleObject('baz', $std4));
 
         $bag1 = (new ObjectBag())->with($object1)->with($object2);
         $bag2 = (new ObjectBag())->with($object3)->with($object4);
@@ -196,8 +197,8 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
 
     public function testIsTraversable()
     {
-        $object1 = new SimpleObject('foo', new \stdClass());
-        $object2 = new SimpleObject('bar', new \stdClass());
+        $object1 = new CompleteObject(new SimpleObject('foo', new \stdClass()));
+        $object2 = new CompleteObject(new SimpleObject('bar', new \stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
 
         $traversed = [];
@@ -216,8 +217,8 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
 
     public function testToArray()
     {
-        $object1 = new SimpleObject('foo', new \stdClass());
-        $object2 = new SimpleObject('bar', new \stdClass());
+        $object1 = new CompleteObject(new SimpleObject('foo', new \stdClass()));
+        $object2 = new CompleteObject(new SimpleObject('bar', new \stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
 
         $this->assertEquals(
@@ -243,13 +244,13 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertEquals(2, $bag->count());
 
-        $object1 = new SimpleObject('foo', new \stdClass());
-        $object2 = new SimpleObject('bar', new \stdClass());
+        $object1 = new CompleteObject(new SimpleObject('foo', new \stdClass()));
+        $object2 = new CompleteObject(new SimpleObject('bar', new \stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
         $this->assertEquals(2, $bag->count());
 
-        $object3 = new SimpleObject('foz', new \stdClass());
-        $object4 = new SimpleObject('baz', new \stdClass());
+        $object3 = new CompleteObject(new SimpleObject('foz', new \stdClass()));
+        $object4 = new CompleteObject(new SimpleObject('baz', new \stdClass()));
         $anotherBag = (new ObjectBag())->with($object3)->with($object4);
         $bag = $bag->mergeWith($anotherBag);
         $this->assertEquals(4, $bag->count());

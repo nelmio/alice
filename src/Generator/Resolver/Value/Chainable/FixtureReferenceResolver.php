@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\FixtureId;
+use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\FixtureNotFoundException;
@@ -84,21 +85,8 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         }
 
         $referredFixture = $this->getReferredFixture($referredFixtureId, $fixtureSet);
-        if (false === $fixtureSet->getObjects()->has($referredFixture)) {
-            if (false === $referredFixture instanceof FixtureInterface) {
-                throw FixtureNotFoundException::create($referredFixtureId);
-            }
 
-            $context->markIsResolvingFixture($referredFixtureId);
-            $objects = $this->generator->generate($referredFixture, $fixtureSet, $context);
-
-            $fixtureSet = $fixtureSet->withObjects($objects);
-        }
-
-        return new ResolvedValueWithFixtureSet(
-            $fixtureSet->getObjects()->get($referredFixture)->getInstance(),
-            $fixtureSet
-        );
+        return $this->resolveReferredFixture($referredFixture, $referredFixtureId, $fixtureSet, $context);
     }
 
     private function getReferredFixture(string $id, ResolvedFixtureSet $set): FixtureIdInterface
@@ -109,5 +97,46 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         }
 
         return new FixtureId($id);
+    }
+
+    /**
+     * @param FixtureIdInterface|FixtureInterface $referredFixture
+     * @param string                              $referredFixtureId
+     * @param ResolvedFixtureSet                  $fixtureSet
+     * @param GenerationContext                   $context
+     *
+     * @return ResolvedValueWithFixtureSet
+     */
+    private function resolveReferredFixture(
+        FixtureIdInterface $referredFixture,
+        string $referredFixtureId,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): ResolvedValueWithFixtureSet
+    {
+        if ($fixtureSet->getObjects()->has($referredFixture)) {
+            $referredObject = $fixtureSet->getObjects()->get($referredFixture);
+
+            if ($referredObject instanceof CompleteObject || false === $context->needsCompleteGeneration()) {
+                return new ResolvedValueWithFixtureSet(
+                    $referredObject->getInstance(),
+                    $fixtureSet
+                );
+            }
+        }
+
+        // Object is either not completely generated or has not been generated at all yet
+        if (false === $referredFixture instanceof FixtureInterface) {
+            throw FixtureNotFoundException::create($referredFixtureId);
+        }
+
+        $context->markIsResolvingFixture($referredFixtureId);
+        $objects = $this->generator->generate($referredFixture, $fixtureSet, $context);
+        $fixtureSet =  $fixtureSet->withObjects($objects);
+
+        return new ResolvedValueWithFixtureSet(
+            $fixtureSet->getObjects()->get($referredFixture)->getInstance(),
+            $fixtureSet
+        );
     }
 }

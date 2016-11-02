@@ -85,7 +85,10 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
             throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
         }
 
+        $context->markAsNeedsCompleteGeneration();
         $fixtureReferenceResult = $this->resolver->resolve($value->getReference(), $fixture, $fixtureSet, $scope, $context);
+        $context->unmarkAsNeedsCompleteGeneration();
+
         /** @var ResolvedFixtureSet $fixtureSet */
         list($instance, $fixtureSet) = [$fixtureReferenceResult->getValue(), $fixtureReferenceResult->getSet()];
 

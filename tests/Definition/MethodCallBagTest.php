@@ -35,12 +35,7 @@ class MethodCallBagTest extends \PHPUnit_Framework_TestCase
         $this->propRefl = $propRefl;
     }
 
-    public function testIsImmutable()
-    {
-        //TODO
-    }
-
-    public function testMutatorsAreImmutable()
+    public function testAddingACallCreatesANewBagWithTheAddedInstance()
     {
         $methodCall1 = new DummyMethodCall('mc1');
         $methodCall2 = new DummyMethodCall('mc2');
@@ -143,5 +138,14 @@ class MethodCallBagTest extends \PHPUnit_Framework_TestCase
             ],
             $this->propRefl->getValue($bag)
         );
+    }
+
+    public function testIsEmpty()
+    {
+        $bag = new MethodCallBag();
+        $this->assertTrue($bag->isEmpty());
+
+        $bag = $bag->with(new FakeMethodCall());
+        $this->assertFalse($bag->isEmpty());
     }
 }

@@ -82,7 +82,10 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
     ): ObjectBag
     {
         if ($context->isFirstPass()) {
-            return $this->instantiator->instantiate($fixture, $fixtureSet, $context)->getObjects();
+            $fixtureSet = $this->instantiator->instantiate($fixture, $fixtureSet, $context)->getObjects();
+            if (false === $context->needsCompleteGeneration()) {
+                return $fixtureSet;
+            }
         }
         $fixtureSet = $this->completeObject($fixture, $fixtureSet, $context);
 
