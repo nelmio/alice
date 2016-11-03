@@ -47,19 +47,9 @@ final class SimpleConstructorDenormalizer implements ConstructorDenormalizerInte
         array $unparsedConstructor
     ): MethodCallInterface
     {
-        /** @var int|string|null $firstKey */
-        $firstKey = key($unparsedConstructor);
-        if (null === $firstKey
-            || is_int($firstKey)
-            || count($unparsedConstructor) > 1
-            || (is_string($firstKey) && preg_match('/\(.*\)/', $firstKey))
-        ) {
-            return new SimpleMethodCall(
-                '__construct',
-                $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
-            );
-        }
-
-        throw new UnexpectedValueException('Could not denormalize the given constructor.');
+        return new SimpleMethodCall(
+            '__construct',
+            $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
+        );
     }
 }

@@ -17,6 +17,7 @@ use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\NamedArgumentsDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer;
@@ -347,8 +348,10 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createBuiltInArgumentsDenormalizer(): ArgumentsDenormalizerInterface
     {
-        return new SimpleArgumentsDenormalizer(
-            $this->getBuiltInValueDenormalizer()
+        return new NamedArgumentsDenormalizer(
+            new SimpleArgumentsDenormalizer(
+                $this->getBuiltInValueDenormalizer()
+            )
         );
     }
 
