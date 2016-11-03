@@ -17,12 +17,15 @@ use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
-use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
+use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnsupportedScenarioException;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * Denormalizer handling factories.
+ */
 final class ConstructorWithCallerDenormalizer implements ConstructorDenormalizerInterface
 {
     use NotClonableTrait;
@@ -46,18 +49,68 @@ final class ConstructorWithCallerDenormalizer implements ConstructorDenormalizer
         array $unparsedConstructor
     ): MethodCallInterface
     {
-        try {
-            return $this->simpleConstructorDenormalizer->denormalize($scope, $parser, $unparsedConstructor);
-        } catch (UnexpectedValueException $exception) {
-            // Continue
-        }
-
         /** @var string $firstKey */
         $firstKey = key($unparsedConstructor);
+
+        if (count($unparsedConstructor) !== 1
+            || false === is_string($firstKey)
+            || false === is_array($unparsedConstructor[$firstKey])
+        ) {
+            return $this->simpleConstructorDenormalizer->denormalize($scope, $parser, $unparsedConstructor);
+        }
+
+        // Constructor can have 1 named array parameter or be a factory
+        if ($this->isNamedParameter($scope, $firstKey)) {
+            return $this->simpleConstructorDenormalizer->denormalize($scope, $parser, $unparsedConstructor);
+        }
+
         list($caller, $method) = $this->getCallerReference($scope, $firstKey);
         $arguments = $this->simpleConstructorDenormalizer->denormalize($scope, $parser, $unparsedConstructor[$firstKey]);
 
         return new MethodCallWithReference($caller, $method, $arguments->getArguments());
+    }
+
+    private function isNamedParameter(FixtureInterface $fixture, string $parameterOrFunction): bool
+    {
+        try {
+            $fixtureRefl = new \ReflectionClass($fixture->getClassName());
+            $constructorRefl = $fixtureRefl->getMethod('__construct');
+        } catch (\ReflectionException $exception) {
+            return false;
+        }
+
+        if ($this->hasNamedParameter($constructorRefl, $parameterOrFunction)) {
+            if ($this->hasStaticFactoryMethod($fixtureRefl, $parameterOrFunction)) {
+                throw UnsupportedScenarioException::createForAmbiguousConstructor($fixture, $parameterOrFunction);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function hasNamedParameter(\ReflectionMethod $method, string $parameterName): bool
+    {
+        $parameters = $method->getParameters();
+        foreach ($parameters as $parameter) {
+            if ($parameterName === $parameter->getName()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasStaticFactoryMethod(\ReflectionClass $fixtureRefl, string $methodName): bool
+    {
+        try {
+            $methodRefl = $fixtureRefl->getMethod($methodName);
+
+            return $methodRefl->isStatic();
+        } catch (\ReflectionException $exception) {
+            return false;
+        }
     }
 
     /**
@@ -76,7 +129,7 @@ final class ConstructorWithCallerDenormalizer implements ConstructorDenormalizer
         if (2 < count($explodedMethod)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'Invalid constructor method "%s".',
+                    'Invalid constructor or factory method "%s".',
                     $method
                 )
             );

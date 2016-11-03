@@ -21,6 +21,9 @@ use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
 use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy;
 use Nelmio\Alice\Entity\ImmutableStd;
+use Nelmio\Alice\Entity\Instantiator\AmbiguousDummyWithConstructorWithArrayParameter;
+use Nelmio\Alice\Entity\Instantiator\DummyWithConstructor;
+use Nelmio\Alice\Entity\Instantiator\DummyWithConstructorWithArrayParameter;
 use Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructor;
@@ -33,6 +36,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Entity\ValueResolver\DummyWithGetter;
+use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnsupportedScenarioException;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\FileLoaderInterface;
@@ -118,6 +122,181 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $objects);
         $this->assertEquals($expected, $objects['dummy']);
+    }
+
+    public function testThrowsAnExceptionIfMissingArgument()
+    {
+        try {
+            $this->loader
+                ->loadData([
+                    DummyWithConstructor::class => [
+                        'dummy' => [
+                            '__construct' => [
+                                'isAdult' => false,
+                            ],
+                        ],
+                    ],
+                ])
+                ->getObjects()
+            ;
+            $this->fail('Expected exception to be thrown.');
+        } catch (\InvalidArgumentException $exception) {
+            $this->assertEquals(
+                'The parameter "name" for "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithConstructor) is required but no value was given.',
+                $exception->getMessage()
+            );
+        }
+
+        try {
+            $this->loader
+                ->loadData([
+                    DummyWithConstructor::class => [
+                        'dummy' => [
+                            '__construct' => [
+                                'create' => [
+                                    'isAdult' => false,
+                                ]
+                            ],
+                        ],
+                    ],
+                ])
+                ->getObjects()
+            ;
+            $this->fail('Expected exception to be thrown.');
+        } catch (\InvalidArgumentException $exception) {
+            $this->assertEquals(
+                'The parameter "name" for "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithConstructor) is required but no value was given.',
+                $exception->getMessage()
+            );
+        }
+    }
+
+    public function testInstantiationWithNamedParametersAndNamedConstructor()
+    {
+        $objects = $this->loader
+            ->loadData([
+                DummyWithConstructorWithArrayParameter::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            [
+                                'foo' => 'bar',
+                            ]
+                        ],
+                    ],
+                ],
+            ])
+            ->getObjects()
+        ;
+        $this->assertEquals(
+            [
+                'dummy' => new DummyWithConstructorWithArrayParameter([
+                    'foo' => 'bar'
+                ]),
+            ],
+            $objects
+        );
+
+        $objects = $this->loader
+            ->loadData([
+                DummyWithConstructorWithArrayParameter::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'value' => [
+                                'foo' => 'bar',
+                            ]
+                        ],
+                    ],
+                ],
+            ])
+            ->getObjects()
+        ;
+        $this->assertEquals(
+            [
+                'dummy' => new DummyWithConstructorWithArrayParameter([
+                    'foo' => 'bar'
+                ]),
+            ],
+            $objects
+        );
+
+        $objects = $this->loader
+            ->loadData([
+                DummyWithConstructorWithArrayParameter::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'create' => [
+                                [
+                                    'foo' => 'bar',
+                                ]
+                            ]
+                        ],
+                    ],
+                ],
+            ])
+            ->getObjects()
+        ;
+        $this->assertEquals(
+            [
+                'dummy' => DummyWithConstructorWithArrayParameter::create([
+                    'foo' => 'bar'
+                ]),
+            ],
+            $objects
+        );
+
+
+        $objects = $this->loader
+            ->loadData([
+                DummyWithConstructorWithArrayParameter::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'create' => [
+                                'value' => [
+                                    'foo' => 'bar',
+                                ]
+                            ]
+                        ],
+                    ],
+                ],
+            ])
+            ->getObjects()
+        ;
+        $this->assertEquals(
+            [
+                'dummy' => DummyWithConstructorWithArrayParameter::create([
+                    'foo' => 'bar'
+                ]),
+            ],
+            $objects
+        );
+
+
+        try {
+            $this->loader
+                ->loadData([
+                    AmbiguousDummyWithConstructorWithArrayParameter::class => [
+                        'dummy' => [
+                            '__construct' => [
+                                'value' => [
+                                    'value' => [
+                                        'foo' => 'bar',
+                                    ]
+                                ]
+                            ],
+                        ],
+                    ],
+                ])
+                ->getObjects()
+            ;
+            $this->fail('Expected exception to be thrown.');
+        } catch (UnsupportedScenarioException $exception) {
+            $this->assertEquals(
+                'Could not denormalize the constructor of the fixture "dummy" '
+                .'(Nelmio\Alice\Entity\Instantiator\AmbiguousDummyWithConstructorWithArrayParameter) as it has both a '
+                .'constructor named parameter and factory method "value" and cannot determine which one to use.',
+                $exception->getMessage()
+            );
+        }
     }
 
     /**
@@ -924,6 +1103,96 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             new DummyWithOptionalParameterInConstructor(100),
         ];
 
+        yield 'with constructor and named arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'name' => 'Alice',
+                            'age' => 7,
+                            'isAdult' => false,
+                        ],
+                    ],
+                ],
+            ],
+            new DummyWithConstructor('Alice', 7, false),
+        ];
+
+        yield 'with constructor and reorganised named arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'isAdult' => false,
+                            'age' => 7,
+                            'name' => 'Alice',
+                        ],
+                    ],
+                ],
+            ],
+            new DummyWithConstructor('Alice', 7, false),
+        ];
+
+        yield 'with constructor and reorganised named arguments and with a missing argument' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'isAdult' => false,
+                            // Expected to use the default value of 'age'
+                            'name' => 'Alice',
+                        ],
+                    ],
+                ],
+            ],
+            new DummyWithConstructor('Alice', 10, false),
+        ];
+
+        yield 'with constructor a mix of named arguments and index arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'name' => 'Alice',
+                            'age' => 7,
+                            'isAdult' => false,
+                        ],
+                    ],
+                ],
+            ],
+            new DummyWithConstructor('Alice', 7, false),
+        ];
+
+        yield 'with constructor a mix of re-organised index arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '2' => false,
+                            '0' => 'Alice',
+                            '1' => 7,
+                        ],
+                    ],
+                ],
+            ],
+            new DummyWithConstructor('Alice', 7, false),
+        ];
+
+        yield 'with constructor a mix of re-organised named arguments and index arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '2' => false,
+                            'name' => 'Alice',
+                            'age' => 7,
+                        ],
+                    ],
+                ],
+            ],
+            new DummyWithConstructor('Alice', 7, false),
+        ];
+
         yield 'with default constructor and required parameters with no parameters - throw exception' => [
             [
                 DummyWithRequiredParameterInConstructor::class => [
@@ -1026,6 +1295,108 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and named arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'create' => [
+                                'name' => 'Alice',
+                                'age' => 7,
+                                'isAdult' => false,
+                            ],
+                        ]
+                    ],
+                ],
+            ],
+            DummyWithConstructor::create('Alice', 7, false),
+        ];
+
+        yield 'with named constructor and reorganised named arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'create' => [
+                                'isAdult' => false,
+                                'age' => 7,
+                                'name' => 'Alice',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithConstructor::create('Alice', 7, false),
+        ];
+
+        yield 'with named constructor and reorganised named arguments and with a missing argument' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'create' => [
+                                'isAdult' => false,
+                                // Expected to use the default value of 'age'
+                                'name' => 'Alice',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithConstructor::create('Alice', 10, false),
+        ];
+
+        yield 'with named constructor a mix of named arguments and index arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'create' => [
+                                'name' => 'Alice',
+                                'age' => 7,
+                                'isAdult' => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithConstructor::create('Alice', 7, false),
+        ];
+
+        yield 'with named constructor a mix of re-organised index arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'create' => [
+                                '2' => false,
+                                '0' => 'Alice',
+                                '1' => 7,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithConstructor::create('Alice', 7, false),
+        ];
+
+        yield 'with named constructor a mix of re-organised named arguments and index arguments' => [
+            [
+                DummyWithConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'create' => [
+                                '2' => false,
+                                'name' => 'Alice',
+                                'age' => 7,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithConstructor::create('Alice', 7, false),
         ];
 
         yield 'with unknown named constructor' => [

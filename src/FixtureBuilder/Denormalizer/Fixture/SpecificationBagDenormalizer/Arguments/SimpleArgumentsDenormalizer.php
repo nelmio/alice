@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments;
 
+use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
@@ -44,8 +45,11 @@ final class SimpleArgumentsDenormalizer implements ArgumentsDenormalizerInterfac
     {
         $arguments = [];
         foreach ($unparsedArguments as $unparsedIndex => $argument) {
-            $argumentFlags = (is_string($unparsedIndex)) ? $parser->parse($unparsedIndex) : null;
-            $arguments[] = $this->valueDenormalizer->denormalize($scope, $argumentFlags, $argument);
+            $argumentFlags = (is_string($unparsedIndex))
+                ? $parser->parse($unparsedIndex)
+                : new FlagBag((string) $unparsedIndex)
+            ;
+            $arguments[$argumentFlags->getKey()] = $this->valueDenormalizer->denormalize($scope, $argumentFlags, $argument);
         }
 
         return $arguments;
