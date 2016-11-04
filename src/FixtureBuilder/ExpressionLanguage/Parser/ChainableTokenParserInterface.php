@@ -15,6 +15,9 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 
+/**
+ * @internal
+ */
 interface ChainableTokenParserInterface extends TokenParserInterface
 {
     public function canParse(Token $token): bool;

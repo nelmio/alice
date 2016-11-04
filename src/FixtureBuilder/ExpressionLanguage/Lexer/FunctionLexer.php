@@ -17,6 +17,9 @@ use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionEx
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * @internal
+ */
 final class FunctionLexer implements LexerInterface
 {
     use NotClonableTrait;

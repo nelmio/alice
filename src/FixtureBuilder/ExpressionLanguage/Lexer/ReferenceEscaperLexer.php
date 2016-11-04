@@ -20,6 +20,8 @@ use Nelmio\Alice\NotClonableTrait;
 /**
  * Escapes references found in a string to avoid the user to have to manually escape references. For
  * example will automatically escape the @ in "email@example.com".
+ *
+ * @internal
  */
 final class ReferenceEscaperLexer implements LexerInterface
 {

@@ -18,9 +18,12 @@ use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
+/**
+ * @internal
+ */
 final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
 {
-    /** @interval */
+    /** @private */
     const REGEX = '/^(?<quantifier>\d+|<.*>)x (?<elements>.*)/';
 
     /**

@@ -20,6 +20,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * @internal
+ */
 abstract class AbstractChainableParserAwareParser implements ChainableTokenParserInterface, ParserAwareInterface
 {
     use NotClonableTrait;

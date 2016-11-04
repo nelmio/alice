@@ -19,6 +19,9 @@ use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * @internal
+ */
 final class FunctionFixtureReferenceParser implements ParserInterface
 {
     use NotClonableTrait;

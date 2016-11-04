@@ -19,6 +19,9 @@ use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
+/**
+ * @internal
+ */
 final class PropertyReferenceTokenParser extends AbstractChainableParserAwareParser
 {
     /**

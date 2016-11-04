@@ -22,6 +22,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * @internal
+ */
 final class SimpleParser implements ParserInterface
 {
     use NotClonableTrait;

@@ -19,6 +19,8 @@ use Nelmio\Alice\Throwable\ParseThrowable;
 
 /**
  * More specific version of {@see \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface}.
+ *
+ * @internal
  */
 interface TokenParserInterface
 {

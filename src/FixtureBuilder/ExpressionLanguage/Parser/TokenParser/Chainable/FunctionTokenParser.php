@@ -21,9 +21,12 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
+/**
+ * @internal
+ */
 final class FunctionTokenParser extends AbstractChainableParserAwareParser
 {
-    /** @interval */
+    /** @private */
     const REGEX = '/^<(?<function>.+?)\((?<arguments>.*)\)>$/';
 
     /**
