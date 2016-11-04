@@ -16,6 +16,9 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
+/**
+ * @internal
+ */
 interface ParserInterface
 {
     /**

@@ -15,6 +15,9 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
+/**
+ * @internal
+ */
 interface LexerInterface
 {
     /**

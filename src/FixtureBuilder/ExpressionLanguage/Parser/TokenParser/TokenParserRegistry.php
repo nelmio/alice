@@ -21,6 +21,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * @internal
+ */
 final class TokenParserRegistry implements TokenParserInterface, ParserAwareInterface
 {
     use NotClonableTrait;

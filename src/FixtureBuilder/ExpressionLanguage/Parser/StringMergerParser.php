@@ -17,6 +17,9 @@ use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\NotClonableTrait;
 
+/**
+ * @internal
+ */
 final class StringMergerParser implements ParserInterface
 {
     use NotClonableTrait;

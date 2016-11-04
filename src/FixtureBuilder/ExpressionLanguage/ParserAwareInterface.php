@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
+/**
+ * @internal
+ */
 interface ParserAwareInterface
 {
     /**

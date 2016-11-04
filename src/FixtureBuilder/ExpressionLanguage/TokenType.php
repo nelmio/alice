@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
+/**
+ * @internal
+ */
 final class TokenType
 {
     const STRING_TYPE = 'STRING_TYPE';

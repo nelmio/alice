@@ -18,6 +18,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
+/**
+ * @internal
+ */
 final class StringArrayTokenParser extends AbstractChainableParserAwareParser
 {
     /**
