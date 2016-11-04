@@ -25,13 +25,8 @@ Main differences between 2.x and 3.x:
 
 The two entry points of the library are the `DataLoader` and `FileLoader`:
 
-<a href="/nelmio/alice/blob/master/doc/img/FileLoader.png" target="_blank">
-    <img src="/nelmio/alice/raw/master/doc/img/FileLoader.png" alt="FileLoader" style="height: 300px; max-width:100%;">
-</a>
-
-<a href="/nelmio/alice/blob/master/doc/img/DataLoader.png" target="_blank">
-    <img src="/nelmio/alice/raw/master/doc/img/DataLoader.png" alt="DataLoader" style="height: 300px; max-width:100%;">
-</a>
+![FileLoader](doc/img/FileLoader.png)
+![DataLoader](doc/img/DataLoader.png)
 
 Alice's goal is to render a PHP array containing a description of objects and parameters (with support for injected external objects
 and parameters) into a set of objects called `ObjectSet`.
@@ -115,9 +110,7 @@ To run the tests, simply run `bin/tests.sh`.
 The tests should be descriptive and are "testdox friendly" i.e. if you are using the testdox
 option, you will get something like:
 
-<a href="/nelmio/alice/blob/master/doc/img/testdox.png" target="_blank">
-    <img src="/nelmio/alice/raw/master/doc/img/testdox.png" alt="Testdox" style="height: 250px; max-width:100%;">
-</a>
+![Testdox](doc/img/testdox.png)
 
 [1]: https://github.com/fzaninotto/Faker
 [2]: https://github.com/sebastianbergmann/phpunit
