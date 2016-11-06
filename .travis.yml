@@ -9,13 +9,15 @@ php:
   - '7.1'
   - nightly
 
+env:
+  global:
+    - PHPUNIT_FLAGS='--stop-on-failure --verbose'
+
 matrix:
   fast_finish: true
   include:
     - php: '7.0'
       env: COVERAGE='true'
-    - php: '7.0'
-      env: SYMFONY_VERSION='^3.0'
     - php: '7.0'
       env: SYMFONY_VERSION='^3.1'
     - php: '7.0'
@@ -27,10 +29,7 @@ matrix:
 before_install:
   - set -eo pipefail
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - |
-    if [ "nightly" != "$TRAVIS_PHP_VERSION" ] && [ "7.1" != "$TRAVIS_PHP_VERSION" ]; then
-        phpenv config-rm xdebug.ini
-    fi
+  - phpenv config-rm xdebug.ini || true
   - |
     if [ -n "$SYMFONY_VERSION" ]; then
         PHPUNIT_BIN=vendor-bin/symfony/bin/phpunit
@@ -39,7 +38,11 @@ before_install:
         PHPUNIT_BIN=bin/phpunit
         PHPUNIT_CONFIG=phpunit.xml.dist
     fi
-  - PHPUNIT_FLAGS='--stop-on-failure --verbose'
+  - |
+    if [ -n "$COVERAGE" ]; then
+        PHPUNIT_BIN="phpdbg -qrr $PHPUNIT_BIN"
+        PHPUNIT_FLAGS="$PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration"
+    fi
 
 install:
   - composer install --prefer-dist $COMPOSER_FLAGS
@@ -49,13 +52,7 @@ install:
     fi
   - composer bin all install
 
-script:
-  - |
-    if [ -n "$COVERAGE" ]; then
-        phpdbg -qrr $PHPUNIT_BIN -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration
-    else
-        $PHPUNIT_BIN -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS
-    fi
+script: $PHPUNIT_BIN -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS
 
 notifications:
     email: false
