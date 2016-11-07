@@ -153,6 +153,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @group legacy
+     */
     public function testCreatePrivateConstructorInstance()
     {
         $loader = new Loader('en_US', [new FakerProvider]);
