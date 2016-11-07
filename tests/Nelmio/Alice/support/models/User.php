@@ -46,7 +46,7 @@ class User
         $this->favoriteNumber = $favoriteNumber;
     }
 
-    protected function setUsername($username)
+    public function setUsername($username)
     {
         $this->username = $username;
     }

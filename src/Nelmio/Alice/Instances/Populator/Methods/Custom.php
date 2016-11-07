@@ -28,6 +28,11 @@ class Custom implements MethodInterface
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
+        @trigger_error(
+            'Customer setters are deprecated since 2.3.0 and will be removed in 3.0.0.',
+            E_USER_DEPRECATED
+        );
+
         if (!method_exists($object, $fixture->getCustomSetter())) {
             throw new \RuntimeException('Setter ' . $fixture->getCustomSetter() . ' not found in object');
         }

@@ -261,6 +261,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('group', $group->getName());
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadAssignsDataToNonPublicSetters()
     {
         $res = $this->loadData([
@@ -1380,6 +1383,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadCanBypassConstructorsWithRequiredArgs()
     {
         $this->loadData([
@@ -1640,6 +1646,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @group legacy
+     */
     public function testCustomSetFunction()
     {
         $loader = $this->createLoader(
@@ -1668,6 +1677,8 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Setter customNonexistantSetter not found in object
+     *
+     * @group legacy
      */
     public function testCustomNonexistantSetFunction()
     {
