@@ -1,0 +1,5 @@
+Nelmio\Alice\support\models\Task:
+    task_1_{@group_1_user1}:
+        name: <text()>
+    task_list_{@group_list_*}:
+        name: <text()>

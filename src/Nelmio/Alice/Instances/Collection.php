@@ -145,7 +145,7 @@ class Collection
      *
      * @return string[]
      */
-    protected function getKeysByMask($mask)
+    public function getKeysByMask($mask)
     {
         if (!isset($this->keysByMask[$mask])) {
             $this->keysByMask[$mask] = array_values(
