@@ -12,9 +12,16 @@
 namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithDefaultConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithExplicitDefaultConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithOptionalAndRequiredParameterInConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithOptionalParameterInConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithPrivateConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithProtectedConstructor;
+use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithRequiredParameterInConstructor;
 
 /**
- * @covers Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithoutConstructor
+ * @covers \Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithoutConstructor
  */
 class ReflectionWithoutConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,13 +37,7 @@ class ReflectionWithoutConstructorInstantiatorTest extends \PHPUnit_Framework_Te
 
     public function testIsAnInstantiatorMethod()
     {
-        $this->assertTrue(
-            is_a(
-                'Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithoutConstructor',
-                'Nelmio\Alice\Instances\Instantiator\Methods\MethodInterface',
-                true
-            )
-        );
+        $this->assertTrue(is_a(ReflectionWithoutConstructor::class, MethodInterface::class, true));
     }
 
     /**
@@ -58,8 +59,8 @@ class ReflectionWithoutConstructorInstantiatorTest extends \PHPUnit_Framework_Te
 
         $this->assertInstanceOf($class, $actual);
 
-        $class = 'Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithDefaultConstructor';
-        $fixture = $this->createFixtureForClass('Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithDefaultConstructor');
+        $class = DummyWithDefaultConstructor::class;
+        $fixture = $this->createFixtureForClass(DummyWithDefaultConstructor::class);
         $this->instantiator->canInstantiate($fixture);
         $actual = $this->instantiator->instantiate($fixture);
 
@@ -71,18 +72,18 @@ class ReflectionWithoutConstructorInstantiatorTest extends \PHPUnit_Framework_Te
         $returned = [];
 
         $returned['private constructor'] = [
-            $this->createFixtureForClass('Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithPrivateConstructor'),
+            $this->createFixtureForClass(DummyWithPrivateConstructor::class),
             true,
         ];
 
         $returned['protected constructor'] = [
-            $this->createFixtureForClass('Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithProtectedConstructor'),
+            $this->createFixtureForClass(DummyWithProtectedConstructor::class),
             true,
         ];
 
         $returned['private constructor with fixture constructor different from __construct'] = [
             new Fixture(
-                'Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithPrivateConstructor',
+                DummyWithPrivateConstructor::class,
                 'dummy',
                 [
                     '__construct' => [
@@ -95,18 +96,18 @@ class ReflectionWithoutConstructorInstantiatorTest extends \PHPUnit_Framework_Te
         ];
 
         $returned['default constructor'] = [
-            $this->createFixtureForClass('Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithDefaultConstructor'),
+            $this->createFixtureForClass(DummyWithDefaultConstructor::class),
             false,
         ];
 
         $returned['explicit default constructor'] = [
-            $this->createFixtureForClass('Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithExplicitDefaultConstructor'),
+            $this->createFixtureForClass(DummyWithExplicitDefaultConstructor::class),
             false,
         ];
 
         $returned['named constructor'] = [
             new Fixture(
-                'Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithPrivateConstructor',
+                DummyWithPrivateConstructor::class,
                 'dummy',
                 [
                     '__construct' => [
@@ -119,17 +120,17 @@ class ReflectionWithoutConstructorInstantiatorTest extends \PHPUnit_Framework_Te
         ];
 
         $returned['constructor with optional parameter'] = [
-            $this->createFixtureForClass('Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithOptionalParameterInConstructor'),
+            $this->createFixtureForClass(DummyWithOptionalParameterInConstructor::class),
             false,
         ];
 
         $returned['constructor with required parameter'] = [
-            $this->createFixtureForClass('Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithRequiredParameterInConstructor'),
+            $this->createFixtureForClass(DummyWithRequiredParameterInConstructor::class),
             false,
         ];
 
         $returned['constructor with optional and required parameter'] = [
-            $this->createFixtureForClass('Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithOptionalAndRequiredParameterInConstructor'),
+            $this->createFixtureForClass(DummyWithOptionalAndRequiredParameterInConstructor::class),
             false,
         ];
 
