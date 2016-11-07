@@ -16,7 +16,7 @@ class ProtectedDummy
     /** @var string */
     public $name;
 
-    public function setName($name)
+    protected function setName($name)
     {
         $this->name = $name;
     }
