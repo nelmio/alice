@@ -2003,6 +2003,23 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('testfullname', $user->fullname);
     }
 
+    public function testArrayOfNonEntityItems()
+    {
+        $res = $this->loadData([
+            self::USER => [
+                'user' => [
+                    'username' => '5x <name()>',
+                ],
+            ],
+        ]);
+        /** @var User $user */
+        $user = $res['user'];
+
+        $this->assertInstanceOf(self::USER, $user);
+        // This feature is not supported in 2.x.
+        $this->assertFalse(is_array($user->username));
+    }
+
     /**
      * Always return the same structure, see the first sample.
      */
