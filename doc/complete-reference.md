@@ -75,6 +75,9 @@ Now it will generate ten users, with names user1 to user10. Pretty good but
 we only have 10 bobs with the same name, username and email, which is not
 so fancy yet.
 
+
+## Fixture Lists
+
 You can also specify a list of values instead of a range:
 
 ```yaml
