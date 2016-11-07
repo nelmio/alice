@@ -97,6 +97,16 @@ class DirectTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($value, $model->$expectedProperty);
     }
 
+    /**
+     * @group legacy
+     */
+    public function testSetInaccessibleProperty()
+    {
+        $this->direct->set($this->fixture, $model = new PrivateDummy(), 'name', $value = 'John Doe');
+
+        self::assertEquals($value, $model->name);
+    }
+
     public function provideProperties()
     {
         return [
@@ -257,13 +267,6 @@ class DirectTest extends \PHPUnit_Framework_TestCase
 
             'protected setter' => [
                 new ProtectedDummy(),
-                'name',
-                $value,
-                'name',
-            ],
-
-            'private setter' => [
-                new PrivateDummy(),
                 'name',
                 $value,
                 'name',

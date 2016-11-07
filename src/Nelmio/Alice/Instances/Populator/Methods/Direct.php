@@ -45,6 +45,13 @@ class Direct implements MethodInterface
         if (!is_callable([$object, $setter])) {
             // Protected or private method
             $refl = new \ReflectionMethod($object, $setter);
+            if (false === $refl->isPublic()) {
+                @trigger_error(
+                    'Using a private or protected method to set a property is deprecated since 2.3.0 and will be'
+                    .' removed in 3.0.0.',
+                    E_USER_DEPRECATED
+                );
+            }
             $refl->setAccessible(true);
             $refl->invoke($object, $value);
 

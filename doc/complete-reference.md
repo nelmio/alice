@@ -159,6 +159,9 @@ example, the following call will be made on the instance when populating:
 $geopoint->customSetter('foo', 'bar');
 ```
 
+**Note:** custom setters are deprecated since 2.3.0 and will be removed in 3.0. In 3.0, you will have
+to rely on a custom hydrator instead (there is no compatible solution between 2.x and 3.x).
+
 
 ## Optional Data
 

@@ -16,7 +16,7 @@ use Nelmio\Alice\Fixtures\Fixture;
 class Property implements MethodInterface
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function canSet(Fixture $fixture, $object, $property, $value)
     {
@@ -24,20 +24,30 @@ class Property implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function set(Fixture $fixture, $object, $property, $value)
     {
         $refl = new \ReflectionProperty($this->findClass($object, $property), $property);
+        if (false === $refl->isPublic()) {
+            @trigger_error(
+                'Setting a private or protected directly is deprecated since 2.3.0 and will be removed in 3.0.0.',
+                E_USER_DEPRECATED
+            );
+
+        }
+
         $refl->setAccessible(true);
         $refl->setValue($object, $value);
     }
 
     /**
-     * Find which class defines the property.
+     * Finds which class defines the property.
      *
      * @param mixed  $class
      * @param string $property
+     *
+     * @return string
      */
     private function findClass($class, $property)
     {
