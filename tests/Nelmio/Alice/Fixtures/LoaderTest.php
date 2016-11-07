@@ -1572,6 +1572,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DateTime', $res['user']->birthDate);
     }
 
+    /**
+     * @group legacy
+     */
     public function testGeneratedValuesAreUnique()
     {
         $loader = new Loader('en_US', [new FakerProvider]);
