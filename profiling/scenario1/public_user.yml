@@ -1,0 +1,11 @@
+#
+# Scenario: set static properties to an entity directly (public properties)
+#
+
+Nelmio\Alice\scenario1\PublicUser:
+    user0:
+        username: bob
+        fullname: Bob
+        birthDate: 1980-10-10
+        email: bob@example.org
+        favoriteNumber: 42

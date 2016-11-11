@@ -1,5 +1,11 @@
 # Handling Relations
 
+1. [References](#references)
+1. [Multiple References](#multiple-references)
+1. [Self reference](#self-reference)
+1. [Passing references to providers](#passing-references-to-providers)
+
+
 ## References
 
 Let's get back to the Group. Ideally a group should have members, and Alice
@@ -177,5 +183,4 @@ Nelmio\Entity\Group:
 ```
 
 
-Next chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)<br />
-Previous chapter: [Complete Reference](complete-reference.md)
+« [Keep Your Fixtures Dry](fixtures-refactoring.md) • [Complete Reference](complete-reference.md) »

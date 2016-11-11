@@ -44,8 +44,9 @@
     "autoload-dev": {
         "psr-4": {
             "Nelmio\\Alice\\": [
-                "tests",
-                "fixtures"
+                "fixtures",
+                "profiling",
+                "tests"
             ]
         }
     },

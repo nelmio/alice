@@ -1,5 +1,9 @@
 # Getting Started
 
+1. [Basic Usage](#basic-usage)
+1. [Framework integration](#framework-integration)
+  1. [Symfony](#symfony)
+
 
 ## Basic Usage
 
@@ -158,5 +162,5 @@ nelmio_alice:
                                    # failing.
 ```
 
-Next chapter: [Complete Reference](complete-reference.md)<br />
-Previous chapter: [Installation](../README.md#installation)
+
+« [Complete Reference](complete-reference.md) • [Installation](../README.md#installation) »
