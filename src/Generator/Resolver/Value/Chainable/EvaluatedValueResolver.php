@@ -51,6 +51,10 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
     ): ResolvedValueWithFixtureSet
     {
         $_scope = $scope;
+        try {
+            $_scope['current'] = $fixture->getValueForCurrent();
+        } catch (\Throwable $e) {}
+
         $expression = $this->replacePlaceholders($value->getValue());
         $evaluateExpression = function ($_expression) use ($_scope) {
             foreach ($_scope as $_scopeVariableName => $_scopeVariableValue) {
