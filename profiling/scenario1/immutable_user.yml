@@ -1,0 +1,12 @@
+#
+# Scenario: set static properties via a constructor
+#
+
+Nelmio\Alice\scenario1\ImmutableUser:
+    user0:
+        __construct:
+            - bob
+            - Bob
+            - '1980-10-10'
+            - bob@example.org
+            - 42

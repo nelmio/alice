@@ -1,5 +1,15 @@
 # Complete Reference
 
+1. [Creating Fixtures](#creating-fixtures)
+  1. [YAML](#yaml)
+  1. [PHP](#php)
+1. [Fixture Ranges](#fixture-ranges)
+1. [Calling Methods](#calling-methods)
+1. [Specifying Constructor Arguments](#specifying-constructor-arguments)
+1. [Optional Data](#optional-data)
+1. [Handling Unique Constraints](#handling-unique-constraints)
+
+
 ## Creating Fixtures
 
 ### YAML
@@ -216,5 +226,4 @@ Nelmio\Entity\User:
 **TODO**: add notes on the scope and the arrays
 
 
-Next chapter: [Handling Relations](relations-handling.md)<br />
-Previous chapter: [Getting Started](getting-started.md)
+« [Handling Relations](relations-handling.md) • [Getting Started](getting-started.md) »

@@ -6,10 +6,12 @@ picture of the library mechanisms.
 
 1. [Differences between 2.x and 3.x](#differences-between-2x-and-3x)
 1. [Architecture](#architecture)
-    1. [FixtureBuilder](#fixturebuilder)
-    1. [Generator](#generator)
+  1. [FixtureBuilder](#fixturebuilder)
+  1. [Generator](#generator)
 1. [Expression Language](#expression-language)
 1. [Contributing](#contributing)
+  1. [Testing](#testing)
+  1. [Profiling](#profiling)
 
 
 ## Differences between 2.x and 3.x
@@ -96,14 +98,16 @@ with the [original RFC](https://github.com/nelmio/alice/issues/377).
 
 ## Contributing
 
+### Testing
+
 The project uses [PHPUnit][2] for tests. The library also includes framework bridges (like
 [for Symfony](https://github.com/nelmio/alice/tree/master/src/Bridge/Symfony)), which amounts to registering the right
 services with the right properties (like tags and configuration) to the framework Dependency Injection Container. Any
 other framework special features should be handled in another library, bundle, module etc.
 
 To avoid any conflicts, the framework dependencies used by the bridges are installed in dedicated folders thanks to
-[bamarni bin composer plugin][3] and [theofidry inheritance composer plugin][4]. As a result, if you want to run the tests for Symfony, you must run the tests with
-`phpunit_symfony.xml.dist` instead of `phpunit.xml.dist`.
+[bamarni bin composer plugin][3] and [theofidry inheritance composer plugin][4]. As a result, if you want to run the
+tests for Symfony, you must run the tests with `phpunit_symfony.xml.dist` instead of `phpunit.xml.dist`.
 
 To run the tests, simply run `bin/tests.sh`.
 
@@ -112,7 +116,16 @@ option, you will get something like:
 
 ![Testdox](doc/img/testdox.png)
 
+
+### Profiling
+
+A Profiling of different scenari is done with [Blackfire][5]. The scenario can be found under `profiling`. If you wish
+to run them, you can try to simply run `bin/profiling.sh`. You may however have to touch some elements of the
+blackfire configuration (see the `profiling/scenarioX/blackfire.php` files).
+
+
 [1]: https://github.com/fzaninotto/Faker
 [2]: https://github.com/sebastianbergmann/phpunit
 [3]: https://github.com/bamarni/composer-bin-plugin
 [4]: https://github.com/theofidry/composer-inheritance-plugin
+[5]: https://blackfire.io/dashboard/mine/profiles

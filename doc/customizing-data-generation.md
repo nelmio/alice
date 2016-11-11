@@ -1,5 +1,13 @@
 # Customizing Data Generation
 
+1. [Faker Data](#faker-data)
+1. [Localized Fake Data](#localized-fake-data) **TODO: port that change to v2**
+1. [Default Providers](#default-providers)
+  1. [Identity](#identity)
+1. [Reuse generated data using objects value](#reuse-generated-data-using-objects-value)
+1. [Custom Faker Data Providers](#custom-faker-data-providers)
+
+
 ## Faker Data
 
 Alice integrates with the [Faker](https://github.com/fzaninotto/Faker) library.
@@ -147,5 +155,4 @@ the `NativeLoader::createFakerGenerator()` method or register it as a service
 with the tag `nelmio_alice.faker.provider`.
 
 
-Previous chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)<br />
-Go back to [Table of Contents](../README.md#table-of-contents)
+« [Keep Your Fixtures Dry](fixtures-refactoring.md) • [Table of Contents](../README.md#table-of-contents) »

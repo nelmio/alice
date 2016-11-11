@@ -1,5 +1,11 @@
 # Keep Your Fixtures Dry
 
+1. [Fixture Inheritance](#fixture-inheritance)
+1. [Including files](#including-files)
+1. [Variables](#variables)
+1. [Parameters](#parameters)
+
+
 ## Fixture inheritance
 
 Base fixtures, to be extended from, can be created to be able to *only* need
@@ -146,5 +152,4 @@ Additionally, you can pass in a list of defined parameters as the second
 argument of `{File,Data}LoaderInterface::load{File,Data}()`.
 
 
-Next chapter: [Customize Data Generation](customizing-data-generation.md)<br />
-Previous chapter: [Handling Relations](relations-handling.md)
+« [Customize Data Generation](customizing-data-generation.md) • [Handling Relations](relations-handling.md) »
