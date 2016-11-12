@@ -21,20 +21,20 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 require_once __DIR__.'/../../vendor-bin/profiling/vendor/autoload.php';
 
 $loader = new NativeLoader();
-//$blackfire = new \Blackfire\Client();
-//
-//$config = new \Blackfire\Profile\Configuration();
-//$config->setTitle('Scenario 2');
-//$config->setSamples(10);
-//$config->setReference(2);
-//
-//$probe = $blackfire->createProbe($config, false);
+$blackfire = new \Blackfire\Client();
 
-//$probe->enable();
+$config = new \Blackfire\Profile\Configuration();
+$config->setTitle('Scenario 2');
+$config->setSamples(10);
+$config->setReference(2);
+
+$probe = $blackfire->createProbe($config, false);
+
+$probe->enable();
 $loader->loadFile(__DIR__.'/fixtures.yml');
-//$probe->disable();
-//
-//$blackfire->endProbe($probe);
-//
-//$output = new SymfonyStyle(new ArrayInput([]), new ConsoleOutput());
-//$output->success('Finished!');
+$probe->disable();
+
+$blackfire->endProbe($probe);
+
+$output = new SymfonyStyle(new ArrayInput([]), new ConsoleOutput());
+$output->success('Finished!');
