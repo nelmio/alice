@@ -36,10 +36,58 @@ final class UniqueValuesPool
     {
         $cachedValues = $this->pool[$valueId];
         foreach ($cachedValues as $cachedValue) {
-            if (
-                ((is_object($value) || is_array($value)) && $value == $cachedValue)
-                || $value === $cachedValue
-        ) {
+            if ($this->isIdentical($cachedValue, $value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isIdentical($val1, $val2): bool
+    {
+        if (gettype($val1) !== gettype($val2)) {
+            return false;
+        }
+
+        if (is_object($val1)) {
+            return $val1 == $val2;
+        }
+
+        if (is_scalar($val1) || null === $val1) {
+            return $val1 === $val2;
+        }
+
+        if (false === is_array($val1)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Unsupported type "%s": cannot determine if two values of this type are identical.',
+                    gettype($val1)
+                )
+            );
+        }
+
+        foreach ($val1 as $key => $item) {
+            if (is_string($key)) {
+                if (false === $this->isIdentical($item, $val2[$key])) {
+                    return false;
+                }
+
+                continue;
+            }
+
+            if (false === $this->arrayHasValue($item, $val2)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    private function arrayHasValue($value, array $array): bool
+    {
+        foreach ($array as $arrayValue) {
+            if ($this->isIdentical($arrayValue, $value)) {
                 return true;
             }
         }
