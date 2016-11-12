@@ -5,32 +5,32 @@
 Nelmio\Alice\scenario2\ImmutableUser:
     immutable_user_{0..1000}:
         __construct:
-            0 (unique): <userName()>
-            1 (unique): <name()>
-            2 (unique): <dateTime()>
-            3 (unique): <email()>
-            4 (unique): <randomNumber()>
+            0: <userName()>
+            1: <name()>
+            2: <dateTime()>
+            3: <email()>
+            4: <randomNumber()>
 
 Nelmio\Alice\scenario2\MutableUser:
     mutable_user_{0..1000}:
-        username (unique): <userName()>
-        fullname (unique): <name()>
-        birthDate (unique): <dateTime()>
-        email (unique): <email()>
-        favoriteNumber (unique): <randomNumber()>
+        username: <userName()>
+        fullname: <name()>
+        birthDate: <dateTime()>
+        email: <email()>
+        favoriteNumber: <randomNumber()>
 
 Nelmio\Alice\scenario2\PublicUser:
     public_user_{0..1000}:
-        username (unique): <userName()>
-        fullname (unique): <name()>
-        birthDate (unique): <dateTime()>
-        email (unique): <email()>
-        favoriteNumber (unique): <randomNumber()>
+        username: <userName()>
+        fullname: <name()>
+        birthDate: <dateTime()>
+        email: <email()>
+        favoriteNumber: <randomNumber()>
 
 stdClass:
     std_user_{0..1000}:
-        username (unique): <userName()>
-        fullname (unique): <name()>
-        birthDate (unique): <dateTime()>
-        email (unique): <email()>
-        favoriteNumber (unique): <randomNumber()>
+        username: <userName()>
+        fullname: <name()>
+        birthDate: <dateTime()>
+        email: <email()>
+        favoriteNumber: <randomNumber()>

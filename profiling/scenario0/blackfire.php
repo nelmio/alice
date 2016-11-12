@@ -41,40 +41,40 @@ $objects = [];
 
 for ($i = 0; $i <= 1000; $i++) {
     $objects['immutable_user_'.$i] = new ImmutableUser(
-        $faker->unique()->userName,
-        $faker->unique()->name,
-        $faker->unique()->dateTime,
-        $faker->unique()->email,
-        $faker->unique()->randomNumber
+        $faker->userName,
+        $faker->name,
+        $faker->dateTime,
+        $faker->email,
+        $faker->randomNumber
     );
 }
 for ($i = 0; $i <= 1000; $i++) {
     $user = new MutableUser();
-    $user->setUsername($faker->unique()->userName);
-    $user->setFullname($faker->unique()->name);
-    $user->setBirthDate($faker->unique()->dateTime);
-    $user->setEmail($faker->unique()->email);
-    $user->setFavoriteNumber($faker->unique()->randomNumber);
+    $user->setUsername($faker->userName);
+    $user->setFullname($faker->name);
+    $user->setBirthDate($faker->dateTime);
+    $user->setEmail($faker->email);
+    $user->setFavoriteNumber($faker->randomNumber);
 
     $objects['mutable_user_'.$i] = $user;
 }
 for ($i = 0; $i <= 1000; $i++) {
     $user = new PublicUser();
-    $user->username = $faker->unique()->userName;
-    $user->fullname = $faker->unique()->name;
-    $user->birthDate = $faker->unique()->dateTime;
-    $user->email = $faker->unique()->email;
-    $user->favoriteNumber = $faker->unique()->randomNumber;
+    $user->username = $faker->userName;
+    $user->fullname = $faker->name;
+    $user->birthDate = $faker->dateTime;
+    $user->email = $faker->email;
+    $user->favoriteNumber = $faker->randomNumber;
 
     $objects['public_user_'.$i] = $user;
 }
 for ($i = 0; $i <= 1000; $i++) {
     $user = new \stdClass();
-    $user->username = $faker->unique()->userName;
-    $user->fullname = $faker->unique()->name;
-    $user->birthDate = $faker->unique()->dateTime;
-    $user->email = $faker->unique()->email;
-    $user->favoriteNumber = $faker->unique()->randomNumber;
+    $user->username = $faker->userName;
+    $user->fullname = $faker->name;
+    $user->birthDate = $faker->dateTime;
+    $user->email = $faker->email;
+    $user->favoriteNumber = $faker->randomNumber;
 
     $objects['public_user_'.$i] = $user;
 }
