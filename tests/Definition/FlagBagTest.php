@@ -31,73 +31,106 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
 {
     public function testReadAccessorsReturnPropertiesValues()
     {
-        $flags = new FlagBag('user0');
+        $bag = new FlagBag('user0');
 
-        $this->assertEquals('user0', $flags->getKey());
+        $this->assertEquals('user0', $bag->getKey());
     }
 
     public function testIsImmutable()
     {
+        $bag = (new FlagBag(''))->withFlag($flag = new MutableFlag('foo', new \stdClass()));
+        $flag->getObject()->foo = 'bar';
+
+        $this->assertEquals(
+            (new FlagBag(''))->withFlag($flag = new MutableFlag('foo', new \stdClass())),
+            $bag
+        );
+
         $this->assertTrue(true, 'Nothing to do.');
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testAddingAFlagCreatesANewModifiedInstance()
     {
-        $flag = new MutableFlag('flag0');
-        $flags = new FlagBag('user0');
-        $newFlags = $flags->withFlag($flag);
+        $flag = new MutableFlag('flag0', new \stdClass());
+        $bag1 = new FlagBag('user0');
+        $bag2 = $bag1->withFlag($flag);
 
-        $this->assertInstanceOf(FlagBag::class, $flags);
-        $this->assertNotSame($flags, $newFlags);
+        $this->assertInstanceOf(FlagBag::class, $bag1);
+        $this->assertNotSame($bag1, $bag2);
 
-        $this->assertCount(0, $flags);
-        $this->assertCount(1, $newFlags);
+        $this->assertCount(0, $bag1);
+        $this->assertCount(1, $bag2);
+
 
         // Mutate injected value
-        $flag->setValue('flag1');
+        $flag->setStringValue('flag1');
+        $flag->getObject()->injected = true;
 
         // Mutate return value
-        foreach ($flags as $flag) {
-            $flag->setvalue('flag2');
+        foreach ($bag1 as $flag) {
+            /** @var MutableFlag $flag */
+            $flag->setStringValue('flag2');
+            $flag->getObject()->foo = 'bar';
         }
 
         $this->assertEquals(
-            $flags->withFlag(new MutableFlag('flag0')),
-            $newFlags
+            (new FlagBag('user0'))->withFlag(new MutableFlag('flag0', new \stdClass())),
+            $bag2
         );
+    }
 
-        $anotherBag = (new FlagBag('user2'))->withFlag(new MutableFlag('another_flag0'));
-        $mergedBag = $newFlags->mergeWith($anotherBag);
+    public function testMergingTwoBagsCreatesANewModifiedInstance()
+    {
+        $bag1 = (new FlagBag('bag1'))->withFlag($flag1 = new MutableFlag('flag1', new \stdClass()));
+        $bag2 = (new FlagBag('bag2'))->withFlag($flag2 = new MutableFlag('flag2', new \stdClass()));
+        $mergedBag = $bag1->mergeWith($bag2);
 
         $this->assertInstanceOf(FlagBag::class, $mergedBag);
-        $this->assertEquals('user0', $mergedBag->getKey(), 'Expected original key to be kept.');
-        $this->assertCount(2, $mergedBag);
 
         // Mutate injected value
-        $flag->setValue('another_flag1');
+        $flag1->setStringValue('flagA');
+        $flag1->getObject()->foo = 'bar';
+
+        $flag2->setStringValue('flagB');
+        $flag2->getObject()->foo = 'baz';
+
 
         // Mutate return value
-        foreach ($flags as $flag) {
-            $flag->setvalue('another_flag2');
+        foreach ($bag1 as $flag) {
+            /** @var MutableFlag $flag */
+            $flag->setStringValue('flagAA');
+            $flag->getObject()->foo = 'rab';
+        }
+        foreach ($bag2 as $flag) {
+            /** @var MutableFlag $flag */
+            $flag->setStringValue('flagBB');
+            $flag->getObject()->foo = 'zab';
+        }
+        foreach ($mergedBag as $index => $flag) {
+            /** @var MutableFlag $flag */
+            $flag->setStringValue('flagM'.$index);
+            $flag->getObject()->foo = $index;
         }
 
+
         $this->assertEquals(
-            $newFlags->mergeWith($anotherBag),
+            (new FlagBag('bag1'))->withFlag(new MutableFlag('flag1', new \stdClass())),
+            $bag1
+        );
+        $this->assertEquals(
+            (new FlagBag('bag2'))->withFlag(new MutableFlag('flag2', new \stdClass())),
+            $bag2
+        );
+        $this->assertEquals(
+            (new FlagBag('bag1'))
+                ->withFlag(new MutableFlag('flag1', new \stdClass()))
+                ->withFlag(new MutableFlag('flag2', new \stdClass()))
+            ,
             $mergedBag
         );
-
-        $renamedBag = $anotherBag->withKey('dummy');
-        $this->assertEquals(
-            (new FlagBag('user2'))->withFlag(new MutableFlag('another_flag0')),
-            $anotherBag
-        );
-        $this->assertEquals(
-            (new FlagBag('dummy'))->withFlag(new MutableFlag('another_flag0')),
-            $renamedBag
-        );
     }
 
-    public function testMergingTwoBagsIsImmutable()
+    public function testCanMergeTwoBagsWithoutOverridingExistingValues()
     {
         $firstBag = (new FlagBag('first'))
             ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
@@ -108,8 +141,10 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
             ->withFlag(new ElementFlag('baz'))
         ;
 
-        $mergeFirstWithSecond = $firstBag->mergeWith($secondBag);
-        $mergeSecondWithFirst = $secondBag->mergeWith($firstBag);
+        $mergeFirstWithSecondWithOverriding = $firstBag->mergeWith($secondBag);
+        $mergeFirstWithSecondWithoutOverriding = $firstBag->mergeWith($secondBag, false);
+        $mergeSecondWithFirstWithOverriding = $secondBag->mergeWith($firstBag);
+        $mergeSecondWithFirstWithoutOverriding = $secondBag->mergeWith($firstBag, false);
 
         $this->assertEquals(
             (new FlagBag('first'))
@@ -123,61 +158,35 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
                 ->withFlag(new ElementFlag('baz')),
             $secondBag
         );
+
         $this->assertEquals(
             (new FlagBag('first'))
                 ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
                 ->withFlag(new ElementFlag('foz'))
                 ->withFlag(new ElementFlag('baz')),
-            $mergeFirstWithSecond
-        );
-        $this->assertEquals(
-            (new FlagBag('second'))
-                ->withFlag(new ElementFlag('baz'))
-                ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
-                ->withFlag(new ElementFlag('foz')),
-            $mergeSecondWithFirst
-        );
-    }
-
-    public function testCanMergeTwoBagsWithoutOverriddingExistingValues()
-    {
-        $firstBag = (new FlagBag('first'))
-            ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
-            ->withFlag(new ElementFlag('foz'))
-        ;
-        $secondBag = (new FlagBag('second'))
-            ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
-            ->withFlag(new ElementFlag('baz'))
-        ;
-
-        $mergeFirstWithSecond = $firstBag->mergeWith($secondBag, false);
-        $mergeSecondWithFirst = $secondBag->mergeWith($firstBag, false);
-
-        $this->assertEquals(
-            (new FlagBag('first'))
-                ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
-                ->withFlag(new ElementFlag('foz')),
-            $firstBag
-        );
-        $this->assertEquals(
-            (new FlagBag('second'))
-                ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
-                ->withFlag(new ElementFlag('baz')),
-            $secondBag
+            $mergeFirstWithSecondWithOverriding
         );
         $this->assertEquals(
             (new FlagBag('first'))
                 ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
                 ->withFlag(new ElementFlag('foz'))
                 ->withFlag(new ElementFlag('baz')),
-            $mergeFirstWithSecond
+            $mergeFirstWithSecondWithoutOverriding
+        );
+
+        $this->assertEquals(
+            (new FlagBag('second'))
+                ->withFlag(new ElementFlag('baz'))
+                ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
+                ->withFlag(new ElementFlag('foz')),
+            $mergeSecondWithFirstWithOverriding
         );
         $this->assertEquals(
             (new FlagBag('second'))
                 ->withFlag(new ElementFlag('baz'))
                 ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
                 ->withFlag(new ElementFlag('foz')),
-            $mergeSecondWithFirst
+            $mergeSecondWithFirstWithoutOverriding
         );
     }
 

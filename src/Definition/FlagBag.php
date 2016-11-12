@@ -54,8 +54,8 @@ final class FlagBag implements \IteratorAggregate, \Countable
      */
     public function withFlag(FlagInterface $flag): self
     {
-        $clone = clone $this;
-        $clone->flags[$flag->__toString()] = clone $flag;
+        $clone = deep_clone($this);
+        $clone->flags[$flag->__toString()] = deep_clone($flag);
         
         return $clone;
     }
@@ -74,17 +74,17 @@ final class FlagBag implements \IteratorAggregate, \Countable
     public function mergeWith(self $flags, bool $override = true): self
     {
         if ($override) {
-            $clone = clone $this;
+            $clone = deep_clone($this);
             foreach ($flags as $stringFlag => $flag) {
                 /** @var FlagInterface $flag */
-                $clone->flags[$flag->__toString()] = clone $flag;
+                $clone->flags[$flag->__toString()] = deep_clone($flag);
             }
         } else {
-            $clone = clone $flags;
+            $clone = deep_clone($flags);
             $clone->key = $this->key;
             foreach ($this as $stringFlag => $flag) {
                 /** @var FlagInterface $flag */
-                $clone->flags[$flag->__toString()] = clone $flag;
+                $clone->flags[$flag->__toString()] = deep_clone($flag);
             }
         }
 
@@ -101,7 +101,7 @@ final class FlagBag implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        return new \ArrayIterator(array_values($this->flags));
+        return new \ArrayIterator(array_values(deep_clone($this->flags)));
     }
 
     /**

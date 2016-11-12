@@ -20,11 +20,17 @@ class MutableFlag implements FlagInterface
     /**
      * @var string
      */
-    private $value;
+    private $stringValue;
 
-    public function __construct(string $value)
+    /**
+     * @var
+     */
+    private $object;
+
+    public function __construct(string $stringValue, $object)
     {
-        $this->value = $value;
+        $this->stringValue = $stringValue;
+        $this->object = $object;
     }
 
     /**
@@ -32,11 +38,16 @@ class MutableFlag implements FlagInterface
      */
     public function __toString(): string
     {
-        return $this->value;
+        return $this->stringValue;
     }
 
-    public function setValue(string $value)
+    public function setStringValue(string $value)
     {
-        $this->value = $value;
+        $this->stringValue = $value;
+    }
+
+    public function getObject()
+    {
+        return $this->object;
     }
 }
