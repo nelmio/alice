@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
+use Nelmio\Alice\Exception\NoValueForCurrentException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -50,12 +51,20 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
+        // Scope exclusive to the evaluated expression
+        // We make use of the underscore prefix (`_`) here to limit the possible conflicts with the variables injected
+        // in the scope.
         $_scope = $scope;
         try {
             $_scope['current'] = $fixture->getValueForCurrent();
-        } catch (\Throwable $e) {}
+        } catch (NoValueForCurrentException $exception) {
+            // Continue
+        }
 
         $expression = $this->replacePlaceholders($value->getValue());
+        // Closure in which the expression is evaluated; This is done in a closure to avoid the expression to have
+        // access to this method variables (which should remain unknown) and we injected only the variables of the
+        // closure.
         $evaluateExpression = function ($_expression) use ($_scope) {
             foreach ($_scope as $_scopeVariableName => $_scopeVariableValue) {
                 $$_scopeVariableName = $_scopeVariableValue;
@@ -73,6 +82,14 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         return new ResolvedValueWithFixtureSet($evaluatedExpression, $fixtureSet);
     }
 
+    /**
+     * Replaces references to another fixtures, e.g. "@another_dummy" by the variable of the scope
+     * "$_instances['another_dummy']".
+     *
+     * @param string $expression
+     *
+     * @return string
+     */
     private function replacePlaceholders(string $expression): string
     {
         return preg_replace('/(@(?<id>[^\ @\-]+))/', '\$_instances[\'$2\']', $expression);
