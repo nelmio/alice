@@ -27,6 +27,8 @@ final class ObjectBag implements \IteratorAggregate, \Countable
      */
     private $objects = [];
 
+    private $array = [];
+
     public function __construct(array $objects = [])
     {
         foreach ($objects as $id => $object) {
@@ -41,6 +43,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
                     );
                 }
                 $this->objects[$id] = $object;
+                $this->array[$id] = $object->getInstance();
 
                 continue;
             }
@@ -48,6 +51,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
             $this->objects[$id] = new CompleteObject(
                 new SimpleObject($id, $object)
             );
+            $this->array[$id] = $object;
         }
     }
 
@@ -63,6 +67,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     {
         $clone = clone $this;
         $clone->objects[$object->getId()] = $object;
+        $clone->array[$object->getId()] = $object->getInstance();
 
         return $clone;
     }
@@ -78,6 +83,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     {
         $clone = clone $this;
         unset($clone->objects[$objectOrFixture->getId()]);
+        unset($clone->array[$objectOrFixture->getId()]);
 
         return $clone;
     }
@@ -95,6 +101,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
         $clone = clone $this;
         foreach ($objects->objects as $reference => $object) {
             $clone->objects[$reference] = $object;
+            $clone->array[$reference] = $object->getInstance();
         }
         
         return $clone;
@@ -142,11 +149,6 @@ final class ObjectBag implements \IteratorAggregate, \Countable
 
     public function toArray(): array
     {
-        $array = [];
-        foreach ($this->objects as $reference => $object) {
-            $array[$reference] = $object->getInstance();
-        }
-
-        return $array;
+        return $this->array;
     }
 }
