@@ -173,7 +173,26 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
             $fixtures[$key] = $value;
         }
 
-        $this->assertSame($fixtures, array_values($this->propRefl->getValue($bag)));
+        $this->assertSame($fixtures, $this->propRefl->getValue($bag));
+    }
+
+    public function testToArray()
+    {
+        $fixture1 = new DummyFixture('foo');
+        $fixture2 = new DummyFixture('bar');
+
+        $bag = (new FixtureBag())
+            ->with($fixture1)
+            ->with($fixture2)
+        ;
+
+        $this->assertEquals(
+            [
+                'foo' => $fixture1,
+                'bar' => $fixture2,
+            ],
+            $bag->toArray()
+        );
     }
 
     private function assertSameFixtures(array $expected, FixtureBag $actual)

@@ -99,6 +99,11 @@ final class FixtureBag implements \IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator(array_values($this->fixtures));
+        return new \ArrayIterator($this->fixtures);
+    }
+
+    public function toArray(): array
+    {
+        return $this->fixtures;
     }
 }
