@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
+use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\UniqueValuesPool
@@ -26,80 +27,198 @@ class UniqueValuesPoolTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($pool->has(new UniqueValue('', '')));
     }
 
-    public function testHasScalarValue()
-    {
-        $pool = new UniqueValuesPool();
-        $value0 = new UniqueValue('scalar', 100);
-        $value1 = new UniqueValue('scalar', 101);
-        $pool->add($value0);
-
-        $this->assertTrue($pool->has($value0));
-        $this->assertFalse($pool->has($value1));
-
-        $pool->add($value1);
-
-        $this->assertTrue($pool->has($value0));
-        $this->assertTrue($pool->has($value1));
-
-        $this->assertFalse($pool->has($value0->withValue(200)));
-    }
-
-    public function testHasEmptyArrayValue()
-    {
-        $pool = new UniqueValuesPool();
-        $value = new UniqueValue('empty array', []);
-        $pool->add($value);
-
-        $this->assertTrue($pool->has($value));
-    }
-
-    public function testHasArrayWithScalarValue()
-    {
-        $pool = new UniqueValuesPool();
-        $value = new UniqueValue('scalar array', [10, 11]);
-        $pool->add($value);
-
-        $this->assertTrue($pool->has($value));
-
-        $newValue = [11, 10];
-        $this->assertFalse($pool->has($value->withValue($newValue)));
-    }
-
-    public function testHasArrayWithObjectValue()
-    {
-        $pool = new UniqueValuesPool();
-        $value = new UniqueValue('object array', [new \stdClass()]);
-        $pool->add($value);
-
-        $this->assertTrue($pool->has($value));
-
-        $newValue = new \stdClass();
-        $newValue->foo = 'bar';
-        $newValue = $value->withValue([$newValue]);
-
-        $this->assertFalse($pool->has($newValue));
-    }
-
-    public function testHasObjectValue()
-    {
-        $pool = new UniqueValuesPool();
-        $value = new UniqueValue('object', new \stdClass());
-        $pool->add($value);
-
-        $this->assertTrue($pool->has($value));
-
-        $newValue = $value->getValue();
-        $this->assertTrue($pool->has($value->withValue($newValue)));
-
-        $newValue->foo = 'bar';
-        $this->assertFalse($pool->has($value->withValue($newValue)));
-    }
-
     /**
      * @depends Nelmio\Alice\Definition\Value\UniqueValueTest::testIsImmutable
      */
     public function testIsImmutable()
     {
         $this->assertTrue(true, 'Nothing to do.');
+    }
+
+    /**
+     * @dataProvider provideHasValueSet
+     */
+    public function testHasObjectValue(UniqueValuesPool $pool, UniqueValue $value, bool $expected)
+    {
+        $this->assertEquals($expected, $pool->has($value));
+
+        $pool->add($value);
+        $this->assertTrue($pool->has($value));
+    }
+
+    public function provideHasValueSet()
+    {
+        $baseValue = new UniqueValue('foo', 'temporary value');
+
+        // Checks for null
+        yield '[null value] empty' => [
+            new UniqueValuesPool(),
+            $baseValue->withValue(null),
+            false,
+        ];
+
+        yield '[null value] with `null' => [
+            $this->createPoolWithValue(null),
+            $baseValue->withValue(null),
+            true,
+        ];
+
+        yield '[null value] with `false' => [
+            $this->createPoolWithValue(false),
+            $baseValue->withValue(null),
+            false,
+        ];
+
+        yield '[null value] with empty array' => [
+            $this->createPoolWithValue([]),
+            $baseValue->withValue(null),
+            false,
+        ];
+
+        yield '[null value] with empty string' => [
+            $this->createPoolWithValue(''),
+            $baseValue->withValue(null),
+            false,
+        ];
+
+
+        // Full checks for a scalar value
+        yield '[`true`] empty' => [
+            new UniqueValuesPool(),
+            $baseValue->withValue(true),
+            false,
+        ];
+
+        yield '[`true`] with `true`' => [
+            $this->createPoolWithValue(true),
+            $baseValue->withValue(true),
+            true,
+        ];
+
+        yield '[`true`] with `1`' => [
+            $this->createPoolWithValue(1),
+            $baseValue->withValue(true),
+            false,
+        ];
+
+        yield '[`true`] with `-1`' => [
+            $this->createPoolWithValue(-1),
+            $baseValue->withValue(true),
+            false,
+        ];
+
+        yield '[`true`] with `"1"`' => [
+            $this->createPoolWithValue('1'),
+            $baseValue->withValue(true),
+            false,
+        ];
+
+        yield '[`true`] with `"-1"`' => [
+            $this->createPoolWithValue('-1'),
+            $baseValue->withValue(true),
+            false,
+        ];
+
+        yield '[`true`] with `"alice"`' => [
+            $this->createPoolWithValue('alice'),
+            $baseValue->withValue(true),
+            false,
+        ];
+
+
+        // Check objects
+        yield 'with two equivalent objects' => [
+            $this->createPoolWithValue(new \stdClass()),
+            $baseValue->withValue(new \stdClass()),
+            true,
+        ];
+
+        yield 'with two non-equivalent objects' => [
+            $this->createPoolWithValue(new \stdClass()),
+            $baseValue->withValue(StdClassFactory::create(['foo' => 'bar'])),
+            false,
+        ];
+
+        yield 'with two equivalent objects (2)' => [
+            $this->createPoolWithValue(
+                StdClassFactory::create([
+                    'relatedDummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ])
+                ])
+            ),
+            $baseValue->withValue(
+                StdClassFactory::create([
+                    'relatedDummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ])
+                ])
+            ),
+            true,
+        ];
+
+        yield 'with two non-equivalent objects (2)' => [
+            $this->createPoolWithValue(
+                StdClassFactory::create([
+                    'relatedDummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ])
+                ])
+            ),
+            $baseValue->withValue(
+                StdClassFactory::create([
+                    'relatedDummy' => StdClassFactory::create([
+                        'foo' => new \stdClass(),
+                    ])
+                ])
+            ),
+            false,
+        ];
+
+
+        // Checks arrays
+        yield 'two identical arrays' => [
+            $this->createPoolWithValue([]),
+            $baseValue->withValue([]),
+            true,
+        ];
+
+        yield 'two equivalent arrays' => [
+            $this->createPoolWithValue([10, 20]),
+            $baseValue->withValue([20, 10]),
+            true,
+        ];
+
+        yield 'two equivalent arrays (2)' => [
+            $this->createPoolWithValue([10, 'foo' => new \stdClass(), 20]),
+            $baseValue->withValue([20, 10, 'foo' => new \stdClass()]),
+            true,
+        ];
+
+        yield 'two non-equivalent arrays (2)' => [
+            $this->createPoolWithValue([10, 20, 30]),
+            $baseValue->withValue([20, 10]),
+            false,
+        ];
+
+        yield 'two non-equivalent arrays (3)' => [
+            $this->createPoolWithValue([1]),
+            $baseValue->withValue([true]),
+            false,
+        ];
+
+        yield 'two non-equivalent arrays (4)' => [
+            $this->createPoolWithValue([10, 'foo' => StdClassFactory::create(['foo' => 'bar']), 20]),
+            $baseValue->withValue([20, 10, 'foo' => new \stdClass()]),
+            false,
+        ];
+    }
+
+    private function createPoolWithValue($value): UniqueValuesPool
+    {
+        $pool = new UniqueValuesPool();
+        $pool->add(new UniqueValue('foo', $value));
+
+        return $pool;
     }
 }
