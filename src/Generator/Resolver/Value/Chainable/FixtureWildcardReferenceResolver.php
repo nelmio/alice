@@ -38,6 +38,8 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
      */
     private $resolver;
 
+    private $idsByPattern = [];
+
     public function __construct(ValueResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
@@ -108,26 +110,25 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
      */
     private function getSuitableIds(FixtureMatchReferenceValue $value, ResolvedFixtureSet $fixtureSet): array
     {
-        $ids = [];
-
-        $fixtures = $fixtureSet->getFixtures();
-        foreach ($fixtures as $fixture) {
-            /** @var FixtureInterface $fixture */
-            $id = $fixture->getId();
-            if ($value->match($id)) {
-                $ids[$id] = true;
-            }
+        if (array_key_exists($pattern = $value->getValue(), $this->idsByPattern)) {
+            return $this->idsByPattern[$pattern];
         }
 
-        $objects = $fixtureSet->getObjects();
-        foreach ($objects as $object) {
-            /** @var ObjectInterface $object */
-            $id = $object->getId();
-            if ($value->match($id)) {
-                $ids[$id] = true;
-            }
-        }
+        $fixtureKeys = array_flip(
+            preg_grep(
+                $pattern,
+                array_keys($fixtureSet->getFixtures()->toArray())
+            )
+        );
+        $objectKeys = array_flip(
+            preg_grep(
+                $pattern,
+                array_keys($fixtureSet->getObjects()->toArray())
+            )
+        );
 
-        return array_keys($ids);
+        $this->idsByPattern[$pattern] = array_keys($fixtureKeys + $objectKeys);
+
+        return $this->idsByPattern[$pattern];
     }
 }
