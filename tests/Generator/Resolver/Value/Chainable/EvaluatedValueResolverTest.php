@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\FakeFixture;
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
@@ -51,7 +52,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
     public function testEvaluateTheGivenExpression()
     {
         $value = new EvaluatedValue('"Hello"." "."world!"');
-        $fixture = new FakeFixture();
+        $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
         $set = ResolvedFixtureSetFactory::create();
 
         $expected = new ResolvedValueWithFixtureSet(
@@ -69,7 +70,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $value = new EvaluatedValue('"unclosed string');
-            $fixture = new FakeFixture();
+            $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
             $set = ResolvedFixtureSetFactory::create();
 
             $resolver = new EvaluatedValueResolver();
@@ -93,7 +94,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
     public function testThrowsAnExceptionIfAnErrorOccurredDuringEvaluation()
     {
         $value = new EvaluatedValue('(function () { throw new \\Exception(""); })()');
-        $fixture = new FakeFixture();
+        $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new EvaluatedValueResolver();
@@ -103,7 +104,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
     public function testTheEvaluatedExpressionCanContainScopeFunctions()
     {
         $value = new EvaluatedValue('$foo');
-        $fixture = new FakeFixture();
+        $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
         $set = ResolvedFixtureSetFactory::create();
         $scope = [
             'foo' => 'bar',
@@ -126,7 +127,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
     public function testVariablesInference()
     {
         $value = new EvaluatedValue('["foo" => $foo, "expression" => $_expression, "scope" => $_scope]');
-        $fixture = new FakeFixture();
+        $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
         $set = ResolvedFixtureSetFactory::create();
         $scope = [
             'foo' => 'bar',
@@ -137,6 +138,45 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
                 'foo' => 'bar',
                 'expression' => '["foo" => $foo, "expression" => $_expression, "scope" => $_scope]',
                 'scope' => $scope,
+            ],
+            $set
+        );
+
+        $resolver = new EvaluatedValueResolver();
+        $actual = $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
+
+        $this->assertEquals($expected, $actual);
+        $this->assertSame(['foo' => 'bar'], $scope);
+
+        $value = new EvaluatedValue('$scope');
+        try {
+            $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
+            $this->fail('Expected an exception to be thrown.');
+        } catch (UnresolvableValueException $exception) {
+            $this->assertEquals(
+                'Could not evaluate the expression "$scope".',
+                $exception->getMessage()
+            );
+        }
+    }
+
+    public function testVariablesInferenceWithCurrent()
+    {
+        $value = new EvaluatedValue('["foo" => $foo, "expression" => $_expression, "scope" => $_scope]');
+        $fixture = new SimpleFixture('dummy_1', 'Dummy', SpecificationBagFactory::create(), '1');
+        $set = ResolvedFixtureSetFactory::create();
+        $scope = [
+            'foo' => 'bar',
+        ];
+
+        $expected = new ResolvedValueWithFixtureSet(
+            [
+                'foo' => 'bar',
+                'expression' => '["foo" => $foo, "expression" => $_expression, "scope" => $_scope]',
+                'scope' => [
+                    'foo' => 'bar',
+                    'current' => '1',
+                ],
             ],
             $set
         );

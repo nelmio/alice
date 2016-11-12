@@ -2038,7 +2038,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        yield '[identity] has access to variables' => [
+        yield '[identity] has access to fixtures' => [
             [
                 \stdClass::class => [
                     'dummy' => [
@@ -2057,6 +2057,27 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                     ]),
                     'another_dummy' => StdClassFactory::create([
                         'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[identity] has access to current' => [
+            [
+                \stdClass::class => [
+                    'dummy_{1..2}' => [
+                        'foo' => '<($current)>'
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy_1' => StdClassFactory::create([
+                        'foo' => '1',
+                    ]),
+                    'dummy_2' => StdClassFactory::create([
+                        'foo' => '2',
                     ]),
                 ],
             ],
