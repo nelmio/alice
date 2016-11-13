@@ -49,7 +49,7 @@ class FixtureListReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "" (type: LIST_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfInvalidTokenIsGiven()
@@ -61,7 +61,7 @@ class FixtureListReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "" (type: LIST_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfAMalformedTokenIsGiven()

@@ -64,7 +64,7 @@ class ParameterValueResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
      * @expectedExceptionMessage Could not find the parameter "foo".
      */
     public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope()

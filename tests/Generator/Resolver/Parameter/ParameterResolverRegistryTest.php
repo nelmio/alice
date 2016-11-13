@@ -107,7 +107,7 @@ class ParameterResolverRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage No resolver found to resolve parameter "foo".
      */
     public function testThrowsAnExceptionIfNoSuitableParserIsFound()

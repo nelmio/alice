@@ -51,7 +51,7 @@ class PropertyReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\AbstractChainableParserAwareParser::parse" to be called only if it has a parser.
      */
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
@@ -63,7 +63,7 @@ class PropertyReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "" (type: PROPERTY_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfCouldNotParseToken()
@@ -75,7 +75,7 @@ class PropertyReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "@@malformed_user->username" (type: PROPERTY_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfParsingReferenceReturnsUnexpectedResult()

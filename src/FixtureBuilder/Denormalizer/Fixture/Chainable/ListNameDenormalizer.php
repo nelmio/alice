@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
-use Nelmio\Alice\Exception\LogicExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
 
 final class ListNameDenormalizer extends AbstractChainableDenormalizer
 {

@@ -21,7 +21,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructorThrowing
 use Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
-use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
@@ -73,7 +73,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfInstantiatingObjectWithoutArgumentsFails()
@@ -100,7 +100,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate "dummy", constructor has mandatory parameters but no parameters has been given.
      */
     public function testThrowsAnExceptionIfObjectConstructorHasMandatoryParameters()
@@ -110,7 +110,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfObjectInstantiationFailsUnderNominalConditions()
@@ -120,7 +120,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate "dummy", constructor is not public.
      */
     public function testThrowsAnExceptionIfObjectConstructorIsPrivate()
@@ -130,7 +130,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate "dummy", constructor is not public.
      */
     public function testThrowsAnExceptionIfObjectConstructorIsProtected()

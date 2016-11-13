@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
-use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 /**
  * Class storing all the unique values.

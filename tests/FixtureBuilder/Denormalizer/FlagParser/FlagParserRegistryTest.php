@@ -80,7 +80,7 @@ class FlagParserRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
      * @expectedExceptionMessage No suitable flag parser found to handle the element "string to parse".
      */
     public function testThrowsAnExceptionIfNotSuitableParserFound()

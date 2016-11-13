@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
-use Nelmio\Alice\Exception\RootExpressionLanguageParseException;
+use Nelmio\Alice\Throwable\Exception\RootExpressionLanguageParseException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable

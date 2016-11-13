@@ -15,10 +15,10 @@ namespace Nelmio\Alice\Generator\Hydrator\Property;
 
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
-use Nelmio\Alice\Exception\Generator\Hydrator\HydrationException;
-use Nelmio\Alice\Exception\Generator\Hydrator\InvalidArgumentException;
-use Nelmio\Alice\Exception\Generator\Hydrator\NoSuchPropertyException;
-use Nelmio\Alice\Exception\Generator\Hydrator\PropertyAccessException;
+use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationException;
+use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException;
+use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException;
+use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\PropertyAccessException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
 use Nelmio\Alice\IsAServiceTrait;

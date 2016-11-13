@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Nelmio\Alice\Exception\Symfony\PropertyAccess;
+namespace Nelmio\Alice\Throwable\Exception\Symfony\PropertyAccess;
 
 use Symfony\Component\PropertyAccess\Exception\ExceptionInterface;
 

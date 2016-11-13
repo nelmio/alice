@@ -134,7 +134,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfCouldNotInstantiateObject()
@@ -154,7 +154,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfCouldNotFindFactoryMethod()
@@ -174,7 +174,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfCouldNotFindFactoryClass()
@@ -194,7 +194,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfCouldNotCallOnTheFactory()
@@ -215,7 +215,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Instantiated fixture was expected to be an instance of "Dummy". Got "Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndOptionalParameters" instead.
      */
     public function testThrowsAnExceptionIfFixtureClassDoesNotMatchObjectClass()
@@ -240,7 +240,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Instantiated fixture was expected to be an instance of "Nelmio\Alice\Entity\Instantiator\DummyWithFakeNamedConstructor". Got "Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator" instead.
      */
     public function testThrowsAnExceptionIfFactoryDoesNotReturnAnInstance()

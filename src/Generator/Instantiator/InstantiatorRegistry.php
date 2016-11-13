@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
-use Nelmio\Alice\Exception\Generator\Instantiator\InstantiatorNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;

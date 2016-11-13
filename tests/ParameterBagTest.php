@@ -40,7 +40,7 @@ class ParameterBagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\ParameterNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\ParameterNotFoundException
      * @expectedExceptionMessage Could not find the parameter "foo".
      */
     public function testThrowsAnExceptionWhenATryingToGetAnInexistingParameter()

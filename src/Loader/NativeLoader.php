@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Loader;
 use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
-use Nelmio\Alice\Exception\BadMethodCallExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\BadMethodCallExceptionFactory;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;

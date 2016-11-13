@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Exception\ParameterNotFoundException;
+use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 
 /**
  * Value object containing a list of parameters.

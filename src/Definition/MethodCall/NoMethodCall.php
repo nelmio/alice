@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Exception\LogicExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
 
 /**
  * Represents an absence of method call. Is used for example when a fixtures has 'constructor: false'. The difference

@@ -142,7 +142,7 @@ class InstantiatorRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiatorNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException
      * @expectedExceptionMessage No suitable instantiator found for the fixture "dummy".
      */
     public function testThrowExceptionIfNoSuitableParserIsFound()

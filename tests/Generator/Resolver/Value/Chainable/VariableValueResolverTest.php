@@ -65,7 +65,7 @@ class VariableValueResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
      * @expectedExceptionMessage Could not find a variable "foo".
      */
     public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope()

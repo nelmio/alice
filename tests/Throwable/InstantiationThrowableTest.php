@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
-use Nelmio\Alice\Exception\RootInstantiationException;
+use Nelmio\Alice\Throwable\Exception\RootInstantiationException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\InstantiationThrowable

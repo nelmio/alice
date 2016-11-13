@@ -33,8 +33,8 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Entity\ValueResolver\DummyWithGetter;
-use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
-use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
@@ -71,7 +71,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Parser\ParserNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException
      * @expectedExceptionMessageRegExp /^No suitable parser found for the file ".*?plain_file"\.$/
      */
     public function testLoadUnsupportedFileFormat()
@@ -754,7 +754,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
      * @expectedExceptionMessage Could not find the fixture "unknown".
      */
     public function testThrowsAnExceptionIfInheritFromAnNonExistingFixture()
@@ -783,7 +783,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\NoValueForCurrentException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\NoValueForCurrentException
      * @expectedExceptionMessage No value for '<current()>' found for the fixture "dummy".
      */
     public function testThrowsAnExceptionIfUsingCurrentOutOfACollection()
@@ -844,7 +844,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
      */
     public function testLoadParsesReferencesInQuotes()
     {

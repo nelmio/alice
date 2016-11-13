@@ -75,7 +75,7 @@ class ReferenceLexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException
      * @expectedExceptionMessage Could not lex the value "foo".
      */
     public function testThrowsAnExceptionIfNoMatchingPatternFound()

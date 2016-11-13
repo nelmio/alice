@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice;
 
 use Nelmio\Alice\Definition\SpecificationBag;
-use Nelmio\Alice\Exception\NoValueForCurrentException;
+use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 
 /**
  * A fixture is a value object representing an object to be built.

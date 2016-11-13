@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
-use Nelmio\Alice\Exception\Parser\ParserNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException;
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\IsAServiceTrait;
 

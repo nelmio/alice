@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
-use Nelmio\Alice\Exception\FileLocator\FileNotFoundException;
-use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\IsAServiceTrait;

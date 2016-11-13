@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use Nelmio\Alice\Exception\ParameterNotFoundException;
+use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
@@ -264,7 +264,7 @@ class StringParameterResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver::resolveStringKey" to be called only if it has a resolver.
      */
     public function testThrowsAnExceptionIfNoResolverInjectedWhenRequired()

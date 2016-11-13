@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Exception\UnclonableException;
+use Nelmio\Alice\Throwable\Exception\UnclonableException;
 
 trait IsAServiceTrait
 {

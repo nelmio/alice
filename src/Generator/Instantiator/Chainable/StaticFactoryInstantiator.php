@@ -15,7 +15,7 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
-use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
 
 final class StaticFactoryInstantiator extends AbstractChainableInstantiator

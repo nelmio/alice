@@ -89,7 +89,7 @@ class NoMethodCallInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate fixture "dummy".
      */
     public function testThrowsAnExceptionIfCouldNotInstantiateObject()

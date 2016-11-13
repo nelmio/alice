@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\RangeName;
-use Nelmio\Alice\Exception\LogicExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 

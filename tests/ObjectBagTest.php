@@ -119,7 +119,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\ObjectNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\ObjectNotFoundException
      * @expectedExceptionMessage Could not find the object "foo" of the class "Dummy".
      */
     public function testThrowsExceptionWhenTryingToGetInexistingObject()

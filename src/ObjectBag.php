@@ -15,8 +15,8 @@ namespace Nelmio\Alice;
 
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
-use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
-use Nelmio\Alice\Exception\ObjectNotFoundException;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\ObjectNotFoundException;
 
 /**
  * Value object containing a list of objects.

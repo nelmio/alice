@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Nelmio\Alice\Exception;
+namespace Nelmio\Alice\Throwable\Exception;
 
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
