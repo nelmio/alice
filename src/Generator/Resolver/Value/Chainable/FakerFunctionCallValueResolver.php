@@ -17,6 +17,7 @@ use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Faker\GeneratorFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -25,11 +26,11 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class FakerFunctionCallValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var GeneratorFactory
@@ -118,11 +119,6 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
             ];
         }
 
-        throw new \InvalidArgumentException(
-            sprintf(
-                'Invalid faker formatter "%s" found.',
-                $formatter
-            )
-        );
+        throw InvalidArgumentExceptionFactory::createForInvalidFakerFormatter($formatter);
     }
 }

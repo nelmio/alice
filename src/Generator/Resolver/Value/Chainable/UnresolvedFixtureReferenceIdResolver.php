@@ -26,7 +26,7 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * Resolves the fixture reference ID first if it is itself a value before handing over the resolution to the decorated
@@ -35,7 +35,7 @@ use Nelmio\Alice\NotClonableTrait;
 final class UnresolvedFixtureReferenceIdResolver
 implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, ValueResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ChainableValueResolverInterface

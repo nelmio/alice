@@ -21,11 +21,11 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class VariableValueResolver implements ChainableValueResolverInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @inheritdoc
@@ -58,11 +58,6 @@ final class VariableValueResolver implements ChainableValueResolverInterface
             );
         }
 
-        throw new UnresolvableValueException(
-            sprintf(
-                'Could not find a variable "%s".',
-                $value->getValue()
-            )
-        );
+        throw UnresolvableValueException::createForCouldNotFindVariable($value);
     }
 }

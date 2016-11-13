@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 /**
  * Value object representing "80%? 'value': 'empty'"
@@ -47,31 +48,13 @@ final class OptionalValue implements ValueInterface
         } elseif (is_scalar($quantifier)) {
             $quantifier = (int) $quantifier;
         } else {
-            throw new \TypeError(
-                sprintf(
-                    'Expected quantifier to be either a scalar value or an instance of "%s". Got "%s" instead.',
-                    ValueInterface::class,
-                    is_object($quantifier) ? get_class($quantifier) : gettype($quantifier)
-                )
-            );
+            throw TypeErrorFactory::createForOptionalValueQuantifier($quantifier);
         }
         if (false === is_string($firstMember) && false === $firstMember instanceof ValueInterface) {
-            throw new \TypeError(
-                sprintf(
-                    'Expected first member to be either a string or an instance of "%s". Got "%s" instead.',
-                    ValueInterface::class,
-                    is_object($firstMember) ? get_class($firstMember) : gettype($firstMember)
-                )
-            );
+            throw TypeErrorFactory::createForOptionalValueFirstMember($firstMember);
         }
         if (null !== $secondMember && false === is_string($secondMember) && false === $secondMember instanceof ValueInterface) {
-            throw new \TypeError(
-                sprintf(
-                    'Expected second member to be either null, a string or an instance of "%s". Got "%s" instead.',
-                    ValueInterface::class,
-                    is_object($secondMember) ? get_class($secondMember) : gettype($secondMember)
-                )
-            );
+            throw TypeErrorFactory::createForOptionalValueSecondMember($secondMember);
         }
 
         $this->quantifier = $quantifier;

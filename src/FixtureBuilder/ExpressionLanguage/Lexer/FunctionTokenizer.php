@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @private
  */
 final class FunctionTokenizer
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @internal */
     const DELIMITER= '___##';

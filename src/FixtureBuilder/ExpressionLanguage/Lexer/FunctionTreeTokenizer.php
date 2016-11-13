@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @private
  */
 final class FunctionTreeTokenizer
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @private */
     const DELIMITER= '___##';

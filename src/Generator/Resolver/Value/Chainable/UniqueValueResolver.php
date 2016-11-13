@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -25,11 +26,11 @@ use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class UniqueValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var UniqueValuesPool
@@ -51,12 +52,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         $this->pool = $pool;
         $this->resolver = $resolver;
         if ($limit < 1) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected limit value to be a strictly positive integer, got "%d" instead.',
-                    $limit
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForInvalidLimitValue($limit);
         }
         $this->limit = $limit;
     }

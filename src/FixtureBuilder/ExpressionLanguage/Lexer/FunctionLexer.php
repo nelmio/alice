@@ -15,14 +15,14 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class FunctionLexer implements LexerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @private */
     const DELIMITER= '___##';

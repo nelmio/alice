@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 /**
  * Value object representing '<{param}>'.
@@ -31,13 +32,7 @@ final class ParameterValue implements ValueInterface
     public function __construct($parameterKey)
     {
         if (false === is_string($parameterKey) && false === $parameterKey instanceof ValueInterface) {
-            throw new \TypeError(
-                sprintf(
-                    'Expected parameter key to be either a string or an instance of "%s". Got "%s" instead.',
-                    ValueInterface::class,
-                    is_object($parameterKey) ? get_class($parameterKey) : gettype($parameterKey)
-                )
-            );
+            throw TypeErrorFactory::createForInvalidParameterKey($parameterKey);
         }
         $this->parameterKey = $parameterKey;
     }

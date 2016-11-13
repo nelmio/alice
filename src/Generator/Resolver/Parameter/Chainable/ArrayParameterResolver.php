@@ -15,7 +15,7 @@ namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -27,7 +27,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
  */
 final class ArrayParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ParameterResolverInterface|null

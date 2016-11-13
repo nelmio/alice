@@ -21,7 +21,7 @@ use Nelmio\Alice\Exception\Generator\Hydrator\NoSuchPropertyException;
 use Nelmio\Alice\Exception\Generator\Hydrator\PropertyAccessException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectInterface;
 use Symfony\Component\PropertyAccess\Exception\AccessException as SymfonyAccessException;
 use Symfony\Component\PropertyAccess\Exception\ExceptionInterface as SymfonyPropertyAccessException;
@@ -31,7 +31,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var PropertyAccessorInterface

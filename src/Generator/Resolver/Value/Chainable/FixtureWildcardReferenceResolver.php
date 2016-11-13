@@ -26,12 +26,12 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectInterface;
 
 final class FixtureWildcardReferenceResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ValueResolverInterface
@@ -83,12 +83,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
         $possibleIds = $this->getSuitableIds($value, $fixtureSet);
         $id = Base::randomElement($possibleIds);
         if (null === $id) {
-            throw new UnresolvableValueException(
-                sprintf(
-                    'Could not find a fixture or object ID matching the pattern "%s".',
-                    $value->getValue()
-                )
-            );
+            throw UnresolvableValueException::createForNoFixtureOrObjectMatchingThePattern($value);
         }
 
         return $this->resolver->resolve(

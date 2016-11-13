@@ -21,6 +21,7 @@ use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 final class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInterface
 {
@@ -131,21 +132,11 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
     ): MethodCallInterface
     {
         if (false === is_array($methodCall)) {
-            throw new \TypeError(
-                sprintf(
-                    'Expected method call value to be an array, got "%s" instead.',
-                    gettype($methodCall)
-                )
-            );
+            throw TypeErrorFactory::createForInvalidSpecificationBagMethodCall($methodCall);
         }
         $unparsedMethod = key($methodCall);
         if (false === is_string($unparsedMethod)) {
-            throw new \TypeError(
-                sprintf(
-                    'Expected method name, got "%s" instead.',
-                    gettype($unparsedMethod)
-                )
-            );
+            throw TypeErrorFactory::createForInvalidSpecificationBagMethodCallName($unparsedMethod);
         }
 
         return $callsDenormalizer->denormalize(

@@ -19,7 +19,7 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 /**
@@ -27,7 +27,7 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
  */
 abstract class AbstractChainableInstantiator implements ChainableInstantiatorInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * {@inheritdoc}

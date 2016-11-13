@@ -17,4 +17,20 @@ use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
 class UnexpectedValueException extends \UnexpectedValueException implements DenormalizationThrowable
 {
+    public static function createForUnparsableValue(string $value, int $code = 0, \Throwable $previous): self
+    {
+        return new static(
+            sprintf(
+                'Could not parse value "%s".',
+                $value
+            ),
+            $code,
+            $previous
+        );
+    }
+
+    public static function createForUnDenormalizableConstructor(): self
+    {
+        return new static('Could not denormalize the given constructor.');
+    }
 }

@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver\FixtureSet;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * Resolver handing over the resolution to a decorated resolver to then remove any object which has a fixture. This
@@ -25,7 +25,7 @@ use Nelmio\Alice\NotClonableTrait;
  */
 final class RemoveConflictingObjectsResolver implements FixtureSetResolverInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var FixtureSetResolverInterface

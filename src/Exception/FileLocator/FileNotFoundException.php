@@ -15,4 +15,18 @@ namespace Nelmio\Alice\Exception\FileLocator;
 
 class FileNotFoundException extends \UnexpectedValueException
 {
+    public static function createForEmptyFile(): self
+    {
+        return new static('An empty file name is not valid to be located.');
+    }
+
+    public static function createForNonExistentFile(string $file): self
+    {
+        return new static(
+            sprintf(
+                'The file "%s" does not exist.',
+                $file
+            )
+        );
+    }
 }

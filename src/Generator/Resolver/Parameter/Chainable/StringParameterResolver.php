@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Exception\ParameterNotFoundException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -25,7 +25,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
 final class StringParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     const PATTERN = '/<{(?<parameter>[^<{]+?)}>/';
     const SINGLE_PARAMETER_PATTERN = '/^<{(?<parameter>(?(?=\{)^[\>]|.)+)}>$/';
@@ -118,13 +118,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         }
 
         if (false === $unresolvedParameters->has($key)) {
-            throw new ParameterNotFoundException(
-                sprintf(
-                    'Could not find the parameter "%s" when resolving "%s".',
-                    $key,
-                    $parameter->getKey()
-                )
-            );
+            throw ParameterNotFoundException::createForWhenResolvingParameter($key, $parameter);
         }
 
         $context->checkForCircularReference($key);

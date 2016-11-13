@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
@@ -25,7 +25,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
  */
 final class SimpleParameterBagResolver implements ParameterBagResolverInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ParameterResolverInterface

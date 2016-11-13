@@ -13,15 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Exception\Parser\ParseException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 final class YamlParser implements ChainableParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @interval */
     const REGEX = '/.{1,}\.ya?ml$/i';
@@ -58,7 +59,7 @@ final class YamlParser implements ChainableParserInterface
     public function parse(string $file): array
     {
         if (false === file_exists($file)) {
-            throw new \InvalidArgumentException(sprintf('The file "%s" could not be found.', $file));
+            throw InvalidArgumentExceptionFactory::createForFileCouldNotBeFound($file);
         }
 
         try {

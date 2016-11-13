@@ -22,14 +22,14 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class TolerantFunctionTokenParser extends AbstractChainableParserAwareParser
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @private */
     const REGEX = '/(\)>)(\ *)</';

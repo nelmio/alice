@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Parser;
 
 use Nelmio\Alice\Exception\FileLocator\FileNotFoundException;
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\ParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * Decorates a parser to cache the result and process includes. Includes are being processed in this parser to be able
@@ -26,7 +27,7 @@ use Nelmio\Alice\NotClonableTrait;
  */
 final class RuntimeCacheParser implements ParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var array[] Keys are real path of cached files and the values the resulting array
@@ -63,11 +64,7 @@ final class RuntimeCacheParser implements ParserInterface
         try {
             $realPath = $this->fileLocator->locate($file);
         } catch (FileNotFoundException $exception) {
-            throw new \InvalidArgumentException(
-                sprintf('The file "%s" could not be found.', $file),
-                0,
-                $exception
-            );
+            throw InvalidArgumentExceptionFactory::createForFileCouldNotBeFound($file, 0, $exception);
         }
 
         if (array_key_exists($realPath, $this->cache)) {

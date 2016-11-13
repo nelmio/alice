@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -44,13 +45,7 @@ final class Configuration implements ConfigurationInterface
                                     return $seed;
                                 }
 
-                                throw new \InvalidArgumentException(
-                                    sprintf(
-                                        'Expected value "nelmio_alice.seed" to be either null or a strictly '
-                                        .'positive interger but got "%s" instead.',
-                                        $seed
-                                    )
-                                );
+                                throw InvalidArgumentExceptionFactory::createForInvalidSeedConfigurationValue($seed);
                             }
                         )
                     ->end()

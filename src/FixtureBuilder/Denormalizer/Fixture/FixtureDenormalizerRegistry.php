@@ -18,11 +18,12 @@ use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundExcep
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
     
     /**
      * @var ChainableFixtureDenormalizerInterface[]
@@ -37,14 +38,7 @@ final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
     {
         foreach ($denormalizers as $index => $denormalizer) {
             if (false === $denormalizer instanceof ChainableFixtureDenormalizerInterface) {
-                throw new \TypeError(
-                    sprintf(
-                        'Expected denormalizer %d to be a "%s", got "%s" instead.',
-                        $index,
-                        ChainableFixtureDenormalizerInterface::class,
-                        is_object($denormalizer) ? get_class($denormalizer) : gettype($denormalizer)
-                    )
-                );
+                throw TypeErrorFactory::createForInvalidDenormalizerType($index, $denormalizer);
             }
 
             if ($denormalizer instanceof FixtureDenormalizerAwareInterface) {

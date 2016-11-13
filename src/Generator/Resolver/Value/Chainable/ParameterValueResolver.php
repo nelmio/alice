@@ -22,11 +22,11 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class ParameterValueResolver implements ChainableValueResolverInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @inheritdoc
@@ -54,12 +54,7 @@ final class ParameterValueResolver implements ChainableValueResolverInterface
         $parameterKey = $value->getValue();
         $parameters = $fixtureSet->getParameters();
         if (false === $parameters->has($parameterKey)) {
-            throw new UnresolvableValueException(
-                sprintf(
-                    'Could not find the parameter "%s".',
-                    $parameterKey
-                )
-            );
+            throw UnresolvableValueException::createForCouldNotFindParameter($parameterKey);
         }
 
         return new ResolvedValueWithFixtureSet(

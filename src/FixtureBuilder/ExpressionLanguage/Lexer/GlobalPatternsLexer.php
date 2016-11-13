@@ -14,17 +14,18 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException;
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class GlobalPatternsLexer implements LexerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     const PATTERNS = [
         '/^(?:\d+|<.*>)x .*/' => TokenType::DYNAMIC_ARRAY_TYPE,
@@ -52,12 +53,7 @@ final class GlobalPatternsLexer implements LexerInterface
         foreach (self::PATTERNS as $pattern => $tokenTypeConstant) {
             if (1 === preg_match($pattern, $value, $matches)) {
                 if (null === $tokenTypeConstant) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'Invalid token "%s" found.',
-                            $value
-                        )
-                    );
+                    throw InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageToken($value);
                 }
 
                 return [new Token($matches[0], new TokenType($tokenTypeConstant))];

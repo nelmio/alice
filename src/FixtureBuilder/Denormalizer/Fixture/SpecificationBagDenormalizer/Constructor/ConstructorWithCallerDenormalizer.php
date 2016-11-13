@@ -18,14 +18,15 @@ use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class ConstructorWithCallerDenormalizer implements ConstructorDenormalizerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var SimpleConstructorDenormalizer
@@ -74,12 +75,7 @@ final class ConstructorWithCallerDenormalizer implements ConstructorDenormalizer
 
         $explodedMethod = explode('::', $method);
         if (2 < count($explodedMethod)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Invalid constructor method "%s".',
-                    $method
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForInvalidConstructorMethod($method);
         }
 
         list($caller, $method) = $explodedMethod;

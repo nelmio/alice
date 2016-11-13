@@ -49,13 +49,7 @@ final class StaticFactoryInstantiator extends AbstractChainableInstantiator
 
         $instance = $factory::$method(...$arguments);
         if (false === $instance instanceof $class) {
-            throw new InstantiationException(
-                sprintf(
-                    'Instantiated fixture was expected to be an instance of "%s". Got "%s" instead.',
-                    $class,
-                    get_class($instance)
-                )
-            );
+            throw InstantiationException::createForInvalidInstanceType($class, $instance);
         }
 
         return $instance;

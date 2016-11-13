@@ -16,11 +16,11 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
     
     /**
      * @var FixtureDenormalizerInterface

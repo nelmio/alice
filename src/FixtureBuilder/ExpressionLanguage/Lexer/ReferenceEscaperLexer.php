@@ -15,7 +15,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * Escapes references found in a string to avoid the user to have to manually escape references. For
@@ -25,7 +25,7 @@ use Nelmio\Alice\NotClonableTrait;
  */
 final class ReferenceEscaperLexer implements LexerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var LexerInterface

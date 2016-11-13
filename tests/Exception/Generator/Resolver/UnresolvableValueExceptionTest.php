@@ -85,7 +85,7 @@ class UnresolvableValueExceptionTest extends \PHPUnit_Framework_TestCase
 
     public function testTestCreateExceptionForAnExpressionThatCouldNotHaveBeenEvaluated()
     {
-        $exception = UnresolvableValueException::couldNotEvaluateExpression(new DummyValue('dummy'));
+        $exception = UnresolvableValueException::createForCouldNotEvaluateExpression(new DummyValue('dummy'));
         $this->assertEquals(
             'Could not evaluate the expression "dummy".',
             $exception->getMessage()
@@ -94,7 +94,7 @@ class UnresolvableValueExceptionTest extends \PHPUnit_Framework_TestCase
         $code = 500;
         $previous = new \Error();
 
-        $exception = UnresolvableValueException::couldNotEvaluateExpression(new DummyValue('dummy'), $code, $previous);
+        $exception = UnresolvableValueException::createForCouldNotEvaluateExpression(new DummyValue('dummy'), $code, $previous);
         $this->assertEquals(
             'Could not evaluate the expression "dummy".',
             $exception->getMessage()
@@ -111,7 +111,7 @@ class UnresolvableValueExceptionTest extends \PHPUnit_Framework_TestCase
         $exception = ChildUnresolvableValueException::createForInvalidReferenceId(new DummyValue('dummy'), new \stdClass());
         $this->assertInstanceOf(ChildUnresolvableValueException::class, $exception);
 
-        $exception = ChildUnresolvableValueException::couldNotEvaluateExpression(new DummyValue('dummy'));
+        $exception = ChildUnresolvableValueException::createForCouldNotEvaluateExpression(new DummyValue('dummy'));
         $this->assertInstanceOf(ChildUnresolvableValueException::class, $exception);
     }
 }

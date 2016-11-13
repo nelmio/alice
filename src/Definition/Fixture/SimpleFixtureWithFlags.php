@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
 use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
 
@@ -36,13 +37,7 @@ final class SimpleFixtureWithFlags implements FixtureWithFlagsInterface
     public function __construct(FixtureInterface $fixture, FlagBag $flags)
     {
         if ($fixture->getId() !== $flags->getKey()) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected the fixture ID and the flags key to be the same. Got "%s" and "%s" instead.',
-                    $fixture->getId(),
-                    $flags->getKey()
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForFlagBagKeyMismatch($fixture, $flags);
         }
 
         $this->fixture = clone $fixture;

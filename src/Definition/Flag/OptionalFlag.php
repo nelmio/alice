@@ -28,6 +28,7 @@ final class OptionalFlag implements FlagInterface
     public function __construct(int $percentage)
     {
         if ($percentage < 1 || $percentage > 99) {
+            //TODO: is a valid use case...
             throw new \InvalidArgumentException(
                 sprintf(
                     'Expected optional flag to be an integer element of ]0;100[. Got "%d" instead.',

@@ -17,11 +17,11 @@ use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class ExtendFlagParser implements ChainableFlagParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @interval */
     const REGEX = '/^extends (?<reference>.+)$/';

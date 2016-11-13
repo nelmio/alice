@@ -18,14 +18,14 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserIn
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 abstract class AbstractChainableParserAwareParser implements ChainableTokenParserInterface, ParserAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ParserInterface|null

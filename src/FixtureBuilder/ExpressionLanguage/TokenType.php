@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
+
 /**
  * @internal
  */
@@ -63,12 +65,7 @@ final class TokenType
     public function __construct(string $type)
     {
         if (false === array_key_exists($type, self::$values)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected type to be a known token type but got "%s".',
-                    $type
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageTokenType($type);
         }
         
         $this->value = $type;

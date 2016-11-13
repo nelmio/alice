@@ -16,14 +16,14 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * Delegates the responsibility to the first suitable parser found.
  */
 final class FlagParserRegistry implements FlagParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ChainableFlagParserInterface[]

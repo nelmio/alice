@@ -21,14 +21,14 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormal
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @private */
     const REGEX = RangeNameDenormalizer::REGEX;

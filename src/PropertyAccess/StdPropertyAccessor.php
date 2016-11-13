@@ -13,13 +13,14 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\PropertyAccess;
 
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\Exception\PropertyAccess\NoSuchPropertyExceptionFactory;
+use Nelmio\Alice\IsAServiceTrait;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class StdPropertyAccessor implements PropertyAccessorInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var PropertyAccessorInterface
@@ -55,9 +56,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
         }
 
         if (false === isset($objectOrArray->$propertyPath)) {
-            throw new NoSuchPropertyException(
-                sprintf('Cannot read property "%s" from stdClass.', $propertyPath)
-            );
+            throw NoSuchPropertyExceptionFactory::createForUnreadablePropertyFromStdClass($propertyPath);
         }
 
         return $objectOrArray->$propertyPath;

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
+use Nelmio\Alice\Exception\LogicExceptionFactory;
 
 /**
  * Represents an absence of method call. Is used for example when a fixtures has 'constructor: false'. The difference
@@ -27,7 +28,7 @@ final class NoMethodCall implements MethodCallInterface
      */
     public function withArguments(array $arguments = null): self
     {
-        return $this->throwException(__METHOD__);
+        $this->throwException(__METHOD__);
     }
 
     /**
@@ -35,7 +36,7 @@ final class NoMethodCall implements MethodCallInterface
      */
     public function getCaller()
     {
-        return $this->throwException(__METHOD__);
+        $this->throwException(__METHOD__);
     }
 
     /**
@@ -43,7 +44,7 @@ final class NoMethodCall implements MethodCallInterface
      */
     public function getMethod(): string
     {
-        return $this->throwException(__METHOD__);
+        $this->throwException(__METHOD__);
     }
 
     /**
@@ -51,7 +52,7 @@ final class NoMethodCall implements MethodCallInterface
      */
     public function getArguments()
     {
-        return $this->throwException(__METHOD__);
+        $this->throwException(__METHOD__);
     }
 
     /**
@@ -64,11 +65,6 @@ final class NoMethodCall implements MethodCallInterface
 
     private function throwException(string $method)
     {
-        throw new \DomainException(
-            sprintf(
-                'By its nature, "%s()" should not be called.',
-                $method
-            )
-        );
+        throw LogicExceptionFactory::createForUncallableMethod($method);
     }
 }

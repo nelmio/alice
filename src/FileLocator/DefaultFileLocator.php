@@ -31,7 +31,7 @@ final class DefaultFileLocator implements FileLocatorInterface
     public function locate(string $name, string $currentPath = null): string
     {
         if ('' == $name) {
-            throw new FileNotFoundException('An empty file name is not valid to be located.');
+            throw FileNotFoundException::createForEmptyFile();
         }
 
         $file = $name;
@@ -40,7 +40,7 @@ final class DefaultFileLocator implements FileLocatorInterface
         }
 
         if (false === $path = realpath($file)) {
-            throw new FileNotFoundException(sprintf('The file "%s" does not exist.', $file));
+            throw FileNotFoundException::createForNonExistentFile($file);
         }
 
         return $path;

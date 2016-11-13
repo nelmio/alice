@@ -18,13 +18,13 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectInterface;
 
 final class CompleteObjectGenerator implements ObjectGeneratorInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
     
     /**
      * @var ObjectGeneratorInterface

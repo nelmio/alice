@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 
 /**
  * Class storing all the unique values.
@@ -59,12 +60,7 @@ final class UniqueValuesPool
         }
 
         if (false === is_array($val1)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Unsupported type "%s": cannot determine if two values of this type are identical.',
-                    gettype($val1)
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForUnsupportedTypeForIdenticalValuesCheck($val1);
         }
 
         foreach ($val1 as $key => $item) {

@@ -15,6 +15,7 @@ namespace Nelmio\Alice;
 
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Exception\ObjectNotFoundException;
 
 /**
@@ -34,13 +35,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
         foreach ($objects as $id => $object) {
             if ($object instanceof ObjectInterface) {
                 if ($id !== $object->getId()) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'Reference key mismatch, the keys "%s" and "%s" refers to the same fixture.',
-                            $id,
-                            $object->getId()
-                        )
-                    );
+                    throw InvalidArgumentExceptionFactory::createForReferenceKeyMismatch($id, $object->getId());
                 }
                 $this->objects[$id] = $object;
                 $this->array[$id] = $object->getInstance();

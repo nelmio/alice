@@ -26,11 +26,11 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface, FlagParserAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var FlagParserInterface|null

@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Exception;
 
+use Nelmio\Alice\Parameter;
+
 class ParameterNotFoundException extends \UnexpectedValueException
 {
-    /**
-     * @return static
-     */
-    public static function create(string $key, int $code = 0, \Throwable $previous = null)
+    public static function create(string $key, int $code = 0, \Throwable $previous = null): self
     {
         return new static(
             sprintf(
@@ -27,6 +26,15 @@ class ParameterNotFoundException extends \UnexpectedValueException
             ),
             $code,
             $previous
+        );
+    }
+
+    public static function createForWhenResolvingParameter(string $key, Parameter $parameter): self
+    {
+        return sprintf(
+            'Could not find the parameter "%s" when resolving "%s".',
+            $key,
+            $parameter->getKey()
         );
     }
 }

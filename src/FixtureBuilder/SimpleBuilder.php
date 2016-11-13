@@ -15,13 +15,13 @@ namespace Nelmio\Alice\FixtureBuilder;
 
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\FixtureSet;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 
 final class SimpleBuilder implements FixtureBuilderInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var DenormalizerInterface

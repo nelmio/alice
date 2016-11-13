@@ -16,12 +16,12 @@ namespace Nelmio\Alice\Loader;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\GeneratorInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectSet;
 
 final class SimpleDataLoader implements DataLoaderInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var FixtureBuilderInterface
