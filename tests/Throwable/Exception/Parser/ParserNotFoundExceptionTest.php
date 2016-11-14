@@ -30,36 +30,9 @@ class ParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_a(ParserNotFoundException::class, ParseThrowable::class, true));
     }
 
-    public function testTestCreateNewExceptionWithFactory()
-    {
-        $exception = ParserNotFoundException::create('foo');
-
-        $this->assertEquals(
-            'No suitable parser found for the file "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-        $code = 500;
-        $previous = new \Error();
-        $exception = ParserNotFoundException::create('foo', $code, $previous);
-
-        $this->assertEquals(
-            'No suitable parser found for the file "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $exception = ChildParserNotFoundException::create('foo');
+        $exception = new ChildParserNotFoundException();
         $this->assertInstanceOf(ChildParserNotFoundException::class, $exception);
     }
-}
-
-class ChildParserNotFoundException extends ParserNotFoundException
-{
 }

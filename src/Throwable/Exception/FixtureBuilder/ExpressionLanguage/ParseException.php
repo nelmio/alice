@@ -13,24 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 class ParseException extends \Exception implements ExpressionLanguageParseThrowable
 {
-    /**
-     * @return static
-     */
-    public static function createForToken(Token $token, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'Could not parse the token "%s" (type: %s).',
-                $token->getValue(),
-                $token->getType()
-            ),
-            $code,
-            $previous
-        );
-    }
 }

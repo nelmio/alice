@@ -15,7 +15,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -27,6 +27,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 /**
  * Resolves the fixture reference ID first if it is itself a value before handing over the resolution to the decorated
@@ -103,7 +104,7 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
         list($referredFixtureId, $fixtureSet) = $this->getReferredFixtureId(
@@ -124,6 +125,9 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         );
     }
 
+    /**
+     * @throws UnresolvableValueException
+     */
     private function getReferredFixtureId(
         ValueResolverInterface $resolver,
         ValueInterface $value,
@@ -139,7 +143,7 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
 
             list($referredFixtureId, $set) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
             if (false === is_string($referredFixtureId)) {
-                throw UnresolvableValueException::createForInvalidReferenceId($value, $referredFixtureId);
+                throw UnresolvableValueExceptionFactory::createForInvalidReferenceId($value, $referredFixtureId);
             }
         }
 

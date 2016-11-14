@@ -30,38 +30,10 @@ class ObjectGeneratorNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_a(ObjectGeneratorNotFoundException::class, GenerationThrowable::class, true));
     }
 
-    public function testTestCreateNewExceptionWithFactory()
-    {
-        $exception = ObjectGeneratorNotFoundException::createUnexpectedCall('dummyMethod');
-
-        $this->assertEquals(
-            'Expected method "dummyMethod" to be called only if it has a generator.',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 500;
-        $previous = new \Error();
-        $exception = ObjectGeneratorNotFoundException::createUnexpectedCall('dummyMethod', $code, $previous);
-
-        $this->assertEquals(
-            'Expected method "dummyMethod" to be called only if it has a generator.',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $exception = ChildObjectGeneratorNotFoundException::createUnexpectedCall('dummyMethod');
+        $exception = new ChildObjectGeneratorNotFoundException();
         $this->assertInstanceOf(ChildObjectGeneratorNotFoundException::class, $exception);
     }
-}
-
-class ChildObjectGeneratorNotFoundException extends ObjectGeneratorNotFoundException
-{
 }
 

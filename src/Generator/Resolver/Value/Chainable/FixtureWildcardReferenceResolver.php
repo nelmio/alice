@@ -17,8 +17,8 @@ use Faker\Provider\Base;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -27,7 +27,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
-use Nelmio\Alice\ObjectInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 final class FixtureWildcardReferenceResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
@@ -77,13 +77,13 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
         $possibleIds = $this->getSuitableIds($value, $fixtureSet);
         $id = Base::randomElement($possibleIds);
         if (null === $id) {
-            throw UnresolvableValueException::createForNoFixtureOrObjectMatchingThePattern($value);
+            throw UnresolvableValueExceptionFactory::createForNoFixtureOrObjectMatchingThePattern($value);
         }
 
         return $this->resolver->resolve(

@@ -13,22 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
-use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
-
-class MalformedFunctionException extends \InvalidArgumentException implements ExpressionLanguageParseThrowable
+class MalformedFunctionException extends \InvalidArgumentException
 {
-    /**
-     * @return static
-     */
-    public static function create(string $value, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'The value "%s" contains an unclosed function.',
-                $value
-            ),
-            $code,
-            $previous
-        );
-    }
 }

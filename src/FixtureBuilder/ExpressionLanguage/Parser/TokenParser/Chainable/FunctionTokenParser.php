@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
@@ -49,7 +50,7 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
         parent::parse($token);
 
         if (1 !== preg_match(self::REGEX, $token->getValue(), $matches)) {
-            throw ParseException::createForToken($token);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
         $function = $matches['function'];

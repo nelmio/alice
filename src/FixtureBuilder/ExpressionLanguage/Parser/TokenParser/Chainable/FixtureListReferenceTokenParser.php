@@ -15,6 +15,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
@@ -80,7 +81,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
         $name = (string) substr($token->getValue(), 1);
 
         if (1 !== preg_match(self::REGEX, $name, $matches)) {
-            throw ParseException::createForToken($token);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
         $listElements = preg_split('/\s*,\s*/', $matches['list']);
 

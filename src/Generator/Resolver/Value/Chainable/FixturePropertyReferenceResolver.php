@@ -16,8 +16,9 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -26,6 +27,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException as SymfonyNoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -82,7 +84,7 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
         $context->markAsNeedsCompleteGeneration();
@@ -95,9 +97,9 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
         try {
             $propertyValue = $this->propertyAccessor->getValue($instance, $value->getProperty());
         } catch (SymfonyNoSuchPropertyException $exception) {
-            throw NoSuchPropertyException::createForFixture($fixture, $value, 0, $exception);
+            throw NoSuchPropertyExceptionFactory::createForFixture($fixture, $value, 0, $exception);
         } catch (\Exception $exception) {
-            throw UnresolvableValueException::create($value, 0, $exception);
+            throw UnresolvableValueExceptionFactory::create($value, 0, $exception);
         }
 
         return new ResolvedValueWithFixtureSet(

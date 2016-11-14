@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\ObjectNotFoundException;
+use Nelmio\Alice\Throwable\Exception\ObjectNotFoundExceptionFactory;
 
 /**
  * Value object containing a list of objects.
@@ -120,7 +121,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
             return $this->objects[$fixture->getId()];
         }
         
-        throw ObjectNotFoundException::create(
+        throw ObjectNotFoundExceptionFactory::create(
             $fixture->getId(),
             $fixture instanceof FixtureInterface ? $fixture->getClassName() : 'no class given'
         );

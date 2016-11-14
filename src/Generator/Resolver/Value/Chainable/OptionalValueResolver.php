@@ -15,8 +15,8 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -25,6 +25,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 final class OptionalValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
@@ -72,7 +73,7 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
         $quantifier = $value->getQuantifier();
@@ -81,7 +82,7 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
             list($quantifier, $fixtureSet) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
 
             if (false === is_int($quantifier) && false === is_string($quantifier)) {
-                throw UnresolvableValueException::createForInvalidResolvedQuantifierTypeForOptionalValue($value, $quantifier);
+                throw UnresolvableValueExceptionFactory::createForInvalidResolvedQuantifierTypeForOptionalValue($value, $quantifier);
             }
         }
 

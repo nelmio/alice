@@ -17,8 +17,8 @@ use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
@@ -80,10 +80,10 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
     ): FixtureBag
     {
         if (null === $this->denormalizer) {
-            throw DenormalizerNotFoundException::createUnexpectedCall(__METHOD__);
+            throw DenormalizerExceptionFactory::createDenormalizerNotFoundUnexpectedCall(__METHOD__);
         }
         if (null === $this->parser) {
-            throw FlagParserNotFoundException::createUnexpectedCall(__METHOD__);
+            throw FlagParserExceptionFactory::createForExpectedMethodToBeCalledIfHasAParser(__METHOD__);
         }
 
         $flags = $this->parser->parse($fixtureId)->mergeWith($flags, false);

@@ -17,6 +17,7 @@ use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Parser\ParseException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
@@ -69,9 +70,9 @@ final class YamlParser implements ChainableParserInterface
             return (null === $data) ? [] : $data;
         } catch (\Exception $exception) {
             if ($exception instanceof SymfonyParseException) {
-                throw ParseException::createForInvalidYaml($file, 0, $exception);
+                throw ParseExceptionFactory::createForInvalidYaml($file, 0, $exception);
             }
-            throw ParseException::createForUnparsableFile($file, 0, $exception);
+            throw ParseExceptionFactory::createForUnparsableFile($file, 0, $exception);
         }
     }
 }

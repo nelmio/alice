@@ -13,24 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
-use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 class UniqueValueGenerationLimitReachedException extends \RuntimeException implements ResolutionThrowable
 {
-    /**
-     * @return static
-     */
-    public static function create(UniqueValue $value, int $limit, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'Could not generate a unique value after %d attempts for "%s".',
-                $limit,
-                $value->getId()
-            ),
-            $code,
-            $previous
-        );
-    }
 }

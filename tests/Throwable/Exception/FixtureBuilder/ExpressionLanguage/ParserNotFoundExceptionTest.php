@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 /**
@@ -32,68 +30,9 @@ class ParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_a(ParserNotFoundException::class, ExpressionLanguageParseThrowable::class, true));
     }
 
-    public function testTestCreateNewExceptionForTokenWithTheFactory()
-    {
-        $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-        $exception = ParserNotFoundException::create($token);
-
-        $this->assertEquals(
-            'No suitable token parser found to handle the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 500;
-        $previous = new \Error('hello');
-
-        $exception = ParserNotFoundException::create($token, $code, $previous);
-        $this->assertEquals(
-            'No suitable token parser found to handle the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-        
-    }
-
-    public function testTestCreateNewExceptionForUnexpectedCallWithTheFactory()
-    {
-        $exception = ParserNotFoundException::createUnexpectedCall('foo');
-
-        $this->assertEquals(
-            'Expected method "foo" to be called only if it has a parser.',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 500;
-        $previous = new \Error('hello');
-
-        $exception = ParserNotFoundException::createUnexpectedCall('foo', $code, $previous);
-        $this->assertEquals(
-            'Expected method "foo" to be called only if it has a parser.',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-
-        $exception = ChildParserNotFoundException::create($token);
-        $this->assertInstanceOf(ChildParserNotFoundException::class, $exception);
-
-        $exception = ChildParserNotFoundException::createUnexpectedCall('foo');
+        $exception = new ChildParserNotFoundException();
         $this->assertInstanceOf(ChildParserNotFoundException::class, $exception);
     }
-}
-
-class ChildParserNotFoundException extends ParserNotFoundException
-{
 }

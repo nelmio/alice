@@ -15,33 +15,4 @@ namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParse
 
 class FlagParserNotFoundException extends \LogicException
 {
-    /**
-     * @return static
-     */
-    public static function create(string $element, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'No suitable flag parser found to handle the element "%s".',
-                $element
-            ),
-            $code,
-            $previous
-        );
-    }
-
-    /**
-     * @return static
-     */
-    public static function createUnexpectedCall(string $method, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'Expected method "%s" to be called only if it has a flag parser.',
-                $method
-            ),
-            $code,
-            $previous
-        );
-    }
 }

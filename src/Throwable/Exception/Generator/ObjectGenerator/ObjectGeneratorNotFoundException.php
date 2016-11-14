@@ -15,18 +15,4 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator;
 
 class ObjectGeneratorNotFoundException extends \LogicException
 {
-    /**
-     * @return static
-     */
-    public static function createUnexpectedCall(string $method, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'Expected method "%s" to be called only if it has a generator.',
-                $method
-            ),
-            $code,
-            $previous
-        );
-    }
 }

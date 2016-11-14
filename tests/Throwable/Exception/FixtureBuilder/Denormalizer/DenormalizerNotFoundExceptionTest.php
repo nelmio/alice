@@ -30,64 +30,9 @@ class DenormalizerNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_a(DenormalizerNotFoundException::class, DenormalizationThrowable::class, true));
     }
 
-    public function testTestCreateNewExceptionWithFactoryForFixture()
-    {
-        $exception = DenormalizerNotFoundException::createForFixture('foo');
-
-        $this->assertEquals(
-            'No suitable fixture denormalizer found to handle the fixture with the reference "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-        
-        
-        $code = 500;
-        $previous = new \Error('hello');
-
-        $exception = DenormalizerNotFoundException::createForFixture('foo', $code, $previous);
-        $this->assertEquals(
-            'No suitable fixture denormalizer found to handle the fixture with the reference "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
-    public function testTestCreateNewExceptionWithFactoryForUnexpectedCall()
-    {
-        $exception = DenormalizerNotFoundException::createUnexpectedCall('fake');
-
-        $this->assertEquals(
-            'Expected method "fake" to be called only if it has a denormalizer.',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 500;
-        $previous = new \Error('hello');
-
-        $exception = DenormalizerNotFoundException::createUnexpectedCall('fake', $code, $previous);
-        $this->assertEquals(
-            'Expected method "fake" to be called only if it has a denormalizer.',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $exception = ChildDenormalizerNotFoundException::createForFixture('foo');
-        $this->assertInstanceOf(ChildDenormalizerNotFoundException::class, $exception);
-
-        $exception = ChildDenormalizerNotFoundException::createUnexpectedCall('fake');
+        $exception = new ChildDenormalizerNotFoundException();
         $this->assertInstanceOf(ChildDenormalizerNotFoundException::class, $exception);
     }
-}
-
-class ChildDenormalizerNotFoundException extends DenormalizerNotFoundException
-{
 }

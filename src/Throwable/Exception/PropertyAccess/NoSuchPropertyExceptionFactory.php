@@ -20,7 +20,10 @@ final class NoSuchPropertyExceptionFactory
     public static function createForUnreadablePropertyFromStdClass(string $propertyPath): NoSuchPropertyException
     {
         return new NoSuchPropertyException(
-            sprintf('Cannot read property "%s" from stdClass.', $propertyPath)
+            sprintf(
+                'Cannot read property "%s" from stdClass.',
+                $propertyPath
+            )
         );
     }
 }

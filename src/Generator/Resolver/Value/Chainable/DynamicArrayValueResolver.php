@@ -15,7 +15,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -119,7 +119,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
     private function checkResolver(string $checkedMethod)
     {
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall($checkedMethod);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall($checkedMethod);
         }
     }
 }

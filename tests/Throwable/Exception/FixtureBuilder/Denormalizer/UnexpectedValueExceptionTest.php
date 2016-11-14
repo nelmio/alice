@@ -36,7 +36,3 @@ class UnexpectedValueExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ChildUnexpectedValueException::class, $exception);
     }
 }
-
-class ChildUnexpectedValueException extends UnexpectedValueException
-{
-}

@@ -32,42 +32,12 @@ class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(InvalidArgumentException::class, HydrationThrowable::class, true));
     }
 
-    public function testCreateExceptionViaFactory()
-    {
-        $object = new SimpleObject('dummy', new \stdClass());
-        $property = new Property('foo', 'bar');
-
-        $exception = InvalidArgumentException::create($object, $property);
-        $this->assertEquals(
-            'Invalid value given for the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 100;
-        $previous = new \Error('hello');
-
-        $exception = InvalidArgumentException::create($object, $property, $code, $previous);
-        $this->assertEquals(
-            'Invalid value given for the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
         $object = new SimpleObject('dummy', new \stdClass());
         $property = new Property('foo', 'bar');
 
-        $exception = ChildInvalidArgumentException::create($object, $property);
+        $exception = new ChildInvalidArgumentException();
         $this->assertInstanceOf(ChildInvalidArgumentException::class, $exception);
     }
-}
-
-class ChildInvalidArgumentException extends InvalidArgumentException
-{
 }

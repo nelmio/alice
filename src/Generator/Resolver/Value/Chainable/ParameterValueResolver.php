@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
-use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -41,7 +41,7 @@ final class ParameterValueResolver implements ChainableValueResolverInterface
      *
      * @param ParameterValue $value
      *
-     * @throws ParameterNotFoundException
+     * @throws UnresolvableValueException
      */
     public function resolve(
         ValueInterface $value,
@@ -54,7 +54,7 @@ final class ParameterValueResolver implements ChainableValueResolverInterface
         $parameterKey = $value->getValue();
         $parameters = $fixtureSet->getParameters();
         if (false === $parameters->has($parameterKey)) {
-            throw UnresolvableValueException::createForCouldNotFindParameter($parameterKey);
+            throw UnresolvableValueExceptionFactory::createForCouldNotFindParameter($parameterKey);
         }
 
         return new ResolvedValueWithFixtureSet(

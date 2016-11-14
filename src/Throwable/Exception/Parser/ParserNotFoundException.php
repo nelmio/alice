@@ -15,18 +15,4 @@ namespace Nelmio\Alice\Throwable\Exception\Parser;
 
 class ParserNotFoundException extends \LogicException
 {
-    /**
-     * @return static
-     */
-    public static function create(string $file, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'No suitable parser found for the file "%s".',
-                $file
-            ),
-            $code,
-            $previous
-        );
-    }
 }

@@ -14,15 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\GenerationThrowable;
-use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 class UnresolvableValueDuringGenerationException extends UnresolvableValueException implements GenerationThrowable
 {
-    /**
-     * @return static
-     */
-    public static function createFromResolutionThrowable(ResolutionThrowable $previous, int $code = 0)
-    {
-        return new static('Could not resolve value during the generation process.', $code, $previous);
-    }
 }

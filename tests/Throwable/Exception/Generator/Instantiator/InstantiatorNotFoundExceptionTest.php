@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
-use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 /**
@@ -31,37 +30,9 @@ class InstantiatorNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_a(InstantiatorNotFoundException::class, InstantiationThrowable::class, true));
     }
 
-    public function testTestCreateNewExceptionWithFactory()
-    {
-        $exception = InstantiatorNotFoundException::create(new DummyFixture('foo'));
-
-        $this->assertEquals(
-            'No suitable instantiator found for the fixture "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 500;
-        $previous = new \Error();
-        $exception = InstantiatorNotFoundException::create(new DummyFixture('foo'), $code, $previous);
-
-        $this->assertEquals(
-            'No suitable instantiator found for the fixture "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $exception = ChildInstantiatorNotFoundException::create(new DummyFixture('foo'));
+        $exception = new ChildInstantiatorNotFoundException();
         $this->assertInstanceOf(ChildInstantiatorNotFoundException::class, $exception);
     }
-}
-
-class ChildInstantiatorNotFoundException extends InstantiatorNotFoundException
-{
 }

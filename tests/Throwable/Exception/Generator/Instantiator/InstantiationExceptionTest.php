@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
-use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 /**
@@ -31,37 +30,9 @@ class InstantiationExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(InstantiationException::class, InstantiationThrowable::class, true));
     }
 
-    public function testTestCreateNewExceptionWithFactory()
-    {
-        $exception = InstantiationException::create(new DummyFixture('foo'));
-
-        $this->assertEquals(
-            'Could not instantiate fixture "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 500;
-        $previous = new \Error();
-        $exception = InstantiationException::create(new DummyFixture('foo'), $code, $previous);
-
-        $this->assertEquals(
-            'Could not instantiate fixture "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $exception = ChildInstantiationException::create(new DummyFixture('foo'));
+        $exception = new ChildInstantiationException();
         $this->assertInstanceOf(ChildInstantiationException::class, $exception);
     }
-}
-
-class ChildInstantiationException extends InstantiationException
-{
 }

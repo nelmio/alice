@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -151,7 +151,7 @@ final class InvalidArgumentExceptionFactory
         );
     }
 
-    public static function createForInvalidFakerFormatter(int $formatter): \InvalidArgumentException
+    public static function createForInvalidFakerFormatter(string $formatter): \InvalidArgumentException
     {
         return new \InvalidArgumentException(
             sprintf(
@@ -165,7 +165,7 @@ final class InvalidArgumentExceptionFactory
     {
         return new \InvalidArgumentException(
             sprintf(
-                'Fixture "%s" extends "%$1s" but "%$1s" is not a template.',
+                'Fixture "%s" extends "%2$s" but "%2$s" is not a template.',
                 $fixture->getId(),
                 $fixtureId
             )

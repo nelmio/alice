@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
@@ -47,7 +48,7 @@ final class WildcardReferenceTokenParser implements ChainableTokenParserInterfac
         $value = $token->getValue();
         $fixtureId = substr($value, 1, strlen($value) - 2);
         if (false === $fixtureId) {
-            throw ParseException::createForToken($token);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
         return FixtureMatchReferenceValue::createWildcardReference($fixtureId);

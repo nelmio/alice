@@ -15,6 +15,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -45,12 +46,12 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
 
         $explodedValue = explode('->', $token->getValue());
         if (count($explodedValue) !== 2) {
-            throw ParseException::createForToken($token);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
         $reference = $this->parser->parse($explodedValue[0]);
         if (false === $reference instanceof ValueInterface) {
-            throw ParseException::createForToken($token);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
         return new FixturePropertyValue(

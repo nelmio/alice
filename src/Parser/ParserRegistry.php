@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
-use Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory;
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\IsAServiceTrait;
 
@@ -47,6 +47,6 @@ final class ParserRegistry implements ParserInterface
             }
         }
 
-        throw ParserNotFoundException::create($file);
+        throw ParseExceptionFactory::createForParserNoFoundForFile($file);
     }
 }

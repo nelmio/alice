@@ -22,6 +22,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 final class VariableValueResolver implements ChainableValueResolverInterface
 {
@@ -58,6 +59,6 @@ final class VariableValueResolver implements ChainableValueResolverInterface
             );
         }
 
-        throw UnresolvableValueException::createForCouldNotFindVariable($value);
+        throw UnresolvableValueExceptionFactory::createForCouldNotFindVariable($value);
     }
 }

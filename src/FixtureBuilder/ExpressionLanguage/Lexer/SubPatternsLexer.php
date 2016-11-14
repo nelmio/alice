@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
@@ -115,6 +116,6 @@ final class SubPatternsLexer implements LexerInterface
             }
         }
 
-        throw LexException::create($valueFragment);
+        throw ExpressionLanguageExceptionFactory::createForCouldNotLexValue($valueFragment);
     }
 }

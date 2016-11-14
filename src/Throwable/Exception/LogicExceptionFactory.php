@@ -31,7 +31,7 @@ final class LogicExceptionFactory
             sprintf(
                 'As a chainable denormalizer, "%s" should be called only if "::canDenormalize() returns true. Got '
                 .'false instead.',
-                __METHOD__
+                $method
             )
         );
     }

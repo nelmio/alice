@@ -22,6 +22,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
+use Nelmio\Alice\Throwable\Exception\ParameterNotFoundExceptionFactory;
 
 final class StringParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
@@ -118,7 +119,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         }
 
         if (false === $unresolvedParameters->has($key)) {
-            throw ParameterNotFoundException::createForWhenResolvingParameter($key, $parameter);
+            throw ParameterNotFoundExceptionFactory::createForWhenResolvingParameter($key, $parameter);
         }
 
         $context->checkForCircularReference($key);

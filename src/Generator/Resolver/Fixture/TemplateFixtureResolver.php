@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver\Fixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
@@ -93,7 +94,7 @@ final class TemplateFixtureResolver
             $context->add($fixtureId);
 
             if (false === $unresolvedFixtures->has($fixtureId)) {
-                throw FixtureNotFoundException::create($fixtureId);
+                throw FixtureNotFoundExceptionFactory::create($fixtureId);
             }
 
             if ($resolvedFixtures->has($fixtureId)) {

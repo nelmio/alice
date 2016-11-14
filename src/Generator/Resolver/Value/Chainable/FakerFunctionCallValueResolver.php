@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Faker\GeneratorFactory;
 use Nelmio\Alice\FixtureInterface;
@@ -78,7 +78,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
         $arguments = $value->getArguments();

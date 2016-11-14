@@ -14,6 +14,7 @@ declare(strict_types = 1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\VariableValue;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
@@ -47,7 +48,7 @@ final class VariableTokenParser implements ChainableTokenParserInterface
         try {
             return new VariableValue(substr($token->getValue(), 1));
         } catch (\TypeError $error) {
-            throw ParseException::createForToken($token, 0, $error);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $error);
         }
     }
 }

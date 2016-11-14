@@ -17,18 +17,4 @@ use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 class LexException extends \Exception implements ExpressionLanguageParseThrowable
 {
-    /**
-     * @return static
-     */
-    public static function create(string $value, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'Could not lex the value "%s".',
-                $value
-            ),
-            $code,
-            $previous
-        );
-    }
 }

@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -76,7 +77,7 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         try {
             $evaluatedExpression = $evaluateExpression($expression);
         } catch (\Throwable $throwable) {
-            throw UnresolvableValueException::createForCouldNotEvaluateExpression($value, 0, $throwable);
+            throw UnresolvableValueExceptionFactory::createForCouldNotEvaluateExpression($value, 0, $throwable);
         }
 
         return new ResolvedValueWithFixtureSet($evaluatedExpression, $fixtureSet);

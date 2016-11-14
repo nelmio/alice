@@ -17,19 +17,4 @@ use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 class RecursionLimitReachedException extends \RuntimeException implements ResolutionThrowable
 {
-    /**
-     * @return static
-     */
-    public static function create(int $limit, string $key, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'Recursion limit (%d tries) reached while resolving the parameter "%s"',
-                $limit,
-                $key
-            ),
-            $code,
-            $previous
-        );
-    }
 }

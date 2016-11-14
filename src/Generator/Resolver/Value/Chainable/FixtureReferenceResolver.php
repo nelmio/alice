@@ -17,8 +17,8 @@ use Nelmio\Alice\Definition\Fixture\FixtureId;
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
-use Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureIdInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -29,6 +29,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 final class FixtureReferenceResolver implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface
 {
@@ -76,12 +77,12 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
     ): ResolvedValueWithFixtureSet
     {
         if (null === $this->generator) {
-            throw ObjectGeneratorNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ObjectGeneratorNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
         $referredFixtureId = $value->getValue();
         if ($referredFixtureId instanceof ValueInterface) {
-            throw UnresolvableValueException::create($value);
+            throw UnresolvableValueExceptionFactory::create($value);
         }
 
         $referredFixture = $this->getReferredFixture($referredFixtureId, $fixtureSet);
@@ -127,7 +128,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
 
         // Object is either not completely generated or has not been generated at all yet
         if (false === $referredFixture instanceof FixtureInterface) {
-            throw FixtureNotFoundException::create($referredFixtureId);
+            throw FixtureNotFoundExceptionFactory::create($referredFixtureId);
         }
 
         $context->markIsResolvingFixture($referredFixtureId);

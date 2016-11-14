@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceExceptionFactory;
 
 /**
  * Counter to keep track of the parameters, fixtures etc. being resolved and detect circular references.
@@ -72,7 +73,7 @@ final class ResolvingContext
     public function checkForCircularReference(string $key)
     {
         if (true === $this->has($key) && 1 < $this->resolving[$key]) {
-            throw CircularReferenceException::createForParameter($key, $this->resolving);
+            throw CircularReferenceExceptionFactory::createForParameter($key, $this->resolving);
         }
     }
 }

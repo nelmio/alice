@@ -24,6 +24,7 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 
 final class ValueResolverRegistry implements ValueResolverInterface, ObjectGeneratorAwareInterface
 {
@@ -85,6 +86,6 @@ final class ValueResolverRegistry implements ValueResolverInterface, ObjectGener
             }
         }
 
-        throw ResolverNotFoundException::createForValue($value);
+        throw ResolverNotFoundExceptionFactory::createForValue($value);
     }
 }

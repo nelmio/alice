@@ -15,19 +15,4 @@ namespace Nelmio\Alice\Throwable\Exception;
 
 class ObjectNotFoundException extends \UnexpectedValueException
 {
-    /**
-     * @return static
-     */
-    public static function create(string $id, string $className, int $code = 0, \Throwable $previous = null)
-    {
-        return new static(
-            sprintf(
-                'Could not find the object "%s" of the class "%s".',
-                $id,
-                $className
-            ),
-            $code,
-            $previous
-        );
-    }
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
-use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
@@ -31,91 +30,9 @@ class UnresolvableValueExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(UnresolvableValueException::class, ResolutionThrowable::class, true));
     }
 
-    public function testTestCreateNewExceptionWithFactory()
-    {
-        $exception = UnresolvableValueException::create(new DummyValue('dummy'));
-        $this->assertEquals(
-            'Could not resolve value "dummy".',
-            $exception->getMessage()
-        );
-
-        $code = 100;
-        $previous = new \Error();
-
-        $exception = UnresolvableValueException::create(new DummyValue('dummy'), $code, $previous);
-        $this->assertEquals(
-            'Could not resolve value "dummy".',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
-    public function testTestCreateExceptionWithFactoryForInvalidReferenceId()
-    {
-        $exception = UnresolvableValueException::createForInvalidReferenceId(new DummyValue('dummy'), 100);
-        $this->assertEquals(
-            'Expected fixture reference value "dummy" to be resolved into a string. Got "(integer) 100" instead.',
-            $exception->getMessage()
-        );
-
-        $exception = UnresolvableValueException::createForInvalidReferenceId(new DummyValue('dummy'), 'alice');
-        $this->assertEquals(
-            'Expected fixture reference value "dummy" to be resolved into a string. Got "(string) alice" instead.',
-            $exception->getMessage()
-        );
-
-        $exception = UnresolvableValueException::createForInvalidReferenceId(new DummyValue('dummy'), new \stdClass());
-        $this->assertEquals(
-            'Expected fixture reference value "dummy" to be resolved into a string. Got "stdClass" instead.',
-            $exception->getMessage()
-        );
-
-        $code = 500;
-        $previous = new \Error();
-
-        $exception = UnresolvableValueException::createForInvalidReferenceId(new DummyValue('dummy'), 100, $code, $previous);
-        $this->assertEquals(
-            'Expected fixture reference value "dummy" to be resolved into a string. Got "(integer) 100" instead.',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
-    public function testTestCreateExceptionForAnExpressionThatCouldNotHaveBeenEvaluated()
-    {
-        $exception = UnresolvableValueException::createForCouldNotEvaluateExpression(new DummyValue('dummy'));
-        $this->assertEquals(
-            'Could not evaluate the expression "dummy".',
-            $exception->getMessage()
-        );
-
-        $code = 500;
-        $previous = new \Error();
-
-        $exception = UnresolvableValueException::createForCouldNotEvaluateExpression(new DummyValue('dummy'), $code, $previous);
-        $this->assertEquals(
-            'Could not evaluate the expression "dummy".',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $exception = ChildUnresolvableValueException::create(new DummyValue('dummy'));
-        $this->assertInstanceOf(ChildUnresolvableValueException::class, $exception);
-
-        $exception = ChildUnresolvableValueException::createForInvalidReferenceId(new DummyValue('dummy'), new \stdClass());
-        $this->assertInstanceOf(ChildUnresolvableValueException::class, $exception);
-
-        $exception = ChildUnresolvableValueException::createForCouldNotEvaluateExpression(new DummyValue('dummy'));
+        $exception = new ChildUnresolvableValueException();
         $this->assertInstanceOf(ChildUnresolvableValueException::class, $exception);
     }
-}
-
-class ChildUnresolvableValueException extends UnresolvableValueException
-{
 }

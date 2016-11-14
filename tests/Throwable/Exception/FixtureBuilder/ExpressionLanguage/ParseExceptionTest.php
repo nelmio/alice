@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 /**
@@ -32,40 +30,9 @@ class ParseExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(ParseException::class, ExpressionLanguageParseThrowable::class, true));
     }
 
-    public function testCanCreateExceptionWithTheFactory()
-    {
-        $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-        $exception = ParseException::createForToken($token);
-        
-        $this->assertEquals(
-            'Could not parse the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-        
-        $code = 500;
-        $previous = new \Error('hello');
-
-        $exception = ParseException::createForToken($token, $code, $previous);
-        $this->assertEquals(
-            'Could not parse the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
-
-        $exception = ChildParseException::createForToken($token);
+        $exception = new ChildParseException();
         $this->assertInstanceOf(ChildParseException::class, $exception);
     }
-}
-
-class ChildParseException extends ParseException
-{
 }

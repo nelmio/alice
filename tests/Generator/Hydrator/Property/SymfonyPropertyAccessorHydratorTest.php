@@ -20,7 +20,7 @@ use Nelmio\Alice\Entity\Hydrator\Dummy;
 use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationException;
 use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException;
 use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException;
-use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\PropertyAccessException;
+use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InaccessiblePropertyException;
 use Nelmio\Alice\Throwable\Exception\Symfony\PropertyAccess\RootException as GenericPropertyAccessException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
@@ -98,7 +98,7 @@ class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
             $hydrator->hydrate($object, $property, new GenerationContext());
 
             $this->fail('Expected exception to be thrown.');
-        } catch (PropertyAccessException $exception) {
+        } catch (InaccessiblePropertyException $exception) {
             $this->assertEquals(
                 'Could not access to the property "username" of the object "dummy" (class: Nelmio\Alice\Entity\Hydrator\Dummy).',
                 $exception->getMessage()

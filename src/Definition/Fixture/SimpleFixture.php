@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Fixture;
 
-use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\Throwable\Exception\NoValueForCurrentExceptionFactory;
 
 /**
  * Minimalist implementation of a fixture.
@@ -80,7 +80,7 @@ final class SimpleFixture implements FixtureInterface
     public function getValueForCurrent()
     {
         if (null === $this->valueForCurrent) {
-            throw NoValueForCurrentException::create($this);
+            throw NoValueForCurrentExceptionFactory::create($this);
         }
 
         return $this->valueForCurrent;

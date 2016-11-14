@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
-use Nelmio\Alice\Definition\Object\SimpleObject;
-use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Throwable\HydrationThrowable;
 
 /**
@@ -32,42 +30,9 @@ class HydrationExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_a(HydrationException::class, HydrationThrowable::class, true));
     }
 
-    public function testCreateExceptionViaFactory()
-    {
-        $object = new SimpleObject('dummy', new \stdClass());
-        $property = new Property('foo', 'bar');
-
-        $exception = HydrationException::create($object, $property);
-        $this->assertEquals(
-            'Could not hydrate the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 100;
-        $previous = new \Error('hello');
-
-        $exception = HydrationException::create($object, $property, $code, $previous);
-        $this->assertEquals(
-            'Could not hydrate the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $object = new SimpleObject('dummy', new \stdClass());
-        $property = new Property('foo', 'bar');
-
-        $exception = ChildHydrationException::create($object, $property);
+        $exception = new ChildHydrationException();
         $this->assertInstanceOf(ChildHydrationException::class, $exception);
     }
-}
-
-class ChildHydrationException extends HydrationException
-{
 }

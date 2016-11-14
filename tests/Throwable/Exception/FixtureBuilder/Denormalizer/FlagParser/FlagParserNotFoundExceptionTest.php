@@ -30,64 +30,9 @@ class FlagParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_a(FlagParserNotFoundException::class, DenormalizationThrowable::class, true));
     }
 
-    public function testTestCreateNewException()
-    {
-        $exception = FlagParserNotFoundException::create('foo');
-
-        $this->assertEquals(
-            'No suitable flag parser found to handle the element "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 500;
-        $previous = new \Error();
-        $exception = FlagParserNotFoundException::create('foo', $code, $previous);
-
-        $this->assertEquals(
-            'No suitable flag parser found to handle the element "foo".',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
-    public function testTestCreateNewExceptionForUnexpectedCall()
-    {
-        $exception = FlagParserNotFoundException::createUnexpectedCall('foo');
-
-        $this->assertEquals(
-            'Expected method "foo" to be called only if it has a flag parser.',
-            $exception->getMessage()
-        );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
-
-
-        $code = 500;
-        $previous = new \Error();
-        $exception = FlagParserNotFoundException::createUnexpectedCall('foo', $code, $previous);
-
-        $this->assertEquals(
-            'Expected method "foo" to be called only if it has a flag parser.',
-            $exception->getMessage()
-        );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
-    }
-
     public function testIsExtensible()
     {
-        $exception = ChildFlagParserNotFoundException::create('foo');
-        $this->assertInstanceOf(ChildFlagParserNotFoundException::class, $exception);
-
-        $exception = ChildFlagParserNotFoundException::createUnexpectedCall('foo');
+        $exception = new ChildFlagParserNotFoundException();
         $this->assertInstanceOf(ChildFlagParserNotFoundException::class, $exception);
     }
-}
-
-class ChildFlagParserNotFoundException extends FlagParserNotFoundException
-{
 }

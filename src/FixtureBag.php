@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice;
 
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory;
 
 /**
  * Value object containing a list of fixtures.
@@ -91,7 +92,7 @@ final class FixtureBag implements \IteratorAggregate
             return clone $this->fixtures[$id];
         }
 
-        throw FixtureNotFoundException::create($id);
+        throw FixtureNotFoundExceptionFactory::create($id);
     }
 
     /**
