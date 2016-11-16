@@ -86,16 +86,8 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
             list($quantifier, $fixtureSet) = [$result->getValue(), $result->getSet()];
         }
 
-        if ($quantifier < 2) {
-            //TODO: should be a valid case
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected quantifier to be an integer superior or equal to 2. Got "%d" for "%s", check you dynamic'
-                    .' arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").',
-                    $quantifier,
-                    $fixture->getId()
-                )
-            );
+        if ($quantifier < 0) {
+            throw InvalidArgumentExceptionFactory::createForInvalidDynamicArrayQuantifier($fixture, $quantifier);
         }
 
         $element = $value->getElement();

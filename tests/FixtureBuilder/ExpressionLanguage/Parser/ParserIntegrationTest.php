@@ -439,7 +439,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Array] nominal string array' => [
             '10x @user',
             new DynamicArrayValue(
-                '10',
+                10,
                 new FixtureReferenceValue('user')
             ),
         ];
@@ -454,7 +454,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Array] string array with right member' => [
             '10x @user bar',
             new DynamicArrayValue(
-                '10',
+                10,
                 new ListValue([
                     new FixtureReferenceValue('user'),
                     ' bar',
@@ -468,7 +468,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
         yield '[Array] string array with string array' => [
             '10x [@user->name, @group->getName()]',
             new DynamicArrayValue(
-                '10',
+                10,
                 [
                     new FixturePropertyValue(
                         new FixtureReferenceValue('user'),

@@ -86,39 +86,101 @@ class DynamicArrayValueTest extends \PHPUnit_Framework_TestCase
 
     public function provideInputTypes()
     {
-        yield 'null/string' => [
+        yield 'null/array' => [
             null,
             'dummy_element',
-            'Expected quantifier to be either a scalar value or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            'Expected quantifier to be either an integer or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
             .'"NULL" instead.'
         ];
 
-        yield 'array/string' => [
+        yield 'bool/array' => [
+            true,
+            'dummy_element',
+            'Expected quantifier to be either an integer or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"boolean" instead.'
+        ];
+
+        yield 'string/array' => [
+            '',
+            'dummy_element',
+            'Expected quantifier to be either an integer or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"string" instead.'
+        ];
+
+        yield 'float/array' => [
+            .5,
+            'dummy_element',
+            'Expected quantifier to be either an integer or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"double" instead.'
+        ];
+
+        yield 'array/array' => [
             [],
             'dummy_element',
-            'Expected quantifier to be either a scalar value or a "Nelmio\Alice\Definition\ValueInterface" object. Got'
-            .' "array" instead.'
+            'Expected quantifier to be either an integer or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"array" instead.'
         ];
 
-        yield 'string/null' => [
-            'dummy_quantifier',
-            null,
-            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got "NULL" '
-            .'instead.'
-        ];
-
-        yield 'string/stdClass' => [
-            'dummy_quantifier',
+        yield 'object/array' => [
             new \stdClass(),
-            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got "stdClass" '
-            .'instead.'
+            'dummy_element',
+            'Expected quantifier to be either an integer or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"stdClass" instead.'
+        ];
+
+        yield 'closure/array' => [
+            function () {},
+            'dummy_element',
+            'Expected quantifier to be either an integer or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"Closure" instead.'
+        ];
+
+        yield 'int/null' => [
+            -1,
+            null,
+            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"NULL" instead.'
+        ];
+
+        yield 'int/bool' => [
+            -1,
+            true,
+            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"boolean" instead.'
+        ];
+
+        yield 'int/float' => [
+            -1,
+            .5,
+            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"double" instead.'
+        ];
+
+        yield 'int/int' => [
+            1,
+            1,
+            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"integer" instead.'
+        ];
+
+        yield 'int/closure' => [
+            -1,
+            function () {},
+            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"Closure" instead.'
+        ];
+
+        yield 'int/non value interface object' => [
+            -1,
+            new \stdClass(),
+            'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
+            .'"stdClass" instead.'
         ];
     }
 
     public function provideValues()
     {
-        yield 'string value' => ['string', 'string', 0];
-        yield 'string numeric value' => ['100', 'string', 100];
+        yield 'int value' => [-1, 'string', -1];
         yield 'object value' => [new FakeValue(), new FakeValue(), new FakeValue()];
     }
 }

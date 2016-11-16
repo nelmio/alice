@@ -70,7 +70,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new DynamicArrayValueResolver();
 
-        $this->assertTrue($resolver->canResolve(new DynamicArrayValue('', '')));
+        $this->assertTrue($resolver->canResolve(new DynamicArrayValue(1, '')));
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
@@ -80,7 +80,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotResolveValueIfHasNoResolver()
     {
-        $value = new DynamicArrayValue('', '');
+        $value = new DynamicArrayValue(1, '');
         $resolver = new DynamicArrayValueResolver();
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
@@ -120,7 +120,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected quantifier to be an integer superior or equal to 2. Got "1" for "dummy", check you dynamic arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").
+     * @expectedExceptionMessage Expected quantifier to be a positive integer. Got "-1" for "dummy", check you dynamic  arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").
      */
     public function testThrowsExceptionIfAnInvalidQuantifierIsGiven()
     {
@@ -136,7 +136,7 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
         $decoratedResolverProphecy
             ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
-                new ResolvedValueWithFixtureSet(1, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
+                new ResolvedValueWithFixtureSet(-1, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
             )
         ;
         /** @var ValueResolverInterface $decoratedResolver */
