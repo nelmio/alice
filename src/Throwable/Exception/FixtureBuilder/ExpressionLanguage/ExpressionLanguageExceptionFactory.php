@@ -15,6 +15,9 @@ namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 
+/**
+ * @private
+ */
 final class ExpressionLanguageExceptionFactory
 {
     public static function createForNoParserFoundForToken(Token $token): ParserNotFoundException

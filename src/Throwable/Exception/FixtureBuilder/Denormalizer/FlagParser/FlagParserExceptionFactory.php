@@ -13,6 +13,9 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser;
 
+/**
+ * @private
+ */
 final class FlagParserExceptionFactory
 {
     public static function createForNoParserFoundForElement(string $element): FlagParserNotFoundException

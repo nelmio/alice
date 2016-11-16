@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Parser;
 
+/**
+ * @private
+ */
 final class ParseExceptionFactory
 {
     public static function createForParserNoFoundForFile(string $file): ParserNotFoundException

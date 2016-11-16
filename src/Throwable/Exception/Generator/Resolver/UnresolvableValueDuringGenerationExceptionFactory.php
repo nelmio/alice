@@ -15,6 +15,9 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
+/**
+ * @private
+ */
 final class UnresolvableValueDuringGenerationExceptionFactory
 {
     public static function createFromResolutionThrowable(ResolutionThrowable $previous): UnresolvableValueDuringGenerationException

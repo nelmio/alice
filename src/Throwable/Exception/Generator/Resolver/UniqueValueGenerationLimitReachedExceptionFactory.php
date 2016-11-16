@@ -15,6 +15,9 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
 
+/**
+ * @private
+ */
 final class UniqueValueGenerationLimitReachedExceptionFactory
 {
     public static function create(UniqueValue $value, int $limit): UniqueValueGenerationLimitReachedException

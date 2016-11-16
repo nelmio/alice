@@ -15,6 +15,9 @@ namespace Nelmio\Alice\Throwable\Exception;
 
 use Nelmio\Alice\FixtureInterface;
 
+/**
+ * @private
+ */
 final class NoValueForCurrentExceptionFactory
 {
     public static function create(FixtureInterface $fixture): NoValueForCurrentException

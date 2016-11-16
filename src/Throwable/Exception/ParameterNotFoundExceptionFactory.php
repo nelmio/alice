@@ -15,6 +15,9 @@ namespace Nelmio\Alice\Throwable\Exception;
 
 use Nelmio\Alice\Parameter;
 
+/**
+ * @private
+ */
 final class ParameterNotFoundExceptionFactory
 {
     public static function create(string $key): ParameterNotFoundException

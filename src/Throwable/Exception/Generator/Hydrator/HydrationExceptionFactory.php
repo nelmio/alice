@@ -16,6 +16,9 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\ObjectInterface;
 
+/**
+ * @private
+ */
 final class HydrationExceptionFactory
 {
     public static function create(

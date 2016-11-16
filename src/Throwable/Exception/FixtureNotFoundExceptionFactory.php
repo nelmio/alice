@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+/**
+ * @private
+ */
 final class FixtureNotFoundExceptionFactory
 {
     public static function create(string $id): FixtureNotFoundException

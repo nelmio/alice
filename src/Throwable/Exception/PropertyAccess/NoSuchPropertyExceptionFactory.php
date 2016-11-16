@@ -15,6 +15,9 @@ namespace Nelmio\Alice\Throwable\Exception\PropertyAccess;
 
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 
+/**
+ * @private
+ */
 final class NoSuchPropertyExceptionFactory
 {
     public static function createForUnreadablePropertyFromStdClass(string $propertyPath): NoSuchPropertyException

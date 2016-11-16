@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
+/**
+ * @private
+ */
 final class RecursionLimitReachedExceptionFactory
 {
     public static function create(int $limit, string $key): RecursionLimitReachedException

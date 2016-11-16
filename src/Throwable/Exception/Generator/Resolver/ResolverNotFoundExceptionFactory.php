@@ -15,6 +15,9 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Definition\ValueInterface;
 
+/**
+ * @private
+ */
 final class ResolverNotFoundExceptionFactory
 {
     public static function createForParameter(string $parameterKey): ResolverNotFoundException

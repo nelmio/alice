@@ -13,6 +13,9 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+/**
+ * @private
+ */
 final class BadMethodCallExceptionFactory
 {
     public static function createForUnknownMethod(string $method): \BadMethodCallException

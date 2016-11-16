@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Alice package.
  *
  * (c) Nelmio <hello@nelm.io>
@@ -17,6 +17,9 @@ use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 
+/**
+ * @private
+ */
 final class InvalidArgumentExceptionFactory
 {
     public static function createForInvalidReferenceType(string $reference): \InvalidArgumentException

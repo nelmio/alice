@@ -15,6 +15,9 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
 use Nelmio\Alice\FixtureInterface;
 
+/**
+ * @private
+ */
 final class InstantiationExceptionFactory
 {
     public static function create(FixtureInterface $fixture, int $code, \Throwable $previous): InstantiationException

@@ -13,6 +13,9 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
+/**
+ * @private
+ */
 final class DenormalizerExceptionFactory
 {
     public static function createForUndenormalizableConstructor(): UnexpectedValueException

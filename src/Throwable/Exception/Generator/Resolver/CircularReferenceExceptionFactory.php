@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
+/**
+ * @private
+ */
 final class CircularReferenceExceptionFactory
 {
     public static function createForParameter(string $key, array $resolving): CircularReferenceException

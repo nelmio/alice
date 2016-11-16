@@ -15,6 +15,9 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Definition\ValueInterface;
 
+/**
+ * @private
+ */
 final class UnresolvableValueExceptionFactory
 {
     public static function create(ValueInterface $value, int $code = 0, \Throwable $previous = null): UnresolvableValueException

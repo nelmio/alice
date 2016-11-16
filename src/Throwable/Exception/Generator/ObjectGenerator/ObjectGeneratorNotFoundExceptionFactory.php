@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator;
 
+/**
+ * @private
+ */
 final class ObjectGeneratorNotFoundExceptionFactory
 {
     public static function createUnexpectedCall(string $method): ObjectGeneratorNotFoundException

@@ -17,6 +17,9 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
+/**
+ * @private
+ */
 final class TypeErrorFactory
 {
     public static function createForObjectArgument($instance): \TypeError

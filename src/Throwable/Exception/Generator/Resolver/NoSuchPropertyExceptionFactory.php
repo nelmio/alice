@@ -16,6 +16,9 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\FixtureInterface;
 
+/**
+ * @private
+ */
 final class NoSuchPropertyExceptionFactory
 {
     public static function createForFixture(
