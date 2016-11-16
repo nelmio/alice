@@ -194,4 +194,14 @@ final class InvalidArgumentExceptionFactory
             )
         );
     }
+
+    public static function createForInvalidOptionalFlagBoundaries(int $percentage): \InvalidArgumentException
+    {
+        return new \InvalidArgumentException(
+            sprintf(
+                'Expected optional flag to be an integer element of [0;100]. Got "%d" instead.',
+                $percentage
+            )
+        );
+    }
 }

@@ -56,23 +56,19 @@ class OptionalFlagTest extends \PHPUnit_Framework_TestCase
     {
         yield 'negative value' => [
             -1,
-            'Expected optional flag to be an integer element of ]0;100[. Got "-1" instead.',
-        ];
-        yield 'lower border (out)' => [
-            0,
-            'Expected optional flag to be an integer element of ]0;100[. Got "0" instead.',
+            'Expected optional flag to be an integer element of [0;100]. Got "-1" instead.',
         ];
         yield 'lower border (in)' => [
-            1,
+            0,
             null,
         ];
         yield 'upper border (in)' => [
-            99,
+            100,
             null,
         ];
         yield 'upper border (out)' => [
-            100,
-            'Expected optional flag to be an integer element of ]0;100[. Got "100" instead.',
+            101,
+            'Expected optional flag to be an integer element of [0;100]. Got "101" instead.',
         ];
     }
 }

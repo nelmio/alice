@@ -232,4 +232,16 @@ class InvalidArgumentExceptionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $exception->getCode());
         $this->assertNull($exception->getPrevious());
     }
+
+    public function testTestCreateForInvalidOptionalFlagBoundaries()
+    {
+        $exception = InvalidArgumentExceptionFactory::createForInvalidOptionalFlagBoundaries(200);
+
+        $this->assertEquals(
+            'Expected optional flag to be an integer element of [0;100]. Got "200" instead.',
+            $exception->getMessage()
+        );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+    }
 }
