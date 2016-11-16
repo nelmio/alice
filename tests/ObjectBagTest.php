@@ -74,7 +74,7 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Reference key mismatch, the keys "foo" and "bar" refers to the same fixture.
+     * @expectedExceptionMessage Reference key mismatch, the keys "foo" and "bar" refers to the same fixture but the keys are different.
      */
     public function testThrowsAnExceptionIfAReferenceMismatchIsFound()
     {

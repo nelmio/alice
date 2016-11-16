@@ -126,7 +126,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      * @expectedExceptionMessageRegExp /^The file ".+\/no_return\.php" must return a PHP array\.$/
      */
     public function testThrowsAnExceptionIfNoArrayReturnedInParsedFile()
@@ -135,7 +135,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      * @expectedExceptionMessageRegExp /^The file ".+\/wrong_return\.php" must return a PHP array\.$/
      */
     public function testThrowsAnExceptionIfWrongValueReturnedInParsedFile()

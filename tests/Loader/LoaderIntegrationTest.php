@@ -80,7 +80,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      * @expectedExceptionMessageRegExp /^The file ".*?no_return.php" must return a PHP array\.$/
      */
     public function testLoadPhpFileWhichDoesNotReturnAnything()

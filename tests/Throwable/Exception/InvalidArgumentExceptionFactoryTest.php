@@ -39,7 +39,7 @@ class InvalidArgumentExceptionFactoryTest extends \PHPUnit_Framework_TestCase
         $exception = InvalidArgumentExceptionFactory::createForReferenceKeyMismatch('foo', 'bar');
 
         $this->assertEquals(
-            'Reference key mismatch, the keys "foo" and "bar" refers to the same fixture but the keys are different',
+            'Reference key mismatch, the keys "foo" and "bar" refers to the same fixture but the keys are different.',
             $exception->getMessage()
         );
         $this->assertEquals(0, $exception->getCode());

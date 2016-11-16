@@ -91,7 +91,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
             $this->fail('Expected exception to be thrown.');
         } catch (InstantiationException $exception) {
             $this->assertEquals(
-                'Could not instantiate fixture "dummy".',
+                'Could not get the necessary data on the constructor to instantiate "dummy".',
                 $exception->getMessage()
             );
             $this->assertEquals(0, $exception->getCode());
@@ -101,7 +101,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate "dummy", constructor has mandatory parameters but no parameters has been given.
+     * @expectedExceptionMessage Could not instantiate "dummy", the constructor has mandatory parameters but no parameters has been given.
      */
     public function testThrowsAnExceptionIfObjectConstructorHasMandatoryParameters()
     {
@@ -121,7 +121,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate "dummy", constructor is not public.
+     * @expectedExceptionMessage Could not instantiate "dummy", the constructor of "Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor" is not public.
      */
     public function testThrowsAnExceptionIfObjectConstructorIsPrivate()
     {
@@ -131,7 +131,7 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate "dummy", constructor is not public.
+     * @expectedExceptionMessage Could not instantiate "dummy", the constructor of "Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor" is not public.
      */
     public function testThrowsAnExceptionIfObjectConstructorIsProtected()
     {

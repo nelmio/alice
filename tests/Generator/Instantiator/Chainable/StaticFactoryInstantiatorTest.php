@@ -241,7 +241,7 @@ class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Instantiated fixture was expected to be an instance of "Nelmio\Alice\Entity\Instantiator\DummyWithFakeNamedConstructor". Got "Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator" instead.
+     * @expectedExceptionMessage Instantiated fixture was expected to be an instance of "Nelmio\Alice\Entity\Instantiator\DummyWithFakeNamedConstructor". Got "Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory" instead.
      */
     public function testThrowsAnExceptionIfFactoryDoesNotReturnAnInstance()
     {

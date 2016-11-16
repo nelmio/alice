@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
@@ -69,7 +70,7 @@ final class SimpleValueDenormalizer implements ValueDenormalizerInterface
         try {
             return $parser->parse($value);
         } catch (ParseThrowable $throwable) {
-            throw UnexpectedValueException::createForUnparsableValue($value, 0, $throwable);
+            throw DenormalizerExceptionFactory::createForUnparsableValue($value, 0, $throwable);
         }
     }
 }

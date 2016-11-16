@@ -52,7 +52,7 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
             $this->fail('Expected exception to be thrown.');
         } catch (\InvalidArgumentException $exception) {
             $this->assertEquals(
-                'Expected limit for recursive calls to be of at least 2. Got 1 instead.',
+                'Expected limit for recursive calls to be of at least 2. Got "1" instead.',
                 $exception->getMessage()
             );
         }

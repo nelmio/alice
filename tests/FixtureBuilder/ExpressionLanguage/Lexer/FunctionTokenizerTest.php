@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer
@@ -50,7 +50,7 @@ class FunctionTokenizerTest extends \PHPUnit_Framework_TestCase
                 $this->fail('Expected exception to be thrown.');
             }
             $this->assertEquals($expected, $actual);
-        } catch (ExpressionLanguageParseThrowable $exception) {
+        } catch (MalformedFunctionException $exception) {
             if (null !== $expected) {
                 throw $exception;
             }

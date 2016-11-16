@@ -74,6 +74,6 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
             }
         }
 
-        throw InstantiationExceptionFactory::create($fixture);
+        throw InstantiationExceptionFactory::createForInstantiatorNotFoundForFixture($fixture);
     }
 }

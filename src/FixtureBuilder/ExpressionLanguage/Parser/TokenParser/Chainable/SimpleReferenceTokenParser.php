@@ -47,7 +47,7 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
         try {
             return new FixtureReferenceValue(substr($value, 1));
         } catch (\InvalidArgumentException $exception) {
-            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $exception);
         }
     }
 }

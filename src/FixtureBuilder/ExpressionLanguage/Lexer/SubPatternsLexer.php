@@ -104,7 +104,7 @@ final class SubPatternsLexer implements LexerInterface
         foreach (self::PATTERNS as $pattern => $tokenTypeConstant) {
             if (1 === preg_match($pattern, $valueFragment, $matches)) {
                 if (null === $tokenTypeConstant) {
-                    throw InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageToken($value);
+                    throw InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageToken($valueFragment);
                 }
 
                 $match = $matches[1];

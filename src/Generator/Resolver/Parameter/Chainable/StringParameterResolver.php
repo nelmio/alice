@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\IsAServiceTrait;
@@ -126,7 +127,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         $context->add($key);
 
         if (null === $resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
         return $resolver->resolve(

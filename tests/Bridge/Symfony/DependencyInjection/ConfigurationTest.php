@@ -65,7 +65,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideInvalidSeedValues
      *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessageRegExp /^Invalid configuration for path "nelmio_alice.seed": Expected value "nelmio_alice.seed" to be either null or a strictly positive interger but got ".*" instead\.$/
+     * @expectedExceptionMessageRegExp /^Invalid configuration for path "nelmio_alice\.seed": Expected value "nelmio_alice\.seed" to be either null or a strictly positive integer but got ".*?" instead\.$/
      */
     public function testIfNotNullThenSeedMustBeAStrictlyPositiveInteger($seed)
     {

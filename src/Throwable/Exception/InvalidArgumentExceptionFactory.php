@@ -37,7 +37,7 @@ final class InvalidArgumentExceptionFactory
     {
         return new \InvalidArgumentException(
             sprintf(
-                'Reference key mismatch, the keys "%s" and "%s" refers to the same fixture but the keys are different',
+                'Reference key mismatch, the keys "%s" and "%s" refers to the same fixture but the keys are different.',
                 $id1,
                 $id2
             )
