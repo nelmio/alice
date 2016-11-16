@@ -15,13 +15,13 @@ namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\FileLoaderInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\ParserInterface;
 
 final class SimpleFileLoader implements FileLoaderInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var DataLoaderInterface

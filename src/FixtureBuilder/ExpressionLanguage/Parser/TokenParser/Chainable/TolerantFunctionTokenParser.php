@@ -16,20 +16,21 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\NestedValue;
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class TolerantFunctionTokenParser extends AbstractChainableParserAwareParser
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @private */
     const REGEX = '/(\)>)(\ *)</';
@@ -89,7 +90,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
         }
 
         if (3 !== count($split) && 4 !== count($split)) {
-            throw LexException::create($token->getValue());
+            throw ExpressionLanguageExceptionFactory::createForCouldNotLexValue($token->getValue());
         }
 
         $values = [

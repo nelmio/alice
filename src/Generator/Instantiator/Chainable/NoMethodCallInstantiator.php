@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
-use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory;
 
 final class NoMethodCallInstantiator extends AbstractChainableInstantiator
 {
@@ -35,7 +35,7 @@ final class NoMethodCallInstantiator extends AbstractChainableInstantiator
         try {
             return (new \ReflectionClass($fixture->getClassName()))->newInstanceWithoutConstructor();
         } catch (\ReflectionException $exception) {
-            throw InstantiationException::create($fixture);
+            throw InstantiationExceptionFactory::create($fixture, 0, $exception);
         }
     }
 }

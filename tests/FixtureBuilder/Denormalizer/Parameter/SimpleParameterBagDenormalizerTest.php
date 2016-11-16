@@ -62,11 +62,9 @@ class SimpleParameterBagDenormalizerTest extends \PHPUnit_Framework_TestCase
         try {
             $this->denormalizer->denormalize($data);
             $this->fail('Expected exception to be thrown.');
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\TypeError $exception) {
             $this->assertEquals($expectedExceptionMessage, $exception->getMessage());
         }
-
-        $this->assertTrue(true, 'Did not expect an exception to be thrown.');
     }
 
     public function provideDataWithNoParameters()

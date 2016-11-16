@@ -15,8 +15,8 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
-use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory;
 
 final class StaticFactoryInstantiator extends AbstractChainableInstantiator
 {
@@ -49,13 +49,7 @@ final class StaticFactoryInstantiator extends AbstractChainableInstantiator
 
         $instance = $factory::$method(...$arguments);
         if (false === $instance instanceof $class) {
-            throw new InstantiationException(
-                sprintf(
-                    'Instantiated fixture was expected to be an instance of "%s". Got "%s" instead.',
-                    $class,
-                    get_class($instance)
-                )
-            );
+            throw InstantiationExceptionFactory::createForInvalidInstanceType($fixture, $instance);
         }
 
         return $instance;

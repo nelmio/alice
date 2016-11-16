@@ -15,14 +15,14 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * Extracts flag elements from a given string and delegates the parsing of each element to the decorated parser.
  */
 final class ElementFlagParser implements FlagParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @private */
     const REGEX = '/\s*(?<reference>.+?)\s\((?<stringFlags>.+).*\)$/';

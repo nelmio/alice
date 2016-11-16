@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
-use Nelmio\Alice\Exception\FixtureNotFoundException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory;
 
 /**
  * Bag containing fixtures and templates.
@@ -71,7 +71,7 @@ final class TemplatingFixtureBag
             return $this->templates->get($id);
         }
 
-        throw FixtureNotFoundException::create($id);
+        throw FixtureNotFoundExceptionFactory::create($id);
     }
 
     public function getTemplate(string $id): FixtureInterface
@@ -80,7 +80,7 @@ final class TemplatingFixtureBag
             return $this->templates->get($id);
         }
 
-        throw FixtureNotFoundException::create($id);
+        throw FixtureNotFoundExceptionFactory::create($id);
     }
 
     public function getFixtures(): FixtureBag

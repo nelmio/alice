@@ -13,19 +13,19 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 abstract class AbstractChainableParserAwareParser implements ChainableTokenParserInterface, ParserAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ParserInterface|null
@@ -51,7 +51,7 @@ abstract class AbstractChainableParserAwareParser implements ChainableTokenParse
     public function parse(Token $token)
     {
         if (null === $this->parser) {
-            throw ParserNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ExpressionLanguageExceptionFactory::createForExpectedMethodCallOnlyIfHasAParser(__METHOD__);
         }
     }
 }

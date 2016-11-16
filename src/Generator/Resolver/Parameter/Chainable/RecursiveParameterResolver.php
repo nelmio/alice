@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
-use Nelmio\Alice\Exception\Generator\Resolver\RecursionLimitReachedException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
@@ -27,7 +29,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
  */
 final class RecursiveParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ChainableParameterResolverInterface
@@ -44,12 +46,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
         $this->resolver = $resolver;
 
         if (2 >= $limit) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected limit for recursive calls to be of at least 2. Got %d instead.',
-                    $limit
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForInvalidLimitValueForRecursiveCalls($limit);
         }
         $this->limit = $limit;
     }
@@ -125,7 +122,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
     private function incrementCounter(int $counter, int $limit, string $parameterKey): int
     {
         if ($counter >= $limit) {
-            throw RecursionLimitReachedException::create($limit, $parameterKey);
+            throw RecursionLimitReachedExceptionFactory::create($limit, $parameterKey);
         }
 
         return ++$counter;

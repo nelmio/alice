@@ -20,8 +20,8 @@ use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
-use Nelmio\Alice\Exception\Generator\Resolver\NoSuchPropertyException;
-use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -70,7 +70,7 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver::resolve" to be called only if it has a resolver.
      */
     public function testCannotResolveValueIfHasNoResolver()
@@ -197,7 +197,7 @@ class FixturePropertyReferenceResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
      * @expectedExceptionMessage Could not resolve value "dummy->publicProperty".
      */
     public function testThrowsAnExceptionIfReferenceResolvedIsNotAnObject()

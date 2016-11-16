@@ -33,7 +33,7 @@ class NoMethodCallTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \LogicException
      * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::withArguments()" should not be called.
      */
     public function testCannotCreateNewInstanceWithNewArguments()
@@ -43,7 +43,7 @@ class NoMethodCallTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \LogicException
      * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getCaller()" should not be called.
      */
     public function testCannotGetCaller()
@@ -53,7 +53,7 @@ class NoMethodCallTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \LogicException
      * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getMethod()" should not be called.
      */
     public function testCannotGetMethod()
@@ -63,7 +63,7 @@ class NoMethodCallTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \LogicException
      * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getArguments()" should not be called.
      */
     public function testCannotGetArguments()

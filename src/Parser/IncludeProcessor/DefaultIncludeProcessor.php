@@ -13,14 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 final class DefaultIncludeProcessor implements IncludeProcessorInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var IncludeDataMerger
@@ -44,12 +46,7 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
     public function process(ParserInterface $parser, string $file, array $data): array
     {
         if (false === array_key_exists('include', $data)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Could not find any include statement in the file "%s".',
-                    $file
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForNoIncludeStatementInData($file);
         }
 
         $include = $data['include'];
@@ -60,35 +57,16 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
         }
 
         if (false === is_array($include)) {
-            throw new \TypeError(
-                sprintf(
-                    'Expected include statement to be either null or an array of files to include. Got %s instead in '
-                    .'file "%s".',
-                    gettype($include),
-                    $file
-                )
-            );
+            throw TypeErrorFactory::createForInvalidIncludeStatementInData($include, $file);
         }
 
         foreach ($include as $includeFile) {
             if (false === is_string($includeFile)) {
-                throw new \TypeError(
-                    sprintf(
-                        'Expected elements of include statement to be file names. Got %s instead in file "%s".',
-                        gettype($includeFile),
-                        $file
-                    )
-                );
+                throw TypeErrorFactory::createForInvalidIncludedFilesInData($includeFile, $file);
             }
 
             if (0 === strlen($includeFile)) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'Expected elements of include statement to be file names. Got empty string instead in file '
-                        .'"%s".',
-                        $file
-                    )
-                );
+                throw InvalidArgumentExceptionFactory::createForEmptyIncludedFileInData($file);
             }
 
             $filePathToInclude = $this->fileLocator->locate($includeFile, dirname($file));

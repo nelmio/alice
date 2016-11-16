@@ -15,11 +15,11 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer;
 
 use Nelmio\Alice\FixtureBuilder\BareFixtureSet;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class SimpleDenormalizer implements DenormalizerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ParameterBagDenormalizerInterface

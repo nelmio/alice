@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
-use Nelmio\Alice\Exception\Parser\ParseException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
+use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
 use Prophecy\Argument;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
@@ -188,7 +188,7 @@ EOF;
             $parser->parse($file);
 
             $this->fail('Expected exception to be thrown.');
-        } catch (ParseException $exception) {
+        } catch (UnparsableFileException $exception) {
             $this->assertRegExp('/^The file ".+\/basic\.yml" does not contain valid YAML\.$/', $exception->getMessage());
             $this->assertEquals(0, $exception->getCode());
             $this->assertNotNull($exception->getPrevious());
@@ -209,7 +209,7 @@ EOF;
             $parser->parse($file);
 
             $this->fail('Expected exception to be thrown.');
-        } catch (ParseException $exception) {
+        } catch (UnparsableFileException $exception) {
             $this->assertRegExp('/^Could not parse the file ".+\/basic\.yml"\.$/', $exception->getMessage());
             $this->assertEquals(0, $exception->getCode());
             $this->assertNotNull($exception->getPrevious());

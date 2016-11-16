@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
-use Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 
 final class GenerationContext

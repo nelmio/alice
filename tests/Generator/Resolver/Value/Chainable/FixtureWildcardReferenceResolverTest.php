@@ -66,7 +66,7 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver::resolve" to be called only if it has a resolver.
      */
     public function testCannotResolveValueIfHasNoResolver()
@@ -182,7 +182,7 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
      * @expectedExceptionMessage Could not find a fixture or object ID matching the pattern
      */
     public function testThrowsAnExceptionIfNotMathcingIdFound()

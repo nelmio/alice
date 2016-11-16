@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
+use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
+
 final class ListNameDenormalizer extends AbstractChainableDenormalizer
 {
     /** @private */
@@ -41,13 +43,7 @@ final class ListNameDenormalizer extends AbstractChainableDenormalizer
     {
         $matches = [];
         if (false === $this->canDenormalize($id, $matches)) {
-            throw new \LogicException(
-                sprintf(
-                    'As a chainable denormalizer, "%s" should be called only if "::canDenormalize() returns true. Got '
-                    .'false instead.',
-                    __METHOD__
-                )
-            );
+            throw LogicExceptionFactory::createForCannotDenormalizerForChainableFixtureBuilderDenormalizer(__METHOD__);
         }
         $listElements = preg_split('/\s*,\s*/', $matches['list']);
 

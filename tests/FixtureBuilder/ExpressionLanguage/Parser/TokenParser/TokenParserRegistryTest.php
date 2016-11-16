@@ -139,7 +139,7 @@ class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
      * @expectedExceptionMessage No suitable token parser found to handle the token "foo" (type: STRING_TYPE).
      */
     public function testThrowsAnExceptionIfNoSuitableParserIsFound()

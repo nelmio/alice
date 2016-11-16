@@ -15,16 +15,17 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class SimpleConstructorDenormalizer implements ConstructorDenormalizerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ArgumentsDenormalizerInterface
@@ -60,6 +61,6 @@ final class SimpleConstructorDenormalizer implements ConstructorDenormalizerInte
             );
         }
 
-        throw new UnexpectedValueException('Could not denormalize the given constructor.');
+        throw DenormalizerExceptionFactory::createForUndenormalizableConstructor();
     }
 }

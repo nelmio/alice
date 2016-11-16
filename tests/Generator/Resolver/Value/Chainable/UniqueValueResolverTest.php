@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
-use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -100,7 +100,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver::resolve" to be called only if it has a resolver.
      */
     public function testCannotResolveValueIfHasNoResolver()
@@ -110,7 +110,7 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
      * @expectedExceptionMessage Could not generate a unique value after 1 attempts for "uniqid".
      */
     public function testThrowsExceptionIfLimitReached()

@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
-use Nelmio\Alice\Exception\Parser\ParserNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory;
 use Nelmio\Alice\ParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class ParserRegistry implements ParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ChainableParserInterface[]
@@ -47,6 +47,6 @@ final class ParserRegistry implements ParserInterface
             }
         }
 
-        throw ParserNotFoundException::create($file);
+        throw ParseExceptionFactory::createForParserNoFoundForFile($file);
     }
 }

@@ -23,12 +23,12 @@ use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectBag;
 
 final class SimpleObjectGenerator implements ObjectGeneratorInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
     
     /**
      * @var InstantiatorInterface

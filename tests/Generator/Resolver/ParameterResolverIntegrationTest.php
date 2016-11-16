@@ -48,7 +48,7 @@ class ParameterResolverIntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideCircularReferences
      *
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\CircularReferenceException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException
      * @expectedExceptionMessageRegExp /^Circular reference detected for the parameter "[^\"]+" while resolving \[.+]\.$/
      */
     public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null)
@@ -57,7 +57,7 @@ class ParameterResolverIntegrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\ParameterNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\ParameterNotFoundException
      */
     public function testThrowExceptionWhenResolvingNonExistentParameter()
     {

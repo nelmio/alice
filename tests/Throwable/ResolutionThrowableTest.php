@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
-use Nelmio\Alice\Exception\RootResolutionException;
+use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\ResolutionThrowable

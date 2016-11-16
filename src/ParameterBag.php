@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Exception\ParameterNotFoundException;
+use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
+use Nelmio\Alice\Throwable\Exception\ParameterNotFoundExceptionFactory;
 
 /**
  * Value object containing a list of parameters.
@@ -79,7 +80,7 @@ final class ParameterBag implements \IteratorAggregate, \Countable
             return deep_clone($this->parameters[$key]);
         }
 
-        throw ParameterNotFoundException::create($key);
+        throw ParameterNotFoundExceptionFactory::create($key);
     }
 
     /**

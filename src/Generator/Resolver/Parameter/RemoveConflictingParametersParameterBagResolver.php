@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 
@@ -22,7 +22,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
  */
 final class RemoveConflictingParametersParameterBagResolver implements ParameterBagResolverInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ParameterBagResolverInterface

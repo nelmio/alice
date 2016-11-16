@@ -160,7 +160,7 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
      * @expectedExceptionMessage No suitable fixture denormalizer found to handle the fixture with the reference "user0".
      */
     public function testThrowsExceptionIfNotSuitableDenormalizer()

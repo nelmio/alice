@@ -13,21 +13,22 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
-use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 
 /**
  * Resolves array parameters.
  */
 final class ArrayParameterResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ParameterResolverInterface|null
@@ -66,7 +67,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
     ): ParameterBag
     {
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall(__METHOD__);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
         $context = ResolvingContext::createFrom($context, $unresolvedArrayParameter->getKey());

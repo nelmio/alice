@@ -13,18 +13,19 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
+use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 
 final class ParameterResolverRegistry implements ParameterResolverInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ChainableParameterResolverInterface[]
@@ -38,13 +39,7 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
     {
         foreach ($resolvers as $index => $resolver) {
             if (false === $resolver instanceof ChainableParameterResolverInterface) {
-                throw new \TypeError(
-                    sprintf(
-                        'Expected resolvers to be "%s" objects. Got "%s" instead.',
-                        ParameterResolverInterface::class,
-                        is_object($resolver)? get_class($resolver) : $resolver
-                    )
-                );
+                throw TypeErrorFactory::createForInvalidChainableParameterResolver($resolver);
             }
 
             if ($resolver instanceof ParameterResolverAwareInterface) {
@@ -71,6 +66,6 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
             }
         }
         
-        throw ResolverNotFoundException::createForParameter($parameter->getKey());
+        throw ResolverNotFoundExceptionFactory::createForParameter($parameter->getKey());
     }
 }

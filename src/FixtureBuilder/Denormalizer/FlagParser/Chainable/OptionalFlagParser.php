@@ -16,11 +16,11 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class OptionalFlagParser implements ChainableFlagParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @interval */
     const REGEX = '/^(?<percentage>\d+)\%\?$/';

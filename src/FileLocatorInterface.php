@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Exception\FileLocator\FileNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 
 interface FileLocatorInterface
 {

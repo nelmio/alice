@@ -47,7 +47,7 @@ class EscapedValueTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "" (type: ESCAPED_VALUE_TYPE).
      */
     public function testThrowsAnExceptionIfAMalformedTokenIsGiven()

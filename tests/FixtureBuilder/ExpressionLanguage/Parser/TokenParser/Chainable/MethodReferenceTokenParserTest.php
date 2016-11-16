@@ -52,7 +52,7 @@ class MethodReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\AbstractChainableParserAwareParser::parse" to be called only if it has a parser.
      */
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
@@ -64,7 +64,7 @@ class MethodReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "" (type: METHOD_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfCouldNotParseToken()
@@ -76,7 +76,7 @@ class MethodReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "@@malformed_user->getUserName(arg1, arg2)" (type: METHOD_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfParsingReferenceGivesAnUnexpectedResult()
@@ -98,7 +98,7 @@ class MethodReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "@user->getUserName((arg1, arg2)" (type: METHOD_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfParsingFunctionCallGivesAnUnexpectedResult()

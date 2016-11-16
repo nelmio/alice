@@ -15,17 +15,18 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 final class VariableValueResolver implements ChainableValueResolverInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @inheritdoc
@@ -58,11 +59,6 @@ final class VariableValueResolver implements ChainableValueResolverInterface
             );
         }
 
-        throw new UnresolvableValueException(
-            sprintf(
-                'Could not find a variable "%s".',
-                $value->getValue()
-            )
-        );
+        throw UnresolvableValueExceptionFactory::createForCouldNotFindVariable($value);
     }
 }

@@ -18,14 +18,14 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Resolver\FixtureBagResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * Decorates a simple fixture resolver to resolve templates fixtures.
  */
 final class TemplateFixtureBagResolver implements FixtureBagResolverInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var TemplateFixtureResolver

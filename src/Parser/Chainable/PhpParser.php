@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parser\ChainableParserInterface;
+use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 final class PhpParser implements ChainableParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @interval */
     const REGEX = '/.+\.php[7]?$/i';
@@ -43,13 +45,13 @@ final class PhpParser implements ChainableParserInterface
     public function parse(string $file): array
     {
         if (false === file_exists($file)) {
-            throw new \InvalidArgumentException(sprintf('The file "%s" could not be found.', $file));
+            throw InvalidArgumentExceptionFactory::createForFileCouldNotBeFound($file);
         }
 
         $data = include($file);
 
         if (false === is_array($data)) {
-            throw new \InvalidArgumentException(sprintf('The file "%s" must return a PHP array.', $file));
+            throw TypeErrorFactory::createForInvalidFixtureFileReturnedData($file);
         }
 
         return $data;

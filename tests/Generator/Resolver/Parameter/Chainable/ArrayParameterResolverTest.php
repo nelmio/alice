@@ -83,7 +83,7 @@ class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver::resolve" to be called only if it has a resolver.
      */
     public function testRequiresInjectedResolverToResolverAParameter()

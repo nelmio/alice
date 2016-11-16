@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Loader;
 use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
+use Nelmio\Alice\Throwable\Exception\BadMethodCallExceptionFactory;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
@@ -134,7 +135,7 @@ use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Generator\DoublePassGenerator;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\FileLoaderInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\PropertyAccess\StdPropertyAccessor;
@@ -182,7 +183,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  */
 final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     private $previous = '';
 
@@ -535,22 +536,12 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         }
 
         if (false === preg_match('/^get.*/', $method)) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'Unknown method "%s".',
-                    $method
-                )
-            );
+            throw BadMethodCallExceptionFactory::createForUnknownMethod($method);
         }
 
         $realMethod = str_replace('get', 'create', $method);
         if ($realMethod === $this->previous) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'Unknown method "%s".',
-                    $method
-                )
-            );
+            throw BadMethodCallExceptionFactory::createForUnknownMethod($method);
         }
         $this->previous = $realMethod;
 

@@ -15,12 +15,12 @@ namespace Nelmio\Alice\Generator;
 
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\GeneratorInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectSet;
 
 final class DoublePassGenerator implements GeneratorInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var FixtureSetResolverInterface

@@ -13,18 +13,20 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\LexException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class SubPatternsLexer implements LexerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     const REFERENCE_LEXER = 'reference';
 
@@ -102,12 +104,7 @@ final class SubPatternsLexer implements LexerInterface
         foreach (self::PATTERNS as $pattern => $tokenTypeConstant) {
             if (1 === preg_match($pattern, $valueFragment, $matches)) {
                 if (null === $tokenTypeConstant) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'Invalid token "%s" found.',
-                            $valueFragment
-                        )
-                    );
+                    throw InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageToken($valueFragment);
                 }
 
                 $match = $matches[1];
@@ -119,6 +116,6 @@ final class SubPatternsLexer implements LexerInterface
             }
         }
 
-        throw LexException::create($valueFragment);
+        throw ExpressionLanguageExceptionFactory::createForCouldNotLexValue($valueFragment);
     }
 }

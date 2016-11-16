@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 /**
  * Value object representing an array like "10x @user0". '10' is called "quantifier" and "@user0" is called "element".
@@ -41,23 +42,11 @@ final class DynamicArrayValue implements ValueInterface
         } elseif (is_scalar($quantifier)) {
             $quantifier = (int) $quantifier;
         } else {
-            throw new \TypeError(
-                sprintf(
-                    'Expected quantifier to be either a scalar value or a "%s" object. Got "%s" instead.',
-                    ValueInterface::class,
-                    is_object($quantifier) ? get_class($quantifier) : gettype($quantifier)
-                )
-            );
+            throw TypeErrorFactory::createForDynamicArrayQuantifier($quantifier);
         }
 
         if (false === is_string($element) && false === is_array($element) && false === $element instanceof ValueInterface) {
-            throw new \TypeError(
-                sprintf(
-                    'Expected element to be either string, an array or a "%s" object. Got "%s" instead.',
-                    ValueInterface::class,
-                    is_object($element) ? get_class($element) : gettype($element)
-                )
-            );
+            throw TypeErrorFactory::createForDynamicArrayElement($element);
         }
 
         $this->quantifier = $quantifier;

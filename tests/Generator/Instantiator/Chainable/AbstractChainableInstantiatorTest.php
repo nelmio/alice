@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Dummy;
-use Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
@@ -80,7 +80,7 @@ class AbstractChainableInstantiatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Instantiator\InstantiationException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage custom exception
      */
     public function testIfCannotCreateInstanceAndExceptionThrownIsAnInstantiationExceptionThenItLetsTheExceptionPass()

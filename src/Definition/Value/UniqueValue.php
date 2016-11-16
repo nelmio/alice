@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 final class UniqueValue implements ValueInterface
 {
@@ -36,12 +37,7 @@ final class UniqueValue implements ValueInterface
         $this->id = $id;
 
         if ($value instanceof self) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Cannot create a unique value of a unique value for value "%s".',
-                    $id
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForRedundantUniqueValue($id);
         }
 
         $this->value = deep_clone($value);

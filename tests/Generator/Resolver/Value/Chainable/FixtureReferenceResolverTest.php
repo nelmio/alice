@@ -69,7 +69,7 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver::resolve" to be called only if it has a generator.
      */
     public function testCannotResolveValueIfHasNoGenerator()
@@ -85,7 +85,7 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
      * @expectedExceptionMessage Could not resolve value "@foo".
      */
     public function testCannotResolveReferenceIsTheReferenceIsAValue()
@@ -245,7 +245,7 @@ class FixtureReferenceResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
      * @expectedExceptionMessage Could not find the fixture "dummy".
      */
     public function testIfTheReferenceRefersToANonExistentFixtureAndNoInstanceIsAvailableThenThrowsAnException()

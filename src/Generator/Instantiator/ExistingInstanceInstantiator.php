@@ -19,7 +19,7 @@ use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * Check if the given fixture has already been instantiated and delegates the instantiation to the decorated
@@ -27,7 +27,7 @@ use Nelmio\Alice\NotClonableTrait;
  */
 final class ExistingInstanceInstantiator implements InstantiatorInterface, ValueResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var InstantiatorInterface

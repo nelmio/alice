@@ -17,7 +17,7 @@ use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
-use Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -88,7 +88,7 @@ class EvaluatedValueResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
      * @expectedExceptionMessage Could not evaluate the expression "(function () { throw new \Exception(""); })()".
      */
     public function testThrowsAnExceptionIfAnErrorOccurredDuringEvaluation()

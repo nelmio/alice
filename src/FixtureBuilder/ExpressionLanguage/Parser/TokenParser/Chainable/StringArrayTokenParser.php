@@ -13,7 +13,7 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -46,7 +46,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
 
             return $this->parseElements($this->parser, $elements);
         } catch (\TypeError $error) {
-            throw ParseException::createForToken($token, 0, $error);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $error);
         }
     }
 

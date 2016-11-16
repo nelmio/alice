@@ -123,7 +123,7 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /^Expected elements of include statement to be file names\. Got boolean instead in file ".+\/main\.yml"\.$/
+     * @expectedExceptionMessageRegExp /^Expected elements of include statement to be file names\. Got "boolean" instead in file ".+\/main\.yml"\.$/
      */
     public function testIncludedFilesMustBeStrings()
     {

@@ -13,21 +13,21 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class IdentityTokenParser implements ChainableTokenParserInterface, ParserAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ChainableTokenParserInterface

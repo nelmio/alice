@@ -16,11 +16,11 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable;
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class UniqueFlagParser implements ChainableFlagParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @inheritdoc

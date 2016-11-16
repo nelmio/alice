@@ -13,15 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @private
  */
 final class FunctionTokenizer
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @internal */
     const DELIMITER= '___##';
@@ -94,7 +95,7 @@ final class FunctionTokenizer
                     end($functions);
                     $lastFunctionKey = key($functions);
                     if (null === $lastFunctionKey) {
-                        throw MalformedFunctionException::create($originalValue);
+                        throw ExpressionLanguageExceptionFactory::createForMalformedFunction($originalValue);
                     }
                     unset($functions[$lastFunctionKey]);
 
@@ -117,7 +118,7 @@ final class FunctionTokenizer
         }
 
         if ([] !== $functions) {
-            throw MalformedFunctionException::create($originalValue);
+            throw ExpressionLanguageExceptionFactory::createForMalformedFunction($originalValue);
         }
 
         return $tree;

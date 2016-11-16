@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
-use Nelmio\Alice\Exception\RootGenerationException;
+use Nelmio\Alice\Throwable\Exception\RootGenerationException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\GenerationThrowable

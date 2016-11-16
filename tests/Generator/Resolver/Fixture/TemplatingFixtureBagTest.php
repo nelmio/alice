@@ -22,7 +22,7 @@ use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
-use Nelmio\Alice\Exception\FixtureNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use Nelmio\Alice\FixtureBag;
 
 /**

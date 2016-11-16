@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter;
 
 use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 final class SimpleParameterBagDenormalizer implements ParameterBagDenormalizerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * {@inheritdoc}
@@ -35,12 +36,7 @@ final class SimpleParameterBagDenormalizer implements ParameterBagDenormalizerIn
         }
 
         if (false === is_array($fixturesParameters)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected parameters to be an array. Got "%s" instead.',
-                    is_object($fixturesParameters) ? get_class($fixturesParameters) : gettype($fixturesParameters)
-                )
-            );
+            throw TypeErrorFactory::createForInvalidFixtureBagParameters($fixturesParameters);
         }
 
         return new ParameterBag($fixturesParameters);

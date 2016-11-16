@@ -16,7 +16,8 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
@@ -46,7 +47,7 @@ final class MethodReferenceTokenParser extends AbstractChainableParserAwareParse
 
         $explodedValue = explode('->', $token->getValue());
         if (count($explodedValue) !== 2) {
-            throw ParseException::createForToken($token);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
         $reference = $this->parser->parse($explodedValue[0]);
@@ -61,6 +62,6 @@ final class MethodReferenceTokenParser extends AbstractChainableParserAwareParse
             return new FixtureMethodCallValue($reference, $method);
         }
 
-        throw ParseException::createForToken($token);
+        throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
     }
 }

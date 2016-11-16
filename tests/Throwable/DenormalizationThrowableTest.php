@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
-use Nelmio\Alice\Exception\RootDenormalizationException;
+use Nelmio\Alice\Throwable\Exception\RootDenormalizationException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\DenormalizationThrowable

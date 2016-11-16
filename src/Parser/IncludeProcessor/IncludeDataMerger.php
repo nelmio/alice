@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class IncludeDataMerger
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * Merges a parsed file data with another. If some data overlaps, the existent data is kept, i.e. the included data

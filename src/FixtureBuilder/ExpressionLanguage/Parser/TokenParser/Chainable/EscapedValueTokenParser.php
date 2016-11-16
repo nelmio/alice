@@ -13,19 +13,19 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class EscapedValueTokenParser implements ChainableTokenParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var FunctionTokenizer
@@ -54,7 +54,7 @@ final class EscapedValueTokenParser implements ChainableTokenParserInterface
     {
         $value = $token->getValue();
         if ('' === $value) {
-            throw ParseException::createForToken($token);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
         return $this->tokenizer->detokenize(substr($value, 1));

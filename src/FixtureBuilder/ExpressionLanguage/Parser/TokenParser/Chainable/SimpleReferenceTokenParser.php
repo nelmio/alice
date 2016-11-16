@@ -14,18 +14,18 @@ declare(strict_types = 1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @inheritdoc
@@ -47,7 +47,7 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
         try {
             return new FixtureReferenceValue(substr($value, 1));
         } catch (\InvalidArgumentException $exception) {
-            throw ParseException::createForToken($token, 0, $exception);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $exception);
         }
     }
 }

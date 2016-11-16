@@ -15,7 +15,8 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -23,11 +24,11 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class DynamicArrayValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ValueResolverInterface|null
@@ -43,12 +44,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
     {
         $this->resolver = $resolver;
         if ($limit < 1) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected limit value to be a strictly positive integer, got "%d" instead.',
-                    $limit
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForInvalidLimitValue($limit);
         }
         $this->limit = $limit;
     }
@@ -91,6 +87,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
         }
 
         if ($quantifier < 2) {
+            //TODO: should be a valid case
             throw new \InvalidArgumentException(
                 sprintf(
                     'Expected quantifier to be an integer superior or equal to 2. Got "%d" for "%s", check you dynamic'
@@ -122,7 +119,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
     private function checkResolver(string $checkedMethod)
     {
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall($checkedMethod);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall($checkedMethod);
         }
     }
 }

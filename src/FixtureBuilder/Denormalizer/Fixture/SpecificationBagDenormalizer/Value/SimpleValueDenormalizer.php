@@ -16,16 +16,17 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\ParseThrowable;
 
 final class SimpleValueDenormalizer implements ValueDenormalizerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ParserInterface
@@ -69,14 +70,7 @@ final class SimpleValueDenormalizer implements ValueDenormalizerInterface
         try {
             return $parser->parse($value);
         } catch (ParseThrowable $throwable) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Could not parse value "%s".',
-                    $value
-                ),
-                0,
-                $throwable
-            );
+            throw DenormalizerExceptionFactory::createForUnparsableValue($value, 0, $throwable);
         }
     }
 }

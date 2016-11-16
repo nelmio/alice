@@ -79,7 +79,7 @@ class UnresolvedFixtureReferenceIdResolverTest extends \PHPUnit_Framework_TestCa
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
      * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver::resolve" to be called only if it has a resolver.
      */
     public function testCannotResolveValueIfHasNoResolver()
@@ -321,7 +321,7 @@ class UnresolvedFixtureReferenceIdResolverTest extends \PHPUnit_Framework_TestCa
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\Generator\Resolver\UnresolvableValueException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
      * @expectedExceptionMessage Expected fixture reference value "@bob" to be resolved into a string. Got "(integer) 200" instead.
      */
     public function testThrowsAnExceptionIfResolvedIdIsInvalid()

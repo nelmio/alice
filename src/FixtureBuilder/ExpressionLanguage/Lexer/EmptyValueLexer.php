@@ -16,14 +16,14 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class EmptyValueLexer implements LexerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     private $lexer;
 

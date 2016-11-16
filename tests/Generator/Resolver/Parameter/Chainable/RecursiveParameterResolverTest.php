@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
-use Nelmio\Alice\Exception\Generator\Resolver\RecursionLimitReachedException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
@@ -52,7 +52,7 @@ class RecursiveParameterResolverTest extends \PHPUnit_Framework_TestCase
             $this->fail('Expected exception to be thrown.');
         } catch (\InvalidArgumentException $exception) {
             $this->assertEquals(
-                'Expected limit for recursive calls to be of at least 2. Got 1 instead.',
+                'Expected limit for recursive calls to be of at least 2. Got "1" instead.',
                 $exception->getMessage()
             );
         }

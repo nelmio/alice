@@ -15,14 +15,14 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class StringMergerParser implements ParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ParserInterface

@@ -15,8 +15,10 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Exception\Generator\Resolver\ResolverNotFoundException;
-use Nelmio\Alice\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -25,11 +27,11 @@ use Nelmio\Alice\Generator\Resolver\UniqueValuesPool;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class UniqueValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var UniqueValuesPool
@@ -51,12 +53,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         $this->pool = $pool;
         $this->resolver = $resolver;
         if ($limit < 1) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected limit value to be a strictly positive integer, got "%d" instead.',
-                    $limit
-                )
-            );
+            throw InvalidArgumentExceptionFactory::createForInvalidLimitValue($limit);
         }
         $this->limit = $limit;
     }
@@ -113,7 +110,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
     private function checkResolver(string $checkedMethod)
     {
         if (null === $this->resolver) {
-            throw ResolverNotFoundException::createUnexpectedCall($checkedMethod);
+            throw ResolverNotFoundExceptionFactory::createUnexpectedCall($checkedMethod);
         }
     }
 
@@ -121,7 +118,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
     {
         ++$tryCounter;
         if ($tryCounter > $limit) {
-            throw UniqueValueGenerationLimitReachedException::create($value, $limit);
+            throw UniqueValueGenerationLimitReachedExceptionFactory::create($value, $limit);
         }
 
         return $tryCounter;

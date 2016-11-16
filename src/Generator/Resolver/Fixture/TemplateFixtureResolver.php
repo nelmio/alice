@@ -15,15 +15,17 @@ namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
-use Nelmio\Alice\Exception\FixtureNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class TemplateFixtureResolver
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * Resolves a given fixture. The resolution of a fixture may result in the resolution of several fixtures.
@@ -92,19 +94,12 @@ final class TemplateFixtureResolver
             $context->add($fixtureId);
 
             if (false === $unresolvedFixtures->has($fixtureId)) {
-                throw FixtureNotFoundException::create($fixtureId);
+                throw FixtureNotFoundExceptionFactory::create($fixtureId);
             }
 
             if ($resolvedFixtures->has($fixtureId)) {
                 if (false === $resolvedFixtures->hasTemplate($fixtureId)) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'Fixture "%s" extends "%s" but "%s" is not a template.',
-                            $fixture->getId(),
-                            $fixtureId,
-                            $fixtureId
-                        )
-                    );
+                    throw InvalidArgumentExceptionFactory::createForFixtureExtendingANonTemplateFixture($fixture, $fixtureId);
                 }
 
                 $fixtures = $fixtures->with(
@@ -116,14 +111,7 @@ final class TemplateFixtureResolver
 
             $unresolvedFixture = $unresolvedFixtures->get($fixtureId);
             if (false === $unresolvedFixture instanceof TemplatingFixture) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'Fixture "%s" extends "%s" but "%s" is not a template.',
-                        $fixture->getId(),
-                        $fixtureId,
-                        $fixtureId
-                    )
-                );
+                throw InvalidArgumentExceptionFactory::createForFixtureExtendingANonTemplateFixture($fixture, $fixtureId);
             }
 
             $resolvedFixtures = $this->resolve(

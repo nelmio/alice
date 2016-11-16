@@ -48,7 +48,7 @@ class FixtureRangeReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "" (type: RANGE_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfPassedTokenIsMalformed()
@@ -60,7 +60,7 @@ class FixtureRangeReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "@user{1..10" (type: RANGE_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfPassedTokenIsInvalid()
@@ -72,7 +72,7 @@ class FixtureRangeReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
      * @expectedExceptionMessage Could not parse the token "" (type: RANGE_REFERENCE_TYPE).
      */
     public function testThrowsAnExceptionIfAMalformedTokenIsGiven()

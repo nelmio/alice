@@ -16,7 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Value\ArrayValue;
-use Nelmio\Alice\Exception\RootParseException;
+use Nelmio\Alice\Throwable\Exception\RootParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;

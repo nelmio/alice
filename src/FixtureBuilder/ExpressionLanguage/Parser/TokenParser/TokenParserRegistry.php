@@ -13,20 +13,20 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser;
 
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class TokenParserRegistry implements TokenParserInterface, ParserAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ChainableTokenParserInterface[]
@@ -72,6 +72,6 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
             }
         }
 
-        throw ParserNotFoundException::create($token);
+        throw ExpressionLanguageExceptionFactory::createForNoParserFoundForToken($token);
     }
 }

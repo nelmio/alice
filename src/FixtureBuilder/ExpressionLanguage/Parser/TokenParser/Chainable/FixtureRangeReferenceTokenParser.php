@@ -16,19 +16,20 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\Definition\RangeName;
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
-use Nelmio\Alice\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @internal
  */
 final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /** @private */
     const REGEX = RangeNameDenormalizer::REGEX;
@@ -88,7 +89,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
         $name = substr($token->getValue(), 1);
 
         if (1 !== preg_match(self::REGEX, (string) $name, $matches)) {
-            throw ParseException::createForToken($token);
+            throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
         $reference = str_replace(sprintf('{%s}', $matches['range']), $this->token, $name);
 

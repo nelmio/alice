@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
 use Nelmio\Alice\Definition\RangeName;
+use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 
@@ -85,12 +86,7 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
     {
         $matches = [];
         if (false === $this->canDenormalize($name, $matches)) {
-            throw new \LogicException(
-                sprintf(
-                    'As a chainable denormalizer, "%s" should be called only if "::canDenormalize() returns true. Got false instead.',
-                    __METHOD__
-                )
-            );
+            throw LogicExceptionFactory::createForCannotDenormalizerForChainableFixtureBuilderDenormalizer(__METHOD__);
         }
         $reference = str_replace(
             sprintf('{%s}', $matches['range']),

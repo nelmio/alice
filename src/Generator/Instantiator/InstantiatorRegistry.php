@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
-use Nelmio\Alice\Exception\Generator\Instantiator\InstantiatorNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class InstantiatorRegistry implements InstantiatorInterface, ValueResolverAwareInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ChainableInstantiatorInterface[]
@@ -60,9 +60,7 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws InstantiatorNotFoundException
+     * @inheritdoc
      */
     public function instantiate(
         FixtureInterface $fixture,
@@ -76,6 +74,6 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
             }
         }
 
-        throw InstantiatorNotFoundException::create($fixture);
+        throw InstantiationExceptionFactory::createForInstantiatorNotFoundForFixture($fixture);
     }
 }

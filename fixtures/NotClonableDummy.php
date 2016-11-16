@@ -15,5 +15,5 @@ namespace Nelmio\Alice;
 
 class NotClonableDummy
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 }

@@ -17,11 +17,11 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\NotClonableTrait;
+use Nelmio\Alice\IsAServiceTrait;
 
 final class SimpleArgumentsDenormalizer implements ArgumentsDenormalizerInterface
 {
-    use NotClonableTrait;
+    use IsAServiceTrait;
 
     /**
      * @var ValueDenormalizerInterface
