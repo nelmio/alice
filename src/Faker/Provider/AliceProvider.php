@@ -34,10 +34,22 @@ final class AliceProvider
      * @param FixtureInterface $fixture
      *
      * @return string
-     *
      */
     public static function current(FixtureInterface $fixture)
     {
         return $fixture->getValueForCurrent();
+    }
+
+    /**
+     * @param string $type
+     * @param mixed  $value
+     *
+     * @return mixed
+     */
+    public static function cast(string $type, $value)
+    {
+        settype($value, $type);
+
+        return $value;
     }
 }
