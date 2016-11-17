@@ -2291,7 +2291,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-g        yield '[parameter] nested parameter' => [
+        yield '[parameter] nested parameter' => [
             [
                 'parameters' => [
                     'param1' => 2,
