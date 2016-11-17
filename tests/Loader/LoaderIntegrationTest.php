@@ -2291,36 +2291,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        //TODO; see LoaderTest::testDynamicParametersLoading in v2
-//        yield '[parameter] dynamic parameter' => [
-//            [
-//                'parameters' => [
-//                    'username_alice' => 'Alice',
-//                    'username_bob' => 'Bob',
-//                ],
-//                \stdClass::class => [
-//                    'user_{alice, bob}' => [
-//                        'username' => '<{username_<current()>}>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [
-//                    'username_alice' => 'Alice',
-//                    'username_bob' => 'Bob',
-//                ],
-//                'objects' => [
-//                    'user_alice' => StdClassFactory::create([
-//                        'username' => 'Alice',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'username' => 'Bob',
-//                    ]),
-//                ],
-//            ],
-//        ];
-
-        yield '[parameter] nested parameter' => [
+g        yield '[parameter] nested parameter' => [
             [
                 'parameters' => [
                     'param1' => 2,
