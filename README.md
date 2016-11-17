@@ -73,7 +73,7 @@ Other references:
 This is installable via [Composer](https://getcomposer.org/) as
 [nelmio/alice](https://packagist.org/packages/nelmio/alice):
 
-    composer require --dev nelmio/alice:^3.0@dev
+    composer require --dev nelmio/alice:^3.0@beta
 
 
 ## Example
