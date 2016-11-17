@@ -36,7 +36,7 @@ final class TypeErrorFactory
     {
         return new \TypeError(
             sprintf(
-                'Expected quantifier to be either a scalar value or a "%s" object. Got "%s" instead.',
+                'Expected quantifier to be either an integer or a "%s" object. Got "%s" instead.',
                 ValueInterface::class,
                 is_object($quantifier) ? get_class($quantifier) : gettype($quantifier)
             )

@@ -39,9 +39,7 @@ final class DynamicArrayValue implements ValueInterface
     {
         if ($quantifier instanceof ValueInterface) {
             $quantifier = clone $quantifier;
-        } elseif (is_scalar($quantifier)) {
-            $quantifier = (int) $quantifier;
-        } else {
+        } elseif (false === is_int($quantifier)) {
             throw TypeErrorFactory::createForDynamicArrayQuantifier($quantifier);
         }
 

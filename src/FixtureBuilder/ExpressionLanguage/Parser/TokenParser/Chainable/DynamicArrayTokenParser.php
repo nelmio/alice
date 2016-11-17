@@ -51,7 +51,7 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
         }
 
         return new DynamicArrayValue(
-            $this->parser->parse($matches['quantifier']),
+            (int) $this->parser->parse($matches['quantifier']),
             $this->parser->parse($matches['elements'])
         );
     }

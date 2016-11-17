@@ -78,12 +78,12 @@ class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
         $token = new Token('10x @user', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
 
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse('10')->willReturn('parsed_quantifier');
+        $decoratedParserProphecy->parse('10')->willReturn('0');
         $decoratedParserProphecy->parse('@user')->willReturn('parsed_element');
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $expected = new DynamicArrayValue('parsed_quantifier', 'parsed_element');
+        $expected = new DynamicArrayValue(0, 'parsed_element');
 
         $parser = new DynamicArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
