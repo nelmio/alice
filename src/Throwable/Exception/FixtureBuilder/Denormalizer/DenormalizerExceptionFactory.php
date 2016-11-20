@@ -56,4 +56,9 @@ final class DenormalizerExceptionFactory
             $previous
         );
     }
+
+    public static function createForInvalidScopeForUniqueValue(): InvalidScopeException
+    {
+        return new InvalidScopeException('Cannot bind a unique value scope to a temporary fixture.');
+    }
 }

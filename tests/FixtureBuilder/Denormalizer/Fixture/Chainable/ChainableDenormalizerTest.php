@@ -103,7 +103,7 @@ abstract class ChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
             ->denormalize(Argument::cetera())
             ->will(
                 function ($args) {
-                    return (new FixtureBag())->with(FixtureFactory::create($args[2], ''));
+                    return $args[0]->with(FixtureFactory::create($args[2], ''));
                 }
             )
         ;

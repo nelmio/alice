@@ -648,23 +648,53 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 'related_dummy{1..2}' => [
                     'name' => '<current()>',
                 ],
-                'dummy' => [
+                'dummy1' => [
+                    'relatedDummies (unique)' => '2x @related_dummy*',
+                ],
+                'dummy2' => [
                     'relatedDummies (unique)' => '2x @related_dummy*',
                 ],
             ],
         ];
-
         $result = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($result->getParameters()));
-        $this->assertEquals(3, count($result->getObjects()));
+        $self = $this;
+        $assertEachValuesInRelatedDummiesAreUnique = function (ObjectSet $set) use ($self) {
+            $self->assertEquals(0, count($set->getParameters()));
+            $self->assertEquals(4, count($set->getObjects()));
 
-        $dummy = $result->getObjects()['dummy'];
-        $this->assertCount(2, $dummy->relatedDummies);
-        foreach ($dummy->relatedDummies as $relatedDummy) {
-            $this->assertEquals($relatedDummy, $result->getObjects()['related_dummy'.$relatedDummy->name]);
-        }
-        $this->assertNotEquals($dummy->relatedDummies[0], $dummy->relatedDummies[1]);
+            $dummy = $set->getObjects()['dummy1'];
+            $self->assertCount(2, $dummy->relatedDummies);
+            foreach ($dummy->relatedDummies as $relatedDummy) {
+                $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy'.$relatedDummy->name]);
+            }
+            $self->assertNotEquals($dummy->relatedDummies[0], $dummy->relatedDummies[1]);
+
+            $anotherDummy = $set->getObjects()['dummy2'];
+            $self->assertCount(2, $anotherDummy->relatedDummies);
+            foreach ($anotherDummy->relatedDummies as $relatedDummy) {
+                $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy'.$relatedDummy->name]);
+            }
+            $self->assertNotEquals($anotherDummy->relatedDummies[0], $anotherDummy->relatedDummies[1]);
+        };
+        $assertEachValuesInRelatedDummiesAreUnique($result);
+
+
+        // Do another check with range/list where a temporary fixture is being used for the unique key
+        $data = [
+            \stdClass::class => [
+                'related_dummy{1..2}' => [
+                    'name' => '<current()>',
+                ],
+                'dummy{1..2}' => [
+                    'relatedDummies (unique)' => '2x @related_dummy*',
+                ],
+            ],
+        ];
+        $result = $this->loader->loadData($data);
+
+        $assertEachValuesInRelatedDummiesAreUnique($result);
+
 
         try {
             $this->loader->loadData([
@@ -690,7 +720,25 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 'dummy' => [
                     'numbers (unique)' => [
                         1,
-                        2
+                        2,
+                    ],
+                ],
+            ],
+        ];
+        $this->loader->loadData($data);
+
+        $data = [
+            \stdClass::class => [
+                'dummy' => [
+                    'numbers (unique)' => [
+                        1,
+                        2,
+                    ],
+                ],
+                'another_dummy' => [
+                    'numbers (unique)' => [
+                        1,
+                        2,
                     ],
                 ],
             ],
@@ -703,7 +751,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                     'dummy' => [
                         'numbers (unique)' => [
                             1,
-                            1
+                            1,
                         ],
                     ],
                 ],

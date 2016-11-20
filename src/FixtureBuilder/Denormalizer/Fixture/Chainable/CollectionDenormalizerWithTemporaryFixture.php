@@ -20,7 +20,6 @@ use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory;
 use Nelmio\Alice\FixtureBag;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
@@ -29,10 +28,14 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
 
 /**
- * @private
+ * Decorates a collection denormalizer to determine which fixtures it can build and how to build the fixture IDs, e.g.
+ * to know if it can build a fixture with the ID 'dummy{1..2}' and to generate the 'dummy1' and 'dummy2' IDs.
+ *
+ * To instantiate the fixtures, it chooses the strategy to instantiate a "temporary" fixture, and then creates the real
+ * fixtures from this temporary fixture to only have to generate a fixture 1 time instead of X times.
  */
-abstract class AbstractChainableDenormalizer
-implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterface, FlagParserAwareInterface
+final class CollectionDenormalizerWithTemporaryFixture
+implements CollectionDenormalizer, FixtureDenormalizerAwareInterface, FlagParserAwareInterface
 {
     use IsAServiceTrait;
 
@@ -46,32 +49,57 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
      */
     private $parser;
 
-    public function __construct(FixtureDenormalizerInterface $denormalizer = null, FlagParserInterface $parser = null)
-    {
-        $this->denormalizer = $denormalizer;
+    /**
+     * @var CollectionDenormalizer
+     */
+    private $collectionDenormalizer;
+
+    public function __construct(
+        CollectionDenormalizer $decoratedCollectionDenormalizer,
+        FixtureDenormalizerInterface $decoratedDenormalizer = null,
+        FlagParserInterface $parser = null
+    ) {
+        $this->collectionDenormalizer = $decoratedCollectionDenormalizer;
+        $this->denormalizer = $decoratedDenormalizer;
         $this->parser = $parser;
     }
 
     /**
      * @inheritdoc
      */
-    final public function withFlagParser(FlagParserInterface $parser): self
+    public function withFlagParser(FlagParserInterface $parser): self
     {
-        return new static($this->denormalizer, $parser);
+        return new static($this->collectionDenormalizer, $this->denormalizer, $parser);
     }
 
     /**
      * @inheritdoc
      */
-    final public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
+    public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
     {
-        return new static($denormalizer, $this->parser);
+        return new static($this->collectionDenormalizer, $denormalizer, $this->parser);
     }
 
     /**
      * @inheritdoc
      */
-    final public function denormalize(
+    public function canDenormalize(string $reference): bool
+    {
+        return $this->collectionDenormalizer->canDenormalize($reference);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function buildIds(string $id): array
+    {
+        return $this->collectionDenormalizer->buildIds($id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function denormalize(
         FixtureBag $builtFixtures,
         string $className,
         string $fixtureId,
@@ -149,18 +177,4 @@ implements ChainableFixtureDenormalizerInterface, FixtureDenormalizerAwareInterf
 
         return [$tempFixture, $builtFixtures];
     }
-
-    /**
-     * @param string $id
-     *
-     * @return string[]
-     *
-     * @example
-     *  'user_{alice, bob}' will result in:
-     *  [
-     *      'user_alice' => 'alice',
-     *      'user_bob' => 'bob',
-     *  ]
-     */
-    abstract public function buildIds(string $id): array;
 }

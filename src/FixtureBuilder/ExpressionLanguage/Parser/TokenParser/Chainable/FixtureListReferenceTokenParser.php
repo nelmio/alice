@@ -15,6 +15,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer;
@@ -31,7 +32,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = ListNameDenormalizer::REGEX;
+    const REGEX = NullListNameDenormalizer::REGEX;
 
     /**
      * @var string Unique token

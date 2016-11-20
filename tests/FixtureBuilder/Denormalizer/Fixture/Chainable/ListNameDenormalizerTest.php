@@ -116,27 +116,44 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
         $flagParser = $flagParserProphecy->reveal();
 
         $decoratedDenormalizerProphecy = $this->prophesize(FixtureDenormalizerInterface::class);
-        $temporaryId = null;
         $decoratedDenormalizerProphecy
             ->denormalize(
                 $fixtures,
                 $className,
-                Argument::that(
-                    function ($args) use (&$temporaryId) {
-                        $temporaryId = $args[0];
-
-                        return true;
-                    }
-                ),
+                'user_alice',
                 $specs,
                 new FlagBag('user_{alice, bob}')
             )
-            ->will(
-                function ($args) use ($className, $specs) {
-                    return (new FixtureBag())
-                        ->with(new SimpleFixture($args[2], $className, SpecificationBagFactory::create()))
-                    ;
-                }
+            ->willReturn(
+                $fixturesWithAlice = (new FixtureBag())->with(
+                    new SimpleFixture('user_alice', $className, SpecificationBagFactory::create())
+                )
+            )
+        ;
+        $decoratedDenormalizerProphecy
+            ->denormalize(
+                $fixturesWithAlice = (new FixtureBag())->with(
+                    new TemplatingFixture(
+                        new SimpleFixtureWithFlags(
+                            new SimpleFixture(
+                                'user_alice',
+                                $className,
+                                SpecificationBagFactory::create(),
+                                'alice'
+                            ),
+                            new FlagBag('user_alice')
+                        )
+                    )
+                ),
+                $className,
+                'user_bob',
+                $specs,
+                new FlagBag('user_{alice, bob}')
+            )
+            ->willReturn(
+                $fixturesWithAlice->with(
+                    new SimpleFixture('user_bob', $className, SpecificationBagFactory::create())
+                )
             )
         ;
         /** @var FixtureDenormalizerInterface $decoratedDenormalizer */
@@ -175,9 +192,8 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
         $this->assertEquals($expected, $actual);
-        $this->stringContains('temporary_id', $temporaryId);
 
-        $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
@@ -205,13 +221,7 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
             ->denormalize(
                 $fixtures,
                 $className,
-                Argument::that(
-                    function ($args) use (&$temporaryId) {
-                        $temporaryId = $args[0];
-
-                        return true;
-                    }
-                ),
+                'user_alice',
                 $specs,
                 Argument::that(
                     function ($arg) {
@@ -228,19 +238,61 @@ class ListNameDenormalizerTest extends ChainableDenormalizerTest
                     }
                 )
             )
-            ->will(
-                function ($args) use ($className, $specs) {
-                    return (new FixtureBag())->with(
-                        new TemplatingFixture(
-                            new SimpleFixtureWithFlags(
-                                new SimpleFixture($args[2], $className, SpecificationBagFactory::create()),
-                                (new FlagBag($args[2]))
-                                    ->withFlag(new DummyFlag())
-                                    ->withFlag(new ElementFlag('injected_flag'))
-                            )
+            ->willReturn(
+                (new FixtureBag())->with(
+                    new SimpleFixtureWithFlags(
+                        new SimpleFixture('user_alice', $className, SpecificationBagFactory::create(), 'alice'),
+                        (new FlagBag('user_alice'))
+                            ->withFlag(new DummyFlag())
+                            ->withFlag(new ElementFlag('injected_flag'))
+                    )
+                )
+            )
+        ;
+        $decoratedDenormalizerProphecy
+            ->denormalize(
+                $fixturesWithAlice = (new FixtureBag())->with(
+                    new TemplatingFixture(
+                        new SimpleFixtureWithFlags(
+                            new SimpleFixture(
+                                'user_alice',
+                                $className,
+                                SpecificationBagFactory::create(),
+                                'alice'
+                            ),
+                            (new FlagBag('user_alice'))
+                                ->withFlag(new DummyFlag())
+                                ->withFlag(new ElementFlag('injected_flag'))
                         )
-                    );
-                }
+                    )
+                ),
+                $className,
+                'user_bob',
+                $specs,
+                Argument::that(
+                    function ($arg) {
+                        $flagBagKey = $arg->getKey();
+
+                        \PHPUnit_Framework_Assert::assertEquals(
+                            (new FlagBag($flagBagKey))
+                                ->withFlag(new DummyFlag())
+                                ->withFlag(new ElementFlag('injected_flag')),
+                            $arg
+                        );
+
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(
+                $fixturesWithAlice->with(
+                    new SimpleFixtureWithFlags(
+                        new SimpleFixture('user_bob', $className, SpecificationBagFactory::create(), 'bob'),
+                        (new FlagBag('user_bob'))
+                            ->withFlag(new DummyFlag())
+                            ->withFlag(new ElementFlag('injected_flag'))
+                    )
+                )
             )
         ;
         /** @var FixtureDenormalizerInterface $decoratedDenormalizer */
