@@ -25,7 +25,7 @@ $blackfire = new \Blackfire\Client();
 
 $config = new \Blackfire\Profile\Configuration();
 $config->setTitle('Scenario 3');
-$config->setSamples(10);
+$config->setSamples(1);
 $config->setReference(6);
 
 $probe = $blackfire->createProbe($config, false);

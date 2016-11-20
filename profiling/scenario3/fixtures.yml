@@ -18,8 +18,6 @@ Nelmio\Alice\scenario3\MutableUser:
         createdAt (unique): <dateTimeBetween("-200 days", "now")>
         updatedAt (unique): <dateTimeBetween($createdAt, "now")>
         email (unique): <email()>
-        favoriteNumber (unique): '@immutable_user_*->favoriteNumber'
-        owner (unique): '@immutable_user*'
         members (unique): '3x @immutable_user_*'
 
 Nelmio\Alice\scenario3\PublicUser:
