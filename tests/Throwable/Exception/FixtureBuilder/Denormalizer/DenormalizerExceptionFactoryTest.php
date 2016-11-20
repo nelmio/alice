@@ -66,4 +66,16 @@ class DenormalizerExceptionFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $exception->getCode());
         $this->assertNull($exception->getPrevious());
     }
+
+    public function testTestCreateForInvalidScopeForUniqueValue()
+    {
+        $exception = DenormalizerExceptionFactory::createForInvalidScopeForUniqueValue();
+
+        $this->assertEquals(
+            'Cannot bind a unique value scope to a temporary fixture.',
+            $exception->getMessage()
+        );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+    }
 }
