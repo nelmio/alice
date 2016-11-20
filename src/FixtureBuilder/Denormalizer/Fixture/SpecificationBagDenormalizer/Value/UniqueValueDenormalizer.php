@@ -22,6 +22,8 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException;
 
 final class UniqueValueDenormalizer implements ValueDenormalizerInterface
 {
@@ -38,7 +40,9 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @throws InvalidScopeException
      */
     public function denormalize(FixtureInterface $scope, FlagBag $flags = null, $value)
     {
@@ -47,9 +51,8 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
         if (false === $this->requiresUnique($flags)) {
             return $value;
         }
-        $uniqueId = sprintf('%s#%s', $scope->getClassName(), $flags->getKey());
 
-        return $this->generateValue($uniqueId, $value);
+        return $this->generateValue($scope, $flags, $value);
     }
 
     private function requiresUnique(FlagBag $flags = null): bool
@@ -68,14 +71,24 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
     }
 
     /**
-     * @param string               $uniqueId
+     * @param FixtureInterface     $scope
+     * @param FlagBag              $flags
      * @param mixed|ValueInterface $value
+     *
+     * @throws InvalidScopeException
      *
      * @return ValueInterface
      */
-    private function generateValue(string $uniqueId, $value): ValueInterface
+    private function generateValue(FixtureInterface $scope, FlagBag $flags, $value): ValueInterface
     {
+        $uniqueId = sprintf('%s#%s', $scope->getClassName(), $flags->getKey());
+        if ('temporary_id' === substr($scope->getId(), 0, 12)) {
+            throw DenormalizerExceptionFactory::createForInvalidScopeForUniqueValue();
+        }
+
         if ($value instanceof DynamicArrayValue) {
+            $uniqueId = uniqid($uniqueId.'::', true);
+
             return new DynamicArrayValue(
                 $value->getQuantifier(),
                 new UniqueValue($uniqueId, $value->getElement())
@@ -83,8 +96,12 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
         }
 
         if ($value instanceof ArrayValue) {
+            $uniqueId = uniqid($uniqueId.'::', true);
             $elements = $value->getValue();
+
             foreach ($elements as $key => $element) {
+                // The key must be the same for each argument: the unique ID is bound to the array, not the argument
+                // number.
                 $elements[$key] = new UniqueValue($uniqueId, $element);
             }
 

@@ -13,10 +13,15 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
+use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
 
-final class ListNameDenormalizer extends AbstractChainableDenormalizer
+final class NullListNameDenormalizer implements CollectionDenormalizer
 {
+    use IsAServiceTrait;
+
     /** @private */
     const REGEX = '/\{(?<list>[^,\s]+(?:,\s[^,\s]+)+)\}/';
 
@@ -26,6 +31,20 @@ final class ListNameDenormalizer extends AbstractChainableDenormalizer
     public function canDenormalize(string $reference, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $reference, $matches);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function denormalize(
+        FixtureBag $builtFixtures,
+        string $className,
+        string $fixtureId,
+        array $specs,
+        FlagBag $flags
+    ): FixtureBag
+    {
+        return $builtFixtures;
     }
 
     /**

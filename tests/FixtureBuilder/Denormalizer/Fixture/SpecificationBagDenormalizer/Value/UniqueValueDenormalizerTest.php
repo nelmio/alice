@@ -21,6 +21,7 @@ use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
+use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Prophecy\Argument;
@@ -113,6 +114,29 @@ class UniqueValueDenormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(UniqueValue::class, $result->getElement());
         $this->stringContains('dummy_id', $result->getElement()->getId());
         $this->assertEquals('parsed_value', $result->getElement()->getValue());
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException
+     * @expectedExceptionMessage Cannot bind a unique value scope to a temporary fixture.
+     */
+    public function testThrowsAnExceptionIsATemporaryFixtureWithAUniqueValue()
+    {
+        $fixture = new SimpleFixture(uniqid('temporary_id'), 'Dummy', SpecificationBagFactory::create());
+        $value = 'string value';
+        $denormalizedValue = new FakeValue();
+        $flags = (new FlagBag(''))->withFlag(new UniqueFlag());
+
+        $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
+        $decoratedDenormalizerProphecy
+            ->denormalize($fixture, $flags, $value)
+            ->willReturn($denormalizedValue)
+        ;
+        /** @var ValueDenormalizerInterface $decoratedDenormalizer */
+        $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
+
+        $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
+        $denormalizer->denormalize($fixture, $flags, $value);
     }
 
     public function testIfParsedValueIsArrayValueThenUniqueFlagAppliesToItsElementInstead()

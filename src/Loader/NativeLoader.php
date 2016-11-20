@@ -16,6 +16,10 @@ namespace Nelmio\Alice\Loader;
 use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizerWithTemporaryFixture;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer;
 use Nelmio\Alice\Throwable\Exception\BadMethodCallExceptionFactory;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer;
@@ -50,8 +54,6 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\TokenParse
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface as ExpressionLanguageParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface;
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SimpleFixtureBagDenormalizer;
@@ -305,8 +307,16 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
                         $this->getBuiltInCallsDenormalizer()
                     )
                 ),
-                new ListNameDenormalizer(),
-                new RangeNameDenormalizer(),
+                new SimpleCollectionDenormalizer(
+                    new CollectionDenormalizerWithTemporaryFixture(
+                        new NullListNameDenormalizer()
+                    )
+                ),
+                new SimpleCollectionDenormalizer(
+                    new CollectionDenormalizerWithTemporaryFixture(
+                        new NullRangeNameDenormalizer()
+                    )
+                ),
             ]
         );
     }

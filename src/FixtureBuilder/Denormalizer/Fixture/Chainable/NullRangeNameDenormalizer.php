@@ -13,13 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
+use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\RangeName;
+use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 
-final class RangeNameDenormalizer extends AbstractChainableDenormalizer
+final class NullRangeNameDenormalizer implements CollectionDenormalizer
 {
+    use IsAServiceTrait;
+
     /** @private */
     const REGEX = '/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+))\}/';
 
@@ -28,11 +31,9 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
      */
     private $token;
 
-    public function __construct(FixtureDenormalizerInterface $denormalizer = null, FlagParserInterface $parser = null)
+    public function __construct()
     {
-        parent::__construct($denormalizer, $parser);
-
-        $this->token = uniqid(__CLASS__);
+        $this->token = uniqid(__CLASS__, true);
     }
 
     /**
@@ -41,6 +42,20 @@ final class RangeNameDenormalizer extends AbstractChainableDenormalizer
     public function canDenormalize(string $name, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $name, $matches);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function denormalize(
+        FixtureBag $builtFixtures,
+        string $className,
+        string $fixtureId,
+        array $specs,
+        FlagBag $flags
+    ): FixtureBag
+    {
+        return $builtFixtures;
     }
 
     /**
