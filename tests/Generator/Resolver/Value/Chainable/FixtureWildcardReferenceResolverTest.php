@@ -41,7 +41,7 @@ class FixtureWildcardReferenceResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
      */
     public function testIsNotClonable()
     {

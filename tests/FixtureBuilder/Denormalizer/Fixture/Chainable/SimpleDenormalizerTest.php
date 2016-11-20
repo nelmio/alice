@@ -50,7 +50,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     }
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
      */
     public function testIsNotClonable()
     {
