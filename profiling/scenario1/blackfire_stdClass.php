@@ -14,31 +14,43 @@ declare(strict_types=1);
 namespace Nelmio\Alice;
 
 use Nelmio\Alice\Loader\NativeLoader;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 require_once __DIR__.'/../../vendor-bin/profiling/vendor/autoload.php';
 
-$fileFinder = new Finder();
-$fileFinder->files()->in(__DIR__)->depth(0)->name('*.yml');
-
-$loader = new NativeLoader();
 $blackfire = new \Blackfire\Client();
 
 $config = new \Blackfire\Profile\Configuration();
-$config->setTitle('Scenario 1');
+$config->setTitle('Scenario 1.4: stdClass object');
 $config->setSamples(10);
-$config->setReference(5);
+$config->setReference(4);
 
-$probe = $blackfire->createProbe($config);
-foreach ($fileFinder as $index => $file) {
-    /** @var SplFileInfo $file */
-    $loader->loadFile($file->getRealPath());
-}
-$blackfire->endProbe($probe);
+$probe = $blackfire->createProbe($config, false);
 
 $output = new SymfonyStyle(new ArrayInput([]), new ConsoleOutput());
+$progressBar = new ProgressBar($output, $config->getSamples());
+
+$output->writeln(
+    sprintf(
+        'Start profiling of <info>%s</info> with <info>%d samples.</info>',
+        $config->getTitle(),
+        $config->getSamples()
+    )
+);
+
+$loader = new NativeLoader();
+for ($i = 1; $i <= $config->getSamples(); $i++) {
+    $probe->enable();
+
+    $loader->loadFile(__DIR__.'/stdClass.yml');
+
+    $probe->close();
+    $progressBar->advance();
+}
+
+$blackfire->endProbe($probe);
+
 $output->success('Finished!');
