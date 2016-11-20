@@ -87,34 +87,8 @@ class FlagBagTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(FlagBag::class, $mergedBag);
 
-        // Mutate injected value
-        $flag1->setStringValue('flagA');
-        $flag1->getObject()->foo = 'bar';
-
-        $flag2->setStringValue('flagB');
-        $flag2->getObject()->foo = 'baz';
-
-
-        // Mutate return value
-        foreach ($bag1 as $flag) {
-            /** @var MutableFlag $flag */
-            $flag->setStringValue('flagAA');
-            $flag->getObject()->foo = 'rab';
-        }
-        foreach ($bag2 as $flag) {
-            /** @var MutableFlag $flag */
-            $flag->setStringValue('flagBB');
-            $flag->getObject()->foo = 'zab';
-        }
-        foreach ($mergedBag as $index => $flag) {
-            /** @var MutableFlag $flag */
-            $flag->setStringValue('flagM'.$index);
-            $flag->getObject()->foo = $index;
-        }
-
-
         $this->assertEquals(
-            (new FlagBag('bag1'))->withFlag(new MutableFlag('flag1', new \stdClass())),
+            (new FlagBag('bag1'))->withFlag($flag1),
             $bag1
         );
         $this->assertEquals(
