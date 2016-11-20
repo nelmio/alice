@@ -24,9 +24,9 @@ require_once __DIR__.'/../../vendor-bin/profiling/vendor/autoload.php';
 $blackfire = new \Blackfire\Client();
 
 $config = new \Blackfire\Profile\Configuration();
-$config->setTitle('Scenario 2');
+$config->setTitle('Scenario 1.1: immutable object');
 $config->setSamples(10);
-$config->setReference(5);
+$config->setReference(1);
 
 $probe = $blackfire->createProbe($config, false);
 
@@ -45,7 +45,7 @@ $loader = new NativeLoader();
 for ($i = 1; $i <= $config->getSamples(); $i++) {
     $probe->enable();
 
-    $loader->loadFile(__DIR__.'/fixtures.yml');
+    $loader->loadFile(__DIR__.'/immutable_user.yml');
 
     $probe->close();
     $progressBar->advance();

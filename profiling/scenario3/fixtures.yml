@@ -20,7 +20,7 @@ Nelmio\Alice\scenario3\MutableUser:
         email (unique): <email()>
         favoriteNumber (unique): '@immutable_user_*->favoriteNumber'
         owner (unique): '@immutable_user*'
-        members (unique): '5x @immutable_user_*'
+        members (unique): '3x @immutable_user_*'
 
 Nelmio\Alice\scenario3\PublicUser:
     public_user_{0..1000}:
