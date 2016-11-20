@@ -156,7 +156,7 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
      */
     public function testBuildSegmentFixtures($name, $expected)
     {
-        $this->assertBuiltResultIsTheSame($name, $expected);
+        $this->markAsInvalidCase();
     }
 
     /**

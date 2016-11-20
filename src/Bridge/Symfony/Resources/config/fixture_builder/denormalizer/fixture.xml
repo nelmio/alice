@@ -33,13 +33,35 @@
 
 
         <!-- Chainables -->
-        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.list"
-                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ListNameDenormalizer">
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_list"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer">
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_list"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizerWithTemporaryFixture">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_list" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.simple_list"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_list" />
+
             <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer" />
         </service>
 
-        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.range"
-                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\RangeNameDenormalizer">
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_range"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer">
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_range"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizerWithTemporaryFixture">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_range" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.simple_range"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_range" />
+
             <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer" />
         </service>
 
