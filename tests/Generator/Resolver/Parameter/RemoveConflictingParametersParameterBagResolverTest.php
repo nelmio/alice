@@ -31,7 +31,7 @@ class RemoveConflictingParametersParameterBagResolverTest extends \PHPUnit_Frame
     }
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
      */
     public function testIsNotClonable()
     {

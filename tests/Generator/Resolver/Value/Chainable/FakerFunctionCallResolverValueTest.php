@@ -38,7 +38,7 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
     }
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
      */
     public function testIsNotClonable()
     {

@@ -24,7 +24,7 @@ abstract class FlagParserTestCase extends \PHPUnit_Framework_TestCase
     protected $parser;
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
      */
     public function testIsNotClonable()
     {

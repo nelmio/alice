@@ -55,7 +55,7 @@ class UnresolvedFixtureReferenceIdResolverTest extends \PHPUnit_Framework_TestCa
     }
 
     /**
-     * @expectedException \DomainException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
      */
     public function testIsNotClonable()
     {
