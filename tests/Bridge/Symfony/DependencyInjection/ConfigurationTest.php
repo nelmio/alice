@@ -30,6 +30,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'locale' => 'en_US',
             'seed' => 1,
+            'functions_blacklist' => ['current'],
             'loading_limit' => 5,
             'max_unique_values_retries' => 150,
         ];
@@ -46,6 +47,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'locale' => 'en_US',
             'seed' => null,
+            'functions_blacklist' => ['current'],
             'loading_limit' => 5,
             'max_unique_values_retries' => 150,
         ];
@@ -89,6 +91,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $expected = [
             'nelmio_alice.locale' => 'en_US',
+            'nelmio_alice.functions_blacklist' => ['current'],
             'nelmio_alice.seed' => 1,
             'nelmio_alice.loading_limit' => 5,
             'nelmio_alice.max_unique_values_retries' => 150,
