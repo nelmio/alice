@@ -124,6 +124,9 @@ to run them, you can try to simply run `bin/profiling.sh`. You may however have 
 blackfire configuration (see the `profiling/scenarioX/blackfire.php` files).
 
 
+« [Advanced Guide](doc/advanced-guide.md) • [Table of Contents](../README.md#table-of-contents) »
+
+
 [1]: https://github.com/fzaninotto/Faker
 [2]: https://github.com/sebastianbergmann/phpunit
 [3]: https://github.com/bamarni/composer-bin-plugin

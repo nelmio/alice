@@ -6,6 +6,7 @@
 1. [Fixture Ranges](#fixture-ranges)
 1. [Calling Methods](#calling-methods)
 1. [Specifying Constructor Arguments](#specifying-constructor-arguments)
+1. [Using a factory](#using-a-factory)
 1. [Optional Data](#optional-data)
 1. [Handling Unique Constraints](#handling-unique-constraints)
 
@@ -114,7 +115,7 @@ To go further we the example above, we can just randomize data.
 
 ## Calling Methods
 
-**TODO: update with https://github.com/nelmio/alice/issues/388**
+**[TODO] Status: unimplemented**
 
 Sometimes though you need to call a method to initialize some more data, you
 can do this just like with properties but instead using the method name and
@@ -125,7 +126,8 @@ a `setLocation` method that requires a latitude and a longitude:
 Nelmio\Entity\User:
     user1:
         username: '<username()>'
-        setLocation: [40.689269, -74.044737]
+        __calls:
+            - setLocation: [40.689269, -74.044737]
 ```
 
 
@@ -141,23 +143,6 @@ Nelmio\Entity\User:
         __construct: ['<username()>']
 ```
 
-If you want to call a static factory method instead of a constructor, you can
-specify a hash as the constructor:
-
-```yaml
-Nelmio\Entity\User:
-    user1:
-        __construct: { create: ['<username()>'] }
-```
-
-If the static factory belongs to another class, you can call it as follows:
-
-```yaml
-Nelmio\Entity\User:
-    user1:
-        __construct: { Nelmio\User\UserFactory::create: ['<username()>'] }
-```
-
 If you specify `false` in place of constructor arguments, Alice will
 instantiate the object without executing the constructor:
 
@@ -167,9 +152,28 @@ Nelmio\Entity\User:
         __construct: false
 ```
 
-Note: If you are using a private constructor without any mandatory arguments you
-can omit the constructor altogether. Private constructors with mandatory
-arguments should use the static factory method described above.
+
+## Using a factory
+
+**[TODO] Status: unimplemented; usable in with `__construct` in `__factory` but this will be deprecated once
+`__factory` is out available and will be removed in 4.0**
+
+If you want to call a static factory method instead of a constructor, you can
+specify a hash as the constructor:
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        __factory: { create: ['<username()>'] }
+```
+
+If the static factory belongs to another class, you can call it as follows:
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        __factory: { Nelmio\User\UserFactory::create: ['<username()>'] }
+```
 
 
 ## Optional Data
@@ -179,7 +183,7 @@ example might be personal data you don't want to share, to reflect this in
 our fixtures and be sure the site works and looks alright even when users
 don't enter a favorite number, we can make Alice fill it in *sometimes* using
 the `50%? value : empty value` notation. It's a bit like the ternary operator,
-and you can omit the empty value if null is ok as such: `50%? value`.
+and you can omit the empty value if `null` is ok as such: `50%? value`.
 
 Let's update the user definition with this new information:
 
@@ -223,7 +227,18 @@ Nelmio\Entity\User:
             0 (unique): '<username()>'
 ```
 
-**TODO**: add notes on the scope and the arrays
+If the property or field in question is an array, the behaviour changes to apply
+only to the fixture, i.e. the following will work:
+
+```yaml
+Nelmio\Entity\User:
+    friends{1..2}:
+        username (unique): '<username()>'
+    user{1..2}:
+        friends (unique): '@friends*' # array value
+```
+
+However the fields `user1#friends` and `user2#friends` will not have any duplicate.
 
 
 « [Handling Relations](relations-handling.md) • [Getting Started](getting-started.md) »

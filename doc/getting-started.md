@@ -8,7 +8,7 @@
 ## Basic Usage
 
 The easiest way to use this is to call the `Nelmio\Alice\Loader\NativeLoader`
-loader. It is ready to use and do not require any framework integration. It
+loader. It is ready to use and does not require any framework integration. It
 allows you to load any file or an array of data.
 
 ```yaml

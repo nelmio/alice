@@ -15,7 +15,6 @@ namespace Nelmio\Alice\PropertyAccess;
 
 use Nelmio\Alice\Throwable\Exception\PropertyAccess\NoSuchPropertyExceptionFactory;
 use Nelmio\Alice\IsAServiceTrait;
-use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class StdPropertyAccessor implements PropertyAccessorInterface
