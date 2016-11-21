@@ -154,6 +154,10 @@ nelmio_alice:
     locale: 'en_US' # Default locale for the Faker Generator
     seed: 1 # Value used make sure Faker generates data consistently across
             # runs, set to null to disable.
+    functions_blacklist: # Some Faker formatter may have the same name as PHP
+        - 'current'      # native functions. PHP functions have the priority,
+                         # so if you want to use a Faker formatter instead,
+                         # blacklist this function here
     loading_limit: 5 # Alice may do some recursion to resolve certain values.
                      # This parameter defines a limit which will stop the
                      # resolution once reached.
