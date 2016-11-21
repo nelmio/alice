@@ -20,6 +20,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenorma
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\PhpFunctionCallValueResolver;
 use Nelmio\Alice\Throwable\Exception\BadMethodCallExceptionFactory;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer;
@@ -468,7 +470,12 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new ArrayValueResolver(),
             new DynamicArrayValueResolver(),
             new EvaluatedValueResolver(),
-            new FakerFunctionCallValueResolver($this->fakerGenerator),
+            new FunctionCallArgumentResolver(
+                new PhpFunctionCallValueResolver(
+                    $this->getBlacklistedFunctions(),
+                    new FakerFunctionCallValueResolver($this->fakerGenerator)
+                )
+            ),
             new FixturePropertyReferenceResolver(
                 $this->getPropertyAccessor()
             ),
@@ -487,6 +494,16 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new ValueForCurrentValueResolver(),
             new VariableValueResolver(),
         ]);
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getBlacklistedFunctions(): array
+    {
+        return [
+            'current',
+        ];
     }
 
     protected function createFakerGenerator(): FakerGenerator
