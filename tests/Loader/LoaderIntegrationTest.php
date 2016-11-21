@@ -1847,7 +1847,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 \stdClass::class => [
                     'dummy' => [
-                        'foo' => '<shuffle([1])>',
+                        'foo' => '<numberBetween(0, 0)>',
                     ],
                 ],
             ],
@@ -1855,7 +1855,25 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => StdClassFactory::create([
-                        'foo' => [1],
+                        'foo' => 0,
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[function] call PHP native function' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<strtolower("BAR")>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
                     ]),
                 ],
             ],

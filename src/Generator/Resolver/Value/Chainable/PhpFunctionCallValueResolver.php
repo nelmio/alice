@@ -13,30 +13,39 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
-use Nelmio\Alice\Faker\GeneratorFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
+use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
 
-final class FakerFunctionCallValueResolver implements ChainableValueResolverInterface
+final class PhpFunctionCallValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
 
     /**
-     * @var GeneratorFactory
+     * @var ValueResolverInterface
      */
-    private $generatorFactory;
+    private $resolver;
 
-    public function __construct(FakerGenerator $fakerGenerator)
+    /**
+     * @var array
+     */
+    private $functionBlacklist;
+
+    /**
+     * @param string[]               $functionBlacklist List of PHP native function that will be skipped, i.e. will be
+     *                                                  considered as non existent
+     * @param ValueResolverInterface $decoratedResolver
+     */
+    public function __construct(array $functionBlacklist, ValueResolverInterface $decoratedResolver)
     {
-        $this->generatorFactory = new GeneratorFactory($fakerGenerator);
+        $this->functionBlacklist = array_flip($functionBlacklist);
+        $this->resolver = $decoratedResolver;
     }
 
     /**
@@ -60,34 +69,18 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
         GenerationContext $context
     ): ResolvedValueWithFixtureSet
     {
-        /**
-         * @var FakerGenerator $generator
-         * @var string         $formatter
-         */
-        list($generator, $formatter) = $this->getGenerator($this->generatorFactory, $value->getName());
+        $functionName = $value->getName();
+        if (false === function_exists($functionName)
+            || array_key_exists($functionName, $this->functionBlacklist)
+        ) {
+            return $this->resolver->resolve($value, $fixture, $fixtureSet, $scope, $context);
+        }
+
+        $arguments = $value->getArguments();
 
         return new ResolvedValueWithFixtureSet(
-            $generator->format($formatter, $value->getArguments()),
+            $functionName(...$arguments),
             $fixtureSet
         );
-    }
-
-    private function getGenerator(GeneratorFactory $factory, string $formatter)
-    {
-        $explodedFormatter = explode(':', $formatter);
-        $size = count($explodedFormatter);
-
-        if (1 === $size) {
-            return [$factory->getSeedGenerator(), $explodedFormatter[0]];
-        }
-
-        if (2 === $size) {
-            return [
-                $factory->createOrReturnExistingInstance($explodedFormatter[0]),
-                $explodedFormatter[1]
-            ];
-        }
-
-        throw InvalidArgumentExceptionFactory::createForInvalidFakerFormatter($formatter);
     }
 }

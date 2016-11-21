@@ -17,14 +17,12 @@ use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
-use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
-use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 
 /**
@@ -45,32 +43,12 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
         clone new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
     }
 
-    public function testWithersReturnNewModifiedInstance()
-    {
-        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
-        $newResolver = $resolver->withValueResolver(new FakeValueResolver());
-
-        $this->assertEquals(new FakerFunctionCallValueResolver(FakerGeneratorFactory::create()), $resolver);
-        $this->assertEquals(new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver()), $newResolver);
-    }
-
     public function testCanResolvePropertyReferenceValues()
     {
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
 
         $this->assertTrue($resolver->canResolve(new FunctionCallValue('')));
         $this->assertFalse($resolver->canResolve(new FakeValue()));
-    }
-
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver::resolve" to be called only if it has a resolver.
-     */
-    public function testCannotResolveValueIfHasNoResolver()
-    {
-        $value = new FixturePropertyValue(new FakeValue(), '');
-        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
-        $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
     public function testReturnsSetWithResolvedValue()
@@ -89,58 +67,7 @@ class FakerFunctionCallValueResolverValueTest extends \PHPUnit_Framework_TestCas
 
         $expected = new ResolvedValueWithFixtureSet('bar', $set);
 
-        $resolver = new FakerFunctionCallValueResolver($fakerGenerator, new FakeValueResolver());
-        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testResolvesAllArgumentsValuesBeforePassingThemToTheGenerator()
-    {
-        $value = new FunctionCallValue(
-            'foo',
-            [
-                'scalar',
-                new FakeValue(),
-                'another scalar',
-            ]
-        );
-        $fixture = new FakeFixture();
-        $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
-        $scope = ['val' => 'scopie'];
-        $context = new GenerationContext();
-        $context->markIsResolvingFixture('foo');
-
-        $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
-        $valueResolverProphecy
-            ->resolve(new FakeValue(), $fixture, $set, $scope, $context)
-            ->willReturn(
-                new ResolvedValueWithFixtureSet(
-                    $instance = new \stdClass(),
-                    $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
-                )
-            )
-        ;
-        /** @var ValueResolverInterface $valueResolver */
-        $valueResolver = $valueResolverProphecy->reveal();
-
-        $fakerGeneratorProphecy = $this->prophesize(FakerGenerator::class);
-        $fakerGeneratorProphecy
-            ->format(
-                'foo',
-                [
-                    'scalar',
-                    $instance,
-                    'another scalar',
-                ])
-            ->willReturn('bar')
-        ;
-        /** @var FakerGenerator $fakerGenerator */
-        $fakerGenerator = $fakerGeneratorProphecy->reveal();
-
-        $expected = new ResolvedValueWithFixtureSet('bar', $newSet);
-
-        $resolver = new FakerFunctionCallValueResolver($fakerGenerator, $valueResolver);
+        $resolver = new FakerFunctionCallValueResolver($fakerGenerator);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
         $this->assertEquals($expected, $actual);
