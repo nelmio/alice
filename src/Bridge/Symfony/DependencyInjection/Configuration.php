@@ -34,6 +34,9 @@ final class Configuration implements ConfigurationInterface
                 ->scalarNode('locale')
                     ->defaultValue('en_US')
                     ->info('Default locale for the Faker Generator')
+                    ->validate()
+                        ->always($this->createStringValidatorClosure('nelmio_alice.locale'))
+                    ->end()
                 ->end()
                 ->scalarNode('seed')
                     ->defaultValue(1)
@@ -58,19 +61,60 @@ final class Configuration implements ConfigurationInterface
                         .'functions are used over Faker formatters. If you want to change that, simply blacklist the '
                         .'PHP function.'
                     )
+                    ->validate()
+                        ->always(
+                            function (array $value) {
+                                foreach ($value as $item) {
+                                    if (false === is_string($item)) {
+                                        throw InvalidArgumentExceptionFactory::createForExpectedConfigurationArrayOfStringValue($item);
+                                    }
+                                }
+
+                                return $value;
+                            }
+                        )
+                    ->end()
                 ->end()
-                ->scalarNode('loading_limit')
+                ->integerNode('loading_limit')
                     ->defaultValue(5)
                     ->info('Alice may do some recursion to resolve certain values. This parameter defines a limit which '
                         .'will stop the resolution once reached.'
                     )
+                    ->validate()
+                        ->always($this->createPositiveIntegerValidatorClosure())
+                    ->end()
                 ->end()
-                ->scalarNode('max_unique_values_retries')
+                ->integerNode('max_unique_values_retry')
                     ->defaultValue(150)
                     ->info('Maximum number of time Alice can try to generate a unique value before stopping and failing.')
+                    ->validate()
+                        ->always($this->createPositiveIntegerValidatorClosure())
+                    ->end()
                 ->end()
             ->end()
         ;
         return $treeBuilder;
+    }
+
+    private function createStringValidatorClosure(): \Closure
+    {
+        return function ($value) {
+            if (is_string($value)) {
+                return $value;
+            }
+
+            throw InvalidArgumentExceptionFactory::createForExpectedConfigurationStringValue($value);
+        };
+    }
+
+    private function createPositiveIntegerValidatorClosure(): \Closure
+    {
+        return function ($value) {
+            if (is_int($value) && 0 < $value) {
+                return $value;
+            }
+
+            throw InvalidArgumentExceptionFactory::createForExpectedConfigurationPositiveIntegerValue($value);
+        };
     }
 }

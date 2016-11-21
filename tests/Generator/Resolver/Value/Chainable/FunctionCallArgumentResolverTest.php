@@ -50,7 +50,7 @@ class FunctionCallArgumentResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($resolver->canResolve(new FunctionCallValue('')));
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
-    
+
     public function testIsResolverAware()
     {
         $decoratedResolverConstructor = function () {

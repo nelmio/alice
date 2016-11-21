@@ -32,11 +32,58 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'seed' => 1,
             'functions_blacklist' => ['current'],
             'loading_limit' => 5,
-            'max_unique_values_retries' => 150,
+            'max_unique_values_retry' => 150,
         ];
         $actual = $processor->processConfiguration($configuration, []);
 
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testOverriddeValues()
+    {
+        $configuration = new Configuration();
+        $processor = new Processor();
+
+        $expected = [
+            'locale' => 'fr_FR',
+            'seed' => 10,
+            'functions_blacklist' => ['fake'],
+            'loading_limit' => 50,
+            'max_unique_values_retry' => 15,
+        ];
+        $actual = $processor->processConfiguration(
+            $configuration,
+            [
+                'nelmio_alice' => [
+                    'locale' => 'fr_FR',
+                    'seed' => 10,
+                    'functions_blacklist' => ['fake'],
+                    'loading_limit' => 50,
+                    'max_unique_values_retry' => 15,
+                ],
+            ]
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "nelmio_alice.locale": Expected a string value but got "boolean" instead.
+     */
+    public function testLocaleMustBeAStringValues()
+    {
+        $configuration = new Configuration();
+        $processor = new Processor();
+
+        $processor->processConfiguration(
+            $configuration,
+            [
+                'nelmio_alice' => [
+                    'locale' => false,
+                ]
+            ]
+        );
     }
 
     public function testSeedCanBeNull()
@@ -49,7 +96,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'seed' => null,
             'functions_blacklist' => ['current'],
             'loading_limit' => 5,
-            'max_unique_values_retries' => 150,
+            'max_unique_values_retry' => 150,
         ];
         $actual = $processor->processConfiguration(
             $configuration,
@@ -64,12 +111,10 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideInvalidSeedValues
-     *
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessageRegExp /^Invalid configuration for path "nelmio_alice\.seed": Expected value "nelmio_alice\.seed" to be either null or a strictly positive integer but got ".*?" instead\.$/
+     * @expectedExceptionMessageRegExp /^Invalid type for path "nelmio_alice.functions_blacklist"\. Expected array, but got string/
      */
-    public function testIfNotNullThenSeedMustBeAStrictlyPositiveInteger($seed)
+    public function testFunctionsBlacklistMustAnArray()
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -78,7 +123,102 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             $configuration,
             [
                 'nelmio_alice' => [
-                    'seed' => $seed,
+                    'functions_blacklist' => 'string',
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "nelmio_alice.functions_blacklist": Expected an array of strings but got "boolean" element in the array instead.
+     */
+    public function testFunctionsBlacklistMustBeStrings()
+    {
+        $configuration = new Configuration();
+        $processor = new Processor();
+
+        $processor->processConfiguration(
+            $configuration,
+            [
+                'nelmio_alice' => [
+                    'functions_blacklist' => [true],
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "nelmio_alice.max_unique_values_retry": Expected a strictly positive integer but got "0" instead.
+     */
+    public function testMaxUniqueValuesRetryMustBeAStrictlyPositiveValues()
+    {
+        $configuration = new Configuration();
+        $processor = new Processor();
+
+        $processor->processConfiguration(
+            $configuration,
+            [
+                'nelmio_alice' => [
+                    'max_unique_values_retry' => 0,
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessageRegExp /^Invalid type for path "nelmio_alice.loading_limit"\. Expected int, but got boolean\./
+     */
+    public function testLoadingLimitMustBeAnInteger()
+    {
+        $configuration = new Configuration();
+        $processor = new Processor();
+
+        $processor->processConfiguration(
+            $configuration,
+            [
+                'nelmio_alice' => [
+                    'loading_limit' => false,
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "nelmio_alice.loading_limit": Expected a strictly positive integer but got "0" instead.
+     */
+    public function testLoadingLimitMustBeAStrictlyPositiveValues()
+    {
+        $configuration = new Configuration();
+        $processor = new Processor();
+
+        $processor->processConfiguration(
+            $configuration,
+            [
+                'nelmio_alice' => [
+                    'loading_limit' => 0,
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessageRegExp /^Invalid type for path "nelmio_alice.max_unique_values_retry"\. Expected int, but got boolean\./
+     */
+    public function testMaxUniqueValuesRetryMustBeAnInteger()
+    {
+        $configuration = new Configuration();
+        $processor = new Processor();
+
+        $processor->processConfiguration(
+            $configuration,
+            [
+                'nelmio_alice' => [
+                    'max_unique_values_retry' => false,
                 ]
             ]
         );
@@ -94,7 +234,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'nelmio_alice.functions_blacklist' => ['current'],
             'nelmio_alice.seed' => 1,
             'nelmio_alice.loading_limit' => 5,
-            'nelmio_alice.max_unique_values_retries' => 150,
+            'nelmio_alice.max_unique_values_retry' => 150,
         ];
 
         foreach ($expected as $parameterName => $value) {

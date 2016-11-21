@@ -161,7 +161,7 @@ nelmio_alice:
     loading_limit: 5 # Alice may do some recursion to resolve certain values.
                      # This parameter defines a limit which will stop the
                      # resolution once reached.
-    max_unique_values_retries: 150 # Maximum number of time Alice can try to
+    max_unique_values_retry: 150 # Maximum number of time Alice can try to
                                    # generate a unique value before stopping and
                                    # failing.
 ```
