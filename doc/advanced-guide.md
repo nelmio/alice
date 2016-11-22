@@ -43,7 +43,7 @@ interested in that scenario, feel free to investigate ;)
 
 **Warning:** nested parameters are currently not supported.
 
-Escaped expression: `'<<{X}>>'` (will return the string `'<{X}>'`).
+Escaped expression: `'\<{X}>'` (will return the string `'<{X}>'`).
 
 Example:
 
