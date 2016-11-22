@@ -39,17 +39,4 @@ final class AliceProvider
     {
         return $fixture->getValueForCurrent();
     }
-
-    /**
-     * @param string $type
-     * @param mixed  $value
-     *
-     * @return mixed
-     */
-    public static function cast(string $type, $value)
-    {
-        settype($value, $type);
-
-        return $value;
-    }
 }

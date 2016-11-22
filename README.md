@@ -51,6 +51,8 @@ documentation for 2.x, head [this way](https://github.com/nelmio/alice/tree/2.x)
   1. [Localized Fake Data](doc/customizing-data-generation.md#localized-fake-data) **TODO: port that change to v2**
   1. [Default Providers](doc/customizing-data-generation.md#default-providers)
     1. [Identity](doc/customizing-data-generation.md#identity)
+    1. [Current](doc/customizing-data-generation.md#current)
+    1. [Cast](doc/customizing-data-generation.md#cast)
   1. [Reuse generated data using objects value](doc/customizing-data-generation.md#reuse-generated-data-using-objects-value)
   1. [Custom Faker Data Providers](doc/customizing-data-generation.md#custom-faker-data-providers)
 1. [Advanced Guide](doc/advanced-guide.md#advanced-guide)
