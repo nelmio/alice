@@ -64,9 +64,39 @@ final class InvalidArgumentExceptionFactory
     {
         return new \InvalidArgumentException(
             sprintf(
-                'Expected value "nelmio_alice.seed" to be either null or a strictly positive integer but got "%s" '
+                'Expected value to be either null or a strictly positive integer but got "%s" '
                 .'instead.',
                 $seed
+            )
+        );
+    }
+
+    public static function createForExpectedConfigurationStringValue($value): \InvalidArgumentException
+    {
+        return new \InvalidArgumentException(
+            sprintf(
+                'Expected a string value but got "%s" instead.',
+                gettype($value)
+            )
+        );
+    }
+
+    public static function createForExpectedConfigurationPositiveIntegerValue(int $value): \InvalidArgumentException
+    {
+        return new \InvalidArgumentException(
+            sprintf(
+                'Expected a strictly positive integer but got "%s" instead.',
+                $value
+            )
+        );
+    }
+
+    public static function createForExpectedConfigurationArrayOfStringValue($value): \InvalidArgumentException
+    {
+        return new \InvalidArgumentException(
+            sprintf(
+                'Expected an array of strings but got "%s" element in the array instead.',
+                gettype($value)
             )
         );
     }

@@ -21,4 +21,4 @@ nelmio_alice:
     locale: 'fr_FR'
     seed: 100
     loading_limit: 50
-    max_unique_values_retries: 15
+    max_unique_values_retry: 15

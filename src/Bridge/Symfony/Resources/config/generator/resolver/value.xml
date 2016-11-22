@@ -111,7 +111,7 @@
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver">
             <argument type="service" id="nelmio_alice.generator.resolver.value.unique_values_pool" />
             <argument>null</argument>
-            <argument>%nelmio_alice.max_unique_values_retries%</argument>
+            <argument>%nelmio_alice.max_unique_values_retry%</argument>
 
             <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>

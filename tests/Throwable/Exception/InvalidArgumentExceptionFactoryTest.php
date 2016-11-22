@@ -66,7 +66,43 @@ class InvalidArgumentExceptionFactoryTest extends \PHPUnit_Framework_TestCase
         $exception = InvalidArgumentExceptionFactory::createForInvalidSeedConfigurationValue(10);
 
         $this->assertEquals(
-            'Expected value "nelmio_alice.seed" to be either null or a strictly positive integer but got "10" instead.',
+            'Expected value to be either null or a strictly positive integer but got "10" instead.',
+            $exception->getMessage()
+        );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+    }
+
+    public function testTestCreateForExpectedConfigurationStringValue()
+    {
+        $exception = InvalidArgumentExceptionFactory::createForExpectedConfigurationStringValue(10);
+
+        $this->assertEquals(
+            'Expected a string value but got "integer" instead.',
+            $exception->getMessage()
+        );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+    }
+
+    public function testTestCreateForExpectedConfigurationPositiveIntegerValue()
+    {
+        $exception = InvalidArgumentExceptionFactory::createForExpectedConfigurationPositiveIntegerValue(-1);
+
+        $this->assertEquals(
+            'Expected a strictly positive integer but got "-1" instead.',
+            $exception->getMessage()
+        );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+    }
+
+    public function testTestCreateForExpectedConfigurationArrayOfStringValue()
+    {
+        $exception = InvalidArgumentExceptionFactory::createForExpectedConfigurationArrayOfStringValue(10);
+
+        $this->assertEquals(
+            'Expected an array of strings but got "integer" element in the array instead.',
             $exception->getMessage()
         );
         $this->assertEquals(0, $exception->getCode());
