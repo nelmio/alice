@@ -78,7 +78,7 @@ documentation for 2.x, head [this way](https://github.com/nelmio/alice/tree/2.x)
   1. [Expression Language](CONTRIBUTING.md#expression-language)
   1. [Contributing](CONTRIBUTING.md#contributing)
     1. [Testing](CONTRIBUTING.md#testing)
-    1. [Profiling](CONTRIBUTING.md#profiling))
+    1. [Profiling](CONTRIBUTING.md#profiling)
 1. [Upgrade](#upgrade)
 1. [License](#license)
 
