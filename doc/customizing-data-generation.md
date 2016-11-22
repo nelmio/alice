@@ -4,6 +4,8 @@
 1. [Localized Fake Data](#localized-fake-data) **TODO: port that change to v2**
 1. [Default Providers](#default-providers)
   1. [Identity](#identity)
+  1. [Current](#current)
+  1. [Cast](#cast)
 1. [Reuse generated data using objects value](#reuse-generated-data-using-objects-value)
 1. [Custom Faker Data Providers](#custom-faker-data-providers)
 
@@ -44,6 +46,8 @@ i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
 
 ### Default Providers
 
+Alice default Faker provider can be found in [AliceProvider](../src/Faker/Provider/AliceProvider.php).
+
 ### Identity
 
 Alice includes a default identity provider, `<identity()>`, that evaluates whatever
@@ -57,6 +61,28 @@ usually used with `<current()>`, is accessible via the `$current` variable.
 
 Some syntactic sugar is provided for this as well, and `<($whatever)>` is an alias
 for `<identity($whatever)>`.
+
+
+### Current
+
+Returns the current value in the context of a collection:
+
+```yaml
+stdClass:
+    dummy{1..2}:
+        currentValue: <current()> # is equivalent to '$current'
+```
+
+
+### Cast
+
+The cast method was added at some point, but you should use PHP `settype` instead:
+
+```yaml
+stdClass:
+    dummy{1..2}:
+        val: <settype('int', $current)>
+```
 
 
 ## Custom Faker Data Providers

@@ -55,23 +55,4 @@ class AliceProviderTest extends \PHPUnit_Framework_TestCase
             $this->assertNull($exception->getPrevious());
         }
     }
-
-    /**
-     * @dataProvider provideValuesToCast
-     */
-    public function testCastReturnsCastedValue(string $type, $value, $expected)
-    {
-        $actual = AliceProvider::cast($type, $value);
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function provideValuesToCast()
-    {
-        yield '"-1" to int' => [
-            'int',
-            '-1',
-            -1,
-        ];
-    }
 }
