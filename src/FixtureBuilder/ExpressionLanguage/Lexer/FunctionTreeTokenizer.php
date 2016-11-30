@@ -48,7 +48,7 @@ final class FunctionTreeTokenizer
     public function tokenize(string $value): array
     {
         $value = preg_replace(
-            '/(.*?)<((?:.*?:)?\p{L}+?)\((.*?)/',
+            '/(.*?)<((?:.*?:)?(?:\p{L}|[0-9])+?)\((.*?)/',
             sprintf('$1%1$sFUNCTION_START__$2__%1$s$3', self::DELIMITER),
             $value
         );

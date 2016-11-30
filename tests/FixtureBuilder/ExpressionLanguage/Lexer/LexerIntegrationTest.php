@@ -307,6 +307,12 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
                 new Token('\>', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
+        yield '[Function] with numeric characters' => [
+            '<ipv6()>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__ipv6__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
         yield '[Function] successive functions' => [
             '<f()><g()>',
             [

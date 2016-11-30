@@ -252,6 +252,10 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '\<function)\>',
             '<function)>',
         ];
+        yield '[Function] with numeric characters' => [
+            '<ipv6()>',
+            new FunctionCallValue('ipv6'),
+        ];
         yield '[Function] successive functions' => [
             '<f()><g()>',
             new ListValue([
