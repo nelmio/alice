@@ -20,8 +20,10 @@
     ],
     "require": {
         "php": "^7.0",
+        "doctrine/cache": "^1.6",
         "fzaninotto/faker": "^1.0",
         "myclabs/deep-copy": "^1.5.2",
+        "symfony/cache": "^3.2",
         "symfony/property-access": "^2.2||^3.0",
         "symfony/yaml": "^2.0||^3.0"
     },
