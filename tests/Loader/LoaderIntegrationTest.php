@@ -56,9 +56,15 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $loader;
 
+    /**
+     * @var FileLoaderInterface|DataLoaderInterface
+     */
+    protected $nonIsolatedLoader;
+
     public function setUp()
     {
         $this->loader = new IsolatedLoader();
+        $this->nonIsolatedLoader = new NativeLoader();
     }
 
     /**
@@ -905,6 +911,45 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
+    }
+
+    /**
+     * @testdox The cache of the loader
+     */
+    public function testGenerationCache()
+    {
+        // This loading will trigger the caching part of the FixtureWildcardReferenceResolver to
+        // cache the pattern for `@another*`
+        $this->nonIsolatedLoader->loadData(
+            [
+                'parameters' => [],
+                \stdClass::class => [
+                    'another_dummy' => [],
+                    'dummy' => [
+                        'related' => '@another*',
+                    ],
+                ],
+            ],
+            [],
+            []
+        );
+
+        // This loading will also the caching part of the FixtureWildcardReferenceResolver. The
+        // cache having the same lifetime as the generation context is what ensures the cache from
+        // the previous loading will not interfer with this one
+        $this->nonIsolatedLoader->loadData(
+            [
+                'parameters' => [],
+                \stdClass::class => [
+                    'another_dummy_new' => [],
+                    'dummy' => [
+                        'related' => '@another*',
+                    ],
+                ],
+            ],
+            [],
+            []
+        );
     }
 
     public function provideFixturesToInstantiate()

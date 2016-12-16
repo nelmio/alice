@@ -13,15 +13,52 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\Loader;
 
-use Nelmio\Alice\Loader\IsolatedSymfonyLoader;
+use Nelmio\Alice\Loader\NonIsolatedSymfonyLoader;
+use Nelmio\Alice\Symfony\KernelFactory;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @group integration
  */
 class LoaderIntegrationTest extends \Nelmio\Alice\Loader\LoaderIntegrationTest
 {
+    /**
+     * @var KernelInterface
+     */
+    private static $kernel;
+
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+
+        static::$kernel = KernelFactory::createKernel();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
-        $this->loader = new IsolatedSymfonyLoader();
+        static::$kernel->boot();
+
+        $this->nonIsolatedLoader = $this->loader = new NonIsolatedSymfonyLoader(static::$kernel->getContainer());
+    }
+
+    public function tearDown()
+    {
+        static::$kernel->shutdown();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function tearDownAfterClass()
+    {
+        static::$kernel = null;
+
+        parent::tearDownAfterClass();
     }
 }
