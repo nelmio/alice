@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
+use Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 
@@ -32,6 +33,11 @@ final class GenerationContext
      * @var bool
      */
     private $needsCompleteResolution = false;
+
+    /**
+     * @var array
+     */
+    private $cache = [];
 
     public function __construct()
     {
@@ -73,5 +79,26 @@ final class GenerationContext
     public function needsCompleteGeneration(): bool
     {
         return $this->needsCompleteResolution;
+    }
+
+    public function cacheValue(string $key, $value)
+    {
+        $this->cache[$key] = $value;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @throws CachedValueNotFound
+     *
+     * @return mixed
+     */
+    public function getCachedValue(string $key)
+    {
+        if (false === array_key_exists($key, $this->cache)) {
+            throw CachedValueNotFound::create($key);
+        }
+
+        return $this->cache[$key];
     }
 }
