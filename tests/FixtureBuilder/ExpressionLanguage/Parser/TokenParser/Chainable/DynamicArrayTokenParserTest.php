@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
+use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
@@ -84,6 +85,26 @@ class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
         $decoratedParser = $decoratedParserProphecy->reveal();
 
         $expected = new DynamicArrayValue(0, 'parsed_element');
+
+        $parser = new DynamicArrayTokenParser($decoratedParser);
+        $actual = $parser->parse($token);
+
+        $this->assertEquals($expected, $actual);
+
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
+    }
+
+    public function testParsedDynamicArrayQuantifierCanBeAValue()
+    {
+        $token = new Token('10x @user', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy->parse('10')->willReturn(new FakeValue());
+        $decoratedParserProphecy->parse('@user')->willReturn('parsed_element');
+        /** @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $expected = new DynamicArrayValue(new FakeValue(), 'parsed_element');
 
         $parser = new DynamicArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);

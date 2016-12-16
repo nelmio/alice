@@ -50,8 +50,13 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
+        $quantifier = $this->parser->parse($matches['quantifier']);
+        if (is_scalar($quantifier)) {
+            $quantifier = (int) $quantifier;
+        }
+
         return new DynamicArrayValue(
-            (int) $this->parser->parse($matches['quantifier']),
+            $quantifier,
             $this->parser->parse($matches['elements'])
         );
     }
