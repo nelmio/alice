@@ -33,12 +33,18 @@ class DynamicServicesConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     private $kernel;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->kernel = KernelFactory::createKernel(__DIR__.'/../../../../fixtures/Bridge/Symfony/Application/config_custom.yml');
         $this->kernel->boot();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function tearDown()
     {
         if (null !== $this->kernel) {

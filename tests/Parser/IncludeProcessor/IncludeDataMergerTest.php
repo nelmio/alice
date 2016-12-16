@@ -23,6 +23,9 @@ class IncludeDataMergerTest extends \PHPUnit_Framework_TestCase
      */
     private $merger;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->merger = new IncludeDataMerger();

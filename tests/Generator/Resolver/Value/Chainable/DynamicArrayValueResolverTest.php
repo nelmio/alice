@@ -36,6 +36,9 @@ class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $resolverRefl;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $reflClass = new \ReflectionClass(DynamicArrayValueResolver::class);

@@ -22,6 +22,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\IsolatedSymfonyBuiltInL
  */
 class LexerIntegrationTest extends \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerIntegrationTest
 {
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->lexer = new IsolatedSymfonyBuiltInLexer();

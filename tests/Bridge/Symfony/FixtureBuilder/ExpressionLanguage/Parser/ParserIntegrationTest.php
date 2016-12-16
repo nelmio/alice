@@ -20,6 +20,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\IsolatedSymfonyBuiltIn
  */
 class ParserIntegrationTest extends \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest
 {
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->parser = new IsolatedSymfonyBuiltInParser();

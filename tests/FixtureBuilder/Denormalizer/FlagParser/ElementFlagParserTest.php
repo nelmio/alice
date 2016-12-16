@@ -22,6 +22,9 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
  */
 class ElementFlagParserTest extends FlagParserTestCase
 {
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->parser = new ElementFlagParser(new ElementParser());

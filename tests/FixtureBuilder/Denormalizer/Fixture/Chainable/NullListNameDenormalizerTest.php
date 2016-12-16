@@ -25,6 +25,9 @@ use Nelmio\Alice\FixtureBag;
  */
 class NullListNameDenormalizerTest extends ChainableDenormalizerTest
 {
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->denormalizer = new NullListNameDenormalizer();

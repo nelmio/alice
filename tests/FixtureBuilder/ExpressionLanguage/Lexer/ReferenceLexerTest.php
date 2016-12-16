@@ -27,6 +27,9 @@ class ReferenceLexerTest extends \PHPUnit_Framework_TestCase
      */
     private $lexer;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->lexer = new ReferenceLexer();

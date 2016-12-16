@@ -42,6 +42,9 @@ class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $propRefl;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->propRefl = (new \ReflectionClass(TemplatingFixture::class))->getProperty('fixture');

@@ -36,6 +36,9 @@ use Prophecy\Argument;
  */
 class SimpleDenormalizerTest extends ChainableDenormalizerTest
 {
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->denormalizer = new SimpleDenormalizer(

@@ -26,6 +26,9 @@ class SimpleObjectTest extends \PHPUnit_Framework_TestCase
      */
     private $propRefl;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->propRefl = (new \ReflectionClass(SimpleObject::class))->getProperty('instance');

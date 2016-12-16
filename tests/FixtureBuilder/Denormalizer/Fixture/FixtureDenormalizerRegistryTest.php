@@ -34,6 +34,9 @@ class FixtureDenormalizerRegistryTest extends \PHPUnit_Framework_TestCase
      */
     private $propRefl;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $propRelf = (new \ReflectionClass(FixtureDenormalizerRegistry::class))->getProperty('denormalizers');

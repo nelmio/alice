@@ -26,6 +26,9 @@ class FunctionTokenizerTest extends \PHPUnit_Framework_TestCase
      */
     private $tokenizer;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->tokenizer = new FunctionTokenizer();

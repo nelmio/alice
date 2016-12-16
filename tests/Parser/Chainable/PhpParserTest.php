@@ -30,6 +30,9 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
      */
     private $parser;
 
+    /**
+     * @inheritdoc
+     */
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -37,6 +40,9 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/php';
     }
 
+    /**
+     * @inheritdoc
+     */
     public static function tearDownAfterClass()
     {
         self::$dir = null;
@@ -44,6 +50,9 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
         parent::tearDownAfterClass();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->parser = new PhpParser();

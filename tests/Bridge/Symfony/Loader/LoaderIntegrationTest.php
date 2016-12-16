@@ -47,6 +47,9 @@ class LoaderIntegrationTest extends \Nelmio\Alice\Loader\LoaderIntegrationTest
         $this->nonIsolatedLoader = $this->loader = new NonIsolatedSymfonyLoader(static::$kernel->getContainer());
     }
 
+    /**
+     * @inheritdoc
+     */
     public function tearDown()
     {
         static::$kernel->shutdown();

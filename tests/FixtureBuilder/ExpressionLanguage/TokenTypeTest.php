@@ -23,6 +23,9 @@ class TokenTypeTest extends \PHPUnit_Framework_TestCase
      */
     private $constants;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $reflClass = new \ReflectionClass(TokenType::class);

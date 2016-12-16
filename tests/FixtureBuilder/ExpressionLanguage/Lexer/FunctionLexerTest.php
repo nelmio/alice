@@ -28,6 +28,9 @@ class FunctionLexerTest extends \PHPUnit_Framework_TestCase
      */
     private $lexer;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->lexer = new FunctionLexer(new DummyLexer());
