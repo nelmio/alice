@@ -33,6 +33,9 @@ class NoMethodCallInstantiatorTest extends \PHPUnit_Framework_TestCase
      */
     private $instantiator;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->instantiator = new NoMethodCallInstantiator();

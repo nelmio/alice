@@ -26,6 +26,9 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalize
  */
 class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 {
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->denormalizer = new NullRangeNameDenormalizer();

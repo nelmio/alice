@@ -26,6 +26,9 @@ class SimpleParameterBagDenormalizerTest extends \PHPUnit_Framework_TestCase
      */
     private $denormalizer;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->denormalizer = new SimpleParameterBagDenormalizer();

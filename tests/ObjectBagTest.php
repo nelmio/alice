@@ -26,6 +26,9 @@ class ObjectBagTest extends \PHPUnit_Framework_TestCase
      */
     private $propRefl;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->propRefl = (new \ReflectionClass(ObjectBag::class))->getProperty('objects');

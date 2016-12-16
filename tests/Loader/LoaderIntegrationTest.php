@@ -61,6 +61,9 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $nonIsolatedLoader;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->loader = new IsolatedLoader();

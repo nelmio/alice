@@ -25,6 +25,9 @@ class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
      */
     private $locator;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->locator = new DefaultFileLocator();

@@ -20,6 +20,9 @@ use Nelmio\Alice\Generator\Resolver\Parameter\IsolatedSymfonyParameterBagResolve
  */
 class ParameterResolverIntegrationTest extends \Nelmio\Alice\Generator\Resolver\ParameterResolverIntegrationTest
 {
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->resolver = new IsolatedSymfonyParameterBagResolver();

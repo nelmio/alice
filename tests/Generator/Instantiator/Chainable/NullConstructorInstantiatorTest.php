@@ -36,6 +36,9 @@ class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
      */
     private $instantiator;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->instantiator = new NullConstructorInstantiator();

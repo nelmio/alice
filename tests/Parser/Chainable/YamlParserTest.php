@@ -34,6 +34,9 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
      */
     private $parser;
 
+    /**
+     * @inheritdoc
+     */
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -41,6 +44,9 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/yaml';
     }
 
+    /**
+     * @inheritdoc
+     */
     public static function tearDownAfterClass()
     {
         self::$dir = null;
@@ -48,6 +54,9 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
         parent::tearDownAfterClass();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);

@@ -30,6 +30,9 @@ class FixtureBagTest extends \PHPUnit_Framework_TestCase
      */
     private $propRefl;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $propRelf = (new \ReflectionClass(FixtureBag::class))->getProperty('fixtures');

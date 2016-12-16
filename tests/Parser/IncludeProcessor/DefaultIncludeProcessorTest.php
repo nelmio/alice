@@ -27,6 +27,9 @@ class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
 {
     private static $dir;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/cache';

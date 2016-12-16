@@ -42,6 +42,9 @@ class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $poolRefl;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $reflClass = new \ReflectionClass(UniqueValueResolver::class);

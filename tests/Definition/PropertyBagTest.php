@@ -23,6 +23,9 @@ class PropertyBagTest extends \PHPUnit_Framework_TestCase
      */
     private $propRefl;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $refl = new \ReflectionClass(PropertyBag::class);

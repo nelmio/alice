@@ -33,6 +33,9 @@ class TokenParserRegistryTest extends \PHPUnit_Framework_TestCase
      */
     private $parsersRefl;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->parsersRefl = (new \ReflectionClass(TokenParserRegistry::class))->getProperty('parsers');
