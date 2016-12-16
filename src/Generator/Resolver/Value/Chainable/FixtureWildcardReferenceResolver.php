@@ -17,6 +17,7 @@ use Faker\Provider\Base;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
@@ -38,7 +39,8 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
      */
     private $resolver;
 
-    private $idsByPattern = [];
+    /** @private */
+    const IDS_BY_PATTERN_CACHE_KEY = self::class;
 
     public function __construct(ValueResolverInterface $resolver = null)
     {
@@ -80,7 +82,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
-        $possibleIds = $this->getSuitableIds($value, $fixtureSet);
+        $possibleIds = $this->getSuitableIds($value, $fixtureSet, $context);
         $id = Base::randomElement($possibleIds);
         if (null === $id) {
             throw UnresolvableValueExceptionFactory::createForNoFixtureOrObjectMatchingThePattern($value);
@@ -100,15 +102,44 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
      *
      * @param FixtureMatchReferenceValue $value
      * @param ResolvedFixtureSet         $fixtureSet
+     * @param GenerationContext          $context
      *
      * @return string[]
      */
-    private function getSuitableIds(FixtureMatchReferenceValue $value, ResolvedFixtureSet $fixtureSet): array
+    private function getSuitableIds(
+        FixtureMatchReferenceValue $value,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): array
     {
-        if (array_key_exists($pattern = $value->getValue(), $this->idsByPattern)) {
-            return $this->idsByPattern[$pattern];
+        $pattern = $value->getValue();
+
+        try {
+            $cache = $context->getCachedValue(self::IDS_BY_PATTERN_CACHE_KEY);
+        } catch (CachedValueNotFound $exception) {
+            $cache = [];
         }
 
+        if (array_key_exists($pattern, $cache)) {
+            return $cache[$pattern];
+        }
+
+        $suitableIds = $this->findSuitableIds($pattern, $fixtureSet);
+
+        $cache[$pattern] = $suitableIds;
+        $context->cacheValue(self::IDS_BY_PATTERN_CACHE_KEY, $cache);
+
+        return $suitableIds;
+    }
+
+    /**
+     * @param string             $pattern
+     * @param ResolvedFixtureSet $fixtureSet
+     *
+     * @return string[]
+     */
+    private function findSuitableIds(string $pattern, ResolvedFixtureSet $fixtureSet): array
+    {
         $fixtureKeys = array_flip(
             preg_grep(
                 $pattern,
@@ -122,8 +153,6 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
             )
         );
 
-        $this->idsByPattern[$pattern] = array_keys($fixtureKeys + $objectKeys);
-
-        return $this->idsByPattern[$pattern];
+        return array_keys($fixtureKeys + $objectKeys);
     }
 }
