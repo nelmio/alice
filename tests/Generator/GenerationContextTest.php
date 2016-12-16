@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
+use Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
 
 /**
@@ -53,6 +54,32 @@ class GenerationContextTest extends \PHPUnit_Framework_TestCase
                 'Circular reference detected for the parameter "foo" while resolving ["bar", "foo"].',
                 $exception->getMessage()
             );
+        }
+    }
+
+    public function testCanSetAnRetrieveAValueFromTheCache()
+    {
+        $context = new GenerationContext();
+
+        $context->cacheValue('foo', $foo = new \stdClass());
+
+        $this->assertSame($foo, $context->getCachedValue('foo'));
+    }
+
+    public function testCannotRetrieveAnInexistingValueFromCache()
+    {
+        $context = new GenerationContext();
+
+        try {
+            $context->getCachedValue('foo');
+            $this->fail('Expected exception to be thrown.');
+        } catch (CachedValueNotFound $exception) {
+            $this->assertEquals(
+                'No value with the key "foo" was found in the cache.',
+                $exception->getMessage()
+            );
+            $this->assertEquals(0, $exception->getCode());
+            $this->assertNull($exception->getPrevious());
         }
     }
 }
