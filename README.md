@@ -89,6 +89,7 @@ For more information, refer to [the documentation](#table-of-contents).
   * [hautelook/AliceBundle](https://github.com/hautelook/AliceBundle)
   * [h4cc/AliceFixturesBundle](https://github.com/h4cc/AliceFixturesBundle)
   * [knplabs/rad-fixtures-load](https://github.com/KnpLabs/rad-fixtures-load)
+  * [trappar/AliceGeneratorBundle](https://github.com/trappar/AliceGeneratorBundle)
 * Nette
   * [Zenify/DoctrineFixtures](https://github.com/Zenify/DoctrineFixtures)
 * Zend Framework 2:
