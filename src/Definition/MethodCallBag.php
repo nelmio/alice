@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
-final class MethodCallBag
+final class MethodCallBag implements \IteratorAggregate, \Countable
 {
     /**
      * @var MethodCallInterface[]
@@ -49,5 +49,21 @@ final class MethodCallBag
     public function isEmpty(): bool
     {
         return [] === $this->methodCalls;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator(array_values($this->methodCalls));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count(): int
+    {
+        return count($this->methodCalls);
     }
 }

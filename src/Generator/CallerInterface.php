@@ -20,10 +20,11 @@ interface CallerInterface
     /**
      * Do calls on the already hydrated object.
      *
-     * @param ObjectInterface    $object Hydrated object
+     * @param ObjectInterface    $object     Hydrated object
      * @param ResolvedFixtureSet $fixtureSet
+     * @param GenerationContext  $context
      *
      * @return ResolvedFixtureSet Set containing the object on which the calls have been made.
      */
-    public function doCallsOn(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet;
+    public function doCallsOn(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet;
 }

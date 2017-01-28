@@ -14,15 +14,16 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Caller;
 
 use Nelmio\Alice\Generator\CallerInterface;
+use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\ObjectInterface;
 
 final class DummyCaller implements CallerInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function doCallsOn(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet
+    public function doCallsOn(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
     {
         return $fixtureSet;
     }

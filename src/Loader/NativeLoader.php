@@ -83,7 +83,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenorma
 use Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\SimpleBuilder;
-use Nelmio\Alice\Generator\Caller\DummyCaller;
+use Nelmio\Alice\Generator\Caller\SimpleCaller;
 use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
@@ -553,7 +553,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createBuiltInCaller(): CallerInterface
     {
-        return new DummyCaller();
+        return new SimpleCaller($this->getBuiltInValueResolver());
     }
 
     public function __call(string $method, array $arguments)

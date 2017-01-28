@@ -103,6 +103,6 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
         $set = $this->hydrator->hydrate($instantiatedObject, $set, $context);
         $hydratedObject = $set->getObjects()->get($fixture);
 
-        return $this->caller->doCallsOn($hydratedObject, $set);
+        return $this->caller->doCallsOn($hydratedObject, $set, $context);
     }
 }

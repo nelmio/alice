@@ -17,7 +17,7 @@
                  alias="nelmio_alice.generator.caller.dummy" />
 
         <service id="nelmio_alice.generator.caller.dummy"
-                 class="Nelmio\Alice\Generator\Caller\DummyCaller" />
+                 class="Nelmio\Alice\Generator\Caller\SimpleCaller" />
 
     </services>
 
