@@ -69,6 +69,8 @@ class SimpleCallerTest extends \PHPUnit_Framework_TestCase
     public function testCallsMethodsOntoTheGivenObject()
     {
         $dummyProphecy = $this->prophesize(Dummy::class);
+        $dummyProphecy->setTitle('foo_title')->shouldBeCalled();
+        $dummyProphecy->addFoo()->shouldBeCalled();
         /** @var Dummy $dummy */
         $dummy = $dummyProphecy->reveal();
 
@@ -96,7 +98,7 @@ class SimpleCallerTest extends \PHPUnit_Framework_TestCase
         $caller = new SimpleCaller(new FakeValueResolver());
         $caller->doCallsOn($object, $set, $context);
 
-        $dummyProphecy->setTitle('foo_title')->shouldHaveBeenCalled();
+        $dummyProphecy->setTitle(Argument::any())->shouldHaveBeenCalledTimes(1);
         $dummyProphecy->addFoo()->shouldHaveBeenCalledTimes(2);
     }
 

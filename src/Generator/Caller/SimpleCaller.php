@@ -66,7 +66,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
         ];
 
         foreach ($calls as $methodCall) {
-            $methodCall = $this->processArguments($methodCall, $fixture, $fixtureSet, $scope, $context);
+            list($methodCall, $fixtureSet) = $this->processArguments($methodCall, $fixture, $fixtureSet, $scope, $context);
 
             $instance = $object->getInstance();
             $instance->{$methodCall->getMethod()}(...$methodCall->getArguments());
@@ -80,10 +80,10 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
     private function processArguments(
         MethodCallInterface $methodCall,
         FixtureInterface $fixture,
-        ResolvedFixtureSet &$fixtureSet,
+        ResolvedFixtureSet $fixtureSet,
         $scope,
         GenerationContext $context
-    ): MethodCallInterface {
+    ): array {
         $arguments = $methodCall->getArguments();
 
         if (null === $arguments) {
@@ -101,6 +101,6 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
             }
         }
 
-        return $methodCall->withArguments($arguments);
+        return [$methodCall->withArguments($arguments), $fixtureSet];
     }
 }

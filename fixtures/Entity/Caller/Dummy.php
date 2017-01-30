@@ -27,4 +27,13 @@ class Dummy
     {
         $this->counter++;
     }
+
+    public static function create($title, $counter): self
+    {
+        $obj = new self();
+        $obj->title = $title;
+        $obj->counter = $counter;
+
+        return $obj;
+    }
 }
