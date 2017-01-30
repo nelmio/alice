@@ -171,6 +171,7 @@ class SimpleCallerTest extends \PHPUnit_Framework_TestCase
                         null,
                         new PropertyBag(),
                         (new MethodCallBag())
+                            ->with(new SimpleMethodCall('setTitle', ['fake_title']))
                             ->with(new SimpleMethodCall('setTitle', [$titleValue = new FakeValue()]))
                     )
                 )
