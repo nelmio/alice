@@ -2534,5 +2534,46 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        yield '[current] in method calls' => [
+            [
+                Dummy::class => [
+                    'dummy_{1..2}' => [
+                        '__calls' => [
+                            ['setTitle' => ['Fake Title <current()>']],
+                            ['addFoo' => []],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy_1' => Dummy::create('Fake Title 1', 1),
+                    'dummy_2' => Dummy::create('Fake Title 2', 1),
+                ],
+            ],
+        ];
+
+        yield 'reference value in method calls' => [
+            [
+                Dummy::class => [
+                    'dummy_1' => [],
+                    'dummy_2' => [
+                        '__calls' => [
+                            ['setTitle' => ['Dummy 2']],
+                            ['setRelatedDummy' => ['@dummy_1']],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy_1' => $dummy1 = Dummy::create(null, 0),
+                    'dummy_2' => Dummy::create('Dummy 2', 0, $dummy1),
+                ],
+            ],
+        ];
     }
 }

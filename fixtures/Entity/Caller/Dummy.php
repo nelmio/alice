@@ -17,6 +17,7 @@ class Dummy
 {
     private $title;
     private $counter = 0;
+    private $related;
 
     public function setTitle(string $title)
     {
@@ -28,11 +29,17 @@ class Dummy
         $this->counter++;
     }
 
-    public static function create($title, $counter): self
+    public function setRelatedDummy(self $related)
+    {
+        $this->related = $related;
+    }
+
+    public static function create($title, $counter, self $related = null): self
     {
         $obj = new self();
         $obj->title = $title;
         $obj->counter = $counter;
+        $obj->related = $related;
 
         return $obj;
     }
