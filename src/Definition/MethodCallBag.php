@@ -52,7 +52,7 @@ final class MethodCallBag implements \IteratorAggregate, \Countable
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIterator()
     {
@@ -60,7 +60,7 @@ final class MethodCallBag implements \IteratorAggregate, \Countable
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function count(): int
     {

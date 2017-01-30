@@ -39,7 +39,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
@@ -47,7 +47,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doCallsOn(
         ObjectInterface $object,
@@ -67,7 +67,6 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
 
         foreach ($calls as $methodCall) {
             $methodCall = $this->processArguments($methodCall, $fixture, $fixtureSet, $scope, $context);
-            $scope[$methodCall->getMethod()] = $methodCall;
 
             $instance = $object->getInstance();
             $instance->{$methodCall->getMethod()}(...$methodCall->getArguments());

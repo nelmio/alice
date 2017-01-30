@@ -69,8 +69,7 @@ class SimpleCallerTest extends \PHPUnit_Framework_TestCase
     public function testCallsMethodsOntoTheGivenObject()
     {
         $dummyProphecy = $this->prophesize(Dummy::class);
-        $dummyProphecy->setTitle('foo_title')->shouldBeCalled();
-        $dummyProphecy->addFoo()->shouldBeCalledTimes(2);
+        /** @var Dummy $dummy */
         $dummy = $dummyProphecy->reveal();
 
         $object = new SimpleObject('dummy', $dummy);
@@ -96,6 +95,9 @@ class SimpleCallerTest extends \PHPUnit_Framework_TestCase
 
         $caller = new SimpleCaller(new FakeValueResolver());
         $caller->doCallsOn($object, $set, $context);
+
+        $dummyProphecy->setTitle('foo_title')->shouldHaveBeenCalled();
+        $dummyProphecy->addFoo()->shouldHaveBeenCalledTimes(2);
     }
 
     public function testResolvesAllPropertyValues()
@@ -111,6 +113,7 @@ class SimpleCallerTest extends \PHPUnit_Framework_TestCase
                         null,
                         new PropertyBag(),
                         (new MethodCallBag())
+                            ->with(new SimpleMethodCall('setTitle', ['fake_title']))
                             ->with(new SimpleMethodCall('setTitle', [$titleValue = new FakeValue()]))
                     )
                 )
@@ -149,6 +152,8 @@ class SimpleCallerTest extends \PHPUnit_Framework_TestCase
         $actual = $caller->doCallsOn($object, $set, $context);
 
         $this->assertEquals($expected, $actual);
+
+        $resolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
     public function testThrowsAGenerationThrowableIfResolutionFails()

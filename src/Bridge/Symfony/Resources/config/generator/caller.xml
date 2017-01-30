@@ -14,9 +14,9 @@
     <services>
 
         <service id="nelmio_alice.generator.caller"
-                 alias="nelmio_alice.generator.caller.dummy" />
+                 alias="nelmio_alice.generator.caller.simple" />
 
-        <service id="nelmio_alice.generator.caller.dummy"
+        <service id="nelmio_alice.generator.caller.simple"
                  class="Nelmio\Alice\Generator\Caller\SimpleCaller" />
 
     </services>

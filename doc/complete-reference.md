@@ -115,8 +115,6 @@ To go further we the example above, we can just randomize data.
 
 ## Calling Methods
 
-**[TODO] Status: unimplemented**
-
 Sometimes though you need to call a method to initialize some more data, you
 can do this just like with properties but instead using the method name and
 giving it an array of arguments. For example let's assume the user class has

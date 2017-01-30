@@ -24,7 +24,7 @@ class FakeCaller implements CallerInterface
     use NotCallableTrait;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doCallsOn(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
     {

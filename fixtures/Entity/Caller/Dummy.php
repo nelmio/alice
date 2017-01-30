@@ -16,18 +16,15 @@ namespace Nelmio\Alice\Entity\Caller;
 class Dummy
 {
     private $title;
-    private $foo = 0;
+    private $counter = 0;
 
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
     }
 
     public function addFoo()
     {
-        $this->foo++;
+        $this->counter++;
     }
 }
