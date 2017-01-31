@@ -42,6 +42,16 @@ class ReflectionWithoutConstructor implements MethodInterface
     public function instantiate(Fixture $fixture)
     {
         $reflClass = new \ReflectionClass($fixture->getClass());
+        if ($fixture->shouldUseConstructor()
+            && null !== $fixture->getConstructorMethod()
+            && [] !== $fixture->getConstructorArgs()
+        ) {
+            @trigger_error(
+                'Using a private or protected constructor is deprecated since 2.3.0 and will be removed in '
+                .'3.0.0.',
+                E_USER_DEPRECATED
+            );
+        }
 
         return $reflClass->newInstanceWithoutConstructor();
     }

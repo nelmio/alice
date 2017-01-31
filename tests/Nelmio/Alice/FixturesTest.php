@@ -11,6 +11,9 @@
 
 namespace Nelmio\Alice;
 
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
+use Doctrine\Common\Persistence\ObjectManager;
 use Nelmio\Alice\support\models\User;
 
 class FixturesTest extends \PHPUnit_Framework_TestCase
@@ -18,6 +21,64 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
     const USER = 'Nelmio\Alice\support\models\User';
     const GROUP = 'Nelmio\Alice\support\models\Group';
     const CONTACT = 'Nelmio\Alice\support\models\Contact';
+
+    public function testLoadUniqueFromTemplateFixtures()
+    {
+        $objectManagerMock = $this->getMockBuilder(ObjectManager::class)->getMock();
+        $metadataFactory = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
+        $metadata = $this->getMockBuilder(ClassMetadata::class)->getMock();
+
+        $objectManagerMock->expects($this->any())
+            ->method('getMetadataFactory')
+            ->will($this->returnValue($metadataFactory));
+
+        $metadataFactory->expects($this->any())
+            ->method('getAllMetadata')
+            ->will($this->returnValue([$metadata, $metadata, $metadata]));
+
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/unique_with_template.yml', $objectManagerMock, ['providers' => [$this]]);
+
+        $this->assertCount(26, $objects);
+
+        $names = [];
+        foreach($objects as $object) {
+            $this->assertNotNull($object->fullname, 'fullname should not be null');
+            $this->assertFalse(in_array($object->username, $names), sprintf('duplicate value %s', $object->username));
+            $names[] = $object->username;
+        }
+    }
+
+    public function testLoadUniqueFromMoreThanOneTemplateFixtures()
+    {
+        $objectManagerMock = $this->getMockBuilder(ObjectManager::class)->getMock();
+        $metadataFactory = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
+        $metadata = $this->getMockBuilder(ClassMetadata::class)->getMock();
+
+        $objectManagerMock->expects($this->any())
+            ->method('getMetadataFactory')
+            ->will($this->returnValue($metadataFactory));
+
+        $metadataFactory->expects($this->any())
+            ->method('getAllMetadata')
+            ->will($this->returnValue([$metadata, $metadata, $metadata]));
+
+        $objects = Fixtures::load(__DIR__.'/support/fixtures/unique_with_more_templates.yml', $objectManagerMock, ['providers' => [$this], 'seed' => 2]);
+
+        $this->assertCount(26, $objects);
+
+        $usernames = [];
+        $fullnames = [];
+
+        foreach($objects as $object) {
+
+            $this->assertContains($object->email, ['A','B','C','D','E','F']);
+            $this->assertFalse(in_array($object->username, $usernames), sprintf('duplicate username value %s', $object->username));
+            $this->assertFalse(in_array($object->fullname, $fullnames), sprintf('duplicate fullname value %s', $object->fullname));
+
+            $usernames[] = $object->username;
+            $fullnames[] = $object->fullname;
+        }
+    }
 
     public function testLoadLoadsYamlFilesAndDoctrinePersister()
     {
@@ -50,15 +111,15 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadFailsOnMissingFiles()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
         $objects = Fixtures::load(__DIR__.'/fixtures/missing_file.yml', $om, ['providers' => [$this]]);
     }
 
     public function testThatNewLoaderIsCreatedForDifferingOptions()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
+        $metadataFactory = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
+        $metadata = $this->getMockBuilder(ClassMetadata::class)->getMock();
 
         $om->expects($this->any())
             ->method('find')->will($this->returnValue(new User()));
@@ -184,7 +245,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     public function testThatExceptionIsThrownForInvalidProvider()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
         $om->expects($this->any())
             ->method('find')->will($this->returnValue(new User()));
 
@@ -268,7 +329,7 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadWithLogger()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
 
         Fixtures::load(__DIR__.'/support/fixtures/basic.php', $om, [
             'logger' => function () {}
@@ -317,11 +378,11 @@ class FixturesTest extends \PHPUnit_Framework_TestCase
 
     protected function getDoctrineManagerMock($objects = null)
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
-        $metadata1 = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $metadata2 = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $metadata3 = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $om = $this->getMockBuilder(ObjectManager::class)->getMock();
+        $metadataFactory = $this->getMockBuilder(ClassMetadataFactory::class)->getMock();
+        $metadata1 = $this->getMockBuilder(ClassMetadata::class)->getMock();
+        $metadata2 = $this->getMockBuilder(ClassMetadata::class)->getMock();
+        $metadata3 = $this->getMockBuilder(ClassMetadata::class)->getMock();
 
         $om->expects($this->once())
             ->method('getMetadataFactory')

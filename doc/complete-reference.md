@@ -15,6 +15,7 @@ Nelmio\Entity\User:
         birthDate: 1980-10-10
         email: bob@example.org
         favoriteNumber: 42
+        
     user1:
         username: alice
         fullname: Alice
@@ -51,6 +52,8 @@ return [
 ];
 ```
 
+**Warning**: the usage of the `$fake` closure has been deprecated since in v2.2.0 and will be removed in v3.0.0.
+
 ## Fixture Ranges
 
 The first step is to let Alice create many copies of an object for you
@@ -72,15 +75,18 @@ Now it will generate ten users, with names user1 to user10. Pretty good but
 we only have 10 bobs with the same name, username and email, which is not
 so fancy yet.
 
+
+## Fixture Lists
+
 You can also specify a list of values instead of a range:
 
 ```yaml
 Nelmio\Entity\User:
     user{alice, bob}:
-        username: <current()>
-        fullname: <current()>
+        username: '<current()>'
+        fullname: '<current()>'
         birthDate: 1980-10-10
-        email: <current()>@example.org
+        email: '<current()>@example.org'
         favoriteNumber: 42
 ```
 
@@ -121,7 +127,7 @@ a `setLocation` method that requires a latitude and a longitude:
 ```yaml
 Nelmio\Entity\User:
     user1:
-        username: <username()>
+        username: '<username()>'
         setLocation: [40.689269, -74.044737]
 ```
 
@@ -135,7 +141,7 @@ could do the following:
 ```yaml
 Nelmio\Entity\User:
     user1:
-        __construct: [<username()>]
+        __construct: ['<username()>']
 ```
 
 If you want to call a static factory method instead of a constructor, you can
@@ -144,7 +150,7 @@ specify a hash as the constructor:
 ```yaml
 Nelmio\Entity\User:
     user1:
-        __construct: { create: [<username()>] }
+        __construct: { create: ['<username()>'] }
 ```
 
 If you specify `false` in place of constructor arguments, Alice will
@@ -180,6 +186,9 @@ example, the following call will be made on the instance when populating:
 $geopoint->customSetter('foo', 'bar');
 ```
 
+**Note:** custom setters are deprecated since 2.3.0 and will be removed in 3.0. In 3.0, you will have
+to rely on a custom hydrator instead (there is no compatible solution between 2.x and 3.x).
+
 
 ## Optional Data
 
@@ -195,11 +204,11 @@ Let's update the user definition with this new information:
 ```yaml
 Nelmio\Entity\User:
     user{1..10}:
-        username: <username()>
-        fullname: <firstName()> <lastName()>
-        birthDate: <date()>
-        email: <email()>
-        favoriteNumber: 50%? <numberBetween(1, 200)>
+        username: '<username()>'
+        fullname: '<firstName()> <lastName()>'
+        birthDate: '<date()>'
+        email: '<email()>'
+        favoriteNumber: '50%? <numberBetween(1, 200)>'
 ```
 
 Now only half of the users will have a number filled-in.
@@ -219,7 +228,7 @@ for that property. For example:
 ```yaml
 Nelmio\Entity\User:
     user{1..10}:
-        username (unique): <username()>
+        username (unique): '<username()>'
 ```
 
 Next chapter: [Handling Relations](relations-handling.md)<br />

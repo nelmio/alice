@@ -57,6 +57,19 @@ class ReflectionWithConstructor implements MethodInterface
         $constructorMethod = $fixture->getConstructorMethod();
         $constructorArgs = $this->resolveConstructorArguments($fixture);
 
+        try {
+            $constructorRefl = (new \ReflectionClass($class))->getMethod($constructorMethod);
+            if (false === $constructorRefl->isPublic()) {
+                @trigger_error(
+                    'Using a private or protected constructor is deprecated since 2.3.0 and will be removed in '
+                    .'3.0.0.',
+                    E_USER_DEPRECATED
+                );
+            }
+        } catch (\ReflectionException $e) {
+            // Continue
+        }
+
         if ($constructorMethod === '__construct') {
             $reflectionClass = new \ReflectionClass($class);
 

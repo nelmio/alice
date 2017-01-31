@@ -56,6 +56,7 @@ class DirectTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideProperties
+     * @group legacy
      */
     public function testCanSet($property, $model, $expected)
     {
@@ -95,6 +96,36 @@ class DirectTest extends \PHPUnit_Framework_TestCase
         $this->direct->set($this->fixture, $model, $property, $value);
 
         self::assertEquals($value, $model->$expectedProperty);
+    }
+
+    /**
+     * @dataProvider provideLegacyModelsToSet
+     */
+    public function testLegacySetProperty($model, $property, $value, $expectedProperty)
+    {
+        $this->direct->set($this->fixture, $model, $property, $value);
+
+        self::assertEquals($value, $model->$expectedProperty);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testSetPropertyViaPrivateSetter()
+    {
+        $this->direct->set($this->fixture, $model = new PrivateDummy(), 'name', $value = 'John Doe');
+
+        self::assertEquals($value, $model->name);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testSetPropertyViaProtectedSetter()
+    {
+        $this->direct->set($this->fixture, $model = new ProtectedDummy(), 'name', $value = 'John Doe');
+
+        self::assertEquals($value, $model->name);
     }
 
     public function provideProperties()
@@ -174,9 +205,6 @@ class DirectTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @return array<{string, string, mixed}>
-     */
     public function provideModelsToSet()
     {
         $value = 'John Doe';
@@ -184,12 +212,6 @@ class DirectTest extends \PHPUnit_Framework_TestCase
         return [
             'simple property with camelCase setter' => [
                 new SimpleCamelCaseDummy(),
-                'name',
-                $value,
-                'name',
-            ],
-            'simple property with snake_case setter' => [
-                new SimpleSnakeCaseDummy(),
                 'name',
                 $value,
                 'name',
@@ -206,6 +228,40 @@ class DirectTest extends \PHPUnit_Framework_TestCase
                 'full_name',
                 $value,
                 'fullName',
+            ],
+
+            'composite camelCase property with mixed setter (BC preserved)' => [
+                new CompositeMixedCaseDummy(),
+                'fullName',
+                $value,
+                'fullname',
+            ],
+            'composite snake_case property with mixed setter (BC preserved)' => [
+                new CompositeMixedCaseDummy(),
+                'full_name',
+                $value,
+                'fullname',
+            ],
+
+            'public setter' => [
+                new PublicDummy(),
+                'name',
+                $value,
+                'name',
+            ],
+        ];
+    }
+
+    public function provideLegacyModelsToSet()
+    {
+        $value = 'John Doe';
+
+        return [
+            'simple property with snake_case setter' => [
+                new SimpleSnakeCaseDummy(),
+                'name',
+                $value,
+                'name',
             ],
 
             'composite snake_case property with snake_case1 setter' => [
@@ -250,20 +306,6 @@ class DirectTest extends \PHPUnit_Framework_TestCase
 
             'public setter' => [
                 new PublicDummy(),
-                'name',
-                $value,
-                'name',
-            ],
-
-            'protected setter' => [
-                new ProtectedDummy(),
-                'name',
-                $value,
-                'name',
-            ],
-
-            'private setter' => [
-                new PrivateDummy(),
                 'name',
                 $value,
                 'name',

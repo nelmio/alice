@@ -89,7 +89,8 @@ class Populator
 
             $value = $property->requiresUnique() ?
                 $this->generateUnique($fixture, $property) :
-                $this->processor->process($property, $fixture->getSetProperties(), $fixture->getValueForCurrent());
+                $this->processor->process($property, $fixture->getSetProperties(), $fixture->getValueForCurrent())
+            ;
 
             foreach ($this->setters as $setter) {
                 if ($setter->canSet($fixture, $object, $key, $value)) {
@@ -126,6 +127,10 @@ class Populator
                 $valHash = spl_object_hash($value);
             } elseif (is_array($value)) {
                 $valHash = hash('md4', serialize($value));
+                @trigger_error(
+                    'Uniqueness of an array will translate in unicity of the items instead of the array hash in 3.0.0.',
+                    E_USER_DEPRECATED
+                );
             } else {
                 $valHash = $value;
             }

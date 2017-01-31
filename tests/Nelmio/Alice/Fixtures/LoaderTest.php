@@ -11,6 +11,13 @@
 
 namespace Nelmio\Alice\Fixtures;
 
+use Nelmio\Alice\support\extensions\FakerProviderWithRequiredParameter;
+use Nelmio\Alice\support\models\DummyWithVariadicConstructor;
+use Nelmio\Alice\support\models\Group;
+use Nelmio\Alice\support\models\MagicUser;
+use Nelmio\Alice\support\models\typehint\Dummy;
+use Nelmio\Alice\support\models\typehint\DummyWithInterface;
+use Nelmio\Alice\support\models\typehint\RelatedDummy;
 use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\extensions;
 
@@ -42,49 +49,58 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             'locale' => 'en_US',
             'providers' => [],
             'seed' => 1,
-            'parameters' => []
+            'parameters' => [],
         ];
         $options = array_merge($defaults, $options);
 
-        return $this->loader = new Loader($options['locale'], $options['providers'], $options['seed'], $options['parameters']);
+        return $this->loader = new Loader(
+            $options['locale'],
+            $options['providers'],
+            $options['seed'],
+            $options['parameters']
+        );
     }
 
     public function testLoadCreatesInstances()
     {
-        $res = $this->loadData([
+        $objects = $this->loadData([
             self::USER => [
+                'alice-user' => [],
                 'bob' => [],
             ],
         ]);
-        $user = $res['bob'];
 
-        $this->assertInstanceOf(self::USER, $user);
+        $this->assertCount(2, $objects);
+
+        $alice = $objects['alice-user'];
+        $bob = $objects['bob'];
+
+        $this->assertInstanceOf(User::class, $alice);
+        $this->assertInstanceOf(User::class, $bob);
     }
 
     public function testGetReference()
     {
-        $res = $this->loadData([
+        $objects = $this->loadData([
             self::USER => [
+                'alice-user' => [],
                 'bob' => [],
             ],
         ]);
-        $user = $res['bob'];
 
-        $this->assertSame($user, $this->loader->getReference('bob'));
+        $this->assertCount(2, $objects);
+
+        $this->assertSame($this->loader->getReference('alice-user'), $objects['alice-user']);
+        $this->assertSame($this->loader->getReference('bob'), $objects['bob']);
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Instance foo is not defined
      */
     public function testGetBadReference()
     {
-        $this->loadData([
-            self::USER => [
-                'bob' => [],
-            ],
-        ]);
-
+        $this->loadData([]);
         $this->loader->getReference('foo');
     }
 
@@ -98,6 +114,48 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->createLoader()->load($file);
     }
 
+    public function testFakerProviderWithEmptyValues()
+    {
+        $objects = $this
+            ->createLoader([
+                'providers' => [
+                    new FakerProviderWithRequiredParameter(),
+                ]
+            ])
+            ->load([
+                DummyWithVariadicConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '<passValue([])>',
+                            '<passValue(0)>',
+                            '<passValue("")>',
+                            '<passValue(null)>',
+                            '<passValue(false)>',
+                        ],
+                    ],
+                ],
+            ])
+        ;
+
+        $this->assertCount(1, $objects);
+        /** @var DummyWithVariadicConstructor $dummy */
+        $dummy = $objects['dummy'];
+
+        $this->assertSame(
+            [
+                [],
+                0,
+                '',
+                null,
+                false,
+            ],
+            $dummy->data
+        );
+    }
+
+    /**
+     * @group legacy
+     */
     public function testCreatePrivateConstructorInstance()
     {
         $loader = new Loader('en_US', [new FakerProvider]);
@@ -124,7 +182,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $file = __DIR__.'/../support/fixtures/invalid.php';
         $this->setExpectedException(
-            'UnexpectedValueException',
+            '\UnexpectedValueException',
             sprintf('Included file "%s" must return an array of data', $file)
         );
         $this->createLoader()->load($file);
@@ -139,6 +197,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadSequencedItems()
     {
         $object = $this->createLoader()->load($file = __DIR__.'/../support/fixtures/sequenced_items.yml');
+
         $this->assertArrayHasKey('group1', $object);
         $this->assertInstanceOf(self::GROUP, $object['group1']);
         $counter = 1;
@@ -165,7 +224,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::USER => [
                 'bob' => [],
-                'jim' => []
+                'jim' => [],
             ],
         ]);
 
@@ -182,7 +241,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::USER => [
                 'bob' => [
-                    'username' => 'bob'
+                    'username' => 'bob',
                 ],
             ],
         ]);
@@ -196,7 +255,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::GROUP => [
                 'a' => [
-                    'name' => 'group'
+                    'name' => 'group',
                 ],
             ],
         ]);
@@ -205,12 +264,15 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('group', $group->getName());
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadAssignsDataToNonPublicSetters()
     {
         $res = $this->loadData([
             self::GROUP => [
                 'a' => [
-                    'sortName' => 'group'
+                    'sortName' => 'group',
                 ],
             ],
         ]);
@@ -241,12 +303,14 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::MAGIC_USER => [
                 'a' => [
-                    'username' => 'bob'
+                    'username' => 'bob',
                 ],
             ],
         ]);
+        /** @var MagicUser $user */
         $user = $res['a'];
 
+        $this->assertInstanceOf(self::MAGIC_USER, $user);
         $this->assertEquals('bob set by __call', $user->getUsername());
     }
 
@@ -255,72 +319,97 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::GROUP => [
                 'a' => [
-                    'members' => [$user = new User()]
+                    'members' => [$user = new User()],
                 ],
             ],
         ]);
+        /** @var Group $group */
         $group = $res['a'];
 
+        $this->assertInstanceOf(self::GROUP, $group);
         $this->assertSame($user, current($group->getMembers()));
     }
 
     public function testLoadParsesReferences()
     {
-        $res = $this->loadData([
+        $objects = $this->loadData([
             self::USER => [
                 'user1' => [
                     'username' => 'alice',
                 ],
+                'user-2' => [
+                    'username' => 'bob',
+                ],
             ],
             self::GROUP => [
                 'a' => [
-                    'members' => ['@user1']
+                    'members' => [
+                        '@user1',
+                        '@user-2',
+                    ]
                 ],
             ],
         ]);
-        $group = $res['a'];
+        /** @var Group $group */
+        $group = $objects['a'];
 
-        $this->assertInstanceOf(self::USER, current($group->getMembers()));
-        $this->assertEquals('alice', current($group->getMembers())->username);
+        $this->assertInstanceOf(Group::class, $group);
+
+        $members = $group->getMembers();
+
+        $this->assertCount(2, $members);
+        foreach ($members as $member) {
+            $this->assertInstanceOf(User::class, $member);
+        }
+
+        $this->assertEquals('alice', $members[0]->username);
+        $this->assertEquals('bob', $members[1]->username);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadParsesReferencesInQuotes()
     {
-        $res = $this->loadData([
-            self::USER => [
+        $result = $this->loadData([
+            User::class => [
                 'user1' => [
                     'username' => 'alice',
                 ],
             ],
-            self::GROUP => [
-                'a' => [
+            Group::class => [
+                'group' => [
                     'members' => ['\'@user1\'']
                 ],
             ],
         ]);
-        $group = $res['a'];
+        /** @var Group $group */
+        $group = $result['group'];
 
-        $this->assertInstanceOf(self::USER, current($group->getMembers()));
+        $this->assertInstanceOf(User::class, current($group->getMembers()));
         $this->assertEquals('alice', current($group->getMembers())->username);
     }
 
     public function testLoadParsesPropertyReferences()
     {
-        $res = $this->loadData([
+        $objects = $this->loadData([
             self::USER => [
-                'user1' => [
+                'user-1' => [
                     'username' => 'alice',
                 ],
                 'user2' => [
-                    'username' => '@user1->username',
+                    'username' => '@user-1->username',
                 ],
             ]
         ]);
 
-        $this->assertInstanceOf(self::USER, $res['user1']);
-        $this->assertInstanceOf(self::USER, $res['user2']);
-        $this->assertEquals('alice', $res['user1']->username);
-        $this->assertEquals($res['user1']->username, $res['user2']->username);
+        $user1 = $objects['user-1'];
+        $user2 = $objects['user2'];
+
+        $this->assertInstanceOf(User::class, $user1);
+        $this->assertInstanceOf(User::class, $user2);
+        $this->assertEquals('alice', $user1->username);
+        $this->assertEquals($user1->username, $user2->username);
     }
 
     public function testLoadParsesPropertyReferencesGetter()
@@ -359,7 +448,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Property doesnotexist is not defined for instance user1
      */
     public function testLoadParsesPropertyReferencesDoesNotExist()
@@ -386,7 +475,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ],
             self::GROUP => [
                 'a' => [
-                    'owner' => '@user*'
+                    'owner' => '@user*',
                 ],
             ],
         ]);
@@ -433,7 +522,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             self::USER => [
                 'user1' => [
                     'username' => 'bob',
-                    'email'    => 'bob@gmail.com',
+                    'email' => 'bob@gmail.com',
                 ],
             ],
             self::GROUP => [
@@ -465,8 +554,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
-     * @expectedExceptionMessage Instance mask "user*" did not match any existing instance, make sure the object is created after its references
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Instance mask "user*" did not match any existing instance, make sure the object is
+     *                           created after its references
      */
     public function testLoadFailsMultiReferencesIfNoneMatch()
     {
@@ -525,6 +615,22 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($res['user.alice']->username, $res['user.alias.alice_alias']->username);
         $this->assertEquals($res['user.alias.alice_alias']->username, $res['user.deep_alias']->username);
     }
+    /**
+     * @dataProvider provideSpecialCharactersData
+     */
+    public function testLoadObjectsWithSpecialCharactersInTheirReferences($data, $keys)
+    {
+        $res = $this->loadData($data);
+
+        $this->assertCount(3, $res);
+        foreach ($keys as $key) {
+            $this->assertInstanceOf(self::USER, $res[$key]);
+        }
+
+        $this->assertEquals('alice', $res[$keys[0]]->username);
+        $this->assertEquals($res[$keys[0]]->username, $res[$keys[1]]->username);
+        $this->assertEquals($res[$keys[1]]->username, $res[$keys[2]]->username);
+    }
 
     public function testLoadParsesOptionalValuesWithPercents()
     {
@@ -536,25 +642,40 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
                 'user1' => [
                     'username' => '50%? name : nothing',
                 ],
-                'user2' => [
-                    'username' => '0%? name : nothing',
-                ],
-                'user3' => [
-                    'username' => '100%? name : nothing',
-                ],
             ],
         ]);
 
         $this->assertContains($this->loader->getReference('user0')->username, ['name', null]);
         $this->assertContains($this->loader->getReference('user1')->username, ['name', 'nothing']);
-        $this->assertEquals('nothing', $this->loader->getReference('user2')->username);
-        $this->assertEquals('name', $this->loader->getReference('user3')->username);
     }
 
-    public function testLoadParsesOptionalValuesWithFloats()
+    /**
+     * @group legacy
+     */
+    public function testLoadParsesOptionalValuesWithPercentsLimits()
     {
         $this->loadData([
             self::USER => [
+                'user0' => [
+                    'username' => '0%? name',
+                ],
+                'user1' => [
+                    'username' => '100%? hello',
+                ],
+            ],
+        ]);
+
+        $this->assertEquals($this->loader->getReference('user0')->username, null);
+        $this->assertEquals($this->loader->getReference('user1')->username, 'hello');
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testLoadParsesOptionalValuesWithFloats()
+    {
+        $this->loadData([
+            User::class => [
                 'user0' => [
                     'username' => '0.5? name',
                 ],
@@ -576,10 +697,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('name', $this->loader->getReference('user3')->username);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadCoercesDatesForDateTimeHints()
     {
-        $res = $this->loadData([
-            self::GROUP => [
+        $result = $this->loadData([
+            Group::class => [
                 'group0' => [
                     'creationDate' => '2012-01-05',
                 ],
@@ -589,9 +713,32 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertInstanceOf('DateTime', $res['group0']->getCreationDate());
-        $this->assertEquals('2012-01-05', $res['group0']->getCreationDate()->format('Y-m-d'));
-        $this->assertInstanceOf('DateTime', $res['group1']->getCreationDate());
+        /** @var Group $group0 */
+        $group0 = $result['group0'];
+        /** @var Group $group1 */
+        $group1 = $result['group1'];
+
+        $this->assertInstanceOf(\DateTime::class, $group0->getCreationDate());
+        $this->assertEquals('2012-01-05', $group0->getCreationDate()->format('Y-m-d'));
+
+        $this->assertInstanceOf(\DateTime::class, $group1->getCreationDate());
+    }
+
+    public function testCreatesDateTimeWithIdentity()
+    {
+        $result = $this->loadData([
+            Group::class => [
+                'group' => [
+                    'name' => '<(new \DateTime("2012-01-05"))>',
+                ],
+            ],
+        ]);
+
+        /** @var Group $group */
+        $group = $result['group'];
+
+        $this->assertInstanceOf(\DateTime::class, $group->getName());
+        $this->assertEquals('2012-01-05', $group->getName()->format('Y-m-d'));
     }
 
     public function testLoadParsesFakerData()
@@ -682,7 +829,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unknown formatter "siren"
      */
     public function testLoadParsesFakerDataUsesDefaultLocale()
@@ -856,7 +1003,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $user3 = $this->loader->getReference('user3');
         $this->assertInstanceOf(self::USER, $user3);
 
-        $this->assertEquals($user1->username . '_' . $user2->username, $user3->username);
+        $this->assertEquals($user1->username.'_'.$user2->username, $user3->username);
     }
 
     public function testSkippingReferencesInStrings()
@@ -897,46 +1044,92 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $res = $this->loadData([
             self::USER => [
+                'user_{alice, bob, foo, bar}' => [
+                    'username' => '<current()>',
+                    'email' => '<current()>@gmail.com',
+                ],
+            ],
+        ]);
+
+        $this->assertCount(4, $res);
+
+        $this->assertInstanceOf(self::USER, $res['user_alice']);
+        $this->assertEquals('alice', $res['user_alice']->username);
+
+        $this->assertInstanceOf(self::USER, $res['user_bob']);
+        $this->assertEquals('bob', $res['user_bob']->username);
+
+        $this->assertInstanceOf(self::USER, $res['user_foo']);
+        $this->assertEquals('foo', $res['user_foo']->username);
+
+        $this->assertInstanceOf(self::USER, $res['user_bar']);
+        $this->assertEquals('bar', $res['user_bar']->username);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testLoadCreatesEnumsOfObjectsWithMalformedList()
+    {
+        $res = $this->loadData([
+            self::USER => [
                 'user_{alice, bob, foo bar}' => [
                     'username' => '<current()>',
-                    'email'    => '<current()>@gmail.com'
+                    'email' => '<current()>@gmail.com',
                 ],
             ],
         ]);
 
         $this->assertCount(3, $res);
+
         $this->assertInstanceOf(self::USER, $res['user_alice']);
         $this->assertEquals('alice', $res['user_alice']->username);
+
         $this->assertInstanceOf(self::USER, $res['user_bob']);
         $this->assertEquals('bob', $res['user_bob']->username);
+
         $this->assertInstanceOf(self::USER, $res['user_foo bar']);
         $this->assertEquals('foo bar', $res['user_foo bar']->username);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLocalObjectsAreNotReturned()
     {
-        $res = $this->loadData([
-            self::GROUP.' (local)' => [
-                'group' => [
-                    'name' => 'foo'
+        $result = $this->loadData([
+            sprintf('%s (local)', Group::class) => [
+                'foo_group' => [
+                    'name' => 'foo',
                 ],
             ],
-            self::USER => [
-                'user' => [
-                    'email'    => '@group'
+            User::class => [
+                'user1' => [
+                    'email' => '@foo_group',
                 ],
                 'user2 (local)' => [
-                    'email'    => '@group'
+                    'email' => '@foo_group',
                 ],
             ],
         ]);
 
-        $this->assertCount(1, $res);
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user2'));
-        $this->assertInstanceOf(self::GROUP, $this->loader->getReference('group'));
-        $this->assertSame($this->loader->getReference('user')->email, $this->loader->getReference('group'));
-        $this->assertSame($this->loader->getReference('user2')->email, $this->loader->getReference('group'));
+        // The loader has still the reference of each fixtures
+        $user1 = $this->loader->getReference('user1');
+        $user2 = $this->loader->getReference('user2');
+        $group = $this->loader->getReference('foo_group');
+        $this->assertInstanceOf(User::class, $user1);
+        $this->assertInstanceOf(User::class, $user2);
+        $this->assertInstanceOf(Group::class, $group);
+        $this->assertSame($user1->email, $group);
+        $this->assertSame($user2->email, $group);
+
+        $this->assertCount(1, $result);
+        $this->assertSame(
+            [
+                'user1' => $user1,
+            ],
+            $result
+        );
     }
 
     public function testTemplateObjectsAreNotReturned()
@@ -944,10 +1137,10 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::USER => [
                 'user (template)' => [
-                    'email'    => 'base@email.com'
+                    'email' => 'base@email.com',
                 ],
                 'user2 (extends user)' => [
-                    'fullname'    => 'testfullname'
+                    'fullname' => 'testfullname',
                 ],
             ],
         ]);
@@ -958,18 +1151,29 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->loader->getReference('user2')->fullname, 'testfullname');
     }
 
+    public function testTemplatesAreKeptBetweenFiles()
+    {
+        $objects = $this->createLoader()->load(__DIR__.'/Files/includes/user.yml');
+
+        $this->assertCount(1, $objects);
+        /** @var User $user0 */
+        $user0 = $this->loader->getReference('user0');
+        $this->assertInstanceOf(self::USER, $user0);
+        $this->assertSame($user0->username, 'Base user');
+    }
+
     public function testTemplateCanExtendOtherTemplateObjectsCombinedWithRange()
     {
         $res = $this->loadData([
             self::USER => [
-                'us{er,rr} (template)' => [
-                    'email'    => 'base@email.com'
+                'us{er, rr} (template)' => [
+                    'email' => 'base@email.com'
                 ],
                 'user{1..2} (template, extends user)' => [
-                    'favoriteNumber'    => 2
+                    'favoriteNumber' => 2
                 ],
-                '{user,uzer}3 (extends user2)' => [
-                    'fullname'    => 'testfullname'
+                '{user, uzer}3 (extends user2)' => [
+                    'fullname' => 'testfullname'
                 ],
             ],
         ]);
@@ -977,6 +1181,36 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $res);
         foreach (['user3', 'uzer3'] as $key) {
             $this->assertInstanceOf(self::USER, $this->loader->getReference($key));
+
+            $this->assertSame($this->loader->getReference($key)->email, 'base@email.com');
+            $this->assertSame($this->loader->getReference($key)->favoriteNumber, 2);
+            $this->assertSame($this->loader->getReference($key)->fullname, 'testfullname');
+        }
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testTemplateCanExtendOtherTemplateObjectsCombinedWithRangeWithLegacySyntax()
+    {
+        $res = $this->loadData([
+            self::USER => [
+                'us{er,rr} (template)' => [
+                    'email' => 'base@email.com'
+                ],
+                'user{1..2} (template, extends user)' => [
+                    'favoriteNumber' => 2
+                ],
+                '{user,uzer}3 (extends user2)' => [
+                    'fullname' => 'testfullname'
+                ],
+            ],
+        ]);
+
+        $this->assertCount(2, $res);
+        foreach (['user3', 'uzer3'] as $key) {
+            $this->assertInstanceOf(self::USER, $this->loader->getReference($key));
+
             $this->assertSame($this->loader->getReference($key)->email, 'base@email.com');
             $this->assertSame($this->loader->getReference($key)->favoriteNumber, 2);
             $this->assertSame($this->loader->getReference($key)->fullname, 'testfullname');
@@ -988,29 +1222,31 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::USER => [
                 'user_minimal (template)' => [
-                    'email'    => 'base@email.com'
+                    'email' => 'base@email.com',
                 ],
                 'user_favorite_number (template)' => [
                     'fullname' => 'testfullname',
-                    'email'    => 'favorite@email.com',
-                    'favoriteNumber'    => 2
+                    'email' => 'favorite@email.com',
+                    'favoriteNumber' => 2,
                 ],
                 'user_full (template, extends user_minimal, extends user_favorite_number)' => [
                     'fullname' => 'myfullname',
-                    'friends' => 'testfriends'
+                    'friends' => 'testfriends',
                 ],
                 'user (extends user_full)' => [
-                    'friends' => 'myfriends'
+                    'friends' => 'myfriends',
                 ],
             ],
         ]);
 
         $this->assertCount(1, $res);
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
-        $this->assertSame($this->loader->getReference('user')->email, 'favorite@email.com');
-        $this->assertSame($this->loader->getReference('user')->favoriteNumber, 2);
-        $this->assertSame($this->loader->getReference('user')->fullname, 'myfullname');
-        $this->assertSame($this->loader->getReference('user')->friends, 'myfriends');
+        /** @var User $user */
+        $user = $this->loader->getReference('user');
+        $this->assertInstanceOf(self::USER, $user);
+        $this->assertSame('favorite@email.com', $user->email);
+        $this->assertSame(2, $user->favoriteNumber);
+        $this->assertSame('myfullname', $user->fullname);
+        $this->assertSame('myfriends', $user->friends);
     }
 
     public function testMultipleInheritanceInInstance()
@@ -1018,16 +1254,16 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::USER => [
                 'user_short_name (template)' => [
-                    'favoriteNumber'    => 2,
-                    'username' => 'name'
+                    'favoriteNumber' => 2,
+                    'username' => 'name',
                 ],
                 'user_medium_name (template)' => [
                     'username' => 'name_medium',
-                    'fullname' => 'my real name'
+                    'fullname' => 'my real name',
                 ],
                 'user_long_name (template)' => [
                     'username' => 'my_very_long_name',
-                    'email' => 'test@email.com'
+                    'email' => 'test@email.com',
                 ],
                 'user (extends user_short_name, extends user_medium_name, extends user_long_name)' => [
                     'email' => 'base@email.com',
@@ -1036,11 +1272,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertCount(1, $res);
-        $this->assertInstanceOf(self::USER, $this->loader->getReference('user'));
-        $this->assertSame($this->loader->getReference('user')->email, 'base@email.com');
-        $this->assertSame($this->loader->getReference('user')->favoriteNumber, 2);
-        $this->assertSame($this->loader->getReference('user')->fullname, 'my real name');
-        $this->assertSame($this->loader->getReference('user')->username, 'my_very_long_name');
+        /** @var User $user */
+        $user = $this->loader->getReference('user');
+        $this->assertInstanceOf(self::USER, $user);
+        $this->assertSame('base@email.com', $user->email);
+        $this->assertSame(2, $user->favoriteNumber);
+        $this->assertSame('my real name', $user->fullname);
+        $this->assertSame('my_very_long_name', $user->username);
     }
 
     /**
@@ -1052,10 +1290,10 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->loadData([
             self::USER => [
                 'user_base (template)' => [
-                    'email'    => 'base@email.com'
+                    'email' => 'base@email.com',
                 ],
                 'user (extends user_not_base)' => [
-                    'friends'  => 'myfriends'
+                    'friends' => 'myfriends',
                 ],
             ],
         ]);
@@ -1066,11 +1304,11 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::USER => [
                 'user (template)' => [
-                    'email'    => 'base@email.com',
-                    'favoriteNumber'    => 2
+                    'email' => 'base@email.com',
+                    'favoriteNumber' => 2,
                 ],
                 'user2 (extends user)' => [
-                    'favoriteNumber'    => 42
+                    'favoriteNumber' => 42,
                 ],
             ],
         ]);
@@ -1086,11 +1324,11 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::USER => [
                 'user (template)' => [
-                    'fullname'    => '<firstName()>',
-                    'favoriteNumber'    => 2
+                    'fullname' => '<firstName()>',
+                    'favoriteNumber' => 2,
                 ],
                 'user2 (extends user)' => [
-                    'favoriteNumber'    => 42
+                    'favoriteNumber' => 42,
                 ],
             ],
         ]);
@@ -1119,7 +1357,8 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not determine how to assign inexistent to a Nelmio\Alice\support\models\User object
+     * @expectedExceptionMessage Could not determine how to assign inexistent to a Nelmio\Alice\support\models\User
+     *                           object
      */
     public function testArbitraryPropertyNamesFail()
     {
@@ -1133,7 +1372,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage
      */
     public function testLoadFailsOnConstructorsWithRequiredArgs()
@@ -1147,6 +1386,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadCanBypassConstructorsWithRequiredArgs()
     {
         $this->loadData([
@@ -1222,7 +1464,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage
      */
     public function testLoadFailsOnInvalidStaticConstructor()
@@ -1237,7 +1479,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage
      */
     public function testLoadFailsOnScalarStaticConstructorArgs()
@@ -1252,7 +1494,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
+     * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage
      */
     public function testLoadFailsIfStaticMethodDoesntReturnAnInstance()
@@ -1266,6 +1508,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadCallsCustomMethodAfterCtor()
     {
         $res = $this->loadData([
@@ -1327,6 +1572,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DateTime', $res['user']->birthDate);
     }
 
+    /**
+     * @group legacy
+     */
     public function testGeneratedValuesAreUnique()
     {
         $loader = new Loader('en_US', [new FakerProvider]);
@@ -1339,8 +1587,8 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $usernames = array_map(function (User $u) { return $u->username; }, $res);
-        $favNumberPairs = array_map(function (User $u) { return serialize($u->favoriteNumber); }, $res);
+        $usernames = array_map(function (User $user) { return $user->username; }, $res);
+        $favNumberPairs = array_map(function (User $user) { return serialize($user->favoriteNumber); }, $res);
 
         $this->assertEquals($usernames, array_unique($usernames));
         $this->assertEquals($favNumberPairs, array_unique($favNumberPairs));
@@ -1352,14 +1600,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load([
             self::USER => [
                 'user{0..4}' => [
-                    'username(unique)' => '<numberBetween()>'
+                    'username(unique)' => '<numberBetween()>',
                 ],
                 'user{5..9}' => [
-                    'username (unique)' => '<numberBetween()>'
+                    'username (unique)' => '<numberBetween()>',
                 ]
             ]
         ]);
-
         $usernames = array_map(function (User $u) { return $u->username; }, $res);
 
         $this->assertEquals($usernames, array_unique($usernames));
@@ -1374,7 +1621,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $loader->load([
             self::USER => [
                 'user{0..1}' => [
-                    'username(unique)' => '<fooGenerator()>'
+                    'username(unique)' => '<fooGenerator()>',
                 ]
             ]
         ]);
@@ -1383,20 +1630,20 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testCurrentInConstructor()
     {
         $this->loadData([
-                self::USER => [
-                    'user1' => [
-                        '__construct' => ['alice', 'alice@example.com'],
-                    ],
-                    'user2' => [
-                        '__construct' => ['bob', 'bob@example.com'],
-                    ],
+            self::USER => [
+                'user1' => [
+                    '__construct' => ['alice', 'alice@example.com'],
                 ],
-                self::CONTACT => [
-                    'contact{1..2}' => [
-                        '__construct' => ['@user<current()>'],
-                    ],
+                'user2' => [
+                    '__construct' => ['bob', 'bob@example.com'],
                 ],
-            ]);
+            ],
+            self::CONTACT => [
+                'contact{1..2}' => [
+                    '__construct' => ['@user<current()>'],
+                ],
+            ],
+        ]);
 
         $this->assertSame(
             $this->loader->getReference('user1'),
@@ -1408,6 +1655,9 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @group legacy
+     */
     public function testCustomSetFunction()
     {
         $loader = $this->createLoader(
@@ -1436,6 +1686,8 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Setter customNonexistantSetter not found in object
+     *
+     * @group legacy
      */
     public function testCustomNonexistantSetFunction()
     {
@@ -1445,20 +1697,122 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
                     'user' => [
                         'username' => 'foo',
                         'fullname' => 'foo bar',
-                        '__set' => 'customNonexistantSetter'
+                        '__set' => 'customNonexistantSetter',
                     ]
                 ]
             ]
         );
     }
 
+    public function testUseTypehintInSetter()
+    {
+        $loader = $this->createLoader();
+        $objects = $loader->load([
+            Dummy::class => [
+               'dummy0' => [
+                   'related_dummy' => '@related_dummy0',
+               ],
+            ],
+            RelatedDummy::class => [
+                'related_dummy0' => [],
+            ],
+        ]);
+
+        $dummy0 = $loader->getReference('dummy0');
+        $relatedDummy0 = $loader->getReference('related_dummy0');
+
+        $this->assertInstanceOf(Dummy::class, $dummy0);
+        $this->assertInstanceOf(RelatedDummy::class, $relatedDummy0);
+
+        $this->assertCount(2, $objects);
+        $this->assertSame($dummy0->data, $relatedDummy0);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testUseTypehintInSetterWithLocalFlag()
+    {
+        $loader = $this->createLoader();
+        $objects = $loader->load([
+            Dummy::class => [
+                'dummy0' => [
+                    'related_dummy' => '@related_dummy0',
+                ],
+            ],
+            RelatedDummy::class => [
+                'related_dummy0 (local)' => [],
+            ],
+        ]);
+
+        $dummy0 = $loader->getReference('dummy0');
+        $relatedDummy0 = $loader->getReference('related_dummy0');
+
+        $this->assertInstanceOf(Dummy::class, $dummy0);
+        $this->assertInstanceOf(RelatedDummy::class, $relatedDummy0);
+
+        $this->assertCount(1, $objects);
+        $this->assertSame($dummy0->data, $relatedDummy0);
+    }
+
+    public function testUseTypehintInSetterWithInterface()
+    {
+        $loader = $this->createLoader();
+        $objects = $loader->load([
+            DummyWithInterface::class => [
+                'dummy0' => [
+                    'related_dummy' => '@related_dummy0',
+                ],
+            ],
+            RelatedDummy::class => [
+                'related_dummy0' => [],
+            ],
+        ]);
+
+        $dummy0 = $loader->getReference('dummy0');
+        $relatedDummy0 = $loader->getReference('related_dummy0');
+
+        $this->assertInstanceOf(DummyWithInterface::class, $dummy0);
+        $this->assertInstanceOf(RelatedDummy::class, $relatedDummy0);
+
+        $this->assertCount(2, $objects);
+        $this->assertSame($dummy0->data, $relatedDummy0);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testUseTypehintInSetterWithInterfaceAndLocalFlag()
+    {
+        $loader = $this->createLoader();
+        $objects = $loader->load([
+            DummyWithInterface::class => [
+                'dummy0' => [
+                    'related_dummy' => '@related_dummy0',
+                ],
+            ],
+            RelatedDummy::class => [
+                'related_dummy0 (local)' => [],
+            ],
+        ]);
+
+        $dummy0 = $loader->getReference('dummy0');
+        $relatedDummy0 = $loader->getReference('related_dummy0');
+
+        $this->assertInstanceOf(DummyWithInterface::class, $dummy0);
+        $this->assertInstanceOf(RelatedDummy::class, $relatedDummy0);
+
+        $this->assertCount(1, $objects);
+        $this->assertSame($dummy0->data, $relatedDummy0);
+    }
+
     public function testNullVariable()
     {
         $loader = new Loader('en_US', [new FakerProvider]);
         $loader->load([
-            self::USER => [
+            User::class => [
                 'user' => [
-                    'username' => '0%? adrien',
+                    'username' => '<null()>',
                     'fullname' => '<noop($username)>',
                 ],
             ],
@@ -1478,20 +1832,30 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
                 ],
                 'user' => [
                     'username' => 'foo',
-                    'friends' => ['\\@<fooGenerator()>', '\\\\@foo', '\\\\\\@foo', '\\foo', '\\\\foo', '\\\\\\foo'],
+                    'friends' => [
+                        '\\@<fooGenerator()>',
+                        '\\\\@foo',
+                        '\\\\\\@foo',
+                        '\\foo',
+                        '\\\\foo',
+                        '\\\\\\foo',
+                    ],
                 ],
             ],
         ]);
 
         $this->assertInstanceOf(self::USER, $res['user']);
-        $this->assertSame([
-            '@foo',
-            '\\@foo',
-            '\\\\@foo',
-            '\\foo',
-            '\\\\foo',
-            '\\\\\\foo'
-        ], $res['user']->friends);
+        $this->assertSame(
+            [
+                '@foo',
+                '\\@foo',
+                '\\\\@foo',
+                '\\foo',
+                '\\\\foo',
+                '\\\\\\foo'
+            ],
+            $res['user']->friends
+        );
     }
 
     public function testAddProcessor()
@@ -1501,7 +1865,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load([
             self::USER => [
                 'user' => [
-                    'username' => 'uppercase processor:testusername'
+                    'username' => 'uppercase processor:testusername',
                 ],
             ],
         ]);
@@ -1517,7 +1881,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load([
             self::USER => [
                 'spec dumped' => [
-                    'email' => '<email()>'
+                    'email' => '<email()>',
                 ],
             ],
         ]);
@@ -1533,7 +1897,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load([
             self::USER => [
                 'user' => [
-                    'username' => '<username()>'
+                    'username' => '<username()>',
                 ],
             ],
         ]);
@@ -1549,13 +1913,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $loader->load([
             self::USER => [
                 'user' => [
-                    'username' => '<username()>'
+                    'username' => '<username()>',
                 ],
             ],
             self::CONTACT => [
                 'contact' => [
                     '__construct' => ['@user'],
-                    'magicProp' => 'magicValue'
+                    'magicProp' => 'magicValue',
                 ],
             ],
         ]);
@@ -1567,61 +1931,30 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testCallFakerFromFakerCall()
     {
         $loader = new Loader('en_US', [new FakerProvider]);
-
-        $res = $loader->load(__DIR__ . '/../support/fixtures/nested_faker.php');
+        $res = $loader->load(__DIR__.'/../support/fixtures/nested_faker.php');
 
         foreach (['user1', 'user2'] as $userKey) {
             $user = $res[$userKey];
-            $this->assertInstanceOf(self::USER, $user, $userKey . ' should match');
-            $this->assertEquals('JOHN DOE', $user->username, $userKey . ' should match');
-            $this->assertEquals('JOHN DOE', $user->fullname, $userKey . ' should match');
+            $this->assertInstanceOf(self::USER, $user, $userKey.' should match');
+            $this->assertEquals('JOHN DOE', $user->username, $userKey.' should match');
+            $this->assertEquals('JOHN DOE', $user->fullname, $userKey.' should match');
         }
     }
 
-    public function testParametersAreReplaced()
+    public function testSimpleParametersLoading()
     {
-        $res = $this->loadData([
-            self::USER => [
-                'user1' => [
-                    'username' => '<{user_1_username}>_alice',
-                ],
-            ],
-        ], [
-            'parameters' => [
-                'user_1_username' => 'user'
-            ]
-        ]);
+        $res = $this->createLoader()->load(__DIR__ . '/Files/parameters/simple.yml');
 
         $this->assertCount(1, $res);
-        $user1 = $this->loader->getReference('user1');
-        $this->assertInstanceOf(self::USER, $user1);
-        $this->assertEquals('user_alice', $user1->username);
+
+        $user = $res['alice'];
+        $this->assertInstanceOf(self::USER, $user);
+        $this->assertEquals('Alice', $user->username);
     }
 
-    public function testArrayParametersAreReplaced()
+    public function testArrayParametersLoading()
     {
-        $res = $this->loadData([
-            self::USER => [
-                'user{1..5}' => [
-                    'username' => '<randomElement(<{usernames}>)>',
-                ],
-            ],
-        ], [
-            'parameters' => [
-                'usernames' => $usernames = ['Alice', 'Bob', 'Ogi'],
-            ]
-        ]);
-
-        $this->assertCount(5, $res);
-        foreach ($this->loader->getReferences() as $user) {
-            $this->assertInstanceOf(self::USER, $user);
-            $this->assertContains($user->username, $usernames);
-        }
-    }
-
-    public function testYamlArrayParametersAreProperlyInterpreted()
-    {
-        $res = $this->createLoader()->load(__DIR__ . '/../support/fixtures/array_parameters.yml');
+        $res = $this->createLoader()->load(__DIR__ . '/Files/parameters/array.yml');
 
         $this->assertCount(5, $res);
         foreach ($this->loader->getReferences() as $user) {
@@ -1630,28 +1963,61 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testPhpArrayParametersAreProperlyInterpreted()
+    public function testCompositeParametersLoading()
     {
-        $res = $this->createLoader()->load(__DIR__ . '/../support/fixtures/array_parameters.php');
+        $objects = $this->createLoader()->load(__DIR__ . '/Files/parameters/composite.yml');
 
-        $this->assertCount(5, $res);
-        foreach ($this->loader->getReferences() as $user) {
-            $this->assertInstanceOf(self::USER, $user);
-            $this->assertContains($user->username, ['Alice', 'Bob', 'Ogi']);
-        }
+        $this->assertCount(2, $objects);
+
+        $user = $objects['user0'];
+        $this->assertInstanceOf(self::USER, $user);
+        //$this->assertEquals('NaN Bat!', $user->username); Not supported yet
+        $this->assertEquals('<{key1}> <{key2}>!', $user->username);
+
+        $user = $objects['user1'];
+        $this->assertInstanceOf(self::USER, $user);
+        //$this->assertEquals('NaN Bat!', $user->username); Not supported yet
+        $this->assertEquals('NaN Bat!', $user->username);
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Parameter "username_<current()>" was not found.
+     */
+    public function testDynamicParametersLoading()
+    {
+        $objects = $this->createLoader()->load(__DIR__ . '/Files/parameters/dynamic.yml');
+        $this->fail('Expected exception to be thrown.');
+
+        // Skipped: not supported yet
+        //$this->assertCount(2, $objects);
+
+        //$alice = $objects['user_alice'];
+        //$this->assertInstanceOf(self::USER, $alice);
+        //$this->assertEquals('Alice', $alice->username);
+
+        //$bob = $objects['user_bob'];
+        //$this->assertInstanceOf(self::USER, $bob);
+        //$this->assertEquals('Bob', $bob->username);
     }
 
     public function testBackslashes()
     {
         $loader = new Loader();
-        $res = $loader->load(__DIR__ . '/../support/fixtures/backslashes.yml');
+        $res = $loader->load(__DIR__.'/../support/fixtures/backslashes.yml');
+
+        $this->assertEquals('Bob', $res['foo']->username);
+
         $this->assertEquals('\\\\', $res['user0']->username);
-        $this->assertEquals([
-            $res['foo'],
-            '@foo',
-            '\\@foo',
-            '\\\\@foo',
-        ], $res['user0']->friends);
+        $this->assertSame(
+            [
+                $res['foo'],
+                '@foo',
+                '\\@foo',
+                '\\\\@foo',
+            ],
+            $res['user0']->friends
+        );
     }
 
     public function testDefaultInstance()
@@ -1659,17 +2025,108 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $res = $this->loadData([
             self::USER => [
                 'user (template)' => [
-                    'email'    => 'base@email.com',
+                    'email' => 'base@email.com',
                     'fullname' => 'testfullname'
                 ],
                 'user2 (extends user)' => null,
             ],
         ]);
+        /** @var User $user */
         $user = $res['user2'];
 
         $this->assertInstanceOf(self::USER, $user);
         $this->assertSame('base@email.com', $user->email);
         $this->assertSame('testfullname', $user->fullname);
+    }
+
+    public function testArrayOfNonEntityItems()
+    {
+        $res = $this->loadData([
+            self::USER => [
+                'user' => [
+                    'username' => '5x <name()>',
+                ],
+            ],
+        ]);
+        /** @var User $user */
+        $user = $res['user'];
+
+        $this->assertInstanceOf(self::USER, $user);
+        // This feature is not supported in 2.x.
+        $this->assertFalse(is_array($user->username));
+    }
+
+    /**
+     * Always return the same structure, see the first sample.
+     */
+    public function provideSpecialCharactersData()
+    {
+        $return = [];
+
+        $return['with underscores'] = [
+            'data' => [
+                self::USER => [
+                    'user_alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user_alias' => [
+                        'username' => '@user_alice->username',
+                    ],
+                    'user_deep_alias' => [
+                        'username' => '@user_alias->username',
+                    ],
+                ]
+            ],
+            'keys' => [
+                'user_alice',
+                'user_alias',
+                'user_deep_alias',
+            ],
+        ];
+
+        $return['with dots'] = [
+            'data' => [
+                self::USER => [
+                    'user.alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user.alias.alice_alias' => [
+                        'username' => '@user.alice->username',
+                    ],
+                    'user.deep_alias' => [
+                        'username' => '@user.alias.alice_alias->username',
+                    ],
+                ]
+            ],
+            'keys' => [
+                'user.alice',
+                'user.alias.alice_alias',
+                'user.deep_alias',
+            ],
+        ];
+
+        $return['with slashes'] = [
+            'data' => [
+                self::USER => [
+                    'user/alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user/alias/alice_alias' => [
+                        'username' => '@user/alice->username',
+                    ],
+                    'user/deep_alias' => [
+                        'username' => '@user/alias/alice_alias->username',
+                    ],
+                ]
+            ],
+            'keys' => [
+                'user/alice',
+                'user/alias/alice_alias',
+                'user/deep_alias',
+            ],
+        ];
+
+        return $return;
     }
 }
 
@@ -1693,5 +2150,10 @@ class FakerProvider
     public function upperCaseProvider($arg)
     {
         return strtoupper($arg);
+    }
+
+    public function null()
+    {
+        return null;
     }
 }

@@ -13,12 +13,12 @@ use Nelmio\Alice\ProcessorInterface;
 use MyApp\Hasher\PasswordHashInterface;
 use User;
 
-class UserProcessor implements ProcessorInterface
+final class UserProcessor implements ProcessorInterface
 {
     /**
      * @var PasswordHashInterface
      */
-    protected $passwordHasher;
+    private $passwordHasher;
 
     /**
      * @param PasswordHashInterface $passwordHasher
@@ -45,6 +45,7 @@ class UserProcessor implements ProcessorInterface
      */
     public function postProcess($object)
     {
+        // do nothing
     }
 }
 ```
@@ -63,4 +64,4 @@ $objects = $loader->loadFiles(__DIR__.'/fixtures.yml');
 ```
 
 Previous chapter: [Customize Data Generation](customizing-data-generation.md)<br />
-Got back to [Table of Contents](../README.md#table-of-contents)
+Go back to [Table of Contents](../README.md#table-of-contents)

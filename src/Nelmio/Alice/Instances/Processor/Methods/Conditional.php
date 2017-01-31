@@ -48,11 +48,13 @@ class Conditional implements MethodInterface
 
         if ($this->shouldReturnTrue($processable)) {
             return $trueValue;
-        } elseif (!is_null($processable->getMatch('falseValue')) && '' !== $processable->getMatch('falseValue')) {
-            return $this->processor->process($processable->getMatch('falseValue'), $variables);
-        } else {
-            return is_array($trueValue) ? [] : null;
         }
+        
+        if (!is_null($processable->getMatch('falseValue')) && '' !== $processable->getMatch('falseValue')) {
+            return $this->processor->process($processable->getMatch('falseValue'), $variables);
+        }
+        
+        return is_array($trueValue) ? [] : null;
     }
 
     /**
@@ -64,6 +66,23 @@ class Conditional implements MethodInterface
     private function shouldReturnTrue(ProcessableInterface $processable)
     {
         $threshold = $processable->getMatch('threshold');
+        if ((float) $threshold != (int) $threshold) {
+            @trigger_error(
+                'Using floats for optional expressions such as "80%? true : false" is deprecated since 2.3.0 and will '
+                .'throw an exception in 3.0. Only integer values should be used.',
+                E_USER_DEPRECATED
+            );
+        }
+
+        if (0 == $threshold || 100 == $threshold) {
+            @trigger_error(
+                'The threshold value in optional expressions such as "80%? true : false" should be an interger element'
+                .' of ]0;100[, i.e. the values 0 and 100 should not be used. This is deprecated since 2.3.0 and will'
+                .'throw an exception in 3.0. Only integer values should be used.',
+                E_USER_DEPRECATED
+            );
+        }
+
         if (substr($threshold, -1) === '%') {
             $threshold = substr($threshold, 0, -1) / 100;
         }

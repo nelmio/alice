@@ -77,6 +77,9 @@ class YamlTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @group legacy
+     */
     public function testCanParseAContextToParsedFiles()
     {
         $parser = new YamlParser(['value' => 'test']);

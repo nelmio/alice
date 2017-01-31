@@ -86,6 +86,9 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['q', 'w', 'e'], $object->getProperties());
     }
 
+    /**
+     * @group legacy
+     */
     public function testSettingPrivatePropertiesDirectly()
     {
         $class = self::PLURAL;

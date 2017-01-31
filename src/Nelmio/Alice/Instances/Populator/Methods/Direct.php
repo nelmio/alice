@@ -42,9 +42,23 @@ class Direct implements MethodInterface
         $setter = $this->getPropertySetter($object, $property);
         $value = $this->typeHintChecker->check($object, $setter, $value);
 
+        if (false !== strpos($setter, '_')) {
+            @trigger_error(
+                'Using a non PSR-2 compliant setter is deprecated since 2.3.0 and will be removed in 3.0.0.',
+                E_USER_DEPRECATED
+            );
+        }
+
         if (!is_callable([$object, $setter])) {
             // Protected or private method
             $refl = new \ReflectionMethod($object, $setter);
+            if (false === $refl->isPublic()) {
+                @trigger_error(
+                    'Using a private or protected method to set a property is deprecated since 2.3.0 and will be'
+                    .' removed in 3.0.0.',
+                    E_USER_DEPRECATED
+                );
+            }
             $refl->setAccessible(true);
             $refl->invoke($object, $value);
 

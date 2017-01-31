@@ -9,10 +9,10 @@ objects in the container you give it.
 Examples:
 
 ```php
-// load a yaml file into a Doctrine\Common\Persistence\ObjectManager object
+// Load a yaml file into a Doctrine\Common\Persistence\ObjectManager object
 $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager);
 
-// load a php file into a Doctrine\Common\Persistence\ObjectManager object
+// Load a php file into a Doctrine\Common\Persistence\ObjectManager object
 $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.php', $objectManager);
 ```
 
@@ -39,11 +39,11 @@ If you want a bit more control you can instantiate the various object yourself
 and make it work just as easily:
 
 ```php
-// load objects from a yaml file
+// Load objects from a yaml file
 $loader = new \Nelmio\Alice\Fixtures\Loader();
 $objects = $loader->load(__DIR__.'/fixtures.yml');
 
-// optionally persist them into the doctrine object manager
+// Optionally persist them into the doctrine object manager
 // you can also do that yourself or persist them in another way
 // if you do not use doctrine
 $persister = new \Nelmio\Alice\Persister\Doctrine($objectManager);
