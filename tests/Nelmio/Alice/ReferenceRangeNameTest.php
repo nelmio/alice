@@ -11,6 +11,9 @@
 
 namespace Nelmio\Alice;
 
+/**
+ * @package Nelmio\Alice
+ */
 class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
 {
     const USER = 'Nelmio\Alice\support\models\User';
@@ -18,11 +21,12 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
     const TASK = 'Nelmio\Alice\support\models\Task';
 
     /**
+     * @test
      * @expectedException \UnexpectedValueException
      */
-    public function testThrowExceptionWhenReferencesAreNotFound()
+    public function throwExceptionWhenReferencesAreNotFound()
     {
-        $managerMock = $this->getDoctrineManagerMock(null);
+        $managerMock = $this->getDoctrineManagerMock();
 
         $files = [
             __DIR__ . '/support/fixtures/reference_range_2.yml',
@@ -32,11 +36,12 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
      * @expectedException \UnexpectedValueException
      */
-    public function testThrowExceptionWhenSelfReferencesAreNotFound()
+    public function throwExceptionWhenSelfReferencesAreNotFound()
     {
-        $managerMock = $this->getDoctrineManagerMock(null);
+        $managerMock = $this->getDoctrineManagerMock();
 
         $files = [
             __DIR__ . '/support/fixtures/reference_range_with_self_reference.yml',
@@ -46,9 +51,9 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @test
      */
-    public function testLoadFixturesByReference()
+    public function loadFixturesByReference()
     {
         $managerMock = $this->getDoctrineManagerMock();
 
@@ -90,9 +95,9 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @test
      */
-    public function testLoadFixturesByReferenceWithRangeList()
+    public function loadFixturesByReferenceWithRangeList()
     {
         $managerMock = $this->getDoctrineManagerMock();
 
@@ -121,9 +126,9 @@ class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
      */
     protected function getDoctrineManagerMock()
     {
-        $managerMock = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $metadataFactoryMock = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
-        $metadataMock = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $managerMock = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $metadataFactoryMock = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metadataMock = $this->createMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
 
         $managerMock->method('getMetadataFactory')
             ->will($this->returnValue($metadataFactoryMock));

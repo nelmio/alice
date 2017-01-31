@@ -1,5 +1,5 @@
 Nelmio\Alice\support\models\User:
-    user_{alice,bob,myra}:
+    user_{alice, bob, myra}:
         uuid: <current()>
         username: <username()>
         fullname: <firstName()> <lastName()>
