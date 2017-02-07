@@ -97,13 +97,13 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
         /** @var ResolvedFixtureSet $fixtureSet */
         list($instance, $fixtureSet) = [$fixtureReferenceResult->getValue(), $fixtureReferenceResult->getSet()];
 
-        if (! method_exists($instance, $functionCall->getName())) {
-            throw NoSuchMethodExceptionFactory::createForFixture($fixture, $value);
-        }
-
         try {
             $resolvedValue = $instance->{$functionCall->getName()}(...$arguments);
         } catch (\Throwable $exception) {
+            if (false === method_exists($instance, $functionCall->getName())) {
+                throw NoSuchMethodExceptionFactory::createForFixture($fixture, $value);
+            }
+
             throw UnresolvableValueExceptionFactory::create($value, 0, $exception);
         }
 

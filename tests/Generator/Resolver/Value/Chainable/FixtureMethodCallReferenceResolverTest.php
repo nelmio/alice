@@ -99,7 +99,11 @@ class FixtureMethodCallReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $dummyProphecy = $this->prophesize(DummyWithGetter::class);
         $dummyProphecy->getFoo('resolved_argument')
             ->shouldBeCalled()
-            ->willReturn('resolved_value');
+            ->willReturn('resolved_value')
+        ;
+
+        /** @var DummyWithGetter $dummy */
+        $dummy = $dummyProphecy->reveal();
 
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy
@@ -114,10 +118,7 @@ class FixtureMethodCallReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $valueResolverProphecy
             ->resolve($reference, $fixture, $newSet, $scope, $valueResolverContext)
             ->willReturn(
-                new ResolvedValueWithFixtureSet(
-                    $instance = $dummyProphecy->reveal(),
-                    $newSet
-                )
+                new ResolvedValueWithFixtureSet($dummy, $newSet)
             )
         ;
         /** @var ValueResolverInterface $valueResolver */
@@ -134,7 +135,7 @@ class FixtureMethodCallReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $dummyProphecy->getFoo(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testCatchesThrowablesToThrowResolverException()
+    public function testThrowsAResolverExceptionOnError()
     {
         try {
             $value = new FixtureMethodCallValue(
@@ -143,8 +144,11 @@ class FixtureMethodCallReferenceResolverTest extends \PHPUnit_Framework_TestCase
             );
             $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
 
+            $error = new \Error();
             $dummyProphecy = $this->prophesize(DummyWithGetter::class);
-            $dummyProphecy->getFoo()->willThrow($ex = new \Exception('Inner exception'));
+            $dummyProphecy->getFoo()->will(function () use ($error) {
+                throw $error;
+            });
 
             $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
             $valueResolverProphecy
@@ -169,7 +173,7 @@ class FixtureMethodCallReferenceResolverTest extends \PHPUnit_Framework_TestCase
                 $exception->getMessage()
             );
             $this->assertEquals(0, $exception->getCode());
-            $this->assertEquals($ex, $exception->getPrevious());
+            $this->assertSame($error, $exception->getPrevious());
         }
     }
 
@@ -210,6 +214,7 @@ class FixtureMethodCallReferenceResolverTest extends \PHPUnit_Framework_TestCase
                 $exception->getMessage()
             );
             $this->assertEquals(0, $exception->getCode());
+            $this->assertNull($exception->getPrevious());
         }
     }
 }
