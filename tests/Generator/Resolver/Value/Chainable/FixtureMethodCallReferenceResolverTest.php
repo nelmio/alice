@@ -82,7 +82,9 @@ class FixtureMethodCallReferenceResolverTest extends \PHPUnit_Framework_TestCase
     {
         $value = new FixtureMethodCallValue(
             $reference = new FakeValue(),
-            $functionCall = new FunctionCallValue('getFoo')
+            $functionCall = new FunctionCallValue('getFoo', [
+                $arg1 = new FakeValue(),
+            ])
         );
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
@@ -95,15 +97,26 @@ class FixtureMethodCallReferenceResolverTest extends \PHPUnit_Framework_TestCase
         $valueResolverContext->markAsNeedsCompleteGeneration();
 
         $dummyProphecy = $this->prophesize(DummyWithGetter::class);
-        $dummyProphecy->getFoo()->willReturn('resolved_value');
+        $dummyProphecy->getFoo('resolved_argument')
+            ->shouldBeCalled()
+            ->willReturn('resolved_value');
 
         $valueResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $valueResolverProphecy
-            ->resolve($reference, $fixture, $set, $scope, $valueResolverContext)
+            ->resolve($arg1, $fixture, $set, $scope, $context)
+            ->willReturn(
+                new ResolvedValueWithFixtureSet(
+                    'resolved_argument',
+                    $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
+                )
+            )
+        ;
+        $valueResolverProphecy
+            ->resolve($reference, $fixture, $newSet, $scope, $valueResolverContext)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     $instance = $dummyProphecy->reveal(),
-                    $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
+                    $newSet
                 )
             )
         ;
@@ -117,7 +130,7 @@ class FixtureMethodCallReferenceResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $actual);
 
-        $valueResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $valueResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
         $dummyProphecy->getFoo(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 

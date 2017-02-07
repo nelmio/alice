@@ -2575,5 +2575,29 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        yield 'method call reference value' => [
+            [
+                DummyWithGetter::class => [
+                    'dummy' => [
+                        'name' => 'foobar'
+                    ],
+                ],
+                \stdClass::class => [
+                    'another_dummy' => [
+                        'foo' => '@dummy->getName()',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (new DummyWithGetter())->setName('foobar'),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => '__get__foobar',
+                    ]),
+                ],
+            ],
+        ];
     }
 }
