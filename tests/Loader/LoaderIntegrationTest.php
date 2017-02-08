@@ -34,6 +34,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Entity\ValueResolver\DummyWithGetter;
+use Nelmio\Alice\Entity\ValueResolver\DummyWithMethodArgument;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\FileLoaderInterface;
@@ -2572,6 +2573,62 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 'objects' => [
                     'dummy_1' => $dummy1 = Dummy::create(null, 0),
                     'dummy_2' => Dummy::create('Dummy 2', 0, $dummy1),
+                ],
+            ],
+        ];
+
+        yield 'method call reference value' => [
+            [
+                DummyWithGetter::class => [
+                    'dummy' => [
+                        'name' => 'foobar'
+                    ],
+                ],
+                \stdClass::class => [
+                    'another_dummy' => [
+                        'foo' => '@dummy->getName()',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (new DummyWithGetter())->setName('foobar'),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => '__get__foobar',
+                    ]),
+                ],
+            ],
+        ];
+
+        $dummyWithMethodArgument = new DummyWithMethodArgument();
+        $dummyWithMethodArgument->prefix = 'bazbaz__';
+        yield 'method call reference value with reference argument' => [
+            [
+                DummyWithGetter::class => [
+                    'dummy' => [
+                        'name' => 'foobar'
+                    ],
+                ],
+                DummyWithMethodArgument::class => [
+                    'dummy_2' => [
+                        'prefix' => 'bazbaz__',
+                    ],
+                ],
+                \stdClass::class => [
+                    'another_dummy' => [
+                        'foo' => '@dummy_2->getValue(@dummy)',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (new DummyWithGetter())->setName('foobar'),
+                    'dummy_2' => $dummyWithMethodArgument,
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'bazbaz____get__foobar',
+                    ]),
                 ],
             ],
         ];

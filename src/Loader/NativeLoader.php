@@ -20,6 +20,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenorma
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer;
+use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureMethodCallReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\PhpFunctionCallValueResolver;
 use Nelmio\Alice\Throwable\Exception\BadMethodCallExceptionFactory;
@@ -479,6 +480,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new FixturePropertyReferenceResolver(
                 $this->getPropertyAccessor()
             ),
+            new FixtureMethodCallReferenceResolver(),
             new UnresolvedFixtureReferenceIdResolver(
                 new SelfFixtureReferenceResolver(
                     new FixtureReferenceResolver()
