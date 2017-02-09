@@ -86,7 +86,7 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
             }
         }
 
-        $realValue = (mt_rand(0, 100) <= $quantifier)
+        $realValue = (mt_rand(0, 99) < $quantifier)
             ? $value->getFirstMember()
             : $value->getSecondMember()
         ;

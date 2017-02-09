@@ -21,6 +21,8 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
+use phpmock\functions\FixedValueFunction;
+use phpmock\MockBuilder;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
@@ -66,6 +68,46 @@ class OptionalValueResolverTest extends \PHPUnit_Framework_TestCase
         $value = new FixturePropertyValue(new FakeValue(), '');
         $resolver = new OptionalValueResolver();
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
+    }
+
+    public function testCanHandleExtremaQuantifiersCorrectly()
+    {
+        $resolver = new OptionalValueResolver(new FakeValueResolver());
+
+        $builder = new MockBuilder();
+        $builder->setNamespace(__NAMESPACE__)
+            ->setName('mt_rand');
+
+        $builder->setFunctionProvider(new FixedValueFunction(0));
+        $mock = $builder->build();
+        $mock->enable();
+
+        $value = new OptionalValue(0, 'first_0', 'second_0');
+        $resolvedValueFor0 = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
+
+        $mock->disable();
+
+        $builder->setFunctionProvider(new FixedValueFunction(99));
+        $mock = $builder->build();
+        $mock->enable();
+
+        $value = new OptionalValue(100, 'first_100', 'second_100');
+        $resolvedValueFor100 = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
+
+        $mock->disable();
+
+        $builder->setFunctionProvider(new FixedValueFunction(49));
+        $mock = $builder->build();
+        $mock->enable();
+
+        $value = new OptionalValue(50, 'first_50', 'second_50');
+        $resolvedValueFor50 = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
+
+        $mock->disable();
+
+        $this->assertEquals('second_0', $resolvedValueFor0->getValue());
+        $this->assertEquals('first_100', $resolvedValueFor100->getValue());
+        $this->assertEquals('first_50', $resolvedValueFor50->getValue());
     }
 
     public function testReturnsSetWithResolvedValue()
