@@ -47,13 +47,15 @@
 
         <service id="nelmio_alice.cache_key_generator.data_sha1"
                  class="Nelmio\Alice\Loader\CacheKeyGenerator\Sha1DataCacheKeyGenerator">
-            <argument type="string"/>%nelmio_alice.seed%</service>
+            <argument type="string">%nelmio_alice.seed%</argument>
         </service>
 
         <service id="nelmio_alice.cache_key_generator.file_sha1"
                  class="Nelmio\Alice\Loader\CacheKeyGenerator\Sha1FileCacheKeyGenerator">
-            <argument type="service"/>nelmio_alice.file_locator</service>
-            <argument type="string"/>%nelmio_alice.seed%</service>
+            <argument type="service" id="nelmio_alice.file_locator" />
+            <argument type="string">%nelmio_alice.seed%</argument>
         </service>
+
+    </services>
 
 </container>
