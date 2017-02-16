@@ -25,9 +25,15 @@ final class Sha1FileCacheKeyGenerator implements FileCacheKeyGeneratorInterface
      */
     private $fileLocator;
 
-    public function __construct(FileLocatorInterface $fileLocator)
+    /**
+     * @var int|null
+     */
+    private $seed;
+
+    public function __construct(FileLocatorInterface $fileLocator, int $seed = null)
     {
         $this->fileLocator = $fileLocator;
+        $this->seed = $seed;
     }
 
     /**
@@ -42,10 +48,11 @@ final class Sha1FileCacheKeyGenerator implements FileCacheKeyGeneratorInterface
         }
 
         return sprintf(
-            '%s%s%s',
+            '%s%s%s%s',
             sha1_file($realPath),
             sha1(serialize($parameters)),
-            sha1(serialize($objects))
+            sha1(serialize($objects)),
+            (string) $this->seed
         );
     }
 }

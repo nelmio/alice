@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Loader\CacheFileLoader;
+use Nelmio\Alice\Loader\PsrCacheFileLoader;
 use Nelmio\Alice\Loader\NativeLoader;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -45,7 +45,7 @@ $output->writeln(
 
 $loader = (new NativeLoader())->getBuiltInFileLoader();
 
-$loader = new CacheFileLoader($loader, new FileLocator\DefaultFileLocator(), new FilesystemAdapter());
+$loader = new PsrCacheFileLoader($loader, new FileLocator\DefaultFileLocator(), new FilesystemAdapter());
 
 for ($i = 1; $i <= $config->getSamples(); $i++) {
     $probe->enable();

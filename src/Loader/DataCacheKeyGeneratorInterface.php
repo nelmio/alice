@@ -13,7 +13,18 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\Throwable\CacheKeyGenerationThrowable;
+
 interface DataCacheKeyGeneratorInterface
 {
-    public function generateForData(array $data, array $parameters = [], array $objects = []): string;
+    /**
+     * @param array $data
+     * @param array $parameters
+     * @param array $objects
+     *
+     * @throws CacheKeyGenerationThrowable
+     *
+     * @return string cache key
+     */
+    public function generateForData(array $data, array $parameters, array $objects): string;
 }

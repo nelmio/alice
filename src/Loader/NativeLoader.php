@@ -512,6 +512,7 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     {
         $generator = FakerGeneratorFactory::create();
         $generator->addProvider(new AliceProvider());
+        $generator->seed($this->getSeed());
 
         return $generator;
     }
@@ -556,6 +557,17 @@ final class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function createBuiltInCaller(): CallerInterface
     {
         return new SimpleCaller($this->getBuiltInValueResolver());
+    }
+
+    /**
+     * Seed used to generate random data. The seed is passed to the random number generator, so calling the a script
+     * twice with the same seed produces the same results.
+     *
+     * @return int|null
+     */
+    protected function getSeed()
+    {
+        return null;
     }
 
     public function __call(string $method, array $arguments)

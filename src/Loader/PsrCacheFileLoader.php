@@ -17,10 +17,13 @@ use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectSet;
-use Nelmio\Alice\Throwable\LoadingThrowable;
+use Nelmio\Alice\Throwable\CacheKeyGenerationThrowable;
 use Psr\Cache\CacheItemPoolInterface;
 
-final class CacheFileLoader implements FileLoaderInterface
+/**
+ * Leverage a cache layer to speed up loading time.
+ */
+final class PsrCacheFileLoader implements FileLoaderInterface
 {
     use IsAServiceTrait;
 
@@ -50,26 +53,22 @@ final class CacheFileLoader implements FileLoaderInterface
     }
 
     /**
-     * Loads a fixture file.
-     *
-     * @param string $file       File to load.
-     * @param array  $parameters Additional parameters to inject.
-     * @param array  $objects    Additional objects to inject.
-     *
-     * @throws LoadingThrowable
-     *
-     * @return ObjectSet Contains the list of objects and parameters loaded and injected.
+     * @inheritdoc
      */
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
-        $cacheKey = $this->fileCacheKeyGenerator->generateForFile($file, $parameters, $objects);
+        try {
+            $cacheKey = $this->fileCacheKeyGenerator->generateForFile($file, $parameters, $objects);
+        } catch (CacheKeyGenerationThrowable $throwable) {
+            return $this->loader->loadFile($file, $parameters, $objects);
+        }
 
         $cachedSet = $this->cacheItemPool->getItem($cacheKey);
         if ($cachedSet->isHit()) {
             return $cachedSet->get();
         }
 
-        $objectSet = $this->loader->loadFile($file);
+        $objectSet = $this->loader->loadFile($file, $parameters, $objects);
         $cachedSet->set($objectSet);
         $this->cacheItemPool->save($cachedSet);
 

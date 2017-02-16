@@ -14,7 +14,14 @@
     <services>
 
         <service id="nelmio_alice.data_loader"
-                 alias="nelmio_alice.data_loader.simple" />
+                 alias="nelmio_alice.data_loader.psr_cache" />
+
+        <service id="nelmio_alice.data_loader.psr_cache"
+                 class="Nelmio\Alice\Loader\PsrCacheDataLoader">
+            <argument type="service" id="nelmio_alice.data_loader.simple" />
+            <argument type="service" id="nelmio_alice.cache_key_generator.data_sha1" />
+            <argument type="service" id="cache.app" />
+        </service>
 
         <service id="nelmio_alice.data_loader.simple"
                  class="Nelmio\Alice\Loader\SimpleDataLoader">
@@ -23,7 +30,14 @@
         </service>
 
         <service id="nelmio_alice.file_loader"
-                 alias="nelmio_alice.file_loader.simple" />
+                 alias="nelmio_alice.file_loader.psr_cache" />
+
+        <service id="nelmio_alice.file_loader.psr_cache"
+                 class="Nelmio\Alice\Loader\PsrCacheFileLoader">
+            <argument type="service" id="nelmio_alice.file_loader.simple" />
+            <argument type="service" id="nelmio_alice.cache_key_generator.file_sha1" />
+            <argument type="service" id="cache.app" />
+        </service>
 
         <service id="nelmio_alice.file_loader.simple"
                  class="Nelmio\Alice\Loader\SimpleFileLoader">
@@ -31,6 +45,15 @@
             <argument type="service" id="nelmio_alice.data_loader" />
         </service>
 
-    </services>
+        <service id="nelmio_alice.cache_key_generator.data_sha1"
+                 class="Nelmio\Alice\Loader\CacheKeyGenerator\Sha1DataCacheKeyGenerator">
+            <argument type="string"/>%nelmio_alice.seed%</service>
+        </service>
+
+        <service id="nelmio_alice.cache_key_generator.file_sha1"
+                 class="Nelmio\Alice\Loader\CacheKeyGenerator\Sha1FileCacheKeyGenerator">
+            <argument type="service"/>nelmio_alice.file_locator</service>
+            <argument type="string"/>%nelmio_alice.seed%</service>
+        </service>
 
 </container>
