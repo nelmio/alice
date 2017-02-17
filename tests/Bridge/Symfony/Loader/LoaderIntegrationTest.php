@@ -64,4 +64,26 @@ class LoaderIntegrationTest extends \Nelmio\Alice\Loader\LoaderIntegrationTest
 
         parent::tearDownAfterClass();
     }
+
+    public function testDataCacheLoader()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy' => [
+                    'foo' => 'bar',
+                ],
+                'another_dummy' => [
+                    'foo' => '@dummy->foo'
+                ],
+            ],
+        ];
+
+        $kernel = KernelFactory::createKernel();
+        $kernel->boot();
+
+        $container = $kernel->getContainer();
+        $cacheCollector = $container->get('data_collector.cache');
+
+        $x = '';
+    }
 }
