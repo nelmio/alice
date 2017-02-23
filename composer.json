@@ -22,7 +22,7 @@
         "php": "^7.0",
         "fzaninotto/faker": "^1.0",
         "myclabs/deep-copy": "^1.5.2",
-        "symfony/property-access": "^2.2||^3.0",
+        "symfony/property-access": "^2.3||^3.0",
         "symfony/yaml": "^2.0||^3.0"
     },
     "require-dev": {
