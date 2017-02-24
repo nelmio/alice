@@ -30,7 +30,6 @@ matrix:
 
 before_install:
   - set -eo pipefail
-  - curl -O -L https://github.com/oradwell/covers-validator/releases/download/v0.5.0/covers-validator.phar
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv config-rm xdebug.ini || true
   - |
@@ -54,7 +53,7 @@ install:
         composer bin symfony require --no-update symfony/symfony "symfony/symfony:${SYMFONY_VERSION}"
     fi
   - composer bin all update $COMPOSER_FLAGS
-  - php ./covers-validator.phar -c $PHPUNIT_CONFIG
+  - vendor-bin/covers-validator/bin/covers-validator -c $PHPUNIT_CONFIG
 
 script: $PHPUNIT_BIN -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS
 
