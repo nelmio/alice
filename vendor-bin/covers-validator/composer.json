@@ -1,0 +1,10 @@
+{
+    "require-dev": {
+        "symfony/console": "^2.7",
+        "ockcyp/covers-validator": "^0.5"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "sort-packages": true
+    }
+}

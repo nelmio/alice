@@ -19,6 +19,8 @@ matrix:
     - php: '7.0'
       env: COVERAGE='true'
     - php: '7.0'
+      env: COMPOSER_FLAGS='--prefer-lowest'
+    - php: '7.0'
       env: SYMFONY_VERSION='~3.2.0'
     - php: '7.0'
       env: SYMFONY_VERSION='~3.3.0@dev'
@@ -45,13 +47,13 @@ before_install:
     fi
 
 install:
-  - composer install --prefer-dist $COMPOSER_FLAGS
+  - composer update --prefer-dist $COMPOSER_FLAGS
   - |
     if [ -n "$SYMFONY_VERSION" ]; then
         composer bin symfony require --no-update symfony/symfony "symfony/symfony:${SYMFONY_VERSION}"
     fi
-  - composer bin all install
-  - bin/covers-validator -c $PHPUNIT_CONFIG
+  - composer bin all update $COMPOSER_FLAGS
+  - vendor-bin/covers-validator/bin/covers-validator -c $PHPUNIT_CONFIG
 
 script: $PHPUNIT_BIN -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS
 
