@@ -43,7 +43,7 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->parser = (new NativeLoader())->getBuiltInExpressionLanguageParser();
+        $this->parser = (new NativeLoader())->getExpressionLanguageParser();
     }
 
     /**
