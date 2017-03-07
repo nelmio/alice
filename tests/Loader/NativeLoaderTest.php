@@ -41,8 +41,8 @@ class NativeLoaderTest extends \PHPUnit_Framework_TestCase
     public function testAlwaysReturnsTheSameService()
     {
         $loader = new NativeLoader();
-        $fileLoader1 = $loader->getBuiltInFileLoader();
-        $fileLoader2 = $loader->getBuiltInFileLoader();
+        $fileLoader1 = $loader->getFileLoader();
+        $fileLoader2 = $loader->getFileLoader();
 
         $this->assertSame($fileLoader1, $fileLoader2);
     }
