@@ -88,6 +88,9 @@ class Doctrine implements PersisterInterface
                 if (isset($metadata->isEmbeddedClass) && $metadata->isEmbeddedClass) {
                     continue;
                 }
+                if (isset($metadata->isEmbeddedDocument) && $metadata->isEmbeddedDocument) {
+                    continue;
+                }
 
                 $this->persistableClasses[] = $metadata->getName();
             }
