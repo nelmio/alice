@@ -17,16 +17,16 @@ matrix:
   fast_finish: true
   include:
     - php: '7.0'
-      env: COVERAGE='true'
-    - php: '7.0'
       env: COMPOSER_FLAGS='--prefer-lowest'
-    - php: '7.0'
+    - php: '7.1'
+      env: COVERAGE='true'
+    - php: '7.1'
       env: SYMFONY_VERSION='~3.2.0'
-    - php: '7.0'
+    - php: '7.1'
       env: SYMFONY_VERSION='~3.3.0@dev'
   allow_failures:
     - php: nightly
-    - env: SYMFONY_VERSION='^3.3.0@dev'
+    - env: SYMFONY_VERSION='~3.3.0@dev'
 
 before_install:
   - set -eo pipefail
@@ -44,6 +44,10 @@ before_install:
     if [ -n "$COVERAGE" ]; then
         PHPUNIT_BIN="phpdbg -qrr $PHPUNIT_BIN"
         PHPUNIT_FLAGS="$PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration"
+    fi
+  - |
+    if [ "TRAVIS_PHP_VERSION" == "nightly" ]; then
+        COMPOSER_FLAGS="$COMPOSER_FLAGS --ignore-platform-reqs"
     fi
 
 install:
