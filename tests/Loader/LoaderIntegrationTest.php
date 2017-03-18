@@ -2832,5 +2832,23 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        yield '[function] call nested PHP native function' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<json_encode([])>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => '[]',
+                    ]),
+                ],
+            ],
+        ];
     }
 }
