@@ -33,7 +33,10 @@ final class NoCallerMethodCallInstantiator extends AbstractChainableInstantiator
      */
     protected function createInstance(FixtureInterface $fixture)
     {
-        list($class, $arguments) = [$fixture->getClassName(), $fixture->getSpecs()->getConstructor()->getArguments()];
+        list($class, $arguments) = [
+            $fixture->getClassName(),
+            array_values($fixture->getSpecs()->getConstructor()->getArguments())
+        ];
 
         return new $class(...$arguments);
     }

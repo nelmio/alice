@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
@@ -82,9 +82,9 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     }
 
     /**
-     * @param FixtureInterface   $fixture
+     * @param FixtureInterface $fixture
      * @param ResolvedFixtureSet $set
-     * @param GenerationContext  $context
+     * @param GenerationContext $context
      *
      * @throws UnresolvableValueDuringGenerationException
      *
@@ -126,11 +126,11 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     }
 
     /**
-     * @param array                  $arguments
+     * @param array $arguments
      * @param ValueResolverInterface $resolver
-     * @param FixtureInterface       $fixture
-     * @param ResolvedFixtureSet     $fixtureSet
-     * @param GenerationContext      $context
+     * @param FixtureInterface $fixture
+     * @param ResolvedFixtureSet $fixtureSet
+     * @param GenerationContext $context
      *
      * @throws UnresolvableValueDuringGenerationException
      *
@@ -145,16 +145,28 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         GenerationContext $context
     ): array
     {
+        $scope = $fixtureSet->getParameters()->toArray();
+
+        $argumentPosition = 1;
         foreach ($arguments as $index => $argument) {
             if ($argument instanceof ValueInterface) {
                 try {
-                    $result = $resolver->resolve($argument, $fixture, $fixtureSet, [], $context);
+                    $result = $resolver->resolve($argument, $fixture, $fixtureSet, $scope, $context);
                 } catch (ResolutionThrowable $throwable) {
                     throw UnresolvableValueDuringGenerationExceptionFactory::createFromResolutionThrowable($throwable);
                 }
 
-                $fixtureSet = $result->getSet();
-                $arguments[$index] = $result->getValue();
+                list($fixtureSet, $value) = [$result->getSet(), $result->getValue()];
+
+                $arguments[$index] = $value;
+
+                if (is_int($index)) {
+                    $scope[$argumentPosition] = $value;
+                } else {
+                    $scope[$index] = $value;
+                }
+
+                $argumentPosition++;
             }
         }
 
