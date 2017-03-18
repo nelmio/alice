@@ -45,6 +45,10 @@ before_install:
         PHPUNIT_BIN="phpdbg -qrr $PHPUNIT_BIN"
         PHPUNIT_FLAGS="$PHPUNIT_FLAGS --testdox --coverage-text --exclude-group=integration"
     fi
+  - |
+    if [ "TRAVIS_PHP_VERSION" == "nightly" ]; then
+        COMPOSER_FLAGS="$COMPOSER_FLAGS --ignore-platform-reqs"
+    fi
 
 install:
   - composer update --prefer-dist $COMPOSER_FLAGS
