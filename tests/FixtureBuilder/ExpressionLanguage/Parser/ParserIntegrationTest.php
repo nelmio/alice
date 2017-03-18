@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
+use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
@@ -426,6 +427,51 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
                     new VariableValue('arg'),
                 ]
             ),
+        ];
+        yield '[Function] nested functions with arguments' => [
+            '<f(<g($baz)>, $arg, " ",<h($foo)>)>',
+            new FunctionCallValue(
+                'f',
+                [
+                    new FunctionCallValue(
+                        'g',
+                        [
+                            new VariableValue('baz'),
+                        ]
+                    ),
+                    new VariableValue('arg'),
+                    ' ',
+                    new FunctionCallValue(
+                        'h',
+                        [
+                            new VariableValue('foo'),
+                        ]
+                    )
+                ]
+            ),
+        ];
+        yield '[Function] nested functions with arguments' => [
+            '<f(<g(\'b\', \'e\')>, \'d\')>',
+            new ListValue([
+                new FunctionCallValue(
+                    'strtolower',
+                    [
+                        new FunctionCallValue(
+                            'implode',
+                            [
+                                ' ',
+                                new ArrayValue([
+                                    'HELLO',
+                                    'WORLD',
+                                ]),
+                                '\<foo()>',
+                            ]
+                        ),
+                        new VariableValue('arg'),
+                    ]
+                ),
+                ' \<bar()>',
+            ]),
         ];
         yield '[Function] nested functions with multiple arguments' => [
             '<f(<g($baz, $faz)>, $arg)>',
