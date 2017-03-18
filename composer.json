@@ -21,11 +21,11 @@
     "require": {
         "php": "^5.6||^7.0",
         "fzaninotto/faker": "^1.5",
-        "symfony/yaml": "^2.0||^3.0"
+        "symfony/yaml": "^2.0||^3.0",
+        "phpunit/phpunit": "^5.6"
     },
     "require-dev": {
         "doctrine/common": "^2.3",
-        "phpunit/phpunit": "^5.0",
         "symfony/phpunit-bridge": "^3.0",
         "symfony/property-access": "^2.2||^3.0"
     },
