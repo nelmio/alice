@@ -14,26 +14,35 @@ matrix:
   fast_finish: true
   include:
     - php: '5.6'
-      env: gSYMFONY_VERSION='~2.3.0'
-    - php: '7.0'
+      env:
+        - SYMFONY_VERSION='~2.7.0'
+        - COMPOSER_FLAGS='--prefer-lowest'
+    - php: '5.6'
       env: SYMFONY_VERSION='~2.7.0'
     - php: '7.0'
+      env:
+        - SYMFONY_VERSION='~2.7.0'
+        - COMPOSER_FLAGS='--prefer-lowest'
+    - php: '7.1'
+      env: SYMFONY_VERSION='~2.7.0'
+    - php: '7.1'
       env: SYMFONY_VERSION='~2.8.0'
-    - php: '7.0'
+    - php: '7.1'
       env: SYMFONY_VERSION='~3.1.0'
-    - php: '7.0'
-      env: SYMFONY_VERSION='~3.2.0@dev'
+    - php: '7.1'
+      env: SYMFONY_VERSION='~3.2.0'
+    - php: '7.1'
+      env: SYMFONY_VERSION='~3.3.0@dev'
   allow_failures:
     - php: nightly
-    - php: '7.1'
-    - env: SYMFONY_VERSION='~3.2.0@dev'
+    - env: SYMFONY_VERSION='~3.3.0@dev'
 
 install:
   - phpenv config-rm xdebug.ini || true
   - if [ "$SYMFONY_VERSION" != "" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}";
     fi
-  - composer install --prefer-dist --no-suggest
+  - composer install --prefer-dist --no-suggest $COMPOSER_FLAGS
 
 script: vendor/bin/phpunit --verbose
 
