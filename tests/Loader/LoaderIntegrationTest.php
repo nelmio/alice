@@ -17,6 +17,7 @@ use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
+use Nelmio\Alice\Entity\DummyWithVariadicConstructorParam;
 use Nelmio\Alice\Entity\Hydrator\CamelCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
 use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
@@ -979,6 +980,24 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [],
             []
         );
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException
+     * @expectedExceptionMessage Could not resolve value during the generation process.
+     */
+    public function testInstancesAreNotInjectedInTheScopeDuringInstantiation()
+    {
+        $this->loader->loadData([
+            \stdClass::class => [
+                'dummy' => [],
+                'another_dummy' => [
+                    '__construct' => [
+                        '<(@dummy)>',
+                    ],
+                ],
+            ],
+        ]);
     }
 
     public function provideFixturesToInstantiate()
@@ -1964,7 +1983,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function() {
+                    'dummy' => (function () {
                         $dummy = new \stdClass();
                         $dummy->itself = $dummy;
 
@@ -1985,7 +2004,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function() {
+                    'dummy' => (function () {
                         $dummy = new \stdClass();
                         $dummy->itself = $dummy;
 
@@ -2007,7 +2026,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function() {
+                    'dummy' => (function () {
                         $dummy = new \stdClass();
                         $dummy->foo = 'bar';
                         $dummy->itself = $dummy;
@@ -2057,7 +2076,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function() {
+                    'dummy' => (function () {
                         $dummy = new \stdClass();
                         $dummy->itself = $dummy;
 
@@ -2079,7 +2098,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function() {
+                    'dummy' => (function () {
                         $dummy = new \stdClass();
                         $dummy->foo = 'bar';
                         $dummy->itself = $dummy;
@@ -2196,6 +2215,30 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                     ]),
                     'another_dummy' => StdClassFactory::create([
                         'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[identity] has access to instances' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar'
+                    ],
+                    'another_dummy' => [
+                        'relatedDummy' => '<(@dummy)>'
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'relatedDummy' => $dummy,
                     ]),
                 ],
             ],
@@ -2458,6 +2501,97 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             null,
+        ];
+
+        yield 'parameters in identity' => [
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<($ping)>',
+                        'bar' => '$foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'pong',
+                        'bar' => 'pong',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'parameters in identity during instantiation' => [
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                DummyWithConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            [
+                                'foo' => '<($ping)>',
+                                'bar' => '$foo',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                'objects' => [
+                    'dummy' => new DummyWithConstructorParam([
+                        'foo' => 'pong',
+                        'bar' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'argument indexes' => [
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                DummyWithVariadicConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'foo' => '<($ping)>',
+                            'bar' => '$foo',
+                            '$bar',
+                            '$3',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                'objects' => [
+                    'dummy' => new DummyWithVariadicConstructorParam(
+                        'pong',
+                        'pong',
+                        'pong',
+                        'pong'
+                    ),
+                ],
+            ],
         ];
 
         yield 'dynamic array with scalar value' => [

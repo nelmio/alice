@@ -67,14 +67,24 @@ class SimpleArgumentsDenormalizerTest extends \PHPUnit_Framework_TestCase
     {
         $arguments = [
             '0 (dummy_flag)' => '<latitude()>',
-            '1 (dummy_flag)' => '<longitude()>',
-            '2 (dummy_flag)' => 'dudu',
+            'foo (dummy_flag)' => '<longitude()>',
+            'bar (dummy_flag)' => 'dudu',
             '3 (dummy_flag)' => 1000,
+            500,
         ];
         $fixture = new FakeFixture();
 
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
-        $flagParserProphecy->parse(Argument::any())->will(function ($args) { return new FlagBag($args[0]); });
+        $flagParserProphecy
+            ->parse(Argument::any())
+            ->will(
+                function ($args) {
+                    preg_match('/(?<val>.+?)\s\(.+\)/', $args[0], $matches);
+
+                    return new FlagBag($matches['val']);
+                }
+            )
+        ;
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -88,17 +98,15 @@ class SimpleArgumentsDenormalizerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                '<latitude()>',
-                '<longitude()>',
-                'dudu',
-                1000,
+                0 => '<latitude()>',
+                'foo' => '<longitude()>',
+                'bar' => 'dudu',
+                3 => 1000,
+                4 => 500,
             ],
             $result
         );
 
-        $valueDenormalizerProphecy->denormalize($fixture, new FlagBag('0 (dummy_flag)'), '<latitude()>')->shouldHaveBeenCalledTimes(1);
-        $valueDenormalizerProphecy->denormalize($fixture, new FlagBag('1 (dummy_flag)'), '<longitude()>')->shouldHaveBeenCalledTimes(1);
-        $valueDenormalizerProphecy->denormalize($fixture, new FlagBag('2 (dummy_flag)'), 'dudu')->shouldHaveBeenCalledTimes(1);
-        $valueDenormalizerProphecy->denormalize($fixture, new FlagBag('3 (dummy_flag)'), 1000)->shouldHaveBeenCalledTimes(1);
+        $valueDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(5);
     }
 }

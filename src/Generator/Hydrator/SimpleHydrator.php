@@ -70,9 +70,9 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
         $fixture = $fixtureSet->getFixtures()->get($object->getId());
         $properties = $fixture->getSpecs()->getProperties();
 
-        $scope = [
-            '_instances' => $fixtureSet->getObjects()->toArray(),
-        ];
+        $scope = $fixtureSet->getParameters()->toArray();
+        $scope['_instances'] = $fixtureSet->getObjects()->toArray();
+
         foreach ($properties as $property) {
             /** @var Property $property */
             $propertyValue = $property->getValue();

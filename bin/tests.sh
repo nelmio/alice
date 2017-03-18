@@ -9,8 +9,9 @@
 # file that was distributed with this source code.
 #
 
-export INFO_COLOR="\e[34m"
-export NO_COLOR="\e[0m"
+INFO_COLOR="\e[34m"
+NO_COLOR="\e[0m"
+PHPUNIT="bin/phpunit"
 
 log() {
     local message=$1;
@@ -20,9 +21,10 @@ log() {
 set -e
 
 log "Core library"
-vendor/bin/phpunit -c phpunit.xml.dist
+$PHPUNIT -c phpunit.xml.dist
 
 log "Symfony bridge"
 rm -rf fixtures/Bridge/Symfony/Application/cache/*
+PHPUNIT=vendor-bin/symfony/bin/phpunit
 
-vendor-bin/symfony/bin/phpunit -c phpunit_symfony.xml.dist
+$PHPUNIT -c phpunit_symfony.xml.dist

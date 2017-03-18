@@ -45,7 +45,13 @@ final class SimpleArgumentsDenormalizer implements ArgumentsDenormalizerInterfac
         $arguments = [];
         foreach ($unparsedArguments as $unparsedIndex => $argument) {
             $argumentFlags = (is_string($unparsedIndex)) ? $parser->parse($unparsedIndex) : null;
-            $arguments[] = $this->valueDenormalizer->denormalize($scope, $argumentFlags, $argument);
+            $denormalizedArgument = $this->valueDenormalizer->denormalize($scope, $argumentFlags, $argument);
+
+            if (null === $argumentFlags) {
+                $arguments[] = $denormalizedArgument;
+            } else {
+                $arguments[$argumentFlags->getKey()] = $denormalizedArgument;
+            }
         }
 
         return $arguments;

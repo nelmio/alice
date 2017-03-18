@@ -53,7 +53,7 @@ final class SubPatternsLexer implements LexerInterface
         '/^(@[^\ @\<]+\{.*\})/' => self::REFERENCE_LEXER,   // Range or list
         '/^(@[^\ @\{\<]+)/' => self::REFERENCE_LEXER,
         '/^(@)<\S+\(.*\)>/' => self::REFERENCE_LEXER,
-        '/^(\$[\p{L}_]+)/' => TokenType::VARIABLE_TYPE,
+        '/^(\$[\p{L}_\d]+)/' => TokenType::VARIABLE_TYPE,
         '/^([^\\\<>\[\d\%\$@\]]+)/' => TokenType::STRING_TYPE,
         '/^([^\\\<>\[\%\$@\]]+)/' => TokenType::STRING_TYPE,
     ];

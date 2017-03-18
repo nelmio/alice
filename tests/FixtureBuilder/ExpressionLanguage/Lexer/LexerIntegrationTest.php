@@ -1081,6 +1081,12 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
                 new Token('$username', new TokenType(TokenType::VARIABLE_TYPE)),
             ],
         ];
+        yield '[Variable] numerical' => [
+            '$0',
+            [
+                new Token('$0', new TokenType(TokenType::VARIABLE_TYPE)),
+            ],
+        ];
         yield '[Variable] left' => [
             'foo $username',
             [

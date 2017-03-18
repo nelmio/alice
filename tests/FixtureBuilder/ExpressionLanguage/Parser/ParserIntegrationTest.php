@@ -1170,6 +1170,10 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             '$username',
             new VariableValue('username'),
         ];
+        yield '[Variable] numerical' => [
+            '$0',
+            new VariableValue('0'),
+        ];
         yield '[Variable] left' => [
             'foo $username',
             new ListValue([
