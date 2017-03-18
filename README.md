@@ -7,7 +7,6 @@ or testing your project. It gives you a few essential tools to make it
 very easy to generate complex data with constraints in a readable and easy
 to edit way, so that everyone on your team can tweak the fixtures if needed.
 
-*Note*: [v3 is on its way](https://github.com/nelmio/alice/issues/265), get involved!
 
 ## Table of Contents
 
