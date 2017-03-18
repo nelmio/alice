@@ -31,6 +31,7 @@ Nelmio\Entity\Group:
 This works fine, but it is not very powerful and is completely static. You
 still have to do most of the work. Let's see how to make this more interesting.
 
+
 ### PHP
 
 You can also specify fixtures in PHP by returing an array where each key with the following structure:
@@ -53,6 +54,7 @@ return [
 ```
 
 **Warning**: the usage of the `$fake` closure has been deprecated since in v2.2.0 and will be removed in v3.0.0.
+
 
 ## Fixture Ranges
 
@@ -207,5 +209,7 @@ Nelmio\Entity\User:
         username (unique): '<username()>'
 ```
 
-Next chapter: [Handling Relations](relations-handling.md)<br />
-Previous chapter: [Getting Started](getting-started.md)
+<br />
+<hr />
+
+« [Getting Started](getting-started.md) • [Handling Relations](relations-handling.md) »
