@@ -17,12 +17,12 @@ matrix:
   fast_finish: true
   include:
     - php: '7.0'
-      env: COVERAGE='true'
-    - php: '7.0'
       env: COMPOSER_FLAGS='--prefer-lowest'
-    - php: '7.0'
+    - php: '7.1'
+      env: COVERAGE='true'
+    - php: '7.1'
       env: SYMFONY_VERSION='~3.2.0'
-    - php: '7.0'
+    - php: '7.1'
       env: SYMFONY_VERSION='~3.3.0@dev'
   allow_failures:
     - php: nightly
