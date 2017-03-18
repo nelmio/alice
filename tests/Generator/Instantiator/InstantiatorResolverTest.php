@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\VariableValue;
+use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -78,7 +79,11 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
             )
         );
         $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
-        $set = ResolvedFixtureSetFactory::create();
+        $set = ResolvedFixtureSetFactory::create(
+            new ParameterBag([
+                'ping' => 'pong',
+            ])
+        );
         $context = new GenerationContext();
         $context->markIsResolvingFixture('foo');
 
@@ -95,7 +100,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
             $set->getObjects()
         );
         $resolverProphecy
-            ->resolve($firstArg, $fixture, $set, [], $context)
+            ->resolve($firstArg, $fixture, $set, ['ping' => 'pong'], $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     'resolvedFirstArg',
@@ -109,7 +114,7 @@ class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
             $setAfterFirstArgResolution->getObjects()
         );
         $resolverProphecy
-            ->resolve($secondArg, $fixture, $setAfterFirstArgResolution, [], $context)
+            ->resolve($secondArg, $fixture, $setAfterFirstArgResolution, ['ping' => 'pong', 1 => 'resolvedFirstArg'], $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     'resolvedSecondArg',
