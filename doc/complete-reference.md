@@ -212,6 +212,4 @@ Nelmio\Entity\User:
 
 <hr />
 
-<p align="center">
 « [Handling Relations](relations-handling.md) • [Getting Started](getting-started.md) »
-<p>

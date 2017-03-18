@@ -67,6 +67,4 @@ Using the `Loader` class directly also allows you to add more customization to h
 
 <hr />
 
-<div style="text-align: center">
 « [Complete Reference](complete-reference.md) • [Installation](../README.md#installation) »
-</div>

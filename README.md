@@ -1,5 +1,8 @@
-Alice - Expressive fixtures generator [![Build Status](https://travis-ci.org/nelmio/alice.svg?branch=2.x)](https://travis-ci.org/nelmio/alice)
-=====================================
+<p align="center">
+    <img src="doc/assets/nelmio.png" />
+</p>
+
+<h1 align=center>Alice - Expressive fixtures generator</h1>
 
 [![Package version](http://img.shields.io/packagist/vpre/nelmio/alice.svg?style=flat-square)](https://packagist.org/packages/nelmio/alice)
 [![Build Status](https://img.shields.io/travis/nelmio/alice.svg?branch=2.x&style=flat-square)](https://travis-ci.org/nelmio/alice?branch=2.x)

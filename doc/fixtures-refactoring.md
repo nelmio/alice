@@ -152,6 +152,4 @@ for more information.
 
 <hr />
 
-<div style="text-align: center">
 « [Customize Data Generation](customizing-data-generation.md) • [Handling Relations](relations-handling.md) »
-</div>
