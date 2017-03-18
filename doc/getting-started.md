@@ -68,4 +68,4 @@ Using the `Loader` class directly also allows you to add more customization to h
 <br />
 <hr />
 
-« [Complete Reference](complete-reference.md) • [Installation](../README.md#installation) »
+« [Installation](../README.md#installation) • [Complete Reference](complete-reference.md) »

@@ -67,4 +67,4 @@ $objects = $loader->loadFiles(__DIR__.'/fixtures.yml');
 <br />
 <hr />
 
-« [Customize Data Generation](customizing-data-generation.md) • [Table of Contents](../README.md#table-of-contents) »
+« [Table of Contents](../README.md#table-of-contents) • [Customize Data Generation](customizing-data-generation.md) »

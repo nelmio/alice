@@ -239,4 +239,4 @@ calling [`Nelmio\Alice\Fixtures::load()`](../src/Nelmio/Alice/Fixtures.php#L55).
 <br />
 <hr />
 
-« [Event handling with Processors](processors.md) • [Keep Your Fixtures Dry](fixtures-refactoring.md) »
+« [Keep Your Fixtures Dry](fixtures-refactoring.md) • [Event handling with Processors](processors.md) »

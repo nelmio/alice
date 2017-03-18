@@ -153,4 +153,4 @@ for more information.
 <br />
 <hr />
 
-« [Customize Data Generation](customizing-data-generation.md) • [Handling Relations](relations-handling.md) »
+« [Handling Relations](relations-handling.md) • [Customize Data Generation](customizing-data-generation.md) »
