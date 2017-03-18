@@ -2001,6 +2001,24 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         //$this->assertEquals('Bob', $bob->username);
     }
 
+    /**
+     * @issue https://github.com/nelmio/alice/issues/664
+     */
+    public function testParametersShouldBeResolvedOnlyOnce()
+    {
+        $loader = $this->createLoader();
+
+        $objects = $loader->load(__DIR__.'/../support/fixtures/parameters_664.yml');
+
+        /** @var User $dummy */
+        $dummy = $objects['dummy'];
+        /** @var User $anotherDummy */
+        $anotherDummy = $objects['another_dummy'];
+
+        // This behaviour is not the desired one but is not changed to avoid BC breaks
+        $this->assertNotEquals($anotherDummy->username, $dummy->username);
+    }
+
     public function testBackslashes()
     {
         $loader = new Loader();
