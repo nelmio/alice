@@ -88,7 +88,6 @@ documentation for 2.x, head [here](https://github.com/nelmio/alice/tree/2.x)**.
         1. [Testing](CONTRIBUTING.md#testing)
         1. [Profiling](CONTRIBUTING.md#profiling)
 1. [Upgrade](#upgrade)
-1. [License](#license)
 
 Other references:
   - [Tutorial: Using Alice in Symfony](https://knpuniversity.com/screencast/symfony-doctrine/fixtures-alice)
