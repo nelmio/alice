@@ -236,6 +236,7 @@ Then, inject your provider to the [`Nelmio\Alice\Fixtures\Loader`](../src/Nelmio
 calling [`Nelmio\Alice\Fixtures::load()`](../src/Nelmio/Alice/Fixtures.php#L55).
 
 
+<br />
 <hr />
 
 « [Event handling with Processors](processors.md) • [Keep Your Fixtures Dry](fixtures-refactoring.md) »

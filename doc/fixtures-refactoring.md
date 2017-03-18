@@ -150,6 +150,7 @@ information.
 for more information.
 
 
+<br />
 <hr />
 
 « [Customize Data Generation](customizing-data-generation.md) • [Handling Relations](relations-handling.md) »

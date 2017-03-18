@@ -65,6 +65,7 @@ Using the `Loader` class directly also allows you to add more customization to h
 > **Note**: To load plain PHP files, the files must return an array containing the same structure as the yaml files have.
 
 
+<br />
 <hr />
 
 « [Complete Reference](complete-reference.md) • [Installation](../README.md#installation) »

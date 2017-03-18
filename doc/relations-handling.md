@@ -179,6 +179,7 @@ Nelmio\Entity\Group:
 ```
 
 
+<br />
 <hr />
 
 « [Keep Your Fixtures Dry](fixtures-refactoring.md) • [Complete Reference](complete-reference.md) »

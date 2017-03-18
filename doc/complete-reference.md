@@ -209,7 +209,7 @@ Nelmio\Entity\User:
         username (unique): '<username()>'
 ```
 
-
+<br />
 <hr />
 
 « [Handling Relations](relations-handling.md) • [Getting Started](getting-started.md) »
