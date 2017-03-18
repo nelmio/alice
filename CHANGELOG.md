@@ -1,3 +1,30 @@
+### 2.3.0 (2017-03-18)
+
+### Features
+
+* Add support for Doctrine Inflector (#548)
+* Add support of embedded couchdb document (couchdb-odm) (#683)
+* Add range named builder (#693)
+
+### Deprecations
+
+* Deprecate the usage of the local flag (#557)
+* Deprecate the usage of date strings (#559)
+* Deprecate optional values with floats (#564)
+* Deprecate references in quotes (#566)
+* Deprecate setting private or protected props directly (#607)
+* Deprecate usage of non PSR-1 compliant setters (#608)
+* Deprecate usage of inaccessible constructors (#609)
+* Deprecate calling methods (#610)
+* Deprecate array hash uniqueness (#611)
+
+### Bugfixes
+
+* Remove usage of the deprecated method getMock (#558)
+* Document the change of behaviour of the identity function (#560)
+* Avoid using the GLOB_BRACE flag when it is not supported (#573)
+
+
 ### 2.2.2 (2016-07-15)
 
 #### Bugfixes
