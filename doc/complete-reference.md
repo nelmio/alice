@@ -92,6 +92,31 @@ Nelmio\Entity\User:
         favoriteNumber: 42
 ```
 
+You can also refer to other fixtures as a range. For example the following example:
+
+
+```yaml
+Nelmio\Entity\UserDetail:
+    # Reference by concrete id
+    userdetail{@user1}:
+        user: <current()>
+        username: <username()>
+        fullname: <firstname()> <lastname()>
+        birthDate: 1980-10-10
+        email: <current()>@example.org
+        favoriteNumber: 42
+    # Reference by a list of fixtures    
+    userdetail{@user*}:
+        user: <current()>
+        username: <username()>
+        fullname: <firstname()> <lastname()>
+        birthDate: 1980-10-10
+        email: <current()>@example.org
+        favoriteNumber: 42
+```
+
+The current formatter is set to the referenced fixture.
+
 To go further we can just randomize data.
 
 
