@@ -149,5 +149,9 @@ information.
 - Parameters are evaluated each time (behaviour changed in 3.x). See [#664](https://github.com/nelmio/alice/issues/664)
 for more information.
 
-Next chapter: [Customize Data Generation](customizing-data-generation.md)<br />
-Previous chapter: [Handling Relations](relations-handling.md)
+
+<hr />
+
+<div style="text-align: center">
+« [Customize Data Generation](customizing-data-generation.md) • [Handling Relations](relations-handling.md) »
+</div>

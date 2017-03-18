@@ -47,6 +47,7 @@ array of `Fixtures::load`.
 Additionally, you can mix locales by adding a locale prefix to the faker key,
 i.e. `<fr_FR:phoneNumber()>` or `<de_DE:firstName()>`.
 
+
 ### Default Providers
 
 Alice includes a default identity provider, `<identity()>`, that
@@ -92,12 +93,14 @@ Nelmio\Entity\Location:
 Sometimes you need more than what Faker and Alice provide you natively, and
 there are three ways to solve the problem:
 
+
 #### Embed PHP code in the yaml file
 
 It is included by the loader so you can add arbitrary PHP as long as it outputs
 valid yaml. That said, this is like PHP templates, it quickly ends up very messy
 if you do too much logic, so it's best to extract logic out of the templates.
   
+
 #### Public method in the Loader
 
 All the public methods are available as `<method()>` in the Alice fixture files.
@@ -136,7 +139,8 @@ final class LoadFixtureData implements FixtureInterface
 ```
 
 That way you can now use `name: '<groupName()>'` to generate specific group names.
-   
+
+
 #### Add a custom [Faker Provider](https://github.com/fzaninotto/Faker/tree/master/src/Faker/Provider) class
 
 ```php
@@ -231,5 +235,9 @@ You will need to inject a Faker generator instance, which you can get thanks to
 Then, inject your provider to the [`Nelmio\Alice\Fixtures\Loader`](../src/Nelmio/Alice/Fixtures/Loader.php) or when
 calling [`Nelmio\Alice\Fixtures::load()`](../src/Nelmio/Alice/Fixtures.php#L55).
 
-Next chapter: [Event handling with Processors](processors.md)<br />
-Previous chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)
+
+<hr />
+
+<div style="text-align: center">
+« [Event handling with Processors](processors.md) • [Keep Your Fixtures Dry](fixtures-refactoring.md) »
+</div>

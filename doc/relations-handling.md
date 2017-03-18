@@ -159,9 +159,11 @@ Nelmio\Entity\Group:
 > **Note**: You do not need to define multi-references inside an array, since
 > they are automatically translated to an array of objects.
 
+
 ## Self reference
 
 The `@self` reference is assigned to the current fixture instance.
+
 
 ## Passing references to providers
 
@@ -176,5 +178,9 @@ Nelmio\Entity\Group:
         owner: '<numberBetween(@group1->owner, 200)>'
 ```
 
-Next chapter: [Keep Your Fixtures Dry](fixtures-refactoring.md)<br />
-Previous chapter: [Complete Reference](complete-reference.md)
+
+<hr />
+
+<div style="text-align: center">
+« [Keep Your Fixtures Dry](fixtures-refactoring.md) • [Complete Reference](complete-reference.md) »
+</div>

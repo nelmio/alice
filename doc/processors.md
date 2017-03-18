@@ -63,5 +63,9 @@ $loader->addProcessor($processor);
 $objects = $loader->loadFiles(__DIR__.'/fixtures.yml');
 ```
 
-Previous chapter: [Customize Data Generation](customizing-data-generation.md)<br />
-Go back to [Table of Contents](../README.md#table-of-contents)
+
+<hr />
+
+<div style="text-align: center">
+« [Customize Data Generation](customizing-data-generation.md) • [Table of Contents](../README.md#table-of-contents) »
+</div>

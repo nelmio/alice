@@ -19,6 +19,7 @@ $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.php', $objectManager)
 Note: You can also pass an array of filenames if you have multiple files with
 references spanning more than one.
 
+
 ### Options
 
 `Fixtures::load` accepts a third `$options` argument that is an array
@@ -32,6 +33,7 @@ with the following keys:
   information during the loading of the fixtures
 - persist_once: only persist objects once if multiple files are passed, by default
   objects are persisted after each file
+
 
 ## Detailed Usage
 
@@ -62,5 +64,9 @@ Using the `Loader` class directly also allows you to add more customization to h
 
 > **Note**: To load plain PHP files, the files must return an array containing the same structure as the yaml files have.
 
-Next chapter: [Complete Reference](complete-reference.md)<br />
-Previous chapter: [Installation](../README.md#installation)
+
+<hr />
+
+<div style="text-align: center">
+« [Complete Reference](complete-reference.md) • [Installation](../README.md#installation) »
+</div>
