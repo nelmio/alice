@@ -5,6 +5,8 @@
     1. [PHP](#php)
 1. [Fixture Ranges](#fixture-ranges)
 1. [Calling Methods](#calling-methods)
+    1. [Method arguments with flags](#method-arguments-with-flags)
+    1. [Method arguments with parameters](#method-arguments-with-parameters)
 1. [Specifying Constructor Arguments](#specifying-constructor-arguments)
 1. [Using a factory](#using-a-factory)
 1. [Optional Data](#optional-data)
@@ -126,6 +128,59 @@ Nelmio\Entity\User:
         username: '<username()>'
         __calls:
             - setLocation: [40.689269, -74.044737]
+```
+
+### Method arguments with flags
+
+You can specify a flag on a specific argument like so:
+
+```yaml
+Nelmio\Entity\User:
+    user{1..10}:
+        username: '<username()>'
+        __calls:
+            - setLocation:
+                0 (unique): '<latitude()>'
+                1 (unique): '<longitude()>'
+```
+
+### Method arguments with parameters
+
+```yaml
+parameters:
+    foo: bar
+
+Nelmio\Entity\Dummy:
+    dummy{1..10}:
+        __calls:
+            - setLocation:
+                arg0: '<{foo}>'
+                arg1: '$arg0' # will be resolved info 'bar'
+                3: 500  # the numerical key here is just a random number as in YAML you cannot mix keys with array values
+                4: '$3' # `3` here refers to the *third* argument, i.e. 500
+```
+
+**Note**: as you can see, arguments can be used as parameters as you go. They however will only in the scope of that 
+function, i.e. in the above the parameter `$arg0` is usable only within the `__construct` declaration above.
+
+The case above can be a bit confusing in YAML, in PHP it would be the following:
+
+```php
+[
+    'parameters' => 'bar',
+    Nelmio\Entity\Dummy::class => [
+        'dummy{1..10}' => [
+            '__calls' => [
+                [
+                    'arg0' => '<{foo}>',
+                    'arg1' => '$arg0',
+                    500,
+                    '$3',
+                ],
+            ],
+        ],
+    ],
+],
 ```
 
 

@@ -4,6 +4,11 @@
 1. [Including files](#including-files)
 1. [Variables](#variables)
 1. [Parameters](#parameters)
+    1. [Static parameters](#static-parameters)
+    1. [Dynamic parameters](#dynamic-parameters)
+    1. [Composite parameters](#composite-parameters)
+    1. [Usage with functions (constructor included)](#usage-with-functions-constructor-included)
+    1. [Inject external parameters](#inject-external-parameters)
 
 
 ## Fixture inheritance
@@ -134,21 +139,103 @@ date and the current time, which ensure the data will look real enough.
 
 ## Parameters
 
-When using the Yaml loader, you can also set global parameters that will be
+When using the YAML loader, you can also set global parameters that will be
 inserted everywhere those values are used to help with readability. For example:
+
+### Static parameters
 
 ```yaml
 parameters:
     ebay_domain_name: ebay.us
 
 Nelmio\Entity\Shop:
-    shop1:
+    shop{1..10}:
         domain: '<{ebay_domain_name}>'
+        # or
+        domain: '<($ebay_domain_name)>'
 ```
 
-**TODO**: add doc regarding dynamic parameters cf. #354
+**Note**: parameters are resolved only one time in 3.x, which means if you have the following:
 
-Additionally, you can pass in a list of defined parameters as the second
+```yaml
+parameters:
+    shop_id: '<uniqid()>'
+
+Nelmio\Entity\Shop:
+    shop{1..10}:
+        id: '<{shop_id}>'
+```
+
+Then `shop1`, `shop2`, ... `shop10` will all have the sale value for `id`
+
+
+### Dynamic parameters 
+
+```yaml
+parameters:
+    username_alice: Alice
+    username_bob: Bob
+
+Nelmio\Entity\User:
+    user_{alice, bob}:
+        username: '<{username_<current()>}>' # Will be 'Alice' for 'user_alice' and 'Bob' for 'user_bob'
+```
+
+
+### Composite parameters
+
+```yaml
+parameters:
+    key1: NaN
+    key2: Bat
+    composite: '<{key1}> <{key2>!'
+
+Nelmio\Entity\User:
+    user0:
+        username: '<{composite}>' # 'NaN Bat!'
+```
+
+
+### Usage with functions (constructor included)
+
+```yaml
+parameters:
+    foo: bar
+
+Nelmio\Entity\Dummy:
+    dummy{1..10}:
+        __construct:
+            arg0: '<{foo}>'
+            arg1: '$arg0' # will be resolved info 'bar'
+            3: 500  # the numerical key here is just a random number as in YAML you cannot mix keys with array values
+            4: '$3' # `3` here refers to the *third* argument, i.e. 500
+```
+
+**Note**: as you can see, arguments can be used as parameters as you go. They however will only in the scope of that 
+function, i.e. in the above the parameter `$arg0` is usable only within the `__construct` declaration above.
+
+The case above can be a bit confusing in YAML, in PHP it would be the following:
+
+```php
+[
+    'parameters' => 'bar',
+    Nelmio\Entity\Dummy::class => [
+        'dummy{1..10}' => [
+            '__construct' => [
+                'arg0' => '<{foo}>',
+                'arg1' => '$arg0',
+                500,
+                '$3',
+            ],
+        ],
+    ],
+],
+```
+
+
+### Inject external parameters
+
+You can pass in a list of defined parameters as the second
 argument of `{File,Data}LoaderInterface::load{File,Data}()`.
 
 
