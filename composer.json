@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "^5.6||^7.0",
-        "fzaninotto/faker": "^1.0",
+        "fzaninotto/faker": "^1.5",
         "symfony/yaml": "^2.0||^3.0"
     },
     "require-dev": {
