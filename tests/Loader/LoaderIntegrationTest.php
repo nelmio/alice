@@ -2632,5 +2632,27 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        yield 'usage of percent sign in string (#665)' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'a\%b',
+                        'bar' => '\%c',
+                        'baz' => '100\%',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'a%b',
+                        'bar' => '%c',
+                        'baz' => '100%',
+                    ]),
+                ],
+            ],
+        ];
     }
 }

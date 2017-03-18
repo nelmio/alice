@@ -185,6 +185,29 @@ class LexerIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        // Escaped percent sign
+        yield '[Escaped percent sign]' => [
+            '\%',
+            [
+                new Token('\%', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+        yield '[Escaped percent sign]' => [
+            'a\%b',
+            [
+                new Token('a', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\%', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('b', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Escaped percent sign]' => [
+            '100\%',
+            [
+                new Token('100', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\%', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+            ],
+        ];
+
         // Parameters
         yield '[Parameter] nominal' => [
             '<{dummy_param}>',
