@@ -2812,5 +2812,25 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
+        yield 'usage of an object' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => (function () {
+                            return StdClassFactory::create(['ping' => 'pong']);
+                        })(),
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => StdClassFactory::create(['ping' => 'pong']),
+                    ]),
+                ],
+            ],
+        ];
     }
 }
