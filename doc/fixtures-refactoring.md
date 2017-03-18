@@ -155,7 +155,7 @@ Nelmio\Entity\Shop:
         domain: '<($ebay_domain_name)>'
 ```
 
-**Note**: parameters are resolved only one time in 3.x, which means if you have the following:
+**Note**: parameters are not evaluated in 3.x, meaning that the following:
 
 ```yaml
 parameters:
@@ -166,7 +166,22 @@ Nelmio\Entity\Shop:
         id: '<{shop_id}>'
 ```
 
-Then `shop1`, `shop2`, ... `shop10` will all have the sale value for `id`
+Will give you `'<{shop_id}>'` for the `id` of `shop1`, `shop2`, ... `shop10`. In 2.x, this was doable to some extend, if
+you really need parameters that benefit from that feature in alice 3.x you can use the following workaround:
+
+```yaml
+stdClass
+    parameters:
+        shop_id: '<uniqid()>'
+
+Nelmio\Entity\Shop:
+    shop{1..10}:
+        id: '@parameters->shop_id'
+```
+
+But then all the `shop*` instances will have the same ID, which may not be what you want. Instead you should call
+directly `<uniqid()>` in the example above or user a custom Faker provider if the expression is too complex.
+
 
 
 ### Dynamic parameters 
