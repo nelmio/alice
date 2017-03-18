@@ -157,6 +157,20 @@ class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
             'foo < bar > baz',
         ];
 
+        // Escaped percent sign
+        yield '[Escaped percent sign]' => [
+            '\%',
+            '%',
+        ];
+        yield '[Escaped percent sign]' => [
+            'a\%b',
+            'a%b',
+        ];
+        yield '[Escaped percent sign]' => [
+            '100\%',
+            '100%',
+        ];
+
         // Parameters
         yield '[Parameter] nominal' => [
             '<{dummy_param}>',
