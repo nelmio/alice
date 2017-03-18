@@ -70,10 +70,10 @@ documentation for 2.x, head [this way](https://github.com/nelmio/alice/tree/2.x)
     1. [Custom Instantiation](doc/advanced-guide.md#custom-instantiator)
     1. [Custom Accessor](doc/advanced-guide.md#custom-accessor)
 1. [Third-party libraries](#third-party-libraries)
-  1. [Symfony](#third-party-libraries)
-  1. [Nette](#third-party-libraries)
-  1. [Zend Framework 2](#third-party-libraries)
-  1. [Framework Agnostic](#third-party-libraries)
+  1. [Symfony](#symfony)
+  1. [Nette](#nette)
+  1. [Zend Framework 2](#zend-framework-2)
+  1. [Framework Agnostic](#framework-agnostic)
 1. [Contribute](CONTRIBUTING.md#contribute)
   1. [Differences between 2.x and 3.x](CONTRIBUTING.md#differences-between-2x-and-3x)
   1. [Architecture](CONTRIBUTING.md#architecture)
@@ -157,16 +157,24 @@ For more information, refer to [the documentation](#table-of-contents).
 
 ## Third-party libraries
 
-* Symfony:
-  * [hautelook/AliceBundle](https://github.com/hautelook/AliceBundle)
-  * [h4cc/AliceFixturesBundle](https://github.com/h4cc/AliceFixturesBundle)
-  * [knplabs/rad-fixtures-load](https://github.com/KnpLabs/rad-fixtures-load)
-* Nette
-  * [Zenify/DoctrineFixtures](https://github.com/Zenify/DoctrineFixtures)
-* Zend Framework 2:
-  * [ma-si/aist-alice-fixtures](https://github.com/ma-si/aist-alice-fixtures)
-* Framework Agnostic
-  * [trappar/AliceGenerator](https://github.com/trappar/AliceGenerator)
+### Symfony
+
+- [hautelook/AliceBundle](https://github.com/hautelook/AliceBundle)
+- [h4cc/AliceFixturesBundle](https://github.com/h4cc/AliceFixturesBundle)
+- [knplabs/rad-fixtures-load](https://github.com/KnpLabs/rad-fixtures-load)
+
+
+###  Nette
+
+-  [Zenify/DoctrineFixtures](https://github.com/Zenify/DoctrineFixtures)
+
+### Zend Framework 2:
+
+- [ma-si/aist-alice-fixtures](https://github.com/ma-si/aist-alice-fixtures)
+
+### Framework Agnostic
+
+- [trappar/AliceGenerator](https://github.com/trappar/AliceGenerator)
 
 
 ## Contribute
