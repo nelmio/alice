@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="doc/assets/nelmio.png" />
+    <img src="doc/assets/nelmio.png" width=300 />
 </p>
 
 <h1 align=center>Alice - Expressive fixtures generator</h1>
