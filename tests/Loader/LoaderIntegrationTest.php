@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
@@ -51,8 +51,8 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
  */
 class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
 {
-    const PARSER_FILES_DIR = __DIR__ . '/../../fixtures/Parser/files';
-    const FIXTURES_FILES_DIR = __DIR__ . '/../../fixtures/Integration';
+    const PARSER_FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
+    const FIXTURES_FILES_DIR = __DIR__.'/../../fixtures/Integration';
 
     /**
      * @var FileLoaderInterface|DataLoaderInterface
@@ -88,7 +88,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadUnsupportedFileFormat()
     {
-        $this->loader->loadFile(self::PARSER_FILES_DIR . '/unsupported/plain_file');
+        $this->loader->loadFile(self::PARSER_FILES_DIR.'/unsupported/plain_file');
     }
 
     /**
@@ -97,7 +97,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadPhpFileWhichDoesNotReturnAnything()
     {
-        $this->loader->loadFile(self::PARSER_FILES_DIR . '/php/no_return.php');
+        $this->loader->loadFile(self::PARSER_FILES_DIR.'/php/no_return.php');
     }
 
     public function testLoadEmptyData()
@@ -226,7 +226,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 \stdClass::class => [
                     'another_dummy' => [
                         '__construct' => [
-                            StdClassFactory::class . '::create' => [['injected' => false]],
+                            StdClassFactory::class.'::create' => [['injected' => false]],
                         ],
                     ],
                 ],
@@ -452,7 +452,7 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
                 ]),
             ])
         );
-        $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR . '/template_in_another_file/dummy.yml');
+        $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/template_in_another_file/dummy.yml');
 
         $this->assertEquals($expected, $actual);
     }
@@ -678,14 +678,14 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             $dummy = $set->getObjects()['dummy1'];
             $self->assertCount(2, $dummy->relatedDummies);
             foreach ($dummy->relatedDummies as $relatedDummy) {
-                $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy' . $relatedDummy->name]);
+                $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy'.$relatedDummy->name]);
             }
             $self->assertNotEquals($dummy->relatedDummies[0], $dummy->relatedDummies[1]);
 
             $anotherDummy = $set->getObjects()['dummy2'];
             $self->assertCount(2, $anotherDummy->relatedDummies);
             foreach ($anotherDummy->relatedDummies as $relatedDummy) {
-                $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy' . $relatedDummy->name]);
+                $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy'.$relatedDummy->name]);
             }
             $self->assertNotEquals($anotherDummy->relatedDummies[0], $anotherDummy->relatedDummies[1]);
         };
@@ -2502,7 +2502,6 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
             ],
             null,
         ];
-
 
         yield 'parameters in identity' => [
             [

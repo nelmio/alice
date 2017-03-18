@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
@@ -82,9 +82,9 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     }
 
     /**
-     * @param FixtureInterface $fixture
+     * @param FixtureInterface   $fixture
      * @param ResolvedFixtureSet $set
-     * @param GenerationContext $context
+     * @param GenerationContext  $context
      *
      * @throws UnresolvableValueDuringGenerationException
      *
@@ -126,11 +126,11 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     }
 
     /**
-     * @param array $arguments
+     * @param array                  $arguments
      * @param ValueResolverInterface $resolver
-     * @param FixtureInterface $fixture
-     * @param ResolvedFixtureSet $fixtureSet
-     * @param GenerationContext $context
+     * @param FixtureInterface       $fixture
+     * @param ResolvedFixtureSet     $fixtureSet
+     * @param GenerationContext      $context
      *
      * @throws UnresolvableValueDuringGenerationException
      *
