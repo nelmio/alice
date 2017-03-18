@@ -369,6 +369,9 @@ final class DummyPropertyHydrator implements PropertyHydratorInterface
 ```
 
 
+<br />
+<hr />
+
 « [Customize Data Generation](customizing-data-generation.md) • [Contribute](../CONTRIBUTING.md) »
 
 

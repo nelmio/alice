@@ -3,9 +3,9 @@
 1. [Faker Data](#faker-data)
 1. [Localized Fake Data](#localized-fake-data) **TODO: port that change to v2**
 1. [Default Providers](#default-providers)
-  1. [Identity](#identity)
-  1. [Current](#current)
-  1. [Cast](#cast)
+    1. [Identity](#identity)
+    1. [Current](#current)
+    1. [Cast](#cast)
 1. [Reuse generated data using objects value](#reuse-generated-data-using-objects-value)
 1. [Custom Faker Data Providers](#custom-faker-data-providers)
 
@@ -180,5 +180,8 @@ Then you can add it to the Faker Generator used by Alice by either overridding
 the `NativeLoader::createFakerGenerator()` method or register it as a service
 with the tag `nelmio_alice.faker.provider`.
 
+
+<br />
+<hr />
 
 « [Keep Your Fixtures Dry](fixtures-refactoring.md) • [Table of Contents](../README.md#table-of-contents) »

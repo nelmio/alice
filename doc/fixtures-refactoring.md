@@ -152,4 +152,7 @@ Additionally, you can pass in a list of defined parameters as the second
 argument of `{File,Data}LoaderInterface::load{File,Data}()`.
 
 
+<br />
+<hr />
+
 « [Customize Data Generation](customizing-data-generation.md) • [Handling Relations](relations-handling.md) »

@@ -1,8 +1,8 @@
 # Complete Reference
 
 1. [Creating Fixtures](#creating-fixtures)
-  1. [YAML](#yaml)
-  1. [PHP](#php)
+    1. [YAML](#yaml)
+    1. [PHP](#php)
 1. [Fixture Ranges](#fixture-ranges)
 1. [Calling Methods](#calling-methods)
 1. [Specifying Constructor Arguments](#specifying-constructor-arguments)
@@ -238,5 +238,8 @@ Nelmio\Entity\User:
 
 However the fields `user1#friends` and `user2#friends` will not have any duplicate.
 
+
+<br />
+<hr />
 
 « [Handling Relations](relations-handling.md) • [Getting Started](getting-started.md) »
