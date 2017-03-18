@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
 use Nelmio\Alice\Fixtures\Fixture;
@@ -13,12 +22,12 @@ final class ReferenceRangeName implements MethodInterface
     private $matches = [];
 
     /**
-     * @var \Nelmio\Alice\Instances\Collection
+     * @var Collection
      */
     private $objects;
 
     /**
-     * @param \Nelmio\Alice\Instances\Collection $objects
+     * @param Collection $objects
      */
     public function __construct(Collection $objects)
     {
@@ -26,7 +35,7 @@ final class ReferenceRangeName implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function canBuild($name)
     {
@@ -34,11 +43,11 @@ final class ReferenceRangeName implements MethodInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function build($class, $name, array $spec)
     {
-        // could be 'car1' from engine_{@car1}
+        // Could be 'car1' from engine_{@car1}
         $referenceName = $this->matches[1];
         $referenceAll = '*' === $this->matches[2];
 
@@ -64,10 +73,10 @@ final class ReferenceRangeName implements MethodInterface
     /**
      * @param string $class
      * @param string $name
-     * @param array $spec
+     * @param array  $spec
      * @param string $referenceName
      *
-     * @return array
+     * @return Fixture[]
      */
     private function buildAll($class, $name, array $spec, $referenceName)
     {
