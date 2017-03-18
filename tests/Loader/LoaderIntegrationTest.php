@@ -901,6 +901,30 @@ class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $set);
     }
 
+    public function testParametersShouldBeResolvedOnlyOnce()
+    {
+        $set = $this->loader->loadData(
+            [
+                'parameters' => [
+                    'unique_id' => '<(uniqid())>',
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<{unique_id}>',
+                        'bar' => '<{unique_id}>',
+                    ],
+                ],
+            ]
+        );
+
+        $uniqueId = $set->getParameters()['unique_id'];
+
+        $dummy = $set->getObjects()['dummy'];
+
+        $this->assertEquals($uniqueId, $dummy->foo);
+        $this->assertEquals($uniqueId, $dummy->bar);
+    }
+
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
      */
