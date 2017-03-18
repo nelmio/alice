@@ -42,7 +42,7 @@ install:
   - if [ "$SYMFONY_VERSION" != "" ]; then
         composer require --no-update "symfony/symfony:${SYMFONY_VERSION}";
     fi
-  - composer install --prefer-dist --no-suggest $COMPOSER_FLAGS
+  - composer update --prefer-dist --no-suggest $COMPOSER_FLAGS
 
 script: vendor/bin/phpunit --verbose
 
