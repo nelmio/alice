@@ -212,6 +212,6 @@ Nelmio\Entity\User:
 
 <hr />
 
-<div style="text-align: center">
+<p align="center">
 « [Handling Relations](relations-handling.md) • [Getting Started](getting-started.md) »
-</div>
+<p>

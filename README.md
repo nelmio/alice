@@ -3,7 +3,6 @@ Alice - Expressive fixtures generator [![Build Status](https://travis-ci.org/nel
 
 [![Package version](http://img.shields.io/packagist/vpre/nelmio/alice.svg?style=flat-square)](https://packagist.org/packages/nelmio/alice)
 [![Build Status](https://img.shields.io/travis/nelmio/alice.svg?branch=2.x&style=flat-square)](https://travis-ci.org/nelmio/alice?branch=2.x)
-[![Dependency Status](https://www.versioneye.com/user/projects/5813cac941d4bc00128b57b3/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5813cac941d4bc00128b57b3)
 [![Slack](https://img.shields.io/badge/slack-%23alice--fixtures-red.svg?style=flat-square)](https://slackinvite.me/to/symfony-devs)
 [![License](https://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](LICENSE)
 
@@ -13,12 +12,10 @@ or testing your project. It gives you a few essential tools to make it
 very easy to generate complex data with constraints in a readable and easy
 to edit way, so that everyone on your team can tweak the fixtures if needed.
 
-**
-You are reading the documentation for the 2.x branch. If you want to head back to the latest version, click
-[here](https://github.com/nelmio).
+**You are reading the documentation for the 2.x branch. If you want to head back to the latest version, click
+[here](https://github.com/nelmio).**
  
-2.x is in maintenance mode: PRs are accepted, but no active development is done on it by the maintainers any longer.
-**
+**2.x is in maintenance mode: PRs are accepted, but no active development is done on it by the maintainers any longer.**
 
 
 ## Table of Contents
