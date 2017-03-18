@@ -2,7 +2,7 @@
 
 1. [Basic Usage](#basic-usage)
 1. [Framework integration](#framework-integration)
-  1. [Symfony](#symfony)
+    1. [Symfony](#symfony)
 
 
 ## Basic Usage
@@ -166,5 +166,8 @@ nelmio_alice:
                                    # failing.
 ```
 
+
+<br />
+<hr />
 
 « [Complete Reference](complete-reference.md) • [Installation](../README.md#installation) »

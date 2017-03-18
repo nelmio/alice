@@ -6,12 +6,12 @@ picture of the library mechanisms.
 
 1. [Differences between 2.x and 3.x](#differences-between-2x-and-3x)
 1. [Architecture](#architecture)
-  1. [FixtureBuilder](#fixturebuilder)
-  1. [Generator](#generator)
+    1. [FixtureBuilder](#fixturebuilder)
+    1. [Generator](#generator)
 1. [Expression Language](#expression-language)
 1. [Contributing](#contributing)
-  1. [Testing](#testing)
-  1. [Profiling](#profiling)
+    1. [Testing](#testing)
+    1. [Profiling](#profiling)
 
 
 ## Differences between 2.x and 3.x
@@ -27,8 +27,10 @@ Main differences between 2.x and 3.x:
 
 The two entry points of the library are the `DataLoader` and `FileLoader`:
 
-![FileLoader](doc/img/FileLoader.png)
-![DataLoader](doc/img/DataLoader.png)
+<p align="center">
+    <img src="doc/img/FileLoader.png" width=500 />
+    <img src="doc/img/DataLoader.png" width=500 />
+</p>
 
 Alice's goal is to render a PHP array containing a description of objects and parameters (with support for injected external objects
 and parameters) into a set of objects called `ObjectSet`.
@@ -114,7 +116,10 @@ To run the tests, simply run `bin/tests.sh`.
 The tests should be descriptive and are "testdox friendly" i.e. if you are using the testdox
 option, you will get something like:
 
-![Testdox](doc/img/testdox.png)
+
+<p align="center">
+    <img src="doc/img/testdox.png" width=500 />
+</p>
 
 
 ### Profiling
@@ -123,6 +128,9 @@ A Profiling of different scenari is done with [Blackfire][5]. The scenario can b
 to run them, you can try to simply run `bin/profiling.sh`. You may however have to touch some elements of the
 blackfire configuration (see the `profiling/scenarioX/blackfire.php` files).
 
+
+<br />
+<hr />
 
 « [Advanced Guide](doc/advanced-guide.md) • [Table of Contents](README.md#table-of-contents) »
 
