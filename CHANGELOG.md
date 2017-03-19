@@ -1,7 +1,81 @@
 ### 3.0.0 (WIP)
 
-  * Added new parser system with support for cache (#361)
-  * Add new parameter resolver system with support for dynamic and composite keys (#366)
+### 3.0.0-beta.4 (2017-03-19)
+
+### Features
+- Implements method callers (#666)
+- Add method call reference resolver (#669)
+- Make NativeLoader non-final and changed its API (#681)
+- Make parameters accessible in identity (#698)
+
+### Bugfixes
+- Fix edge case on OptionalValueResolver (#671)
+- Fix escaping of the percent sign (#687)
+- Fix usage of underscore in the function name (#702)
+
+
+### 3.0.0-beta.3 (2016-12-16)
+
+### Features
+- Add a context cache (#656)
+
+### Bugfixes
+- Fix wildcard resolver cache (#657)
+- Fix usage of dynamic array with functions (#655)
+
+
+### 3.0.0-beta.2 (2016-12-02)
+
+### Features
+- Add a Faker provider to cast values (#622)
+- Allow to whitelist some PHP native functions (#640)
+
+### Bugfixes
+- Fix optional flag boundaries (allow extremums `0` and `100`) (#623)
+- Lowered dynamic array quantifier minimal value (allow `0` and `1`) (#624)
+- Fix unique scope for arrays (#634)
+- Fix function which contains numerical characters tokenization (#649)
+
+### Other changes highlight
+- Rework blackfire scripts (#633) 
+- Replace the exception thrown for unclonable tests (#637)
+- Symfony Bundle configuration tweaks (#641)
+
+
+### 3.0.0-beta.1
+
+### Features
+- Better handling of references to inexistent fixtures (#592)
+- Automatically escape the `@` character in words (#593)
+
+### Bugfix
+- Move PhpUnitBridge dependency to dev dependencies (#576)
+- Fix support for stdClass classes (#595)
+- Fix complete generation process (#596)
+- Fix FlagBag immutability (#614)
+- Fix UniqueValuesPool cached value check (#615)
+- Make ObjectBag more performant (#617)
+- Fix performance issues with Wildcard resolver (#618)
+- Fix usage of `$current` with identity (#619)
+
+### Changes highlight
+- Harden tests (higher coverage and make them more robust thanks to Humbug) (#571, #590)
+- Simplify mutli-dep management with (#582)
+- Make testing easier (#583, #603)
+- Enforce strict types everywhere (#587)
+- Tag the Expression Language as internal (#600)
+- Add scenarios for profiling (#613, #616)
+
+
+### 3.0.0-beta.0 (2016-09-14)
+
+Main differences between 2.x and 3.x:
+
+The persistence layer has been removed
+Rewrite of the API to make it more extensible and more robust
+Change in the architecture to address some limitations found in 2.x
+More details on the architectural changes can be found
+[here](https://github.com/nelmio/alice/blob/master/CONTRIBUTING.md#architecture).
 
 
 ### 2.3.0 (2017-03-18)
