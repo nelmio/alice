@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Hydrator\Property;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Entity\DummyWithDate;
@@ -32,7 +33,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 /**
  * @covers \Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator
  */
-class SymfonyPropertyAccessorHydratorTest extends \PHPUnit_Framework_TestCase
+class SymfonyPropertyAccessorHydratorTest extends TestCase
 {
     /**
      * @var SymfonyPropertyAccessorHydrator

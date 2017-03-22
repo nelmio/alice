@@ -13,12 +13,13 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationExceptionFactory
  */
-class UnresolvableValueDuringGenerationExceptionFactoryTest extends \PHPUnit_Framework_TestCase
+class UnresolvableValueDuringGenerationExceptionFactoryTest extends TestCase
 {
     public function testTestCreateFromResolutionThrowable()
     {

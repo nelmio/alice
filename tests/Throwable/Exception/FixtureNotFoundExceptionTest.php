@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
  */
-class FixtureNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
+class FixtureNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException()
     {

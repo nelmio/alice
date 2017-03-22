@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\ResolvingContext
  */
-class ResolvingContextTest extends \PHPUnit_Framework_TestCase
+class ResolvingContextTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues()
     {

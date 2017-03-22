@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
@@ -25,7 +26,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser
  */
-class DynamicArrayTokenParserTest extends \PHPUnit_Framework_TestCase
+class DynamicArrayTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser()
     {

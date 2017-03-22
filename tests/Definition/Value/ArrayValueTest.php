@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ArrayValue
  */
-class ArrayValueTest extends \PHPUnit_Framework_TestCase
+class ArrayValueTest extends TestCase
 {
     public function testIsAValue()
     {

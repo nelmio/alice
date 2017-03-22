@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
  */
-class ParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
+class ParserNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException()
     {

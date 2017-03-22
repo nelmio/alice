@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\OptionalValue
  */
-class OptionalValueTest extends \PHPUnit_Framework_TestCase
+class OptionalValueTest extends TestCase
 {
     public function testIsAValue()
     {

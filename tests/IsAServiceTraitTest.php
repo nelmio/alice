@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\UnclonableException;
 
 /**
  * @covers \Nelmio\Alice\IsAServiceTrait
  */
-class IsAServiceTraitTest extends \PHPUnit_Framework_TestCase
+class IsAServiceTraitTest extends TestCase
 {
     public function testThrowsAnExceptionWhenTryingToCloneInstance()
     {

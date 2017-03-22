@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
@@ -21,7 +22,7 @@ use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
  */
-class StaticParameterResolverTest extends \PHPUnit_Framework_TestCase
+class StaticParameterResolverTest extends TestCase
 {
     public function testIsAChainableParameterResolver()
     {

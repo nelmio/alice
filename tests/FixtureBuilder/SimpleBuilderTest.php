@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FakeDenormalizer;
 use Nelmio\Alice\FixtureBuilderInterface;
@@ -24,7 +25,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\SimpleBuilder
  */
-class SimpleBuilderTest extends \PHPUnit_Framework_TestCase
+class SimpleBuilderTest extends TestCase
 {
     public function testIsAFixtureBuilder()
     {

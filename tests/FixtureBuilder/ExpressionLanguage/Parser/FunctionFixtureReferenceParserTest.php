@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
@@ -23,7 +24,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser
  */
-class FunctionFixtureReferenceParserTest extends \PHPUnit_Framework_TestCase
+class FunctionFixtureReferenceParserTest extends TestCase
 {
     public function testIsAParser()
     {

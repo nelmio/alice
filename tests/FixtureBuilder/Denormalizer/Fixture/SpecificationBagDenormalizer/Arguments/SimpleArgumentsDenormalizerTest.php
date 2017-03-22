@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\FlagBag;
@@ -24,7 +25,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\SimpleArgumentsDenormalizer
  */
-class SimpleArgumentsDenormalizerTest extends \PHPUnit_Framework_TestCase
+class SimpleArgumentsDenormalizerTest extends TestCase
 {
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
@@ -21,7 +22,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ReferenceProviderTrait;
 use Prophecy\Argument;
 
-abstract class ChainableDenormalizerTest extends \PHPUnit_Framework_TestCase
+abstract class ChainableDenormalizerTest extends TestCase
 {
     use ReferenceProviderTrait;
 

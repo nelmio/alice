@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\Parameter
  */
-class ParameterTest extends \PHPUnit_Framework_TestCase
+class ParameterTest extends TestCase
 {
     /**
      * @dataProvider provideValues

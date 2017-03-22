@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
  *
@@ -20,7 +22,7 @@ namespace Nelmio\Alice\Generator\Resolver\Fixture;
  *
  * @see \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolverTest
  */
-class TemplateFixtureResolverTest extends \PHPUnit_Framework_TestCase
+class TemplateFixtureResolverTest extends TestCase
 {
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException

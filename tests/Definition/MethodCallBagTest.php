@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCallBag
  */
-class MethodCallBagTest extends \PHPUnit_Framework_TestCase
+class MethodCallBagTest extends TestCase
 {
     /**
      * @var \ReflectionProperty

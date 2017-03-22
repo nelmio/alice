@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Flag\AnotherDummyFlag;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
@@ -27,7 +28,7 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 /**
  * @covers \Nelmio\Alice\Definition\FlagBag
  */
-class FlagBagTest extends \PHPUnit_Framework_TestCase
+class FlagBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues()
     {

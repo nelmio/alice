@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
@@ -24,7 +25,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver
  */
-class SimpleParameterBagResolverTest extends \PHPUnit_Framework_TestCase
+class SimpleParameterBagResolverTest extends TestCase
 {
     public function testIsAParameterBagResolver()
     {

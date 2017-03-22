@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTreeTokenizer
  */
-class FunctionTokenizerTest extends \PHPUnit_Framework_TestCase
+class FunctionTokenizerTest extends TestCase
 {
     /**
      * @var FunctionTokenizer

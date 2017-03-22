@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\Definition\PropertyBag
  */
-class PropertyBagTest extends \PHPUnit_Framework_TestCase
+class PropertyBagTest extends TestCase
 {
     /**
      * @var \ReflectionProperty

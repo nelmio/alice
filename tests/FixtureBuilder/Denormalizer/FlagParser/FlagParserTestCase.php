@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 
-abstract class FlagParserTestCase extends \PHPUnit_Framework_TestCase
+abstract class FlagParserTestCase extends TestCase
 {
     /**
      * @var FlagParserInterface|ChainableFlagParserInterface

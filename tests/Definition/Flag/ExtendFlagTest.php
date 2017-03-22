@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Flag;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FlagInterface;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 
 /**
  * @covers \Nelmio\Alice\Definition\Flag\ExtendFlag
  */
-class ExtendFlagTest extends \PHPUnit_Framework_TestCase
+class ExtendFlagTest extends TestCase
 {
     public function testIsAFlag()
     {

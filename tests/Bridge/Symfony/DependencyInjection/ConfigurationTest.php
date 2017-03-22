@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Symfony\KernelFactory;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -20,7 +21,7 @@ use Symfony\Component\Config\Definition\Processor;
  * @covers \Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
  * @group integration
  */
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     public function testDefaultValues()
     {

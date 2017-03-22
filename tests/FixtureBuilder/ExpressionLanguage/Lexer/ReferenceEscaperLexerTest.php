@@ -11,13 +11,14 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Prophecy\Argument;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer
  */
-class ReferenceEscaperLexerTest extends \PHPUnit_Framework_TestCase
+class ReferenceEscaperLexerTest extends TestCase
 {
     public function testIsALexer()
     {

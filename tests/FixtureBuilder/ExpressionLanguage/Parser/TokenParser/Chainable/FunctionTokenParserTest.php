@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
@@ -27,7 +28,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FunctionTokenParser
  */
-class FunctionTokenParserTest extends \PHPUnit_Framework_TestCase
+class FunctionTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser()
     {

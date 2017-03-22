@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\ParserInterface;
 use Prophecy\Argument;
 
 /**
  * @covers \Nelmio\Alice\Parser\ParserRegistry
  */
-class ParserRegistryTest extends \PHPUnit_Framework_TestCase
+class ParserRegistryTest extends TestCase
 {
     public function testIsAParser()
     {

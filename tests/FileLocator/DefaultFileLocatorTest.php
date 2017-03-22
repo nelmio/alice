@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FileLocator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FileLocatorInterface;
 
 /**
  * @covers \Nelmio\Alice\FileLocator\DefaultFileLocator
  */
-class DefaultFileLocatorTest extends \PHPUnit_Framework_TestCase
+class DefaultFileLocatorTest extends TestCase
 {
     /**
      * @var DefaultFileLocator

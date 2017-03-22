@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
@@ -22,7 +23,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureListReferenceTokenParser
  */
-class FixtureListReferenceTokenParserTest extends \PHPUnit_Framework_TestCase
+class FixtureListReferenceTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser()
     {

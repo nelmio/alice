@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
@@ -30,7 +31,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver
  */
-class UniqueValueResolverTest extends \PHPUnit_Framework_TestCase
+class UniqueValueResolverTest extends TestCase
 {
     /**
      * @var \ReflectionProperty

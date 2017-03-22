@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
@@ -26,7 +27,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NoMethodCallInstantiator
  */
-class NoMethodCallInstantiatorTest extends \PHPUnit_Framework_TestCase
+class NoMethodCallInstantiatorTest extends TestCase
 {
     /**
      * @var NoMethodCallInstantiator

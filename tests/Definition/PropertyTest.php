@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
  * @covers \Nelmio\Alice\Definition\Property
  */
-class PropertyTest extends \PHPUnit_Framework_TestCase
+class PropertyTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues()
     {

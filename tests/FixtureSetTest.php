@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\FixtureSet
  */
-class FixtureSetTest extends \PHPUnit_Framework_TestCase
+class FixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues()
     {

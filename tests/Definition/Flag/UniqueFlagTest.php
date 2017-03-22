@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Flag;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FlagInterface;
 
 /**
  * @covers \Nelmio\Alice\Definition\Flag\UniqueFlag
  */
-class UniqueFlagTest extends \PHPUnit_Framework_TestCase
+class UniqueFlagTest extends TestCase
 {
     public function testIsAFlag()
     {

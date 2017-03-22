@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory
  */
-class ExpressionLanguageExceptionFactoryTest extends \PHPUnit_Framework_TestCase
+class ExpressionLanguageExceptionFactoryTest extends TestCase
 {
     public function testTestCreateForNoParserFoundForToken()
     {

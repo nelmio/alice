@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException
  */
-class InvalidScopeExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidScopeExceptionTest extends TestCase
 {
     public function testIsARuntimeException()
     {

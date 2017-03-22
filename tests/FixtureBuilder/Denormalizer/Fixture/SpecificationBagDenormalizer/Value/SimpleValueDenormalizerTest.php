@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Value\ArrayValue;
@@ -26,7 +27,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer
  */
-class SimpleValueDenormalizerTest extends \PHPUnit_Framework_TestCase
+class SimpleValueDenormalizerTest extends TestCase
 {
     public function testIsAValueDenormalizer()
     {

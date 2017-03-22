@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\ObjectGenerator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
@@ -32,7 +33,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator
  */
-class SimpleObjectGeneratorTest extends \PHPUnit_Framework_TestCase
+class SimpleObjectGeneratorTest extends TestCase
 {
     public function testIsAnObjectGenerator()
     {

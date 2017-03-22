@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationExceptionFactory
  */
-class HydrationExceptionFactoryTest extends \PHPUnit_Framework_TestCase
+class HydrationExceptionFactoryTest extends TestCase
 {
     public function testTestCreate()
     {

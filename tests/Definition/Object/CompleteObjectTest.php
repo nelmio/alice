@@ -11,13 +11,14 @@
 
 namespace Nelmio\Alice\Definition\Object;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
 
 /**
  * @covers \Nelmio\Alice\Definition\Object\CompleteObject
  */
-class CompleteObjectTest extends \PHPUnit_Framework_TestCase
+class CompleteObjectTest extends TestCase
 {
     public function testIsAnObject()
     {

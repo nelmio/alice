@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\BareFixtureSet;
@@ -25,7 +26,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer
  */
-class SimpleDenormalizerTest extends \PHPUnit_Framework_TestCase
+class SimpleDenormalizerTest extends TestCase
 {
     public function testIsADenormalizer()
     {

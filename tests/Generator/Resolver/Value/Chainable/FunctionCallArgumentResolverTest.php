@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
@@ -28,7 +29,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver
  */
-class FunctionCallArgumentResolverTest extends \PHPUnit_Framework_TestCase
+class FunctionCallArgumentResolverTest extends TestCase
 {
     public function testIsAChainableResolver()
     {

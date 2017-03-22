@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
@@ -31,7 +32,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\PhpFunctionCallValueResolver
  */
-class PhpFunctionCallValueResolverTest extends \PHPUnit_Framework_TestCase
+class PhpFunctionCallValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver()
     {

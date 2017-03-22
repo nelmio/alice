@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer
  */
-class SimpleParameterBagDenormalizerTest extends \PHPUnit_Framework_TestCase
+class SimpleParameterBagDenormalizerTest extends TestCase
 {
     /**
      * @var SimpleParameterBagDenormalizer

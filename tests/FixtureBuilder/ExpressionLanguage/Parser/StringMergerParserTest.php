@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
@@ -21,7 +22,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\StringMergerParser
  */
-class StringMergerParserTest extends \PHPUnit_Framework_TestCase
+class StringMergerParserTest extends TestCase
 {
     public function testIsAParser()
     {

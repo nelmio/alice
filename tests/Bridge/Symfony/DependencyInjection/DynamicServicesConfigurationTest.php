@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Bridge\Symfony\Application\AppKernel;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
@@ -26,7 +27,7 @@ use Nelmio\Alice\Symfony\KernelFactory;
  *
  * @group integration
  */
-class DynamicServicesConfigurationTest extends \PHPUnit_Framework_TestCase
+class DynamicServicesConfigurationTest extends TestCase
 {
     /**
      * @var AppKernel

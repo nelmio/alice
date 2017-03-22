@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\ObjectSetFactory;
 use Nelmio\Alice\Parser\FakeParser;
@@ -23,7 +24,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Loader\SimpleFileLoader
  */
-class SimpleFileLoaderTest extends \PHPUnit_Framework_TestCase
+class SimpleFileLoaderTest extends TestCase
 {
     public function testIsALoader()
     {

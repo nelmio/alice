@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 
 /**
  * @covers \Nelmio\Alice\Definition\SpecificationBag
  */
-class SpecificationBagTest extends \PHPUnit_Framework_TestCase
+class SpecificationBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues()
     {

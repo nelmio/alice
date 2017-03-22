@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\RootExpressionLanguageParseException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable
  */
-class ExpressionLanguageParseThrowableTest extends \PHPUnit_Framework_TestCase
+class ExpressionLanguageParseThrowableTest extends TestCase
 {
     public function testIsABuildThrowable()
     {

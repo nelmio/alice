@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException
  */
-class MalformedFunctionExceptionTest extends \PHPUnit_Framework_TestCase
+class MalformedFunctionExceptionTest extends TestCase
 {
     public function testIsAnInvalidArgumentException()
     {

@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\ResolutionThrowable
  */
-class ResolutionThrowableTest extends \PHPUnit_Framework_TestCase
+class ResolutionThrowableTest extends TestCase
 {
     public function testIsABuildThrowable()
     {

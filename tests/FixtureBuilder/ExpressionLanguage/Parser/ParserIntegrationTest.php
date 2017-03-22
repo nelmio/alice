@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
 use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
@@ -33,7 +34,7 @@ use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 /**
  * @group integration
  */
-class ParserIntegrationTest extends \PHPUnit_Framework_TestCase
+class ParserIntegrationTest extends TestCase
 {
     /** @var ParserInterface */
     protected $parser;

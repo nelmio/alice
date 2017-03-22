@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
@@ -37,7 +38,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver
  */
-class UnresolvedFixtureReferenceIdResolverTest extends \PHPUnit_Framework_TestCase
+class UnresolvedFixtureReferenceIdResolverTest extends TestCase
 {
     public function testIsAChainableResolver()
     {

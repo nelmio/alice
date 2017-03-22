@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
@@ -30,7 +31,7 @@ use Nelmio\Alice\FixtureBag;
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
  */
-class TemplateFixtureBagResolverTest extends \PHPUnit_Framework_TestCase
+class TemplateFixtureBagResolverTest extends TestCase
 {
     /**
      * @var TemplateFixtureBagResolver

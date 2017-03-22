@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver;
@@ -20,7 +21,7 @@ use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver;
 /**
  * @group integration
  */
-class ParameterResolverIntegrationTest extends \PHPUnit_Framework_TestCase
+class ParameterResolverIntegrationTest extends TestCase
 {
     /**
      * @var SimpleParameterBagResolver

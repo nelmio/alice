@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -20,7 +21,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer
  */
-class ReferenceLexerTest extends \PHPUnit_Framework_TestCase
+class ReferenceLexerTest extends TestCase
 {
     /**
      * @var ReferenceLexer

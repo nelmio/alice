@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
@@ -31,7 +32,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator
  */
-class StaticFactoryInstantiatorTest extends \PHPUnit_Framework_TestCase
+class StaticFactoryInstantiatorTest extends TestCase
 {
     /**
      * @var StaticFactoryInstantiator

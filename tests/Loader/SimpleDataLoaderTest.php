@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\FixtureBuilder\FakeFixtureBuilder;
 use Nelmio\Alice\FixtureBuilderInterface;
@@ -25,7 +26,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Loader\SimpleDataLoader
  */
-class SimpleDataLoaderTest extends \PHPUnit_Framework_TestCase
+class SimpleDataLoaderTest extends TestCase
 {
     public function testIsADataLoader()
     {

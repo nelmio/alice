@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
@@ -25,7 +26,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
  */
-class ArrayParameterResolverTest extends \PHPUnit_Framework_TestCase
+class ArrayParameterResolverTest extends TestCase
 {
     public function testIsAChainableParameterResolver()
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
@@ -23,7 +24,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\VariableTokenParser
  */
-class VariableTokenParserTest extends \PHPUnit_Framework_TestCase
+class VariableTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser()
     {

@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\RootInstantiationException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\InstantiationThrowable
  */
-class InstantiationThrowableTest extends \PHPUnit_Framework_TestCase
+class InstantiationThrowableTest extends TestCase
 {
     public function testIsABuildThrowable()
     {
