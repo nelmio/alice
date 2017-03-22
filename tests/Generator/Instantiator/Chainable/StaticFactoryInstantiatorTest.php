@@ -245,7 +245,7 @@ class StaticFactoryInstantiatorTest extends TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Instantiated fixture was expected to be an instance of "Nelmio\Alice\Entity\Instantiator\DummyWithFakeNamedConstructor". Got "Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory" instead.
+     * @expectedExceptionMessage Instantiated fixture was expected to be an instance of "Nelmio\Alice\Entity\Instantiator\DummyWithFakeNamedConstructor". Got "null" instead.
      */
     public function testThrowsAnExceptionIfFactoryDoesNotReturnAnInstance()
     {

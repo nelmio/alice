@@ -81,7 +81,7 @@ final class InstantiationExceptionFactory
             sprintf(
                 'Instantiated fixture was expected to be an instance of "%s". Got "%s" instead.',
                 $fixture->getClassName(),
-                get_class($instance)
+                $instance ? get_class($instance) : 'null'
             )
         );
     }
