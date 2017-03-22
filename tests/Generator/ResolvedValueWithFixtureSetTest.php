@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\Generator\ResolvedValueWithFixtureSet
  */
-class ResolvedValueWithFixtureSetTest extends \PHPUnit_Framework_TestCase
+class ResolvedValueWithFixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues()
     {

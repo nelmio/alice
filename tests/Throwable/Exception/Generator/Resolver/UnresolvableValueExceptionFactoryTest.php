@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
@@ -20,7 +21,7 @@ use Nelmio\Alice\Throwable\ResolutionThrowable;
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory
  */
-class UnresolvableValueExceptionFactoryTest extends \PHPUnit_Framework_TestCase
+class UnresolvableValueExceptionFactoryTest extends TestCase
 {
     public function testTestCreate()
     {

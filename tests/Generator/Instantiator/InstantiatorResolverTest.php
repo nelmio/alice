@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
@@ -35,7 +36,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorResolver
  */
-class InstantiatorResolverTest extends \PHPUnit_Framework_TestCase
+class InstantiatorResolverTest extends TestCase
 {
     public function testIsAnInstantiator()
     {

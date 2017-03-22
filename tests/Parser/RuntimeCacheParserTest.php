@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 use Nelmio\Alice\FileLocator\FakeFileLocator;
 use Nelmio\Alice\FileLocatorInterface;
@@ -24,7 +25,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Parser\RuntimeCacheParser
  */
-class RuntimeCacheParserTest extends \PHPUnit_Framework_TestCase
+class RuntimeCacheParserTest extends TestCase
 {
     private static $dir;
 

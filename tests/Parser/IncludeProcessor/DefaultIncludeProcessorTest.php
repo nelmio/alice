@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
 use Nelmio\Alice\FileLocator\FakeFileLocator;
 use Nelmio\Alice\FileLocatorInterface;
@@ -23,7 +24,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
  */
-class DefaultIncludeProcessorTest extends \PHPUnit_Framework_TestCase
+class DefaultIncludeProcessorTest extends TestCase
 {
     private static $dir;
 

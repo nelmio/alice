@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\NoValueForCurrentException
  */
-class NoValueForCurrentExceptionTest extends \PHPUnit_Framework_TestCase
+class NoValueForCurrentExceptionTest extends TestCase
 {
     public function testIsARuntimeException()
     {

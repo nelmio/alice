@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
@@ -22,7 +23,7 @@ use Nelmio\Alice\FixtureInterface;
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixture
  */
-class SimpleFixtureTest extends \PHPUnit_Framework_TestCase
+class SimpleFixtureTest extends TestCase
 {
     public function testIsAFixtureId()
     {

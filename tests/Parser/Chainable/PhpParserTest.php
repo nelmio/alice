@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 
 /**
  * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
  */
-class PhpParserTest extends \PHPUnit_Framework_TestCase
+class PhpParserTest extends TestCase
 {
     use FileListProviderTrait;
 

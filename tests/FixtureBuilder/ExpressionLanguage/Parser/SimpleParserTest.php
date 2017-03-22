@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\NestedValue;
 use Nelmio\Alice\Definition\Value\ParameterValue;
 use Nelmio\Alice\Definition\Value\ListValue;
@@ -28,7 +29,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser
  */
-class SimpleParserTest extends \PHPUnit_Framework_TestCase
+class SimpleParserTest extends TestCase
 {
     public function testIsAParser()
     {

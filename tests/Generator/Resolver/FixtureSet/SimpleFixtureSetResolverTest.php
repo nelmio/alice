@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\FixtureSet;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\FixtureBag;
@@ -29,7 +30,7 @@ use Nelmio\Alice\ParameterBag;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
  */
-class SimpleFixtureSetResolverTest extends \PHPUnit_Framework_TestCase
+class SimpleFixtureSetResolverTest extends TestCase
 {
     public function testIsAFixtureResolver()
     {

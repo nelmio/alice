@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
  */
-class InstantiationExceptionTest extends \PHPUnit_Framework_TestCase
+class InstantiationExceptionTest extends TestCase
 {
     public function testIsARuntimeException()
     {

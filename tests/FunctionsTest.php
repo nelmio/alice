@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-class FunctionsTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FunctionsTest extends TestCase
 {
     /**
      * @dataProvider provideScalarValues

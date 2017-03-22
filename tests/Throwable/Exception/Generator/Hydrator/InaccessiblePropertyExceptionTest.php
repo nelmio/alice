@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\HydrationThrowable;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InaccessiblePropertyException
  */
-class InaccessiblePropertyExceptionTest extends \PHPUnit_Framework_TestCase
+class InaccessiblePropertyExceptionTest extends TestCase
 {
     public function testIsARuntimeException()
     {

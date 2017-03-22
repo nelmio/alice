@@ -13,13 +13,14 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\FlagBag;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory
  */
-class InvalidArgumentExceptionFactoryTest extends \PHPUnit_Framework_TestCase
+class InvalidArgumentExceptionFactoryTest extends TestCase
 {
     public function testTestCreateForInvalidReferenceType()
     {

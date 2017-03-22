@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\MethodCall;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\SimpleMethodCall
  */
-class SimpleMethodCallTest extends \PHPUnit_Framework_TestCase
+class SimpleMethodCallTest extends TestCase
 {
     public function testIsAMethodCall()
     {

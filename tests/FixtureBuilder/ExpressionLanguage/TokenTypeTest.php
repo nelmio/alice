@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType
  */
-class TokenTypeTest extends \PHPUnit_Framework_TestCase
+class TokenTypeTest extends TestCase
 {
     /**
      * @var string[]

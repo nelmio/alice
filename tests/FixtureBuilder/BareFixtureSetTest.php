@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Parameter;
@@ -21,7 +22,7 @@ use Nelmio\Alice\ParameterBag;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\BareFixtureSet
  */
-class BareFixtureSetTest extends \PHPUnit_Framework_TestCase
+class BareFixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues()
     {

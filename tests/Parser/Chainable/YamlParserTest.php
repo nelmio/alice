@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
@@ -23,7 +24,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 /**
  * @covers \Nelmio\Alice\Parser\Chainable\YamlParser
  */
-class YamlParserTest extends \PHPUnit_Framework_TestCase
+class YamlParserTest extends TestCase
 {
     use FileListProviderTrait;
 

@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
  */
-class FlagParserNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
+class FlagParserNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException()
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
@@ -29,7 +30,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver
  */
-class DynamicArrayValueResolverTest extends \PHPUnit_Framework_TestCase
+class DynamicArrayValueResolverTest extends TestCase
 {
     /**
      * @var \ReflectionProperty

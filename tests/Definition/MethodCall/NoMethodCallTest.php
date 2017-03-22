@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\MethodCall;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCallInterface;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\NoMethodCall
  */
-class NoMethodCallTest extends \PHPUnit_Framework_TestCase
+class NoMethodCallTest extends TestCase
 {
     public function testIsAMethodCall()
     {

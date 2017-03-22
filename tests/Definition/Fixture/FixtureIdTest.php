@@ -11,12 +11,13 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureIdInterface;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\FixtureId
  */
-class FixtureIdTest extends \PHPUnit_Framework_TestCase
+class FixtureIdTest extends TestCase
 {
     public function testIsAFixtureId()
     {

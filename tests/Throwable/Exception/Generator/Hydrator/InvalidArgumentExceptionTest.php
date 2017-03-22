@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Throwable\HydrationThrowable;
@@ -20,7 +21,7 @@ use Nelmio\Alice\Throwable\HydrationThrowable;
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException
  */
-class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
+class InvalidArgumentExceptionTest extends TestCase
 {
     public function testIsARuntimeException()
     {

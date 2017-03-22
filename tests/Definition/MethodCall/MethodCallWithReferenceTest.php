@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\MethodCall;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\MutableReference;
@@ -21,7 +22,7 @@ use Nelmio\Alice\Entity\StdClassFactory;
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\MethodCallWithReference
  */
-class MethodCallWithReferenceTest extends \PHPUnit_Framework_TestCase
+class MethodCallWithReferenceTest extends TestCase
 {
     public function testIsAMethodCall()
     {

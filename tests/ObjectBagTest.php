@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 
 /**
  * @covers \Nelmio\Alice\ObjectBag
  */
-class ObjectBagTest extends \PHPUnit_Framework_TestCase
+class ObjectBagTest extends TestCase
 {
     /**
      * @var \ReflectionProperty

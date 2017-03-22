@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Entity\Instantiator\AbstractDummy;
@@ -29,7 +30,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NullConstructorInstantiator
  */
-class NullConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
+class NullConstructorInstantiatorTest extends TestCase
 {
     /**
      * @var NullConstructorInstantiator

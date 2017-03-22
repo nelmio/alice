@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\MutableFixture;
@@ -23,7 +24,7 @@ use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 /**
  * @covers \Nelmio\Alice\FixtureBag
  */
-class FixtureBagTest extends \PHPUnit_Framework_TestCase
+class FixtureBagTest extends TestCase
 {
     /**
      * @var \ReflectionProperty

@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\Loader\NativeLoader
  */
-class NativeLoaderTest extends \PHPUnit_Framework_TestCase
+class NativeLoaderTest extends TestCase
 {
     /**
      * @expectedException \BadMethodCallException

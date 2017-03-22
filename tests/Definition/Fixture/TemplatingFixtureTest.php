@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
@@ -25,7 +26,7 @@ use Nelmio\Alice\FixtureInterface;
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\TemplatingFixture
  */
-class TemplatingFixtureTest extends \PHPUnit_Framework_TestCase
+class TemplatingFixtureTest extends TestCase
 {
     public function testIsAFixture()
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
@@ -21,7 +22,7 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory
  */
-class InstantiationExceptionFactoryTest extends \PHPUnit_Framework_TestCase
+class InstantiationExceptionFactoryTest extends TestCase
 {
     public function testTestCreate()
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Dummy;
@@ -29,7 +30,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\AbstractChainableInstantiator
  */
-class AbstractChainableInstantiatorTest extends \PHPUnit_Framework_TestCase
+class AbstractChainableInstantiatorTest extends TestCase
 {
     /**
      * @var AbstractChainableInstantiator

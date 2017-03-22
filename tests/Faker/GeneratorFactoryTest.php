@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Faker;
 
+use PHPUnit\Framework\TestCase;
 use Faker\Factory as FakerFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Faker\Provider\DummyProvider;
@@ -21,7 +22,7 @@ use Nelmio\Alice\Faker\Provider\DummyProvider;
  * @covers \Nelmio\Alice\Faker\GeneratorFactory
  * @group integration
  */
-class GeneratorFactoryTest extends \PHPUnit_Framework_TestCase
+class GeneratorFactoryTest extends TestCase
 {
     public function testAssertGeneratorLocaleMethod()
     {

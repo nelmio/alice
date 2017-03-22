@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException
  */
-class CircularReferenceExceptionTest extends \PHPUnit_Framework_TestCase
+class CircularReferenceExceptionTest extends TestCase
 {
     public function testIsARuntimeException()
     {

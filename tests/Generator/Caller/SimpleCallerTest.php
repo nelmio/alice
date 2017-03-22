@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
@@ -39,7 +40,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\Caller\SimpleCaller
  */
-class SimpleCallerTest extends \PHPUnit_Framework_TestCase
+class SimpleCallerTest extends TestCase
 {
     public function testIsACaller()
     {

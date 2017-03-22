@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\RootGenerationException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\GenerationThrowable
  */
-class GenerationThrowableTest extends \PHPUnit_Framework_TestCase
+class GenerationThrowableTest extends TestCase
 {
     public function testIsABuildThrowable()
     {

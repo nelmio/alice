@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerIntegrationTest;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest;
 
 /**
  * @coversNothing
  */
-class LexerParserSynchronizationTest extends \PHPUnit_Framework_TestCase
+class LexerParserSynchronizationTest extends TestCase
 {
     public function testProvidesAreSynchronized()
     {

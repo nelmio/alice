@@ -13,10 +13,12 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\UnclonableException
  */
-class UnclonableExceptionTest extends \PHPUnit_Framework_TestCase
+class UnclonableExceptionTest extends TestCase
 {
     public function testIsADomainException()
     {

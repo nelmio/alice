@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedExceptionFactory
  */
-class RecursionLimitReachedExceptionFactoryTest extends \PHPUnit_Framework_TestCase
+class RecursionLimitReachedExceptionFactoryTest extends TestCase
 {
     public function testTestCreateNewExceptionWithFactory()
     {

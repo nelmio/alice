@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\VariableValue;
@@ -25,7 +26,7 @@ use Nelmio\Alice\ParameterBag;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver
  */
-class VariableValueResolverTest extends \PHPUnit_Framework_TestCase
+class VariableValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver()
     {

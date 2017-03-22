@@ -13,6 +13,7 @@ declare(strict_types = 1);
 
 namespace Nelmio\Alice\Faker\Provider;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
@@ -20,7 +21,7 @@ use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 /**
  * @covers \Nelmio\Alice\Faker\Provider\AliceProvider
  */
-class AliceProviderTest extends \PHPUnit_Framework_TestCase
+class AliceProviderTest extends TestCase
 {
     public function testIdentityReturnsTheValueUnchanged()
     {

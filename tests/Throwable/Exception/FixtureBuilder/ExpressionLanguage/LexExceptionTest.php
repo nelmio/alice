@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException
  */
-class LexExceptionTest extends \PHPUnit_Framework_TestCase
+class LexExceptionTest extends TestCase
 {
     public function testIsAnException()
     {

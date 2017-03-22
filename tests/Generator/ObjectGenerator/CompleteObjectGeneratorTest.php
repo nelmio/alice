@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\ObjectGenerator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Object\CompleteObject;
@@ -32,7 +33,7 @@ use Prophecy\Argument;
 /**
  * @covers \Nelmio\Alice\Generator\ObjectGenerator\CompleteObjectGenerator
  */
-class CompleteObjectGeneratorTest extends \PHPUnit_Framework_TestCase
+class CompleteObjectGeneratorTest extends TestCase
 {
     public function testIsAnObjectGenerator()
     {

@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Entity\StdClassFactory;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\UniqueValuesPool
  */
-class UniqueValuesPoolTest extends \PHPUnit_Framework_TestCase
+class UniqueValuesPoolTest extends TestCase
 {
     public function testDoesNotHaveValueIfValueIsNotCached()
     {

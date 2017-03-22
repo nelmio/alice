@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
@@ -49,7 +50,7 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
 /**
  * @group integration
  */
-class LoaderIntegrationTest extends \PHPUnit_Framework_TestCase
+class LoaderIntegrationTest extends TestCase
 {
     const PARSER_FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
     const FIXTURES_FILES_DIR = __DIR__.'/../../fixtures/Integration';

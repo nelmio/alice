@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Parameter;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\ParameterNotFoundExceptionFactory
  */
-class ParameterNotFoundExceptionFactoryTest extends \PHPUnit_Framework_TestCase
+class ParameterNotFoundExceptionFactoryTest extends TestCase
 {
     public function testIsARuntimeException()
     {

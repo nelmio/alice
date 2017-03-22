@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
 
 /**
  * @covers \Nelmio\Alice\Generator\GenerationContext
  */
-class GenerationContextTest extends \PHPUnit_Framework_TestCase
+class GenerationContextTest extends TestCase
 {
     public function testAccessors()
     {

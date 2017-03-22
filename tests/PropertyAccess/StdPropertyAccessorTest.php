@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\PropertyAccess;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
@@ -20,7 +21,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 /**
  * @covers \Nelmio\Alice\PropertyAccess\StdPropertyAccessor
  */
-class StdPropertyAccessorTest extends \PHPUnit_Framework_TestCase
+class StdPropertyAccessorTest extends TestCase
 {
     public function testIsAPropertyAccessor()
     {

@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
  */
-class ObjectGeneratorNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
+class ObjectGeneratorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException()
     {

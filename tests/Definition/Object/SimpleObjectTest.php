@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Object;
 
+use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
 
 /**
  * @covers \Nelmio\Alice\Definition\Object\SimpleObject
  */
-class SimpleObjectTest extends \PHPUnit_Framework_TestCase
+class SimpleObjectTest extends TestCase
 {
     /**
      * @var \ReflectionProperty
