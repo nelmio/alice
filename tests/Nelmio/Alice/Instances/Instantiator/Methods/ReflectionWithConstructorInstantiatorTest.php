@@ -11,10 +11,12 @@
 
 namespace Nelmio\Alice\Instances\Instantiator\Methods;
 
+use PHPUnit\Framework\TestCase;
+
 /**
- * @covers Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithConstructor
+ * @covers \Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithConstructor
  */
-class ReflectionWithConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
+class ReflectionWithConstructorInstantiatorTest extends TestCase
 {
     public function testIsAnInstantiatorMethod()
     {

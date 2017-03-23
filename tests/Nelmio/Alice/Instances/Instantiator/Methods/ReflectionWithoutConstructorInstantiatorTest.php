@@ -19,11 +19,12 @@ use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithOptionalParameterI
 use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithPrivateConstructor;
 use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithProtectedConstructor;
 use Nelmio\Alice\Instances\Instantiator\DummyClasses\DummyWithRequiredParameterInConstructor;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Instances\Instantiator\Methods\ReflectionWithoutConstructor
  */
-class ReflectionWithoutConstructorInstantiatorTest extends \PHPUnit_Framework_TestCase
+class ReflectionWithoutConstructorInstantiatorTest extends TestCase
 {
     /**
      * @var ReflectionWithoutConstructor

@@ -11,7 +11,9 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-class FixtureTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FixtureTest extends TestCase
 {
     const USER = 'Nelmio\Alice\support\models\User';
     const STATIC_USER = 'Nelmio\Alice\support\models\StaticUser';

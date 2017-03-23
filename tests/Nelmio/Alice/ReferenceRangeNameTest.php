@@ -15,10 +15,11 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\ObjectManager;
 use Nelmio\Alice\support\models\Group;
-use Nelmio\Alice\support\models\User;
 use Nelmio\Alice\support\models\Task;
+use Nelmio\Alice\support\models\User;
+use PHPUnit\Framework\TestCase;
 
-class ReferenceRangeNameTest extends \PHPUnit_Framework_TestCase
+class ReferenceRangeNameTest extends TestCase
 {
     /**
      * @expectedException \UnexpectedValueException

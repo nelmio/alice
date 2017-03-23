@@ -13,9 +13,10 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
 use Nelmio\Alice\Fixtures\Loader;
 use Nelmio\Alice\Fixtures\Parser\Methods\Yaml as YamlParser;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
-class YamlTest extends \PHPUnit_Framework_TestCase
+class YamlTest extends TestCase
 {
     private static $dir;
 

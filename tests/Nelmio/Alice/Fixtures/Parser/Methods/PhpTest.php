@@ -13,9 +13,10 @@ namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
 use Nelmio\Alice\Fixtures\Loader;
 use Nelmio\Alice\Fixtures\Parser\Methods\Php as PhpParser;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
-class PhpTest extends \PHPUnit_Framework_TestCase
+class PhpTest extends TestCase
 {
     private static $dir;
 

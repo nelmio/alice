@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
 /**
- * @covers Nelmio\Alice\Fixtures\Builder\Methods\RangeName
+ * @covers \Nelmio\Alice\Fixtures\Builder\Methods\RangeName
  */
 class RangeNameTest extends MethodTestCase
 {
