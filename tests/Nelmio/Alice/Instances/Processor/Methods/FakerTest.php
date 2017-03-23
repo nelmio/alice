@@ -12,24 +12,14 @@
 namespace Nelmio\Alice\Instances\Processor\Methods;
 
 use Nelmio\Alice\FooProvider;
+use PHPUnit\Framework\TestCase;
 
-class FakerTest extends \PHPUnit_Framework_TestCase
+class FakerTest extends TestCase
 {
-    const USER = 'Nelmio\Alice\support\models\User';
-    const MAGIC_USER = 'Nelmio\Alice\support\models\MagicUser';
-    const GROUP = 'Nelmio\Alice\support\models\Group';
-    const CONTACT = 'Nelmio\Alice\support\models\Contact';
-
-    protected $persister;
-
-    /**
-     * @var \Nelmio\Alice\Fixtures\Loader
-     */
-    protected $loader;
-
     public function testAddProvider()
     {
         $faker = new Faker([]);
         $faker->addProvider(new FooProvider());
+        $this->assertSame('foo_bar', $faker->fake('foo', null, '_bar'));
     }
 }

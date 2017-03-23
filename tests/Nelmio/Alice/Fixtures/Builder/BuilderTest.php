@@ -14,12 +14,13 @@ namespace Nelmio\Alice\Fixtures\Builder;
 use Nelmio\Alice\Fixtures\Builder\Methods\MethodInterface;
 use Nelmio\Alice\Fixtures\Fixture;
 use Nelmio\Alice\Fixtures\Loader;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**
- * @covers Nelmio\Alice\Fixtures\Builder\Builder
+ * @covers \Nelmio\Alice\Fixtures\Builder\Builder
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends TestCase
 {
     use BuilderProviderTrait;
 
@@ -180,7 +181,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testReturnsNullWhenCannotBuildAFixture()
     {
         $builder = new Builder([]);
-        $builder->build('Dummy', 'dummy', []);
+        $this->assertNull($builder->build('Dummy', 'dummy', []));
     }
 }
 

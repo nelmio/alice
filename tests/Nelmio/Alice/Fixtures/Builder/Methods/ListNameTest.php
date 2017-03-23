@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
 /**
- * @covers Nelmio\Alice\Fixtures\Builder\Methods\ListName
+ * @covers \Nelmio\Alice\Fixtures\Builder\Methods\ListName
  */
 class ListNameTest extends MethodTestCase
 {

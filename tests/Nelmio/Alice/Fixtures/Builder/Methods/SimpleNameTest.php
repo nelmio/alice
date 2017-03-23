@@ -12,7 +12,7 @@
 namespace Nelmio\Alice\Fixtures\Builder\Methods;
 
 /**
- * @covers Nelmio\Alice\Fixtures\Builder\Methods\SimpleName
+ * @covers \Nelmio\Alice\Fixtures\Builder\Methods\SimpleName
  */
 class SimpleNameTest extends MethodTestCase
 {

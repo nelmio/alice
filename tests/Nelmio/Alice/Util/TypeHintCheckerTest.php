@@ -12,8 +12,9 @@
 namespace Nelmio\Alice\Util;
 
 use Nelmio\Alice\TestPersister;
+use PHPUnit\Framework\TestCase;
 
-class TypeHintCheckerTest extends \PHPUnit_Framework_TestCase
+class TypeHintCheckerTest extends TestCase
 {
     const DYNAMIC_CONSTRUCTOR_CLASS = 'Nelmio\Alice\support\models\DynamicConstructorClass';
 

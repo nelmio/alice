@@ -13,11 +13,12 @@ namespace Nelmio\Alice\Instances\Processor\Methods;
 
 use Nelmio\Alice\Fixtures\ParameterBag;
 use Nelmio\Alice\Instances\Processor\Processable;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Nelmio\Alice\Instances\Processor\Methods\Parameterized
+ * @covers \Nelmio\Alice\Instances\Processor\Methods\Parameterized
  */
-class ParameterizedTest extends \PHPUnit_Framework_TestCase
+class ParameterizedTest extends TestCase
 {
     /**
      * @var Parameterized

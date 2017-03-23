@@ -11,11 +11,12 @@
 
 namespace Nelmio\Alice\Instances\Processor;
 
-use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\Fixtures\ParameterBag;
+use Nelmio\Alice\Instances\Collection;
 use Nelmio\Alice\support\extensions\CustomProcessor;
+use PHPUnit\Framework\TestCase;
 
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends TestCase
 {
     /**
      * @var Collection

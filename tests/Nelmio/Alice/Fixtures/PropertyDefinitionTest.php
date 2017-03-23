@@ -11,7 +11,9 @@
 
 namespace Nelmio\Alice\Fixtures;
 
-class PropertyDefinitionTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class PropertyDefinitionTest extends TestCase
 {
     public function testWillParseFlagsOutOfName()
     {
