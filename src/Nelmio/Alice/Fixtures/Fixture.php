@@ -368,19 +368,25 @@ class Fixture
             throw new \UnexpectedValueException("The __construct call in object '{$this}' must be defined as an array of arguments or false to bypass it");
         }
 
-        list($method, $args) = each($constructorValue);
-        if ($method !== 0) {
-            if (!is_callable([$this->class, $method])) {
-                throw new \UnexpectedValueException("Cannot call static method '{$method}' on class '{$this->class}' as a constructor for object '{$this}'");
-            }
-            if (!is_array($args)) {
-                throw new \UnexpectedValueException("The static '{$method}' call in object '{$this}' must be given an array");
+        foreach ($constructorValue as $method => $args) {
+            if ($method !== 0) {
+                if (!is_callable([$this->class, $method])) {
+                    throw new \UnexpectedValueException(
+                        "Cannot call static method '{$method}' on class '{$this->class}' as a constructor for object '{$this}'"
+                    );
+                }
+
+                if (!is_array($args)) {
+                    throw new \UnexpectedValueException(
+                        "The static '{$method}' call in object '{$this}' must be given an array"
+                    );
+                }
+
+                return ['method' => $method, 'args' => $args];
             }
 
-            return ['method' => $method, 'args' => $args];
+            return ['method' => '__construct', 'args' => $constructorValue];
         }
-
-        return ['method' => '__construct', 'args' => $constructorValue];
     }
 
     /**
