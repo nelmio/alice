@@ -29,5 +29,5 @@ interface LexerInterface
      *
      * @return Token[]
      */
-    public function lex(string $value): array;
+    public function lex(string $value);
 }

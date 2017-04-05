@@ -16,6 +16,8 @@ namespace Nelmio\Alice\Loader;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer as NelmioSimpleDenormalizer;
 use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\HoaLexer;
+use Hoa\File\Read;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FileLoaderInterface;
@@ -208,6 +210,13 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     /** @protected */
     const LOCALE = 'en_US';
+
+    /**
+     * @var string Path to Alice grammar defined in the PP language.
+     *
+     * @see https://hoa-project.net/En/Literature/Hack/Compiler.html#PP_language
+     */
+    protected $ppFilePath = __DIR__.'/../../Alice.pp';
 
     private $previous = '';
 
@@ -441,19 +450,9 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     protected function createLexer(): LexerInterface
     {
-        return new EmptyValueLexer(
-            new ReferenceEscaperLexer(
-                new GlobalPatternsLexer(
-                    new FunctionLexer(
-                        new StringThenReferenceLexer(
-                            new SubPatternsLexer(
-                                new ReferenceLexer()
-                            )
-                        )
-                    )
-                )
-            )
-        );
+        $parser = \Hoa\Compiler\Llk\Llk::load(new Read($this->ppFilePath));
+
+        return new HoaLexer($parser);
     }
 
     protected function createExpressionLanguageTokenParser(): TokenParserInterface
