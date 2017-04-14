@@ -18,6 +18,7 @@ use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
+use Nelmio\Alice\Entity\DummyWithPrivateProperty;
 use Nelmio\Alice\Entity\DummyWithVariadicConstructorParam;
 use Nelmio\Alice\Entity\Hydrator\CamelCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
@@ -182,6 +183,27 @@ class LoaderIntegrationTest extends TestCase
         $actualObjects = $set->getObjects();
         $this->assertEquals(count($expectedObjects), count($actualObjects));
         $this->assertEquals($expectedObjects, $actualObjects);
+    }
+
+    public function testWithReflection()
+    {
+        $loader = new WithReflectionLoader();
+
+        $data = [
+            DummyWithPrivateProperty::class => [
+                'dummy' => [
+                    'val' => 'bar',
+                ],
+            ],
+        ];
+
+        $expected = ['dummy' => new DummyWithPrivateProperty('bar')];
+
+        $set = $loader->loadData($data);
+
+        $actual = $set->getObjects();
+        $this->assertEquals(count($expected), count($actual));
+        $this->assertEquals($expected, $actual);
     }
 
     public function testLoadASetOfDataWithInjectedObjects()

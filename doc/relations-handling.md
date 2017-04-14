@@ -48,6 +48,7 @@ To be able to use this feature, your entities have to match some requirements :
 * You can reference properties reachable through a getter (i.e :
 `@name->property` will call `$name->getProperty()` if ```property``` is not
 public)
+* You can reference private properties [by decorating the property accessor with the `ReflectionPropertyAccessor`](advanced-guide.md#custom-accessor)
 * You can reference entities' ID but you will then have to split fixtures in
 multiple files (this is because objects are persisted at the end of each file
 processing) :

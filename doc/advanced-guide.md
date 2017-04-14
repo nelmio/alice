@@ -322,8 +322,21 @@ have 2 easy ways.
 
 1. Create a custom `PropertyAccessor`.
 
-By far the simplies solution, this is actually what is done for setting the
+By far the simplest solution, this is actually what is done for setting the
 values of an `stdClass` object (see [StdPropertyAccessor](../src/PropertyAccess/StdPropertyAccessor.php))
+or for setting private properties using reflection (see [`ReflectionPropertyAccessor`](../src/PropertyAccess/ReflectionPropertyAccessor.php))
+
+You can decorate the property accessor to use your own [by extending the `NativeLoader`](../fixtures/Loader/WithReflectionLoader.php)
+or by using the decoration feature of the Symfony DI component when using the provided integration:
+
+```yml
+    app.fixtures.reflection_property_accessor:
+        class: Nelmio\Alice\PropertyAccess\ReflectionPropertyAccessor
+        public: false
+        decorates: nelmio_alice.property_accessor
+        decoration_priority: -10
+        arguments: ['@app.fixtures.reflection_property_accessor']
+```
 
 
 2. Decorate the PropertyHydrator
