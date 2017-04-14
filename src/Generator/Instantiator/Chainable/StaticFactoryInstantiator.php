@@ -47,7 +47,7 @@ final class StaticFactoryInstantiator extends AbstractChainableInstantiator
             $arguments = [];
         }
 
-        $instance = $factory::$method(...$arguments);
+        $instance = $factory::$method(...array_values($arguments));
         if (false === $instance instanceof $class) {
             throw InstantiationExceptionFactory::createForInvalidInstanceType($fixture, $instance);
         }

@@ -1169,6 +1169,21 @@ class LoaderIntegrationTest extends TestCase
             DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
         ];
 
+        yield 'with named constructor and required parameters with named parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                'param' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
         yield 'with unknown named constructor' => [
             [
                 DummyWithDefaultConstructor::class => [

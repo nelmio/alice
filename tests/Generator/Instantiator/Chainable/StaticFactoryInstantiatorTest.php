@@ -137,6 +137,27 @@ class StaticFactoryInstantiatorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testInstantiatesObjectWithFactoryAndNamedArguments()
+    {
+        $fixture = new SimpleFixture(
+            'dummy',
+            DummyWithNamedConstructorAndOptionalParameters::class,
+            SpecificationBagFactory::create(
+                new MethodCallWithReference(
+                    new StaticReference(DummyWithNamedConstructorAndOptionalParameters::class),
+                    'namedConstruct',
+                    ['param' => 10]
+                )
+            )
+        );
+        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
+
+        $expected = DummyWithNamedConstructorAndOptionalParameters::namedConstruct(10);
+        $actual = $set->getObjects()->get($fixture)->getInstance();
+
+        $this->assertEquals($expected, $actual);
+    }
+
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
      * @expectedExceptionMessage Could not instantiate fixture "dummy".
