@@ -341,7 +341,8 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         return new ConstructorWithCallerDenormalizer(
             new SimpleConstructorDenormalizer(
                 $this->getArgumentsDenormalizer()
-            )
+            ),
+            $this->getArgumentsDenormalizer()
         );
     }
 

@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
@@ -33,9 +34,17 @@ final class ConstructorWithCallerDenormalizer implements ConstructorDenormalizer
      */
     private $simpleConstructorDenormalizer;
 
-    public function __construct(SimpleConstructorDenormalizer $simpleConstructorDenormalizer)
-    {
+    /**
+     * @var ArgumentsDenormalizerInterface
+     */
+    private $argumentsDenormalizer;
+
+    public function __construct(
+        SimpleConstructorDenormalizer $simpleConstructorDenormalizer,
+        ArgumentsDenormalizerInterface $argumentsDenormalizer
+    ) {
         $this->simpleConstructorDenormalizer = $simpleConstructorDenormalizer;
+        $this->argumentsDenormalizer = $argumentsDenormalizer;
     }
 
     /**
@@ -56,9 +65,9 @@ final class ConstructorWithCallerDenormalizer implements ConstructorDenormalizer
         /** @var string $firstKey */
         $firstKey = key($unparsedConstructor);
         list($caller, $method) = $this->getCallerReference($scope, $firstKey);
-        $arguments = $this->simpleConstructorDenormalizer->denormalize($scope, $parser, $unparsedConstructor[$firstKey]);
+        $arguments = $this->argumentsDenormalizer->denormalize($scope, $parser, $unparsedConstructor[$firstKey]);
 
-        return new MethodCallWithReference($caller, $method, $arguments->getArguments());
+        return new MethodCallWithReference($caller, $method, $arguments);
     }
 
     /**

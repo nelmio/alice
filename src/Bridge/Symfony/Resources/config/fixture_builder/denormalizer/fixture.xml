@@ -92,6 +92,7 @@
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.constructor_with_caller_denormalizer"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorWithCallerDenormalizer">
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.simple_constructor_denormalizer" />
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments.simple_arguments_denormalizer" />
         </service>
 
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.simple_constructor_denormalizer"
