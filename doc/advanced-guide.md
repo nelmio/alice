@@ -335,7 +335,7 @@ or by using the decoration feature of the Symfony DI component when using the pr
         public: false
         decorates: nelmio_alice.property_accessor
         decoration_priority: -10
-        arguments: ['@app.fixtures.reflection_property_accessor']
+        arguments: ['@app.fixtures.reflection_property_accessor.inner']
 ```
 
 
