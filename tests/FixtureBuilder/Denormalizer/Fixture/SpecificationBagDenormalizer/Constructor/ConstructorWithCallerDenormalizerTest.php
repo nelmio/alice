@@ -35,7 +35,10 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
      */
     public function testIsNotClonable()
     {
-        clone new ConstructorWithCallerDenormalizer(new SimpleConstructorDenormalizer(new FakeArgumentsDenormalizer()));
+        clone new ConstructorWithCallerDenormalizer(
+            new SimpleConstructorDenormalizer($argsDenormalizer = new FakeArgumentsDenormalizer()),
+            $argsDenormalizer
+        );
     }
 
     public function testDenormalizesEmptyConstructorAsSimpleConstructor()
@@ -57,7 +60,10 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             []
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(new SimpleConstructorDenormalizer($argumentsDenormalizer));
+        $denormalizer = new ConstructorWithCallerDenormalizer(
+            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+            $argumentsDenormalizer
+        );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
         $this->assertEquals($expected, $actual);
@@ -87,7 +93,10 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             $constructor
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(new SimpleConstructorDenormalizer($argumentsDenormalizer));
+        $denormalizer = new ConstructorWithCallerDenormalizer(
+            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+            $argumentsDenormalizer
+        );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
         $this->assertEquals($expected, $actual);
@@ -123,7 +132,10 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             $arguments
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(new SimpleConstructorDenormalizer($argumentsDenormalizer));
+        $denormalizer = new ConstructorWithCallerDenormalizer(
+            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+            $argumentsDenormalizer
+        );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
         $this->assertEquals($expected, $actual);
@@ -155,7 +167,10 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             $arguments
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(new SimpleConstructorDenormalizer($argumentsDenormalizer));
+        $denormalizer = new ConstructorWithCallerDenormalizer(
+            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+            $argumentsDenormalizer
+        );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
         $this->assertEquals($expected, $actual);
@@ -187,7 +202,10 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             $arguments
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(new SimpleConstructorDenormalizer($argumentsDenormalizer));
+        $denormalizer = new ConstructorWithCallerDenormalizer(
+            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+            $argumentsDenormalizer
+        );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
         $this->assertEquals($expected, $actual);
@@ -209,7 +227,10 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
         $flagParser = new FakeFlagParser();
         $argumentsDenormalizer = new FakeArgumentsDenormalizer();
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(new SimpleConstructorDenormalizer($argumentsDenormalizer));
+        $denormalizer = new ConstructorWithCallerDenormalizer(
+            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+            $argumentsDenormalizer
+        );
         $denormalizer->denormalize($fixture, $flagParser, $constructor);
     }
 }
