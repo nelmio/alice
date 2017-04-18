@@ -47,7 +47,7 @@ return [
     ],
     \Nelmio\Entity\Group::class => [
         'group1' => [
-            'name' => Admins,
+            'name' => 'Admins',
             'owner' => '@user1',
             'members' => '<numberBetween(1, 10)>x @user*',
             'created' => '<dateTimeBetween("-200 days", "now")>',
@@ -78,7 +78,7 @@ $objectSet = $loader->loadData([
     ],
     \Nelmio\Entity\Group::class => [
         'group1' => [
-            'name' => Admins,
+            'name' => 'Admins',
             'owner' => '@user1',
             'members' => '<numberBetween(1, 10)>x @user*',
             'created' => '<dateTimeBetween("-200 days", "now")>',
@@ -96,7 +96,7 @@ $objectSet = $loader->loadData(
     [
         \Nelmio\Entity\Group::class => [
             'group1' => [
-                'name' => <{name}>,
+                'name' => '<{name}>',
                 'owner' => '@user1',
             ],
         ],
