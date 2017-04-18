@@ -491,11 +491,7 @@ class LoaderIntegrationTest extends TestCase
             ])
         );
 
-        $actual = $this->loader->loadFile(
-            self::FIXTURES_FILES_DIR
-            . DIRECTORY_SEPARATOR
-            . 'DummyWithConstructorAndCallableReferences.php'
-        );
+        $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.DIRECTORY_SEPARATOR.'DummyWithConstructorAndCallableReferences.php');
 
         $this->assertEquals($expected, $actual);
     }
