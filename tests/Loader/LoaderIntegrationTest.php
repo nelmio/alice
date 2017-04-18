@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
 use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
@@ -476,6 +477,25 @@ class LoaderIntegrationTest extends TestCase
             ])
         );
         $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/template_in_another_file/dummy.yml');
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testTemplatesAreBuildBeforeUsage()
+    {
+        $expected = new ObjectSet(
+            new ParameterBag(),
+            new ObjectBag([
+                'dummy' => new DummyWithConstructorAndCallable(null),
+                'foo-0' => new DummyWithConstructorParam(null)
+            ])
+        );
+
+        $actual = $this->nonIsolatedLoader->loadFile(
+            self::FIXTURES_FILES_DIR
+            . DIRECTORY_SEPARATOR
+            . 'DummyWithConstructorAndCallableReferences.php'
+        );
 
         $this->assertEquals($expected, $actual);
     }
