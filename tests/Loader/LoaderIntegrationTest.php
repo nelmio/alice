@@ -491,7 +491,25 @@ class LoaderIntegrationTest extends TestCase
             ])
         );
 
-        $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.DIRECTORY_SEPARATOR.'DummyWithConstructorAndCallableReferences.php');
+        $actual = $this->loader->loadData([
+            \Nelmio\Alice\Entity\DummyWithConstructorAndCallable::class => [
+                'dummy_template (template)' => [
+                    '__calls' => [
+                        [
+                            'reset' => []
+                        ]
+                    ]
+                ],
+                'dummy (extends dummy_template)' => [
+                    '__construct' => ['foo']
+                ]
+            ],
+            \Nelmio\Alice\Entity\DummyWithConstructorParam::class => [
+                'foo-0' => [
+                    '__construct' => ['@dummy->foo']
+                ],
+            ],
+        ]);
 
         $this->assertEquals($expected, $actual);
     }
