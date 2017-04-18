@@ -246,7 +246,7 @@ class FixtureReferenceResolverTest extends TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundException
      * @expectedExceptionMessage Could not find the fixture "dummy".
      */
     public function testIfTheReferenceRefersToANonExistentFixtureAndNoInstanceIsAvailableThenThrowsAnException()

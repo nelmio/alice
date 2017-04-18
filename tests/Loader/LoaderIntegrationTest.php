@@ -950,7 +950,7 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException
      */
     public function testLoadParsesReferencesInQuotes()
     {

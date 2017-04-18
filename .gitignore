@@ -6,3 +6,4 @@ bin/
 !bin/test.sh
 vendor-bin/*/vendor/
 humbuglog.txt
+fixtures/Bridge/Symfony/Application/cache/
