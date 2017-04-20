@@ -6,7 +6,7 @@
 
 [![Package version](http://img.shields.io/packagist/vpre/nelmio/alice.svg?style=flat-square)](https://packagist.org/packages/nelmio/alice)
 [![Build Status](https://img.shields.io/travis/nelmio/alice.svg?branch=2.x&style=flat-square)](https://travis-ci.org/nelmio/alice?branch=2.x)
-[![Slack](https://img.shields.io/badge/slack-%23alice--fixtures-red.svg?style=flat-square)](https://slackinvite.me/to/symfony-devs)
+[![Slack](https://img.shields.io/badge/slack-%23alice--fixtures-red.svg?style=flat-square)](https://symfony-devs.slack.com/shared_invite/MTYxMjcxMjc0MTc5LTE0OTA3ODE4OTQtYzc4NWVmMzRmZQ)
 [![License](https://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](LICENSE)
 
 Relying on [fzaninotto/Faker](https://github.com/fzaninotto/Faker), Alice
