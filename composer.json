@@ -13,11 +13,11 @@
     "require": {
         "php": ">=5.3",
         "fzaninotto/faker": "~1.0",
-        "symfony/yaml": "~2.0"
+        "symfony/yaml": "~2.8|~3.0"
     },
     "require-dev": {
         "doctrine/common": "~2.3",
-        "symfony/property-access": "~2.2",
+        "symfony/property-access": "~2.8|~3.0",
         "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
