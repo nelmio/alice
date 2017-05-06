@@ -16,9 +16,11 @@ namespace Nelmio\Alice\Loader;
 use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
 use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\DataLoaderInterface;
+use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use Nelmio\Alice\Entity\DummyWithPrivateProperty;
+use Nelmio\Alice\Entity\DummyWithVariadicConstructorParam;
 use Nelmio\Alice\Entity\Hydrator\CamelCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
 use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
@@ -35,6 +37,8 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Entity\StdClassFactory;
+use Nelmio\Alice\Entity\ValueResolver\DummyWithGetter;
+use Nelmio\Alice\Entity\ValueResolver\DummyWithMethodArgument;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\FileLoaderInterface;
@@ -1528,391 +1532,391 @@ class LoaderIntegrationTest extends TestCase
 
     public function provideFixturesToGenerate()
     {
-//        yield 'empty instance' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => new \stdClass(),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'static value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ])
-//                ],
-//            ],
-//        ];
-//
-//        yield 'reference value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'dummy' => '@dummy',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'dummy' => $dummy,
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'inverted reference value' => [
-//            [
-//                \stdClass::class => [
-//                    'another_dummy' => [
-//                        'dummy' => '@dummy',
-//                    ],
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'dummy' => $dummy,
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'dynamic reference' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy{1..2}' => [
-//                        'name' => '<current()>',
-//                    ],
-//                    'another_dummy{1..2}' => [
-//                        'dummy' => '@dummy<current()>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy1' => $dummy1 = StdClassFactory::create([
-//                        'name' => '1',
-//                    ]),
-//                    'dummy2' => $dummy2 = StdClassFactory::create([
-//                        'name' => '2',
-//                    ]),
-//                    'another_dummy1' => StdClassFactory::create([
-//                        'dummy' => $dummy1,
-//                    ]),
-//                    'another_dummy2' => StdClassFactory::create([
-//                        'dummy' => $dummy2,
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'inverted dynamic reference' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy{1..2}' => [
-//                        'relatedDummy' => '@another_dummy<current()>',
-//                    ],
-//                    'another_dummy{1..2}' => [
-//                        'name' => '<current()>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'another_dummy1' => $anotherDummy1 = StdClassFactory::create([
-//                        'name' => '1',
-//                    ]),
-//                    'another_dummy2' => $anotherDummy2 = StdClassFactory::create([
-//                        'name' => '2',
-//                    ]),
-//                    'dummy1' => StdClassFactory::create([
-//                        'relatedDummy' => $anotherDummy1,
-//                    ]),
-//                    'dummy2' => StdClassFactory::create([
-//                        'relatedDummy' => $anotherDummy2,
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'property reference value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'foo' => '@dummy->foo',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'inverted property reference value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'name' => '@another_dummy->name',
-//                    ],
-//                    'another_dummy' => [
-//                        'name' => 'foo',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'name' => 'foo',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'name' => 'foo',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'non existing property reference' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'foo' => '@dummy->bob',
-//                    ],
-//                ],
-//            ],
-//            null,
-//        ];
-//
-//        yield 'property reference value with a getter' => [
-//            [
-//                DummyWithGetter::class => [
-//                    'dummy' => [
-//                        'name' => 'foo',
-//                    ],
-//                    'another_dummy' => [
-//                        'name' => '@dummy->name',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = (new DummyWithGetter())->setName('foo'),
-//                    'another_dummy' => (new DummyWithGetter())->setName('__get__foo'),
-//                ],
-//            ]
-//        ];
-//
-//        yield 'inverted property reference value with a getter' => [
-//            [
-//                DummyWithGetter::class => [
-//                    'dummy' => [
-//                        'name' => '@another_dummy->name',
-//                    ],
-//                    'another_dummy' => [
-//                        'name' => 'foo',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = (new DummyWithGetter())->setName('__get__foo'),
-//                    'another_dummy' => (new DummyWithGetter())->setName('foo'),
-//                ],
-//            ]
-//        ];
-//
-//        yield 'array value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'dummies' => ['@dummy', '@dummy', '@dummy'],
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'dummies' => [$dummy, $dummy, $dummy]
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'wildcard reference value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy_0' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'dummy' => '@dummy*',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy_0' => $dummy = StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'dummy' => $dummy,
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'wildcard property reference value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'foo' => '@dummy*->foo',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'dynamic array value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'dummies' => '3x @dummy',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'dummies' => [$dummy, $dummy, $dummy]
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'array value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'dummies' => ['@dummy', '@dummy', '@dummy'],
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'dummies' => [$dummy, $dummy, $dummy]
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'dynamic array value with wildcard' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'dummies' => '3x @dummy*',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'dummies' => [$dummy, $dummy, $dummy]
-//                    ]),
-//                ],
-//            ],
-//        ];
+        yield 'empty instance' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new \stdClass(),
+                ],
+            ],
+        ];
+
+        yield 'static value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ])
+                ],
+            ],
+        ];
+
+        yield 'reference value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummy' => '@dummy',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummy' => $dummy,
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'inverted reference value' => [
+            [
+                \stdClass::class => [
+                    'another_dummy' => [
+                        'dummy' => '@dummy',
+                    ],
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummy' => $dummy,
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'dynamic reference' => [
+            [
+                \stdClass::class => [
+                    'dummy{1..2}' => [
+                        'name' => '<current()>',
+                    ],
+                    'another_dummy{1..2}' => [
+                        'dummy' => '@dummy<current()>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy1' => $dummy1 = StdClassFactory::create([
+                        'name' => '1',
+                    ]),
+                    'dummy2' => $dummy2 = StdClassFactory::create([
+                        'name' => '2',
+                    ]),
+                    'another_dummy1' => StdClassFactory::create([
+                        'dummy' => $dummy1,
+                    ]),
+                    'another_dummy2' => StdClassFactory::create([
+                        'dummy' => $dummy2,
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'inverted dynamic reference' => [
+            [
+                \stdClass::class => [
+                    'dummy{1..2}' => [
+                        'relatedDummy' => '@another_dummy<current()>',
+                    ],
+                    'another_dummy{1..2}' => [
+                        'name' => '<current()>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'another_dummy1' => $anotherDummy1 = StdClassFactory::create([
+                        'name' => '1',
+                    ]),
+                    'another_dummy2' => $anotherDummy2 = StdClassFactory::create([
+                        'name' => '2',
+                    ]),
+                    'dummy1' => StdClassFactory::create([
+                        'relatedDummy' => $anotherDummy1,
+                    ]),
+                    'dummy2' => StdClassFactory::create([
+                        'relatedDummy' => $anotherDummy2,
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'property reference value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '@dummy->foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'inverted property reference value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'name' => '@another_dummy->name',
+                    ],
+                    'another_dummy' => [
+                        'name' => 'foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'name' => 'foo',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'name' => 'foo',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'non existing property reference' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '@dummy->bob',
+                    ],
+                ],
+            ],
+            null,
+        ];
+
+        yield 'property reference value with a getter' => [
+            [
+                DummyWithGetter::class => [
+                    'dummy' => [
+                        'name' => 'foo',
+                    ],
+                    'another_dummy' => [
+                        'name' => '@dummy->name',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = (new DummyWithGetter())->setName('foo'),
+                    'another_dummy' => (new DummyWithGetter())->setName('__get__foo'),
+                ],
+            ]
+        ];
+
+        yield 'inverted property reference value with a getter' => [
+            [
+                DummyWithGetter::class => [
+                    'dummy' => [
+                        'name' => '@another_dummy->name',
+                    ],
+                    'another_dummy' => [
+                        'name' => 'foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = (new DummyWithGetter())->setName('__get__foo'),
+                    'another_dummy' => (new DummyWithGetter())->setName('foo'),
+                ],
+            ]
+        ];
+
+        yield 'array value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummies' => ['@dummy', '@dummy', '@dummy'],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummies' => [$dummy, $dummy, $dummy]
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'wildcard reference value' => [
+            [
+                \stdClass::class => [
+                    'dummy_0' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummy' => '@dummy*',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy_0' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummy' => $dummy,
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'wildcard property reference value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '@dummy*->foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'dynamic array value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummies' => '3x @dummy',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummies' => [$dummy, $dummy, $dummy]
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'array value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummies' => ['@dummy', '@dummy', '@dummy'],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummies' => [$dummy, $dummy, $dummy]
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'dynamic array value with wildcard' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'dummies' => '3x @dummy*',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummies' => [$dummy, $dummy, $dummy]
+                    ]),
+                ],
+            ],
+        ];
 
         yield 'dynamic array with fixture range' => [
             [
@@ -1947,1009 +1951,1009 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
-//        yield 'objects with dots in their references' => [
-//            [
-//                \stdClass::class => [
-//                    'user.alice' => [
-//                        'username' => 'alice',
-//                    ],
-//                    'user.alias.alice_alias' => [
-//                        'username' => '@user.alice->username',
-//                    ],
-//                    'user.deep_alias' => [
-//                        'username' => '@user.alias.alice_alias->username',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'user.alice' => StdClassFactory::create([
-//                        'username' => 'alice',
-//                    ]),
-//                    'user.alias.alice_alias' => StdClassFactory::create([
-//                        'username' => 'alice',
-//                    ]),
-//                    'user.deep_alias' => StdClassFactory::create([
-//                        'username' => 'alice',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[special characters] references with underscores' => [
-//            [
-//                \stdClass::class => [
-//                    'user_alice' => [
-//                        'username' => 'alice',
-//                    ],
-//                    'user_alias' => [
-//                        'username' => '@user_alice->username',
-//                    ],
-//                    'user_deep_alias' => [
-//                        'username' => '@user_alias->username',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'user_alice' => StdClassFactory::create([
-//                        'username' => 'alice',
-//                    ]),
-//                    'user_alias' => StdClassFactory::create([
-//                        'username' => 'alice',
-//                    ]),
-//                    'user_deep_alias' => StdClassFactory::create([
-//                        'username' => 'alice',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[special characters] references with slashes' => [
-//            [
-//                \stdClass::class => [
-//                    'user/alice' => [
-//                        'username' => 'alice',
-//                    ],
-//                    'user/alias/alice_alias' => [
-//                        'username' => '@user/alice->username',
-//                    ],
-//                    'user/deep_alias' => [
-//                        'username' => '@user/alias/alice_alias->username',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'user/alice' => StdClassFactory::create([
-//                        'username' => 'alice',
-//                    ]),
-//                    'user/alias/alice_alias' => StdClassFactory::create([
-//                        'username' => 'alice',
-//                    ]),
-//                    'user/deep_alias' => StdClassFactory::create([
-//                        'username' => 'alice',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[provider] faker functions' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => '<numberBetween(0, 0)>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 0,
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[function] call PHP native function' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => '<strtolower("BAR")>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[self reference] alone' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'itself' => '@self',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (function () {
-//                        $dummy = new \stdClass();
-//                        $dummy->itself = $dummy;
-//
-//                        return $dummy;
-//                    })(),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[self reference] evaluated with a function' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'itself' => '@<("self")>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (function () {
-//                        $dummy = new \stdClass();
-//                        $dummy->itself = $dummy;
-//
-//                        return $dummy;
-//                    })(),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[self reference] property' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                        'itself' => '@self',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (function () {
-//                        $dummy = new \stdClass();
-//                        $dummy->foo = 'bar';
-//                        $dummy->itself = $dummy;
-//
-//                        return $dummy;
-//                    })(),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'identity provider' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                        'identity_foo' => '<identity($foo)>',
-//                    ],
-//                    'another_dummy' => [
-//                        'foo' => 'bar_baz',
-//                        'identity_foo' => '<identity(str_replace("_", " ", $foo))>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                        'identity_foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'foo' => 'bar_baz',
-//                        'identity_foo' => 'bar baz',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[self reference] alone' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'itself' => '@self',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (function () {
-//                        $dummy = new \stdClass();
-//                        $dummy->itself = $dummy;
-//
-//                        return $dummy;
-//                    })(),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[self reference] property' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                        'itself' => '@self',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (function () {
-//                        $dummy = new \stdClass();
-//                        $dummy->foo = 'bar';
-//                        $dummy->itself = $dummy;
-//
-//                        return $dummy;
-//                    })(),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[variable] nominal' => [
-//            [
-//                \Nelmio\Alice\Entity\DummyWithGetter::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                        'fooVal' => '$foo',
-//                    ],
-//                    'another_dummy' => [
-//                        'foo' => 'bar',
-//                        'fooVal' => '@self->foo',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
-//                        $dummy->setFoo('bar');
-//                        $dummy->fooVal = 'bar';
-//
-//                        return $dummy;
-//                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
-//                    'another_dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
-//                        $dummy->setFoo('bar');
-//                        $dummy->fooVal = 'rab';
-//
-//                        return $dummy;
-//                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[variable] variables are scoped to the fixture' => [
-//            [
-//                \Nelmio\Alice\Entity\DummyWithGetter::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                        'fooVal' => '$foo',
-//                    ],
-//                    'another_dummy' => [
-//                        'foo' => '$foo',
-//                    ],
-//                ],
-//            ],
-//            null,
-//        ];
-//
-//        yield '[identity] evaluate the argument as if it was a plain PHP function' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => '<("Hello"." "."world!")>',
-//                        'bar' => '<(str_replace("_", " ", "Hello_world!"))>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'Hello world!',
-//                        'bar' => 'Hello world!',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[identity] has access to variables' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                        'foz' => '<($foo)>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                        'foz' => 'bar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[identity] has access to fixtures' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'foo' => '<(@dummy->foo)>'
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[identity] has access to instances' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar'
-//                    ],
-//                    'another_dummy' => [
-//                        'relatedDummy' => '<(@dummy)>'
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => $dummy = StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'relatedDummy' => $dummy,
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[identity] has access to current' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy_{1..2}' => [
-//                        'foo' => '<($current)>'
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy_1' => StdClassFactory::create([
-//                        'foo' => '1',
-//                    ]),
-//                    'dummy_2' => StdClassFactory::create([
-//                        'foo' => '2',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[templating] templates are not returned' => [
-//            [
-//                \stdClass::class => [
-//                    'base_dummy (template)' => [],
-//                    'dummy' => [],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => new \stdClass(),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[templating] nominal' => [
-//            [
-//                \stdClass::class => [
-//                    'base_dummy (template)' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_base_dummy (template)' => [
-//                        'foo' => 'baz',
-//                        'ping' => 'pong',
-//                    ],
-//                    'dummy0 (extends base_dummy, extends another_base_dummy)' => [
-//                        'foo' => 'baz',
-//                        'ping' => 'pong',
-//                    ],
-//                    'dummy1 (extends another_base_dummy, extends base_dummy)' => [
-//                        'foo' => 'bar',
-//                        'ping' => 'pong',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy0' => StdClassFactory::create([
-//                        'foo' => 'baz',
-//                        'ping' => 'pong',
-//                    ]),
-//                    'dummy1' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                        'ping' => 'pong',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[current] nominal' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy{1..2}' => [
-//                        'val' => '<current()>',
-//                    ],
-//                    'dummy_{alice, bob}' => [
-//                        'val' => '<current()>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy1' => StdClassFactory::create([
-//                        'val' => 1,
-//                    ]),
-//                    'dummy2' => StdClassFactory::create([
-//                        'val' => 2,
-//                    ]),
-//                    'dummy_alice' => StdClassFactory::create([
-//                        'val' => 'alice',
-//                    ]),
-//                    'dummy_bob' => StdClassFactory::create([
-//                        'val' => 'bob',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[current] in constructor' => [
-//            [
-//                DummyWithConstructorParam::class => [
-//                    'dummy{1..2}' => [
-//                        '__construct' => ['<current()>'],
-//                    ],
-//                    'dummy_{alice, bob}' => [
-//                        '__construct' => ['<current()>'],
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy1' => new DummyWithConstructorParam(1),
-//                    'dummy2' => new DummyWithConstructorParam(2),
-//                    'dummy_alice' => new DummyWithConstructorParam('alice'),
-//                    'dummy_bob' => new DummyWithConstructorParam('bob'),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'at literal is not resolved' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'atValues' => [
-//                            '\\@<("hello")>',
-//                            '\\\\',
-//                            '\\\\\\@foo',
-//                            '\\\\foo',
-//                        ],
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'atValues' => [
-//                            '@hello',
-//                            '\\',
-//                            '\\@foo',
-//                            '\\foo',
-//                        ]
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[parameter] simple' => [
-//            [
-//                'parameters' => [
-//                    'foo' => 'bar',
-//                ],
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => '<{foo}>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [
-//                    'foo' => 'bar',
-//                ],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[parameter] array parameter' => [
-//            [
-//                'parameters' => [
-//                    'foo' => ['bar'],
-//                ],
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => '<randomElement(<{foo}>)>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [
-//                    'foo' => ['bar'],
-//                ],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[parameter] composite parameter' => [
-//            [
-//                'parameters' => [
-//                    'foo' => 'NaN',
-//                    'bar' => 'Bat',
-//                    'composite' => '<{foo}> <{bar}>!',
-//                ],
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => '<{foo}> <{bar}>!',
-//                    ],
-//                    'another_dummy' => [
-//                        'foo' => '<{composite}>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [
-//                    'foo' => 'NaN',
-//                    'bar' => 'Bat',
-//                    'composite' => 'NaN Bat!',
-//                ],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'NaN Bat!',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'foo' => 'NaN Bat!',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[parameter] nested parameter' => [
-//            [
-//                'parameters' => [
-//                    'param1' => 2,
-//                    'param2' => 1,
-//                    'param3' => '<{param<{param2}>}>',
-//                ],
-//                'objects' => [],
-//            ],
-//            [
-//                'parameters' => [
-//                    'param1' => 2,
-//                    'param2' => 1,
-//                    'param3' => '2',
-//                ],
-//                'objects' => [],
-//            ],
-//        ];
-//
-//        yield '[parameter] circular reference' => [
-//            [
-//                'parameters' => [
-//                    'foo' => '<{bar}>',
-//                    'bar' => '<{foo}>',
-//                ],
-//            ],
-//            null,
-//        ];
-//
-//        yield 'parameters in identity' => [
-//            [
-//                'parameters' => [
-//                    'ping' => 'pong',
-//                    'foo' => 'bar',
-//                ],
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => '<($ping)>',
-//                        'bar' => '$foo',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [
-//                    'ping' => 'pong',
-//                    'foo' => 'bar',
-//                ],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'pong',
-//                        'bar' => 'pong',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'parameters in identity during instantiation' => [
-//            [
-//                'parameters' => [
-//                    'ping' => 'pong',
-//                    'foo' => 'bar',
-//                ],
-//                DummyWithConstructorParam::class => [
-//                    'dummy' => [
-//                        '__construct' => [
-//                            [
-//                                'foo' => '<($ping)>',
-//                                'bar' => '$foo',
-//                            ],
-//                        ],
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [
-//                    'ping' => 'pong',
-//                    'foo' => 'bar',
-//                ],
-//                'objects' => [
-//                    'dummy' => new DummyWithConstructorParam([
-//                        'foo' => 'pong',
-//                        'bar' => 'bar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'argument indexes' => [
-//            [
-//                'parameters' => [
-//                    'ping' => 'pong',
-//                    'foo' => 'bar',
-//                ],
-//                DummyWithVariadicConstructorParam::class => [
-//                    'dummy' => [
-//                        '__construct' => [
-//                            'foo' => '<($ping)>',
-//                            'bar' => '$foo',
-//                            '$bar',
-//                            '$3',
-//                        ],
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [
-//                    'ping' => 'pong',
-//                    'foo' => 'bar',
-//                ],
-//                'objects' => [
-//                    'dummy' => new DummyWithVariadicConstructorParam(
-//                        'pong',
-//                        'pong',
-//                        'pong',
-//                        'pong'
-//                    ),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'dynamic array with scalar value' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => '5x bar',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => ['bar', 'bar', 'bar', 'bar', 'bar']
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'object circular reference' => [
-//            [
-//                DummyWithConstructorParam::class => [
-//                    'dummy' => [
-//                        '__construct' => [
-//                            '@another_dummy',
-//                        ],
-//                    ],
-//                    'another_dummy' => [
-//                        '__construct' => [
-//                            '@dummy',
-//                        ],
-//                    ],
-//                ],
-//            ],
-//            null,
-//        ];
-//
-//        yield 'has proper stdClass support' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'bar',
-//                    ],
-//                    'another_dummy' => [
-//                        'foo' => '@dummy->foo'
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'foo' => 'bar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'method calls' => [
-//            [
-//                Dummy::class => [
-//                    'dummy' => [
-//                        '__calls' => [
-//                            ['setTitle' => ['Fake Title']],
-//                            ['addFoo' => []],
-//                            ['addFoo' => []],
-//                        ]
-//                    ]
-//                ]
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => Dummy::create('Fake Title', 2),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[current] in method calls' => [
-//            [
-//                Dummy::class => [
-//                    'dummy_{1..2}' => [
-//                        '__calls' => [
-//                            ['setTitle' => ['Fake Title <current()>']],
-//                            ['addFoo' => []],
-//                        ]
-//                    ]
-//                ]
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy_1' => Dummy::create('Fake Title 1', 1),
-//                    'dummy_2' => Dummy::create('Fake Title 2', 1),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[current] in method calls' => [
-//            [
-//                Dummy::class => [
-//                    'dummy_{1..2}' => [
-//                        '__calls' => [
-//                            ['setTitle' => ['Fake Title <current()>']],
-//                            ['addFoo' => []],
-//                        ]
-//                    ]
-//                ]
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy_1' => Dummy::create('Fake Title 1', 1),
-//                    'dummy_2' => Dummy::create('Fake Title 2', 1),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'reference value in method calls' => [
-//            [
-//                Dummy::class => [
-//                    'dummy_1' => [],
-//                    'dummy_2' => [
-//                        '__calls' => [
-//                            ['setTitle' => ['Dummy 2']],
-//                            ['setRelatedDummy' => ['@dummy_1']],
-//                        ]
-//                    ]
-//                ]
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy_1' => $dummy1 = Dummy::create(null, 0),
-//                    'dummy_2' => Dummy::create('Dummy 2', 0, $dummy1),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'method call reference value' => [
-//            [
-//                DummyWithGetter::class => [
-//                    'dummy' => [
-//                        'name' => 'foobar'
-//                    ],
-//                ],
-//                \stdClass::class => [
-//                    'another_dummy' => [
-//                        'foo' => '@dummy->getName()',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (new DummyWithGetter())->setName('foobar'),
-//                    'another_dummy' => StdClassFactory::create([
-//                        'foo' => '__get__foobar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        $dummyWithMethodArgument = new DummyWithMethodArgument();
-//        $dummyWithMethodArgument->prefix = 'bazbaz__';
-//        yield 'method call reference value with reference argument' => [
-//            [
-//                DummyWithGetter::class => [
-//                    'dummy' => [
-//                        'name' => 'foobar'
-//                    ],
-//                ],
-//                DummyWithMethodArgument::class => [
-//                    'dummy_2' => [
-//                        'prefix' => 'bazbaz__',
-//                    ],
-//                ],
-//                \stdClass::class => [
-//                    'another_dummy' => [
-//                        'foo' => '@dummy_2->getValue(@dummy)',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => (new DummyWithGetter())->setName('foobar'),
-//                    'dummy_2' => $dummyWithMethodArgument,
-//                    'another_dummy' => StdClassFactory::create([
-//                        'foo' => 'bazbaz____get__foobar',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'usage of percent sign in string (#665)' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => 'a\%b',
-//                        'bar' => '\%c',
-//                        'baz' => '100\%',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => 'a%b',
-//                        'bar' => '%c',
-//                        'baz' => '100%',
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield 'usage of an object' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => (function () {
-//                            return StdClassFactory::create(['ping' => 'pong']);
-//                        })(),
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => StdClassFactory::create(['ping' => 'pong']),
-//                    ]),
-//                ],
-//            ],
-//        ];
-//
-//        yield '[function] call nested PHP native function' => [
-//            [
-//                \stdClass::class => [
-//                    'dummy' => [
-//                        'foo' => '<json_encode([])>',
-//                    ],
-//                ],
-//            ],
-//            [
-//                'parameters' => [],
-//                'objects' => [
-//                    'dummy' => StdClassFactory::create([
-//                        'foo' => '[]',
-//                    ]),
-//                ],
-//            ],
-//        ];
+        yield 'objects with dots in their references' => [
+            [
+                \stdClass::class => [
+                    'user.alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user.alias.alice_alias' => [
+                        'username' => '@user.alice->username',
+                    ],
+                    'user.deep_alias' => [
+                        'username' => '@user.alias.alice_alias->username',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'user.alice' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user.alias.alice_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user.deep_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[special characters] references with underscores' => [
+            [
+                \stdClass::class => [
+                    'user_alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user_alias' => [
+                        'username' => '@user_alice->username',
+                    ],
+                    'user_deep_alias' => [
+                        'username' => '@user_alias->username',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'user_alice' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user_deep_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[special characters] references with slashes' => [
+            [
+                \stdClass::class => [
+                    'user/alice' => [
+                        'username' => 'alice',
+                    ],
+                    'user/alias/alice_alias' => [
+                        'username' => '@user/alice->username',
+                    ],
+                    'user/deep_alias' => [
+                        'username' => '@user/alias/alice_alias->username',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'user/alice' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user/alias/alice_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                    'user/deep_alias' => StdClassFactory::create([
+                        'username' => 'alice',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[provider] faker functions' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<numberBetween(0, 0)>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 0,
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[function] call PHP native function' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<strtolower("BAR")>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[self reference] alone' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'itself' => '@self',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function () {
+                        $dummy = new \stdClass();
+                        $dummy->itself = $dummy;
+
+                        return $dummy;
+                    })(),
+                ],
+            ],
+        ];
+
+        yield '[self reference] evaluated with a function' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'itself' => '@<("self")>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function () {
+                        $dummy = new \stdClass();
+                        $dummy->itself = $dummy;
+
+                        return $dummy;
+                    })(),
+                ],
+            ],
+        ];
+
+        yield '[self reference] property' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'itself' => '@self',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function () {
+                        $dummy = new \stdClass();
+                        $dummy->foo = 'bar';
+                        $dummy->itself = $dummy;
+
+                        return $dummy;
+                    })(),
+                ],
+            ],
+        ];
+
+        yield 'identity provider' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'identity_foo' => '<identity($foo)>',
+                    ],
+                    'another_dummy' => [
+                        'foo' => 'bar_baz',
+                        'identity_foo' => '<identity(str_replace("_", " ", $foo))>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                        'identity_foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'bar_baz',
+                        'identity_foo' => 'bar baz',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[self reference] alone' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'itself' => '@self',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function () {
+                        $dummy = new \stdClass();
+                        $dummy->itself = $dummy;
+
+                        return $dummy;
+                    })(),
+                ],
+            ],
+        ];
+
+        yield '[self reference] property' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'itself' => '@self',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function () {
+                        $dummy = new \stdClass();
+                        $dummy->foo = 'bar';
+                        $dummy->itself = $dummy;
+
+                        return $dummy;
+                    })(),
+                ],
+            ],
+        ];
+
+        yield '[variable] nominal' => [
+            [
+                \Nelmio\Alice\Entity\DummyWithGetter::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'fooVal' => '$foo',
+                    ],
+                    'another_dummy' => [
+                        'foo' => 'bar',
+                        'fooVal' => '@self->foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
+                        $dummy->setFoo('bar');
+                        $dummy->fooVal = 'bar';
+
+                        return $dummy;
+                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
+                    'another_dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
+                        $dummy->setFoo('bar');
+                        $dummy->fooVal = 'rab';
+
+                        return $dummy;
+                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
+                ],
+            ],
+        ];
+
+        yield '[variable] variables are scoped to the fixture' => [
+            [
+                \Nelmio\Alice\Entity\DummyWithGetter::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'fooVal' => '$foo',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '$foo',
+                    ],
+                ],
+            ],
+            null,
+        ];
+
+        yield '[identity] evaluate the argument as if it was a plain PHP function' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<("Hello"." "."world!")>',
+                        'bar' => '<(str_replace("_", " ", "Hello_world!"))>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'Hello world!',
+                        'bar' => 'Hello world!',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[identity] has access to variables' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                        'foz' => '<($foo)>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                        'foz' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[identity] has access to fixtures' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '<(@dummy->foo)>'
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[identity] has access to instances' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar'
+                    ],
+                    'another_dummy' => [
+                        'relatedDummy' => '<(@dummy)>'
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => $dummy = StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'relatedDummy' => $dummy,
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[identity] has access to current' => [
+            [
+                \stdClass::class => [
+                    'dummy_{1..2}' => [
+                        'foo' => '<($current)>'
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy_1' => StdClassFactory::create([
+                        'foo' => '1',
+                    ]),
+                    'dummy_2' => StdClassFactory::create([
+                        'foo' => '2',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[templating] templates are not returned' => [
+            [
+                \stdClass::class => [
+                    'base_dummy (template)' => [],
+                    'dummy' => [],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new \stdClass(),
+                ],
+            ],
+        ];
+
+        yield '[templating] nominal' => [
+            [
+                \stdClass::class => [
+                    'base_dummy (template)' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_base_dummy (template)' => [
+                        'foo' => 'baz',
+                        'ping' => 'pong',
+                    ],
+                    'dummy0 (extends base_dummy, extends another_base_dummy)' => [
+                        'foo' => 'baz',
+                        'ping' => 'pong',
+                    ],
+                    'dummy1 (extends another_base_dummy, extends base_dummy)' => [
+                        'foo' => 'bar',
+                        'ping' => 'pong',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy0' => StdClassFactory::create([
+                        'foo' => 'baz',
+                        'ping' => 'pong',
+                    ]),
+                    'dummy1' => StdClassFactory::create([
+                        'foo' => 'bar',
+                        'ping' => 'pong',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[current] nominal' => [
+            [
+                \stdClass::class => [
+                    'dummy{1..2}' => [
+                        'val' => '<current()>',
+                    ],
+                    'dummy_{alice, bob}' => [
+                        'val' => '<current()>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy1' => StdClassFactory::create([
+                        'val' => 1,
+                    ]),
+                    'dummy2' => StdClassFactory::create([
+                        'val' => 2,
+                    ]),
+                    'dummy_alice' => StdClassFactory::create([
+                        'val' => 'alice',
+                    ]),
+                    'dummy_bob' => StdClassFactory::create([
+                        'val' => 'bob',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[current] in constructor' => [
+            [
+                DummyWithConstructorParam::class => [
+                    'dummy{1..2}' => [
+                        '__construct' => ['<current()>'],
+                    ],
+                    'dummy_{alice, bob}' => [
+                        '__construct' => ['<current()>'],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy1' => new DummyWithConstructorParam(1),
+                    'dummy2' => new DummyWithConstructorParam(2),
+                    'dummy_alice' => new DummyWithConstructorParam('alice'),
+                    'dummy_bob' => new DummyWithConstructorParam('bob'),
+                ],
+            ],
+        ];
+
+        yield 'at literal is not resolved' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'atValues' => [
+                            '\\@<("hello")>',
+                            '\\\\',
+                            '\\\\\\@foo',
+                            '\\\\foo',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'atValues' => [
+                            '@hello',
+                            '\\',
+                            '\\@foo',
+                            '\\foo',
+                        ]
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[parameter] simple' => [
+            [
+                'parameters' => [
+                    'foo' => 'bar',
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<{foo}>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'foo' => 'bar',
+                ],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[parameter] array parameter' => [
+            [
+                'parameters' => [
+                    'foo' => ['bar'],
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<randomElement(<{foo}>)>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'foo' => ['bar'],
+                ],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[parameter] composite parameter' => [
+            [
+                'parameters' => [
+                    'foo' => 'NaN',
+                    'bar' => 'Bat',
+                    'composite' => '<{foo}> <{bar}>!',
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<{foo}> <{bar}>!',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '<{composite}>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'foo' => 'NaN',
+                    'bar' => 'Bat',
+                    'composite' => 'NaN Bat!',
+                ],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'NaN Bat!',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'NaN Bat!',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[parameter] nested parameter' => [
+            [
+                'parameters' => [
+                    'param1' => 2,
+                    'param2' => 1,
+                    'param3' => '<{param<{param2}>}>',
+                ],
+                'objects' => [],
+            ],
+            [
+                'parameters' => [
+                    'param1' => 2,
+                    'param2' => 1,
+                    'param3' => '2',
+                ],
+                'objects' => [],
+            ],
+        ];
+
+        yield '[parameter] circular reference' => [
+            [
+                'parameters' => [
+                    'foo' => '<{bar}>',
+                    'bar' => '<{foo}>',
+                ],
+            ],
+            null,
+        ];
+
+        yield 'parameters in identity' => [
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<($ping)>',
+                        'bar' => '$foo',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'pong',
+                        'bar' => 'pong',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'parameters in identity during instantiation' => [
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                DummyWithConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            [
+                                'foo' => '<($ping)>',
+                                'bar' => '$foo',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                'objects' => [
+                    'dummy' => new DummyWithConstructorParam([
+                        'foo' => 'pong',
+                        'bar' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'argument indexes' => [
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                DummyWithVariadicConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'foo' => '<($ping)>',
+                            'bar' => '$foo',
+                            '$bar',
+                            '$3',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [
+                    'ping' => 'pong',
+                    'foo' => 'bar',
+                ],
+                'objects' => [
+                    'dummy' => new DummyWithVariadicConstructorParam(
+                        'pong',
+                        'pong',
+                        'pong',
+                        'pong'
+                    ),
+                ],
+            ],
+        ];
+
+        yield 'dynamic array with scalar value' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '5x bar',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => ['bar', 'bar', 'bar', 'bar', 'bar']
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'object circular reference' => [
+            [
+                DummyWithConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '@another_dummy',
+                        ],
+                    ],
+                    'another_dummy' => [
+                        '__construct' => [
+                            '@dummy',
+                        ],
+                    ],
+                ],
+            ],
+            null,
+        ];
+
+        yield 'has proper stdClass support' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'bar',
+                    ],
+                    'another_dummy' => [
+                        'foo' => '@dummy->foo'
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'bar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'method calls' => [
+            [
+                Dummy::class => [
+                    'dummy' => [
+                        '__calls' => [
+                            ['setTitle' => ['Fake Title']],
+                            ['addFoo' => []],
+                            ['addFoo' => []],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => Dummy::create('Fake Title', 2),
+                ],
+            ],
+        ];
+
+        yield '[current] in method calls' => [
+            [
+                Dummy::class => [
+                    'dummy_{1..2}' => [
+                        '__calls' => [
+                            ['setTitle' => ['Fake Title <current()>']],
+                            ['addFoo' => []],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy_1' => Dummy::create('Fake Title 1', 1),
+                    'dummy_2' => Dummy::create('Fake Title 2', 1),
+                ],
+            ],
+        ];
+
+        yield '[current] in method calls' => [
+            [
+                Dummy::class => [
+                    'dummy_{1..2}' => [
+                        '__calls' => [
+                            ['setTitle' => ['Fake Title <current()>']],
+                            ['addFoo' => []],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy_1' => Dummy::create('Fake Title 1', 1),
+                    'dummy_2' => Dummy::create('Fake Title 2', 1),
+                ],
+            ],
+        ];
+
+        yield 'reference value in method calls' => [
+            [
+                Dummy::class => [
+                    'dummy_1' => [],
+                    'dummy_2' => [
+                        '__calls' => [
+                            ['setTitle' => ['Dummy 2']],
+                            ['setRelatedDummy' => ['@dummy_1']],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy_1' => $dummy1 = Dummy::create(null, 0),
+                    'dummy_2' => Dummy::create('Dummy 2', 0, $dummy1),
+                ],
+            ],
+        ];
+
+        yield 'method call reference value' => [
+            [
+                DummyWithGetter::class => [
+                    'dummy' => [
+                        'name' => 'foobar'
+                    ],
+                ],
+                \stdClass::class => [
+                    'another_dummy' => [
+                        'foo' => '@dummy->getName()',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (new DummyWithGetter())->setName('foobar'),
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => '__get__foobar',
+                    ]),
+                ],
+            ],
+        ];
+
+        $dummyWithMethodArgument = new DummyWithMethodArgument();
+        $dummyWithMethodArgument->prefix = 'bazbaz__';
+        yield 'method call reference value with reference argument' => [
+            [
+                DummyWithGetter::class => [
+                    'dummy' => [
+                        'name' => 'foobar'
+                    ],
+                ],
+                DummyWithMethodArgument::class => [
+                    'dummy_2' => [
+                        'prefix' => 'bazbaz__',
+                    ],
+                ],
+                \stdClass::class => [
+                    'another_dummy' => [
+                        'foo' => '@dummy_2->getValue(@dummy)',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (new DummyWithGetter())->setName('foobar'),
+                    'dummy_2' => $dummyWithMethodArgument,
+                    'another_dummy' => StdClassFactory::create([
+                        'foo' => 'bazbaz____get__foobar',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'usage of percent sign in string (#665)' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => 'a\%b',
+                        'bar' => '\%c',
+                        'baz' => '100\%',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'a%b',
+                        'bar' => '%c',
+                        'baz' => '100%',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'usage of an object' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => (function () {
+                            return StdClassFactory::create(['ping' => 'pong']);
+                        })(),
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => StdClassFactory::create(['ping' => 'pong']),
+                    ]),
+                ],
+            ],
+        ];
+
+        yield '[function] call nested PHP native function' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<json_encode([])>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => '[]',
+                    ]),
+                ],
+            ],
+        ];
     }
 }
