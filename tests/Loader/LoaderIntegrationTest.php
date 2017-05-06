@@ -1918,6 +1918,39 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
+        yield 'dynamic array with fixture range' => [
+            [
+                \stdClass::class => [
+                    'dummy{1..3}' => [
+                        'id' => '<current()>',
+                    ],
+                    'another_dummy' => [
+                        'dummies' => '@dummy{1..2}',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy1' => $dummy1 = StdClassFactory::create([
+                        'id' => '1',
+                    ]),
+                    'dummy2' => $dummy2 = StdClassFactory::create([
+                        'id' => '2',
+                    ]),
+                    'dummy3' => $dummy3 = StdClassFactory::create([
+                        'id' => '3',
+                    ]),
+                    'another_dummy' => StdClassFactory::create([
+                        'dummies' => [
+                            $dummy1,
+                            $dummy2,
+                        ]
+                    ]),
+                ],
+            ],
+        ];
+
         yield 'objects with dots in their references' => [
             [
                 \stdClass::class => [
