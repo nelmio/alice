@@ -152,6 +152,10 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  * Loader implementation made to be usable without any dependency injection for quick and easy usage. For more advanced
  * usages, use {@see \Nelmio\Alice\Loader\SimpleFileLoader} instead or implement your own loader.
  *
+ * WARNING: because this class is wrapping the whole configuration, the BC break policy is not fully ensured here. Not
+ * methods can be added in minor versions, which could make your application break if you are extending this class and
+ * have a method with the same name.
+ *
  * @method DataLoaderInterface getDataLoader()
  * @method FileLoaderInterface getFileLoader()
  *
@@ -513,6 +517,7 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     {
         $generator = FakerGeneratorFactory::create();
         $generator->addProvider(new AliceProvider());
+        $generator->seed($this->getSeed());
 
         return $generator;
     }
@@ -557,6 +562,17 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function createCaller(): CallerInterface
     {
         return new SimpleCaller($this->getValueResolver());
+    }
+
+    /**
+     * Seed used to generate random data. The seed is passed to the random number generator, so calling the a script
+     * twice with the same seed produces the same results.
+     *
+     * @return int|null
+     */
+    protected function getSeed()
+    {
+        return null;
     }
 
     public function __call(string $method, array $arguments)
