@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
+use Nelmio\Alice\Definition\Value\ArrayValue;
 use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
-use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
@@ -837,7 +837,7 @@ class ParserIntegrationTest extends TestCase
         yield '[Reference] list with prop' => [
             '@user{alice, bob}->username',
             new FixturePropertyValue(
-                new ChoiceListValue([
+                new ArrayValue([
                     new FixtureReferenceValue('useralice'),
                     new FixtureReferenceValue('userbob'),
                 ]),
@@ -847,7 +847,7 @@ class ParserIntegrationTest extends TestCase
         yield '[Reference] range with prop' => [
             '@user{1..2}->username',
             new FixturePropertyValue(
-                new ChoiceListValue([
+                new ArrayValue([
                     new FixtureReferenceValue('user1'),
                     new FixtureReferenceValue('user2'),
                 ]),
@@ -862,7 +862,7 @@ class ParserIntegrationTest extends TestCase
                     new FixtureReferenceValue('user0'),
                     'username'
                 ),
-            ]),
+            ])
         ];
         yield '[Reference] right with prop' => [
             '@user0->username bar',
@@ -901,7 +901,7 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Reference] nominal range' => [
             '@user{1..2}',
-            new ChoiceListValue([
+            new ArrayValue([
                 new FixtureReferenceValue('user1'),
                 new FixtureReferenceValue('user2'),
             ]),
@@ -910,7 +910,7 @@ class ParserIntegrationTest extends TestCase
             'foo @user{1..2} bar',
             new ListValue([
                 'foo ',
-                new ChoiceListValue([
+                new ArrayValue([
                     new FixtureReferenceValue('user1'),
                     new FixtureReferenceValue('user2'),
                 ]),
@@ -920,11 +920,11 @@ class ParserIntegrationTest extends TestCase
         yield '[Reference] successive' => [
             '@user{1..2}@group{3..4}',
             new ListValue([
-                new ChoiceListValue([
+                new ArrayValue([
                     new FixtureReferenceValue('user1'),
                     new FixtureReferenceValue('user2'),
                 ]),
-                new ChoiceListValue([
+                new ArrayValue([
                     new FixtureReferenceValue('group3'),
                     new FixtureReferenceValue('group4'),
                 ]),
@@ -1037,7 +1037,7 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Reference] nominal list' => [
             '@user0{alice, bob}',
-            new ChoiceListValue([
+            new ArrayValue([
                 new FixtureReferenceValue('user0alice'),
                 new FixtureReferenceValue('user0bob'),
             ]),
@@ -1045,18 +1045,18 @@ class ParserIntegrationTest extends TestCase
         yield '[Reference] list with function' => [
             '@user{alice, bob}->getUserName()',
             new FixtureMethodCallValue(
-                new ChoiceListValue([
+                new ArrayValue([
                     new FixtureReferenceValue('useralice'),
                     new FixtureReferenceValue('userbob'),
                 ]),
-                new FunctionCallValue('getUserName')
+                new FunctionCallValue('getUserName', [])
             ),
         ];
         yield '[Reference] surrounded list' => [
             'foo @user0{alice, bob} bar',
             new ListValue([
                 'foo ',
-                new ChoiceListValue([
+                new ArrayValue([
                     new FixtureReferenceValue('user0alice'),
                     new FixtureReferenceValue('user0bob'),
                 ]),

@@ -24,6 +24,7 @@ use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 final class ListValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
@@ -77,11 +78,26 @@ final class ListValueResolver implements ChainableValueResolverInterface, ValueR
             if ($value instanceof ValueInterface) {
                 $resolvedSet = $this->resolver->resolve($value, $fixture, $fixtureSet, $scope, $context);
 
-                $values[$index] = $resolvedSet->getValue();
+                $resolvedValue = $resolvedSet->getValue();
+
+                if (null !== $resolvedValue
+                    && false === is_scalar($resolvedValue)
+                    && (
+                        false === is_object($resolvedValue)
+                        || false === method_exists($resolvedValue, '__toString')
+                    )
+                ) {
+                    throw UnresolvableValueExceptionFactory::createForCouldNotEvaluateExpression($value);
+                }
+
+                $values[$index] = $resolvedValue;
                 $fixtureSet = $resolvedSet->getSet();
             }
         }
 
-        return new ResolvedValueWithFixtureSet(implode('', $values), $fixtureSet);
+        return new ResolvedValueWithFixtureSet(
+            implode('', $values),
+            $fixtureSet
+        );
     }
 }

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Definition\Value\ArrayValue;
 use PHPUnit\Framework\TestCase;
-use Nelmio\Alice\Definition\Value\ChoiceListValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
@@ -87,7 +87,7 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
     public function testReturnsAChoiceListIfCanParseToken()
     {
         $token = new Token('@user{10..8}', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
-        $expected = new ChoiceListValue([
+        $expected = new ArrayValue([
             new FixtureReferenceValue('user8'),
             new FixtureReferenceValue('user9'),
             new FixtureReferenceValue('user10'),
