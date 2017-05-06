@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
+use function Nelmio\Alice\deep_clone;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Entity;
 
+use function Nelmio\Alice\deep_clone;
+
 class ImmutableStd
 {
     private $properties;

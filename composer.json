@@ -41,7 +41,7 @@
 
     "autoload": {
         "files": [
-            "src/functions.php"
+            "src/deep_clone.php"
         ],
         "psr-4": {
             "Nelmio\\Alice\\": "src"

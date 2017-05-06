@@ -12,6 +12,8 @@
 declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
+use ArrayIterator;
+use function Nelmio\Alice\deep_clone;
 
 /**
  * Collection of flags.
@@ -101,7 +103,7 @@ final class FlagBag implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        return new \ArrayIterator(array_values($this->flags));
+        return new ArrayIterator(array_values($this->flags));
     }
 
     /**
