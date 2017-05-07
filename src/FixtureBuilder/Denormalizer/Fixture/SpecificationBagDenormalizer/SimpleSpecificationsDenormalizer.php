@@ -22,6 +22,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerI
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
 
 final class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInterface
 {
@@ -64,6 +66,16 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
             if ('__construct' === $unparsedPropertyName) {
                 $constructor = $this->denormalizeConstructor($value, $scope, $parser);
 
+                 continue;
+            }
+
+            if ('__factory' === $unparsedPropertyName) {
+                if (null !== $constructor) {
+                    throw LogicExceptionFactory::createForCannotHaveBothConstructorAndFactory();
+                }
+
+                $constructor = $this->denormalizeFactory($value, $scope, $parser);
+
                 continue;
             }
 
@@ -89,6 +101,21 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
             ? new NoMethodCall()
             : $this->constructorDenormalizer->denormalize($scope, $parser, $value)
         ;
+    }
+
+    private function denormalizeFactory(
+        $value,
+        FixtureInterface $scope,
+        FlagParserInterface $parser
+    ): MethodCallInterface
+    {
+        $factory = $this->denormalizeConstructor($value, $scope, $parser);
+
+        if ('__construct' === $factory->getMethod()) {
+            throw DenormalizerExceptionFactory::createForInvalidFactory();
+        }
+
+        return $factory;
     }
 
     private function denormalizeProperty(

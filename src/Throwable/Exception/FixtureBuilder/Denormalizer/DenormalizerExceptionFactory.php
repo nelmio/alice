@@ -12,6 +12,7 @@
 declare(strict_types = 1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
+use Nelmio\Alice\Definition\MethodCallInterface;
 
 /**
  * @private
@@ -60,5 +61,12 @@ final class DenormalizerExceptionFactory
     public static function createForInvalidScopeForUniqueValue(): InvalidScopeException
     {
         return new InvalidScopeException('Cannot bind a unique value scope to a temporary fixture.');
+    }
+
+    public static function createForInvalidFactory(): UnexpectedValueException
+    {
+        return new UnexpectedValueException(
+            'Cannot use `__construct` for a factory method. Use the `__construct` fixture property instead.'
+        );
     }
 }

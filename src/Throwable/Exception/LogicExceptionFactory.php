@@ -38,4 +38,11 @@ final class LogicExceptionFactory
             )
         );
     }
+
+    public static function createForCannotHaveBothConstructorAndFactory(): \LogicException
+    {
+        return new \LogicException(
+            'Cannot use the fixture property "__construct" and "__factory" together.'
+        );
+    }
 }
