@@ -136,6 +136,47 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
+     * @dataProvider provideFixturesToInstantiateWithFactory
+     */
+    public function testObjectInstantiationWithFactory(array $data, $expected)
+    {
+        try {
+            $objects = $this->loader->loadData($data)->getObjects();
+            if (null === $expected) {
+                $this->fail('Expected exception to be thrown.');
+            }
+        } catch (InstantiationThrowable $exception) {
+            if (null === $expected) {
+                return;
+            }
+
+            throw $exception;
+        }
+
+        $this->assertCount(1, $objects);
+        $this->assertEquals($expected, $objects['dummy']);
+    }
+
+    public function testCannotUseBothConstructAndFactoryAtTheSameTime()
+    {
+        try {
+            $this->loader->loadData([
+                \stdClass::class => [
+                    'dummy' => [
+                        '__construct' => [],
+                        '__factory' => [],
+                    ],
+                ],
+            ]);
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (InstantiationThrowable $exception) {
+            //TODO: check message
+            throw $exception;
+        }
+    }
+
+    /**
      * @dataProvider provideFixturesToHydrate
      */
     public function testObjectHydration(array $data, array $expected = null)
@@ -1394,6 +1435,134 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             (new \ReflectionClass(DummyWithNamedPrivateConstructor::class))->newInstanceWithoutConstructor(),
+        ];
+    }
+
+    public function provideFixturesToInstantiateWithFactory()
+    {
+        yield 'regular factory' => [
+            [
+                DummyWithNamedConstructor::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructor::namedConstruct(),
+        ];
+
+        yield 'factory with optional parameters with no parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
+        ];
+
+        yield 'factory with optional parameters with parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'factory with optional parameters with parameters and unique value - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [
+                                '0 (unique)' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'factory with required parameters with no parameters - throw exception' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            null,
+        ];
+
+        yield 'factory with required parameters with parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'factory with required parameters with named parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [
+                                'param' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'unknown named factory' => [
+            [
+                DummyWithDefaultConstructor::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'unknown' => [],
+                        ],
+                    ],
+                ],
+            ],
+            null,
+        ];
+
+        yield 'with private factory – throw exception' => [
+            [
+                DummyWithNamedPrivateConstructor::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            null,
         ];
     }
 
