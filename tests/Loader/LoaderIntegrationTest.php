@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use Humbug\Exception\LogicException;
 use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
 use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\DataLoaderInterface;
@@ -157,23 +158,25 @@ class LoaderIntegrationTest extends TestCase
         $this->assertEquals($expected, $objects['dummy']);
     }
 
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot use the fixture property "__construct" and "__factory" together.
+     */
     public function testCannotUseBothConstructAndFactoryAtTheSameTime()
     {
-        try {
-            $this->loader->loadData([
-                \stdClass::class => [
-                    'dummy' => [
-                        '__construct' => [],
-                        '__factory' => [],
-                    ],
+        $this->loader->loadData([
+            \stdClass::class => [
+                'dummy' => [
+                    '__construct' => [],
+                    '__factory' => [],
                 ],
-            ]);
+            ],
+        ]);
+    }
 
-            $this->fail('Expected exception to be thrown.');
-        } catch (InstantiationThrowable $exception) {
-            //TODO: check message
-            throw $exception;
-        }
+    public function testUsingConstructorAsAFactoryIsDeprecated()
+    {
+
     }
 
     /**
