@@ -120,7 +120,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         $factory = $this->denormalizeConstructor($value, $scope, $parser);
 
         if ('__construct' === $factory->getMethod()) {
-            throw DenormalizerExceptionFactory::createForInvalidFactory();
+            throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
         }
 
         return $factory;

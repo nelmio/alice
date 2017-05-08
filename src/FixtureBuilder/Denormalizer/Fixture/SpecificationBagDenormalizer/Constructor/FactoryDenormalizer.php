@@ -54,14 +54,15 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
 
         if (false === $firstKey
             || false === is_string($firstKey)
+            || 1 !== count($unparsedConstructor)
         ) {
-            throw DenormalizerExceptionFactory::createForUndenormalizableConstructor();
+            throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
         }
 
         $arguments = $unparsedConstructor[$firstKey];
 
         if (false === is_array($arguments)) {
-            throw DenormalizerExceptionFactory::createForUndenormalizableConstructor();
+            throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
         }
 
         list($caller, $method) = $this->getCallerReference($scope, $firstKey);

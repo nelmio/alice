@@ -174,7 +174,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
-     * @expectedExceptionMessage Cannot use `__construct` for a factory method. Use the `__construct` fixture property instead.
+     * @expectedExceptionMessage Cannot denormalize the given factory.
      */
     public function testCannotDenormalizeAFactoryAndAConstructor()
     {

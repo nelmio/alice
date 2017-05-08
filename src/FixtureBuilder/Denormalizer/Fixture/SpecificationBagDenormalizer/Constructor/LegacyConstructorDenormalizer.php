@@ -39,19 +39,12 @@ final class LegacyConstructorDenormalizer implements ConstructorDenormalizerInte
      */
     private $factoryDenormalizer;
 
-    /**
-     * @var ArgumentsDenormalizerInterface
-     */
-    private $argumentsDenormalizer;
-
     public function __construct(
         ConstructorDenormalizerInterface $constructorDenormalizer,
-        ConstructorDenormalizerInterface $factoryDenormalizer,
-        ArgumentsDenormalizerInterface $argumentsDenormalizer
+        ConstructorDenormalizerInterface $factoryDenormalizer
     ) {
         $this->constructorDenormalizer = $constructorDenormalizer;
         $this->factoryDenormalizer = $factoryDenormalizer;
-        $this->argumentsDenormalizer = $argumentsDenormalizer;
     }
 
     /**

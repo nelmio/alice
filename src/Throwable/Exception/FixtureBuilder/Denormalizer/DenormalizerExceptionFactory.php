@@ -24,6 +24,11 @@ final class DenormalizerExceptionFactory
         return new UnexpectedValueException('Could not denormalize the given constructor.');
     }
 
+    public static function createForUndenormalizableFactory(): UnexpectedValueException
+    {
+        return new UnexpectedValueException('Cannot denormalize the given factory.');
+    }
+
     public static function createForUnparsableValue(string $value, int $code = 0, \Throwable $previous): UnexpectedValueException
     {
         return new UnexpectedValueException(
@@ -61,12 +66,5 @@ final class DenormalizerExceptionFactory
     public static function createForInvalidScopeForUniqueValue(): InvalidScopeException
     {
         return new InvalidScopeException('Cannot bind a unique value scope to a temporary fixture.');
-    }
-
-    public static function createForInvalidFactory(): UnexpectedValueException
-    {
-        return new UnexpectedValueException(
-            'Cannot use `__construct` for a factory method. Use the `__construct` fixture property instead.'
-        );
     }
 }
