@@ -18,6 +18,10 @@
          beStrictAboutTestsThatDoNotTestAnything="false"
 >
 
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0" />
+    </php>
+
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
@@ -70,8 +74,4 @@
             </exclude>
         </whitelist>
     </filter>
-
-    <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0" />
-    </php>
 </phpunit>

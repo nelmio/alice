@@ -115,6 +115,10 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
+     * Only a few tests samples are legacy.
+     *
+     * @group legacy
+     *
      * @dataProvider provideFixturesToInstantiate
      */
     public function testObjectInstantiation(array $data, $expected)
@@ -289,6 +293,11 @@ class LoaderIntegrationTest extends TestCase
         );
     }
 
+    /**
+     * Only a few tests samples are legacy.
+     *
+     * @group legacy
+     */
     public function testIfAFixtureAndAnInjectedObjectHaveTheSameIdThenTheInjectedObjectIsOverridden()
     {
         $set = $this->loader->loadData(
