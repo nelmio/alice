@@ -174,9 +174,18 @@ class LoaderIntegrationTest extends TestCase
         ]);
     }
 
-    public function testUsingConstructorAsAFactoryIsDeprecated()
+    /**
+     * @dataProvider provideFixtureToInstantiateWithDeprecatedConstructor
+     *
+     * @group legacy
+     * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in 4.0.0. Use "__factory" instead.
+     */
+    public function testUsingConstructorAsAFactoryIsDeprecated(array $data, $expected)
     {
+        $objects = $this->loader->loadData($data)->getObjects();
 
+        $this->assertCount(1, $objects);
+        $this->assertEquals($expected, $objects['dummy']);
     }
 
     /**
@@ -1566,6 +1575,95 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             null,
+        ];
+    }
+
+    public function provideFixtureToInstantiateWithDeprecatedConstructor()
+    {
+        yield 'with named constructor - use factory function' => [
+            [
+                DummyWithNamedConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructor::namedConstruct(),
+        ];
+
+        yield 'with named constructor and optional parameters with no parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
+        ];
+
+        yield 'with named constructor and optional parameters with parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and optional parameters with parameters and unique value - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                '0 (unique)' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and required parameters with parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and required parameters with named parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                'param' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
         ];
     }
 

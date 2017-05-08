@@ -18,6 +18,10 @@
          beStrictAboutTestsThatDoNotTestAnything="false"
 >
 
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
+
     <testsuites>
         <testsuite name="Dependent tests">
             <file>tests/Definition/PropertyTest.php</file>

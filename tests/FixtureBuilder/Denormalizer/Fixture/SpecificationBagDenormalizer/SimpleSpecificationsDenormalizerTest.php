@@ -62,7 +62,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $fixture = new FakeFixture();
         $specs = [
             '__construct' => $construct = [
-                '<latitude()>'
+                'foo'
             ],
         ];
         $flagParser = new FakeFlagParser();
@@ -70,7 +70,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
         $constructorDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $construct)
-            ->willReturn($constructor = new FakeMethodCall())
+            ->willReturn(
+                $constructor = new SimpleMethodCall(
+                    '__construct',
+                    ['foo']
+                )
+            )
         ;
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
@@ -135,11 +140,11 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $fixture = new FakeFixture();
         $specs = [
             '__construct' => $construct = [
-                '<latitude()>'
+                'foo'
             ],
             '__factory' => $factory = [
                 'create' => [
-                    '<latitude()>',
+                    'foo',
                 ],
             ],
         ];
@@ -149,7 +154,10 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $constructorDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $construct)
             ->willReturn(
-                $constructor = new FakeMethodCall()
+                $constructor = new SimpleMethodCall(
+                    '__construct',
+                    ['foo']
+                )
             )
         ;
         $constructorDenormalizerProphecy
@@ -323,7 +331,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
         $constructorDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $construct)
-            ->willReturn($constructor = new FakeMethodCall())
+            ->willReturn(
+                $constructor = new SimpleMethodCall(
+                    '__construct',
+                    ['<latitude()>']
+                )
+            )
         ;
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
