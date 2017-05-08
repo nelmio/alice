@@ -23,7 +23,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
 
-final class SimpleConstructorDenormalizer implements ConstructorDenormalizerInterface
+final class ConstructorDenormalizer implements ConstructorDenormalizerInterface
 {
     use IsAServiceTrait;
 
@@ -48,19 +48,9 @@ final class SimpleConstructorDenormalizer implements ConstructorDenormalizerInte
         array $unparsedConstructor
     ): MethodCallInterface
     {
-        /** @var int|string|null $firstKey */
-        $firstKey = key($unparsedConstructor);
-        if (null === $firstKey
-            || is_int($firstKey)
-            || count($unparsedConstructor) > 1
-            || (is_string($firstKey) && preg_match('/\(.*\)/', $firstKey))
-        ) {
-            return new SimpleMethodCall(
-                '__construct',
-                $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
-            );
-        }
-
-        throw DenormalizerExceptionFactory::createForUndenormalizableConstructor();
+        return new SimpleMethodCall(
+            '__construct',
+            $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
+        );
     }
 }

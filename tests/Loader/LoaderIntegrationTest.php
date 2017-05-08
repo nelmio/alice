@@ -2978,6 +2978,27 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
+        yield 'argument indexes (ambiguous case, default to argument instead of factory)' => [
+            [
+                'parameters' => [],
+                DummyWithVariadicConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'foo' => 'bar',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new DummyWithVariadicConstructorParam(
+                        'bar'
+                    ),
+                ],
+            ],
+        ];
+
         yield 'dynamic array with scalar value' => [
             [
                 \stdClass::class => [

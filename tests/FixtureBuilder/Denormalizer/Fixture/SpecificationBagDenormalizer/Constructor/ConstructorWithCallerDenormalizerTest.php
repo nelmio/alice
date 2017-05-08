@@ -25,8 +25,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureInterface;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\SimpleConstructorDenormalizer
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorWithCallerDenormalizer
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorDenormalizer
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\LegacyConstructorDenormalizer
  */
 class ConstructorWithCallerDenormalizerTest extends TestCase
 {
@@ -35,8 +35,8 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
      */
     public function testIsNotClonable()
     {
-        clone new ConstructorWithCallerDenormalizer(
-            new SimpleConstructorDenormalizer($argsDenormalizer = new FakeArgumentsDenormalizer()),
+        clone new LegacyConstructorDenormalizer(
+            new ConstructorDenormalizer($argsDenormalizer = new FakeArgumentsDenormalizer()),
             $argsDenormalizer
         );
     }
@@ -60,8 +60,8 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             []
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(
-            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+        $denormalizer = new LegacyConstructorDenormalizer(
+            new ConstructorDenormalizer($argumentsDenormalizer),
             $argumentsDenormalizer
         );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
@@ -93,8 +93,8 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             $constructor
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(
-            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+        $denormalizer = new LegacyConstructorDenormalizer(
+            new ConstructorDenormalizer($argumentsDenormalizer),
             $argumentsDenormalizer
         );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
@@ -132,8 +132,8 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             $arguments
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(
-            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+        $denormalizer = new LegacyConstructorDenormalizer(
+            new ConstructorDenormalizer($argumentsDenormalizer),
             $argumentsDenormalizer
         );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
@@ -167,8 +167,8 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             $arguments
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(
-            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+        $denormalizer = new LegacyConstructorDenormalizer(
+            new ConstructorDenormalizer($argumentsDenormalizer),
             $argumentsDenormalizer
         );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
@@ -202,8 +202,8 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
             $arguments
         );
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(
-            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+        $denormalizer = new LegacyConstructorDenormalizer(
+            new ConstructorDenormalizer($argumentsDenormalizer),
             $argumentsDenormalizer
         );
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
@@ -227,8 +227,8 @@ class ConstructorWithCallerDenormalizerTest extends TestCase
         $flagParser = new FakeFlagParser();
         $argumentsDenormalizer = new FakeArgumentsDenormalizer();
 
-        $denormalizer = new ConstructorWithCallerDenormalizer(
-            new SimpleConstructorDenormalizer($argumentsDenormalizer),
+        $denormalizer = new LegacyConstructorDenormalizer(
+            new ConstructorDenormalizer($argumentsDenormalizer),
             $argumentsDenormalizer
         );
         $denormalizer->denormalize($fixture, $flagParser, $constructor);
