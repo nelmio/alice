@@ -12,7 +12,6 @@
 declare(strict_types = 1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
-use Nelmio\Alice\Definition\MethodCallInterface;
 
 /**
  * @private
@@ -26,7 +25,7 @@ final class DenormalizerExceptionFactory
 
     public static function createForUndenormalizableFactory(): UnexpectedValueException
     {
-        return new UnexpectedValueException('Cannot denormalize the given factory.');
+        return new UnexpectedValueException('Could not denormalize the given factory.');
     }
 
     public static function createForUnparsableValue(string $value, int $code = 0, \Throwable $previous): UnexpectedValueException

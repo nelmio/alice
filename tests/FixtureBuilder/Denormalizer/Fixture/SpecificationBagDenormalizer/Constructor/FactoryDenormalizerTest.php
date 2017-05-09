@@ -13,17 +13,15 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor;
 
-use Nelmio\Alice\Definition\Fixture\DummyFixture;
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
-use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\FakeArgumentsDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FactoryDenormalizer
@@ -42,7 +40,7 @@ class FactoryDenormalizerTest extends TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
-     * @expectedExceptionMessage Cannot denormalize the given factory.
+     * @expectedExceptionMessage Could not denormalize the given factory.
      */
     public function testCannotDenormalizeEmptyFactory()
     {
@@ -59,7 +57,7 @@ class FactoryDenormalizerTest extends TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
-     * @expectedExceptionMessage Cannot denormalize the given factory.
+     * @expectedExceptionMessage Could not denormalize the given factory.
      */
     public function testCannotDenormalizeFactoryWithMultipleNames()
     {
@@ -79,7 +77,7 @@ class FactoryDenormalizerTest extends TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
-     * @expectedExceptionMessage Cannot denormalize the given factory.
+     * @expectedExceptionMessage Could not denormalize the given factory.
      */
     public function testCannotDenormalizeFactoryWithNoFactoryName()
     {

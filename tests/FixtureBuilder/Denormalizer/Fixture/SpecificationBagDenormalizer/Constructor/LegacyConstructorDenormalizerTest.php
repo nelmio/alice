@@ -14,18 +14,11 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor;
 
 use Nelmio\Alice\Definition\FakeMethodCall;
+use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use PHPUnit\Framework\TestCase;
-use Nelmio\Alice\Definition\Fixture\FakeFixture;
-use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
-use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
-use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
-use Nelmio\Alice\Definition\ServiceReference\StaticReference;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\FakeArgumentsDenormalizer;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
-use Nelmio\Alice\FixtureInterface;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\LegacyConstructorDenormalizer

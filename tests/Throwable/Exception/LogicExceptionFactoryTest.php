@@ -44,4 +44,16 @@ class LogicExceptionFactoryTest extends TestCase
         $this->assertEquals(0, $exception->getCode());
         $this->assertNull($exception->getPrevious());
     }
+
+    public function testTestCreateForCannotHaveBothConstructorAndFactory()
+    {
+        $exception = LogicExceptionFactory::createForCannotHaveBothConstructorAndFactory();
+
+        $this->assertEquals(
+            'Cannot use the fixture property "__construct" and "__factory" together.',
+            $exception->getMessage()
+        );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+    }
 }

@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
-use PHPUnit\Framework\TestCase;
-use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
@@ -29,6 +27,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer
@@ -132,6 +131,47 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
     }
 
     /**
+     * @group legacy
+     * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in 4.0.0. Use "__factory" instead.
+     */
+    public function testUsingAFactoryWithConstructIsDeprecated()
+    {
+        $fixture = new FakeFixture();
+        $specs = [
+            '__construct' => $factory = [
+                'create' => ['foo', 'bar'],
+            ],
+        ];
+        $flagParser = new FakeFlagParser();
+
+        $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
+        $constructorDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, $factory)
+            ->willReturn(
+                $constructor = new SimpleMethodCall(
+                    'create',
+                    ['foo', 'bar']
+                )
+            )
+        ;
+        /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
+        $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
+
+        $expected = new SpecificationBag(
+            $constructor,
+            new PropertyBag(),
+            new MethodCallBag()
+        );
+
+        $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+
+        $this->assertEquals($expected, $actual);
+
+        $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot use the fixture property "__construct" and "__factory" together.
      */
@@ -174,7 +214,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
-     * @expectedExceptionMessage Cannot denormalize the given factory.
+     * @expectedExceptionMessage Could not denormalize the given factory.
      */
     public function testCannotDenormalizeAFactoryAndAConstructor()
     {

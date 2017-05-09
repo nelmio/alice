@@ -66,7 +66,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
             if ('__construct' === $unparsedPropertyName) {
                 $constructor = $this->denormalizeConstructor($value, $scope, $parser);
 
-                if (false === ($constructor instanceof NoMethodCall) &&'__construct' !== $constructor->getMethod()) {
+                if (false === ($constructor instanceof NoMethodCall) && '__construct' !== $constructor->getMethod()) {
                     @trigger_error(
                         'Using factories with the fixture keyword "__construct" has been deprecated since '
                         .'3.0.0 and will no longer be supported in 4.0.0. Use "__factory" instead.',

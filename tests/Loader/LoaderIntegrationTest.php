@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
-use Humbug\Exception\LogicException;
 use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
@@ -49,6 +47,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\Throwable\HydrationThrowable;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group integration
