@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
@@ -48,6 +47,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\Throwable\HydrationThrowable;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group integration
@@ -114,6 +114,10 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
+     * Only a few tests samples are legacy.
+     *
+     * @group legacy
+     *
      * @dataProvider provideFixturesToInstantiate
      */
     public function testObjectInstantiation(array $data, $expected)
@@ -130,6 +134,58 @@ class LoaderIntegrationTest extends TestCase
 
             throw $exception;
         }
+
+        $this->assertCount(1, $objects);
+        $this->assertEquals($expected, $objects['dummy']);
+    }
+
+    /**
+     * @dataProvider provideFixturesToInstantiateWithFactory
+     */
+    public function testObjectInstantiationWithFactory(array $data, $expected)
+    {
+        try {
+            $objects = $this->loader->loadData($data)->getObjects();
+            if (null === $expected) {
+                $this->fail('Expected exception to be thrown.');
+            }
+        } catch (InstantiationThrowable $exception) {
+            if (null === $expected) {
+                return;
+            }
+
+            throw $exception;
+        }
+
+        $this->assertCount(1, $objects);
+        $this->assertEquals($expected, $objects['dummy']);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot use the fixture property "__construct" and "__factory" together.
+     */
+    public function testCannotUseBothConstructAndFactoryAtTheSameTime()
+    {
+        $this->loader->loadData([
+            \stdClass::class => [
+                'dummy' => [
+                    '__construct' => [],
+                    '__factory' => [],
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * @dataProvider provideFixtureToInstantiateWithDeprecatedConstructor
+     *
+     * @group legacy
+     * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in 4.0.0. Use "__factory" instead.
+     */
+    public function testUsingConstructorAsAFactoryIsDeprecated(array $data, $expected)
+    {
+        $objects = $this->loader->loadData($data)->getObjects();
 
         $this->assertCount(1, $objects);
         $this->assertEquals($expected, $objects['dummy']);
@@ -236,6 +292,11 @@ class LoaderIntegrationTest extends TestCase
         );
     }
 
+    /**
+     * Only a few tests samples are legacy.
+     *
+     * @group legacy
+     */
     public function testIfAFixtureAndAnInjectedObjectHaveTheSameIdThenTheInjectedObjectIsOverridden()
     {
         $set = $this->loader->loadData(
@@ -1394,6 +1455,223 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             (new \ReflectionClass(DummyWithNamedPrivateConstructor::class))->newInstanceWithoutConstructor(),
+        ];
+    }
+
+    public function provideFixturesToInstantiateWithFactory()
+    {
+        yield 'regular factory' => [
+            [
+                DummyWithNamedConstructor::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructor::namedConstruct(),
+        ];
+
+        yield 'factory with optional parameters with no parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
+        ];
+
+        yield 'factory with optional parameters with parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'factory with optional parameters with parameters and unique value - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [
+                                '0 (unique)' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'factory with required parameters with no parameters - throw exception' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            null,
+        ];
+
+        yield 'factory with required parameters with parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'factory with required parameters with named parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [
+                                'param' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'unknown named factory' => [
+            [
+                DummyWithDefaultConstructor::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'unknown' => [],
+                        ],
+                    ],
+                ],
+            ],
+            null,
+        ];
+
+        yield 'with private factory – throw exception' => [
+            [
+                DummyWithNamedPrivateConstructor::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            null,
+        ];
+    }
+
+    public function provideFixtureToInstantiateWithDeprecatedConstructor()
+    {
+        yield 'with named constructor - use factory function' => [
+            [
+                DummyWithNamedConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructor::namedConstruct(),
+        ];
+
+        yield 'with named constructor and optional parameters with no parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
+        ];
+
+        yield 'with named constructor and optional parameters with parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and optional parameters with parameters and unique value - use factory function' => [
+            [
+                DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                '0 (unique)' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and required parameters with parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and required parameters with named parameters - use factory function' => [
+            [
+                DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                'param' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
         ];
     }
 
@@ -2694,6 +2972,27 @@ class LoaderIntegrationTest extends TestCase
                         'pong',
                         'pong',
                         'pong'
+                    ),
+                ],
+            ],
+        ];
+
+        yield 'argument indexes (ambiguous case, default to argument instead of factory)' => [
+            [
+                'parameters' => [],
+                DummyWithVariadicConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'foo' => 'bar',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new DummyWithVariadicConstructorParam(
+                        'bar'
                     ),
                 ],
             ],

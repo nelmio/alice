@@ -23,6 +23,11 @@ final class DenormalizerExceptionFactory
         return new UnexpectedValueException('Could not denormalize the given constructor.');
     }
 
+    public static function createForUndenormalizableFactory(): UnexpectedValueException
+    {
+        return new UnexpectedValueException('Could not denormalize the given factory.');
+    }
+
     public static function createForUnparsableValue(string $value, int $code = 0, \Throwable $previous): UnexpectedValueException
     {
         return new UnexpectedValueException(

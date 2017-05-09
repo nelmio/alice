@@ -31,6 +31,17 @@ class DenormalizerExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
+    public function testTestCreateForUndenormalizableFactory()
+    {
+        $exception = DenormalizerExceptionFactory::createForUndenormalizableFactory();
+        $this->assertEquals(
+            'Could not denormalize the given factory.',
+            $exception->getMessage()
+        );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+    }
+
     public function testTestCreateForUnparsableValue()
     {
         $code = 500;

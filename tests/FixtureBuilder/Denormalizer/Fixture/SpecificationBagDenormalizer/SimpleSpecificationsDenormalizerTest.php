@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
-use PHPUnit\Framework\TestCase;
-use Nelmio\Alice\Definition\FakeMethodCall;
+use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
@@ -28,6 +27,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer
@@ -61,7 +61,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $fixture = new FakeFixture();
         $specs = [
             '__construct' => $construct = [
-                '<latitude()>'
+                'foo'
             ],
         ];
         $flagParser = new FakeFlagParser();
@@ -69,7 +69,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
         $constructorDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $construct)
-            ->willReturn($constructor = new FakeMethodCall())
+            ->willReturn(
+                $constructor = new SimpleMethodCall(
+                    '__construct',
+                    ['foo']
+                )
+            )
         ;
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
@@ -86,6 +91,157 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $this->assertEquals($expected, $actual);
 
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testCanDenormalizeFactory()
+    {
+        $fixture = new FakeFixture();
+        $specs = [
+            '__factory' => $factory = [
+                'create' => ['foo'],
+            ],
+        ];
+        $flagParser = new FakeFlagParser();
+
+        $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
+        $constructorDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, $factory)
+            ->willReturn(
+                $constructor = new SimpleMethodCall(
+                    'create',
+                    ['foo']
+                )
+            )
+        ;
+        /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
+        $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
+
+        $expected = new SpecificationBag(
+            $constructor,
+            new PropertyBag(),
+            new MethodCallBag()
+        );
+
+        $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+
+        $this->assertEquals($expected, $actual);
+
+        $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in 4.0.0. Use "__factory" instead.
+     */
+    public function testUsingAFactoryWithConstructIsDeprecated()
+    {
+        $fixture = new FakeFixture();
+        $specs = [
+            '__construct' => $factory = [
+                'create' => ['foo', 'bar'],
+            ],
+        ];
+        $flagParser = new FakeFlagParser();
+
+        $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
+        $constructorDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, $factory)
+            ->willReturn(
+                $constructor = new SimpleMethodCall(
+                    'create',
+                    ['foo', 'bar']
+                )
+            )
+        ;
+        /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
+        $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
+
+        $expected = new SpecificationBag(
+            $constructor,
+            new PropertyBag(),
+            new MethodCallBag()
+        );
+
+        $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+
+        $this->assertEquals($expected, $actual);
+
+        $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot use the fixture property "__construct" and "__factory" together.
+     */
+    public function testCannotDenormalizeAnInvalidFactory()
+    {
+        $fixture = new FakeFixture();
+        $specs = [
+            '__construct' => $construct = [
+                'foo'
+            ],
+            '__factory' => $factory = [
+                'create' => [
+                    'foo',
+                ],
+            ],
+        ];
+        $flagParser = new FakeFlagParser();
+
+        $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
+        $constructorDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, $construct)
+            ->willReturn(
+                $constructor = new SimpleMethodCall(
+                    '__construct',
+                    ['foo']
+                )
+            )
+        ;
+        $constructorDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, $factory)
+            ->shouldNotBeCalled()
+        ;
+        /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
+        $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
+
+        $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+
+        $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+    }
+
+    /**
+     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
+     * @expectedExceptionMessage Could not denormalize the given factory.
+     */
+    public function testCannotDenormalizeAFactoryAndAConstructor()
+    {
+        $fixture = new FakeFixture();
+        $specs = [
+            '__factory' => $construct = [
+                '<latitude()>',
+            ],
+        ];
+        $flagParser = new FakeFlagParser();
+
+        $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
+        $constructorDenormalizerProphecy
+            ->denormalize($fixture, $flagParser, $construct)
+            ->willReturn(
+                $constructor = new SimpleMethodCall(
+                    '__construct',
+                    []
+                )
+            )
+        ;
+        /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
+        $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
+
+        $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+
+        $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
     }
 
     public function testCanDenormalizeTheNoConstructor()
@@ -215,7 +371,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
         $constructorDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $construct)
-            ->willReturn($constructor = new FakeMethodCall())
+            ->willReturn(
+                $constructor = new SimpleMethodCall(
+                    '__construct',
+                    ['<latitude()>']
+                )
+            )
         ;
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();

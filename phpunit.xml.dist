@@ -18,6 +18,14 @@
          beStrictAboutTestsThatDoNotTestAnything="false"
 >
 
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0" />
+    </php>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
+
     <testsuites>
         <testsuite name="Dependent tests">
             <file>tests/Definition/PropertyTest.php</file>
@@ -66,8 +74,4 @@
             </exclude>
         </whitelist>
     </filter>
-
-    <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0" />
-    </php>
 </phpunit>

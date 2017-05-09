@@ -20,6 +20,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenorma
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FactoryDenormalizer;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureMethodCallReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\PhpFunctionCallValueResolver;
@@ -64,8 +65,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\OptionalCallsDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorWithCallerDenormalizer;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\SimpleConstructorDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\LegacyConstructorDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\SimplePropertyDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\PropertyDenormalizerInterface;
@@ -342,8 +343,11 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createConstructorDenormalizer(): ConstructorDenormalizerInterface
     {
-        return new ConstructorWithCallerDenormalizer(
-            new SimpleConstructorDenormalizer(
+        return new LegacyConstructorDenormalizer(
+            new ConstructorDenormalizer(
+                $this->getArgumentsDenormalizer()
+            ),
+            new FactoryDenormalizer(
                 $this->getArgumentsDenormalizer()
             ),
             $this->getArgumentsDenormalizer()

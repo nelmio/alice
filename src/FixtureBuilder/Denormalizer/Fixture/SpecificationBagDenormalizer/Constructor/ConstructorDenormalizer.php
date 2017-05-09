@@ -15,7 +15,6 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
@@ -23,7 +22,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
 
-final class SimpleConstructorDenormalizer implements ConstructorDenormalizerInterface
+final class ConstructorDenormalizer implements ConstructorDenormalizerInterface
 {
     use IsAServiceTrait;
 
@@ -48,19 +47,9 @@ final class SimpleConstructorDenormalizer implements ConstructorDenormalizerInte
         array $unparsedConstructor
     ): MethodCallInterface
     {
-        /** @var int|string|null $firstKey */
-        $firstKey = key($unparsedConstructor);
-        if (null === $firstKey
-            || is_int($firstKey)
-            || count($unparsedConstructor) > 1
-            || (is_string($firstKey) && preg_match('/\(.*\)/', $firstKey))
-        ) {
-            return new SimpleMethodCall(
-                '__construct',
-                $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
-            );
-        }
-
-        throw DenormalizerExceptionFactory::createForUndenormalizableConstructor();
+        return new SimpleMethodCall(
+            '__construct',
+            $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
+        );
     }
 }

@@ -18,32 +18,24 @@ use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
 
-final class ConstructorWithCallerDenormalizer implements ConstructorDenormalizerInterface
+final class FactoryDenormalizer implements ConstructorDenormalizerInterface
 {
     use IsAServiceTrait;
-
-    /**
-     * @var SimpleConstructorDenormalizer
-     */
-    private $simpleConstructorDenormalizer;
 
     /**
      * @var ArgumentsDenormalizerInterface
      */
     private $argumentsDenormalizer;
 
-    public function __construct(
-        SimpleConstructorDenormalizer $simpleConstructorDenormalizer,
-        ArgumentsDenormalizerInterface $argumentsDenormalizer
-    ) {
-        $this->simpleConstructorDenormalizer = $simpleConstructorDenormalizer;
+    public function __construct(ArgumentsDenormalizerInterface $argumentsDenormalizer)
+    {
         $this->argumentsDenormalizer = $argumentsDenormalizer;
     }
 
@@ -56,14 +48,22 @@ final class ConstructorWithCallerDenormalizer implements ConstructorDenormalizer
         array $unparsedConstructor
     ): MethodCallInterface
     {
-        try {
-            return $this->simpleConstructorDenormalizer->denormalize($scope, $parser, $unparsedConstructor);
-        } catch (UnexpectedValueException $exception) {
-            // Continue
-        }
-
         /** @var string $firstKey */
         $firstKey = key($unparsedConstructor);
+
+        if (false === $firstKey
+            || false === is_string($firstKey)
+            || 1 !== count($unparsedConstructor)
+        ) {
+            throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
+        }
+
+        $arguments = $unparsedConstructor[$firstKey];
+
+        if (false === is_array($arguments)) {
+            throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
+        }
+
         list($caller, $method) = $this->getCallerReference($scope, $firstKey);
         $arguments = $this->argumentsDenormalizer->denormalize($scope, $parser, $unparsedConstructor[$firstKey]);
 

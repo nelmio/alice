@@ -22,6 +22,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerI
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
 
 final class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInterface
 {
@@ -64,6 +66,24 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
             if ('__construct' === $unparsedPropertyName) {
                 $constructor = $this->denormalizeConstructor($value, $scope, $parser);
 
+                if (false === ($constructor instanceof NoMethodCall) && '__construct' !== $constructor->getMethod()) {
+                    @trigger_error(
+                        'Using factories with the fixture keyword "__construct" has been deprecated since '
+                        .'3.0.0 and will no longer be supported in 4.0.0. Use "__factory" instead.',
+                        E_USER_DEPRECATED
+                    );
+                }
+
+                 continue;
+            }
+
+            if ('__factory' === $unparsedPropertyName) {
+                if (null !== $constructor) {
+                    throw LogicExceptionFactory::createForCannotHaveBothConstructorAndFactory();
+                }
+
+                $constructor = $this->denormalizeFactory($value, $scope, $parser);
+
                 continue;
             }
 
@@ -89,6 +109,21 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
             ? new NoMethodCall()
             : $this->constructorDenormalizer->denormalize($scope, $parser, $value)
         ;
+    }
+
+    private function denormalizeFactory(
+        $value,
+        FixtureInterface $scope,
+        FlagParserInterface $parser
+    ): MethodCallInterface
+    {
+        $factory = $this->denormalizeConstructor($value, $scope, $parser);
+
+        if ('__construct' === $factory->getMethod()) {
+            throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
+        }
+
+        return $factory;
     }
 
     private function denormalizeProperty(
