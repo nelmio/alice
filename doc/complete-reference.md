@@ -208,8 +208,8 @@ Nelmio\Entity\User:
 
 ## Using a factory
 
-**[TODO] Status: unimplemented; usable in with `__construct` in `__factory` but this will be deprecated once
-`__factory` is out available and will be removed in 4.0**
+**Note**: the following also applies to `__construct`. However using `__construct` for factories has been deprecated as of
+3.0.0 and will be removed in 4.0.0. Use `__factory` instead.
 
 If you want to call a static factory method instead of a constructor, you can
 specify a hash as the constructor:
