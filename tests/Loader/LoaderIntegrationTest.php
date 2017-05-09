@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\Entity\Caller\DummyWithStaticFunction;
+use Nelmio\Alice\Entity\Caller\StaticService;
 use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
@@ -48,6 +50,7 @@ use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\Throwable\HydrationThrowable;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @group integration
@@ -1353,7 +1356,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithDefaultConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithDefaultConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with explicit constructor but specified no constructor – use reflection' => [
@@ -1364,7 +1367,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithExplicitDefaultConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithExplicitDefaultConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with named constructor but specified no constructor – use reflection' => [
@@ -1375,7 +1378,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithNamedConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithNamedConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with named constructor and optional parameters but specified no constructor – use reflection' => [
@@ -1386,7 +1389,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithNamedConstructorAndOptionalParameters::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithNamedConstructorAndOptionalParameters::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with named constructor and required parameters but specified no constructor – use reflection' => [
@@ -1397,7 +1400,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithNamedConstructorAndRequiredParameters::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithNamedConstructorAndRequiredParameters::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with optional parameters in constructor but specified no constructor – use reflection' => [
@@ -1408,7 +1411,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithOptionalParameterInConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithOptionalParameterInConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with required parameters in constructor but specified no constructor – use reflection' => [
@@ -1419,7 +1422,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithRequiredParameterInConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithRequiredParameterInConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with private constructor – use reflection' => [
@@ -1430,7 +1433,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithPrivateConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithPrivateConstructor::class))->newInstanceWithoutConstructor(),
 
         ];
 
@@ -1442,7 +1445,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithProtectedConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithProtectedConstructor::class))->newInstanceWithoutConstructor(),
 
         ];
 
@@ -1454,7 +1457,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            (new \ReflectionClass(DummyWithNamedPrivateConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(DummyWithNamedPrivateConstructor::class))->newInstanceWithoutConstructor(),
         ];
     }
 
@@ -3191,6 +3194,63 @@ class LoaderIntegrationTest extends TestCase
                     'another_dummy' => StdClassFactory::create([
                         'foo' => 'bazbaz____get__foobar',
                     ]),
+                ],
+            ],
+        ];
+
+        yield 'method call with another static function' => [
+            [
+                DummyWithStaticFunction::class => [
+                    'dummy' => [
+                        '__construct' => false,
+                        '__calls' => [
+                            [StaticService::class.'::setTitle' => ['@self', 'Foo']],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new DummyWithStaticFunction('Foo'),
+                ],
+            ],
+        ];
+
+        yield 'method call with optional flag' => [
+            [
+                DummyWithStaticFunction::class => [
+                    'dummy' => [
+                        '__construct' => false,
+                        '__calls' => [
+                            [StaticService::class.'::setTitle (0%?)' => ['@self', 'Foo']],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => (new ReflectionClass(DummyWithStaticFunction::class))->newInstanceWithoutConstructor(),
+                ],
+            ],
+        ];
+
+        yield 'method call with static function' => [
+            [
+                DummyWithStaticFunction::class => [
+                    'dummy' => [
+                        '__construct' => false,
+                        '__calls' => [
+                            [DummyWithStaticFunction::class.'::setTitle' => ['@self', 'Foo']],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new DummyWithStaticFunction('Foo'),
                 ],
             ],
         ];

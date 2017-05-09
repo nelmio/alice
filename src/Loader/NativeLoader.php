@@ -20,7 +20,16 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenorma
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\CallsWithFlagsDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\FunctionDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\ConfiguratorFlagHandler;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\OptionalFlagHandler;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FactoryDenormalizer;
+use Nelmio\Alice\Generator\Caller\CallProcessorInterface;
+use Nelmio\Alice\Generator\Caller\CallProcessorRegistry;
+use Nelmio\Alice\Generator\Caller\Chainable\MethodCallWithReferenceProcessor;
+use Nelmio\Alice\Generator\Caller\Chainable\OptionalMethodCallProcessor;
+use Nelmio\Alice\Generator\Caller\Chainable\SimpleMethodCallProcessor;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureMethodCallReferenceResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\PhpFunctionCallValueResolver;
@@ -190,6 +199,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  * @method PropertyHydratorInterface getPropertyHydrator()
  * @method PropertyAccessorInterface getPropertyAccessor()
  * @method CallerInterface getCaller()
+ * @method CallProcessorInterface getCallProcessor()
  */
 class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 {
@@ -348,7 +358,7 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
                 $this->getArgumentsDenormalizer()
             ),
             new FactoryDenormalizer(
-                $this->getArgumentsDenormalizer()
+                $this->getCallsDenormalizer()
             ),
             $this->getArgumentsDenormalizer()
         );
@@ -363,8 +373,13 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createCallsDenormalizer(): CallsDenormalizerInterface
     {
-        return new OptionalCallsDenormalizer(
-            $this->getArgumentsDenormalizer()
+        return new CallsWithFlagsDenormalizer(
+            new FunctionDenormalizer(
+                $this->getArgumentsDenormalizer()
+            ),
+            [
+                new OptionalFlagHandler(),
+            ]
         );
     }
 
@@ -565,7 +580,16 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createCaller(): CallerInterface
     {
-        return new SimpleCaller($this->getValueResolver());
+        return new SimpleCaller($this->getCallProcessor(), $this->getValueResolver());
+    }
+
+    protected function createCallProcessor(): CallProcessorInterface
+    {
+        return new CallProcessorRegistry([
+            new MethodCallWithReferenceProcessor(),
+            new OptionalMethodCallProcessor(),
+            new SimpleMethodCallProcessor(),
+        ]);
     }
 
     /**

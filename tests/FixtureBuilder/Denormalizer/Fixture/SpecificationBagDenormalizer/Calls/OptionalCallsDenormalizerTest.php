@@ -26,7 +26,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\Argument;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\OptionalCallsDenormalizer
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\CallsWithFlagsDenormalizer
  */
 class OptionalCallsDenormalizerTest extends TestCase
 {
@@ -35,7 +35,7 @@ class OptionalCallsDenormalizerTest extends TestCase
      */
     public function testIsNotClonable()
     {
-        clone new OptionalCallsDenormalizer(new FakeArgumentsDenormalizer());
+        clone new CallsWithFlagsDenormalizer(new FakeArgumentsDenormalizer());
     }
 
     public function testDenormalizesInputToReturnAMethodCall()
@@ -63,7 +63,7 @@ class OptionalCallsDenormalizerTest extends TestCase
 
         $expected = new SimpleMethodCall('parsed_method', $parsedArguments);
 
-        $denormalizer = new OptionalCallsDenormalizer($argumentsDenormalizer);
+        $denormalizer = new CallsWithFlagsDenormalizer($argumentsDenormalizer);
         $actual = $denormalizer->denormalize($fixture, $flagParser, $unparsedMethod, $unparsedArguments);
 
         $this->assertEquals($expected, $actual);
@@ -96,7 +96,7 @@ class OptionalCallsDenormalizerTest extends TestCase
 
         $expected = new SimpleMethodCall('parsed_method', $parsedArguments);
 
-        $denormalizer = new OptionalCallsDenormalizer($argumentsDenormalizer);
+        $denormalizer = new CallsWithFlagsDenormalizer($argumentsDenormalizer);
         $actual = $denormalizer->denormalize($fixture, $flagParser, 'something', $unparsedArguments);
 
         if ($optional) {

@@ -16,6 +16,8 @@ namespace Nelmio\Alice\Definition;
 /**
  * Value object to point to refer to a service. For example, can be an instantiated service or a reference to a static
  * class.
+ *
+ * TODO: to be renamed?
  */
 interface ServiceReferenceInterface
 {
