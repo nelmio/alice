@@ -53,6 +53,14 @@ class ImmutableByCloneObject implements ObjectInterface
         return $this->instance;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function withInstance($newInstance)
+    {
+        return new self($this->id, $newInstance);
+    }
+
     public function __clone()
     {
         $this->instance = clone $this->instance;

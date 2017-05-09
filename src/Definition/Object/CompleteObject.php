@@ -46,6 +46,14 @@ final class CompleteObject implements ObjectInterface
         return $this->object->getInstance();
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function withInstance($newInstance)
+    {
+        throw new \LogicException('TODO');
+    }
+
     public function __clone()
     {
         $this->object = clone $this->object;

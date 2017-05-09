@@ -76,11 +76,11 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
     ): ResolvedFixtureSet
     {
         if (false === ($methodCall instanceof OptionalMethodCall)) {
-            //TODO: throw error
+            throw new \LogicException('TODO');
         }
 
         if (null === $this->processor) {
-            //TODO: throw error
+            throw new \LogicException('TODO');
         }
 
         if (mt_rand(0, 99) >= $methodCall->getPercentage()) {

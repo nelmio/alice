@@ -30,4 +30,11 @@ interface ObjectInterface
      * @return object
      */
     public function getInstance();
+
+    /**
+     * @param object $newInstance
+     *
+     * @return static
+     */
+    public function withInstance($newInstance);
 }

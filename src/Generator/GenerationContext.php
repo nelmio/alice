@@ -39,6 +39,11 @@ final class GenerationContext
      */
     private $cache = [];
 
+    /**
+     * @var bool
+     */
+    private $retrieveCallResult = false;
+
     public function __construct()
     {
         $this->isFirstPass = true;
@@ -84,6 +89,21 @@ final class GenerationContext
     public function cacheValue(string $key, $value)
     {
         $this->cache[$key] = $value;
+    }
+
+    public function markRetrieveCallResult(): void
+    {
+        $this->retrieveCallResult = true;
+    }
+
+    public function unmarkRetrieveCallResult(): void
+    {
+        $this->retrieveCallResult = false;
+    }
+
+    public function needsCallResult(): bool
+    {
+        return $this->retrieveCallResult;
     }
 
     /**

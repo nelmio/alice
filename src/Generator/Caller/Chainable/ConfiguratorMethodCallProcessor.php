@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller\Chainable;
 
-use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
+use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Definition\ServiceReference\StaticReference;
+use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\Caller\CallProcessorAwareInterface;
+use Nelmio\Alice\Generator\Caller\CallProcessorInterface;
 use Nelmio\Alice\Generator\Caller\ChainableCallProcessorInterface;
 use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -32,26 +34,38 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringG
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
-final class MethodCallWithReferenceProcessor implements ChainableCallProcessorInterface
+final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInterface, CallProcessorAwareInterface
 {
     use IsAServiceTrait;
+
+    /**
+     * @var CallProcessorInterface|null
+     */
+    private $processor;
+
+    public function __construct(CallProcessorInterface $processor = null)
+    {
+        $this->processor = $processor;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withProcessor(CallProcessorInterface $processor): self
+    {
+        return new self($processor);
+    }
 
     /**
      * @inheritdoc
      */
     public function canProcess(MethodCallInterface $methodCall): bool
     {
-        return (
-            $methodCall instanceof MethodCallWithReference
-            && null !== $methodCall->getCaller()
-            && $methodCall->getCaller() instanceof StaticReference
-        );
+        return $methodCall instanceof ConfiguratorMethodCall;
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param MethodCallWithReference $methodCall
+     * @inheritdoc
      */
     public function process(
         ObjectInterface $object,
@@ -60,21 +74,21 @@ final class MethodCallWithReferenceProcessor implements ChainableCallProcessorIn
         MethodCallInterface $methodCall
     ): ResolvedFixtureSet
     {
-        /** @var StaticReference $reference */
-        $reference = $methodCall->getCaller();
-
-        if (false === ($reference instanceof StaticReference)) {
+        if (null === $this->processor) {
             throw new \LogicException('TODO');
         }
 
-        $result = $reference->getId()::{$methodCall->getMethod()}(...$methodCall->getArguments());
+        $context->markRetrieveCallResult();
 
-        if ($context->needsCallResult()) {
-            $object = $object->withInstance($result);
-        }
-
-        return $fixtureSet->withObjects(
-            $fixtureSet->getObjects()->with($result)
+        $fixtureSet = $this->processor->process(
+            $object,
+            $fixtureSet,
+            $context,
+            $methodCall->getOriginalMethodCall()
         );
+
+        $context->unmarkRetrieveCallResult();
+
+        return $fixtureSet;
     }
 }
