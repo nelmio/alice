@@ -3058,6 +3058,44 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
+        yield 'percentage method calls, 100' => [
+            [
+                Dummy::class => [
+                    'dummy' => [
+                        '__calls' => [
+                            ['setTitle' => ['Fake Title']],
+                            ['addFoo (100%?)' => []],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => Dummy::create('Fake Title', 1),
+                ],
+            ]
+        ];
+
+        yield 'percentage method calls, 0' => [
+            [
+                Dummy::class => [
+                    'dummy' => [
+                        '__calls' => [
+                            ['setTitle' => ['Fake Title']],
+                            ['addFoo (0%?)' => []],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => Dummy::create('Fake Title', 0),
+                ],
+            ],
+        ];
+
         yield 'method calls' => [
             [
                 Dummy::class => [
