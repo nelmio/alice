@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller;
 
+use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -66,6 +67,12 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
         ];
 
         foreach ($calls as $methodCall) {
+            if ($methodCall instanceof OptionalMethodCall) {
+                if ($methodCall->getPercentage() <= mt_rand(0,99)) {
+                    continue;
+                }
+            }
+
             list($methodCall, $fixtureSet) = $this->processArguments($methodCall, $fixture, $fixtureSet, $scope, $context);
 
             $instance = $object->getInstance();
