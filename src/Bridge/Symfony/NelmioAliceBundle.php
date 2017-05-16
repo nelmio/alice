@@ -48,6 +48,12 @@ final class NelmioAliceBundle extends Bundle
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
+                'nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.simple_denormalizer',
+                'nelmio_alice.fixture_builder.denormalizer.chainable_method_flag_handler'
+            )
+        );
+        $container->addCompilerPass(
+            new RegisterTagServicesPass(
                 'nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry',
                 'nelmio_alice.fixture_builder.expression_language.chainable_token_parser'
             )
@@ -56,6 +62,12 @@ final class NelmioAliceBundle extends Bundle
             new RegisterTagServicesPass(
                 'nelmio_alice.generator.instantiator.registry',
                 'nelmio_alice.generator.instantiator.chainable_instantiator'
+            )
+        );
+        $container->addCompilerPass(
+            new RegisterTagServicesPass(
+                'nelmio_alice.generator.caller.registry',
+                'nelmio_alice.generator.caller.chainable_call_processor'
             )
         );
         $container->addCompilerPass(

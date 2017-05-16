@@ -17,7 +17,32 @@
                  alias="nelmio_alice.generator.caller.simple" />
 
         <service id="nelmio_alice.generator.caller.simple"
-                 class="Nelmio\Alice\Generator\Caller\SimpleCaller" />
+                 class="Nelmio\Alice\Generator\Caller\SimpleCaller">
+            <argument type="service" id="nelmio_alice.generator.caller.registry" />
+            <argument type="service" id="nelmio_alice.generator.resolver.value" />
+        </service>
+
+        <service id="nelmio_alice.generator.caller.registry"
+                 class="Nelmio\Alice\Generator\Caller\CallProcessorRegistry">
+            <!-- Injected via a compiler pass -->
+        </service>
+
+
+        <!-- Chainables -->
+        <service id="nelmio_alice.generator.caller.chainable.method_call_with_reference"
+                 class="Nelmio\Alice\Generator\Caller\Chainable\MethodCallWithReferenceProcessor">
+            <tag name="nelmio_alice.generator.caller.chainable_call_processor" />
+        </service>
+
+        <service id="nelmio_alice.generator.caller.chainable.optional_method_call"
+                 class="Nelmio\Alice\Generator\Caller\Chainable\OptionalMethodCallProcessor">
+            <tag name="nelmio_alice.generator.caller.chainable_call_processor" />
+        </service>
+
+        <service id="nelmio_alice.generator.caller.chainable.simple_call"
+                 class="Nelmio\Alice\Generator\Caller\Chainable\SimpleMethodCallProcessor">
+            <tag name="nelmio_alice.generator.caller.chainable_call_processor" />
+        </service>
 
     </services>
 
