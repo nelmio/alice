@@ -46,20 +46,20 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedConstructor
+        array $unparsedMethod
     ): MethodCallInterface
     {
         /** @var string $method */
-        $method = key($unparsedConstructor);
+        $method = key($unparsedMethod);
 
         if (false === $method
             || false === is_string($method)
-            || 1 !== count($unparsedConstructor)
+            || 1 !== count($unparsedMethod)
         ) {
             throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
         }
 
-        $arguments = $unparsedConstructor[$method];
+        $arguments = $unparsedMethod[$method];
 
         if (false === is_array($arguments)) {
             throw DenormalizerExceptionFactory::createForUndenormalizableFactory();

@@ -33,6 +33,7 @@ class FakeValue implements ValueInterface
      */
     public function __toString(): string
     {
+        return 'tmp';
         $this->__call(__METHOD__, func_get_args());
     }
 }

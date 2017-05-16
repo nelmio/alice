@@ -72,11 +72,11 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
         $fixture = $fixtureSet->getFixtures()->get($object->getId());
         $calls = $fixture->getSpecs()->getMethodCalls();
 
-        $scope = [
-            '_instances' => $fixtureSet->getObjects()->toArray(),
-        ];
-
         foreach ($calls as $methodCall) {
+            $scope = [
+                '_instances' => $fixtureSet->getObjects()->toArray(),
+            ];
+
             list($methodCall, $fixtureSet) = $this->processArguments($methodCall, $fixture, $fixtureSet, $scope, $context);
 
             $fixtureSet = $this->callProcessor->process($object, $fixtureSet, $context, $methodCall);

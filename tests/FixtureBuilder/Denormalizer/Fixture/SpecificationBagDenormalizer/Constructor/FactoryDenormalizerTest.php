@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor;
 
+use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\FakeArgumentsDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\FakeCallsDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureInterface;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +37,7 @@ class FactoryDenormalizerTest extends TestCase
     public function testIsNotClonable()
     {
         clone new FactoryDenormalizer(
-            new FakeArgumentsDenormalizer()
+            new FakeCallsDenormalizer()
         );
     }
 
@@ -49,7 +52,7 @@ class FactoryDenormalizerTest extends TestCase
         $flagParser = new FakeFlagParser();
 
         $denormalizer = new FactoryDenormalizer(
-            new FakeArgumentsDenormalizer()
+            new FakeCallsDenormalizer()
         );
 
         $denormalizer->denormalize($fixture, $flagParser, $factory);
@@ -69,7 +72,7 @@ class FactoryDenormalizerTest extends TestCase
         $flagParser = new FakeFlagParser();
 
         $denormalizer = new FactoryDenormalizer(
-            new FakeArgumentsDenormalizer()
+            new FakeCallsDenormalizer()
         );
 
         $denormalizer->denormalize($fixture, $flagParser, $factory);
@@ -88,13 +91,13 @@ class FactoryDenormalizerTest extends TestCase
         $flagParser = new FakeFlagParser();
 
         $denormalizer = new FactoryDenormalizer(
-            new FakeArgumentsDenormalizer()
+            new FakeCallsDenormalizer()
         );
 
         $denormalizer->denormalize($fixture, $flagParser, $factory);
     }
 
-    public function testDenormalizesWithArgumentsConstructorAsSimpleConstructor()
+    public function testCanDenormalizeASimpleFactory()
     {
         $factory = [
             'create' => $unparsedArguments = [
@@ -112,28 +115,29 @@ class FactoryDenormalizerTest extends TestCase
 
         $flagParser = new FakeFlagParser();
 
-        $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
-        $argumentsDenormalizerProphecy
-            ->denormalize($fixture, $flagParser, $unparsedArguments)
-            ->willReturn(['argument values'])
+        $callsDenormalizerProphecy = $this->prophesize(CallsDenormalizerInterface::class);
+        $callsDenormalizerProphecy
+            ->denormalize(
+                $fixture,
+                $flagParser,
+                'Nelmio\Alice\Entity\User::create',
+                $unparsedArguments
+            )
+            ->willReturn(
+                $expected = new FakeMethodCall()
+            )
         ;
-        /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
-        $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
+        /** @var CallsDenormalizerInterface $callsDenormalizer */
+        $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
-        $expected = new MethodCallWithReference(
-            new StaticReference('Nelmio\Alice\Entity\User'),
-            'create',
-            ['argument values']
-        );
-
-        $denormalizer = new FactoryDenormalizer($argumentsDenormalizer);
+        $denormalizer = new FactoryDenormalizer($callsDenormalizer);
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $factory);
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function testCanDenormalizeStaticFactoriesConstructor()
+    public function testCanDenormalizeAStaticFactory()
     {
         $constructor = [
             'Nelmio\Entity\UserFactory::create' => $arguments = [
@@ -145,28 +149,29 @@ class FactoryDenormalizerTest extends TestCase
         $fixture = new FakeFixture();
         $flagParser = new FakeFlagParser();
 
-        $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
-        $argumentsDenormalizerProphecy
-            ->denormalize($fixture, $flagParser, $arguments)
-            ->willReturn($arguments)
+        $callsDenormalizerProphecy = $this->prophesize(CallsDenormalizerInterface::class);
+        $callsDenormalizerProphecy
+            ->denormalize(
+                $fixture,
+                $flagParser,
+                'Nelmio\Entity\UserFactory::create',
+                $arguments
+            )
+            ->willReturn(
+                $expected = new FakeMethodCall()
+            )
         ;
-        /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
-        $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
+        /** @var CallsDenormalizerInterface $callsDenormalizer */
+        $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
-        $expected = new MethodCallWithReference(
-            new StaticReference('Nelmio\Entity\UserFactory'),
-            'create',
-            $arguments
-        );
-
-        $denormalizer = new FactoryDenormalizer($argumentsDenormalizer);
+        $denormalizer = new FactoryDenormalizer($callsDenormalizer);
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function testCanDenormalizeNonStaticFactoryConstructor()
+    public function testCanDenormalizeANonStaticFactory()
     {
         $constructor = [
             '@nelmio.entity.user_factory::create' => $arguments = [
@@ -178,45 +183,25 @@ class FactoryDenormalizerTest extends TestCase
         $fixture = new FakeFixture();
         $flagParser = new FakeFlagParser();
 
-        $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
-        $argumentsDenormalizerProphecy
-            ->denormalize($fixture, $flagParser, $arguments)
-            ->willReturn($arguments)
+        $callsDenormalizerProphecy = $this->prophesize(CallsDenormalizerInterface::class);
+        $callsDenormalizerProphecy
+            ->denormalize(
+                $fixture,
+                $flagParser,
+                '@nelmio.entity.user_factory::create',
+                $arguments
+            )
+            ->willReturn(
+                $expected = new FakeMethodCall()
+            )
         ;
-        /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
-        $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
+        /** @var CallsDenormalizerInterface $callsDenormalizer */
+        $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
-        $expected = new MethodCallWithReference(
-            new InstantiatedReference('nelmio.entity.user_factory'),
-            'create',
-            $arguments
-        );
-
-        $denormalizer = new FactoryDenormalizer($argumentsDenormalizer);
+        $denormalizer = new FactoryDenormalizer($callsDenormalizer);
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid constructor method "@foo::bar::baz".
-     */
-    public function testThrowsExceptionIfInvalidConstructor()
-    {
-        $constructor = [
-            '@foo::bar::baz' => $arguments = [
-                '<latitude()>',
-                '1 (unique)' => '<longitude()>',
-            ]
-        ];
-        $fixture = new FakeFixture();
-        $flagParser = new FakeFlagParser();
-        $argumentsDenormalizer = new FakeArgumentsDenormalizer();
-
-        $denormalizer = new FactoryDenormalizer($argumentsDenormalizer);
-
-        $denormalizer->denormalize($fixture, $flagParser, $constructor);
     }
 }

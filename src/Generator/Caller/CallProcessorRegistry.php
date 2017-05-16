@@ -25,6 +25,7 @@ use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Caller\CallProcessorExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationExceptionFactory;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
@@ -64,6 +65,6 @@ final class CallProcessorRegistry implements CallProcessorInterface
             }
         }
 
-        throw new \Exception('TODO');
+        throw CallProcessorExceptionFactory::createForNoParserFoundForElement($methodCall);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller;
 
+use Nelmio\Alice\Definition\Value\DummyValue;
 use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
@@ -36,12 +37,24 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Prophecy\Argument;
+use stdClass;
+use Symfony\Component\ExpressionLanguage\Tests\Node\Obj;
 
 /**
  * @covers \Nelmio\Alice\Generator\Caller\SimpleCaller
  */
 class SimpleCallerTest extends TestCase
 {
+    /**
+     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
+     */
+    public function testIsNotClonable()
+    {
+        clone new SimpleCaller(
+            new FakeCallProcessor()
+        );
+    }
+
     public function testIsACaller()
     {
         $this->assertTrue(is_a(SimpleCaller::class, CallerInterface::class, true));
@@ -50,8 +63,15 @@ class SimpleCallerTest extends TestCase
     public function testIsValueResolverAware()
     {
         $this->assertEquals(
-            (new SimpleCaller())->withValueResolver(new FakeValueResolver()),
-            new SimpleCaller(new FakeValueResolver())
+            (
+                new SimpleCaller(
+                    new FakeCallProcessor()
+                )
+            )->withValueResolver(new FakeValueResolver()),
+            new SimpleCaller(
+                new FakeCallProcessor(),
+                new FakeValueResolver()
+            )
         );
     }
 
@@ -63,19 +83,16 @@ class SimpleCallerTest extends TestCase
     {
         $obj = new FakeObject();
 
-        $caller = new SimpleCaller();
+        $caller = new SimpleCaller(
+            new FakeCallProcessor()
+        );
         $caller->doCallsOn($obj, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
     public function testCallsMethodsOntoTheGivenObject()
     {
-        $dummyProphecy = $this->prophesize(Dummy::class);
-        $dummyProphecy->setTitle('foo_title')->shouldBeCalled();
-        $dummyProphecy->addFoo()->shouldBeCalled();
-        /** @var Dummy $dummy */
-        $dummy = $dummyProphecy->reveal();
+        $object = new SimpleObject('dummy', new stdClass());
 
-        $object = new SimpleObject('dummy', $dummy);
         $set = ResolvedFixtureSetFactory::create(
             null,
             $fixtures = (new FixtureBag())->with(
@@ -86,27 +103,83 @@ class SimpleCallerTest extends TestCase
                         null,
                         new PropertyBag(),
                         (new MethodCallBag())
-                            ->with(new SimpleMethodCall('setTitle', [ 'foo_title' ]))
-                            ->with(new SimpleMethodCall('addFoo'))
-                            ->with(new SimpleMethodCall('addFoo'))
+                            ->with($methodCall1 = new SimpleMethodCall('setTitle', [ 'foo_title' ]))
+                            ->with($methodCall2 = new SimpleMethodCall('addFoo'))
+                            ->with($methodCall3 = new SimpleMethodCall('addFoo'))
                     )
                 )
             )
         );
+
         $context = new GenerationContext();
         $context->markIsResolvingFixture('foo');
 
-        $caller = new SimpleCaller(new FakeValueResolver());
+        $callProcessorProphecy = $this->prophesize(CallProcessorInterface::class);
+        $callProcessorProphecy
+            ->process(
+                $object,
+                $set,
+                $context,
+                $methodCall1
+            )
+            ->willReturn(
+                $set1 = ResolvedFixtureSetFactory::create(
+                    new ParameterBag([
+                        'pass' => 1,
+                    ]),
+                    $fixtures
+                )
+            )
+        ;
+        $callProcessorProphecy
+            ->process(
+                $object,
+                $set1,
+                $context,
+                $methodCall2
+            )
+            ->willReturn(
+                $set2 = ResolvedFixtureSetFactory::create(
+                    new ParameterBag([
+                        'pass' => 2,
+                    ]),
+                    $fixtures
+                )
+            )
+        ;
+        $callProcessorProphecy
+            ->process(
+                $object,
+                $set2,
+                $context,
+                $methodCall3
+            )
+            ->willReturn(
+                $set3 = ResolvedFixtureSetFactory::create(
+                    new ParameterBag([
+                        'pass' => 3,
+                    ]),
+                    $fixtures
+                )
+            )
+        ;
+        /** @var CallProcessorInterface $callProcessor */
+        $callProcessor = $callProcessorProphecy->reveal();
+
+        $caller = new SimpleCaller(
+            $callProcessor,
+            new FakeValueResolver()
+        );
         $caller->doCallsOn($object, $set, $context);
 
-        $dummyProphecy->setTitle(Argument::any())->shouldHaveBeenCalledTimes(1);
-        $dummyProphecy->addFoo()->shouldHaveBeenCalledTimes(2);
+        $callProcessorProphecy->process(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
     public function testResolvesAllPropertyValues()
     {
         $object = new SimpleObject('dummy', new Dummy());
-        $set = ResolvedFixtureSetFactory::create(
+
+        $originalSet = ResolvedFixtureSetFactory::create(
             null,
             $fixtures = (new FixtureBag())->with(
                 $fixture = new SimpleFixture(
@@ -116,45 +189,147 @@ class SimpleCallerTest extends TestCase
                         null,
                         new PropertyBag(),
                         (new MethodCallBag())
-                            ->with(new SimpleMethodCall('setTitle', ['fake_title']))
-                            ->with(new SimpleMethodCall('setTitle', [$titleValue = new FakeValue()]))
+                            ->with($methodCall1 = new SimpleMethodCall('setTitle', [$value1 = new DummyValue('val1')]))
+                            ->with($methodCall2 = new SimpleMethodCall('setTitle', [$value2 = new DummyValue('val2')]))
+                            ->with($methodCall3 = new SimpleMethodCall('setTitle', ['fake_title']))
                     )
                 )
             )
         );
+
         $context = new GenerationContext();
         $context->markIsResolvingFixture('foo');
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
-        $setAfterFirstResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 1]), $fixtures);
+        /** @var ValueResolverInterface $resolver */
+        $resolver = $resolverProphecy->reveal();
+
+        $callProcessorProphecy = $this->prophesize(CallProcessorInterface::class);
+        /** @var CallProcessorInterface $callProcessor */
+        $callProcessor = $callProcessorProphecy->reveal();
+
         $resolverProphecy
             ->resolve(
-                $titleValue,
+                $value1,
                 $fixture,
-                $set,
+                $originalSet,
                 [
-                    '_instances' => $set->getObjects()->toArray(),
+                    '_instances' => [],
                 ],
                 $context
             )
             ->willReturn(
-                new ResolvedValueWithFixtureSet('Generated Title', $setAfterFirstResolution)
+                new ResolvedValueWithFixtureSet(
+                    'Generated Title 1',
+                    $setAfterResolution1 = ResolvedFixtureSetFactory::create(
+                        new ParameterBag([
+                            'resolution pass' => 1,
+                        ]),
+                        $fixtures
+                    )
+                )
             )
         ;
 
-        /** @var ValueResolverInterface $resolver */
-        $resolver = $resolverProphecy->reveal();
-
-        $expected = new ResolvedFixtureSet(
-            new ParameterBag(['iteration' => 1]),
-            $fixtures,
-            new ObjectBag(['dummy' => $object])
+        $methodCall1AfterResolution = new SimpleMethodCall(
+            'setTitle',
+            ['Generated Title 1']
         );
 
-        $caller = new SimpleCaller($resolver);
-        $actual = $caller->doCallsOn($object, $set, $context);
+        $callProcessorProphecy
+            ->process(
+                $object,
+                $setAfterResolution1,
+                $context,
+                $methodCall1AfterResolution
+            )
+            ->willReturn(
+                $setAfterProcessing1 = ResolvedFixtureSetFactory::create(
+                    new ParameterBag([
+                        'resolution pass' => 1,
+                        'processing pass' => 1,
+                    ]),
+                    $fixtures,
+                    new ObjectBag($objectsAfterProcessing1 = [
+                        'dummy' => new SimpleObject('dummy', new stdClass())
+                    ])
+                )
+            )
+        ;
 
-        $this->assertEquals($expected, $actual);
+        $resolverProphecy
+            ->resolve(
+                $value2,
+                $fixture,
+                $setAfterProcessing1,
+                [
+                    '_instances' => $objectsAfterProcessing1,
+                ],
+                $context
+            )
+            ->willReturn(
+                new ResolvedValueWithFixtureSet(
+                    'Generated Title 2',
+                    $setAfterResolution2 = ResolvedFixtureSetFactory::create(
+                        new ParameterBag([
+                            'resolution pass' => 2,
+                            'processing pass' => 1,
+                        ]),
+                        $fixtures,
+                        new ObjectBag($objectsAfterProcessing1)
+                    )
+                )
+            )
+        ;
+
+        $methodCall2AfterResolution = new SimpleMethodCall(
+            'setTitle',
+            ['Generated Title 2']
+        );
+
+        $callProcessorProphecy
+            ->process(
+                $object,
+                $setAfterResolution2,
+                $context,
+                $methodCall2AfterResolution
+            )
+            ->willReturn(
+                $setAfterProcessing2 = ResolvedFixtureSetFactory::create(
+                    new ParameterBag([
+                        'resolution pass' => 2,
+                        'processing pass' => 2,
+                    ]),
+                    $fixtures,
+                    new ObjectBag($objectsAfterProcessing1)
+                )
+            )
+        ;
+        $callProcessorProphecy
+            ->process(
+                $object,
+                $setAfterProcessing2,
+                $context,
+                $methodCall3
+            )
+            ->willReturn(
+                $setAfterProcessing3 = ResolvedFixtureSetFactory::create(
+                    new ParameterBag([
+                        'resolution pass' => 3,
+                        'processing pass' => 2,
+                    ]),
+                    $fixtures,
+                    new ObjectBag($objects)
+                )
+            )
+        ;
+
+        $expected = $setAfterProcessing3;
+
+        $caller = new SimpleCaller($callProcessor, $resolver);
+        $actual = $caller->doCallsOn($object, $originalSet, $context);
+
+        $this->assertSame($expected, $actual);
 
         $resolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -162,6 +337,7 @@ class SimpleCallerTest extends TestCase
     public function testThrowsAGenerationThrowableIfResolutionFails()
     {
         $object = new SimpleObject('dummy', new Dummy());
+
         $set = ResolvedFixtureSetFactory::create(
             null,
             $fixtures = (new FixtureBag())->with(
@@ -172,8 +348,7 @@ class SimpleCallerTest extends TestCase
                         null,
                         new PropertyBag(),
                         (new MethodCallBag())
-                            ->with(new SimpleMethodCall('setTitle', ['fake_title']))
-                            ->with(new SimpleMethodCall('setTitle', [$titleValue = new FakeValue()]))
+                            ->with(new SimpleMethodCall('setTitle', [new FakeValue()]))
                     )
                 )
             )
@@ -187,9 +362,11 @@ class SimpleCallerTest extends TestCase
         /** @var ValueResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
-        $caller = new SimpleCaller($resolver);
+        $caller = new SimpleCaller(new FakeCallProcessor(), $resolver);
+
         try {
             $caller->doCallsOn($object, $set, new GenerationContext());
+
             $this->fail('Expected exception to be thrown.');
         } catch (GenerationThrowable $throwable) {
             // Expected result

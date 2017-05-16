@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\MethodCall;
 
+use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
@@ -40,14 +41,22 @@ class MethodCallWithReferenceTest extends TestCase
         $this->assertEquals($caller, $definition->getCaller());
         $this->assertEquals($method, $definition->getMethod());
         $this->assertEquals($arguments, $definition->getArguments());
-        $this->assertEquals('user.factorysetUsername', $definition->__toString());
+        $this->assertEquals('user.factory->setUsername', $definition->__toString());
 
         $definition = new MethodCallWithReference($caller, $method, null);
 
         $this->assertEquals($caller, $definition->getCaller());
         $this->assertEquals($method, $definition->getMethod());
         $this->assertNull($definition->getArguments());
-        $this->assertEquals('user.factorysetUsername', $definition->__toString());
+        $this->assertEquals('user.factory->setUsername', $definition->__toString());
+
+        $caller = new StaticReference('Dummy');
+        $definition = new MethodCallWithReference($caller, $method, null);
+
+        $this->assertEquals($caller, $definition->getCaller());
+        $this->assertEquals($method, $definition->getMethod());
+        $this->assertNull($definition->getArguments());
+        $this->assertEquals('Dummy::setUsername', $definition->__toString());
     }
 
     public function testIsMutable()
