@@ -229,8 +229,6 @@ Escaped expression: `'@@ref'` will return `'@ref'`
 
 `prop` refers to a property of the object pointed by `@ref` and is accessed via a property accessor (which will determined which getter to use if a getter is required or get it directly if it is a public property). For the sake of simplicity, it is assumed that properties are plain english and as such should only be composed of letters or underscores `_`.
 
-@tshelburne for that one I'm willing to add support for calling a function e.g. `@user1->getName()`, WDYT?
-
 As `prop` is not resolved, having `@user1->name<current()>` will be equivalent to `Alice<current()>` if `@user1->name` results in `'Alice'`.
 
 
@@ -270,6 +268,7 @@ instantiator, for example:
 
 namespace App;
 
+use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
@@ -330,6 +329,7 @@ You can decorate the property accessor to use your own [by extending the `Native
 or by using the decoration feature of the Symfony DI component when using the provided integration:
 
 ```yml
+services:
     app.fixtures.reflection_property_accessor:
         class: Nelmio\Alice\PropertyAccess\ReflectionPropertyAccessor
         public: false
@@ -351,6 +351,7 @@ decorate it to do what you want:
 
 namespace App;
 
+use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
@@ -360,7 +361,7 @@ final class DummyPropertyHydrator implements PropertyHydratorInterface
 {
     private $hydrator;
 
-    public function __construct(InstantiatorInterface $decoratedPropertyHydrator)
+    public function __construct(PropertyHydratorInterface $decoratedPropertyHydrator)
     {
         $this->hydrator = $decoratedPropertyHydrator;
     }
