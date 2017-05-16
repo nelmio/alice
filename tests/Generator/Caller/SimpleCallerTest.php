@@ -251,7 +251,7 @@ class SimpleCallerTest extends TestCase
                     ]),
                     $fixtures,
                     new ObjectBag($objectsAfterProcessing1 = [
-                        'dummy' => new SimpleObject('dummy', new stdClass())
+                        'dummy' => new SimpleObject('dummy', $dummy = new stdClass())
                     ])
                 )
             )
@@ -263,7 +263,9 @@ class SimpleCallerTest extends TestCase
                 $fixture,
                 $setAfterProcessing1,
                 [
-                    '_instances' => $objectsAfterProcessing1,
+                    '_instances' => [
+                        'dummy' => $dummy,
+                    ],
                 ],
                 $context
             )
@@ -319,7 +321,7 @@ class SimpleCallerTest extends TestCase
                         'processing pass' => 2,
                     ]),
                     $fixtures,
-                    new ObjectBag($objects)
+                    new ObjectBag($objectsAfterProcessing1)
                 )
             )
         ;
@@ -331,7 +333,8 @@ class SimpleCallerTest extends TestCase
 
         $this->assertSame($expected, $actual);
 
-        $resolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $resolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
+        $callProcessorProphecy->process(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
     public function testThrowsAGenerationThrowableIfResolutionFails()

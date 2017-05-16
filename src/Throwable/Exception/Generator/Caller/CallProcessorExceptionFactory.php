@@ -15,7 +15,7 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Caller;
 use Nelmio\Alice\Definition\MethodCallInterface;
 
 /**
- * @final
+ * @private
  */
 final class CallProcessorExceptionFactory
 {
