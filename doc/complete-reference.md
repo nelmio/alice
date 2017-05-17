@@ -7,6 +7,7 @@
 1. [Calling Methods](#calling-methods)
     1. [Method arguments with flags](#method-arguments-with-flags)
     1. [Method arguments with parameters](#method-arguments-with-parameters)
+    1. [Optional method calls](#optional-method-calls)
 1. [Specifying Constructor Arguments](#specifying-constructor-arguments)
 1. [Using a factory](#using-a-factory)
 1. [Optional Data](#optional-data)
@@ -182,6 +183,20 @@ The case above can be a bit confusing in YAML, in PHP it would be the following:
     ],
 ],
 ```
+
+### Optional method calls
+
+Calls can be made optional thanks to an optional flag. In the following example, `setLocation()` will have 80% chances
+to be called.
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        username: '<username()>'
+        __calls:
+            - setLocation (80%?): [40.689269, -74.044737]
+```
+
 
 
 ## Specifying Constructor Arguments

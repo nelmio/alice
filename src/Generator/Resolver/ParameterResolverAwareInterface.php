@@ -18,7 +18,7 @@ interface ParameterResolverAwareInterface
     /**
      * @param ParameterResolverInterface $resolver
      *
-     * @return self
+     * @return static
      */
     public function withResolver(ParameterResolverInterface $resolver);
 }

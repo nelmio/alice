@@ -36,7 +36,7 @@ class OptionalMethodCallTest extends TestCase
         $method = 'setUsername';
         $arguments = [new \stdClass()];
         $percentage = 30;
-        $stringValue = 'user.factorysetUsername';
+        $stringValue = 'user.factory->setUsername';
 
         $methodCallProphecy = $this->prophesize(MethodCallInterface::class);
         $methodCallProphecy->getCaller()->willReturn($caller);
@@ -55,6 +55,7 @@ class OptionalMethodCallTest extends TestCase
         $this->assertEquals($arguments, $definition->getArguments());
         $this->assertEquals($percentage, $definition->getPercentage());
         $this->assertEquals($stringValue, $definition->__toString());
+        $this->assertSame($methodCall, $definition->getOriginalMethodCall());
 
         $methodCallProphecy->getCaller()->shouldHaveBeenCalledTimes(1);
         $methodCallProphecy->getMethod()->shouldHaveBeenCalledTimes(1);
@@ -75,14 +76,15 @@ class OptionalMethodCallTest extends TestCase
         $definition = new OptionalMethodCall($caller, $flag);
 
         // Mutate before reading values
-        $caller->setMethod(new DummyMethodCall('dummy'));
+        $caller->setMethod('dummy');
         $arg0->foo = 'bar';
 
         // Mutate retrieved values
         $definition->getCaller()->setId('mutated');
         $definition->getArguments()[0]->foz = 'baz';
 
-        $this->assertEquals(new MutableReference(), $definition->getCaller());
+        $this->assertEquals('mutated', $definition->getCaller()->getId());
+        $this->assertEquals('dummy', $definition->getMethod());
         $this->assertEquals(
             [
                 StdClassFactory::create([

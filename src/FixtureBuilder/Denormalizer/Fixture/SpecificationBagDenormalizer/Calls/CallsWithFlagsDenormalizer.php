@@ -24,18 +24,28 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
 
-final class OptionalCallsDenormalizer implements CallsDenormalizerInterface
+final class CallsWithFlagsDenormalizer implements CallsDenormalizerInterface
 {
     use IsAServiceTrait;
 
     /**
-     * @var ArgumentsDenormalizerInterface
+     * @var CallsDenormalizerInterface
      */
-    private $argumentDenormalizer;
+    private $callsDenormalizer;
 
-    public function __construct(ArgumentsDenormalizerInterface $argumentsDenormalizer)
+    /**
+     * @var MethodFlagHandler[]
+     */
+    private $methodFlagHandlers;
+
+    /**
+     * @param CallsDenormalizerInterface $callsDenormalizer
+     * @param MethodFlagHandler[]        $methodFlagHandlers
+     */
+    public function __construct(CallsDenormalizerInterface $callsDenormalizer, array $methodFlagHandlers)
     {
-        $this->argumentDenormalizer = $argumentsDenormalizer;
+        $this->callsDenormalizer = $callsDenormalizer;
+        $this->methodFlagHandlers = (function (MethodFlagHandler ...$handlers) { return $handlers; })(...$methodFlagHandlers);
     }
 
     /**
@@ -50,18 +60,17 @@ final class OptionalCallsDenormalizer implements CallsDenormalizerInterface
     {
         $methodFlags = $parser->parse($unparsedMethod);
         $method = $methodFlags->getKey();
-        $arguments = $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedArguments);
 
-        $methodCall = new SimpleMethodCall($method, $arguments);
+        $methodCall = $this->callsDenormalizer->denormalize($scope, $parser, $method, $unparsedArguments);
 
         return $this->handleMethodFlags($methodCall, $methodFlags);
     }
 
     private function handleMethodFlags(MethodCallInterface $methodCall, FlagBag $flags): MethodCallInterface
     {
-        foreach ($flags as $flag) {
-            if ($flag instanceof OptionalFlag) {
-                return new OptionalMethodCall($methodCall, $flag);
+        foreach ($this->methodFlagHandlers as $methodFlagHandler) {
+            foreach ($flags as $flag) {
+                $methodCall = $methodFlagHandler->handleMethodFlags($methodCall, $flag);
             }
         }
 

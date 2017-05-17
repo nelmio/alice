@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
@@ -30,13 +31,13 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
     use IsAServiceTrait;
 
     /**
-     * @var ArgumentsDenormalizerInterface
+     * @var CallsDenormalizerInterface
      */
-    private $argumentsDenormalizer;
+    private $callsDenormalizer;
 
-    public function __construct(ArgumentsDenormalizerInterface $argumentsDenormalizer)
+    public function __construct(CallsDenormalizerInterface $callsDenormalizer)
     {
-        $this->argumentsDenormalizer = $argumentsDenormalizer;
+        $this->callsDenormalizer = $callsDenormalizer;
     }
 
     /**
@@ -45,54 +46,38 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedConstructor
+        array $unparsedMethod
     ): MethodCallInterface
     {
-        /** @var string $firstKey */
-        $firstKey = key($unparsedConstructor);
+        /** @var string $method */
+        $method = key($unparsedMethod);
 
-        if (false === $firstKey
-            || false === is_string($firstKey)
-            || 1 !== count($unparsedConstructor)
+        if (false === $method
+            || false === is_string($method)
+            || 1 !== count($unparsedMethod)
         ) {
             throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
         }
 
-        $arguments = $unparsedConstructor[$firstKey];
+        $arguments = $unparsedMethod[$method];
 
         if (false === is_array($arguments)) {
             throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
         }
 
-        list($caller, $method) = $this->getCallerReference($scope, $firstKey);
-        $arguments = $this->argumentsDenormalizer->denormalize($scope, $parser, $unparsedConstructor[$firstKey]);
-
-        return new MethodCallWithReference($caller, $method, $arguments);
-    }
-
-    /**
-     * @param FixtureInterface $scope
-     * @param string           $method
-     *
-     * @return array The first element is a ServiceReferenceInterface ($caller) and the second a string ($method)
-     */
-    private function getCallerReference(FixtureInterface $scope, string $method): array
-    {
         if (false === strpos($method, '::')) {
-            return [new StaticReference($scope->getClassName()), $method];
+            $method = sprintf(
+                '%s::%s',
+                $scope->getClassName(),
+                $method
+            );
         }
 
-        $explodedMethod = explode('::', $method);
-        if (2 < count($explodedMethod)) {
-            throw InvalidArgumentExceptionFactory::createForInvalidConstructorMethod($method);
-        }
-
-        list($caller, $method) = $explodedMethod;
-
-        if (0 === strpos($caller, '@')) {
-            return [new InstantiatedReference(substr($caller, 1)), $method];
-        }
-
-        return [new StaticReference($caller), $method];
+        return $this->callsDenormalizer->denormalize(
+            $scope,
+            $parser,
+            $method,
+            $arguments
+        );
     }
 }

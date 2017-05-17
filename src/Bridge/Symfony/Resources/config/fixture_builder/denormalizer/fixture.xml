@@ -97,7 +97,7 @@
 
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.factory_denormalizer"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FactoryDenormalizer">
-            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments" />
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls" />
         </service>
 
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.constructor.constructor_denormalizer"
@@ -146,8 +146,22 @@
                  alias="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.simple_denormalizer" />
 
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.simple_denormalizer"
-                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\OptionalCallsDenormalizer">
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\CallsWithFlagsDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.function_denormalizer" />
+            <!-- Injected via a compiler pass -->
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.function_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\FunctionDenormalizer">
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.arguments" />
+        </service>
+
+
+        <!-- Chainable method call handlers -->
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.method_flag_handler.optional_flag_handler"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\OptionalFlagHandler">
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_method_flag_handler" />
         </service>
 
     </services>
