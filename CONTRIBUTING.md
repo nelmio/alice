@@ -111,7 +111,7 @@ To avoid any conflicts, the framework dependencies used by the bridges are insta
 [bamarni bin composer plugin][3] and [theofidry inheritance composer plugin][4]. As a result, if you want to run the
 tests for Symfony, you must run the tests with `phpunit_symfony.xml.dist` instead of `phpunit.xml.dist`.
 
-To run the tests, simply run `bin/tests.sh`.
+To run the tests use `make test`.
 
 The tests should be descriptive and are "testdox friendly" i.e. if you are using the testdox
 option, you will get something like:
@@ -125,8 +125,8 @@ option, you will get something like:
 ### Profiling
 
 A Profiling of different scenari is done with [Blackfire][5]. The scenario can be found under `profiling`. If you wish
-to run them, you can try to simply run `bin/profiling.sh`. You may however have to touch some elements of the
-blackfire configuration (see the `profiling/scenarioX/blackfire.php` files).
+to run them, you can try to simply run `make tp` (for "test performances"). You may however have to touch some elements
+of the blackfire configuration (see the `profiling/scenarioX/blackfire.php` files).
 
 
 <br />
