@@ -19,6 +19,7 @@ use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
+use Nelmio\Alice\Entity\DummyWithImmutableFunction;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use Nelmio\Alice\Entity\DummyWithPrivateProperty;
 use Nelmio\Alice\Entity\DummyWithVariadicConstructorParam;
@@ -3311,6 +3312,29 @@ class LoaderIntegrationTest extends TestCase
                     'dummy' => StdClassFactory::create([
                         'foo' => '[]',
                     ]),
+                ],
+            ],
+        ];
+
+        yield '[configurator] named factory' => [
+            [
+                DummyWithImmutableFunction::class => [
+                    'dummy' => [
+                        '__construct' => false,
+                        '__calls' => [
+                            [
+                                'withVal (configurator)' => [
+                                    'foo'
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new DummyWithImmutableFunction('foo'),
                 ],
             ],
         ];

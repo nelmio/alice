@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Object;
 
+use LogicException;
 use Nelmio\Alice\ObjectInterface;
 
 /**
@@ -44,6 +45,14 @@ final class CompleteObject implements ObjectInterface
     public function getInstance()
     {
         return $this->object->getInstance();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withInstance($newInstance)
+    {
+        throw new LogicException('Cannot create a new object from a complete object.');
     }
 
     public function __clone()

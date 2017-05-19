@@ -28,6 +28,11 @@
 
 
         <!-- Chainables -->
+        <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.configurator"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ConfiguratorFlagParser">
+            <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser" />
+        </service>
+
         <service id="nelmio_alice.fixture_builder.denormalizer.flag_parser.chainable.extend"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ExtendFlagParser">
             <tag name="nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser" />

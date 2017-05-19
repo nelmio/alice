@@ -25,8 +25,10 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\ConfiguratorFlagHandler;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\OptionalFlagHandler;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FactoryDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ConfiguratorFlagParser;
 use Nelmio\Alice\Generator\Caller\CallProcessorInterface;
 use Nelmio\Alice\Generator\Caller\CallProcessorRegistry;
+use Nelmio\Alice\Generator\Caller\Chainable\ConfiguratorMethodCallProcessor;
 use Nelmio\Alice\Generator\Caller\Chainable\MethodCallWithReferenceProcessor;
 use Nelmio\Alice\Generator\Caller\Chainable\OptionalMethodCallProcessor;
 use Nelmio\Alice\Generator\Caller\Chainable\SimpleMethodCallProcessor;
@@ -342,6 +344,7 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function createFlagParser(): FlagParserInterface
     {
         $registry = new FlagParserRegistry([
+            new ConfiguratorFlagParser(),
             new ExtendFlagParser(),
             new OptionalFlagParser(),
             new TemplateFlagParser(),
@@ -378,6 +381,7 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
                 $this->getArgumentsDenormalizer()
             ),
             [
+                new ConfiguratorFlagHandler(),
                 new OptionalFlagHandler(),
             ]
         );
@@ -586,6 +590,7 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function createCallProcessor(): CallProcessorInterface
     {
         return new CallProcessorRegistry([
+            new ConfiguratorMethodCallProcessor(),
             new MethodCallWithReferenceProcessor(),
             new OptionalMethodCallProcessor(),
             new SimpleMethodCallProcessor(),

@@ -11,6 +11,7 @@
 
 namespace Nelmio\Alice\Definition\Object;
 
+use Nelmio\Alice\Definition\Value\FakeObject;
 use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
@@ -114,5 +115,16 @@ class CompleteObjectTest extends TestCase
 
         $this->assertEquals(new \stdClass(), $object->getInstance());
         $this->assertEquals(new \stdClass(), $clone->getInstance());
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Cannot create a new object from a complete object.
+     */
+    public function testCannotCreateANewInstance()
+    {
+        $object = new CompleteObject(new FakeObject());
+
+        $object->withInstance(null);
     }
 }

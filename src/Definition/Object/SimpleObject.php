@@ -46,9 +46,7 @@ final class SimpleObject implements ObjectInterface
     }
 
     /**
-     * @param object $newInstance
-     *
-     * @return self
+     * @inheritdoc
      */
     public function withInstance($newInstance): self
     {

@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller\Chainable;
 
-use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
+use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
+use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Caller\CallProcessorAwareInterface;
@@ -33,12 +34,12 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringG
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
-final class OptionalMethodCallProcessor implements ChainableCallProcessorInterface, CallProcessorAwareInterface
+final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInterface, CallProcessorAwareInterface
 {
     use IsAServiceTrait;
 
     /**
-     * @var CallProcessorInterface
+     * @var CallProcessorInterface|null
      */
     private $processor;
 
@@ -60,13 +61,11 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
      */
     public function canProcess(MethodCallInterface $methodCall): bool
     {
-        return $methodCall instanceof OptionalMethodCall;
+        return $methodCall instanceof ConfiguratorMethodCall;
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param OptionalMethodCall $methodCall
+     * @inheritdoc
      */
     public function process(
         ObjectInterface $object,
@@ -75,23 +74,21 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
         MethodCallInterface $methodCall
     ): ResolvedFixtureSet
     {
-        if (false === ($methodCall instanceof OptionalMethodCall)) {
-            throw new \LogicException('TODO');
-        }
-
         if (null === $this->processor) {
             throw new \LogicException('TODO');
         }
 
-        if (mt_rand(0, 99) >= $methodCall->getPercentage()) {
-            return $fixtureSet;
-        }
+        $context->markRetrieveCallResult();
 
-        return $this->processor->process(
+        $fixtureSet = $this->processor->process(
             $object,
             $fixtureSet,
             $context,
             $methodCall->getOriginalMethodCall()
         );
+
+        $context->unmarkRetrieveCallResult();
+
+        return $fixtureSet;
     }
 }

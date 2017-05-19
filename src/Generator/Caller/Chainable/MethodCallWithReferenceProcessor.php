@@ -64,10 +64,14 @@ final class MethodCallWithReferenceProcessor implements ChainableCallProcessorIn
         $reference = $methodCall->getCaller();
 
         if (false === ($reference instanceof StaticReference)) {
-            //TODO: throw error
+            throw new \LogicException('TODO');
         }
 
-        $reference->getId()::{$methodCall->getMethod()}(...$methodCall->getArguments());
+        $result = $reference->getId()::{$methodCall->getMethod()}(...$methodCall->getArguments());
+
+        if ($context->needsCallResult()) {
+            $object = $object->withInstance($result);
+        }
 
         return $fixtureSet->withObjects(
             $fixtureSet->getObjects()->with($object)

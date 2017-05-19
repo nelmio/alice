@@ -13,14 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler;
 
+use Nelmio\Alice\Definition\Flag\ConfiguratorFlag;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\FlagInterface;
+use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
 use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler;
 use Nelmio\Alice\IsAServiceTrait;
 
-final class OptionalFlagHandler implements MethodFlagHandler
+final class ConfiguratorFlagHandler implements MethodFlagHandler
 {
     use IsAServiceTrait;
 
@@ -29,8 +31,8 @@ final class OptionalFlagHandler implements MethodFlagHandler
      */
     public function handleMethodFlags(MethodCallInterface $methodCall, FlagInterface $flag): MethodCallInterface
     {
-        return $flag instanceof OptionalFlag
-            ? new OptionalMethodCall($methodCall, $flag)
+        return $flag instanceof ConfiguratorFlag
+            ? new ConfiguratorMethodCall($methodCall)
             : $methodCall
         ;
     }
