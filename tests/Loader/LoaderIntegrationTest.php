@@ -2358,6 +2358,24 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
+        yield '[function] call nested PHP native function' => [
+            [
+                \stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<strtolower(<(implode(" ", ["HELLO", "WORLD", \<foo()>]))>)> \<bar()>'
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
+                        'foo' => 'hello world <bar()>',
+                    ]),
+                ],
+            ],
+        ];
+
         yield '[self reference] alone' => [
             [
                 \stdClass::class => [
