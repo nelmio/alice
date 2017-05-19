@@ -169,11 +169,9 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  *
  * @method DataLoaderInterface getDataLoader()
  * @method FileLoaderInterface getFileLoader()
- *
  * @method FixtureBuilderInterface getFixtureBuilder()
  * @method GeneratorInterface getGenerator()
  * @method ParserInterface getParser()
- *
  * @method DenormalizerInterface getDenormalizer()
  * @method FixtureBagDenormalizerInterface getFixtureBagDenormalizer
  * @method FixtureDenormalizerInterface getFixtureDenormalizer()
@@ -183,18 +181,14 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  * @method CallsDenormalizerInterface getCallsDenormalizer()
  * @method ArgumentsDenormalizerInterface getArgumentsDenormalizer()
  * @method ValueDenormalizerInterface getValueDenormalizer()
- *
  * @method ExpressionLanguageParserInterface getExpressionLanguageParser()
  * @method LexerInterface getLexer()
  * @method TokenParserInterface getExpressionLanguageTokenParser()
- *
  * @method ObjectGeneratorInterface getObjectGenerator()
- *
  * @method FixtureSetResolverInterface getFixtureSetResolver()
  * @method ParameterBagResolverInterface getParameterResolver()
  * @method ValueResolverInterface getValueResolver()
  * @method FakerGenerator getFakerGenerator()
- *
  * @method InstantiatorInterface getInstantiator()
  * @method HydratorInterface getHydrator()
  * @method PropertyHydratorInterface getPropertyHydrator()

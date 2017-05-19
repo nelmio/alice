@@ -15,6 +15,9 @@ namespace Nelmio\Alice;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @coversNothing
+ */
 class FunctionsTest extends TestCase
 {
     /**

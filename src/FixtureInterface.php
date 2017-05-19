@@ -29,9 +29,9 @@ interface FixtureInterface extends FixtureIdInterface
     public function getSpecs(): SpecificationBag;
 
     /**
-     * @return string|int
-     *
      * @throws NoValueForCurrentException
+     *
+     * @return string|int
      */
     public function getValueForCurrent();
 

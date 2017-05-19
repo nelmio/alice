@@ -55,6 +55,7 @@ use ReflectionClass;
 
 /**
  * @group integration
+ * @coversNothing
  */
 class LoaderIntegrationTest extends TestCase
 {

@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @group integration
+ * @coversNothing
  */
 class LexerIntegrationTest extends TestCase
 {

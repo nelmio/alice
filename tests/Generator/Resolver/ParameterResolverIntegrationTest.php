@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @group integration
+ * @coversNothing
  */
 class ParameterResolverIntegrationTest extends TestCase
 {

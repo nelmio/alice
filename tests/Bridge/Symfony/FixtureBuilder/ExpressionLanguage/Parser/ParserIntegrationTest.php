@@ -17,6 +17,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\IsolatedSymfonyBuiltIn
 
 /**
  * @group integration
+ * @coversNothing
  */
 class ParserIntegrationTest extends \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest
 {
