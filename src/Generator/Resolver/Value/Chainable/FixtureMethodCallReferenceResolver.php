@@ -15,10 +15,6 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchMethodExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -27,6 +23,10 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchMethodExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 final class FixtureMethodCallReferenceResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
@@ -73,8 +73,7 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         if (null === $this->argumentResolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }

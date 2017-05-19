@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FakeDenormalizer;
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 /**
  * @internal
@@ -79,7 +79,7 @@ final class SubPatternsLexer implements LexerInterface
         $valueLength = strlen($value);
         $tokens = [];
 
-        while($offset < $valueLength) {
+        while ($offset < $valueLength) {
             $valueFragment = substr($value, $offset);
             $fragmentTokens = $this->lexFragment($this->referenceLexer, $valueFragment);
 

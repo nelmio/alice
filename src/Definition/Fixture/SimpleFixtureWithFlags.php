@@ -15,9 +15,9 @@ namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
-use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 /**
  * Decorates a fixture to add it flags.

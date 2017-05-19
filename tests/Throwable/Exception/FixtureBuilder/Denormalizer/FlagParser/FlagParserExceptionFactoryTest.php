@@ -43,5 +43,4 @@ class FlagParserExceptionFactoryTest extends TestCase
         $this->assertEquals(0, $exception->getCode());
         $this->assertNull($exception->getPrevious());
     }
-
 }

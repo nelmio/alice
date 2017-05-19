@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException

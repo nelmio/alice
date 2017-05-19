@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
@@ -57,7 +57,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
      */
     public function testIsNotClonable()
     {
-        clone new SimpleDenormalizer(new FakeSpecificationBagDenormalizer());;
+        clone new SimpleDenormalizer(new FakeSpecificationBagDenormalizer());
     }
 
     /**

@@ -17,9 +17,6 @@ use Faker\Provider\Base;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -28,6 +25,9 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 final class FixtureWildcardReferenceResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
@@ -76,8 +76,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
@@ -110,8 +109,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
         FixtureMatchReferenceValue $value,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context
-    ): array
-    {
+    ): array {
         $pattern = $value->getValue();
 
         try {

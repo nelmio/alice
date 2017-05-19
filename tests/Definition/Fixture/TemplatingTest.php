@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Fixture;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\Templating

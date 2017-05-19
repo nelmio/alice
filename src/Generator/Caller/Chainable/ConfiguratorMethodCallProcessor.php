@@ -14,25 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Caller\Chainable;
 
 use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
-use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Definition\Object\SimpleObject;
-use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Caller\CallProcessorAwareInterface;
 use Nelmio\Alice\Generator\Caller\CallProcessorInterface;
 use Nelmio\Alice\Generator\Caller\ChainableCallProcessorInterface;
-use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
-use Nelmio\Alice\Generator\ValueResolverAwareInterface;
-use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationExceptionFactory;
-use Nelmio\Alice\Throwable\InstantiationThrowable;
-use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInterface, CallProcessorAwareInterface
 {
@@ -72,8 +61,7 @@ final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInt
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
         MethodCallInterface $methodCall
-    ): ResolvedFixtureSet
-    {
+    ): ResolvedFixtureSet {
         if (null === $this->processor) {
             throw new \LogicException('TODO');
         }

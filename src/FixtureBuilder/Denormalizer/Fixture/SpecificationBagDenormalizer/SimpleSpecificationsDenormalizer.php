@@ -46,8 +46,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         ConstructorDenormalizerInterface $constructorDenormalizer,
         PropertyDenormalizerInterface $propertyDenormalizer,
         CallsDenormalizerInterface $callsDenormalizer
-    )
-    {
+    ) {
         $this->constructorDenormalizer = $constructorDenormalizer;
         $this->propertyDenormalizer = $propertyDenormalizer;
         $this->callsDenormalizer = $callsDenormalizer;
@@ -74,7 +73,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
                     );
                 }
 
-                 continue;
+                continue;
             }
 
             if ('__factory' === $unparsedPropertyName) {
@@ -103,8 +102,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         $value,
         FixtureInterface $scope,
         FlagParserInterface $parser
-    ): MethodCallInterface
-    {
+    ): MethodCallInterface {
         return (false === $value)
             ? new NoMethodCall()
             : $this->constructorDenormalizer->denormalize($scope, $parser, $value)
@@ -115,8 +113,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         $value,
         FixtureInterface $scope,
         FlagParserInterface $parser
-    ): MethodCallInterface
-    {
+    ): MethodCallInterface {
         $factory = $this->denormalizeConstructor($value, $scope, $parser);
 
         if ('__construct' === $factory->getMethod()) {
@@ -133,8 +130,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         $value,
         PropertyBag $properties,
         FixtureInterface $scope
-    ): PropertyBag
-    {
+    ): PropertyBag {
         $flags = $flagParser->parse($unparsedPropertyName);
         $propertyName = $flags->getKey();
 
@@ -149,8 +145,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         MethodCallBag $calls,
         FixtureInterface $scope,
         FlagParserInterface $parser
-    ): MethodCallBag
-    {
+    ): MethodCallBag {
         foreach ($value as $methodCall) {
             $methodCall = $this->denormalizeCallMethod($callsDenormalizer, $methodCall, $scope, $parser);
             $calls = $calls->with($methodCall);
@@ -164,8 +159,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         $methodCall,
         FixtureInterface $scope,
         FlagParserInterface $parser
-    ): MethodCallInterface
-    {
+    ): MethodCallInterface {
         if (false === is_array($methodCall)) {
             throw TypeErrorFactory::createForInvalidSpecificationBagMethodCall($methodCall);
         }

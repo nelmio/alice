@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;

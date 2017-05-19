@@ -54,7 +54,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     /**
      * Creates a new instance which will contain the given object. If an object with the same reference already exists,
      * it will be overridden by the new object.
-     * 
+     *
      * @param ObjectInterface $object
      *
      * @return self
@@ -78,8 +78,8 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     public function without($objectOrFixture): self
     {
         $clone = clone $this;
-        unset($clone->objects[$objectOrFixture->getId()]);
-        unset($clone->array[$objectOrFixture->getId()]);
+        unset($clone->objects[$objectOrFixture->getId()], $clone->array[$objectOrFixture->getId()]);
+        
 
         return $clone;
     }
@@ -87,7 +87,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
     /**
      * Creates a new instance with the new objects. If objects with the same reference already exists, they will be
      * overridden by the new ones.
-     * 
+     *
      * @param ObjectBag $objects
      *
      * @return self
@@ -112,7 +112,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
      * @param FixtureIdInterface $fixture
      *
      * @throws ObjectNotFoundException
-     * 
+     *
      * @return ObjectInterface
      */
     public function get(FixtureIdInterface $fixture): ObjectInterface

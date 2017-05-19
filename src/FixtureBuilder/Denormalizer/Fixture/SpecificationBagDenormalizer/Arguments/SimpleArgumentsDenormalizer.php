@@ -40,8 +40,7 @@ final class SimpleArgumentsDenormalizer implements ArgumentsDenormalizerInterfac
         FixtureInterface $scope,
         FlagParserInterface $parser,
         array $unparsedArguments
-    ): array
-    {
+    ): array {
         $arguments = [];
         foreach ($unparsedArguments as $unparsedIndex => $argument) {
             $argumentFlags = (is_string($unparsedIndex)) ? $parser->parse($unparsedIndex) : null;

@@ -43,8 +43,7 @@ final class CompleteObjectGenerator implements ObjectGeneratorInterface
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context
-    ): ObjectBag
-    {
+    ): ObjectBag {
         if ($fixtureSet->getObjects()->has($fixture)
             && $fixtureSet->getObjects()->get($fixture) instanceof CompleteObject
         ) {

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\ParserInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

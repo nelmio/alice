@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Nelmio\Alice\PropertyAccess;
 
-use Nelmio\Alice\Throwable\Exception\PropertyAccess\NoSuchPropertyExceptionFactory;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\PropertyAccess\NoSuchPropertyExceptionFactory;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class StdPropertyAccessor implements PropertyAccessorInterface

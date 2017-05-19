@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\Value\ArrayValue;
-use Nelmio\Alice\Throwable\Exception\RootParseException;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
+use Nelmio\Alice\Throwable\Exception\RootParseException;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**
@@ -84,7 +84,6 @@ class SimpleValueDenormalizerTest extends TestCase
 
         $parserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
-
 
     public function testReturnsUnchangedValueIfTheValueIsNotAStringOrAnArray()
     {

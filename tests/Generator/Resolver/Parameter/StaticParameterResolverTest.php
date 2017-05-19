@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use PHPUnit\Framework\TestCase;
+use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
@@ -46,7 +46,8 @@ class StaticParameterResolverTest extends TestCase
         $this->assertTrue($resolver->canResolve($parameter->withValue(10)));
         $this->assertTrue($resolver->canResolve($parameter->withValue(.75)));
         $this->assertTrue($resolver->canResolve($parameter->withValue(new \stdClass())));
-        $this->assertTrue($resolver->canResolve($parameter->withValue(function () {})));
+        $this->assertTrue($resolver->canResolve($parameter->withValue(function () {
+        })));
 
         $this->assertFalse($resolver->canResolve($parameter->withValue('string')));
     }

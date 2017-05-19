@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
@@ -24,6 +23,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use phpmock\functions\FixedValueFunction;
 use phpmock\MockBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver

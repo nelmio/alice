@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Faker;
 
-use PHPUnit\Framework\TestCase;
 use Faker\Factory as FakerFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Faker\Provider\DummyProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Faker\GeneratorFactory

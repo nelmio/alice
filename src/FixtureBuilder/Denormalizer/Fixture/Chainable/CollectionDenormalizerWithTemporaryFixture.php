@@ -17,8 +17,6 @@ use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
@@ -26,6 +24,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory;
 
 /**
  * Decorates a collection denormalizer to determine which fixtures it can build and how to build the fixture IDs, e.g.
@@ -34,8 +34,7 @@ use Nelmio\Alice\IsAServiceTrait;
  * To instantiate the fixtures, it chooses the strategy to instantiate a "temporary" fixture, and then creates the real
  * fixtures from this temporary fixture to only have to generate a fixture 1 time instead of X times.
  */
-final class CollectionDenormalizerWithTemporaryFixture
-implements CollectionDenormalizer, FixtureDenormalizerAwareInterface, FlagParserAwareInterface
+final class CollectionDenormalizerWithTemporaryFixture implements CollectionDenormalizer, FixtureDenormalizerAwareInterface, FlagParserAwareInterface
 {
     use IsAServiceTrait;
 
@@ -105,8 +104,7 @@ implements CollectionDenormalizer, FixtureDenormalizerAwareInterface, FlagParser
         string $fixtureId,
         array $specs,
         FlagBag $flags
-    ): FixtureBag
-    {
+    ): FixtureBag {
         if (null === $this->denormalizer) {
             throw DenormalizerExceptionFactory::createDenormalizerNotFoundUnexpectedCall(__METHOD__);
         }
@@ -161,8 +159,7 @@ implements CollectionDenormalizer, FixtureDenormalizerAwareInterface, FlagParser
         string $className,
         array $specs,
         FlagBag $flags
-    ): array
-    {
+    ): array {
         $tempFixtureId = uniqid('temporary_id');
         $builtFixtures = $this->denormalizer->denormalize(
             $builtFixtures,

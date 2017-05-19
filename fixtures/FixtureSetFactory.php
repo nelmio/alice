@@ -20,8 +20,7 @@ class FixtureSetFactory
         ParameterBag $injectedParameters = null,
         FixtureBag $fixtures = null,
         ObjectBag $objects = null
-    ): FixtureSet
-    {
+    ): FixtureSet {
         return new FixtureSet(
             null === $loadedParameters ? new ParameterBag() : $loadedParameters,
             null === $injectedParameters ? new ParameterBag() : $injectedParameters,

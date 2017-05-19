@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
+use Nelmio\Alice\FileLocatorInterface;
+use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
-use Nelmio\Alice\FileLocatorInterface;
-use Nelmio\Alice\ParserInterface;
-use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * Decorates a parser to cache the result and process includes. Includes are being processed in this parser to be able

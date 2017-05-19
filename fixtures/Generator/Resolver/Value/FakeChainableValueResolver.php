@@ -41,8 +41,7 @@ class FakeChainableValueResolver implements ChainableValueResolverInterface
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         $this->__call(__METHOD__, func_get_args());
     }
 }

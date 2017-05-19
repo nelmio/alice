@@ -15,7 +15,10 @@ namespace Nelmio\Alice;
 
 use PHPUnit\Framework\TestCase;
 
-class FunctionsTest extends TestCase
+/**
+ * @coversNothing
+ */
+class DeepCloneTest extends TestCase
 {
     /**
      * @dataProvider provideScalarValues

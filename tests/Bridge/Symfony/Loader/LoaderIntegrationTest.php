@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @group integration
+ * @coversNothing
  */
 class LoaderIntegrationTest extends \Nelmio\Alice\Loader\LoaderIntegrationTest
 {

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\GenerationThrowable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
@@ -37,4 +37,3 @@ class ObjectGeneratorNotFoundExceptionTest extends TestCase
         $this->assertInstanceOf(ChildObjectGeneratorNotFoundException::class, $exception);
     }
 }
-

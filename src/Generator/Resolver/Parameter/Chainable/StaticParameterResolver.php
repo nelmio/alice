@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
+use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 
 /**
  * Resolves "static" parameters, i.e. parameters that requires no further processing.

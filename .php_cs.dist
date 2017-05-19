@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 use PhpCsFixer\Config;
@@ -8,8 +17,15 @@ use PhpCsFixer\Finder;
 $finder = Finder::create()
     ->in([
         __DIR__.'/fixtures',
+        __DIR__.'/profiling',
         __DIR__.'/src',
         __DIR__.'/tests',
+    ])
+    ->append([
+        __DIR__.'/.php_cs.dist',
+    ])
+    ->exclude([
+        __DIR__.'/fixtures/Parser/files/php',
     ])
 ;
 
@@ -22,8 +38,20 @@ return Config::create()
         'cast_spaces' => true,
         'combine_consecutive_unsets' => true,
         'declare_equal_normalize' => true,
+        'declare_strict_types' => true,
         'heredoc_to_nowdoc' => true,
         'include' => true,
+        'header_comment' => [
+            'location' => 'after_open',
+            'header' => <<<'LICENSE'
+This file is part of the Alice package.
+
+(c) Nelmio <hello@nelm.io>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+LICENSE
+        ],
         'lowercase_cast' => true,
         'method_separation' => true,
         'modernize_types_casting' => true,
@@ -41,7 +69,12 @@ return Config::create()
         'no_spaces_around_offset' => true,
         'no_unused_imports' => true,
         'ordered_imports' => true,
+        'phpdoc_order' => true,
+        'phpdoc_scalar' => true,
+        'phpdoc_separation' => true,
+        'phpdoc_trim' => true,
         'php_unit_fqcn_annotation' => true,
+        'php_unit_test_class_requires_covers' => true,
         'single_quote' => true,
         'space_after_semicolon' => true,
         'standardize_not_equals' => true,

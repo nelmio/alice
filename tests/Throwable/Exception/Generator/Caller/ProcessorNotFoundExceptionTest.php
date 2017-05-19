@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Caller;
 
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\ChildInstantiatorNotFoundException;
-use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException;
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Caller\ProcessorNotFoundException

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\UnclonableException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\IsAServiceTrait

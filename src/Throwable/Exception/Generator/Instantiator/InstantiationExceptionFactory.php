@@ -57,8 +57,7 @@ final class InstantiationExceptionFactory
         FixtureInterface $fixture,
         int $code = 0,
         \Throwable $previous = null
-    ): InstantiationException
-    {
+    ): InstantiationException {
         return new InstantiationException(
             sprintf(
                 'Could not get the necessary data on the constructor to instantiate "%s".',

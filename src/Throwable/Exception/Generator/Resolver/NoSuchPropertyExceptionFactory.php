@@ -26,8 +26,7 @@ final class NoSuchPropertyExceptionFactory
         FixturePropertyValue $value,
         int $code = 0,
         \Throwable $previous = null
-    ): NoSuchPropertyException
-    {
+    ): NoSuchPropertyException {
         return new NoSuchPropertyException(
             sprintf(
                 'Could not find the property "%s" of the object "%s" (class: %s).',

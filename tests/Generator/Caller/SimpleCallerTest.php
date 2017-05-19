@@ -13,32 +13,30 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller;
 
-use Nelmio\Alice\Definition\Value\DummyValue;
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
+use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FakeObject;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Entity\Caller\Dummy;
-use Nelmio\Alice\Generator\CallerInterface;
-use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\GenerationContext;
-use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use stdClass;
-use Symfony\Component\ExpressionLanguage\Tests\Node\Obj;
 
 /**
  * @covers \Nelmio\Alice\Generator\Caller\SimpleCaller
@@ -103,7 +101,7 @@ class SimpleCallerTest extends TestCase
                         null,
                         new PropertyBag(),
                         (new MethodCallBag())
-                            ->with($methodCall1 = new SimpleMethodCall('setTitle', [ 'foo_title' ]))
+                            ->with($methodCall1 = new SimpleMethodCall('setTitle', ['foo_title']))
                             ->with($methodCall2 = new SimpleMethodCall('addFoo'))
                             ->with($methodCall3 = new SimpleMethodCall('addFoo'))
                     )

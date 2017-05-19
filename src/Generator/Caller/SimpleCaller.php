@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller;
 
-use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\CallerInterface;

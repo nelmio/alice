@@ -15,7 +15,6 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
@@ -26,9 +25,9 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 
-final class SelfFixtureReferenceResolver
-implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, ValueResolverAwareInterface
+final class SelfFixtureReferenceResolver implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, ValueResolverAwareInterface
 {
     use IsAServiceTrait;
 
@@ -89,8 +88,7 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         if ('self' === $value->getValue()) {
             return new ResolvedValueWithFixtureSet(
                 $fixtureSet->getObjects()->get($fixture)->getInstance(),
@@ -99,6 +97,5 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         }
 
         return $this->decoratedResolver->resolve($value, $fixture, $fixtureSet, $scope, $context);
-
     }
 }

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\HydrationThrowable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InaccessiblePropertyException

@@ -16,7 +16,6 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Faker\GeneratorFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -24,6 +23,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 final class FakerFunctionCallValueResolver implements ChainableValueResolverInterface
 {
@@ -58,8 +58,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         /**
          * @var FakerGenerator $generator
          * @var string         $formatter

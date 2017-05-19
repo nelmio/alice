@@ -13,26 +13,27 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
-use Nelmio\Alice\Definition\Value\ArrayValue;
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
+use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Definition\Value\ParameterValue;
-use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group integration
+ * @coversNothing
  */
 class ParserIntegrationTest extends TestCase
 {

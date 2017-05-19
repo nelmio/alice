@@ -13,18 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor;
 
-use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
-use Nelmio\Alice\Definition\ServiceReference\StaticReference;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
 
 final class FactoryDenormalizer implements ConstructorDenormalizerInterface
 {
@@ -47,8 +42,7 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
         FixtureInterface $scope,
         FlagParserInterface $parser,
         array $unparsedMethod
-    ): MethodCallInterface
-    {
+    ): MethodCallInterface {
         /** @var string $method */
         $method = key($unparsedMethod);
 

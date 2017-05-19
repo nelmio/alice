@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Parser\ParseException;
-use Nelmio\Alice\Parser\ChainableParserInterface;
-use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
-use function Nelmio\Alice\deep_clone;
 use Nelmio\Alice\Definition\ValueInterface;
+use function Nelmio\Alice\deep_clone;
 
 /**
  * Value representing a list of values which will be chained. For example '<foo()> <{bar}>' will be composed of a

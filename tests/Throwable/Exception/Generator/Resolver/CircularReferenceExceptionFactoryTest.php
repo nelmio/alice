@@ -32,4 +32,3 @@ class CircularReferenceExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 }
-

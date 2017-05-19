@@ -25,8 +25,7 @@ class KernelFactory
         string $kernelClass = AppKernel::class,
         string $environment = 'test',
         $debug = true
-    ): KernelInterface
-    {
+    ): KernelInterface {
         if (null !== $config) {
             if (false === array_key_exists($config, static::$environments)) {
                 static::$environments[$config] = uniqid();

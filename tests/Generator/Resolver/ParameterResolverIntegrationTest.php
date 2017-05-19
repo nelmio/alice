@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver;
 
-use PHPUnit\Framework\TestCase;
+use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group integration
+ * @coversNothing
  */
 class ParameterResolverIntegrationTest extends TestCase
 {
@@ -114,7 +115,8 @@ class ParameterResolverIntegrationTest extends TestCase
             'int_param' => 2000,
             'float_param' => -.89,
             'object_param' => new \stdClass(),
-            'closure_param' => function () { },
+            'closure_param' => function () {
+            },
             'class_param' => 'App\Test\Dummy',
             'array_value' => [
                 'dummy',

@@ -17,9 +17,6 @@ use Nelmio\Alice\Definition\Fixture\FixtureId;
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureIdInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -29,6 +26,9 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 final class FixtureReferenceResolver implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface
@@ -74,8 +74,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         if (null === $this->generator) {
             throw ObjectGeneratorNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
@@ -113,8 +112,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         string $referredFixtureId,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         if ($fixtureSet->getObjects()->has($referredFixture)) {
             $referredObject = $fixtureSet->getObjects()->get($referredFixture);
 

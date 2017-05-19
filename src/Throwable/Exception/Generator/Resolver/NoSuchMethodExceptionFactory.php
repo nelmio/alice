@@ -26,8 +26,7 @@ final class NoSuchMethodExceptionFactory
         FixtureMethodCallValue $value,
         int $code = 0,
         \Throwable $previous = null
-    ): NoSuchMethodException
-    {
+    ): NoSuchMethodException {
         return new NoSuchMethodException(
             sprintf(
                 'Could not find the method "%s" of the object "%s" (class: %s).',

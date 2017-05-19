@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Flag;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FlagInterface;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Flag\ExtendFlag

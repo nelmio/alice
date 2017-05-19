@@ -15,10 +15,6 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
@@ -28,6 +24,10 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 final class UniqueValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
@@ -88,8 +88,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         array $scope,
         GenerationContext $context,
         int $tryCounter = 0
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         $this->checkResolver(__METHOD__);
         $tryCounter = $this->incrementCounter($tryCounter, $value, $this->limit);
 
@@ -130,8 +129,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): array
-    {
+    ): array {
         $realValue = $value->getValue();
         if ($realValue instanceof ValueInterface) {
             $result = $this->resolver->resolve($value->getValue(), $fixture, $fixtureSet, $scope, $context);

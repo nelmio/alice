@@ -67,8 +67,7 @@ final class PhpFunctionCallValueResolver implements ChainableValueResolverInterf
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         $functionName = $value->getName();
         if (false === function_exists($functionName)
             || array_key_exists($functionName, $this->functionBlacklist)

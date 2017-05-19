@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory
@@ -33,7 +33,6 @@ class ExpressionLanguageExceptionFactoryTest extends TestCase
         );
         $this->assertEquals(0, $exception->getCode());
         $this->assertNull($exception->getPrevious());
-
     }
 
     public function testTestCreateForExpectedMethodCallOnlyIfHasAParser()

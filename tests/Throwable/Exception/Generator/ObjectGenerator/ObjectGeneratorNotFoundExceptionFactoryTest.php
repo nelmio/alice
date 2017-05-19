@@ -32,4 +32,3 @@ class ObjectGeneratorNotFoundExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 }
-

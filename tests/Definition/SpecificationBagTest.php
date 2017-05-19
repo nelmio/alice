@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\SpecificationBag

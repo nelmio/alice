@@ -13,23 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller;
 
-use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\FixtureInterface;
-use Nelmio\Alice\Generator\Caller\ChainableCallProcessorInterface;
-use Nelmio\Alice\Generator\CallerInterface;
+
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
-use Nelmio\Alice\Generator\ValueResolverAwareInterface;
-use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Caller\CallProcessorExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationExceptionFactory;
-use Nelmio\Alice\Throwable\InstantiationThrowable;
-use Nelmio\Alice\Throwable\ResolutionThrowable;
 
 final class CallProcessorRegistry implements CallProcessorInterface
 {
@@ -42,7 +32,9 @@ final class CallProcessorRegistry implements CallProcessorInterface
 
     public function __construct(array $processors)
     {
-        $processors = (function (ChainableCallProcessorInterface ...$processors) { return $processors; })(...$processors);
+        $processors = (function (ChainableCallProcessorInterface ...$processors) {
+            return $processors;
+        })(...$processors);
 
         foreach ($processors as $processor) {
             $this->processors[] = $processor instanceof CallProcessorAwareInterface
@@ -57,8 +49,7 @@ final class CallProcessorRegistry implements CallProcessorInterface
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
         MethodCallInterface $methodCall
-    ): ResolvedFixtureSet
-    {
+    ): ResolvedFixtureSet {
         foreach ($this->processors as $processor) {
             if ($processor->canProcess($methodCall)) {
                 return $processor->process($object, $fixtureSet, $context, $methodCall);

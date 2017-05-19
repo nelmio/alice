@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\MethodCall;
 
-use Nelmio\Alice\Definition\ServiceReference\StaticReference;
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\MutableReference;
+use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Entity\StdClassFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\MethodCallWithReference

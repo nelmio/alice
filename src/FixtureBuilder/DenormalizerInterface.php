@@ -23,7 +23,7 @@ interface DenormalizerInterface
      * @param array $data PHP data coming from the parser
      *
      * @throws DenormalizationThrowable
-     *                        
+     *
      * @return BareFixtureSet Contains the loaded parameters and fixtures.
      */
     public function denormalize(array $data): BareFixtureSet;

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException

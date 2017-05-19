@@ -15,7 +15,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
 trait ReferenceProviderTrait
 {
-    public  function provideSimpleFixtures()
+    public function provideSimpleFixtures()
     {
         return Reference::getSimpleFixtures();
     }

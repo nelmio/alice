@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Caller;
+
 use Nelmio\Alice\Definition\MethodCallInterface;
 
 /**

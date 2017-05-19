@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
+
 use ArrayIterator;
 use function Nelmio\Alice\deep_clone;
 
@@ -64,7 +65,7 @@ final class FlagBag implements \IteratorAggregate, \Countable
 
     /**
      * Creates a new instance with the two bags merged together.
-     * 
+     *
      * The original key is kept.
      *
      * @param self $flags

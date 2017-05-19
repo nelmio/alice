@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
-use PHPUnit\Framework\TestCase;
-use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
@@ -26,6 +25,7 @@ use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver
@@ -161,7 +161,7 @@ class TemplateFixtureBagResolverTest extends TestCase
                 )
             )
             ->with(
-                $user5 = new SimpleFixtureWithFlags(  // has a template flag but is not a templating fixture!
+                $user5 = new SimpleFixtureWithFlags(// has a template flag but is not a templating fixture!
                     new SimpleFixture(
                         'user5',
                         'Nelmio\Alice\Entity\User',

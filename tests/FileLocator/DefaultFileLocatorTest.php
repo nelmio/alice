@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FileLocator;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FileLocatorInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FileLocator\DefaultFileLocator

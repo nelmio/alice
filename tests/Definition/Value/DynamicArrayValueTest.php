@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\DynamicArrayValue
@@ -130,7 +130,8 @@ class DynamicArrayValueTest extends TestCase
         ];
 
         yield 'closure/array' => [
-            function () {},
+            function () {
+            },
             'dummy_element',
             'Expected quantifier to be either an integer or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
             .'"Closure" instead.'
@@ -166,7 +167,8 @@ class DynamicArrayValueTest extends TestCase
 
         yield 'int/closure' => [
             -1,
-            function () {},
+            function () {
+            },
             'Expected element to be either string, an array or a "Nelmio\Alice\Definition\ValueInterface" object. Got '
             .'"Closure" instead.'
         ];

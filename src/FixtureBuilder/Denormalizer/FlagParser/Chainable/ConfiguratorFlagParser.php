@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable;
 
 use Nelmio\Alice\Definition\Flag\ConfiguratorFlag;
-use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface;
 use Nelmio\Alice\IsAServiceTrait;

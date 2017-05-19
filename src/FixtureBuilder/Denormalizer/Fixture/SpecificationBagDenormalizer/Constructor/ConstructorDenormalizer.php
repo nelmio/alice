@@ -15,12 +15,12 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 
 final class ConstructorDenormalizer implements ConstructorDenormalizerInterface
 {
@@ -45,8 +45,7 @@ final class ConstructorDenormalizer implements ConstructorDenormalizerInterface
         FixtureInterface $scope,
         FlagParserInterface $parser,
         array $unparsedConstructor
-    ): MethodCallInterface
-    {
+    ): MethodCallInterface {
         return new SimpleMethodCall(
             '__construct',
             $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
