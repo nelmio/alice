@@ -91,12 +91,12 @@ final class GenerationContext
         $this->cache[$key] = $value;
     }
 
-    public function markRetrieveCallResult(): void
+    public function markRetrieveCallResult()
     {
         $this->retrieveCallResult = true;
     }
 
-    public function unmarkRetrieveCallResult(): void
+    public function unmarkRetrieveCallResult()
     {
         $this->retrieveCallResult = false;
     }
