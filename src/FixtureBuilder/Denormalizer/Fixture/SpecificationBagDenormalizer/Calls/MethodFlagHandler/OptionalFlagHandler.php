@@ -29,10 +29,9 @@ final class OptionalFlagHandler implements MethodFlagHandler
      */
     public function handleMethodFlags(MethodCallInterface $methodCall, FlagInterface $flag): MethodCallInterface
     {
-        if ($flag instanceof OptionalFlag) {
-            return new OptionalMethodCall($methodCall, $flag);
-        }
-
-        return $methodCall;
+        return $flag instanceof OptionalFlag
+            ? new OptionalMethodCall($methodCall, $flag)
+            : $methodCall
+        ;
     }
 }

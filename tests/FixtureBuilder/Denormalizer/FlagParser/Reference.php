@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 
+use Nelmio\Alice\Definition\Flag\ConfiguratorFlag;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
@@ -191,6 +192,12 @@ final class Reference
                     (new FlagBag(''))->withFlag(new UniqueFlag()),
                 ],
             ],
+            'configurator' => [
+                'nominal' => [
+                    'configurator',
+                    (new FlagBag(''))->withFlag(new ConfiguratorFlag()),
+                ],
+            ],
         ];
     }
 
@@ -232,6 +239,11 @@ final class Reference
     public static function getUniques()
     {
         return self::getList('unique');
+    }
+
+    public static function getConfigurators()
+    {
+        return self::getList('configurator');
     }
 
     private static function getList(string $name): array

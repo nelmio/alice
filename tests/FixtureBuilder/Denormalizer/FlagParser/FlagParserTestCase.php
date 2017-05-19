@@ -96,6 +96,14 @@ abstract class FlagParserTestCase extends TestCase
         $this->assertCannotParse($element);
     }
 
+    /**
+     * @dataProvider provideConfigurators
+     */
+    public function testCanParseConfigurators(string $element, FlagBag $expected = null)
+    {
+        $this->assertCannotParse($element);
+    }
+
     public function assertCanParse(string $element, FlagBag $expected)
     {
         if ($this->parser instanceof ChainableFlagParserInterface) {
@@ -166,5 +174,10 @@ abstract class FlagParserTestCase extends TestCase
     public function provideUniques()
     {
         return Reference::getUniques();
+    }
+
+    public function provideConfigurators()
+    {
+        return Reference::getConfigurators();
     }
 }

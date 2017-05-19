@@ -31,10 +31,9 @@ final class ConfiguratorFlagHandler implements MethodFlagHandler
      */
     public function handleMethodFlags(MethodCallInterface $methodCall, FlagInterface $flag): MethodCallInterface
     {
-        if ($flag instanceof ConfiguratorFlag) {
-            return new ConfiguratorMethodCall($methodCall);
-        }
-
-        return $methodCall;
+        return $flag instanceof ConfiguratorFlag
+            ? new ConfiguratorMethodCall($methodCall)
+            : $methodCall
+        ;
     }
 }

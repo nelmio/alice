@@ -1,0 +1,67 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler;
+
+use Nelmio\Alice\Definition\FakeMethodCall;
+use Nelmio\Alice\Definition\Flag\ConfiguratorFlag;
+use Nelmio\Alice\Definition\Flag\DummyFlag;
+use Nelmio\Alice\Definition\Flag\FakeFlag;
+use Nelmio\Alice\Definition\Flag\OptionalFlag;
+use Nelmio\Alice\Definition\FlagBag;
+use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
+use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\ConfiguratorFlagHandler
+ */
+class ConfiguratorFlagHandlerTest extends TestCase
+{
+    /**
+     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
+     */
+    public function testIsNotClonable()
+    {
+        clone new ConfiguratorFlagHandler();
+    }
+
+    public function testCreatesAnOptionalCallIfFlagIsAnOptionalFlagIs()
+    {
+        $call = new FakeMethodCall();
+
+        $handler = new ConfiguratorFlagHandler();
+
+        $expected = new ConfiguratorMethodCall($call);
+
+        $actual = $handler->handleMethodFlags($call, new ConfiguratorFlag());
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testLeavesTheFunctionUnchangedIfFlagIsNotAnOptionalFlag()
+    {
+        $call = new FakeMethodCall();
+
+        $flag = new DummyFlag();
+
+        $handler = new ConfiguratorFlagHandler();
+
+        $expected = $call;
+
+        $actual = $handler->handleMethodFlags($call, $flag);
+
+        $this->assertSame($expected, $actual);
+    }
+}
+

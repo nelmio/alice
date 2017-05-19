@@ -36,10 +36,7 @@ final class ConfiguratorMethodCall implements MethodCallInterface
      */
     public function withArguments(array $arguments = null): self
     {
-        $clone = clone $this;
-        $clone->methodCall = $clone->methodCall->withArguments($arguments);
-
-        return $clone;
+        return new self($this->methodCall->withArguments($arguments));
     }
 
     /**
