@@ -24,6 +24,9 @@ $finder = Finder::create()
     ->append([
         __DIR__.'/.php_cs.dist',
     ])
+    ->exclude([
+        __DIR__.'/fixtures/Parser/files/php',
+    ])
 ;
 
 return Config::create()
@@ -39,6 +42,7 @@ return Config::create()
         'heredoc_to_nowdoc' => true,
         'include' => true,
         'header_comment' => [
+            'location' => 'after_open',
             'header' => <<<'LICENSE'
 This file is part of the Alice package.
 
@@ -47,8 +51,6 @@ This file is part of the Alice package.
 For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 LICENSE
-            ,
-            'location' => 'after_open',
         ],
         'lowercase_cast' => true,
         'method_separation' => true,

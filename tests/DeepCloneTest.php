@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversNothing
  */
-class FunctionsTest extends TestCase
+class DeepCloneTest extends TestCase
 {
     /**
      * @dataProvider provideScalarValues

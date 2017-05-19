@@ -160,8 +160,7 @@ class CompleteObjectGeneratorTest extends TestCase
                     $decoratedGenerator,
                     $expected,
                 ];
-        })()
-        ;
+        })();
 
         yield 'object has been generated during the second pass => complete object' => (function () {
             $fixture = new SimpleFixture(
@@ -200,8 +199,7 @@ class CompleteObjectGeneratorTest extends TestCase
                     $decoratedGenerator,
                     $expected,
                 ];
-        })()
-        ;
+        })();
 
         yield 'object was generated with "complete object" generation context => complete object' => (function () {
             $fixture = new SimpleFixture(
@@ -240,8 +238,7 @@ class CompleteObjectGeneratorTest extends TestCase
                     $decoratedGenerator,
                     $expected,
                 ];
-        })()
-        ;
+        })();
 
         yield 'object generated needed only instantiation => complete object' => (function () {
             $fixture = new SimpleFixture(
@@ -276,8 +273,7 @@ class CompleteObjectGeneratorTest extends TestCase
                     $decoratedGenerator,
                     $expected,
                 ];
-        })()
-        ;
+        })();
 
         yield 'object generated during first pass => unchanged' => (function () {
             $fixture = new SimpleFixture(
@@ -309,7 +305,6 @@ class CompleteObjectGeneratorTest extends TestCase
                     $decoratedGenerator,
                     $expected,
                 ];
-        })()
-        ;
+        })();
     }
 }

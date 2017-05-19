@@ -10,6 +10,7 @@
  */
 
 declare(strict_types=1);
+
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\PropertyAccess\ReflectionPropertyAccessor;
