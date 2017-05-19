@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\MethodCall;
 
-use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\MethodCallInterface;
 
 /**

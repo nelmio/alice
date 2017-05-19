@@ -28,8 +28,7 @@ class FakeParameterResolver implements ParameterResolverInterface
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters
-    ): ParameterBag
-    {
+    ): ParameterBag {
         $this->__call(__FUNCTION__, func_get_args());
     }
 }

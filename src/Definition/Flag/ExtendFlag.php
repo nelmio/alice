@@ -30,7 +30,7 @@ final class ExtendFlag implements FlagInterface
 
     /**
      * @param FixtureReference $extendedFixture Reference of the extended fixture.
-     *                                
+     *
      * @example
      *  For (extends user0), $extendedFixture is 'user0'
      */

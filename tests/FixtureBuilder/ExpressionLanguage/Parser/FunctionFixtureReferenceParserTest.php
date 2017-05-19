@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

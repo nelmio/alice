@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 
 /**
  * Escapes references found in a string to avoid the user to have to manually escape references. For

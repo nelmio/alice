@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
@@ -30,6 +29,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

@@ -20,12 +20,10 @@ use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ConstructorDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 final class FunctionDenormalizer implements CallsDenormalizerInterface
 {
@@ -49,8 +47,7 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
         FlagParserInterface $parser,
         string $unparsedMethod,
         array $unparsedArguments
-    ): MethodCallInterface
-    {
+    ): MethodCallInterface {
         list($caller, $method) = $this->getCallerReference($scope, $unparsedMethod);
         $arguments = $this->argumentsDenormalizer->denormalize($scope, $parser, $unparsedArguments);
 

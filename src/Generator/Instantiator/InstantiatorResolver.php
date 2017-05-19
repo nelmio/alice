@@ -15,8 +15,6 @@ namespace Nelmio\Alice\Generator\Instantiator;
 
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
@@ -24,6 +22,8 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationExceptionFactory;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
@@ -74,8 +74,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context
-    ): ResolvedFixtureSet
-    {
+    ): ResolvedFixtureSet {
         list($fixture, $fixtureSet) = $this->resolveFixtureConstructor($fixture, $fixtureSet, $context);
 
         return $this->instantiator->instantiate($fixture, $fixtureSet, $context);
@@ -94,8 +93,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         FixtureInterface $fixture,
         ResolvedFixtureSet $set,
         GenerationContext $context
-    ): array
-    {
+    ): array {
         $specs = $fixture->getSpecs();
         $constructor = $specs->getConstructor();
 
@@ -143,8 +141,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context
-    ): array
-    {
+    ): array {
         $scope = $fixtureSet->getParameters()->toArray();
 
         $argumentPosition = 1;

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\ObjectBag

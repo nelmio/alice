@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\MethodCall;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Entity\StdClassFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\SimpleMethodCall

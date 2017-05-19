@@ -15,13 +15,13 @@ namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
-use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
-use Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 final class TemplateFixtureResolver
 {
@@ -44,8 +44,7 @@ final class TemplateFixtureResolver
         FixtureBag $unresolvedFixtures,
         TemplatingFixtureBag $resolvedFixtures,
         ResolvingContext $context
-    ): TemplatingFixtureBag
-    {
+    ): TemplatingFixtureBag {
         $context->checkForCircularReference($fixture->getId());
 
         if (false === $fixture->extendsFixtures()) {
@@ -86,8 +85,7 @@ final class TemplateFixtureResolver
         FixtureBag $unresolvedFixtures,
         TemplatingFixtureBag $resolvedFixtures,
         ResolvingContext $context
-    ): array
-    {
+    ): array {
         $fixtures = new FixtureBag();
         foreach ($extendedFixtureReferences as $reference) {
             $fixtureId = $reference->getId();

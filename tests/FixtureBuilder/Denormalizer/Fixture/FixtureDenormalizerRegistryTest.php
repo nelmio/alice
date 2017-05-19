@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\DummyChainableParserAwareDenormalizer;
@@ -23,6 +22,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

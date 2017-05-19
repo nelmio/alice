@@ -17,14 +17,14 @@ use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException;
 
 /**
@@ -32,8 +32,7 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeExc
  * this is likely due to the usage of a temporary fixture with a unique value. In that situation, this denormalizer
  * tries to fallback on denormalizing the fixtures one by one with the correct ID.
  */
-final class SimpleCollectionDenormalizer
-implements CollectionDenormalizer, FixtureDenormalizerAwareInterface, FlagParserAwareInterface
+final class SimpleCollectionDenormalizer implements CollectionDenormalizer, FixtureDenormalizerAwareInterface, FlagParserAwareInterface
 {
     use IsAServiceTrait;
 
@@ -114,8 +113,7 @@ implements CollectionDenormalizer, FixtureDenormalizerAwareInterface, FlagParser
         string $fixtureId,
         array $specs,
         FlagBag $flags
-    ): FixtureBag
-    {
+    ): FixtureBag {
         try {
             return $this->collectionDenormalizer->denormalize($builtFixtures, $className, $fixtureId, $specs, $flags);
         } catch (InvalidScopeException $exception) {
@@ -154,8 +152,7 @@ implements CollectionDenormalizer, FixtureDenormalizerAwareInterface, FlagParser
         array $specs,
         FlagBag $flags,
         string $valueForCurrent
-    ): FixtureBag
-    {
+    ): FixtureBag {
         $builtFixtures = $this->denormalizer->denormalize(
             $builtFixtures,
             $className,

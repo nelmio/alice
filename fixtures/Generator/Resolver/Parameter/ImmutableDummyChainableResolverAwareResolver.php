@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use Nelmio\Alice\NotCallableTrait;
-use Nelmio\Alice\Parameter;
-use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
+use Nelmio\Alice\NotCallableTrait;
+use Nelmio\Alice\Parameter;
+use Nelmio\Alice\ParameterBag;
 
 final class ImmutableDummyChainableResolverAwareResolver implements ChainableParameterResolverInterface, ParameterResolverAwareInterface
 {
@@ -46,8 +46,7 @@ final class ImmutableDummyChainableResolverAwareResolver implements ChainablePar
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters
-    ): ParameterBag
-    {
+    ): ParameterBag {
         $this->__call(__FUNCTION__, func_get_args());
     }
 }

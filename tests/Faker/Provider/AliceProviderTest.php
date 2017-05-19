@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Nelmio\Alice\Faker\Provider;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Faker\Provider\AliceProvider

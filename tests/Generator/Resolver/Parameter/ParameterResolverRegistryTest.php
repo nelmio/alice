@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
-use PHPUnit\Framework\TestCase;
+use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\DummyChainableParameterResolverAwareResolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\FakeChainableParameterResolver;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

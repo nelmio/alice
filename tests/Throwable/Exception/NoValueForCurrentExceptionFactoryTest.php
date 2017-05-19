@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\NoValueForCurrentExceptionFactory

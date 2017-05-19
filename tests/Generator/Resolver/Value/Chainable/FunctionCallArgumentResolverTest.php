@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
@@ -25,6 +24,7 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver

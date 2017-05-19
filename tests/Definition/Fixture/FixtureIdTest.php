@@ -11,8 +11,8 @@
 
 namespace Nelmio\Alice\Definition\Fixture;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureIdInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\FixtureId

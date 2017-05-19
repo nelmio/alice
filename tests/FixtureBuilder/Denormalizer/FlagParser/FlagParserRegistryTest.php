@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\FakeChainableFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

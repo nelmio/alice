@@ -26,7 +26,7 @@ interface LexerInterface
      * @param string $value
      *
      * @throws ExpressionLanguageParseThrowable
-     * 
+     *
      * @return Token[]
      */
     public function lex(string $value): array;

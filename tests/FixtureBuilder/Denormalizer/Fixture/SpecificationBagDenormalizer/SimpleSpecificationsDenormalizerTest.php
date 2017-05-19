@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
-use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
+use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Definition\PropertyBag;
@@ -26,8 +26,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\FakePropertyDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
-use Prophecy\Argument;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer
@@ -51,7 +51,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
-        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+        $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
     }
@@ -86,7 +86,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
-        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+        $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
 
@@ -123,7 +123,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
-        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+        $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
 
@@ -164,7 +164,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
-        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+        $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
 
@@ -209,7 +209,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
 
-        $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+        $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
     }
 
     /**
@@ -241,7 +241,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
 
-        $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+        $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
     }
 
     public function testCanDenormalizeTheNoConstructor()
@@ -257,7 +257,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
-        $actual = $denormalizer->denormalize(new FakeFixture, new FakeFlagParser(), $specs);
+        $actual = $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
 
         $this->assertEquals($expected, $actual);
     }
@@ -292,13 +292,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             null,
             (new PropertyBag())
                 ->with($usernameProp)
-                ->with($nameProp)
-            ,
+                ->with($nameProp),
             new MethodCallBag()
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), $propertyDenormalizer, new FakeCallsDenormalizer());
-        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+        $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
 
@@ -336,7 +335,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), $callsDenormalizer);
-        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+        $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
 
@@ -405,13 +404,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             $constructor,
             (new PropertyBag())
                 ->with($usernameProp)
-                ->with($nameProp)
-            ,
+                ->with($nameProp),
             (new MethodCallBag())->with($call)
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, $propertyDenormalizer, $callsDenormalizer);
-        $actual = $denormalizer->denormalize(new FakeFixture, $flagParser, $specs);
+        $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
         $this->assertEquals($expected, $actual);
 

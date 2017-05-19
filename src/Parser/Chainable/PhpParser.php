@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
+use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 final class PhpParser implements ChainableParserInterface
 {
@@ -48,7 +48,7 @@ final class PhpParser implements ChainableParserInterface
             throw InvalidArgumentExceptionFactory::createForFileCouldNotBeFound($file);
         }
 
-        $data = include($file);
+        $data = include $file;
 
         if (false === is_array($data)) {
             throw TypeErrorFactory::createForInvalidFixtureFileReturnedData($file);

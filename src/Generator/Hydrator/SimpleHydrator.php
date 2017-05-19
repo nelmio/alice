@@ -61,8 +61,7 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context
-    ): ResolvedFixtureSet
-    {
+    ): ResolvedFixtureSet {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }

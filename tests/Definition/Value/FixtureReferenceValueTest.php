@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\FixtureReferenceValue
@@ -92,7 +92,8 @@ class FixtureReferenceValueTest extends TestCase
         }
 
         try {
-            new FixtureReferenceValue(function () {});
+            new FixtureReferenceValue(function () {
+            });
         } catch (\InvalidArgumentException $exception) {
             $this->assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'

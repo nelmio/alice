@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Fixture;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
-use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 use Nelmio\Alice\FixtureIdInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixture

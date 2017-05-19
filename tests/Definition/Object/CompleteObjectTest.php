@@ -12,9 +12,9 @@
 namespace Nelmio\Alice\Definition\Object;
 
 use Nelmio\Alice\Definition\Value\FakeObject;
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Object\CompleteObject

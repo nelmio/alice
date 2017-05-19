@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 
 /**
@@ -64,8 +63,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
         ResolvingContext $context = null
-    ): ParameterBag
-    {
+    ): ParameterBag {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }

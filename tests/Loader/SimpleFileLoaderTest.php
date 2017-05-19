@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\DataLoaderInterface;
+use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\ObjectSetFactory;
 use Nelmio\Alice\Parser\FakeParser;
-use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\ParserInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

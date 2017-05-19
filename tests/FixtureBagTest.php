@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\MutableFixture;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBag
@@ -75,8 +75,7 @@ class FixtureBagTest extends TestCase
 
         $this->assertEquals(
             (new FixtureBag())
-                ->with(new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create()))
-            ,
+                ->with(new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create())),
             $bag
         );
     }

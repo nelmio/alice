@@ -19,11 +19,11 @@ interface GeneratorInterface
 {
     /**
      * Generates a list of parameters and objects from the given set of data.
-     * 
+     *
      * @param FixtureSet $fixtureSet
      *
      * @throws GenerationThrowable
-     * 
+     *
      * @return ObjectSet Contains the parameters and objects built from the loaded and injected ones.
      */
     public function generate(FixtureSet $fixtureSet): ObjectSet;

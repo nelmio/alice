@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable;
 
-use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;

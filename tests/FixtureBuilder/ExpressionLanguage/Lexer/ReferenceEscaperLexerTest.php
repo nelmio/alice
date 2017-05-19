@@ -11,8 +11,8 @@
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

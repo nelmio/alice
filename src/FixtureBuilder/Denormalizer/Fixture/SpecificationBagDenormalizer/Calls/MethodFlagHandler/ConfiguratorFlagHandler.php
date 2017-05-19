@@ -14,10 +14,8 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler;
 
 use Nelmio\Alice\Definition\Flag\ConfiguratorFlag;
-use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\FlagInterface;
 use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
-use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler;
 use Nelmio\Alice\IsAServiceTrait;

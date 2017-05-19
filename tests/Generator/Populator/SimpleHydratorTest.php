@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Hydrator;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\Object\SimpleObject;
@@ -22,7 +21,6 @@ use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\SpecificationBag;
 use Nelmio\Alice\Definition\Value\FakeObject;
 use Nelmio\Alice\Definition\Value\FakeValue;
-use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\HydratorInterface;
@@ -33,7 +31,9 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**
@@ -155,8 +155,7 @@ class SimpleHydratorTest extends TestCase
                         null,
                         (new PropertyBag())
                             ->with($username = new Property('username', $usernameValue = new FakeValue()))
-                            ->with($group = new Property('group', $groupValue = new FakeValue()))
-                        ,
+                            ->with($group = new Property('group', $groupValue = new FakeValue())),
                         new MethodCallBag()
                     )
                 )
@@ -239,8 +238,7 @@ class SimpleHydratorTest extends TestCase
                         null,
                         (new PropertyBag())
                             ->with(new Property('username', $usernameValue = new FakeValue()))
-                            ->with(new Property('group', $groupValue = new FakeValue()))
-                        ,
+                            ->with(new Property('group', $groupValue = new FakeValue())),
                         new MethodCallBag()
                     )
                 )

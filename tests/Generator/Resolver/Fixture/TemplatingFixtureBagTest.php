@@ -13,19 +13,19 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
-use function Nelmio\Alice\deep_clone;
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
-use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\MutableFixture;
+use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
-use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use PHPUnit\Framework\TestCase;
+use function Nelmio\Alice\deep_clone;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplatingFixtureBag
@@ -118,8 +118,7 @@ class TemplatingFixtureBagTest extends TestCase
 
         $this->assertEquals(
             (new FixtureBag())
-                ->with($fixture)
-            ,
+                ->with($fixture),
             $bag->getFixtures()
         );
     }

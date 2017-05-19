@@ -31,8 +31,7 @@ class DummySpecificationBagDenormalizer implements SpecificationsDenormalizerInt
         FixtureInterface $fixture,
         FlagParserInterface $parser,
         array $unparsedSpecs
-    ): SpecificationBag
-    {
+    ): SpecificationBag {
         return SpecificationBagFactory::create();
     }
 }

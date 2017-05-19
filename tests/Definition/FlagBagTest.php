@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Flag\AnotherDummyFlag;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
@@ -24,6 +23,7 @@ use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\FlagBag
@@ -99,8 +99,7 @@ class FlagBagTest extends TestCase
         $this->assertEquals(
             (new FlagBag('bag1'))
                 ->withFlag(new MutableFlag('flag1', new \stdClass()))
-                ->withFlag(new MutableFlag('flag2', new \stdClass()))
-            ,
+                ->withFlag(new MutableFlag('flag2', new \stdClass())),
             $mergedBag
         );
     }

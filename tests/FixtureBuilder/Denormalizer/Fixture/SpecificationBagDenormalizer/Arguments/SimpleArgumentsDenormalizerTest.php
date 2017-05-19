@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\FakeValueDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**
@@ -54,7 +54,9 @@ class SimpleArgumentsDenormalizerTest extends TestCase
         $flagParser = $flagParserProphecy->reveal();
 
         $valueDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
-        $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(function ($args) { return $args[2]; });
+        $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(function ($args) {
+            return $args[2];
+        });
         /** @var ValueDenormalizerInterface $valueDenormalizer */
         $valueDenormalizer = $valueDenormalizerProphecy->reveal();
 
@@ -90,7 +92,9 @@ class SimpleArgumentsDenormalizerTest extends TestCase
         $flagParser = $flagParserProphecy->reveal();
 
         $valueDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
-        $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(function ($args) { return $args[2]; });
+        $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(function ($args) {
+            return $args[2];
+        });
         /** @var ValueDenormalizerInterface $valueDenormalizer */
         $valueDenormalizer = $valueDenormalizerProphecy->reveal();
 

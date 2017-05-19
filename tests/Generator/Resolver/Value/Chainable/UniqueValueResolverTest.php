@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -26,6 +24,8 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

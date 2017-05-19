@@ -13,21 +13,21 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\ObjectGenerator;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Generator\Caller\FakeCaller;
 use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\GenerationContext;
+use Nelmio\Alice\Generator\Hydrator\FakeHydrator;
+use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\Instantiator\FakeInstantiator;
 use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
-use Nelmio\Alice\Generator\Hydrator\FakeHydrator;
-use Nelmio\Alice\Generator\HydratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\ObjectBag;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException
@@ -37,4 +37,3 @@ class RecursionLimitReachedExceptionTest extends TestCase
         $this->assertInstanceOf(ChildRecursionLimitReachedException::class, $exception);
     }
 }
-

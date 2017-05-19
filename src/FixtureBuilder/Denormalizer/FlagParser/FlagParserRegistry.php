@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 
 use Nelmio\Alice\Definition\FlagBag;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory;
 
 /**
  * Delegates the responsibility to the first suitable parser found.

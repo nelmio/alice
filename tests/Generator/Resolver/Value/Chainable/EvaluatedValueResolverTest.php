@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver

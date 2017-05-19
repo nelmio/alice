@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Fixture;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags

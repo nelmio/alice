@@ -20,7 +20,7 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 
 /**
  * Helper to easily manipulate flags related to templates.
- * 
+ *
  * @private
  */
 final class Templating

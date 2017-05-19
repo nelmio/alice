@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Generator\GenerationContext

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer
@@ -122,6 +122,5 @@ class FunctionTokenizerTest extends TestCase
             '<foo(>',
             null,
         ];
-
     }
 }

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Symfony\KernelFactory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 
 /**

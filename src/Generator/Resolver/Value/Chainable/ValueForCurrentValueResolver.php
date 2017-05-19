@@ -15,13 +15,13 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 
 final class ValueForCurrentValueResolver implements ChainableValueResolverInterface
 {
@@ -48,8 +48,7 @@ final class ValueForCurrentValueResolver implements ChainableValueResolverInterf
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         return new ResolvedValueWithFixtureSet(
             $fixtureSet->getFixtures()->get($fixture->getId()),
             $fixtureSet

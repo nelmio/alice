@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
-use PHPUnit\Framework\TestCase;
+use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\NestedValue;
 use Nelmio\Alice\Definition\Value\ParameterValue;
-use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FakeLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DummyChainableTokenParserAware;
@@ -24,6 +23,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\FakeTokenP
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

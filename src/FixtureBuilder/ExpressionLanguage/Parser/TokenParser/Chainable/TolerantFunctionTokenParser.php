@@ -16,14 +16,14 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\NestedValue;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 
 /**
  * @internal

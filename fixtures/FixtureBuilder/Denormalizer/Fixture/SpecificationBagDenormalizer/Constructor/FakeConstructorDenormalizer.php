@@ -30,8 +30,7 @@ class FakeConstructorDenormalizer implements ConstructorDenormalizerInterface
         FixtureInterface $scope,
         FlagParserInterface $parser,
         array $unparsedConstructor
-    ): MethodCallInterface
-    {
+    ): MethodCallInterface {
         $this->__call(__FUNCTION__, func_get_args());
     }
 }

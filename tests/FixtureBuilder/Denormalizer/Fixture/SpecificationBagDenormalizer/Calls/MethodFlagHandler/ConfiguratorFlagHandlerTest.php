@@ -16,11 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Flag\ConfiguratorFlag;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
-use Nelmio\Alice\Definition\Flag\FakeFlag;
-use Nelmio\Alice\Definition\Flag\OptionalFlag;
-use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
-use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -64,4 +60,3 @@ class ConfiguratorFlagHandlerTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 }
-

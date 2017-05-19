@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer

@@ -11,10 +11,10 @@
 
 namespace Nelmio\Alice\PropertyAccess;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\FakeValue;
@@ -29,6 +28,7 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeChainableValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\ObjectBag;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

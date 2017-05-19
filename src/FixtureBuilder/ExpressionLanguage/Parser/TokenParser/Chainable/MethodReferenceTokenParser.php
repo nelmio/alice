@@ -16,10 +16,10 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 
 /**
  * @internal

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 
 /**
  * Remove all the injected parameters conflicting with the existing ones to ensure the right parameter is always used.
@@ -40,8 +40,7 @@ final class RemoveConflictingParametersParameterBagResolver implements Parameter
     public function resolve(
         ParameterBag $unresolvedParameters,
         ParameterBag $injectedParameters = null
-    ): ParameterBag
-    {
+    ): ParameterBag {
         if (null === $injectedParameters) {
             $injectedParameters = new ParameterBag();
         }

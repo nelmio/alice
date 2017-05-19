@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Value\UniqueValue;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedExceptionFactory

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FileLocator;
 
-use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 use Nelmio\Alice\FileLocatorInterface;
+use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 
 /**
  * Symfony DefaultFileLocator shamelessly copy/pasted to avoid a dependency to the Config component and simplified a bit for

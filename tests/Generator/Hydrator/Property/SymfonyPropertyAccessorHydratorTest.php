@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Hydrator\Property;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Entity\DummyWithDate;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
-use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationException;
-use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException;
-use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException;
-use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InaccessiblePropertyException;
-use Nelmio\Alice\Throwable\Exception\Symfony\PropertyAccess\RootException as GenericPropertyAccessException;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
+use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationException;
+use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InaccessiblePropertyException;
+use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException;
+use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException;
+use Nelmio\Alice\Throwable\Exception\Symfony\PropertyAccess\RootException as GenericPropertyAccessException;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -183,7 +183,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
     {
         $instance = new Dummy();
         $object = new SimpleObject('dummy', $instance);
-        $hydratedObject = $this->hydrator->hydrate($object , $property, new GenerationContext());
+        $hydratedObject = $this->hydrator->hydrate($object, $property, new GenerationContext());
 
         $expected = $property->getValue();
         $actual = $this->propertyAccessor->getValue($hydratedObject->getInstance(), $property->getName());

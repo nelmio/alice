@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
-use Nelmio\Alice\IsAServiceTrait;
 
 /**
  * @private

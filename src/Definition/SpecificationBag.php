@@ -75,7 +75,7 @@ final class SpecificationBag
     /**
      * Creates a new instance to which the given specs have been merged. In case of conflicts, the existing values are
      * kept.
-     * 
+     *
      * @param self $specs
      *
      * @return self

@@ -19,8 +19,7 @@ class SpecificationBagFactory
         MethodCallInterface $constructor = null,
         PropertyBag $properties = null,
         MethodCallBag $calls = null
-    ): SpecificationBag
-    {
+    ): SpecificationBag {
         return new SpecificationBag(
             $constructor,
             (null === $properties) ? new PropertyBag() : $properties,

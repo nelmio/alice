@@ -15,8 +15,6 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\ValueInterface;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorAwareInterface;
@@ -27,14 +25,15 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 
 /**
  * Resolves the fixture reference ID first if it is itself a value before handing over the resolution to the decorated
  * resolver.
  */
-final class UnresolvedFixtureReferenceIdResolver
-implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, ValueResolverAwareInterface
+final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, ValueResolverAwareInterface
 {
     use IsAServiceTrait;
 
@@ -101,8 +100,7 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context
-    ): ResolvedValueWithFixtureSet
-    {
+    ): ResolvedValueWithFixtureSet {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
@@ -135,8 +133,7 @@ implements ChainableValueResolverInterface, ObjectGeneratorAwareInterface, Value
         ResolvedFixtureSet $set,
         array $scope,
         GenerationContext $context
-    ): array
-    {
+    ): array {
         $referredFixtureId = $value->getValue();
         if ($referredFixtureId instanceof ValueInterface) {
             $resolvedSet = $resolver->resolve($referredFixtureId, $fixture, $set, $scope, $context);

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
-use Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory;
-use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory;
 
 final class ParserRegistry implements ParserInterface
 {
@@ -31,7 +31,9 @@ final class ParserRegistry implements ParserInterface
      */
     public function __construct(array $parsers)
     {
-        $this->parsers = (function (ChainableParserInterface ...$parsers) { return $parsers; })(...$parsers);
+        $this->parsers = (function (ChainableParserInterface ...$parsers) {
+            return $parsers;
+        })(...$parsers);
     }
 
     /**

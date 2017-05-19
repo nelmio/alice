@@ -30,8 +30,7 @@ class FakeSpecificationBagDenormalizer implements SpecificationsDenormalizerInte
         FixtureInterface $fixture,
         FlagParserInterface $parser,
         array $unparsedSpecs
-    ): SpecificationBag
-    {
+    ): SpecificationBag {
         $this->__call(__METHOD__, func_get_args());
     }
 }

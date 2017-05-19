@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
-use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\InstantiatorInterface;
@@ -21,6 +20,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory;
 
 final class InstantiatorRegistry implements InstantiatorInterface, ValueResolverAwareInterface
 {
@@ -66,8 +66,7 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context
-    ): ResolvedFixtureSet
-    {
+    ): ResolvedFixtureSet {
         foreach ($this->instantiators as $instantiator) {
             if ($instantiator->canInstantiate($fixture)) {
                 return $instantiator->instantiate($fixture, $fixtureSet, $context);

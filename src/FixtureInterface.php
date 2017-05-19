@@ -37,7 +37,7 @@ interface FixtureInterface extends FixtureIdInterface
 
     /**
      * Creates a new instance with the given specs.
-     * 
+     *
      * @param SpecificationBag $specs
      *
      * @return static

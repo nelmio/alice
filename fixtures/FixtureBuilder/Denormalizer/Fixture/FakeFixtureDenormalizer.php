@@ -30,8 +30,7 @@ class FakeFixtureDenormalizer implements FixtureDenormalizerInterface
         string $fixtureId,
         array $specs,
         FlagBag $flags
-    ): FixtureBag
-    {
+    ): FixtureBag {
         $this->__call(__METHOD__, func_get_args());
     }
 }

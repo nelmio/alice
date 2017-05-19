@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
+use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
-use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
-use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 
 /**
  * Decorates a simple parameter resolver to resolve a bag.
@@ -43,8 +43,7 @@ final class SimpleParameterBagResolver implements ParameterBagResolverInterface
     public function resolve(
         ParameterBag $unresolvedParameters,
         ParameterBag $injectedParameters = null
-    ): ParameterBag
-    {
+    ): ParameterBag {
         $resolvedParameters = (null === $injectedParameters) ? new ParameterBag() : $injectedParameters;
         foreach ($unresolvedParameters as $key => $value) {
             if ($resolvedParameters->has($key)) {

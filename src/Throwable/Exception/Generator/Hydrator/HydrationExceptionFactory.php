@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
@@ -26,8 +26,7 @@ final class HydrationExceptionFactory
         Property $property,
         int $code,
         \Throwable $previous
-    ): HydrationException
-    {
+    ): HydrationException {
         return new HydrationException(
             sprintf(
                 'Could not hydrate the property "%s" of the object "%s" (class: %s).',
@@ -45,8 +44,7 @@ final class HydrationExceptionFactory
         Property $property,
         int $code = 0,
         \Throwable $previous = null
-    ): InaccessiblePropertyException
-    {
+    ): InaccessiblePropertyException {
         return new InaccessiblePropertyException(
             sprintf(
                 'Could not access to the property "%s" of the object "%s" (class: %s).',
@@ -64,8 +62,7 @@ final class HydrationExceptionFactory
         Property $property,
         int $code = 0,
         \Throwable $previous = null
-    ): InvalidArgumentException
-    {
+    ): InvalidArgumentException {
         return new InvalidArgumentException(
             sprintf(
                 'Invalid value given for the property "%s" of the object "%s" (class: %s).',
@@ -83,8 +80,7 @@ final class HydrationExceptionFactory
         Property $property,
         int $code = 0,
         \Throwable $previous = null
-    ): NoSuchPropertyException
-    {
+    ): NoSuchPropertyException {
         return new NoSuchPropertyException(
             sprintf(
                 'Could not hydrate the property "%s" of the object "%s" (class: %s).',

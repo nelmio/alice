@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Throwable\Exception\RootExpressionLanguageParseException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable

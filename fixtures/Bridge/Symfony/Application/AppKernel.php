@@ -33,7 +33,6 @@ class AppKernel extends Kernel
         parent::__construct($environment, $debug);
     }
 
-
     /**
      * @inheritdoc
      */
@@ -44,6 +43,7 @@ class AppKernel extends Kernel
             new NelmioAliceBundle(),
         ];
     }
+
     /**
      * {@inheritdoc}
      */

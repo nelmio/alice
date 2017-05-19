@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
-use PHPUnit\Framework\TestCase;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -21,6 +20,7 @@ use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\ObjectBag;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**

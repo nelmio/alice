@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
-use PHPUnit\Framework\TestCase;
-use Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**
