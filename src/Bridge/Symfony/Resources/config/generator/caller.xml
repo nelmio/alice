@@ -29,6 +29,11 @@
 
 
         <!-- Chainables -->
+        <service id="nelmio_alice.generator.caller.chainable.configurator_method_call"
+                 class="Nelmio\Alice\Generator\Caller\Chainable\ConfiguratorMethodCallProcessor">
+            <tag name="nelmio_alice.generator.caller.chainable_call_processor" />
+        </service>
+
         <service id="nelmio_alice.generator.caller.chainable.method_call_with_reference"
                  class="Nelmio\Alice\Generator\Caller\Chainable\MethodCallWithReferenceProcessor">
             <tag name="nelmio_alice.generator.caller.chainable_call_processor" />

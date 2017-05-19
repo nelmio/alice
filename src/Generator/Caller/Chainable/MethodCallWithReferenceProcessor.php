@@ -74,7 +74,7 @@ final class MethodCallWithReferenceProcessor implements ChainableCallProcessorIn
         }
 
         return $fixtureSet->withObjects(
-            $fixtureSet->getObjects()->with($result)
+            $fixtureSet->getObjects()->with($object)
         );
     }
 }
