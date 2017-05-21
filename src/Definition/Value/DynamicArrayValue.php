@@ -23,7 +23,7 @@ use function Nelmio\Alice\deep_clone;
 final class DynamicArrayValue implements ValueInterface
 {
     /**
-     * @var string|ValueInterface
+     * @var int|ValueInterface
      */
     private $quantifier;
 

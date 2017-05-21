@@ -25,12 +25,12 @@ final class LegacyConstructorDenormalizer implements ConstructorDenormalizerInte
     use IsAServiceTrait;
 
     /**
-     * @var ConstructorDenormalizer
+     * @var ConstructorDenormalizerInterface
      */
     private $constructorDenormalizer;
 
     /**
-     * @var ConstructorDenormalizer
+     * @var ConstructorDenormalizerInterface
      */
     private $factoryDenormalizer;
 

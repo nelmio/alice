@@ -22,7 +22,7 @@ use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 final class OptionalValue implements ValueInterface
 {
     /**
-     * @var string|ValueInterface
+     * @var int|ValueInterface
      */
     private $quantifier;
 
@@ -37,7 +37,7 @@ final class OptionalValue implements ValueInterface
     private $secondMember;
 
     /**
-     * @param int|ValueInterface         $quantifier
+     * @param int|string|ValueInterface         $quantifier
      * @param string|ValueInterface      $firstMember
      * @param string|ValueInterface|null $secondMember
      */
