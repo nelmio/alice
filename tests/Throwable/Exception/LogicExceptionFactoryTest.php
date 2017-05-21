@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LogicExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateForUncallableMethod()
+    public function testCreateForUncallableMethod()
     {
         $exception = LogicExceptionFactory::createForUncallableMethod('foo');
 
@@ -32,7 +32,7 @@ class LogicExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForCannotDenormalizerForChainableFixtureBuilderDenormalizer()
+    public function testCreateForCannotDenormalizerForChainableFixtureBuilderDenormalizer()
     {
         $exception = LogicExceptionFactory::createForCannotDenormalizerForChainableFixtureBuilderDenormalizer('foo');
 
@@ -45,7 +45,7 @@ class LogicExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForCannotHaveBothConstructorAndFactory()
+    public function testCreateForCannotHaveBothConstructorAndFactory()
     {
         $exception = LogicExceptionFactory::createForCannotHaveBothConstructorAndFactory();
 

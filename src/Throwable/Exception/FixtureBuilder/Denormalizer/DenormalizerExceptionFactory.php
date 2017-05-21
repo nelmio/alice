@@ -66,4 +66,8 @@ final class DenormalizerExceptionFactory
     {
         return new InvalidScopeException('Cannot bind a unique value scope to a temporary fixture.');
     }
+
+    private function __construct()
+    {
+    }
 }

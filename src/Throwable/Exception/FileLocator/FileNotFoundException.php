@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FileLocator;
 
-class FileNotFoundException extends \UnexpectedValueException
+use UnexpectedValueException;
+
+class FileNotFoundException extends UnexpectedValueException
 {
     public static function createForEmptyFile(): self
     {

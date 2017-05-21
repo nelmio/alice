@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UniqueValueGenerationLimitReachedExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory()
     {
         $exception = UniqueValueGenerationLimitReachedExceptionFactory::create(
             new UniqueValue('unique_id', new \stdClass()),

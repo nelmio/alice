@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ExpressionLanguageExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateForNoParserFoundForToken()
+    public function testCreateForNoParserFoundForToken()
     {
         $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $exception = ExpressionLanguageExceptionFactory::createForNoParserFoundForToken($token);
@@ -35,7 +35,7 @@ class ExpressionLanguageExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForExpectedMethodCallOnlyIfHasAParser()
+    public function testCreateForExpectedMethodCallOnlyIfHasAParser()
     {
         $exception = ExpressionLanguageExceptionFactory::createForExpectedMethodCallOnlyIfHasAParser('foo');
 
@@ -47,7 +47,7 @@ class ExpressionLanguageExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForUnparsableToken()
+    public function testCreateForUnparsableToken()
     {
         $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $exception = ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
@@ -72,7 +72,7 @@ class ExpressionLanguageExceptionFactoryTest extends TestCase
         $this->assertSame($previous, $exception->getPrevious());
     }
 
-    public function testTestCreateForMalformedFunction()
+    public function testCreateForMalformedFunction()
     {
         $exception = ExpressionLanguageExceptionFactory::createForMalformedFunction('foo');
 
@@ -84,7 +84,7 @@ class ExpressionLanguageExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForCouldNotLexValue()
+    public function testCreateForCouldNotLexValue()
     {
         $exception = ExpressionLanguageExceptionFactory::createForCouldNotLexValue('foo');
 

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ParseExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateForParserNoFoundForFile()
+    public function testCreateForParserNoFoundForFile()
     {
         $exception = ParseExceptionFactory::createForParserNoFoundForFile('foo');
 
@@ -32,7 +32,7 @@ class ParseExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForUnparsableFile()
+    public function testCreateForUnparsableFile()
     {
         $exception = ParseExceptionFactory::createForUnparsableFile('foo');
 
@@ -57,7 +57,7 @@ class ParseExceptionFactoryTest extends TestCase
         $this->assertSame($previous, $exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidYaml()
+    public function testCreateForInvalidYaml()
     {
         $exception = ParseExceptionFactory::createForInvalidYaml('foo');
 

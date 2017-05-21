@@ -103,7 +103,7 @@ class DefaultIncludeProcessorTest extends TestCase
 
     /**
      * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /^Expected include statement to be either null or an array of files to include\. Got string instead in file ".+\/main\.yml"\.$/
+     * @expectedExceptionMessageRegExp /^Expected include statement to be either null or an array of files to include\. Got "string" instead in file ".+\/main\.yml"\.$/
      */
     public function testIfNotNullIncludeStatementMustBeAnArray()
     {

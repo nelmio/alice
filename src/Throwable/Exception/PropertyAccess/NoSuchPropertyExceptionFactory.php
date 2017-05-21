@@ -29,4 +29,8 @@ final class NoSuchPropertyExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

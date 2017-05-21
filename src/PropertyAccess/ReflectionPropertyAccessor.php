@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\PropertyAccess;
 
+use Closure;
 use Nelmio\Alice\IsAServiceTrait;
+use ReflectionClass;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -41,12 +43,12 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
     {
         try {
             $this->decoratedPropertyAccessor->setValue($objectOrArray, $propertyPath, $value);
-        } catch (NoSuchPropertyException $e) {
-            if (!$this->propertyExists($objectOrArray, $propertyPath)) {
-                throw $e;
+        } catch (NoSuchPropertyException $exception) {
+            if (false === $this->propertyExists($objectOrArray, $propertyPath)) {
+                throw $exception;
             }
 
-            $setPropertyClosure = \Closure::bind(
+            $setPropertyClosure = Closure::bind(
                 function ($object) use ($propertyPath, $value) {
                     $object->{$propertyPath} = $value;
                 },
@@ -65,12 +67,12 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
     {
         try {
             return $this->decoratedPropertyAccessor->getValue($objectOrArray, $propertyPath);
-        } catch (NoSuchPropertyException $e) {
-            if (!$this->propertyExists($objectOrArray, $propertyPath)) {
-                throw $e;
+        } catch (NoSuchPropertyException $exception) {
+            if (false === $this->propertyExists($objectOrArray, $propertyPath)) {
+                throw $exception;
             }
 
-            $getPropertyClosure = \Closure::bind(
+            $getPropertyClosure = Closure::bind(
                 function ($object) use ($propertyPath) {
                     return $object->{$propertyPath};
                 },
@@ -106,12 +108,15 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
      */
     private function propertyExists($objectOrArray, $propertyPath)
     {
-        if (!is_object($objectOrArray)) {
+        if (false === is_object($objectOrArray)) {
             return false;
         }
 
-        $reflectionClass = (new \ReflectionClass(get_class($objectOrArray)));
+        $reflectionClass = (new ReflectionClass(get_class($objectOrArray)));
 
-        return $reflectionClass->hasProperty($propertyPath) && !$reflectionClass->getProperty($propertyPath)->isStatic();
+        return (
+            $reflectionClass->hasProperty($propertyPath)
+            && false === $reflectionClass->getProperty($propertyPath)->isStatic()
+        );
     }
 }

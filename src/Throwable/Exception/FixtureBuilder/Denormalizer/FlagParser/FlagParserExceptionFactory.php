@@ -37,4 +37,8 @@ final class FlagParserExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

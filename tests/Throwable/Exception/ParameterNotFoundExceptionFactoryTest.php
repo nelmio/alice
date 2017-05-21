@@ -26,7 +26,7 @@ class ParameterNotFoundExceptionFactoryTest extends TestCase
         $this->assertTrue(is_a(ParameterNotFoundException::class, \RuntimeException::class, true));
     }
 
-    public function testTestCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory()
     {
         $exception = ParameterNotFoundExceptionFactory::create('foo');
 
@@ -38,7 +38,7 @@ class ParameterNotFoundExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForWhenResolvingParameter()
+    public function testCreateForWhenResolvingParameter()
     {
         $exception = ParameterNotFoundExceptionFactory::createForWhenResolvingParameter(
             'foo',

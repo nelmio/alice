@@ -15,7 +15,9 @@ namespace Nelmio\Alice;
 
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
+use Nelmio\Alice\Entity\StdClassFactory;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\ObjectBag
@@ -39,8 +41,8 @@ class ObjectBagTest extends TestCase
     public function testBagsCanBeInstantiatedWithRegularObjects()
     {
         $objects = [
-            'user1' => $u1 = new \stdClass(),
-            'user2' => $u2 = new \stdClass(),
+            'user1' => $u1 = new stdClass(),
+            'user2' => $u2 = new stdClass(),
         ];
         $u1->name = 'bob';
         $u2->name = 'alice';
@@ -57,9 +59,9 @@ class ObjectBagTest extends TestCase
 
     public function testBagsCanBeInstantiatedWithObjects()
     {
-        $u1 = new \stdClass();
+        $u1 = new stdClass();
         $u1->name = 'bob';
-        $u2 = new \stdClass();
+        $u2 = new stdClass();
         $u2->name = 'alice';
 
         $bag = new ObjectBag([
@@ -83,7 +85,7 @@ class ObjectBagTest extends TestCase
     public function testThrowsAnExceptionIfAReferenceMismatchIsFound()
     {
         new ObjectBag([
-            'foo' => new CompleteObject(new SimpleObject('bar', new \stdClass())),
+            'foo' => new CompleteObject(new SimpleObject('bar', new stdClass())),
         ]);
     }
 
@@ -99,23 +101,23 @@ class ObjectBagTest extends TestCase
     public function testReadAccessorsReturnPropertiesValues()
     {
         $bag = new ObjectBag([
-            'user1' => new \stdClass(),
-            'group1' => new \stdClass(),
+            'user1' => new stdClass(),
+            'group1' => new stdClass(),
         ]);
 
-        $user1Fixture = $this->createFixture('user1', \stdClass::class);
-        $group1Fixture = $this->createFixture('group1', \stdClass::class);
+        $user1Fixture = $this->createFixture('user1', stdClass::class);
+        $group1Fixture = $this->createFixture('group1', stdClass::class);
         $inexistingReference = $this->createFixture('unknown', 'Dummy');
 
         $this->assertTrue($bag->has($user1Fixture));
         $this->assertEquals(
-            new CompleteObject(new SimpleObject('user1', new \stdClass())),
+            new CompleteObject(new SimpleObject('user1', new stdClass())),
             $bag->get($user1Fixture)
         );
 
         $this->assertTrue($bag->has($group1Fixture));
         $this->assertEquals(
-            new CompleteObject(new SimpleObject('group1', new \stdClass())),
+            new CompleteObject(new SimpleObject('group1', new stdClass())),
             $bag->get($group1Fixture)
         );
 
@@ -132,35 +134,95 @@ class ObjectBagTest extends TestCase
         $bag->get($this->createFixture('foo', 'Dummy'));
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testNamedConstructorReturnNewModifiedInstanceWhenAddingAnObject()
     {
-        $bag = new ObjectBag(['foo' => new \stdClass()]);
-        $std = new \stdClass();
-        $std->ping = 'pong';
+        $bag = new ObjectBag(['foo' => new stdClass()]);
+
+        $std = StdClassFactory::create([
+            'ping' => 'pong',
+        ]);
+
         $newBag = $bag->with(new CompleteObject(new SimpleObject('bar', $std)));
 
         $this->assertEquals(
-            new ObjectBag(['foo' => new \stdClass()]),
+            new ObjectBag(['foo' => new stdClass()]),
             $bag
         );
         $this->assertEquals(
             new ObjectBag([
-                'foo' => new \stdClass(),
+                'foo' => new stdClass(),
                 'bar' => new CompleteObject(new SimpleObject('bar', $std)),
             ]),
             $newBag
         );
     }
 
+    public function testAddingAnObjectCanOverrideTheExistingOne()
+    {
+        $bag = new ObjectBag(['foo' => new stdClass()]);
+
+        $std = StdClassFactory::create([
+            'ping' => 'pong',
+        ]);
+
+        $newBag = $bag->with(new CompleteObject(new SimpleObject('foo', $std)));
+
+        $this->assertEquals(
+            new ObjectBag([
+                'foo' => new CompleteObject(
+                    new SimpleObject(
+                        'foo',
+                        StdClassFactory::create([
+                            'ping' => 'pong',
+                        ])
+                    )
+                ),
+            ]),
+            $newBag
+        );
+    }
+
+    public function testNamedConstructorReturnNewModifiedInstanceWhenRemovingAnObject()
+    {
+        $bag = new ObjectBag(['foo' => new stdClass()]);
+
+        $newBag = $bag->without(
+            new SimpleObject('foo', new stdClass())
+        );
+
+        $this->assertEquals(
+            new ObjectBag(['foo' => new stdClass()]),
+            $bag
+        );
+        $this->assertEquals(
+            new ObjectBag([]),
+            $newBag
+        );
+    }
+
+    public function testCanRemoveAnNonExistentObject()
+    {
+        $bag = new ObjectBag([]);
+
+        $newBag = $bag->without(
+            new SimpleObject('foo', new stdClass())
+        );
+
+        $this->assertEquals(
+            new ObjectBag([]),
+            $newBag
+        );
+    }
+
     public function testImmutableMerge()
     {
-        $std1 = new \stdClass();
+        $std1 = new stdClass();
         $std1->id = 1;
 
-        $std2 = new \stdClass();
+        $std2 = new stdClass();
         $std2->id = 2;
 
-        $std3 = new \stdClass();
+        $std3 = new stdClass();
         $std3->id = 3;
 
         $std4 = new Dummy();
@@ -201,8 +263,8 @@ class ObjectBagTest extends TestCase
 
     public function testIsTraversable()
     {
-        $object1 = new CompleteObject(new SimpleObject('foo', new \stdClass()));
-        $object2 = new CompleteObject(new SimpleObject('bar', new \stdClass()));
+        $object1 = new CompleteObject(new SimpleObject('foo', new stdClass()));
+        $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
 
         $traversed = [];
@@ -221,14 +283,14 @@ class ObjectBagTest extends TestCase
 
     public function testToArray()
     {
-        $object1 = new CompleteObject(new SimpleObject('foo', new \stdClass()));
-        $object2 = new CompleteObject(new SimpleObject('bar', new \stdClass()));
+        $object1 = new CompleteObject(new SimpleObject('foo', new stdClass()));
+        $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
 
         $this->assertEquals(
             [
-                'foo' => new \stdClass(),
-                'bar' => new \stdClass(),
+                'foo' => new stdClass(),
+                'bar' => new stdClass(),
             ],
             $bag->toArray()
         );
@@ -243,18 +305,18 @@ class ObjectBagTest extends TestCase
         $this->assertEquals(0, $bag->count());
 
         $bag = new ObjectBag([
-            'foo' => new \stdClass(),
-            'bar' => new \stdClass(),
+            'foo' => new stdClass(),
+            'bar' => new stdClass(),
         ]);
         $this->assertEquals(2, $bag->count());
 
-        $object1 = new CompleteObject(new SimpleObject('foo', new \stdClass()));
-        $object2 = new CompleteObject(new SimpleObject('bar', new \stdClass()));
+        $object1 = new CompleteObject(new SimpleObject('foo', new stdClass()));
+        $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
         $this->assertEquals(2, $bag->count());
 
-        $object3 = new CompleteObject(new SimpleObject('foz', new \stdClass()));
-        $object4 = new CompleteObject(new SimpleObject('baz', new \stdClass()));
+        $object3 = new CompleteObject(new SimpleObject('foz', new stdClass()));
+        $object4 = new CompleteObject(new SimpleObject('baz', new stdClass()));
         $anotherBag = (new ObjectBag())->with($object3)->with($object4);
         $bag = $bag->mergeWith($anotherBag);
         $this->assertEquals(4, $bag->count());

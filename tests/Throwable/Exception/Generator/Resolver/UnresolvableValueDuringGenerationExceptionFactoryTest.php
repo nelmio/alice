@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UnresolvableValueDuringGenerationExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateFromResolutionThrowable()
+    public function testCreateFromResolutionThrowable()
     {
         $previous = new RootResolutionException();
 

@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\FixtureInterface;
+use Throwable;
 
 /**
  * @private
@@ -25,7 +26,7 @@ final class NoSuchMethodExceptionFactory
         FixtureInterface $fixture,
         FixtureMethodCallValue $value,
         int $code = 0,
-        \Throwable $previous = null
+        Throwable $previous = null
     ): NoSuchMethodException {
         return new NoSuchMethodException(
             sprintf(
@@ -37,5 +38,9 @@ final class NoSuchMethodExceptionFactory
             $code,
             $previous
         );
+    }
+
+    private function __construct()
+    {
     }
 }

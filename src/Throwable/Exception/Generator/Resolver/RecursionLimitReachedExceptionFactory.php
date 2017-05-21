@@ -28,4 +28,8 @@ final class RecursionLimitReachedExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class BadMethodCallExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateForUnknownMethod()
+    public function testCreateForUnknownMethod()
     {
         $exception = BadMethodCallExceptionFactory::createForUnknownMethod('foo');
 

@@ -27,4 +27,8 @@ final class FixtureNotFoundExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

@@ -24,6 +24,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry
@@ -58,10 +59,9 @@ class FixtureDenormalizerRegistryTest extends TestCase
         try {
             new FixtureDenormalizerRegistry($flagParser, [new \stdClass()]);
             $this->fail('Expected exception to be thrown.');
-        } catch (\TypeError $error) {
+        } catch (TypeError $error) {
             $this->assertEquals(
-                'Expected denormalizer 0 to be a '
-                .'"Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface", got '
+                'Expected denormalizer 0 to be a "'.ChainableFixtureDenormalizerInterface::class.'". Got '
                 .'"stdClass" instead.',
                 $error->getMessage()
             );
@@ -70,10 +70,9 @@ class FixtureDenormalizerRegistryTest extends TestCase
         try {
             new FixtureDenormalizerRegistry($flagParser, [1]);
             $this->fail('Expected exception to be thrown.');
-        } catch (\TypeError $error) {
+        } catch (TypeError $error) {
             $this->assertEquals(
-                'Expected denormalizer 0 to be a '
-                .'"Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface", got '
+                'Expected denormalizer 0 to be a "'.ChainableFixtureDenormalizerInterface::class.'". Got '
                 .'"integer" instead.',
                 $error->getMessage()
             );

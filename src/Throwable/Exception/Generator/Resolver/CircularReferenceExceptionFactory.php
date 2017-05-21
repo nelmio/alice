@@ -28,4 +28,8 @@ final class CircularReferenceExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

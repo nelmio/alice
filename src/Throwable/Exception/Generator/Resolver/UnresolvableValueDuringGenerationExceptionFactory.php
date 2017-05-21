@@ -28,4 +28,8 @@ final class UnresolvableValueDuringGenerationExceptionFactory
             $previous
         );
     }
+
+    private function __construct()
+    {
+    }
 }

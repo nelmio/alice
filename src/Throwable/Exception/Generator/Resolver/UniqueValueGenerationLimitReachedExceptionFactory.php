@@ -30,4 +30,8 @@ final class UniqueValueGenerationLimitReachedExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class InstantiationExceptionFactoryTest extends TestCase
 {
-    public function testTestCreate()
+    public function testCreate()
     {
         $code = 500;
         $previous = new \Error();
@@ -37,7 +37,7 @@ class InstantiationExceptionFactoryTest extends TestCase
         $this->assertSame($previous, $exception->getPrevious());
     }
 
-    public function testTestCreateForNonPublicConstructor()
+    public function testCreateForNonPublicConstructor()
     {
         $exception = InstantiationExceptionFactory::createForNonPublicConstructor(
             new SimpleFixture('foo', 'Dummy', SpecificationBagFactory::create())
@@ -51,7 +51,7 @@ class InstantiationExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForConstructorIsMissingMandatoryParameters()
+    public function testCreateForConstructorIsMissingMandatoryParameters()
     {
         $exception = InstantiationExceptionFactory::createForConstructorIsMissingMandatoryParameters(
             new DummyFixture('foo')
@@ -65,7 +65,7 @@ class InstantiationExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForCouldNotGetConstructorData()
+    public function testCreateForCouldNotGetConstructorData()
     {
         $exception = InstantiationExceptionFactory::createForCouldNotGetConstructorData(
             new DummyFixture('foo')
@@ -79,7 +79,7 @@ class InstantiationExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidInstanceType()
+    public function testCreateForInvalidInstanceType()
     {
         $exception = InstantiationExceptionFactory::createForInvalidInstanceType(
             new SimpleFixture('foo', 'Dummy', SpecificationBagFactory::create()),
@@ -94,7 +94,7 @@ class InstantiationExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInstantiatorNotFoundForFixture()
+    public function testCreateForInstantiatorNotFoundForFixture()
     {
         $exception = InstantiationExceptionFactory::createForInstantiatorNotFoundForFixture(
             new DummyFixture('foo')

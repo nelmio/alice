@@ -51,7 +51,7 @@ class ParserIntegrationTest extends TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testTestParseValues(string $value, $expected)
+    public function testParseValues(string $value, $expected)
     {
         try {
             $actual = $this->parser->parse($value);

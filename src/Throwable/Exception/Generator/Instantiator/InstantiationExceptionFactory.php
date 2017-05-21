@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
 use Nelmio\Alice\FixtureInterface;
+use Throwable;
 
 /**
  * @private
  */
 final class InstantiationExceptionFactory
 {
-    public static function create(FixtureInterface $fixture, int $code, \Throwable $previous): InstantiationException
+    public static function create(FixtureInterface $fixture, int $code, Throwable $previous): InstantiationException
     {
         return new InstantiationException(
             sprintf(
@@ -56,7 +57,7 @@ final class InstantiationExceptionFactory
     public static function createForCouldNotGetConstructorData(
         FixtureInterface $fixture,
         int $code = 0,
-        \Throwable $previous = null
+        Throwable $previous = null
     ): InstantiationException {
         return new InstantiationException(
             sprintf(
@@ -93,5 +94,9 @@ final class InstantiationExceptionFactory
                 $fixture->getId()
             )
         );
+    }
+
+    private function __construct()
+    {
     }
 }

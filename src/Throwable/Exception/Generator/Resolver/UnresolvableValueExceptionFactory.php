@@ -107,4 +107,8 @@ final class UnresolvableValueExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

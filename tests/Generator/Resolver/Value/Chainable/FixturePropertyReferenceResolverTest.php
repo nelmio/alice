@@ -167,7 +167,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
         }
     }
 
-    public function testTestResolutionWithSymfonyPropertyAccessor()
+    public function testResolutionWithSymfonyPropertyAccessor()
     {
         $value = new FixturePropertyValue(
             $reference = new FakeValue(),

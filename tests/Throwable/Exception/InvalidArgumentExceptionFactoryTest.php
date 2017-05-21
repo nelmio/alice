@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class InvalidArgumentExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateForInvalidReferenceType()
+    public function testCreateForInvalidReferenceType()
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidReferenceType('foo');
         
@@ -35,7 +35,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForReferenceKeyMismatch()
+    public function testCreateForReferenceKeyMismatch()
     {
         $exception = InvalidArgumentExceptionFactory::createForReferenceKeyMismatch('foo', 'bar');
 
@@ -47,7 +47,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForFlagBagKeyMismatch()
+    public function testCreateForFlagBagKeyMismatch()
     {
         $exception = InvalidArgumentExceptionFactory::createForFlagBagKeyMismatch(
             new DummyFixture('foo'),
@@ -62,7 +62,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidSeedConfigurationValue()
+    public function testCreateForInvalidSeedConfigurationValue()
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidSeedConfigurationValue(10);
 
@@ -74,7 +74,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForExpectedConfigurationStringValue()
+    public function testCreateForExpectedConfigurationStringValue()
     {
         $exception = InvalidArgumentExceptionFactory::createForExpectedConfigurationStringValue(10);
 
@@ -86,7 +86,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForExpectedConfigurationPositiveIntegerValue()
+    public function testCreateForExpectedConfigurationPositiveIntegerValue()
     {
         $exception = InvalidArgumentExceptionFactory::createForExpectedConfigurationPositiveIntegerValue(-1);
 
@@ -98,7 +98,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForExpectedConfigurationArrayOfStringValue()
+    public function testCreateForExpectedConfigurationArrayOfStringValue()
     {
         $exception = InvalidArgumentExceptionFactory::createForExpectedConfigurationArrayOfStringValue(10);
 
@@ -110,7 +110,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForRedundantUniqueValue()
+    public function testCreateForRedundantUniqueValue()
     {
         $exception = InvalidArgumentExceptionFactory::createForRedundantUniqueValue('foo');
 
@@ -122,7 +122,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidExpressionLanguageTokenType()
+    public function testCreateForInvalidExpressionLanguageTokenType()
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageTokenType('foo');
 
@@ -134,7 +134,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidExpressionLanguageToken()
+    public function testCreateForInvalidExpressionLanguageToken()
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageToken('foo');
 
@@ -146,7 +146,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForNoIncludeStatementInData()
+    public function testCreateForNoIncludeStatementInData()
     {
         $exception = InvalidArgumentExceptionFactory::createForNoIncludeStatementInData('foo');
 
@@ -158,7 +158,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForEmptyIncludedFileInData()
+    public function testCreateForEmptyIncludedFileInData()
     {
         $exception = InvalidArgumentExceptionFactory::createForEmptyIncludedFileInData('foo');
 
@@ -170,7 +170,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForFileCouldNotBeFound()
+    public function testCreateForFileCouldNotBeFound()
     {
         $exception = InvalidArgumentExceptionFactory::createForFileCouldNotBeFound('foo');
 
@@ -195,7 +195,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertSame($previous, $exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidLimitValue()
+    public function testCreateForInvalidLimitValue()
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidLimitValue(10);
 
@@ -207,7 +207,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidLimitValueForRecursiveCalls()
+    public function testCreateForInvalidLimitValueForRecursiveCalls()
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidLimitValueForRecursiveCalls(10);
 
@@ -219,7 +219,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidFakerFormatter()
+    public function testCreateForInvalidFakerFormatter()
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidFakerFormatter('foo');
 
@@ -231,7 +231,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForFixtureExtendingANonTemplateFixture()
+    public function testCreateForFixtureExtendingANonTemplateFixture()
     {
         $exception = InvalidArgumentExceptionFactory::createForFixtureExtendingANonTemplateFixture(
             new DummyFixture('foo'),
@@ -246,7 +246,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForUnsupportedTypeForIdenticalValuesCheck()
+    public function testCreateForUnsupportedTypeForIdenticalValuesCheck()
     {
         $exception = InvalidArgumentExceptionFactory::createForUnsupportedTypeForIdenticalValuesCheck(true);
 
@@ -258,7 +258,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidConstructorMethod()
+    public function testCreateForInvalidConstructorMethod()
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidConstructorMethod('foo');
 
@@ -270,12 +270,28 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidOptionalFlagBoundaries()
+    public function testCreateForInvalidOptionalFlagBoundaries()
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidOptionalFlagBoundaries(200);
 
         $this->assertEquals(
             'Expected optional flag to be an integer element of [0;100]. Got "200" instead.',
+            $exception->getMessage()
+        );
+        $this->assertEquals(0, $exception->getCode());
+        $this->assertNull($exception->getPrevious());
+    }
+
+    public function testCreateForInvalidDynamicArrayQuantifier()
+    {
+        $exception = InvalidArgumentExceptionFactory::createForInvalidDynamicArrayQuantifier(
+            new DummyFixture('dummy'),
+            200
+        );
+
+        $this->assertEquals(
+            'Expected quantifier to be a positive integer. Got "200" for "dummy", check you dynamic  arrays '
+            .'declarations (e.g. "<numberBetween(1, 2)>x @user*").',
             $exception->getMessage()
         );
         $this->assertEquals(0, $exception->getCode());
