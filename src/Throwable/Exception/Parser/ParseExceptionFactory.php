@@ -51,4 +51,8 @@ final class ParseExceptionFactory
             $previous
         );
     }
+
+    private function __construct()
+    {
+    }
 }

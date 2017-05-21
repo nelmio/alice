@@ -16,47 +16,48 @@ namespace Nelmio\Alice\Throwable\Error;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
+use TypeError;
 
 /**
  * @private
  */
 final class TypeErrorFactory
 {
-    public static function createForObjectArgument($instance): \TypeError
+    public static function createForObjectArgument($instance): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
-                'Expected instance argument to be an object, got "%s" instead.',
+                'Expected instance argument to be an object. Got "%s" instead.',
                 gettype($instance)
             )
         );
     }
 
-    public static function createForDynamicArrayQuantifier($quantifier): \TypeError
+    public static function createForDynamicArrayQuantifier($quantifier): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
-                'Expected quantifier to be either an integer or a "%s" object. Got "%s" instead.',
+                'Expected quantifier to be either an integer or a "%s". Got "%s" instead.',
                 ValueInterface::class,
                 is_object($quantifier) ? get_class($quantifier) : gettype($quantifier)
             )
         );
     }
 
-    public static function createForDynamicArrayElement($element): \TypeError
+    public static function createForDynamicArrayElement($element): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
-                'Expected element to be either string, an array or a "%s" object. Got "%s" instead.',
+                'Expected element to be either string, an array or a "%s". Got "%s" instead.',
                 ValueInterface::class,
                 is_object($element) ? get_class($element) : gettype($element)
             )
         );
     }
 
-    public static function createForOptionalValueQuantifier($quantifier): \TypeError
+    public static function createForOptionalValueQuantifier($quantifier): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
                 'Expected quantifier to be either a scalar value or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
@@ -65,9 +66,9 @@ final class TypeErrorFactory
         );
     }
 
-    public static function createForOptionalValueFirstMember($firstMember): \TypeError
+    public static function createForOptionalValueFirstMember($firstMember): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
                 'Expected first member to be either a string or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
@@ -76,9 +77,9 @@ final class TypeErrorFactory
         );
     }
 
-    public static function createForOptionalValueSecondMember($secondMember): \TypeError
+    public static function createForOptionalValueSecondMember($secondMember): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
                 'Expected second member to be either null, a string or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
@@ -87,9 +88,9 @@ final class TypeErrorFactory
         );
     }
 
-    public static function createForInvalidParameterKey($parameterKey): \TypeError
+    public static function createForInvalidParameterKey($parameterKey): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
                 'Expected parameter key to be either a string or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
@@ -98,11 +99,11 @@ final class TypeErrorFactory
         );
     }
 
-    public static function createForInvalidDenormalizerType(int $index, $denormalizer): \TypeError
+    public static function createForInvalidDenormalizerType(int $index, $denormalizer): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
-                'Expected denormalizer %d to be a "%s", got "%s" instead.',
+                'Expected denormalizer %d to be a "%s". Got "%s" instead.',
                 $index,
                 ChainableFixtureDenormalizerInterface::class,
                 is_object($denormalizer) ? get_class($denormalizer) : gettype($denormalizer)
@@ -110,29 +111,29 @@ final class TypeErrorFactory
         );
     }
 
-    public static function createForInvalidSpecificationBagMethodCall($methodCall): \TypeError
+    public static function createForInvalidSpecificationBagMethodCall($methodCall): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
-                'Expected method call value to be an array, got "%s" instead.',
+                'Expected method call value to be an array. Got "%s" instead.',
                 gettype($methodCall)
             )
         );
     }
 
-    public static function createForInvalidSpecificationBagMethodCallName($unparsedMethod): \TypeError
+    public static function createForInvalidSpecificationBagMethodCallName($unparsedMethod): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
-                'Expected method name, got "%s" instead.',
+                'Expected method name. Got "%s" instead.',
                 gettype($unparsedMethod)
             )
         );
     }
 
-    public static function createForInvalidFixtureBagParameters($fixturesParameters): \TypeError
+    public static function createForInvalidFixtureBagParameters($fixturesParameters): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
                 'Expected parameters to be an array. Got "%s" instead.',
                 is_object($fixturesParameters) ? get_class($fixturesParameters) : gettype($fixturesParameters)
@@ -140,21 +141,21 @@ final class TypeErrorFactory
         );
     }
 
-    public static function createForInvalidIncludeStatementInData($include, string $file): \TypeError
+    public static function createForInvalidIncludeStatementInData($include, string $file): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
-                'Expected include statement to be either null or an array of files to include. Got %s instead in '
-                .'file "%s".',
+                'Expected include statement to be either null or an array of files to include. Got "%s" instead '
+                .'in file "%s".',
                 gettype($include),
                 $file
             )
         );
     }
 
-    public static function createForInvalidIncludedFilesInData($includeFile, string $file): \TypeError
+    public static function createForInvalidIncludedFilesInData($includeFile, string $file): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
                 'Expected elements of include statement to be file names. Got "%s" instead in file "%s".',
                 gettype($includeFile),
@@ -163,9 +164,9 @@ final class TypeErrorFactory
         );
     }
 
-    public static function createForInvalidFixtureFileReturnedData(string $file): \TypeError
+    public static function createForInvalidFixtureFileReturnedData(string $file): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
                 'The file "%s" must return a PHP array.',
                 $file
@@ -173,14 +174,18 @@ final class TypeErrorFactory
         );
     }
 
-    public static function createForInvalidChainableParameterResolver($resolver): \TypeError
+    public static function createForInvalidChainableParameterResolver($resolver): TypeError
     {
-        return new \TypeError(
+        return new TypeError(
             sprintf(
                 'Expected resolvers to be "%s" objects. Got "%s" instead.',
                 ParameterResolverInterface::class,
                 is_object($resolver)? get_class($resolver) : $resolver
             )
         );
+    }
+
+    private function __construct()
+    {
     }
 }

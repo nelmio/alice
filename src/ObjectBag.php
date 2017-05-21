@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
@@ -22,7 +25,7 @@ use Nelmio\Alice\Throwable\Exception\ObjectNotFoundExceptionFactory;
 /**
  * Value object containing a list of objects.
  */
-final class ObjectBag implements \IteratorAggregate, \Countable
+final class ObjectBag implements IteratorAggregate, Countable
 {
     /**
      * @var ObjectInterface[]
@@ -140,7 +143,7 @@ final class ObjectBag implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->objects);
+        return new ArrayIterator($this->objects);
     }
 
     public function toArray(): array

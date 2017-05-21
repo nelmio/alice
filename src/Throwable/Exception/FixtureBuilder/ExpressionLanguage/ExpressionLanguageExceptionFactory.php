@@ -73,4 +73,8 @@ final class ExpressionLanguageExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

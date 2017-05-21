@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FlagParserExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateNewException()
+    public function testCreateNewException()
     {
         $exception = FlagParserExceptionFactory::createForNoParserFoundForElement('foo');
 
@@ -32,7 +32,7 @@ class FlagParserExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateNewExceptionForUnexpectedCall()
+    public function testCreateNewExceptionForUnexpectedCall()
     {
         $exception = FlagParserExceptionFactory::createForExpectedMethodToBeCalledIfHasAParser('foo');
 

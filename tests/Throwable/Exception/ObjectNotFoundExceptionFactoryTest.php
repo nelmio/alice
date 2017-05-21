@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ObjectNotFoundExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory()
     {
         $exception = ObjectNotFoundExceptionFactory::create('foo', 'Dummy');
 

@@ -71,6 +71,8 @@
             <directory>src</directory>
             <exclude>
                 <directory>src/Bridge</directory>
+
+                <file>src/deep_clone.php</file>
             </exclude>
         </whitelist>
     </filter>

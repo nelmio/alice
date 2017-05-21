@@ -49,4 +49,8 @@ final class ResolverNotFoundExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

@@ -16,7 +16,7 @@ namespace Nelmio\Alice;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
+ * @covers ::\Nelmio\Alice\deep_clone
  */
 class DeepCloneTest extends TestCase
 {

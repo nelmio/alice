@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
-use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
 /**
  * Class storing all the unique values.
@@ -57,10 +56,6 @@ final class UniqueValuesPool
 
         if (is_scalar($val1) || null === $val1) {
             return $val1 === $val2;
-        }
-
-        if (false === is_array($val1)) {
-            throw InvalidArgumentExceptionFactory::createForUnsupportedTypeForIdenticalValuesCheck($val1);
         }
 
         foreach ($val1 as $key => $item) {

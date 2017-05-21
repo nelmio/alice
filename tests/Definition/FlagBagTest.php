@@ -24,6 +24,7 @@ use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\FlagBag
@@ -39,11 +40,11 @@ class FlagBagTest extends TestCase
 
     public function testIsImmutable()
     {
-        $bag = (new FlagBag(''))->withFlag($flag = new MutableFlag('foo', new \stdClass()));
+        $bag = (new FlagBag(''))->withFlag($flag = new MutableFlag('foo', new stdClass()));
         $flag->getObject()->foo = 'bar';
 
         $this->assertEquals(
-            (new FlagBag(''))->withFlag($flag = new MutableFlag('foo', new \stdClass())),
+            (new FlagBag(''))->withFlag($flag = new MutableFlag('foo', new stdClass())),
             $bag
         );
 
@@ -52,7 +53,7 @@ class FlagBagTest extends TestCase
 
     public function testAddingAFlagCreatesANewModifiedInstance()
     {
-        $flag = new MutableFlag('flag0', new \stdClass());
+        $flag = new MutableFlag('flag0', new stdClass());
         $bag1 = new FlagBag('user0');
         $bag2 = $bag1->withFlag($flag);
 
@@ -75,15 +76,43 @@ class FlagBagTest extends TestCase
         }
 
         $this->assertEquals(
-            (new FlagBag('user0'))->withFlag(new MutableFlag('flag0', new \stdClass())),
+            (new FlagBag('user0'))->withFlag(new MutableFlag('flag0', new stdClass())),
+            $bag2
+        );
+    }
+
+    public function testCanCreateANewFlagBagWithADifferentKey()
+    {
+        $bag1 = (new FlagBag('user0'))
+            ->withFlag(
+                new MutableFlag(
+                    'flag0',
+                    new stdClass()
+                )
+            )
+        ;
+        $bag2 = $bag1->withKey('user2');
+
+        $this->assertInstanceOf(FlagBag::class, $bag1);
+        $this->assertNotSame($bag1, $bag2);
+
+        $this->assertCount(1, $bag1);
+        $this->assertCount(1, $bag2);
+
+        $this->assertEquals(
+            (new FlagBag('user0'))->withFlag(new MutableFlag('flag0', new stdClass())),
+            $bag1
+        );
+        $this->assertEquals(
+            (new FlagBag('user2'))->withFlag(new MutableFlag('flag0', new stdClass())),
             $bag2
         );
     }
 
     public function testMergingTwoBagsCreatesANewModifiedInstance()
     {
-        $bag1 = (new FlagBag('bag1'))->withFlag($flag1 = new MutableFlag('flag1', new \stdClass()));
-        $bag2 = (new FlagBag('bag2'))->withFlag($flag2 = new MutableFlag('flag2', new \stdClass()));
+        $bag1 = (new FlagBag('bag1'))->withFlag($flag1 = new MutableFlag('flag1', new stdClass()));
+        $bag2 = (new FlagBag('bag2'))->withFlag($flag2 = new MutableFlag('flag2', new stdClass()));
         $mergedBag = $bag1->mergeWith($bag2);
 
         $this->assertInstanceOf(FlagBag::class, $mergedBag);
@@ -93,13 +122,13 @@ class FlagBagTest extends TestCase
             $bag1
         );
         $this->assertEquals(
-            (new FlagBag('bag2'))->withFlag(new MutableFlag('flag2', new \stdClass())),
+            (new FlagBag('bag2'))->withFlag(new MutableFlag('flag2', new stdClass())),
             $bag2
         );
         $this->assertEquals(
             (new FlagBag('bag1'))
-                ->withFlag(new MutableFlag('flag1', new \stdClass()))
-                ->withFlag(new MutableFlag('flag2', new \stdClass())),
+                ->withFlag(new MutableFlag('flag1', new stdClass()))
+                ->withFlag(new MutableFlag('flag2', new stdClass())),
             $mergedBag
         );
     }
@@ -204,7 +233,7 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testCanCumulateExtendFlags()
+    public function testCanAccumulateExtendFlags()
     {
         $extendFlag1 = new ExtendFlag(new FixtureReference('user_base'));
         $extendFlag2 = new ExtendFlag(new FixtureReference('user_with_owner'));
@@ -223,7 +252,7 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testCannotCumulateOptionalFlags()
+    public function testCannotAccumulateOptionalFlags()
     {
         $optionalFlag1 = new OptionalFlag(20);
         $optionalFlag2 = new OptionalFlag(60);
@@ -241,7 +270,7 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testCannotCumulateTemplateFlags()
+    public function testCannotAccumulateTemplateFlags()
     {
         $templateFlag1 = new TemplateFlag();
         $templateFlag2 = new TemplateFlag();
@@ -259,7 +288,7 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testCannotCumulateUniqueFlags()
+    public function testCannotAccumulateUniqueFlags()
     {
         $uniqueFlag1 = new UniqueFlag();
         $uniqueFlag2 = new UniqueFlag();

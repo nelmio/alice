@@ -27,4 +27,8 @@ final class ObjectGeneratorNotFoundExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

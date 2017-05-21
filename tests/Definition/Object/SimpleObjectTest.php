@@ -90,7 +90,7 @@ class SimpleObjectTest extends TestCase
      * @dataProvider provideInvalidInstances
      *
      * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /^Expected instance argument to be an object, got ".+?" instead\.$/
+     * @expectedExceptionMessageRegExp /^Expected instance argument to be an object. Got ".+?" instead\.$/
      */
     public function testThrowsAnErrorIfInstanceIsNotAnObject($instance)
     {

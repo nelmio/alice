@@ -29,4 +29,8 @@ final class NoValueForCurrentExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

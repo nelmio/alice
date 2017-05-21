@@ -28,4 +28,8 @@ final class ObjectNotFoundExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

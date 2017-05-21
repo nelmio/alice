@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ResolverNotFoundExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateNewExceptionWithFactoryForParameter()
+    public function testCreateNewExceptionWithFactoryForParameter()
     {
         $exception = ResolverNotFoundExceptionFactory::createForParameter('foo');
 
@@ -33,7 +33,7 @@ class ResolverNotFoundExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateNewExceptionWithFactoryForValue()
+    public function testCreateNewExceptionWithFactoryForValue()
     {
         $exception = ResolverNotFoundExceptionFactory::createForValue(new DummyValue('dummy'));
 
@@ -45,7 +45,7 @@ class ResolverNotFoundExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateNewExceptionWithFactoryForUnexpectedCall()
+    public function testCreateNewExceptionWithFactoryForUnexpectedCall()
     {
         $exception = ResolverNotFoundExceptionFactory::createUnexpectedCall('fake');
 

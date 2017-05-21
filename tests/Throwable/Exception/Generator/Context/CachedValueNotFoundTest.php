@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CachedValueNotFoundTest extends TestCase
 {
-    public function testTestCreate()
+    public function testCreate()
     {
         $exception = CachedValueNotFound::create('foo');
 

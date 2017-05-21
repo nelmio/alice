@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\ObjectInterface;
+use Throwable;
 
 /**
  * @private
@@ -25,7 +26,7 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code,
-        \Throwable $previous
+        Throwable $previous
     ): HydrationException {
         return new HydrationException(
             sprintf(
@@ -43,7 +44,7 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code = 0,
-        \Throwable $previous = null
+        Throwable $previous = null
     ): InaccessiblePropertyException {
         return new InaccessiblePropertyException(
             sprintf(
@@ -61,7 +62,7 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code = 0,
-        \Throwable $previous = null
+        Throwable $previous = null
     ): InvalidArgumentException {
         return new InvalidArgumentException(
             sprintf(
@@ -79,7 +80,7 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code = 0,
-        \Throwable $previous = null
+        Throwable $previous = null
     ): NoSuchPropertyException {
         return new NoSuchPropertyException(
             sprintf(
@@ -91,5 +92,9 @@ final class HydrationExceptionFactory
             $code,
             $previous
         );
+    }
+
+    private function __construct()
+    {
     }
 }

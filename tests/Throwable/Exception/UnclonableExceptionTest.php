@@ -25,7 +25,7 @@ class UnclonableExceptionTest extends TestCase
         $this->assertTrue(is_a(UnclonableException::class, \DomainException::class, true));
     }
 
-    public function testTestCreateExceptionForAService()
+    public function testCreateExceptionForAService()
     {
         $exception = UnclonableException::createForService();
 

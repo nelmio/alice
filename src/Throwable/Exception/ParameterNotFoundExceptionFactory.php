@@ -40,4 +40,8 @@ final class ParameterNotFoundExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

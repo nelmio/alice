@@ -179,7 +179,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
     /**
      * @dataProvider provideProperties
      */
-    public function testTestObjectHydrationAgainstMutlipleValues(Property $property)
+    public function testObjectHydrationAgainstMutlipleValues(Property $property)
     {
         $instance = new Dummy();
         $object = new SimpleObject('dummy', $instance);

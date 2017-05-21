@@ -29,4 +29,8 @@ final class CallProcessorExceptionFactory
             )
         );
     }
+
+    private function __construct()
+    {
+    }
 }

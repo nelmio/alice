@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UnresolvableValueExceptionFactoryTest extends TestCase
 {
-    public function testTestCreate()
+    public function testCreate()
     {
         $exception = UnresolvableValueExceptionFactory::create(new DummyValue('dummy'));
 
@@ -45,7 +45,7 @@ class UnresolvableValueExceptionFactoryTest extends TestCase
         $this->assertSame($previous, $exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidReferenceId()
+    public function testCreateForInvalidReferenceId()
     {
         $exception = UnresolvableValueExceptionFactory::createForInvalidReferenceId(new DummyValue('dummy'), 100);
 
@@ -90,7 +90,7 @@ class UnresolvableValueExceptionFactoryTest extends TestCase
         $this->assertSame($previous, $exception->getPrevious());
     }
 
-    public function testTestCreateForCouldNotEvaluateExpression()
+    public function testCreateForCouldNotEvaluateExpression()
     {
         $exception = UnresolvableValueExceptionFactory::createForCouldNotEvaluateExpression(new DummyValue('dummy'));
 
@@ -115,7 +115,7 @@ class UnresolvableValueExceptionFactoryTest extends TestCase
         $this->assertSame($previous, $exception->getPrevious());
     }
 
-    public function testTestCreateForCouldNotFindVariable()
+    public function testCreateForCouldNotFindVariable()
     {
         $exception = UnresolvableValueExceptionFactory::createForCouldNotFindVariable(new DummyValue('dummy'));
 
@@ -140,7 +140,7 @@ class UnresolvableValueExceptionFactoryTest extends TestCase
         $this->assertSame($previous, $exception->getPrevious());
     }
 
-    public function testTestCreateForCouldNotFindParameter()
+    public function testCreateForCouldNotFindParameter()
     {
         $exception = UnresolvableValueExceptionFactory::createForCouldNotFindParameter('foo');
 
@@ -152,7 +152,7 @@ class UnresolvableValueExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidResolvedQuantifierTypeForOptionalValue()
+    public function testCreateForInvalidResolvedQuantifierTypeForOptionalValue()
     {
         $quantifier = new DummyValue('quantifier');
 
@@ -189,7 +189,7 @@ class UnresolvableValueExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForNoFixtureOrObjectMatchingThePattern()
+    public function testCreateForNoFixtureOrObjectMatchingThePattern()
     {
         $exception = UnresolvableValueExceptionFactory::createForNoFixtureOrObjectMatchingThePattern(
             new DummyValue('/foo/')

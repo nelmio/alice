@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class NoSuchPropertyExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateForUnreadablePropertyFromStdClass()
+    public function testCreateForUnreadablePropertyFromStdClass()
     {
         $exception = NoSuchPropertyExceptionFactory::createForUnreadablePropertyFromStdClass('foo');
 

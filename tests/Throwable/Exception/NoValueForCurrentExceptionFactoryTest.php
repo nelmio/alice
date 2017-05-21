@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class NoValueForCurrentExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateException()
+    public function testCreateException()
     {
         $exception = NoValueForCurrentExceptionFactory::create(new DummyFixture('dummy'));
 

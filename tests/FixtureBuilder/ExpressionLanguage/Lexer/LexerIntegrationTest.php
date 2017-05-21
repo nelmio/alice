@@ -42,7 +42,7 @@ class LexerIntegrationTest extends TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testTestCanLexValues(string $value, $expected)
+    public function testCanLexValues(string $value, $expected)
     {
         try {
             $actual = $this->lexer->lex($value);

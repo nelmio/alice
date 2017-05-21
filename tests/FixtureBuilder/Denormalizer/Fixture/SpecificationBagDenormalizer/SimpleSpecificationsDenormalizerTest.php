@@ -421,7 +421,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
     /**
      * @expectedException \TypeError
-     * @expectedExceptionMessage Expected method call value to be an array, got "string" instead.
+     * @expectedExceptionMessage Expected method call value to be an array. Got "string" instead.
      */
     public function testDenormalizeInvalidCalls()
     {
@@ -437,7 +437,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
     /**
      * @expectedException \TypeError
-     * @expectedExceptionMessage Expected method name, got "NULL" instead.
+     * @expectedExceptionMessage Expected method name. Got "NULL" instead.
      */
     public function testDenormalizeCallsWithInvalidMethod()
     {
@@ -453,7 +453,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
     /**
      * @expectedException \TypeError
-     * @expectedExceptionMessage Expected method call value to be an array, got "NULL" instead.
+     * @expectedExceptionMessage Expected method call value to be an array. Got "NULL" instead.
      */
     public function testDenormalizeWithInvalidMethodCalls()
     {

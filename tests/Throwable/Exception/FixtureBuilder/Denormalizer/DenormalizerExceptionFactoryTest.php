@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DenormalizerExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateForUndenormalizableConstructor()
+    public function testCreateForUndenormalizableConstructor()
     {
         $exception = DenormalizerExceptionFactory::createForUndenormalizableConstructor();
         $this->assertEquals(
@@ -31,7 +31,7 @@ class DenormalizerExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForUndenormalizableFactory()
+    public function testCreateForUndenormalizableFactory()
     {
         $exception = DenormalizerExceptionFactory::createForUndenormalizableFactory();
         $this->assertEquals(
@@ -42,7 +42,7 @@ class DenormalizerExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForUnparsableValue()
+    public function testCreateForUnparsableValue()
     {
         $code = 500;
         $previous = new \Error();
@@ -56,7 +56,7 @@ class DenormalizerExceptionFactoryTest extends TestCase
         $this->assertSame($previous, $exception->getPrevious());
     }
 
-    public function testTestCreateDenormalizerNotFoundForFixture()
+    public function testCreateDenormalizerNotFoundForFixture()
     {
         $exception = DenormalizerExceptionFactory::createDenormalizerNotFoundForFixture('foo');
 
@@ -68,7 +68,7 @@ class DenormalizerExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateDenormalizerNotFoundUnexpectedCall()
+    public function testCreateDenormalizerNotFoundUnexpectedCall()
     {
         $exception = DenormalizerExceptionFactory::createDenormalizerNotFoundUnexpectedCall('fake');
 
@@ -80,7 +80,7 @@ class DenormalizerExceptionFactoryTest extends TestCase
         $this->assertNull($exception->getPrevious());
     }
 
-    public function testTestCreateForInvalidScopeForUniqueValue()
+    public function testCreateForInvalidScopeForUniqueValue()
     {
         $exception = DenormalizerExceptionFactory::createForInvalidScopeForUniqueValue();
 

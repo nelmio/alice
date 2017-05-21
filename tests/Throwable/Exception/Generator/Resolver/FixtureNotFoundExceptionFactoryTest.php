@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FixtureNotFoundExceptionFactoryTest extends TestCase
 {
-    public function testTestCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory()
     {
         $exception = FixtureNotFoundExceptionFactory::create('foo');
 
