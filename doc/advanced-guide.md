@@ -26,7 +26,7 @@ attempt is reached.
 
 If you are interested in seeing how huge the impact can be, you can compare
 [the scenario 2 profiling fixtures](../profiling/scenario2/fixtures.yml) with
-[the scenario 3 profiling fixtures](../profiling/scenario2/fixtures.yml) with
+[the scenario 3 profiling fixtures](../profiling/scenario3/fixtures.yml) with
 [Blackfire](https://blackfire.io).
 
 A the moment, alice does not focus on generating huge sets of object either
