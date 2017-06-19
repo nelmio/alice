@@ -102,7 +102,7 @@ will result in:
 
 `'<(X)>'` shortcut for `<identity(X)>`
 
-Returns `X` evaluated as a PHP element, e.g. `2 + $nbr` (provided `$nbr ===`2`) will result in`4`.
+Returns `X` evaluated as a PHP element, e.g. `2 + $nbr` (provided `$nbr === 2`) will result in`4`.
 When using the identity function, you will still have access to:
 
 - The value current (result of `<current()>`) with the variable `$current`
