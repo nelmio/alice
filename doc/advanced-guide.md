@@ -220,7 +220,7 @@ There is obvious limits to this annotation: we cannot use the optional pattern w
 - `{}`, digits and `.` (for lists)
 - `'<X>'` pattern
 
-Escaped expression: `'@@ref'` will return `'@ref'`
+Escaped expression: `'\@ref'` will return `'@ref'`
 
 
 ### Property reference
