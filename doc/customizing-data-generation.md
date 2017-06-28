@@ -1,12 +1,11 @@
 # Customizing Data Generation
 
 1. [Faker Data](#faker-data)
-1. [Localized Fake Data](#localized-fake-data) **TODO: port that change to v2**
+1. [Localized Fake Data](#localized-fake-data)
 1. [Default Providers](#default-providers)
     1. [Identity](#identity)
     1. [Current](#current)
     1. [Cast](#cast)
-1. [Reuse generated data using objects value](#reuse-generated-data-using-objects-value)
 1. [Custom Faker Data Providers](#custom-faker-data-providers)
 
 
