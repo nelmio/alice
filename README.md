@@ -94,7 +94,9 @@ documentation for 2.x, head [here](https://github.com/nelmio/alice/tree/2.x)**.
     1. [Contributing](CONTRIBUTING.md#contributing)
         1. [Testing](CONTRIBUTING.md#testing)
         1. [Profiling](CONTRIBUTING.md#profiling)
+1. [Backward Compatibility Promise (BCP)](backward-compatibility-promise-bcp)
 1. [Upgrade](#upgrade)
+    1. [Breaking changes between Alice 2.x and 3.0](breaking-changes-between-alice-2x-and-30)
 
 Other references:
   - [Tutorial: Using Alice in Symfony](https://knpuniversity.com/screencast/symfony-doctrine/fixtures-alice)
@@ -175,7 +177,7 @@ For more information, refer to [the documentation](#table-of-contents).
 - [knplabs/rad-fixtures-load](https://github.com/KnpLabs/rad-fixtures-load)
 
 
-###  Nette
+### Nette
 
 -  [Zenify/DoctrineFixtures](https://github.com/Zenify/DoctrineFixtures)
 
@@ -193,6 +195,20 @@ For more information, refer to [the documentation](#table-of-contents).
 Check the [contribution guide](CONTRIBUTING.md).
 
 
+## Backward Compatibility Promise (BCP)
+
+The policy is for the major part following the same as [Symfony's one][symfony-bc-policy] with a few changes or
+highlights:
+
+- Code marked with `@private` or `@internal` are excluded from the BCP
+- `Nelmio\Alice\Loader\NativeLoader` is excluded from the BCP: as it is the no DIC solution, registring a new service
+  may require a new method, in which case your code may break if you have already declared that method. To avoid that,
+  please beware of the naming of your methods to avoid any conflicts.
+
+
 ## Upgrade
 
 Check the [upgrade guide](UPGRADE.md).
+
+
+[symfony-bc-policy]: https://symfony.com/doc/current/contributing/code/bc.html
