@@ -1,4 +1,38 @@
-### 3.0.0 (WIP)
+### 3.0.0-rc.1 (2017-06-29)
+
+### Bugfixes
+* Attempts to resolved objects completely whenever possible (#756)
+
+
+### 3.0.0-rc.0 (2017-05-21)
+
+### Features
+* Add a ReflectionPropertyAccessor to access to private and protected properties (#716)
+* Make Faker seed configurable (#726)
+* Add the factory keyword (#729)
+* Add support for immutable functions (#731)
+
+### Bugfixes
+* Fix error on static factory with associative array (#714)
+* Fix a TypeError thrown when objected needed complete generation (#715)
+* Fix array value behaviour (#728)
+
+### Other changes highlight
+* Move `deep_clone` in Alice namespace (#727)
+* Rework callers (#734)
+* Add Makefile script (#737)
+
+
+### 3.0.0-beta.5 (2017-04-11)
+
+### Features
+* Prepare for PHPUnit 6 (#705)
+* Provide compatibility with PHP 7.2 (#706)
+
+
+### Bugfixes
+* Create FixtureNotFoundException for resolver context (#713)
+
 
 ### 3.0.0-beta.4 (2017-03-19)
 
