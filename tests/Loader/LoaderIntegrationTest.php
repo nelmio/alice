@@ -3339,5 +3339,42 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
         ];
+
+        // https://github.com/nelmio/alice/issues/752
+        yield 'calls and factory order' => (function () {
+            return [
+                [
+                    \Nelmio\Alice\Entity\InitializationOrder\Address::class => [
+                        'address' => [
+                            'country' => 'France',
+                            'city' => 'Paris',
+                        ],
+                    ],
+                    \Nelmio\Alice\Entity\InitializationOrder\Person::class => [
+                        'person' => [
+                            '__factory' => [
+                                'createWithAddress' => [
+                                    '@address',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'parameters' => [],
+                    'objects' => [
+                        'address' => $address = (function () {
+                            $address = new \Nelmio\Alice\Entity\InitializationOrder\Address();
+
+                            $address->setCountry('France');
+                            $address->setCity('Paris');
+
+                            return $address;
+                        })(),
+                        'person' => \Nelmio\Alice\Entity\InitializationOrder\Person::createWithAddress($address)
+                    ],
+                ],
+            ];
+        })();
     }
 }

@@ -121,30 +121,6 @@ class FixtureReferenceResolverTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testIfTheReferenceRefersToAnInstantiatedFixtureThatDoesNotRequireToBeCompleteThenReturnsItsInstance()
-    {
-        $value = new FixtureReferenceValue('dummy');
-        $fixture = new FakeFixture();
-        $set = ResolvedFixtureSetFactory::create(
-            null,
-            null,
-            (new ObjectBag())->with(
-                new SimpleObject(
-                    'dummy',
-                    $expectedInstance = new \stdClass())
-            )
-        );
-        $scope = [];
-        $context = new GenerationContext();
-
-        $expected = new ResolvedValueWithFixtureSet($expectedInstance, $set);
-
-        $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
-        $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
-
-        $this->assertEquals($expected, $actual);
-    }
-
     public function testIfTheReferenceRefersToAnInstantiatedFixtureAndRequiresToBeCompleteThenGenerateIt()
     {
         $value = new FixtureReferenceValue('dummy');
@@ -216,6 +192,7 @@ class FixtureReferenceResolverTest extends TestCase
 
         $generatorContext = new GenerationContext();
         $generatorContext->markIsResolvingFixture('dummy');
+        $generatorContext->markAsNeedsCompleteGeneration();
 
         $generatorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
         $generatorProphecy
@@ -239,8 +216,10 @@ class FixtureReferenceResolverTest extends TestCase
         $resolver = new FixtureReferenceResolver($generator);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
+        $generatorContext->unmarkAsNeedsCompleteGeneration();
+
         $this->assertEquals($expected, $actual);
-        $this->assertEquals($context, $generatorContext);
+        $this->assertEquals($generatorContext, $context);
 
         $generatorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
