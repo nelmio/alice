@@ -95,7 +95,7 @@ documentation for 2.x, head [here](https://github.com/nelmio/alice/tree/2.x)**.
         1. [Profiling](CONTRIBUTING.md#profiling)
 1. [Backward Compatibility Promise (BCP)](backward-compatibility-promise-bcp)
 1. [Upgrade](#upgrade)
-    1. [Breaking changes between Alice 2.x and 3.0](breaking-changes-between-alice-2x-and-30)
+    1. [Breaking changes between Alice 2.x and 3.0](UPGRADE.md#breaking-changes-between-alice-2x-and-30)
 
 Other references:
   - [Tutorial: Using Alice in Symfony](https://knpuniversity.com/screencast/symfony-doctrine/fixtures-alice)
