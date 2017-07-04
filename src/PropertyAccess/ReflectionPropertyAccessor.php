@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\PropertyAccess;
 
-use Closure;
 use Nelmio\Alice\IsAServiceTrait;
 use ReflectionClass;
+use ReflectionProperty;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -48,15 +48,9 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
                 throw $exception;
             }
 
-            $setPropertyClosure = Closure::bind(
-                function ($object) use ($propertyPath, $value) {
-                    $object->{$propertyPath} = $value;
-                },
-                $objectOrArray,
-                $objectOrArray
-            );
-
-            $setPropertyClosure($objectOrArray);
+            $reflectionProperty = new ReflectionProperty($this->findClass($objectOrArray, $propertyPath), $propertyPath);
+            $reflectionProperty->setAccessible(true);
+            $reflectionProperty->setValue($objectOrArray, $value);
         }
     }
 
@@ -72,15 +66,8 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
                 throw $exception;
             }
 
-            $getPropertyClosure = Closure::bind(
-                function ($object) use ($propertyPath) {
-                    return $object->{$propertyPath};
-                },
-                $objectOrArray,
-                $objectOrArray
-            );
-
-            return $getPropertyClosure($objectOrArray);
+            $reflectionProperty = new ReflectionProperty($this->findClass($objectOrArray, $propertyPath), $propertyPath);
+            return $reflectionProperty->getValue($propertyPath);
         }
     }
 
@@ -114,9 +101,31 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
 
         $reflectionClass = (new ReflectionClass(get_class($objectOrArray)));
 
-        return (
-            $reflectionClass->hasProperty($propertyPath)
-            && false === $reflectionClass->getProperty($propertyPath)->isStatic()
-        );
+        while ($reflectionClass) {
+            if ($reflectionClass->hasProperty($propertyPath)) {
+                return false === $reflectionClass->getProperty($propertyPath)->isStatic();
+            }
+
+            $reflectionClass = $reflectionClass->getParentClass();
+        }
+
+        return false;
+    }
+
+    /**
+     * Finds which class defines the property.
+     *
+     * @param mixed  $class
+     * @param string $property
+     *
+     * @return string|null
+     */
+    private function findClass($class, $property)
+    {
+        do {
+            if (property_exists($class, $property)) {
+                return $class;
+            }
+        } while ($class = get_parent_class($class));
     }
 }
