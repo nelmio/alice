@@ -103,7 +103,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
 
         while ($reflectionClass) {
             if ($reflectionClass->hasProperty($propertyPath)) {
-                return false === $reflectionClass->getProperty($propertyPath)->isStatic();
+                return true;
             }
 
             $reflectionClass = $reflectionClass->getParentClass();
