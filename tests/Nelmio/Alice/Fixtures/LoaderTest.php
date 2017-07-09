@@ -13,6 +13,7 @@ namespace Nelmio\Alice\Fixtures;
 
 use Nelmio\Alice\support\extensions;
 use Nelmio\Alice\support\extensions\FakerProviderWithRequiredParameter;
+use Nelmio\Alice\support\models\AnotherDummy;
 use Nelmio\Alice\support\models\DummyWithVariadicConstructor;
 use Nelmio\Alice\support\models\Group;
 use Nelmio\Alice\support\models\MagicUser;
@@ -2073,6 +2074,45 @@ class LoaderTest extends TestCase
         $this->assertInstanceOf(self::USER, $user);
         // This feature is not supported in 2.x.
         $this->assertFalse(is_array($user->username));
+    }
+
+    /**
+     * @issue https://github.com/nelmio/alice/issues/765
+     */
+    public function testDuplicateFixturesId()
+    {
+        $res = $this->loadData([
+            \Nelmio\Alice\support\models\Dummy::class => [
+                'dummy_template (template)' => [
+                    'name' => 'Foo',
+                ],
+                'dummy (extends dummy_template)' => [],
+            ],
+            \Nelmio\Alice\support\models\AnotherDummy::class => [
+                'dummy_template (template)' => [
+                    'name' => 'Bar',
+                ],
+                'another_dummy (extends dummy_template)' => [],
+            ],
+        ]);
+
+        $this->assertEquals(
+            [
+                'dummy' => (function () {
+                    $instance = new \Nelmio\Alice\support\models\Dummy();
+                    $instance->name = 'Foo';
+
+                    return $instance;
+                })(),
+                'another_dummy' => (function () {
+                    $instance = new \Nelmio\Alice\support\models\AnotherDummy();
+                    $instance->name = 'Bar';
+
+                    return $instance;
+                })(),
+            ],
+            $res
+        );
     }
 
     /**
