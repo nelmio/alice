@@ -62,6 +62,10 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
             $fqcn = $flags->getKey();
 
             foreach ($rawFixtureSet as $reference => $specs) {
+                if (null === $specs) {
+                    $specs = [];
+                }
+
                 $fixtures = $this->fixtureDenormalizer->denormalize(
                     $fixtures,
                     $fqcn,
