@@ -2096,20 +2096,16 @@ class LoaderTest extends TestCase
             ],
         ]);
 
+        $dummy = new \Nelmio\Alice\support\models\Dummy();
+        $dummy->name = 'Foo';
+
+        $anotherDummy = new \Nelmio\Alice\support\models\AnotherDummy();
+        $anotherDummy->name = 'Bar';
+
         $this->assertEquals(
             [
-                'dummy' => (function () {
-                    $instance = new \Nelmio\Alice\support\models\Dummy();
-                    $instance->name = 'Foo';
-
-                    return $instance;
-                })(),
-                'another_dummy' => (function () {
-                    $instance = new \Nelmio\Alice\support\models\AnotherDummy();
-                    $instance->name = 'Bar';
-
-                    return $instance;
-                })(),
+                'dummy' => $dummy,
+                'another_dummy' => $anotherDummy,
             ],
             $res
         );
