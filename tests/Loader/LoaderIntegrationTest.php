@@ -1829,6 +1829,20 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
+        yield 'empty instance with null' => [
+            [
+                \stdClass::class => [
+                    'dummy' => null,
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy' => new \stdClass(),
+                ],
+            ],
+        ];
+
         yield 'static value' => [
             [
                 \stdClass::class => [
