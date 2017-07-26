@@ -70,7 +70,7 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
                     $fixtures,
                     $fqcn,
                     $reference,
-                    $specs,
+                    $specs ?? [],
                     $flags
                 );
             }
