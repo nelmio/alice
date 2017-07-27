@@ -613,6 +613,29 @@ class LoaderIntegrationTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testEmptyInheritance()
+    {
+        $data = [
+            \stdClass::class => [
+                'dummy_template (template)' => [
+                    'foo' => 'bar',
+                ],
+                'dummy (extends dummy_template)' => null,
+            ],
+        ];
+        $expected = new ObjectSet(
+            new ParameterBag(),
+            new ObjectBag([
+                'dummy' => StdClassFactory::create([
+                    'foo' => 'bar',
+                ]),
+            ])
+        );
+        $actual = $this->loader->loadData($data);
+
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testMultipleInheritanceInTemplates()
     {
         $data = [
