@@ -108,6 +108,46 @@ class FunctionTokenParserTest extends TestCase
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
+    public function testIfFunctionHasArrayArgumentThenTheArgumentWillBeParsedAsArray()
+    {
+        $token = new Token('<foo([arg1, arg2])>', new TokenType(TokenType::FUNCTION_TYPE));
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy->parse('[arg1, arg2]')->willReturn('[arg1, arg2]');
+        /** @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $expected = new FunctionCallValue('foo', ['[arg1, arg2]']);
+
+        $parser = new FunctionTokenParser($decoratedParser);
+        $actual = $parser->parse($token);
+
+        $this->assertEquals($expected, $actual);
+
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testIfFunctionHasMixedArgumentsThenArraysWillBeParsedAsArray()
+    {
+        $token = new Token('<foo([arg1, arg2], arg3, [arg4, arg5])>', new TokenType(TokenType::FUNCTION_TYPE));
+
+        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
+        $decoratedParserProphecy->parse('[arg1, arg2]')->willReturn('[arg1, arg2]');
+        $decoratedParserProphecy->parse('arg3')->willReturn('parsed_arg3');
+        $decoratedParserProphecy->parse('[arg4, arg5]')->willReturn('[arg4, arg5]');
+        /** @var ParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $expected = new FunctionCallValue('foo', ['[arg1, arg2]', 'parsed_arg3', '[arg4, arg5]']);
+
+        $parser = new FunctionTokenParser($decoratedParser);
+        $actual = $parser->parse($token);
+
+        $this->assertEquals($expected, $actual);
+
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(3);
+    }
+
     public function testEachArgumentIsTrimedToNotFalsifyTheParsing()
     {
         $token = new Token('<foo( arg1 , arg2 )>', new TokenType(TokenType::FUNCTION_TYPE));
