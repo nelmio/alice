@@ -408,6 +408,12 @@ class LexerIntegrationTest extends TestCase
                 new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\', "bar"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
+        yield '[Function] nominal with array argument which contains string elements in quotes' => [
+            '<function([\'foo\', "bar"])>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__[\'foo\', "bar"]IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
         yield '[Function] unbalanced with arguments (1)' => [
             '<function($foo, $arg)',
             null,
