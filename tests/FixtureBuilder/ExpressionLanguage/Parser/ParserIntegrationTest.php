@@ -349,6 +349,15 @@ class ParserIntegrationTest extends TestCase
                 ]
             ),
         ];
+        yield '[Function] nominal with array argument which contains string elements in quotes' => [
+            '<function([\'foo\', "bar"])>',
+            new FunctionCallValue(
+                'function',
+                [
+                    ['\'foo\'', '"bar"'],
+                ]
+            ),
+        ];
         yield '[Function] unbalanced with arguments (1)' => [
             '<function($foo, $arg)',
             null,
