@@ -32,7 +32,7 @@ Nelmio\Entity\Group:
 ```
 
 ```php
-<?php>
+<?php
 // Example of PHP file
 
 return [
