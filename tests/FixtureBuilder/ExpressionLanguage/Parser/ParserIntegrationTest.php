@@ -104,6 +104,16 @@ class ParserIntegrationTest extends TestCase
             '"dummy"',
         ];
 
+        yield 'string ending with letter followed by reference character' => [
+            'foo@example.com',
+            'foo@example.com',
+        ];
+
+        yield 'string ending with number followed by reference character' => [
+            'foo55@example.com',
+            'foo55@example.com',
+        ];
+
         // Escaped character
         yield '[Escape character] nominal (1)' => [
             '\\',

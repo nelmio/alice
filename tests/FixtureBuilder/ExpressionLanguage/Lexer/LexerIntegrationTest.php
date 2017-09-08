@@ -107,6 +107,23 @@ class LexerIntegrationTest extends TestCase
             ],
         ];
 
+        yield 'string ending with letter followed by reference character' => [
+            'foo@example.com',
+            [
+                new Token('foo', new TokenType(TokenType::STRING_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('example.com', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        yield 'string ending with number followed by reference character' => [
+            'foo55@example.com',
+            [
+                new Token('foo', new TokenType(TokenType::STRING_TYPE)),
+                new Token('55@example.com', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
         // Escaped character
         yield '[Escape character] nominal (1)' => [
             '\\',
