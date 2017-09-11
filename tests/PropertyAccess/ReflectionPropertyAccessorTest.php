@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\PropertyAccess;
 
+use Nelmio\Alice\Entity\DummyWithInheritedAbstractPrivateProperty;
 use Nelmio\Alice\Entity\DummyWithPrivateProperty;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
@@ -360,5 +361,48 @@ class ReflectionPropertyAccessorTest extends TestCase
         $this->assertEquals($expected, $actual);
 
         $decoratedAccessorProphecy->isReadable(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testSetAbstractPrivateValueOnNoSuchPropertyException()
+    {
+        $object = new DummyWithInheritedAbstractPrivateProperty();
+        $property = 'val';
+        $value = 'bar';
+
+        $expected = new DummyWithInheritedAbstractPrivateProperty('bar');
+
+        $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
+        $decoratedAccessorProphecy
+            ->setValue($object, $property, $value)
+            ->willThrow(NoSuchPropertyException::class)
+        ;
+        /** @var PropertyAccessorInterface $decoratedAccessor */
+        $decoratedAccessor = $decoratedAccessorProphecy->reveal();
+
+        $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
+        $accessor->setValue($object, $property, $value);
+
+        $this->assertEquals($expected, $object);
+    }
+
+    public function testGetAbstractPrivateValueOnNoSuchPropertyException()
+    {
+        $property = 'val';
+        $value = 'foo';
+        $object = new DummyWithInheritedAbstractPrivateProperty($value);
+
+        $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
+        $decoratedAccessorProphecy
+            ->getValue($object, $property)
+            ->willThrow(NoSuchPropertyException::class)
+        ;
+
+        /** @var PropertyAccessorInterface $decoratedAccessor */
+        $decoratedAccessor = $decoratedAccessorProphecy->reveal();
+
+        $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
+        $actual = $accessor->getValue($object, $property);
+
+        $this->assertEquals($value, $actual);
     }
 }
