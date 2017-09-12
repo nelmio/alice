@@ -26,6 +26,16 @@ final class StringTokenParser implements ChainableTokenParserInterface
     use IsAServiceTrait;
 
     /**
+     * @var ArgumentEscaper
+     */
+    private $argumentEscaper;
+
+    public function __construct(ArgumentEscaper $argumentEscaper)
+    {
+        $this->argumentEscaper = $argumentEscaper;
+    }
+
+    /**
      * @inheritdoc
      */
     public function canParse(Token $token): bool
@@ -38,6 +48,6 @@ final class StringTokenParser implements ChainableTokenParserInterface
      */
     public function parse(Token $token)
     {
-        return $token->getValue();
+        return $this->argumentEscaper->unescape($token->getValue());
     }
 }

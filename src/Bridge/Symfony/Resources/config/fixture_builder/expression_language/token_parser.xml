@@ -21,6 +21,8 @@
             <!-- Injected via compiler pass -->
         </service>
 
+        <service id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.argument_escaper"
+                 class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\ArgumentEscaper" />
 
         <!-- Chainables -->
         <service id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.dynamic_array_token_parser"
@@ -80,6 +82,8 @@
 
         <service id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.string_token_parser"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringTokenParser">
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.argument_escaper" />
+
             <tag name="nelmio_alice.fixture_builder.expression_language.chainable_token_parser" />
         </service>
 
@@ -96,7 +100,9 @@
         </service>
 
         <service id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.function_token_parser"
-                 class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FunctionTokenParser" />
+                 class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FunctionTokenParser">
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.argument_escaper" />
+        </service>
 
         <service id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.variable_token_parser"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\VariableTokenParser">

@@ -354,7 +354,7 @@ class ParserIntegrationTest extends TestCase
             new FunctionCallValue(
                 'function',
                 [
-                    ['\'foo\'', '"bar"'],
+                    ['foo', 'bar'],
                 ]
             ),
         ];
@@ -462,9 +462,23 @@ class ParserIntegrationTest extends TestCase
             '<(function($foo, $arg))>',
             IdentityFactory::create('function($foo, $arg)'),
         ];
-        yield '[Function] identity with params' => [
-            '<(function(echo(<{param}>))>',
-            IdentityFactory::create('function(echo(<{param}>)'),
+        // https://github.com/nelmio/alice/issues/773
+        yield '[Function] with tricky string arguments' => [
+            '<dateTimeBetween(\'something,\', \'-12 months\', \'\', \',\', $now, "something,", "-12 months", "", ",")>',
+            new FunctionCallValue(
+                'dateTimeBetween',
+                [
+                    'something,',
+                    '-12 months',
+                    '',
+                    ',',
+                    new VariableValue('now'),
+                    'something,',
+                    '-12 months',
+                    '',
+                    ',',
+                ]
+            ),
         ];
 
         // Arrays

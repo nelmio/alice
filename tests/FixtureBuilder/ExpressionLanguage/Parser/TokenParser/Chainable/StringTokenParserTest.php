@@ -33,14 +33,14 @@ class StringTokenParserTest extends TestCase
      */
     public function testIsNotClonable()
     {
-        clone new StringTokenParser();
+        clone new StringTokenParser(new ArgumentEscaper());
     }
 
     public function testCanParseDynamicArrayTokens()
     {
         $token = new Token('', new TokenType(TokenType::STRING_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
-        $parser = new StringTokenParser();
+        $parser = new StringTokenParser(new ArgumentEscaper());
 
         $this->assertTrue($parser->canParse($token));
         $this->assertFalse($parser->canParse($anotherToken));
@@ -51,7 +51,7 @@ class StringTokenParserTest extends TestCase
         $token = new Token(' foo ', new TokenType(TokenType::STRING_TYPE));
         $expected = ' foo ';
 
-        $parser = new StringTokenParser();
+        $parser = new StringTokenParser(new ArgumentEscaper());
         $actual = $parser->parse($token);
 
         $this->assertEquals($expected, $actual);

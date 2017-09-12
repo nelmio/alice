@@ -65,6 +65,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\StringMergerParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\ArgumentEscaper;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedValueTokenParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureListReferenceTokenParser;
@@ -425,6 +426,8 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
 
     protected function createExpressionLanguageTokenParser(): TokenParserInterface
     {
+        $argumentEscaper = new ArgumentEscaper();
+
         return new TokenParserRegistry([
             new DynamicArrayTokenParser(),
             new EscapedValueTokenParser(),
@@ -432,7 +435,7 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new FixtureMethodReferenceTokenParser(),
             new FixtureRangeReferenceTokenParser(),
             new IdentityTokenParser(
-                new FunctionTokenParser()
+                new FunctionTokenParser($argumentEscaper)
             ),
             new MethodReferenceTokenParser(),
             new OptionalTokenParser(),
@@ -440,10 +443,10 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new PropertyReferenceTokenParser(),
             new SimpleReferenceTokenParser(),
             new StringArrayTokenParser(),
-            new StringTokenParser(),
+            new StringTokenParser($argumentEscaper),
             new TolerantFunctionTokenParser(
                 new IdentityTokenParser(
-                    new FunctionTokenParser()
+                    new FunctionTokenParser($argumentEscaper)
                 )
             ),
             new VariableTokenParser(),

@@ -480,10 +480,11 @@ class LexerIntegrationTest extends TestCase
                 new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction($foo, $arg)IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
-        yield '[Function] identity with params' => [
-            '<(function(echo(<{param}>))>',
+        // https://github.com/nelmio/alice/issues/773
+        yield '[Function] with tricky string arguments' => [
+            '<dateTimeBetween(\'something,\', \'-12 months\', \'\', \',\', $now, "something,", "-12 months", "", ",")>',
             [
-                new Token('<aliceTokenizedFunction(IDENTITY_STARTfunction(echo(<{param}>)IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__dateTimeBetween__\'something,\', \'-12 months\', \'\', \',\', $now, "something,", "-12 months", "", ","IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
 
