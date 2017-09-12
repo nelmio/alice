@@ -1,23 +1,37 @@
+### 3.0.0 (2017-09-12)
+
+#### Features
+
+* Allow a fixture specs to be null (#767)
+
+
+#### Bugfixes
+
+* [DX] Properly handle missing specs (#774)
+* Fixed array function arguments (#775)
+* Fixed string arguments for function calls (#787)
+
+
 ### 3.0.0-rc.1 (2017-06-29)
 
-### Bugfixes
+#### Bugfixes
 * Attempts to resolved objects completely whenever possible (#756)
 
 
 ### 3.0.0-rc.0 (2017-05-21)
 
-### Features
+#### Features
 * Add a ReflectionPropertyAccessor to access to private and protected properties (#716)
 * Make Faker seed configurable (#726)
 * Add the factory keyword (#729)
 * Add support for immutable functions (#731)
 
-### Bugfixes
+#### Bugfixes
 * Fix error on static factory with associative array (#714)
 * Fix a TypeError thrown when objected needed complete generation (#715)
 * Fix array value behaviour (#728)
 
-### Other changes highlight
+#### Other changes highlight
 * Move `deep_clone` in Alice namespace (#727)
 * Rework callers (#734)
 * Add Makefile script (#737)
@@ -25,18 +39,18 @@
 
 ### 3.0.0-beta.5 (2017-04-11)
 
-### Features
+#### Features
 * Prepare for PHPUnit 6 (#705)
 * Provide compatibility with PHP 7.2 (#706)
 
 
-### Bugfixes
+#### Bugfixes
 * Create FixtureNotFoundException for resolver context (#713)
 
 
 ### 3.0.0-beta.4 (2017-03-19)
 
-### Features
+#### Features
 - Implements method callers (#666)
 - Add method call reference resolver (#669)
 - Make NativeLoader non-final and changed its API (#681)
@@ -50,27 +64,27 @@
 
 ### 3.0.0-beta.3 (2016-12-16)
 
-### Features
+#### Features
 - Add a context cache (#656)
 
-### Bugfixes
+#### Bugfixes
 - Fix wildcard resolver cache (#657)
 - Fix usage of dynamic array with functions (#655)
 
 
 ### 3.0.0-beta.2 (2016-12-02)
 
-### Features
+#### Features
 - Add a Faker provider to cast values (#622)
 - Allow to whitelist some PHP native functions (#640)
 
-### Bugfixes
+#### Bugfixes
 - Fix optional flag boundaries (allow extremums `0` and `100`) (#623)
 - Lowered dynamic array quantifier minimal value (allow `0` and `1`) (#624)
 - Fix unique scope for arrays (#634)
 - Fix function which contains numerical characters tokenization (#649)
 
-### Other changes highlight
+#### Other changes highlight
 - Rework blackfire scripts (#633) 
 - Replace the exception thrown for unclonable tests (#637)
 - Symfony Bundle configuration tweaks (#641)
@@ -82,7 +96,7 @@
 - Better handling of references to inexistent fixtures (#592)
 - Automatically escape the `@` character in words (#593)
 
-### Bugfix
+#### Bugfix
 - Move PhpUnitBridge dependency to dev dependencies (#576)
 - Fix support for stdClass classes (#595)
 - Fix complete generation process (#596)
@@ -92,7 +106,7 @@
 - Fix performance issues with Wildcard resolver (#618)
 - Fix usage of `$current` with identity (#619)
 
-### Changes highlight
+#### Changes highlight
 - Harden tests (higher coverage and make them more robust thanks to Humbug) (#571, #590)
 - Simplify mutli-dep management with (#582)
 - Make testing easier (#583, #603)
@@ -114,13 +128,13 @@ More details on the architectural changes can be found
 
 ### 2.3.0 (2017-03-18)
 
-### Features
+#### Features
 
 * Add support for Doctrine Inflector (#548)
 * Add support of embedded couchdb document (couchdb-odm) (#683)
 * Add range named builder (#693)
 
-### Deprecations
+#### Deprecations
 
 * Deprecate the usage of the local flag (#557)
 * Deprecate the usage of date strings (#559)
@@ -132,7 +146,7 @@ More details on the architectural changes can be found
 * Deprecate calling methods (#610)
 * Deprecate array hash uniqueness (#611)
 
-### Bugfixes
+#### Bugfixes
 
 * Remove usage of the deprecated method getMock (#558)
 * Document the change of behaviour of the identity function (#560)
