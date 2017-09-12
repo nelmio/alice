@@ -16,19 +16,48 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 
 /**
  * @internal
  */
-final class FunctionTokenParser extends AbstractChainableParserAwareParser
+final class FunctionTokenParser implements ChainableTokenParserInterface, ParserAwareInterface
 {
+    use IsAServiceTrait;
+
     /** @private */
     const REGEX = '/^<(?<function>.+?)\((?<arguments>.*)\)>$/';
+
+    /**
+     * @var ArgumentEscaper
+     */
+    private $argumentEscaper;
+
+    /**
+     * @var ParserInterface|null
+     */
+    protected $parser;
+
+    public function __construct(ArgumentEscaper $argumentEscaper, ParserInterface $parser = null)
+    {
+        $this->argumentEscaper = $argumentEscaper;
+        $this->parser = $parser;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function withParser(ParserInterface $parser)
+    {
+        return new static($this->argumentEscaper, $parser);
+    }
 
     /**
      * @inheritdoc
@@ -47,15 +76,27 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
      */
     public function parse(Token $token): FunctionCallValue
     {
-        parent::parse($token);
+        if (null === $this->parser) {
+            throw ExpressionLanguageExceptionFactory::createForExpectedMethodCallOnlyIfHasAParser(__METHOD__);
+        }
 
         if (1 !== preg_match(self::REGEX, $token->getValue(), $matches)) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
+        $argumentEscaper = $this->argumentEscaper;
+
         $function = $matches['function'];
         if ('identity' === $function) {
-            $arguments = [new EvaluatedValue($matches['arguments'])];
+            $value = preg_replace_callback(
+                '/__ARG_TOKEN__[\da-z]{32}/',
+                function (array $matches) use ($argumentEscaper): string {
+                    return '\''.$argumentEscaper->unescape($matches[0]).'\'';
+                },
+                $matches['arguments']
+            );
+
+            $arguments = [new EvaluatedValue($value)];
         } elseif ('current' === $function) {
             $arguments = [new ValueForCurrentValue()];
         } else {
@@ -71,13 +112,19 @@ final class FunctionTokenParser extends AbstractChainableParserAwareParser
             return [];
         }
 
+        $argumentEscaper = $this->argumentEscaper;
+
+        $escapedString = preg_replace_callback(
+            '/\'(.*?)\'|"(.*?)"/',
+            function (array $matches) use ($argumentEscaper): string {
+                return $argumentEscaper->escape(end($matches));
+            },
+            $argumentsString
+        );
+
         $arguments = [];
-        preg_match_all('/\[[^[]+\]|[^,\s]+/', $argumentsString, $argumentsList);
+        preg_match_all('/\[[^[]+\]|[^,\s]+/', $escapedString, $argumentsList);
         foreach ($argumentsList[0] as $index => $argument) {
-            $argument = trim($argument);
-            if (is_string($argument) && preg_match('/^\'(.*)\'$|^"(.*)"$/', $argument, $match)) {
-                $argument = array_key_exists(2, $match) ? $match[2] : $match[1];
-            }
             $argument = $parser->parse($argument);
 
             $arguments[$index] = $argument;
