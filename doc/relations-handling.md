@@ -49,9 +49,7 @@ To be able to use this feature, your entities have to match some requirements :
 `@name->property` will call `$name->getProperty()` if ```property``` is not
 public)
 * You can reference private properties [by decorating the property accessor with the `ReflectionPropertyAccessor`](advanced-guide.md#custom-accessor)
-* You can reference entities' ID but you will then have to split fixtures in
-multiple files (this is because objects are persisted at the end of each file
-processing) :
+* You can reference entities' ID :
 
 ```yaml
 # fixture_user.yml
@@ -66,6 +64,9 @@ Nelmio\Entity\Group:
         name: Admins
         owner: '@user1->id'
 ```
+
+**Warning:** If you are using IDs this way, this either means you are setting the IDs when your object is created like
+with UUIDs or you will not have any guarantee the ID is not already used in the database.
 
 If you want to create ten users and ten groups and have each user own one
 group, you can use `<current()>` which is replaced with the current ID of
