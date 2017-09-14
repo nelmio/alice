@@ -60,6 +60,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser;
@@ -415,8 +416,10 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
             new ReferenceEscaperLexer(
                 new GlobalPatternsLexer(
                     new FunctionLexer(
-                        new SubPatternsLexer(
-                            new ReferenceLexer()
+                        new StringThenReferenceLexer(
+                            new SubPatternsLexer(
+                                new ReferenceLexer()
+                            )
                         )
                     )
                 )
