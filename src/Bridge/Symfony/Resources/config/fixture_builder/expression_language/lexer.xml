@@ -35,6 +35,11 @@
 
         <service id="nelmio_alice.fixture_builder.expression_language.lexer.function_lexer"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer">
+            <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.string_then_reference_lexer" />
+        </service>
+
+        <service id="nelmio_alice.fixture_builder.expression_language.lexer.string_then_reference_lexer"
+                 class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer">
             <argument type="service" id="nelmio_alice.fixture_builder.expression_language.lexer.sub_patterns_lexer" />
         </service>
 
