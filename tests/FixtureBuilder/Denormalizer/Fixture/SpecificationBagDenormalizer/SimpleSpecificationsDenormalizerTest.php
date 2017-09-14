@@ -172,6 +172,25 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid property name: 0.
+     */
+    public function testCannotProceedWithInvalidProperty()
+    {
+        $unparsedSpecs = [
+            'foo'
+        ];
+
+        $denormalizer = new SimpleSpecificationsDenormalizer(
+            new FakeConstructorDenormalizer(),
+            new FakePropertyDenormalizer(),
+            new FakeCallsDenormalizer()
+        );
+
+        $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $unparsedSpecs);
+    }
+
+    /**
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot use the fixture property "__construct" and "__factory" together.
      */

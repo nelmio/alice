@@ -62,6 +62,10 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         $calls = new MethodCallBag();
 
         foreach ($unparsedSpecs as $unparsedPropertyName => $value) {
+            if (!is_string($unparsedPropertyName)) {
+                throw new \InvalidArgumentException("Invalid property name: $unparsedPropertyName.");
+            }
+
             if ('__construct' === $unparsedPropertyName) {
                 $constructor = $this->denormalizeConstructor($value, $scope, $parser);
 
