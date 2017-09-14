@@ -26,6 +26,7 @@ $finder = Finder::create()
     ])
     ->exclude([
         __DIR__.'/fixtures/Parser/files/php',
+        __DIR__.'/Bridge/Symfony/Application/cache',
     ])
 ;
 
