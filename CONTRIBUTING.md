@@ -111,7 +111,7 @@ To avoid any conflicts, the framework dependencies used by the bridges are insta
 [bamarni bin composer plugin][3] and [theofidry inheritance composer plugin][4]. As a result, if you want to run the
 tests for Symfony, you must run the tests with `phpunit_symfony.xml.dist` instead of `phpunit.xml.dist`.
 
-To run the tests use `make test`.
+To run the tests use `make test`. Note: You may need to run `composer bin all update` once to install vendor binaries.
 
 The tests should be descriptive and are "testdox friendly" i.e. if you are using the testdox
 option, you will get something like:
