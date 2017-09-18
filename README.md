@@ -39,7 +39,7 @@ documentation for 2.x, head [here](https://github.com/nelmio/alice/tree/2.x)**.
         1. [Method arguments with flags](doc/complete-reference.md#method-arguments-with-flags)
         1. [Method arguments with parameters](doc/complete-reference.md#method-arguments-with-parameters)
     1. [Specifying Constructor Arguments](doc/complete-reference.md#specifying-constructor-arguments)
-    1. [Using a factory / a named constructor](doc/complete-reference.md#using-a-factory)
+    1. [Using a factory / a named constructor](doc/complete-reference.md#using-a-factory--a-named-constructor)
     1. [Optional Data](doc/complete-reference.md#optional-data)
     1. [Handling Unique Constraints](doc/complete-reference.md#handling-unique-constraints)
 1. [Handling Relations](doc/relations-handling.md)

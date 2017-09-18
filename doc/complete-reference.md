@@ -9,7 +9,7 @@
     1. [Method arguments with parameters](#method-arguments-with-parameters)
     1. [Optional method calls](#optional-method-calls)
 1. [Specifying Constructor Arguments](#specifying-constructor-arguments)
-1. [Using a factory / a named constructor](#using-a-factory)
+1. [Using a factory / a named constructor](#using-a-factory--a-named-constructor)
 1. [Optional Data](#optional-data)
 1. [Handling Unique Constraints](#handling-unique-constraints)
 
