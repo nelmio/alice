@@ -4,7 +4,7 @@
 
 <h1 align=center>Alice - Expressive fixtures generator</h1>
 
-[![Package version](http://img.shields.io/packagist/vpre/nelmio/alice.svg?style=flat-square)](https://packagist.org/packages/nelmio/alice)
+[![Package version](https://img.shields.io/packagist/v/nelmio/alice.svg?style=flat-square)](https://packagist.org/packages/nelmio/alice)
 [![Build Status](https://img.shields.io/travis/nelmio/alice.svg?branch=master&style=flat-square)](https://travis-ci.org/nelmio/alice?branch=master)
 [![Slack](https://img.shields.io/badge/slack-%23alice--fixtures-red.svg?style=flat-square)](https://symfony-devs.slack.com/shared_invite/MTYxMjcxMjc0MTc5LTE0OTA3ODE4OTQtYzc4NWVmMzRmZQ)
 [![License](https://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](LICENSE)
@@ -16,8 +16,8 @@ or testing your project. It gives you a few essential tools to make it
 very easy to generate complex data with constraints in a readable and easy
 to edit way, so that everyone on your team can tweak the fixtures if needed.
 
-**Warning: this doc is being updated for alice 3.0. If you want to check the
-documentation for 2.x, head [here](https://github.com/nelmio/alice/tree/2.x)**.
+**Warning: this doc is for alice 3.0. If you want to check the documentation
+for 2.x, head [here](https://github.com/nelmio/alice/tree/2.x)**.
 
 **2.x is in maintenance mode: PRs are accepted, but no active development is done on it by the maintainers any longer.**
 
