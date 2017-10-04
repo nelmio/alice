@@ -129,7 +129,7 @@ Nelmio\Entity\Group:
 ```
 
 Another, which is more interesting, is to define a reference with a wildcard,
-and also tell Alice how many object you want:
+and also tell Alice how many objects you want:
 
 ```yaml
 Nelmio\Entity\User:
