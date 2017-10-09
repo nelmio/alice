@@ -1,6 +1,7 @@
 {
     "require-dev": {
         "humbug/humbug": "^1.0@dev",
+        "padraic/phpunit-accelerator": "dev-master",
         "theofidry/composer-inheritance-plugin": "^1.0"
     },
     "config": {

@@ -33,7 +33,7 @@ ts: vendor-bin/symfony/vendor vendor-bin/covers-validator/vendor
 
 tc:             ## Run the tests with coverage
 tc: vendor/phpunit
-	$(PHPDBG) --exclude-group=integration --coverage-text --coverage-html=dist/coverage
+	$(PHPDBG) --exclude-group=integration --coverage-text --coverage-html=dist/coverage --coverage-clover=dist/clover.xml
 
 tm:             ## Run the tests for mutation testing
 tm: vendor/phpunit vendor-bin/humbug/vendor
@@ -114,3 +114,6 @@ vendor-bin/covers-validator/vendor: vendor-bin/covers-validator/composer.lock
 
 vendor-bin/covers-validator/composer.lock: vendor-bin/covers-validator/composer.json
 	@echo covers-validator composer.lock is not up to date
+
+dist/clover.xml: vendor/phpunit
+	$(MAKE) tc
