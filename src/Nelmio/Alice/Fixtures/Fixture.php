@@ -398,7 +398,7 @@ class Fixture
             @trigger_error(
                 sprintf(
                     'Fixture references 1 character long should be composed of a letter. Found "%s" instead. This is '
-                    .'is deprecated since 2.2.0 and will be removed in 3.0',
+                    .'is deprecated since 2.2.0 and will be removed in Alice 3.0',
                     $name
                 ),
                 E_USER_DEPRECATED
@@ -408,7 +408,7 @@ class Fixture
                 sprintf(
                     'Fixture references should only be composed of letters, digits, periods ("."), underscores ("_") '
                     .' and slashes ("/"). The usage of other characters is deprecated since 2.2.0 and will no longer be'
-                    .'supported in 3.0',
+                    .'supported in Alice 3.0',
                     $name
                 ),
                 E_USER_DEPRECATED

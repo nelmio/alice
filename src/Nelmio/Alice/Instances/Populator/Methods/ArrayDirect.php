@@ -40,7 +40,7 @@ class ArrayDirect implements MethodInterface
     public function set(Fixture $fixture, $object, $property, $value)
     {
         @trigger_error(
-            'Using a method call is deprecated since 2.3.0. This feature is will be removed in 3.0.0 in favour of'
+            'Using a method call is deprecated since 2.3.0. This feature is will be removed in Alice 3.0.0 in favour of'
             .' __calls.',
             E_USER_DEPRECATED
         );

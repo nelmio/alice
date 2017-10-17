@@ -34,7 +34,7 @@ abstract class Base implements MethodInterface
     {
         if (null !== $context && false === $context instanceof Loader) {
             @trigger_error(
-                'Passing context in the parser is deprecated since 2.2.0 and will be removed in 3.0.',
+                'Passing context in the parser is deprecated since 2.2.0 and will be removed in Alice 3.0.',
                 E_USER_DEPRECATED
             );
         }

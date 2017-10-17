@@ -44,7 +44,7 @@ class Direct implements MethodInterface
 
         if (false !== strpos($setter, '_')) {
             @trigger_error(
-                'Using a non PSR-2 compliant setter is deprecated since 2.3.0 and will be removed in 3.0.0.',
+                'Using a non PSR-2 compliant setter is deprecated since 2.3.0 and will be removed in Alice 3.0.0.',
                 E_USER_DEPRECATED
             );
         }
@@ -55,7 +55,7 @@ class Direct implements MethodInterface
             if (false === $refl->isPublic()) {
                 @trigger_error(
                     'Using a private or protected method to set a property is deprecated since 2.3.0 and will be'
-                    .' removed in 3.0.0.',
+                    .' removed in Alice 3.0.0.',
                     E_USER_DEPRECATED
                 );
             }
