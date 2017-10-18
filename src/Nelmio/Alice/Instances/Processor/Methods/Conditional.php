@@ -69,7 +69,7 @@ class Conditional implements MethodInterface
         if ((float) $threshold != (int) $threshold) {
             @trigger_error(
                 'Using floats for optional expressions such as "80%? true : false" is deprecated since 2.3.0 and will '
-                .'throw an exception in 3.0. Only integer values should be used.',
+                .'throw an exception in Alice 3.0. Only integer values should be used.',
                 E_USER_DEPRECATED
             );
         }
@@ -78,7 +78,7 @@ class Conditional implements MethodInterface
             @trigger_error(
                 'The threshold value in optional expressions such as "80%? true : false" should be an interger element'
                 .' of ]0;100[, i.e. the values 0 and 100 should not be used. This is deprecated since 2.3.0 and will'
-                .'throw an exception in 3.0. Only integer values should be used.',
+                .'throw an exception in Alice 3.0. Only integer values should be used.',
                 E_USER_DEPRECATED
             );
         }

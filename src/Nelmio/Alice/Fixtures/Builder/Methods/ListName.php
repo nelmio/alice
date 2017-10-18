@@ -48,7 +48,7 @@ class ListName implements MethodInterface
             @trigger_error(
                 sprintf(
                     'You have a malformed ranged list "%s". Ranged list must follow the mask "user_{alice, bob}". '
-                    .'Constructing malformed ranged list is deprecated since 2.2.0 and will throw an error in 3.0.',
+                    .'Constructing malformed ranged list is deprecated since 2.2.0 and will throw an error in Alice 3.0.',
                     $name
                 ),
                 E_USER_DEPRECATED

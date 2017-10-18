@@ -128,7 +128,7 @@ class Populator
             } elseif (is_array($value)) {
                 $valHash = hash('md4', serialize($value));
                 @trigger_error(
-                    'Uniqueness of an array will translate in unicity of the items instead of the array hash in 3.0.0.',
+                    'Uniqueness of an array will translate in unicity of the items instead of the array hash in Alice 3.0.0.',
                     E_USER_DEPRECATED
                 );
             } else {

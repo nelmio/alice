@@ -31,7 +31,7 @@ class Property implements MethodInterface
         $refl = new \ReflectionProperty($this->findClass($object, $property), $property);
         if (false === $refl->isPublic()) {
             @trigger_error(
-                'Setting a private or protected directly is deprecated since 2.3.0 and will be removed in 3.0.0.',
+                'Setting a private or protected directly is deprecated since 2.3.0 and will be removed in Alice 3.0.0.',
                 E_USER_DEPRECATED
             );
 

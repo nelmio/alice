@@ -62,7 +62,7 @@ class ReflectionWithConstructor implements MethodInterface
             if (false === $constructorRefl->isPublic()) {
                 @trigger_error(
                     'Using a private or protected constructor is deprecated since 2.3.0 and will be removed in '
-                    .'3.0.0.',
+                    .'Alice 3.0.0.',
                     E_USER_DEPRECATED
                 );
             }

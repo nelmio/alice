@@ -78,7 +78,7 @@ class TypeHintChecker
     private function createDate($value, \ReflectionMethod $reflectionMethod, $method)
     {
         @trigger_error(
-            'Casting a string date into a DateTime object is deprecated since 2.3.0 and will be removed in 3.0. Create'
+            'Casting a string date into a DateTime object is deprecated since 2.3.0 and will be removed in Alice 3.0. Create'
             .'a DateTime object directly by using the identity function like "<(new \DateTime(\'2012-01-05\'))>" '
             .'instead.',
             E_USER_DEPRECATED
