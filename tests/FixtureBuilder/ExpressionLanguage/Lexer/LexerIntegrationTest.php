@@ -46,6 +46,7 @@ class LexerIntegrationTest extends TestCase
     {
         try {
             $actual = $this->lexer->lex($value);
+
             if (null === $expected) {
                 $this->fail(
                     sprintf(

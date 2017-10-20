@@ -26,9 +26,11 @@ class RemoveConflictingParametersParameterBagResolverTest extends TestCase
 {
     public function testIsAParameterBagResolver()
     {
-        $this->assertTrue(is_a(RemoveConflictingParametersParameterBagResolver::class,
+        $this->assertTrue(is_a(
+            RemoveConflictingParametersParameterBagResolver::class,
             ParameterBagResolverInterface::class,
-            true));
+            true
+        ));
     }
 
     /**

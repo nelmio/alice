@@ -15,14 +15,16 @@ namespace Nelmio\Alice;
 
 use DeepCopy\DeepCopy;
 
-/**
- * Deep clone the given value.
- *
- * @param mixed $value
- *
- * @return mixed
- */
-function deep_clone($value)
-{
-    return (new DeepCopy())->copy($value);
+if (false === function_exists('Nelmio\Alice\deep_clone')) {
+    /**
+     * Deep clone the given value.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    function deep_clone($value)
+    {
+        return (new DeepCopy())->copy($value);
+    }
 }

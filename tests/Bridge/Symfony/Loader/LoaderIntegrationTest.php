@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\Loader;
 
+use Nelmio\Alice\Loader\LoaderIntegrationTest as CoreLoaderIntegrationTest;
 use Nelmio\Alice\Loader\NonIsolatedSymfonyLoader;
 use Nelmio\Alice\Symfony\KernelFactory;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -21,7 +22,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  * @group integration
  * @coversNothing
  */
-class LoaderIntegrationTest extends \Nelmio\Alice\Loader\LoaderIntegrationTest
+class LoaderIntegrationTest extends CoreLoaderIntegrationTest
 {
     /**
      * @var KernelInterface

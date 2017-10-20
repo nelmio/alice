@@ -22,21 +22,21 @@ test:           ## Run all the tests
 test: tu ts
 
 tu:             ## Run the tests for the core library
-tu: vendor vendor-bin/covers-validator/vendor
+tu: vendor/phpunit vendor-bin/covers-validator/vendor
 	$(COVERS_VALIDATOR)
 	$(PHPUNIT)
 
 ts:             ## Run the tests for the Symfony Bridge
-ts: vendor
+ts: vendor-bin/symfony/vendor vendor-bin/covers-validator/vendor
 	$(COVERS_VALIDATOR) -c phpunit_symfony.xml.dist
 	$(PHPUNIT_SYMFONY) -c phpunit_symfony.xml.dist
 
 tc:             ## Run the tests with coverage
-tc: dist/coverage
-	$(PHPDBG) --exclude-group=integration --coverage-text --coverage-html=dist/coverage
+tc: vendor/phpunit
+	$(PHPDBG) --exclude-group=integration --coverage-text --coverage-html=dist/coverage --coverage-clover=dist/clover.xml
 
 tm:             ## Run the tests for mutation testing
-tm: vendor vendor-bin/humbug/vendor
+tm: vendor/phpunit vendor-bin/humbug/vendor
 	$(HUMBUG)
 
 tp:             ## Run Blackfire performance tests
@@ -54,7 +54,7 @@ tp: vendor vendor-bin/profiling/vendor
 
 phpstan:        ## Run PHPStan analysis
 phpstan: vendor-bin/phpstan/vendor
-	$(PHPSTAN) analyze -c phpstan.neon -l4 src fixtures tests
+	$(PHPSTAN) analyze -c phpstan.neon -l4 src tests
 
 
 ##
@@ -62,7 +62,7 @@ phpstan: vendor-bin/phpstan/vendor
 ##---------------------------------------------------------------------------
 
 cs:             ## Run the CS Fixer
-cs:	.php_cs.cache vendor-bin/php-cs-fixer/vendor
+cs:	vendor-bin/php-cs-fixer/vendor
 	$(PHP_CS_FIXER) fix
 
 
@@ -70,11 +70,14 @@ cs:	.php_cs.cache vendor-bin/php-cs-fixer/vendor
 ## Rules from files
 ##---------------------------------------------------------------------------
 
+composer.lock: composer.json
+	@echo compose.lock is not up to date.
+
 vendor: composer.lock
 	composer install
 
-composer.lock: composer.json
-	@echo compose.lock is not up to date.
+vendor/phpunit: composer.lock
+	composer install
 
 vendor-bin/symfony/vendor: vendor-bin/symfony/composer.lock
 	composer bin symfony install
@@ -111,3 +114,6 @@ vendor-bin/covers-validator/vendor: vendor-bin/covers-validator/composer.lock
 
 vendor-bin/covers-validator/composer.lock: vendor-bin/covers-validator/composer.json
 	@echo covers-validator composer.lock is not up to date
+
+dist/clover.xml: vendor/phpunit
+	$(MAKE) tc

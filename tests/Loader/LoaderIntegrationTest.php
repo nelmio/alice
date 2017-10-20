@@ -225,11 +225,14 @@ class LoaderIntegrationTest extends TestCase
     {
         try {
             $set = $this->loader->loadData($data);
+
             if (null === $expected) {
                 $this->fail('Expected exception to be thrown.');
             }
         } catch (GenerationThrowable $exception) {
             if (null === $expected) {
+                $this->assertTrue(true);
+
                 return;
             }
 
