@@ -45,6 +45,7 @@ Nelmio\Entity\Group:
 This works fine, but it is not very powerful and is completely static. You
 still have to do most of the work. Let's see how to make this more interesting.
 
+
 ### PHP
 
 You can also specify fixtures in PHP by returing an array where each key with
@@ -68,6 +69,7 @@ return [
 ```
 
 
+
 ## Fixture Ranges
 
 The first step is to let Alice create many copies of an object for you
@@ -88,6 +90,9 @@ Nelmio\Entity\User:
 Now it will generate ten users, with IDs `user1` to `user10`. Pretty good but
 we only have 10 bobs with the same name, username and email, which is not
 so fancy yet.
+
+
+## Fixture Lists
 
 You can also specify a list of values instead of a range:
 
