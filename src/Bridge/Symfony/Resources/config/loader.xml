@@ -13,7 +13,7 @@
 
     <services>
 
-        <service id="nelmio_alice.data_loader"
+        <service id="nelmio_alice.data_loader" public="true"
                  alias="nelmio_alice.data_loader.simple" />
 
         <service id="nelmio_alice.data_loader.simple"
@@ -22,7 +22,7 @@
             <argument type="service" id="nelmio_alice.generator" />
         </service>
 
-        <service id="nelmio_alice.file_loader"
+        <service id="nelmio_alice.file_loader" public="true"
                  alias="nelmio_alice.file_loader.simple" />
 
         <service id="nelmio_alice.file_loader.simple"
