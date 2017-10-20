@@ -54,7 +54,7 @@ tp: vendor vendor-bin/profiling/vendor
 
 phpstan:        ## Run PHPStan analysis
 phpstan: vendor-bin/phpstan/vendor
-	$(PHPSTAN) analyze -c phpstan.neon -l4 src fixtures tests
+	$(PHPSTAN) analyze -c phpstan.neon -l4 src tests
 
 
 ##
