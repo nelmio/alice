@@ -1,3 +1,14 @@
+### 3.0.1 (2017-09-14)
+
+### Bugfixes
+
+* Combine string token followed by reference (#783)
+
+### Other changes highlight
+
+* Fix the MakeFile (#790)
+
+
 ### 3.0.0 (2017-09-12)
 
 ### Features
@@ -142,6 +153,26 @@ Rewrite of the API to make it more extensible and more robust
 Change in the architecture to address some limitations found in 2.x
 More details on the architectural changes can be found
 [here](https://github.com/nelmio/alice/blob/master/CONTRIBUTING.md#architecture).
+
+
+### 2.3.2 (2017-10-20)
+
+### Misc
+
+* Add tests to pin the behaviour in case of duplicate fixtures (#766)
+* Add vendor name in trigger error deprecation notices (#807)
+* Remove useless extra option (#817)
+* Make invalid scenarios as passing tests instead of skipped ones (#814)
+* Added tests to ensure setting a private/protected property is deprecated (#816)
+
+
+### 2.3.1 (2017-04-14)
+
+### Bugfixes
+
+* Prepare for PHPUnit 6 (#707)
+* Prepare for PHP 7.2 (#708)
+* Fixed required dependencies (#707)
 
 
 ### 2.3.0 (2017-03-18)
