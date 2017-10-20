@@ -1,6 +1,24 @@
 ### 3.0.0 (2017-09-12)
 
-#### Features
+### Features
+
+* Add support for Doctrine Inflector (#548)
+* Add support of embedded couchdb document (couchdb-odm) (#683)
+* Add range named builder (#693)
+
+### Deprecations
+
+* Deprecate the usage of the local flag (#557)
+* Deprecate the usage of date strings (#559)
+* Deprecate optional values with floats (#564)
+* Deprecate references in quotes (#566)
+* Deprecate setting private or protected props directly (#607)
+* Deprecate usage of non PSR-1 compliant setters (#608)
+* Deprecate usage of inaccessible constructors (#609)
+* Deprecate calling methods (#610)
+* Deprecate array hash uniqueness (#611)
+
+### Bugfixes
 
 * Allow a fixture specs to be null (#767)
 
