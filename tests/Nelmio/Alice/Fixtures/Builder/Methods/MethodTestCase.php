@@ -88,6 +88,6 @@ abstract class MethodTestCase extends TestCase
 
     public function markAsInvalidCase()
     {
-        $this->markTestSkipped('Invalid scenario.');
+        $this->assertTrue(true, 'Invalid scenario.');
     }
 }
