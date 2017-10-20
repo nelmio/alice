@@ -1,8 +1,0 @@
-Nelmio\Alice\support\models\User:
-    user_{alice, bob, myra}:
-        uuid: <current()>
-        username: <username()>
-        fullname: <firstName()> <lastName()>
-        birthDate: '80%? <date> : 0000-00-00'
-        email: <email()>
-        favoriteNumber: 40%? <numberBetween(1, 99)>

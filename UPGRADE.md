@@ -8,7 +8,7 @@ API wise, but only a few changes user-land. The reasons for those changes are:
 - Introduce a proper fixture lifecycle (building, instantiation,
   hydration and configuration step)
 - Introduce a proper Lexer
-- Make it easier to extence the library
+- Make it easier to extend the library
 
 The aim of those changes are to make Alice more robust, performant and
 extensible. The technical debt and a lot of weird edge cases were extremely hard

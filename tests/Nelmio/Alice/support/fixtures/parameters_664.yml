@@ -1,8 +1,0 @@
-parameters:
-    unique_id: '<(uniqid())>'
-
-Nelmio\Alice\support\models\User:
-    dummy:
-        username: '<{unique_id}>'
-    another_dummy:
-        username: '<{unique_id}>'
