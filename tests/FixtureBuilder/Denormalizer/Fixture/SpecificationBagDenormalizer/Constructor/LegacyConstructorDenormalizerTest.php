@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\LegacyConstructorDenormalizer
+ * @group legacy
  */
 class LegacyConstructorDenormalizerTest extends TestCase
 {
