@@ -283,6 +283,25 @@ class LoaderTest extends TestCase
         $this->assertEquals('group', $group->getSortName());
     }
 
+    /**
+     * @group legacy
+     */
+    public function testLoadAssignsDataToDirectlyWithReflection()
+    {
+        $res = $this->loadData([
+            Group::class => [
+                'a' => [
+                    'foo' => 'bar',
+                ],
+            ],
+        ]);
+        /** @var Group $group */
+        $group = $res['a'];
+
+        $this->assertEquals('bar', $group->getFoo());
+    }
+
+
     public function testSnakeCaseProperty()
     {
         $res = $this->loadData([

@@ -13,6 +13,7 @@ class Group
     private $supportEmails = [];
     public $contactPerson;
     public $contactPersonName;
+    private $foo;
 
     public function getName()
     {
@@ -82,5 +83,10 @@ class Group
     public function getSupportEmails()
     {
         return $this->supportEmails;
+    }
+
+    public function getFoo()
+    {
+        return $this->foo;
     }
 }
