@@ -132,7 +132,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
     /**
      * @group legacy
-     * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in 4.0.0. Use "__factory" instead.
+     * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      */
     public function testUsingAFactoryWithConstructIsDeprecated()
     {
