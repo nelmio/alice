@@ -6,5 +6,6 @@
 /vendor/
 /vendor-bin/*/bin/
 /vendor-bin/*/vendor/
+/vendor-bin/*/composer.lock
 /humbuglog.json
 /humbuglog.txt
