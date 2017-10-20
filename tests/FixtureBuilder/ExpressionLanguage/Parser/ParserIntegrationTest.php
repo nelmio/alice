@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
 use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
@@ -55,6 +56,7 @@ class ParserIntegrationTest extends TestCase
     {
         try {
             $actual = $this->parser->parse($value);
+
             if (null === $expected) {
                 $this->fail(
                     sprintf(
@@ -64,7 +66,7 @@ class ParserIntegrationTest extends TestCase
                     )
                 );
             }
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             if (null === $expected) {
                 return;
             }
