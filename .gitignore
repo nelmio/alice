@@ -4,6 +4,7 @@
 /dist/
 /fixtures/Bridge/Symfony/Application/cache/
 /vendor/
+/vendor-bin/*/bin/
 /vendor-bin/*/vendor/
 /humbuglog.json
 /humbuglog.txt
