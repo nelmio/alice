@@ -133,7 +133,8 @@ class FixtureReferenceResolverTest extends TestCase
             (new ObjectBag())->with(
                 new SimpleObject(
                     'dummy',
-                    $expectedInstance = new \stdClass())
+                    $expectedInstance = new \stdClass()
+                )
             )
         );
         $scope = [];

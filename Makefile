@@ -62,7 +62,7 @@ phpstan: vendor-bin/phpstan/vendor
 ##---------------------------------------------------------------------------
 
 cs:             ## Run the CS Fixer
-cs:	.php_cs.cache vendor-bin/php-cs-fixer/vendor
+cs:	vendor-bin/php-cs-fixer/vendor
 	$(PHP_CS_FIXER) fix
 
 

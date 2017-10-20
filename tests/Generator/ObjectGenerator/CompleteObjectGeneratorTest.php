@@ -143,8 +143,8 @@ class CompleteObjectGeneratorTest extends TestCase
                         )
                     )
                 ;
-                /** @var ObjectGeneratorInterface $decoratedGenerator */
-                $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+            /** @var ObjectGeneratorInterface $decoratedGenerator */
+            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
             $expected = (new ObjectBag())->with(
                     new CompleteObject(
@@ -184,8 +184,8 @@ class CompleteObjectGeneratorTest extends TestCase
                         )
                     )
                 ;
-                /** @var ObjectGeneratorInterface $decoratedGenerator */
-                $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+            /** @var ObjectGeneratorInterface $decoratedGenerator */
+            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
             $expected = (new ObjectBag())->with(
                     new CompleteObject(
@@ -223,8 +223,8 @@ class CompleteObjectGeneratorTest extends TestCase
                         )
                     )
                 ;
-                /** @var ObjectGeneratorInterface $decoratedGenerator */
-                $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+            /** @var ObjectGeneratorInterface $decoratedGenerator */
+            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
             $expected = (new ObjectBag())->with(
                     new CompleteObject(
@@ -258,8 +258,8 @@ class CompleteObjectGeneratorTest extends TestCase
                         )
                     )
                 ;
-                /** @var ObjectGeneratorInterface $decoratedGenerator */
-                $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+            /** @var ObjectGeneratorInterface $decoratedGenerator */
+            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
             $expected = (new ObjectBag())->with(
                     new CompleteObject(
@@ -296,8 +296,8 @@ class CompleteObjectGeneratorTest extends TestCase
                         )
                     )
                 ;
-                /** @var ObjectGeneratorInterface $decoratedGenerator */
-                $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+            /** @var ObjectGeneratorInterface $decoratedGenerator */
+            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
             return [
                     $fixture,

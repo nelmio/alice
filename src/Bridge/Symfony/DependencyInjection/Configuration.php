@@ -57,7 +57,8 @@ final class Configuration implements ConfigurationInterface
                     ->prototype('scalar')
                     ->end()
                     ->defaultValue(['current'])
-                    ->info('Some PHP native functions may conflict with Faker formatters. By default, PHP native '
+                    ->info(
+                        'Some PHP native functions may conflict with Faker formatters. By default, PHP native '
                         .'functions are used over Faker formatters. If you want to change that, simply blacklist the '
                         .'PHP function.'
                     )
@@ -77,7 +78,8 @@ final class Configuration implements ConfigurationInterface
                 ->end()
                 ->integerNode('loading_limit')
                     ->defaultValue(5)
-                    ->info('Alice may do some recursion to resolve certain values. This parameter defines a limit which '
+                    ->info(
+                        'Alice may do some recursion to resolve certain values. This parameter defines a limit which '
                         .'will stop the resolution once reached.'
                     )
                     ->validate()
