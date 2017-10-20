@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\LegacyConstructorDenormalizer
  */
-class LegacyConstructorDenormalizerTest extends TestCase
+class LLegacyConstructorDenormalizerTest extends TestCase
 {
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
