@@ -35,10 +35,5 @@
     },
     "autoload-dev": {
         "psr-4": { "Nelmio\\Alice\\": "tests/Nelmio/Alice" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.0.x-dev"
-        }
     }
 }
