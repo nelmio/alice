@@ -35,3 +35,30 @@ Alice 2.x.
 Alice 2.x is no longer supported. Some bug fixes or improvements may still be
 done depending of the case, but no Alice maintainer will actively work on it
 (PR may still be welcomed though).
+
+## User-land changes
+
+- `addXxx()` methods are no longer supported, you need to define a setter for the collection.
+
+    ```php
+    class Recipe
+    {
+        // no longer supported
+        public function addServing(Serving $serving)
+        {
+            // …
+        }
+        
+        // the setter must be defined
+        public function setServings(iterable $servings)
+        {
+            // …
+        }
+    }
+    ```
+    
+    This change is mostly the result of moving from a custom property accessor to the
+    [Symfony Property Access Component](https://symfony.com/doc/current/components/property_access.html)
+    which does not support this.
+    
+    [See the original discussion](https://github.com/nelmio/alice/issues/654)
