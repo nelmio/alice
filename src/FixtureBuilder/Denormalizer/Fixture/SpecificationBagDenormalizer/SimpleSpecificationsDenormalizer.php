@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\MethodCallInterface;
@@ -62,6 +63,15 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         $calls = new MethodCallBag();
 
         foreach ($unparsedSpecs as $unparsedPropertyName => $value) {
+            if (false === is_string($unparsedPropertyName)) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Invalid property name: %s.',
+                        $unparsedPropertyName
+                    )
+                );
+            }
+
             if ('__construct' === $unparsedPropertyName) {
                 $constructor = $this->denormalizeConstructor($value, $scope, $parser);
 
