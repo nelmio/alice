@@ -604,7 +604,7 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
      */
     protected function getSeed()
     {
-        return null;
+        return 1;
     }
 
     public function __call(string $method, array $arguments)
