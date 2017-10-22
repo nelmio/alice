@@ -57,4 +57,8 @@ done depending of the case, but no Alice maintainer will actively work on it
     }
     ```
     
-    See: https://github.com/nelmio/alice/issues/654
+    This change is mostly the result of moving from a custom property accessor to the
+    [Symfony Property Access Component](https://symfony.com/doc/current/components/property_access.html)
+    which does not support this.
+    
+    [See the original discussion](https://github.com/nelmio/alice/issues/654)
