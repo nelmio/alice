@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
-use Nelmio\Alice\FileLocator\FakeFileLocator;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;

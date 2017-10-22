@@ -22,11 +22,22 @@
             <argument type="service" id="nelmio_alice.generator" />
         </service>
 
+
         <service id="nelmio_alice.file_loader" public="true"
                  alias="nelmio_alice.file_loader.simple" />
 
         <service id="nelmio_alice.file_loader.simple"
                  class="Nelmio\Alice\Loader\SimpleFileLoader">
+            <argument type="service" id="nelmio_alice.file_parser" />
+            <argument type="service" id="nelmio_alice.data_loader" />
+        </service>
+
+
+        <service id="nelmio_alice.files_loader" public="true"
+                 alias="nelmio_alice.files_loader.simple" />
+
+        <service id="nelmio_alice.files_loader.simple"
+                 class="Nelmio\Alice\Loader\SimpleFilesLoader">
             <argument type="service" id="nelmio_alice.file_parser" />
             <argument type="service" id="nelmio_alice.data_loader" />
         </service>

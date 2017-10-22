@@ -14,10 +14,8 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
-use Nelmio\Alice\FixtureBuilder\FakeFixtureBuilder;
 use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\FixtureSetFactory;
-use Nelmio\Alice\Generator\FakeGenerator;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\ObjectSetFactory;
 use PHPUnit\Framework\TestCase;

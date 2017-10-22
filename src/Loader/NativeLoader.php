@@ -19,6 +19,7 @@ use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
+use Nelmio\Alice\FilesLoaderInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizerWithTemporaryFixture;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer;
@@ -171,6 +172,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  *
  * @method DataLoaderInterface getDataLoader()
  * @method FileLoaderInterface getFileLoader()
+ * @method FilesLoaderInterface getFilesLoader()
  * @method FixtureBuilderInterface getFixtureBuilder()
  * @method GeneratorInterface getGenerator()
  * @method ParserInterface getParser()
@@ -198,7 +200,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  * @method CallerInterface getCaller()
  * @method CallProcessorInterface getCallProcessor()
  */
-class NativeLoader implements FileLoaderInterface, DataLoaderInterface
+class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoaderInterface
 {
     use IsAServiceTrait;
 
@@ -220,6 +222,11 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     private $fileLoader;
 
     /**
+     * @var FilesLoaderInterface
+     */
+    private $filesLoader;
+
+    /**
      * @var DataLoaderInterface
      */
     private $dataLoader;
@@ -229,6 +236,15 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
         $this->fakerGenerator = (null === $fakerGenerator) ? $this->getFakerGenerator() : $fakerGenerator;
         $this->dataLoader = $this->getDataLoader();
         $this->fileLoader = $this->getFileLoader();
+        $this->filesLoader = $this->getFilesLoader();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
+    {
+        return $this->filesLoader->loadFiles($files, $parameters, $objects);
     }
 
     /**
@@ -258,6 +274,14 @@ class NativeLoader implements FileLoaderInterface, DataLoaderInterface
     protected function createFileLoader(): FileLoaderInterface
     {
         return new SimpleFileLoader(
+            $this->getParser(),
+            $this->dataLoader
+        );
+    }
+
+    protected function createFilesLoader(): FilesLoaderInterface
+    {
+        return new SimpleFilesLoader(
             $this->getParser(),
             $this->dataLoader
         );

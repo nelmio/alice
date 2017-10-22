@@ -63,6 +63,7 @@ phpstan: vendor-bin/phpstan/vendor
 
 cs:             ## Run the CS Fixer
 cs:	vendor-bin/php-cs-fixer/vendor
+	rm -rf fixtures/Bridge/Symfony/Application/cache/*
 	$(PHP_CS_FIXER) fix
 
 

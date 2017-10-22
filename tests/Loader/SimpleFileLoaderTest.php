@@ -16,7 +16,6 @@ namespace Nelmio\Alice\Loader;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\ObjectSetFactory;
-use Nelmio\Alice\Parser\FakeParser;
 use Nelmio\Alice\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;

@@ -15,13 +15,14 @@ namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\FileLoaderInterface;
+use Nelmio\Alice\FilesLoaderInterface;
 use Nelmio\Alice\ObjectSet;
 
 /**
  * Make use of NativeLoader for easy usage but ensure than no state is kept between each usage, perfect for isolated
  * tests.
  */
-class IsolatedLoader implements FileLoaderInterface, DataLoaderInterface
+class IsolatedLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoaderInterface
 {
     /**
      * @inheritdoc
@@ -29,6 +30,14 @@ class IsolatedLoader implements FileLoaderInterface, DataLoaderInterface
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
         return (new NativeLoader())->loadData($data, $parameters, $objects);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
+    {
+        return (new NativeLoader())->loadFiles($files, $parameters, $objects);
     }
 
     /**
