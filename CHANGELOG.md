@@ -1,3 +1,23 @@
+### 3.1.0 (2017-10-22)
+
+### Features
+
+* Add new multifile loader (#821)
+
+### Bugfixes
+
+* Make loaders aliases public (#813)
+* Fix PHPUnit Bridge deprecation (#818)
+* Update unclonable trait (#820)
+
+### Other changes highlight
+
+* Add Project name in trigger error deprecation notices (#810)
+* Makefile tweaks & Update deps (#804)
+* Fix PHPUnit Bridge deprecation (#818)
+* Mention about `addXxx()` methods in upgrade path (#791)
+
+
 ### 3.0.1 (2017-09-14)
 
 ### Bugfixes
