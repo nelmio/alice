@@ -26,6 +26,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException;
 use Nelmio\Alice\Throwable\Exception\Symfony\PropertyAccess\RootException as GenericPropertyAccessException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -59,12 +60,9 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
         $this->assertTrue(is_a(SymfonyPropertyAccessorHydrator::class, PropertyHydratorInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone $this->hydrator;
+        $this->assertFalse((new ReflectionClass(SymfonyPropertyAccessorHydrator::class))->isCloneable());
     }
 
     public function testReturnsHydratedObject()

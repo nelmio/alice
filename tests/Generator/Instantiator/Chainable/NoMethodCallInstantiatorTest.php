@@ -23,6 +23,7 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NoMethodCallInstantiator
@@ -47,12 +48,9 @@ class NoMethodCallInstantiatorTest extends TestCase
         $this->assertTrue(is_a(NoMethodCallInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone $this->instantiator;
+        $this->assertFalse((new ReflectionClass(NoMethodCallInstantiator::class))->isCloneable());
     }
 
     public function testCanInstantiateFixtureWithNoMethodCallConstructor()

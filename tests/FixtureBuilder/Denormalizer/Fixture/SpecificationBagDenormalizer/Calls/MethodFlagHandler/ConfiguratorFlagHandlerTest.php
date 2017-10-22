@@ -18,18 +18,16 @@ use Nelmio\Alice\Definition\Flag\ConfiguratorFlag;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\ConfiguratorFlagHandler
  */
 class ConfiguratorFlagHandlerTest extends TestCase
 {
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new ConfiguratorFlagHandler();
+        $this->assertFalse((new ReflectionClass(ConfiguratorFlagHandler::class))->isCloneable());
     }
 
     public function testCreatesAnOptionalCallIfFlagIsAnOptionalFlagIs()

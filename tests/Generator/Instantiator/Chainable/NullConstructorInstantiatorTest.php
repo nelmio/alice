@@ -26,6 +26,7 @@ use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NullConstructorInstantiator
@@ -50,12 +51,9 @@ class NullConstructorInstantiatorTest extends TestCase
         $this->assertTrue(is_a(NullConstructorInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone $this->instantiator;
+        $this->assertFalse((new ReflectionClass(NullConstructorInstantiator::class))->isCloneable());
     }
 
     public function testCanInstantiateFixtureUsingADefaultConstructor()

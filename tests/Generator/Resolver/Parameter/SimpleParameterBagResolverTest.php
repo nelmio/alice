@@ -21,6 +21,7 @@ use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver
@@ -32,12 +33,9 @@ class SimpleParameterBagResolverTest extends TestCase
         $this->assertTrue(is_a(SimpleParameterBagResolver::class, ParameterBagResolverInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimpleParameterBagResolver(new FakeParameterResolver());
+        $this->assertFalse((new ReflectionClass(SimpleParameterBagResolver::class))->isCloneable());
     }
 
     public function testDecoratesResolverToResolveParameterBag()

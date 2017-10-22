@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
@@ -24,11 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class TemplateFixtureResolverTest extends TestCase
 {
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new TemplateFixtureResolver();
+        $this->assertFalse((new ReflectionClass(TemplateFixtureResolver::class))->isCloneable());
     }
 }

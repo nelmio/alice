@@ -24,6 +24,7 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use phpmock\functions\FixedValueFunction;
 use phpmock\MockBuilder;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
@@ -35,12 +36,9 @@ class OptionalValueResolverTest extends TestCase
         $this->assertTrue(is_a(OptionalValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new OptionalValueResolver();
+        $this->assertFalse((new ReflectionClass(OptionalValueResolver::class))->isCloneable());
     }
 
     public function testWithersReturnNewModifiedInstance()

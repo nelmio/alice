@@ -32,6 +32,7 @@ use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorResolver
@@ -51,12 +52,9 @@ class InstantiatorResolverTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver());
+        $this->assertFalse((new ReflectionClass(InstantiatorResolver::class))->isCloneable());
     }
 
     public function testResolvesAllArguments()

@@ -23,6 +23,7 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver
@@ -34,12 +35,9 @@ class EvaluatedValueResolverTest extends TestCase
         $this->assertTrue(is_a(EvaluatedValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new EvaluatedValueResolver();
+        $this->assertFalse((new ReflectionClass(EvaluatedValueResolver::class))->isCloneable());
     }
 
     public function testCanResolveFixtureReferenceValues()

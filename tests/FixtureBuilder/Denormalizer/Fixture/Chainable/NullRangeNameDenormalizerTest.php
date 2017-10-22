@@ -20,6 +20,7 @@ use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer
@@ -39,12 +40,9 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $this->assertTrue(is_a(NullRangeNameDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new NullRangeNameDenormalizer();
+        $this->assertFalse((new ReflectionClass(NullRangeNameDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesListToBuildFixtures()

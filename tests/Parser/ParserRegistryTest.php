@@ -16,6 +16,8 @@ namespace Nelmio\Alice\Parser;
 use Nelmio\Alice\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Parser\ParserRegistry
@@ -42,22 +44,18 @@ class ParserRegistryTest extends TestCase
      */
     public function testThrowsAnExceptionIfInvalidParserIsPassed()
     {
-        new ParserRegistry([new \stdClass()]);
+        new ParserRegistry([new stdClass()]);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        $parser = new ParserRegistry([]);
-        clone $parser;
+        $this->assertFalse((new ReflectionClass(ParserRegistry::class))->isCloneable());
     }
 
     public function testIteratesOverEveryParsersAndUseTheFirstValidOne()
     {
         $file = 'dummy.php';
-        $expected = [new \stdClass()];
+        $expected = [new stdClass()];
 
         $parser1Prophecy = $this->prophesize(ChainableParserInterface::class);
         $parser1Prophecy->canParse($file)->willReturn(false);

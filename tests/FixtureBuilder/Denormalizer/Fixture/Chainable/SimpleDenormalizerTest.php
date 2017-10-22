@@ -30,6 +30,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerI
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\DummyFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer
@@ -52,12 +53,9 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $this->assertTrue(is_a(SimpleDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimpleDenormalizer(new FakeSpecificationBagDenormalizer());
+        $this->assertFalse((new ReflectionClass(SimpleDenormalizer::class))->isCloneable());
     }
 
     /**

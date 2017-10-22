@@ -15,6 +15,8 @@ namespace Nelmio\Alice;
 
 use Nelmio\Alice\Throwable\Exception\UnclonableException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Throwable;
 
 /**
  * @covers \Nelmio\Alice\IsAServiceTrait
@@ -26,15 +28,18 @@ class IsAServiceTraitTest extends TestCase
         try {
             clone new NotClonableDummy();
             $this->fail('Expected exception to be thrown.');
-        } catch (UnclonableException $exception) {
+        } catch (Throwable $exception) {
             $this->assertEquals(
-                'This class is a service and as such should not be cloned. A service is not necessarily stateless and as '
-                .'such cloning it may result in weird side effects. You should either create a new instance or make use '
-                .'of a static or non static factory instead.',
+                'Call to private Nelmio\Alice\NotClonableDummy::__clone() from context '
+                .'\'Nelmio\Alice\IsAServiceTraitTest\'',
                 $exception->getMessage()
             );
             $this->assertEquals(0, $exception->getCode());
             $this->assertNull($exception->getPrevious());
         }
+
+        $dummyRefl = new ReflectionClass(NotClonableDummy::class);
+
+        $this->assertFalse($dummyRefl->isCloneable());
     }
 }

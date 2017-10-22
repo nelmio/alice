@@ -18,6 +18,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer
@@ -29,12 +30,9 @@ class SubPatternsLexerTest extends TestCase
         $this->assertTrue(is_a(SubPatternsLexer::class, LexerInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SubPatternsLexer(new FakeLexer());
+        $this->assertFalse((new ReflectionClass(SubPatternsLexer::class))->isCloneable());
     }
 
     public function testLexAValueToReturnAListOfTokens()

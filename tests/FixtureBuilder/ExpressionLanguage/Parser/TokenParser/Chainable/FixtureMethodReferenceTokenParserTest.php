@@ -23,6 +23,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureMethodReferenceTokenParser
@@ -34,12 +35,9 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
         $this->assertTrue(is_a(FixtureMethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new FixtureMethodReferenceTokenParser();
+        $this->assertFalse((new ReflectionClass(FixtureMethodReferenceTokenParser::class))->isCloneable());
     }
 
     public function testCanParseMethodReferenceTokens()

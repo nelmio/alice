@@ -25,6 +25,7 @@ use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver
@@ -36,12 +37,9 @@ class FunctionCallArgumentResolverTest extends TestCase
         $this->assertTrue(is_a(FunctionCallArgumentResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new FunctionCallArgumentResolver(new FakeValueResolver());
+        $this->assertFalse((new ReflectionClass(FunctionCallArgumentResolver::class))->isCloneable());
     }
 
     public function testCanResolvePropertyReferenceValues()

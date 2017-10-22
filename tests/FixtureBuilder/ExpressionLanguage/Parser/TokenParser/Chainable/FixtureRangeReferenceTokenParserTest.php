@@ -19,6 +19,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserIn
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureRangeReferenceTokenParser
@@ -30,12 +31,9 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
         $this->assertTrue(is_a(FixtureRangeReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new FixtureRangeReferenceTokenParser();
+        $this->assertFalse((new ReflectionClass(FixtureRangeReferenceTokenParser::class))->isCloneable());
     }
 
     public function testCanParseRangedReferencesTokens()

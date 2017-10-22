@@ -20,6 +20,7 @@ use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
@@ -41,12 +42,9 @@ class DefaultIncludeProcessorTest extends TestCase
         $this->assertTrue(is_a(DefaultIncludeProcessor::class, IncludeProcessorInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new DefaultIncludeProcessor(new FakeFileLocator());
+        $this->assertFalse((new ReflectionClass(DefaultIncludeProcessor::class))->isCloneable());
     }
 
     /**

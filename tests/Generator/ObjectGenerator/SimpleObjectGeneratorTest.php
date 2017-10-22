@@ -29,6 +29,7 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\ObjectBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator
@@ -40,12 +41,9 @@ class SimpleObjectGeneratorTest extends TestCase
         $this->assertTrue(is_a(SimpleObjectGenerator::class, ObjectGeneratorInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimpleObjectGenerator(new FakeValueResolver(), new FakeInstantiator(), new FakeHydrator(), new FakeCaller());
+        $this->assertFalse((new ReflectionClass(SimpleObjectGenerator::class))->isCloneable());
     }
 
     /**

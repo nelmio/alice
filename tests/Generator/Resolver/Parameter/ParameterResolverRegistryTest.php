@@ -21,6 +21,7 @@ use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry
@@ -44,7 +45,7 @@ class ParameterResolverRegistryTest extends TestCase
 
     public function testInjectsItselfToParameterResolverAwareResolvers()
     {
-        $propRefl = (new \ReflectionClass(ParameterResolverRegistry::class))->getProperty('resolvers');
+        $propRefl = (new ReflectionClass(ParameterResolverRegistry::class))->getProperty('resolvers');
         $propRefl->setAccessible(true);
 
         $oneResolver = new FakeChainableParameterResolver();
@@ -55,12 +56,9 @@ class ParameterResolverRegistryTest extends TestCase
         $this->assertSame($registry, $propRefl->getValue($registry)[1]->resolver);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new ParameterResolverRegistry([]);
+        $this->assertFalse((new ReflectionClass(ParameterResolverRegistry::class))->isCloneable());
     }
 
     /**

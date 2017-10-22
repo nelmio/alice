@@ -17,6 +17,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer
@@ -41,12 +42,9 @@ class ReferenceLexerTest extends TestCase
         $this->assertInstanceOf(LexerInterface::class, $this->lexer);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone $this->lexer;
+        $this->assertFalse((new ReflectionClass(ReferenceLexer::class))->isCloneable());
     }
 
     /**

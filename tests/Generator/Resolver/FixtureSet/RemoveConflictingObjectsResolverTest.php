@@ -22,6 +22,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver
@@ -33,12 +34,9 @@ class RemoveConflictingObjectsResolverTest extends TestCase
         $this->assertTrue(is_a(RemoveConflictingObjectsResolver::class, FixtureSetResolverInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new RemoveConflictingObjectsResolver(new FakeFixtureSetResolver());
+        $this->assertFalse((new ReflectionClass(RemoveConflictingObjectsResolver::class))->isCloneable());
     }
 
     public function testRemovesConflictingObjectsByIteratingFixturesIfThereIsLessFixturesThanInjectedObjects()

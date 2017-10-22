@@ -22,6 +22,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SimpleFixtureBagDenormalizer
@@ -33,12 +34,9 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
         $this->assertTrue(is_a(SimpleFixtureBagDenormalizer::class, FixtureBagDenormalizerInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimpleFixtureBagDenormalizer(new FakeFixtureDenormalizer(), new FakeFlagParser());
+        $this->assertFalse((new ReflectionClass(SimpleFixtureBagDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesASetOfDataIntoAFixtureBag()

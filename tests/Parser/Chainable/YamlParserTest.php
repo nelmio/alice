@@ -18,6 +18,7 @@ use Nelmio\Alice\Parser\FileListProviderTrait;
 use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
@@ -73,12 +74,9 @@ class YamlParserTest extends TestCase
         $this->assertTrue(is_a(YamlParser::class, ChainableParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone $this->parser;
+        $this->assertFalse((new ReflectionClass(YamlParser::class))->isCloneable());
     }
 
     /**

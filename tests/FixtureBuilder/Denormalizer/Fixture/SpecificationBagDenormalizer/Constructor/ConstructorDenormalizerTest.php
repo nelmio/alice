@@ -20,20 +20,16 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorDenormalizer
  */
 class ConstructorDenormalizerTest extends TestCase
 {
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new ConstructorDenormalizer(
-            new FakeArgumentsDenormalizer()
-        );
+        $this->assertFalse((new ReflectionClass(ConstructorDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesInputAsAConstructorMethod()

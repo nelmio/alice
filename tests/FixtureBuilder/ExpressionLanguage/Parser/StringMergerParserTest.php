@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\StringMergerParser
@@ -29,12 +30,9 @@ class StringMergerParserTest extends TestCase
         $this->assertTrue(is_a(StringMergerParser::class, ParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new StringMergerParser(new FakeParser());
+        $this->assertFalse((new ReflectionClass(StringMergerParser::class))->isCloneable());
     }
 
     public function testIsInstantiatedWithAParser()

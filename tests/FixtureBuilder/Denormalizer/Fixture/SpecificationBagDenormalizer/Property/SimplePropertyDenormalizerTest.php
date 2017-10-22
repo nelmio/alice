@@ -20,18 +20,16 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\SimplePropertyDenormalizer
  */
 class SimplePropertyDenormalizerTest extends TestCase
 {
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimplePropertyDenormalizer(new FakeValueDenormalizer());
+        $this->assertFalse((new ReflectionClass(SimplePropertyDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesValueBeforeReturningProperty()

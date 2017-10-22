@@ -20,6 +20,7 @@ use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser
@@ -31,12 +32,9 @@ class FunctionFixtureReferenceParserTest extends TestCase
         $this->assertTrue(is_a(FunctionFixtureReferenceParser::class, ParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new FunctionFixtureReferenceParser(new FakeParser());
+        $this->assertFalse((new ReflectionClass(FunctionFixtureReferenceParser::class))->isCloneable());
     }
 
     public function testIsInstantiatedWithAParser()

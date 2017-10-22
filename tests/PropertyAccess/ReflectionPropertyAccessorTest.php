@@ -26,6 +26,7 @@ use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -39,12 +40,9 @@ class ReflectionPropertyAccessorTest extends TestCase
         $this->assertTrue(is_a(ReflectionPropertyAccessor::class, PropertyAccessorInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new ReflectionPropertyAccessor(new FakePropertyAccessor());
+        $this->assertFalse((new ReflectionClass(ReflectionPropertyAccessor::class))->isCloneable());
     }
 
     public function testSetValueOnNoSuchPropertyException()
