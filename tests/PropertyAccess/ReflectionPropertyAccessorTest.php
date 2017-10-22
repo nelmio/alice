@@ -23,7 +23,6 @@ namespace Nelmio\Alice\PropertyAccess;
 
 use Nelmio\Alice\Entity\DummyWithPrivateProperty;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
-use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;

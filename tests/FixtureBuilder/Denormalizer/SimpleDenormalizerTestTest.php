@@ -16,8 +16,6 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\BareFixtureSet;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FakeFixtureBagDenormalizer;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\FakeParameterBagDenormalizer;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;

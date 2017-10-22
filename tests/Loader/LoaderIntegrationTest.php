@@ -42,6 +42,7 @@ use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Entity\ValueResolver\DummyWithGetter;
 use Nelmio\Alice\Entity\ValueResolver\DummyWithMethodArgument;
 use Nelmio\Alice\FileLoaderInterface;
+use Nelmio\Alice\FilesLoaderInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\ParameterBag;
@@ -52,6 +53,7 @@ use Nelmio\Alice\Throwable\HydrationThrowable;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @group integration
@@ -63,12 +65,12 @@ class LoaderIntegrationTest extends TestCase
     const FIXTURES_FILES_DIR = __DIR__.'/../../fixtures/Integration';
 
     /**
-     * @var FileLoaderInterface|DataLoaderInterface
+     * @var FilesLoaderInterface|FileLoaderInterface|DataLoaderInterface
      */
     protected $loader;
 
     /**
-     * @var FileLoaderInterface|DataLoaderInterface
+     * @var FilesLoaderInterface|FileLoaderInterface|DataLoaderInterface
      */
     protected $nonIsolatedLoader;
 
@@ -79,6 +81,34 @@ class LoaderIntegrationTest extends TestCase
     {
         $this->loader = new IsolatedLoader();
         $this->nonIsolatedLoader = new NativeLoader();
+    }
+
+    public function testLoadFile()
+    {
+        $objects = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/dummy.yml')->getObjects();
+
+        $this->assertEquals(
+            [
+                'dummy' => new stdClass(),
+            ],
+            $objects
+        );
+    }
+
+    public function testLoadFiles()
+    {
+        $objects = $this->loader->loadFiles([
+            self::FIXTURES_FILES_DIR.'/dummy.yml',
+            self::FIXTURES_FILES_DIR.'/another_dummy.yml',
+        ])->getObjects();
+
+        $this->assertEquals(
+            [
+                'dummy' => new stdClass(),
+                'another_dummy' => new stdClass(),
+            ],
+            $objects
+        );
     }
 
     /**
@@ -173,7 +203,7 @@ class LoaderIntegrationTest extends TestCase
     public function testCannotUseBothConstructAndFactoryAtTheSameTime()
     {
         $this->loader->loadData([
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy' => [
                     '__construct' => [],
                     '__factory' => [],
@@ -275,7 +305,7 @@ class LoaderIntegrationTest extends TestCase
     {
         $set = $this->loader->loadData(
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'relatedDummy' => '@injected_dummy',
                     ],
@@ -316,7 +346,7 @@ class LoaderIntegrationTest extends TestCase
                         ],
                     ],
                 ],
-                \stdClass::class => [
+                stdClass::class => [
                     'another_dummy' => [
                         '__construct' => [
                             StdClassFactory::class.'::create' => [['injected' => false]],
@@ -348,7 +378,7 @@ class LoaderIntegrationTest extends TestCase
     public function testLoadOptionalValues()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'user0' => [
                     'username' => '80%? something',
                 ],
@@ -380,7 +410,7 @@ class LoaderIntegrationTest extends TestCase
     public function testLoadTwoSuccessiveFakerFunctions()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'user' => [
                     'username' => '<firstName()> <lastName()>',
                 ],
@@ -395,14 +425,14 @@ class LoaderIntegrationTest extends TestCase
         $this->assertEquals(1, count($objects));
 
         $user = $objects['user'];
-        $this->assertInstanceOf(\stdClass::class, $user);
+        $this->assertInstanceOf(stdClass::class, $user);
         $this->assertRegExp('/^[\w\']+ [\w\']+$/i', $user->username);
     }
 
     public function testLoadFakerFunctionWithData()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'user' => [
                     'age' => '<numberBetween(10, 10)>',
                 ],
@@ -417,14 +447,14 @@ class LoaderIntegrationTest extends TestCase
         $this->assertEquals(1, count($objects));
 
         $user = $objects['user'];
-        $this->assertInstanceOf(\stdClass::class, $user);
+        $this->assertInstanceOf(stdClass::class, $user);
         $this->assertTrue(10 === $user->age);
     }
 
     public function testLoadLocalizedFakerFunctionWithData()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'user' => [
                     'siren' => '<fr_FR:siren()>',
                 ],
@@ -439,14 +469,14 @@ class LoaderIntegrationTest extends TestCase
         $this->assertEquals(1, count($objects));
 
         $user = $objects['user'];
-        $this->assertInstanceOf(\stdClass::class, $user);
+        $this->assertInstanceOf(stdClass::class, $user);
         $this->assertRegExp('/^\d{3} \d{3} \d{3}$/', $user->siren);
     }
 
     public function testLoadFakerFunctionWithPhpArguments()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'user' => [
                     'updatedAt' => '<dateTimeBetween(<("yest"."erday")>, <(strrev("omot")."rrow")>)>',
                 ],
@@ -461,7 +491,7 @@ class LoaderIntegrationTest extends TestCase
         $this->assertEquals(1, count($objects));
 
         $user = $objects['user'];
-        $this->assertInstanceOf(\stdClass::class, $user);
+        $this->assertInstanceOf(stdClass::class, $user);
 
         $updatedAt = $user->updatedAt;
         $this->assertInstanceOf(\DateTimeInterface::class, $updatedAt);
@@ -473,7 +503,7 @@ class LoaderIntegrationTest extends TestCase
     public function testLoadSelfReferencedFixture()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy' => [
                     'relatedDummy' => '@dummy*',
                 ],
@@ -487,7 +517,7 @@ class LoaderIntegrationTest extends TestCase
         $objects = $set->getObjects();
         $this->assertEquals(1, count($objects));
 
-        $expectedDummy = new \stdClass();
+        $expectedDummy = new stdClass();
         $expectedDummy->relatedDummy = $expectedDummy;
 
         $this->assertEquals($expectedDummy, $objects['dummy']);
@@ -496,7 +526,7 @@ class LoaderIntegrationTest extends TestCase
     public function testLoadAutomaticallyEscapedReference()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy' => [
                     'email' => 'email@example.com',
                 ],
@@ -520,7 +550,7 @@ class LoaderIntegrationTest extends TestCase
     public function testLoadSelfReferencedFixtures()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy{1..2}' => [
                     'relatedDummies' => '3x @dummy*',
                 ],
@@ -586,7 +616,7 @@ class LoaderIntegrationTest extends TestCase
     public function testTemplateCanExtendOtherTemplateObjectsCombinedWithRange()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'base_{du, yu}mmy (template)' => [
                     'base' => 'true',
                 ],
@@ -619,7 +649,7 @@ class LoaderIntegrationTest extends TestCase
     public function testEmptyInheritance()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy_template (template)' => [
                     'foo' => 'bar',
                 ],
@@ -642,7 +672,7 @@ class LoaderIntegrationTest extends TestCase
     public function testMultipleInheritanceInTemplates()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy_minimal (template)' => [
                     'foo' => 'bar',
                 ],
@@ -679,7 +709,7 @@ class LoaderIntegrationTest extends TestCase
     public function testMultipleInheritanceInInstance()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy1 (template)' => [
                     'number' => '1',
                 ],
@@ -710,7 +740,7 @@ class LoaderIntegrationTest extends TestCase
     public function testUniqueValueGeneration()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy{1..10}' => [
                     'number (unique)' => '<numberBetween(1, 10)>',
                 ],
@@ -736,7 +766,7 @@ class LoaderIntegrationTest extends TestCase
     public function testUniqueValueGenerationFailure()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy{1..10}' => [
                     'number (unique)' => '<numberBetween(1, 2)>',
                 ],
@@ -805,7 +835,7 @@ class LoaderIntegrationTest extends TestCase
     public function testUniqueValueGenerationWithDynamicArray()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'related_dummy{1..2}' => [
                     'name' => '<current()>',
                 ],
@@ -843,7 +873,7 @@ class LoaderIntegrationTest extends TestCase
 
         // Do another check with range/list where a temporary fixture is being used for the unique key
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'related_dummy{1..2}' => [
                     'name' => '<current()>',
                 ],
@@ -859,7 +889,7 @@ class LoaderIntegrationTest extends TestCase
 
         try {
             $this->loader->loadData([
-                \stdClass::class => [
+                stdClass::class => [
                     'related_dummy' => [
                         'name' => 'unique',
                     ],
@@ -877,7 +907,7 @@ class LoaderIntegrationTest extends TestCase
     public function testUniqueOnArray()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy' => [
                     'numbers (unique)' => [
                         1,
@@ -889,7 +919,7 @@ class LoaderIntegrationTest extends TestCase
         $this->loader->loadData($data);
 
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy' => [
                     'numbers (unique)' => [
                         1,
@@ -908,7 +938,7 @@ class LoaderIntegrationTest extends TestCase
 
         try {
             $this->loader->loadData([
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'numbers (unique)' => [
                             1,
@@ -926,7 +956,7 @@ class LoaderIntegrationTest extends TestCase
     public function testUniqueValuesAreUniqueAcrossAClass()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy{1..5}' => [
                     'val (unique)' => '<numberBetween(1, 10)>',
                 ],
@@ -948,7 +978,7 @@ class LoaderIntegrationTest extends TestCase
 
         $objects = $result->getObjects();
         $value = [
-            \stdClass::class => [],
+            stdClass::class => [],
             DummyWithPublicProperty::class => [],
         ];
         foreach ($objects as $object) {
@@ -957,7 +987,7 @@ class LoaderIntegrationTest extends TestCase
             $value[get_class($object)][$object->val] = true;
         }
 
-        $this->assertCount(10, $value[\stdClass::class]);
+        $this->assertCount(10, $value[stdClass::class]);
         $this->assertCount(10, $value[DummyWithPublicProperty::class]);
     }
 
@@ -968,7 +998,7 @@ class LoaderIntegrationTest extends TestCase
     public function testThrowsAnExceptionIfInheritFromAnNonExistingFixture()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy (extends unknown)' => [],
             ],
         ];
@@ -982,7 +1012,7 @@ class LoaderIntegrationTest extends TestCase
     public function testThrowsAnExceptionIfInheritFromAnInexistingTemplate()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'another_dummy' => [],
                 'dummy (extends another_dummy)' => [],
             ],
@@ -997,7 +1027,7 @@ class LoaderIntegrationTest extends TestCase
     public function testThrowsAnExceptionIfUsingCurrentOutOfACollection()
     {
         $data = [
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy' => [
                     'foo' => '<current()>',
                 ],
@@ -1019,7 +1049,7 @@ class LoaderIntegrationTest extends TestCase
                         '__construct' => ['@dummy'],
                     ],
                 ],
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'injected' => false,
                     ],
@@ -1058,7 +1088,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [
                     'unique_id' => '<(uniqid())>',
                 ],
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '<{unique_id}>',
                         'bar' => '<{unique_id}>',
@@ -1081,7 +1111,7 @@ class LoaderIntegrationTest extends TestCase
     public function testLoadParsesReferencesInQuotes()
     {
         $this->loader->loadData([
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy1' => [
                     'name' => 'foo',
                 ],
@@ -1102,7 +1132,7 @@ class LoaderIntegrationTest extends TestCase
         $this->nonIsolatedLoader->loadData(
             [
                 'parameters' => [],
-                \stdClass::class => [
+                stdClass::class => [
                     'another_dummy' => [],
                     'dummy' => [
                         'related' => '@another*',
@@ -1119,7 +1149,7 @@ class LoaderIntegrationTest extends TestCase
         $this->nonIsolatedLoader->loadData(
             [
                 'parameters' => [],
-                \stdClass::class => [
+                stdClass::class => [
                     'another_dummy_new' => [],
                     'dummy' => [
                         'related' => '@another*',
@@ -1138,7 +1168,7 @@ class LoaderIntegrationTest extends TestCase
     public function testInstancesAreNotInjectedInTheScopeDuringInstantiation()
     {
         $this->loader->loadData([
-            \stdClass::class => [
+            stdClass::class => [
                 'dummy' => [],
                 'another_dummy' => [
                     '__construct' => [
@@ -1843,35 +1873,35 @@ class LoaderIntegrationTest extends TestCase
     {
         yield 'empty instance' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [],
                 ],
             ],
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => new \stdClass(),
+                    'dummy' => new stdClass(),
                 ],
             ],
         ];
 
         yield 'empty instance with null' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => null,
                 ],
             ],
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => new \stdClass(),
+                    'dummy' => new stdClass(),
                 ],
             ],
         ];
 
         yield 'static value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -1889,7 +1919,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'reference value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -1913,7 +1943,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'inverted reference value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'another_dummy' => [
                         'dummy' => '@dummy',
                     ],
@@ -1937,7 +1967,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'dynamic reference' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy{1..2}' => [
                         'name' => '<current()>',
                     ],
@@ -1967,7 +1997,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'inverted dynamic reference' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy{1..2}' => [
                         'relatedDummy' => '@another_dummy<current()>',
                     ],
@@ -1997,7 +2027,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'property reference value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -2021,7 +2051,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'inverted property reference value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'name' => '@another_dummy->name',
                     ],
@@ -2045,7 +2075,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'non existing property reference' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -2099,7 +2129,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'array value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -2123,7 +2153,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'wildcard reference value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy_0' => [
                         'foo' => 'bar',
                     ],
@@ -2147,7 +2177,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'wildcard property reference value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -2171,7 +2201,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'dynamic array value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -2195,7 +2225,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'array value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -2219,7 +2249,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'dynamic array value with wildcard' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -2243,7 +2273,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'dynamic array with fixture range' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy{1..3}' => [
                         'id' => '<current()>',
                     ],
@@ -2276,7 +2306,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'objects with dots in their references' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'user.alice' => [
                         'username' => 'alice',
                     ],
@@ -2306,7 +2336,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[special characters] references with underscores' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'user_alice' => [
                         'username' => 'alice',
                     ],
@@ -2336,7 +2366,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[special characters] references with slashes' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'user/alice' => [
                         'username' => 'alice',
                     ],
@@ -2366,7 +2396,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[provider] faker functions' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '<numberBetween(0, 0)>',
                     ],
@@ -2384,7 +2414,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[function] call PHP native function' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '<strtolower("BAR")>',
                     ],
@@ -2402,7 +2432,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[self reference] alone' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'itself' => '@self',
                     ],
@@ -2412,7 +2442,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => (function () {
-                        $dummy = new \stdClass();
+                        $dummy = new stdClass();
                         $dummy->itself = $dummy;
 
                         return $dummy;
@@ -2423,7 +2453,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[self reference] evaluated with a function' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'itself' => '@<("self")>',
                     ],
@@ -2433,7 +2463,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => (function () {
-                        $dummy = new \stdClass();
+                        $dummy = new stdClass();
                         $dummy->itself = $dummy;
 
                         return $dummy;
@@ -2444,7 +2474,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[self reference] property' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'itself' => '@self',
@@ -2455,7 +2485,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => (function () {
-                        $dummy = new \stdClass();
+                        $dummy = new stdClass();
                         $dummy->foo = 'bar';
                         $dummy->itself = $dummy;
 
@@ -2467,7 +2497,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'identity provider' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'identity_foo' => '<identity($foo)>',
@@ -2495,7 +2525,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[self reference] alone' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'itself' => '@self',
                     ],
@@ -2505,7 +2535,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => (function () {
-                        $dummy = new \stdClass();
+                        $dummy = new stdClass();
                         $dummy->itself = $dummy;
 
                         return $dummy;
@@ -2516,7 +2546,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[self reference] property' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'itself' => '@self',
@@ -2527,7 +2557,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => (function () {
-                        $dummy = new \stdClass();
+                        $dummy = new stdClass();
                         $dummy->foo = 'bar';
                         $dummy->itself = $dummy;
 
@@ -2586,7 +2616,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[identity] evaluate the argument as if it was a plain PHP function' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '<("Hello"." "."world!")>',
                         'bar' => '<(str_replace("_", " ", "Hello_world!"))>',
@@ -2606,7 +2636,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[identity] has access to variables' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'foz' => '<($foo)>',
@@ -2626,7 +2656,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[identity] has access to fixtures' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -2650,7 +2680,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[identity] has access to instances' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar'
                     ],
@@ -2674,7 +2704,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[identity] has access to current' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy_{1..2}' => [
                         'foo' => '<($current)>'
                     ],
@@ -2695,7 +2725,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[templating] templates are not returned' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'base_dummy (template)' => [],
                     'dummy' => [],
                 ],
@@ -2703,14 +2733,14 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => new \stdClass(),
+                    'dummy' => new stdClass(),
                 ],
             ],
         ];
 
         yield '[templating] nominal' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'base_dummy (template)' => [
                         'foo' => 'bar',
                     ],
@@ -2745,7 +2775,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[current] nominal' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy{1..2}' => [
                         'val' => '<current()>',
                     ],
@@ -2797,7 +2827,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'at literal is not resolved' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'atValues' => [
                             '\\@<("hello")>',
@@ -2828,7 +2858,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [
                     'foo' => 'bar',
                 ],
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '<{foo}>',
                     ],
@@ -2851,7 +2881,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [
                     'foo' => ['bar'],
                 ],
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '<randomElement(<{foo}>)>',
                     ],
@@ -2876,7 +2906,7 @@ class LoaderIntegrationTest extends TestCase
                     'bar' => 'Bat',
                     'composite' => '<{foo}> <{bar}>!',
                 ],
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '<{foo}> <{bar}>!',
                     ],
@@ -2937,7 +2967,7 @@ class LoaderIntegrationTest extends TestCase
                     'ping' => 'pong',
                     'foo' => 'bar',
                 ],
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '<($ping)>',
                         'bar' => '$foo',
@@ -3045,7 +3075,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'dynamic array with scalar value' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '5x bar',
                     ],
@@ -3081,7 +3111,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'has proper stdClass support' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'bar',
                     ],
@@ -3191,7 +3221,7 @@ class LoaderIntegrationTest extends TestCase
                         'name' => 'foobar'
                     ],
                 ],
-                \stdClass::class => [
+                stdClass::class => [
                     'another_dummy' => [
                         'foo' => '@dummy->getName()',
                     ],
@@ -3222,7 +3252,7 @@ class LoaderIntegrationTest extends TestCase
                         'prefix' => 'bazbaz__',
                     ],
                 ],
-                \stdClass::class => [
+                stdClass::class => [
                     'another_dummy' => [
                         'foo' => '@dummy_2->getValue(@dummy)',
                     ],
@@ -3299,7 +3329,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'usage of percent sign in string (#665)' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => 'a\%b',
                         'bar' => '\%c',
@@ -3321,7 +3351,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'usage of an object' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => (function () {
                             return StdClassFactory::create(['ping' => 'pong']);
@@ -3341,7 +3371,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[function] call nested PHP native function' => [
             [
-                \stdClass::class => [
+                stdClass::class => [
                     'dummy' => [
                         'foo' => '<json_encode([])>',
                     ],
@@ -3425,7 +3455,7 @@ class LoaderIntegrationTest extends TestCase
                         'intParam' => 100,
                         'stringParam' => '100',
                     ],
-                    \stdClass::class => [
+                    stdClass::class => [
                         'dummy' => [
                             'intParam' => '<{intParam}>',
                             'stringParam' => '<{stringParam}>',

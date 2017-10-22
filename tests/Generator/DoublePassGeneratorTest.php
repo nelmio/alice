@@ -18,7 +18,6 @@ use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureSet;
-use Nelmio\Alice\Generator\Resolver\FixtureSet\FakeFixtureSetResolver;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;

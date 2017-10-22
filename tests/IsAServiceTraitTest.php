@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Throwable\Exception\UnclonableException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Throwable;

@@ -19,8 +19,6 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
-use Nelmio\Alice\Generator\Resolver\FakeFixtureBagResolver;
-use Nelmio\Alice\Generator\Resolver\FakeParameterBagResolver;
 use Nelmio\Alice\Generator\Resolver\FixtureBagResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\ObjectBag;
