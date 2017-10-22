@@ -24,6 +24,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver
@@ -50,12 +51,9 @@ class StringParameterResolverTest extends TestCase
         new StringParameterResolver(new FakeParameterResolver());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new StringParameterResolver();
+        $this->assertFalse((new ReflectionClass(StringParameterResolver::class))->isCloneable());
     }
 
     public function testWithersReturnNewModifiedInstance()

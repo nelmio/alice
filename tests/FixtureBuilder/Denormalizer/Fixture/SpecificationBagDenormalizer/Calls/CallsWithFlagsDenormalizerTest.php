@@ -23,6 +23,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 use stdClass;
 
 /**
@@ -30,12 +31,9 @@ use stdClass;
  */
 class CallsWithFlagsDenormalizerTest extends TestCase
 {
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new CallsWithFlagsDenormalizer(new FakeCallsDenormalizer(), []);
+        $this->assertFalse((new ReflectionClass(CallsWithFlagsDenormalizer::class))->isCloneable());
     }
 
     /**

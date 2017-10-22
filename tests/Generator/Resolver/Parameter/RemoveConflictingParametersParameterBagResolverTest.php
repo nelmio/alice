@@ -18,6 +18,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver
@@ -33,12 +34,9 @@ class RemoveConflictingParametersParameterBagResolverTest extends TestCase
         ));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new RemoveConflictingParametersParameterBagResolver(new FakeParameterBagResolver());
+        $this->assertFalse((new ReflectionClass(RemoveConflictingParametersParameterBagResolver::class))->isCloneable());
     }
 
     public function testRemovesAllConflictingKeysFromInjectedParametersBagBeforeResolvingIt()

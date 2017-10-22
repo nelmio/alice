@@ -18,6 +18,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer
@@ -29,12 +30,9 @@ class StringThenReferenceLexerTest extends TestCase
         $this->assertTrue(is_a(StringThenReferenceLexer::class, LexerInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new StringThenReferenceLexer(new FakeLexer());
+        $this->assertFalse((new ReflectionClass(StringThenReferenceLexer::class))->isCloneable());
     }
 
     public function testMergesNonEmptyStringFollowedByAReference()

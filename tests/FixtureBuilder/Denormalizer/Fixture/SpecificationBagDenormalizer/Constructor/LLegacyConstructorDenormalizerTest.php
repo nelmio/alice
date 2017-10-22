@@ -19,21 +19,16 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\LegacyConstructorDenormalizer
  */
 class LLegacyConstructorDenormalizerTest extends TestCase
 {
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new LegacyConstructorDenormalizer(
-            new FakeConstructorDenormalizer(),
-            new FakeConstructorDenormalizer()
-        );
+        $this->assertFalse((new ReflectionClass(LegacyConstructorDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesConstructorWithTheDecoratedFactoryDenormalizer()

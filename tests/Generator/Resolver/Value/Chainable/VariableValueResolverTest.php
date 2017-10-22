@@ -22,6 +22,7 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver
@@ -33,12 +34,9 @@ class VariableValueResolverTest extends TestCase
         $this->assertTrue(is_a(VariableValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new VariableValueResolver();
+        $this->assertFalse((new ReflectionClass(VariableValueResolver::class))->isCloneable());
     }
 
     public function testCanResolveVariableValues()

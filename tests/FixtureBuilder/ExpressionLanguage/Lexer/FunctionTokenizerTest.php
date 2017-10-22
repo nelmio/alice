@@ -15,6 +15,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer
@@ -35,12 +36,9 @@ class FunctionTokenizerTest extends TestCase
         $this->tokenizer = new FunctionTokenizer();
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone $this->tokenizer;
+        $this->assertFalse((new ReflectionClass(FunctionTokenizer::class))->isCloneable());
     }
 
     /**

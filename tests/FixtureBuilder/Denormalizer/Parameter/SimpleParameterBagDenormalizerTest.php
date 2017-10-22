@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
+use ReflectionObject;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer
@@ -40,12 +41,9 @@ class SimpleParameterBagDenormalizerTest extends TestCase
         $this->assertInstanceOf(ParameterBagDenormalizerInterface::class, $this->denormalizer);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone $this->denormalizer;
+        $this->assertFalse((new ReflectionObject($this->denormalizer))->isCloneable());
     }
 
     /**

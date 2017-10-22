@@ -18,6 +18,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer
@@ -29,12 +30,9 @@ class EmptyValueLexerTest extends TestCase
         $this->assertTrue(is_a(EmptyValueLexer::class, LexerInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
-    public function testIsNotCLonable()
+    public function testIsNotClonable()
     {
-        clone new EmptyValueLexer(new FakeLexer());
+        $this->assertFalse((new ReflectionClass(EmptyValueLexer::class))->isCloneable());
     }
 
     public function testLexEmptyStringIntoAnEmptyStringToken()

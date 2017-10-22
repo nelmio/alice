@@ -29,6 +29,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\ObjectBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\ObjectGenerator\CompleteObjectGenerator
@@ -40,12 +41,9 @@ class CompleteObjectGeneratorTest extends TestCase
         $this->assertTrue(is_a(CompleteObjectGenerator::class, ObjectGeneratorInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new CompleteObjectGenerator(new FakeObjectGenerator());
+        $this->assertFalse((new ReflectionClass(CompleteObjectGenerator::class))->isCloneable());
     }
 
     public function testReturnsFixtureSetObjectsIfObjectIsAlreadyCompletelyGenerated()

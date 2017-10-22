@@ -32,6 +32,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -45,12 +46,9 @@ class FixturePropertyReferenceResolverTest extends TestCase
         $this->assertTrue(is_a(FixturePropertyReferenceResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new FixturePropertyReferenceResolver(new FakePropertyAccessor());
+        $this->assertFalse((new ReflectionClass(FixturePropertyReferenceResolver::class))->isCloneable());
     }
 
     public function testWithersReturnNewModifiedInstance()

@@ -23,6 +23,7 @@ use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use Nelmio\Alice\Throwable\Exception\RootParseException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer
@@ -34,12 +35,9 @@ class SimpleValueDenormalizerTest extends TestCase
         $this->assertTrue(is_a(SimpleValueDenormalizer::class, ValueDenormalizerInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimpleValueDenormalizer(new FakeParser());
+        $this->assertFalse((new ReflectionClass(SimpleValueDenormalizer::class))->isCloneable());
     }
 
     public function testReturnsParsedValueIfValueIsAString()

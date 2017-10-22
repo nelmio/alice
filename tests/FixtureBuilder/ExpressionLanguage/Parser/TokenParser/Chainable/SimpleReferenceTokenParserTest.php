@@ -19,6 +19,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\SimpleReferenceTokenParser
@@ -30,12 +31,9 @@ class SimpleReferenceTokenParserTest extends TestCase
         $this->assertTrue(is_a(SimpleReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimpleReferenceTokenParser();
+        $this->assertFalse((new ReflectionClass(SimpleReferenceTokenParser::class))->isCloneable());
     }
 
     public function testCanParseDynamicArrayTokens()

@@ -34,6 +34,7 @@ use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver
@@ -55,12 +56,9 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
         $this->assertTrue(is_a(UnresolvedFixtureReferenceIdResolver::class, ValueResolverAwareInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver());
+        $this->assertFalse((new ReflectionClass(UnresolvedFixtureReferenceIdResolver::class))->isCloneable());
     }
 
     public function testCanResolveTheValueResolvableByItsDecoratedResolver()

@@ -26,6 +26,7 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver
@@ -48,18 +49,15 @@ class TemplateFixtureBagResolverTest extends TestCase
      */
     public function setUp()
     {
-        $this->propRefl = (new \ReflectionClass(TemplatingFixture::class))->getProperty('fixture');
+        $this->propRefl = (new ReflectionClass(TemplatingFixture::class))->getProperty('fixture');
         $this->propRefl->setAccessible(true);
 
         $this->resolver = new TemplateFixtureBagResolver();
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new TemplateFixtureResolver();
+        $this->assertFalse((new ReflectionClass(TemplateFixtureBagResolver::class))->isCloneable());
     }
 
     public function testResolvesTemplatesFixturesAndReturnsResultingFixtureBag()

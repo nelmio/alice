@@ -18,18 +18,16 @@ use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\OptionalFlagHandler
  */
 class OptionalFlagHandlerTest extends TestCase
 {
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new OptionalFlagHandler();
+        $this->assertFalse((new ReflectionClass(OptionalFlagHandler::class))->isCloneable());
     }
 
     public function testCreatesAnOptionalCallIfFlagIsAnOptionalFlagIs()

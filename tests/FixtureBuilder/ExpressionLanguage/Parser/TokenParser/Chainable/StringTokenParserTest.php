@@ -17,6 +17,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserIn
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringTokenParser
@@ -28,12 +29,9 @@ class StringTokenParserTest extends TestCase
         $this->assertTrue(is_a(StringTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new StringTokenParser(new ArgumentEscaper());
+        $this->assertFalse((new ReflectionClass(StringTokenParser::class))->isCloneable());
     }
 
     public function testCanParseDynamicArrayTokens()

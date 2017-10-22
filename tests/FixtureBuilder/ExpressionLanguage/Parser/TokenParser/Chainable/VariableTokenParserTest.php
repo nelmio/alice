@@ -20,6 +20,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\VariableTokenParser
@@ -31,12 +32,9 @@ class VariableTokenParserTest extends TestCase
         $this->assertTrue(is_a(VariableTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new VariableTokenParser();
+        $this->assertFalse((new ReflectionClass(VariableTokenParser::class))->isCloneable());
     }
 
     public function testCanParseDynamicArrayTokens()

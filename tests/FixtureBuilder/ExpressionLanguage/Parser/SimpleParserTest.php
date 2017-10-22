@@ -25,6 +25,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser
@@ -36,12 +37,9 @@ class SimpleParserTest extends TestCase
         $this->assertTrue(is_a(SimpleParser::class, ParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimpleParser(new FakeLexer(), new FakeTokenParser());
+        $this->assertFalse((new ReflectionClass(SimpleParser::class))->isCloneable());
     }
 
     public function testCanBeInstantiatedWithALexerAndAParser()

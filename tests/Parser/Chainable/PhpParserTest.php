@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Parser\Chainable;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
@@ -64,12 +65,9 @@ class PhpParserTest extends TestCase
         $this->assertTrue(is_a(PhpParser::class, ChainableParserInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone $this->parser;
+        $this->assertFalse((new ReflectionClass(PhpParser::class))->isCloneable());
     }
 
     /**

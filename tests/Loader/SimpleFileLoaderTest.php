@@ -20,6 +20,7 @@ use Nelmio\Alice\Parser\FakeParser;
 use Nelmio\Alice\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Loader\SimpleFileLoader
@@ -31,12 +32,9 @@ class SimpleFileLoaderTest extends TestCase
         $this->assertTrue(is_a(SimpleFileLoader::class, FileLoaderInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimpleFileLoader(new FakeParser(), new FakeDataLoader());
+        $this->assertFalse((new ReflectionClass(SimpleFileLoader::class))->isCloneable());
     }
 
     public function testLoadAFileAndReturnsAnObjectSet()

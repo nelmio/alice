@@ -27,6 +27,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver
@@ -62,13 +63,9 @@ class UniqueValueResolverTest extends TestCase
         $this->assertTrue(is_a(UniqueValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        $resolver = new UniqueValueResolver(new UniqueValuesPool());
-        clone $resolver;
+        $this->assertFalse((new ReflectionClass(UniqueValueResolver::class))->isCloneable());
     }
 
     /**

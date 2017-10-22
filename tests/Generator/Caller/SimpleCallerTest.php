@@ -36,6 +36,7 @@ use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 use stdClass;
 
 /**
@@ -43,14 +44,9 @@ use stdClass;
  */
 class SimpleCallerTest extends TestCase
 {
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new SimpleCaller(
-            new FakeCallProcessor()
-        );
+        $this->assertFalse((new ReflectionClass(SimpleCaller::class))->isCloneable());
     }
 
     public function testIsACaller()

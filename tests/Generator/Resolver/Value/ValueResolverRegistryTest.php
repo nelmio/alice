@@ -25,6 +25,8 @@ use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
@@ -46,16 +48,12 @@ class ValueResolverRegistryTest extends TestCase
      */
     public function testThrowExceptionIfInvalidParserIsPassed()
     {
-        new ValueResolverRegistry([new \stdClass()]);
+        new ValueResolverRegistry([new stdClass()]);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        $resolver = new ValueResolverRegistry([]);
-        clone $resolver;
+        $this->assertFalse((new ReflectionClass(ValueResolverRegistry::class))->isCloneable());
     }
 
     public function testPicksTheFirstSuitableResolverToResolveTheGivenValue()
@@ -68,7 +66,7 @@ class ValueResolverRegistryTest extends TestCase
         $context->markIsResolvingFixture('foo');
         $expected = new ResolvedValueWithFixtureSet(
             10,
-            ResolvedFixtureSetFactory::create(null, null, (new ObjectBag())->with(new SimpleObject('dummy', new \stdClass())))
+            ResolvedFixtureSetFactory::create(null, null, (new ObjectBag())->with(new SimpleObject('dummy', new stdClass())))
         );
 
         $instantiator1Prophecy = $this->prophesize(ChainableValueResolverInterface::class);

@@ -22,6 +22,7 @@ use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
@@ -38,12 +39,9 @@ class ArrayParameterResolverTest extends TestCase
         $this->assertTrue(is_a(ArrayParameterResolver::class, ParameterResolverAwareInterface::class, true));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\UnclonableException
-     */
     public function testIsNotClonable()
     {
-        clone new ArrayParameterResolver();
+        $this->assertFalse((new ReflectionClass(ArrayParameterResolver::class))->isCloneable());
     }
 
     public function testCanBeInstantiatedWithoutAResolver()

@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use Nelmio\Alice\Throwable\Exception\UnclonableException;
-
 trait IsAServiceTrait
 {
-    public function __clone()
+    private function __clone()
     {
-        throw UnclonableException::createForService();
+        // This class is a service and as such should not be cloned. A service is not
+        // necessarily stateless and as such, cloning it may result in weird side effects.
+        // You should either create a new instance or make use  of a static or non static
+        // factory instead.
     }
 }
