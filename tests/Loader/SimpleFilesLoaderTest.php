@@ -25,7 +25,7 @@ use stdClass;
 /**
  * @covers \Nelmio\Alice\Loader\SimpleFilesLoader
  */
-class SimpleFilesLoamderTest extends TestCase
+class SimpleFilesLoaderTest extends TestCase
 {
     public function testIsALoader()
     {
