@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
-use Nelmio\Alice\Fixtures\Loader;
 use Symfony\Component\Yaml\Yaml as YamlParser;
 
 /**
