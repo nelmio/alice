@@ -47,7 +47,7 @@ the parameter `nelmio_alice.seed` if you are using Symfony.
 
 Faker can create localized data for addresses, phone numbers and so on. You can
 set the default locale to use by configuring the `locale` value used by Faker
-generator. With `NativeLoader`, this can be done by overridding the
+generator. With `NativeLoader`, this can be done by overriding the
 `createFakerGenerator()` method. In Symfony, override the
 `nelmio_alice.faker.generator` service.
 
@@ -187,7 +187,7 @@ final class JobProvider extends BaseProvider
 }
 ```
 
-Then you can add it to the Faker Generator used by Alice by either overridding
+Then you can add it to the Faker Generator used by Alice by either overriding
 the `NativeLoader::createFakerGenerator()` method or register it as a service
 with the tag `nelmio_alice.faker.provider`.
 

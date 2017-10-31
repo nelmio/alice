@@ -48,7 +48,7 @@ still have to do most of the work. Let's see how to make this more interesting.
 
 ### PHP
 
-You can also specify fixtures in PHP by returing an array where each key with
+You can also specify fixtures in PHP by returning an array where each key with
 the following structure:
 
 ```php
