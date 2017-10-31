@@ -11,7 +11,6 @@
 
 namespace Nelmio\Alice\Fixtures\Parser\Methods;
 
-use Nelmio\Alice\Fixtures\Loader;
 use Symfony\Component\Yaml\Yaml as YamlParser;
 
 /**
@@ -44,7 +43,9 @@ class Yaml extends Base
     public function parse($file)
     {
         $yaml = $this->compilePhp($file);
-        $data = YamlParser::parse($yaml);
+        $data = defined('Symfony\\Component\\Yaml\\Yaml::PARSE_CONSTANT')
+            ? YamlParser::parse($yaml, YamlParser::PARSE_CONSTANT)
+            : YamlParser::parse($yaml);
 
         if (!is_array($data)) {
             throw new \UnexpectedValueException('Yaml files must parse to an array of data');

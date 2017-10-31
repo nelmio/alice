@@ -78,6 +78,21 @@ class YamlTest extends TestCase
         );
     }
 
+    public function testParseReturnsInterpretedConstants()
+    {
+        if (!defined('Symfony\\Component\\Yaml\\Yaml::PARSE_CONSTANT')) {
+            $this->markTestSkipped('This test needs symfony/yaml v3.2 or higher.');
+        }
+        $data = $this->parser->parse(self::$dir.'/file_with_constants.yml');
+
+        $this->assertSame(
+            [
+                'max_int' => PHP_INT_MAX,
+            ],
+            $data
+        );
+    }
+
     /**
      * @group legacy
      */
