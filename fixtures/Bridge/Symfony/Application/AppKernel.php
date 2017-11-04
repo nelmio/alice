@@ -67,14 +67,14 @@ class AppKernel extends Kernel
             public function process(ContainerBuilder $container)
             {
                 foreach ($container->getDefinitions() as $id => $definition) {
-                    if ('nelmio_alice' !== substr($id, 0, 12)) {
-                        continue;
-                    }
+                    $definition->setPublic(true);
+                }
 
+                foreach ($container->getAliases() as $id => $definition) {
                     $definition->setPublic(true);
                 }
             }
-        }, PassConfig::TYPE_AFTER_REMOVING);
+        }, PassConfig::TYPE_OPTIMIZE);
     }
 
     public function setConfigurationResource(string $resource)
