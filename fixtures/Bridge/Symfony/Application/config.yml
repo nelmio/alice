@@ -12,7 +12,6 @@ framework:
     router:
         resource:            ~
         strict_requirements: '%kernel.debug%'
-    trusted_proxies:         ~
     test:                    ~
     session:
         storage_id:          session.storage.mock_file

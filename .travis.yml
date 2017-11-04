@@ -24,9 +24,12 @@ matrix:
       env: SYMFONY_VERSION='~3.3.0'
     - php: '7.1'
       env: SYMFONY_VERSION='~3.4.0@dev'
+    - php: '7.1'
+      env: SYMFONY_VERSION='~4.0.0@dev'
   allow_failures:
     - php: nightly
     - env: SYMFONY_VERSION='~3.4.0@dev'
+    - env: SYMFONY_VERSION='~4.0.0@dev'
 
 before_install:
   - set -eo pipefail
