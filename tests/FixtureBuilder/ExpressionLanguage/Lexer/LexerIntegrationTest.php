@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
+use InvalidArgumentException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -56,7 +57,7 @@ class LexerIntegrationTest extends TestCase
                     )
                 );
             }
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             if (null === $expected) {
                 return;
             }
@@ -841,6 +842,12 @@ class LexerIntegrationTest extends TestCase
                 new Token('@user{1..2}->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
             ],
         ];
+        yield '[Reference] variable with prop' => [
+            '@user$current->username',
+            [
+                new Token('@user$current->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+            ],
+        ];
         yield '[Reference] left with prop' => [
             'foo @user0->username',
             [
@@ -1020,6 +1027,12 @@ class LexerIntegrationTest extends TestCase
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+        yield '[Reference] reference variable' => [
+            '@user0$foo',
+            [
+                new Token('@user0$foo', new TokenType(TokenType::VARIABLE_REFERENCE_TYPE)),
             ],
         ];
         yield '[Reference] reference function' => [

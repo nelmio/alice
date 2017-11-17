@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
@@ -20,6 +22,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use TypeError;
 
 /**
  * @internal
@@ -45,9 +48,18 @@ final class VariableTokenParser implements ChainableTokenParserInterface
      */
     public function parse(Token $token)
     {
+        $variable = substr($token->getValue(), 1);
+
+        if ('current' === $variable) {
+            return new FunctionCallValue(
+                'current',
+                [new ValueForCurrentValue()]
+            );
+        }
+
         try {
-            return new VariableValue(substr($token->getValue(), 1));
-        } catch (\TypeError $error) {
+            return new VariableValue($variable);
+        } catch (TypeError $error) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $error);
         }
     }
