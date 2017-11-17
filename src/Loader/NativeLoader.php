@@ -205,6 +205,9 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 {
     use IsAServiceTrait;
 
+    /** @protected */
+    const LOCALE = 'en_US';
+
     private $previous = '';
 
     /**
@@ -563,7 +566,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     protected function createFakerGenerator(): FakerGenerator
     {
-        $generator = FakerGeneratorFactory::create();
+        $generator = FakerGeneratorFactory::create(self::LOCALE);
         $generator->addProvider(new AliceProvider());
         $generator->seed($this->getSeed());
 
