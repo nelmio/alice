@@ -2025,6 +2025,36 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
+        yield 'dynamic reference with variable' => [
+            [
+                stdClass::class => [
+                    'dummy{1..2}' => [
+                        'name' => '<current()>',
+                    ],
+                    'another_dummy{1..2}' => [
+                        'dummy' => '@dummy$current',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy1' => $dummy1 = StdClassFactory::create([
+                        'name' => '1',
+                    ]),
+                    'dummy2' => $dummy2 = StdClassFactory::create([
+                        'name' => '2',
+                    ]),
+                    'another_dummy1' => StdClassFactory::create([
+                        'dummy' => $dummy1,
+                    ]),
+                    'another_dummy2' => StdClassFactory::create([
+                        'dummy' => $dummy2,
+                    ]),
+                ],
+            ],
+        ];
+
         yield 'property reference value' => [
             [
                 stdClass::class => [
@@ -2068,6 +2098,36 @@ class LoaderIntegrationTest extends TestCase
                     ]),
                     'another_dummy' => StdClassFactory::create([
                         'name' => 'foo',
+                    ]),
+                ],
+            ],
+        ];
+
+        yield 'dynamic property reference value' => [
+            [
+                stdClass::class => [
+                    'dummy{1..2}' => [
+                        'name' => '<current()>',
+                    ],
+                    'another_dummy{1..2}' => [
+                        'dummy' => '@dummy$current->name',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy1' => $dummy1 = StdClassFactory::create([
+                        'name' => '1',
+                    ]),
+                    'dummy2' => $dummy2 = StdClassFactory::create([
+                        'name' => '2',
+                    ]),
+                    'another_dummy1' => StdClassFactory::create([
+                        'dummy' => '1',
+                    ]),
+                    'another_dummy2' => StdClassFactory::create([
+                        'dummy' => '2',
                     ]),
                 ],
             ],
@@ -2782,6 +2842,12 @@ class LoaderIntegrationTest extends TestCase
                     'dummy_{alice, bob}' => [
                         'val' => '<current()>',
                     ],
+                    'dummy_var{1..2}' => [
+                        'val' => '$current',
+                    ],
+                    'dummy_var_{alice, bob}' => [
+                        'val' => '$current',
+                    ],
                 ],
             ],
             [
@@ -2797,6 +2863,18 @@ class LoaderIntegrationTest extends TestCase
                         'val' => 'alice',
                     ]),
                     'dummy_bob' => StdClassFactory::create([
+                        'val' => 'bob',
+                    ]),
+                    'dummy_var1' => StdClassFactory::create([
+                        'val' => 1,
+                    ]),
+                    'dummy_var2' => StdClassFactory::create([
+                        'val' => 2,
+                    ]),
+                    'dummy_var_alice' => StdClassFactory::create([
+                        'val' => 'alice',
+                    ]),
+                    'dummy_var_bob' => StdClassFactory::create([
                         'val' => 'bob',
                     ]),
                 ],

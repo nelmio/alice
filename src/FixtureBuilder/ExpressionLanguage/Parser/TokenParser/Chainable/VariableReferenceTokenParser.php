@@ -15,6 +15,10 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 
 use InvalidArgumentException;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ListValue;
+use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
+use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -24,7 +28,7 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\Expressio
 /**
  * @internal
  */
-final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
+final class VariableReferenceTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
 
@@ -33,20 +37,32 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
      */
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::SIMPLE_REFERENCE_TYPE;
+        return $token->getType() === TokenType::VARIABLE_REFERENCE_TYPE;
     }
 
     /**
-     * Parses expressions such as "@user".
+     * Parses expressions such as "@user$foo".
      *
      * {@inheritdoc}
      */
     public function parse(Token $token): FixtureReferenceValue
     {
-        $value = $token->getValue();
+        $parts = explode('$', $token->getValue());
+
+        $variable = $parts[1];
 
         try {
-            return new FixtureReferenceValue(substr($value, 1));
+            return new FixtureReferenceValue(
+                new ListValue([
+                    substr($parts[0], 1),
+                    'current' === $variable
+                        ? new FunctionCallValue(
+                            'current',
+                            [new ValueForCurrentValue()]
+                        )
+                        : new VariableValue($variable)
+                ])
+            );
         } catch (InvalidArgumentException $exception) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $exception);
         }

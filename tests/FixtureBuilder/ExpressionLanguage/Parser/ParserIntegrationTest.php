@@ -890,6 +890,18 @@ class ParserIntegrationTest extends TestCase
                 'username'
             ),
         ];
+        yield '[Reference] variable with prop' => [
+            '@user$foo->username',
+            new FixturePropertyValue(
+                new FixtureReferenceValue(
+                    new ListValue([
+                        'user',
+                        new VariableValue('foo'),
+                    ])
+                ),
+                'username'
+            ),
+        ];
         yield '[Reference] left with prop' => [
             'foo @user0->username',
             new ListValue([
@@ -1098,6 +1110,15 @@ class ParserIntegrationTest extends TestCase
                 ]),
                 ' bar',
             ]),
+        ];
+        yield '[Reference] reference variable' => [
+            '@user0$foo',
+            new FixtureReferenceValue(
+                new ListValue([
+                    'user0',
+                    new VariableValue('foo')
+                ])
+            ),
         ];
         yield '[Reference] reference function' => [
             '@user0<foo()>',

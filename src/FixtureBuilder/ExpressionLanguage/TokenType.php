@@ -36,6 +36,7 @@ final class TokenType
     const RANGE_REFERENCE_TYPE = 'RANGE_REFERENCE_TYPE';
     const PROPERTY_REFERENCE_TYPE = 'PROPERTY_REFERENCE_TYPE';
     const METHOD_REFERENCE_TYPE = 'METHOD_REFERENCE_TYPE';
+    const VARIABLE_REFERENCE_TYPE = 'VARIABLE_REFERENCE_TYPE';
 
     const VARIABLE_TYPE = 'VARIABLE_TYPE';
 
@@ -54,6 +55,7 @@ final class TokenType
         self::RANGE_REFERENCE_TYPE => true,
         self::PROPERTY_REFERENCE_TYPE => true,
         self::METHOD_REFERENCE_TYPE => true,
+        self::VARIABLE_REFERENCE_TYPE => true,
         self::VARIABLE_TYPE => true,
     ];
 
