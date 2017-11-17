@@ -70,6 +70,11 @@
             <tag name="nelmio_alice.fixture_builder.expression_language.chainable_token_parser" />
         </service>
 
+        <service id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.variable_reference_token_parser"
+                 class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\VariableReferenceTokenParser">
+            <tag name="nelmio_alice.fixture_builder.expression_language.chainable_token_parser" />
+        </service>
+
         <service id="nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.simple_reference_token_parser"
                  class="Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\SimpleReferenceTokenParser">
             <tag name="nelmio_alice.fixture_builder.expression_language.chainable_token_parser" />
