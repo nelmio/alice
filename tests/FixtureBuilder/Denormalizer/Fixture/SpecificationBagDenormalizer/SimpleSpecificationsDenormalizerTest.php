@@ -74,8 +74,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
                     '__construct',
                     ['foo']
                 )
-            )
-        ;
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
@@ -111,8 +110,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
                     'create',
                     ['foo']
                 )
-            )
-        ;
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
@@ -152,8 +150,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
                     'create',
                     ['foo', 'bar']
                 )
-            )
-        ;
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
@@ -217,12 +214,10 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
                     '__construct',
                     ['foo']
                 )
-            )
-        ;
+            );
         $constructorDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $factory)
-            ->shouldNotBeCalled()
-        ;
+            ->shouldNotBeCalled();
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
@@ -253,8 +248,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
                     '__construct',
                     []
                 )
-            )
-        ;
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
@@ -298,12 +292,10 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $propertyDenormalizerProphecy = $this->prophesize(PropertyDenormalizerInterface::class);
         $propertyDenormalizerProphecy
             ->denormalize($fixture, 'parsed_username', '<name()>', $usernameFlags)
-            ->willReturn($usernameProp = new Property('username', '<name()>'))
-        ;
+            ->willReturn($usernameProp = new Property('username', '<name()>'));
         $propertyDenormalizerProphecy
             ->denormalize($fixture, 'parsed_name', 'bob', $nameFlags)
-            ->willReturn($nameProp = new Property('name', 'bob'))
-        ;
+            ->willReturn($nameProp = new Property('name', 'bob'));
         /** @var PropertyDenormalizerInterface $propertyDenormalizer */
         $propertyDenormalizer = $propertyDenormalizerProphecy->reveal();
 
@@ -342,8 +334,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $callsDenormalizerProphecy = $this->prophesize(CallsDenormalizerInterface::class);
         $callsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, 'setLocation', $setLocationArgs)
-            ->willReturn($call = new NoMethodCall())
-        ;
+            ->willReturn($call = new NoMethodCall());
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
@@ -394,28 +385,24 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
                     '__construct',
                     ['<latitude()>']
                 )
-            )
-        ;
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
         $propertyDenormalizerProphecy = $this->prophesize(PropertyDenormalizerInterface::class);
         $propertyDenormalizerProphecy
             ->denormalize($fixture, 'parsed_username', '<name()>', $usernameFlags)
-            ->willReturn($usernameProp = new Property('username', '<name()>'))
-        ;
+            ->willReturn($usernameProp = new Property('username', '<name()>'));
         $propertyDenormalizerProphecy
             ->denormalize($fixture, 'parsed_name', 'bob', $nameFlags)
-            ->willReturn($nameProp = new Property('name', 'bob'))
-        ;
+            ->willReturn($nameProp = new Property('name', 'bob'));
         /** @var PropertyDenormalizerInterface $propertyDenormalizer */
         $propertyDenormalizer = $propertyDenormalizerProphecy->reveal();
 
         $callsDenormalizerProphecy = $this->prophesize(CallsDenormalizerInterface::class);
         $callsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, 'setLocation', $setLocationArgs)
-            ->willReturn($call = new NoMethodCall())
-        ;
+            ->willReturn($call = new NoMethodCall());
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 

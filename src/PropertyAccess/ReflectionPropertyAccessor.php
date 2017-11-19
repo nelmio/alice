@@ -116,7 +116,6 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
 
         return
             $reflectionClass->hasProperty($propertyPath)
-            && false === $reflectionClass->getProperty($propertyPath)->isStatic()
-        ;
+            && false === $reflectionClass->getProperty($propertyPath)->isStatic();
     }
 }

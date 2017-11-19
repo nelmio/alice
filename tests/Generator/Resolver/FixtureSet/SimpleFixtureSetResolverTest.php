@@ -55,8 +55,7 @@ class SimpleFixtureSetResolverTest extends TestCase
             ->resolve($injectedParameters, $loadedParameters)
             ->willReturn(
                 $resolvedParameters = (new ParameterBag(['resolved' => true]))
-            )
-        ;
+            );
         /** @var ParameterBagResolverInterface $parameterResolver */
         $parameterResolver = $parameterResolverProphecy->reveal();
 
@@ -65,8 +64,7 @@ class SimpleFixtureSetResolverTest extends TestCase
             ->resolve($fixtures)
             ->willReturn(
                 $resolvedFixtures = (new FixtureBag())->with(new DummyFixture('another_dummy'))
-            )
-        ;
+            );
         /** @var FixtureBagResolverInterface $fixtureResolver */
         $fixtureResolver = $fixtureResolverProphecy->reveal();
 

@@ -53,8 +53,7 @@ class TemplatingFixtureTest extends TestCase
 
         $flags = (new FlagBag($reference))
             ->withFlag($flag1)
-            ->withFlag($flag2)
-        ;
+            ->withFlag($flag2);
 
         $fixtureWithFlags = new SimpleFixtureWithFlags($decoratedFixture, $flags);
         $fixture = new TemplatingFixture($fixtureWithFlags);

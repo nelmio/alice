@@ -88,8 +88,7 @@ class SelfFixtureReferenceResolverTest extends TestCase
         $decoratedResolverProphecy->willImplement(ObjectGeneratorAwareInterface::class);
         $decoratedResolverProphecy
             ->withObjectGenerator($generator)
-            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver())
-        ;
+            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver());
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -117,8 +116,7 @@ class SelfFixtureReferenceResolverTest extends TestCase
         $decoratedResolverProphecy->willImplement(ValueResolverAwareInterface::class);
         $decoratedResolverProphecy
             ->withValueResolver($valueResolver)
-            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver())
-        ;
+            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver());
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -213,8 +211,7 @@ class SelfFixtureReferenceResolverTest extends TestCase
                     $resolvedFixture = new SimpleFixture('resolved_fixture', 'Dummy', SpecificationBagFactory::create()),
                     ResolvedFixtureSetFactory::create(null, $fixtureBag->with($resolvedFixture))
                 )
-            )
-        ;
+            );
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 

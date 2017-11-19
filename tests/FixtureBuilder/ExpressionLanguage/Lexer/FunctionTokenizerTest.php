@@ -51,6 +51,7 @@ class FunctionTokenizerTest extends TestCase
             if (null === $expected) {
                 $this->fail('Expected exception to be thrown.');
             }
+
             $this->assertEquals($expected, $actual);
         } catch (MalformedFunctionException $exception) {
             if (null !== $expected) {

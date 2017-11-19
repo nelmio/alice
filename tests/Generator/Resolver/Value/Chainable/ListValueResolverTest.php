@@ -98,8 +98,7 @@ class ListValueResolverTest extends TestCase
                     'b',
                     $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'baz']))
                 )
-            )
-        ;
+            );
         $valueResolverProphecy
             ->resolve(new FakeValue(), $fixture, $newSet, $scope, $context)
             ->willReturn(
@@ -107,8 +106,7 @@ class ListValueResolverTest extends TestCase
                     'd',
                     $newSet2 = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'zab']))
                 )
-            )
-        ;
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 

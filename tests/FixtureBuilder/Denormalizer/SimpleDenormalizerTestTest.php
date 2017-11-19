@@ -64,8 +64,7 @@ class SimpleDenormalizerTest extends TestCase
             ->denormalize($data)
             ->willReturn(
                 $parameters = new ParameterBag(['foo' => 'bar'])
-            )
-        ;
+            );
         /** @var ParameterBagDenormalizerInterface $parameterDenormalizer */
         $parameterDenormalizer = $parameterDenormalizerProphecy->reveal();
 
@@ -74,8 +73,7 @@ class SimpleDenormalizerTest extends TestCase
             ->denormalize($fixturesData)
             ->willReturn(
                 $fixtures = (new FixtureBag())->with(new DummyFixture('foo'))
-            )
-        ;
+            );
         /** @var FixtureBagDenormalizerInterface $fixturesDenormalizer */
         $fixturesDenormalizer = $fixturesDenormalizerProphecy->reveal();
 

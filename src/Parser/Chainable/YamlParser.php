@@ -75,6 +75,7 @@ final class YamlParser implements ChainableParserInterface
             if ($exception instanceof SymfonyParseException) {
                 throw ParseExceptionFactory::createForInvalidYaml($file, 0, $exception);
             }
+
             throw ParseExceptionFactory::createForUnparsableFile($file, 0, $exception);
         }
     }

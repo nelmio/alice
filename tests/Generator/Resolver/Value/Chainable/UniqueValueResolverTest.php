@@ -155,8 +155,7 @@ class UniqueValueResolverTest extends TestCase
                     10,
                     $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']))
                 )
-            )
-        ;
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -195,8 +194,7 @@ class UniqueValueResolverTest extends TestCase
                     10,
                     $setAfterResolution0
                 )
-            )
-        ;
+            );
         $decoratedResolverProphecy
             ->resolve($realValue, $fixture, $setAfterResolution0, $scope, $context)
             ->willReturn(
@@ -204,8 +202,7 @@ class UniqueValueResolverTest extends TestCase
                     11,
                     $setAfterResolution1
                 )
-            )
-        ;
+            );
         $decoratedResolverProphecy
             ->resolve($realValue, $fixture, $setAfterResolution1, $scope, $context)
             ->willReturn(
@@ -213,8 +210,7 @@ class UniqueValueResolverTest extends TestCase
                     12,
                     $setAfterResolution2
                 )
-            )
-        ;
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -248,8 +244,7 @@ class UniqueValueResolverTest extends TestCase
             ->resolve($realValue, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(10, $set)
-            )
-        ;
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 

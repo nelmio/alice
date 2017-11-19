@@ -100,8 +100,7 @@ class SimpleValueDenormalizerTest extends TestCase
             ->parse(Argument::any())
             ->willThrow(
                 $thrownException = new RootParseException('hello world', 10)
-            )
-        ;
+            );
         /** @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 

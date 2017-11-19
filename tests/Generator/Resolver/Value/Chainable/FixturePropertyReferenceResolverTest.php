@@ -103,8 +103,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
                     $instance = new \stdClass(),
                     $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
                 )
-            )
-        ;
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -141,8 +140,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
                         $instance = new \stdClass(),
                         $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
                     )
-                )
-            ;
+                );
             /** @var ValueResolverInterface $valueResolver */
             $valueResolver = $valueResolverProphecy->reveal();
 
@@ -182,8 +180,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
             ->resolve(Argument::cetera())
             ->willReturn(
                 new ResolvedValueWithFixtureSet($instance, $set)
-            )
-        ;
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -216,8 +213,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
             ->resolve(Argument::cetera())
             ->willReturn(
                 new ResolvedValueWithFixtureSet('string value', $set)
-            )
-        ;
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -243,8 +239,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
                 ->resolve(Argument::cetera())
                 ->willReturn(
                     new ResolvedValueWithFixtureSet(new \stdClass(), $set)
-                )
-            ;
+                );
             /** @var ValueResolverInterface $valueResolver */
             $valueResolver = $valueResolverProphecy->reveal();
 

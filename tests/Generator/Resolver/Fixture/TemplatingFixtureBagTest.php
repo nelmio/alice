@@ -47,8 +47,7 @@ class TemplatingFixtureBagTest extends TestCase
         
         $bag = (new TemplatingFixtureBag())
             ->with($fixture)
-            ->with($template)
-        ;
+            ->with($template);
 
         $this->assertTrue($bag->has($fixtureId));
         $this->assertFalse($bag->hasTemplate($fixtureId));
@@ -113,8 +112,7 @@ class TemplatingFixtureBagTest extends TestCase
 
         $bag = (new TemplatingFixtureBag())
             ->with($fixture)
-            ->with($template)
-        ;
+            ->with($template);
 
         $this->assertEquals(
             (new FixtureBag())

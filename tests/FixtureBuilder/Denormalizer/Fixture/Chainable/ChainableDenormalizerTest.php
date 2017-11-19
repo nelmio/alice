@@ -88,6 +88,7 @@ abstract class ChainableDenormalizerTest extends TestCase
         foreach ($expected as $item) {
             $expectedFixtures = $expectedFixtures->with($item);
         }
+
         $this->assertEquals($expectedFixtures, $actual);
     }
 
@@ -105,8 +106,7 @@ abstract class ChainableDenormalizerTest extends TestCase
                 function ($args) {
                     return $args[0]->with(FixtureFactory::create($args[2], ''));
                 }
-            )
-        ;
+            );
 
         return $decoratedDenormalizerProphecy->reveal();
     }

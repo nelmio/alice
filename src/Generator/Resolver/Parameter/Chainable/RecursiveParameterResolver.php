@@ -48,6 +48,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
         if (2 >= $limit) {
             throw InvalidArgumentExceptionFactory::createForInvalidLimitValueForRecursiveCalls($limit);
         }
+
         $this->limit = $limit;
     }
 
@@ -93,6 +94,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
 
             return $this->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context, $result);
         }
+
         $parameterKey = $parameter->getKey();
         $previousParameterValue = $previousResult->get($parameterKey);
         $counter = $this->incrementCounter($counter, $this->limit, $parameterKey);

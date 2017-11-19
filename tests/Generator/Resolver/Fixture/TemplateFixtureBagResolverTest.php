@@ -168,8 +168,7 @@ class TemplateFixtureBagResolverTest extends TestCase
                     (new FlagBag('user5'))
                         ->withFlag(new TemplateFlag())
                 )
-            )
-        ;
+            );
         $expected = (new FixtureBag())
             ->with($group1)
             ->with($group2)
@@ -194,8 +193,7 @@ class TemplateFixtureBagResolverTest extends TestCase
                         ->withFlag(new ElementFlag('dummy_flag'))
                 )
             )
-            ->with($user5)
-        ;
+            ->with($user5);
 
         $actual = $this->resolver->resolve($unresolvedFixtures);
         $this->assertEquals($expected, $actual);
@@ -280,8 +278,7 @@ class TemplateFixtureBagResolverTest extends TestCase
                             ->withFlag(new ElementFlag('dummy_flag'))
                     )
                 )
-            )
-        ;
+            );
         $expected = (new FixtureBag())
             ->with(
                 new TemplatingFixture(
@@ -302,8 +299,7 @@ class TemplateFixtureBagResolverTest extends TestCase
                     ),
                     (new FlagBag('user1'))
                 )
-            )
-        ;
+            );
 
         $actual = $this->resolver->resolve($unresolvedFixtures);
         $this->assertEquals($expected, $actual);
@@ -332,8 +328,7 @@ class TemplateFixtureBagResolverTest extends TestCase
                             )
                     )
                 )
-            )
-        ;
+            );
         $this->resolver->resolve($unresolvedFixtures);
     }
 
@@ -367,8 +362,7 @@ class TemplateFixtureBagResolverTest extends TestCase
                     'Nelmio\Alice\Entity\User',
                     SpecificationBagFactory::create()
                 )
-            )
-        ;
+            );
         $this->resolver->resolve($unresolvedFixtures);
     }
 

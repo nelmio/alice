@@ -115,8 +115,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
     ): MethodCallInterface {
         return (false === $value)
             ? new NoMethodCall()
-            : $this->constructorDenormalizer->denormalize($scope, $parser, $value)
-        ;
+            : $this->constructorDenormalizer->denormalize($scope, $parser, $value);
     }
 
     private function denormalizeFactory(
@@ -173,6 +172,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         if (false === is_array($methodCall)) {
             throw TypeErrorFactory::createForInvalidSpecificationBagMethodCall($methodCall);
         }
+
         $unparsedMethod = key($methodCall);
         if (false === is_string($unparsedMethod)) {
             throw TypeErrorFactory::createForInvalidSpecificationBagMethodCallName($unparsedMethod);

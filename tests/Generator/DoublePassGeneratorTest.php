@@ -74,8 +74,7 @@ class DoublePassGeneratorTest extends TestCase
                     'foo',
                     StdClassFactory::create(['pass' => 'first'])
                 )
-            ))
-        ;
+            ));
         $contextAfterFirstPass = clone $context;
         $contextAfterFirstPass->setToSecondPass();
         $objectGeneratorProphecy
@@ -93,8 +92,7 @@ class DoublePassGeneratorTest extends TestCase
                     'foo',
                     StdClassFactory::create(['pass' => 'second'])
                 )
-            ))
-        ;
+            ));
         /** @var ObjectGeneratorInterface $objectGenerator */
         $objectGenerator = $objectGeneratorProphecy->reveal();
 

@@ -55,8 +55,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->setValue($object, $property, $value)
-            ->willThrow(NoSuchPropertyException::class)
-        ;
+            ->willThrow(NoSuchPropertyException::class);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
@@ -79,8 +78,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->setValue($object, $property, $value)
-            ->willThrow(new NoSuchPropertyException("Cannot set property \"$property\"."))
-        ;
+            ->willThrow(new NoSuchPropertyException("Cannot set property \"$property\"."));
 
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
@@ -103,8 +101,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->setValue($object, $property, $value)
-            ->willThrow(new NoSuchPropertyException("Cannot set property \"$property\"."))
-        ;
+            ->willThrow(new NoSuchPropertyException("Cannot set property \"$property\"."));
 
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
@@ -127,8 +124,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->setValue($object, $property, $value)
-            ->willThrow(new NoSuchPropertyException("Cannot set property \"$property\"."))
-        ;
+            ->willThrow(new NoSuchPropertyException("Cannot set property \"$property\"."));
 
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
@@ -154,8 +150,7 @@ class ReflectionPropertyAccessorTest extends TestCase
                 function ($args) {
                     $args[0]->{$args[1]} = $args[2];
                 }
-            )
-        ;
+            );
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
@@ -176,8 +171,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->getValue($object, $property)
-            ->willThrow(NoSuchPropertyException::class)
-        ;
+            ->willThrow(NoSuchPropertyException::class);
 
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
@@ -200,8 +194,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->getValue($object, $property)
-            ->willThrow(new NoSuchPropertyException("Cannot read property \"$property\"."))
-        ;
+            ->willThrow(new NoSuchPropertyException("Cannot read property \"$property\"."));
 
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
@@ -223,8 +216,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->getValue($object, $property)
-            ->willThrow(new NoSuchPropertyException("Cannot read property \"$property\"."))
-        ;
+            ->willThrow(new NoSuchPropertyException("Cannot read property \"$property\"."));
 
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
@@ -246,8 +238,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->getValue($object, $property)
-            ->willThrow(new NoSuchPropertyException("Cannot read property \"$property\"."))
-        ;
+            ->willThrow(new NoSuchPropertyException("Cannot read property \"$property\"."));
 
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
@@ -266,8 +257,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->getValue($object, $property)
-            ->willReturn($value)
-        ;
+            ->willReturn($value);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
@@ -286,8 +276,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isWritable($object, Argument::any())
-            ->willReturn(false)
-        ;
+            ->willReturn(false);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
@@ -306,8 +295,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isWritable($object, $property)
-            ->willReturn($expected = true)
-        ;
+            ->willReturn($expected = true);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
@@ -326,8 +314,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isReadable($object, Argument::any())
-            ->willReturn(false)
-        ;
+            ->willReturn(false);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
@@ -346,8 +333,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isReadable($object, $property)
-            ->willReturn($expected = true)
-        ;
+            ->willReturn($expected = true);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 

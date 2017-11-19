@@ -83,8 +83,7 @@ class FunctionFixtureReferenceParserTest extends TestCase
                     new FixtureReferenceValue('hatter'),
                     new FunctionCallValue('h'),
                 ])
-            )
-        ;
+            );
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -132,8 +131,7 @@ class FunctionFixtureReferenceParserTest extends TestCase
                     new FakeValue(),
                     new FakeValue(),
                 ])
-            )
-        ;
+            );
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 

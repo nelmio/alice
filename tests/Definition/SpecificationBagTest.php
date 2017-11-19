@@ -74,12 +74,10 @@ class SpecificationBagTest extends TestCase
 
         $propertiesA = (new PropertyBag())
             ->with($propertyA1)
-            ->with($propertyA2)
-        ;
+            ->with($propertyA2);
         $propertiesB = (new PropertyBag())
             ->with($propertyB1)
-            ->with($propertyB2)
-        ;
+            ->with($propertyB2);
 
         $callA1 = new SimpleMethodCall('setUsername', []);
         $callA2 = new SimpleMethodCall('setOwner', []);
@@ -89,12 +87,10 @@ class SpecificationBagTest extends TestCase
 
         $callsA = (new MethodCallBag())
             ->with($callA1)
-            ->with($callA2)
-        ;
+            ->with($callA2);
         $callsB = (new MethodCallBag())
             ->with($callB1)
-            ->with($callB2)
-        ;
+            ->with($callB2);
 
         $bagA = new SpecificationBag($constructorA, $propertiesA, $callsA);
         $bagB = new SpecificationBag($constructorB, $propertiesB, $callsB);

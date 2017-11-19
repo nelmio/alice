@@ -42,6 +42,7 @@ final class FixtureReferenceValue implements ValueInterface
 
             throw InvalidArgumentExceptionFactory::createForInvalidReferenceType($referenceString);
         }
+
         $this->reference = $reference;
     }
 

@@ -36,6 +36,7 @@ class GeneratorFactoryTest extends TestCase
                 $exception->getMessage()
             );
         }
+
         $this->assertGeneratorLocaleIs('fr_FR', FakerFactory::create('fr_FR'));
     }
 

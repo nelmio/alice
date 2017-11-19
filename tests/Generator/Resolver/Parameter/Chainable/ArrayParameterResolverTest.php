@@ -121,8 +121,7 @@ class ArrayParameterResolverTest extends TestCase
                     'name' => 'resolvedParams',
                     '0' => 'val1',
                 ])
-            )
-        ;
+            );
         $context->add('array_param');
         $injectedResolverProphecy
             ->resolve(
@@ -136,8 +135,7 @@ class ArrayParameterResolverTest extends TestCase
                     'name' => 'resolvedParams',
                     '1' => 'val2',
                 ])
-            )
-        ;
+            );
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
@@ -177,8 +175,7 @@ class ArrayParameterResolverTest extends TestCase
                     '0' => 'val1',
                     'other_param' => 'yo',
                 ])
-            )
-        ;
+            );
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
@@ -224,8 +221,7 @@ class ArrayParameterResolverTest extends TestCase
                     'name' => 'resolvedParams',
                     '0' => 'val1',
                 ])
-            )
-        ;
+            );
         $injectedResolverProphecy
             ->resolve(
                 new Parameter('1', $val2),
@@ -238,8 +234,7 @@ class ArrayParameterResolverTest extends TestCase
                     'name' => 'resolvedParams',
                     '1' => 'val2',
                 ])
-            )
-        ;
+            );
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 

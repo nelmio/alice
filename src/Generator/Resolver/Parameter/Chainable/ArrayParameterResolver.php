@@ -85,6 +85,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
             $resolvedArray[$index] = $resolvedParameters->get((string) $index);
             $resolvedParameters = $resolvedParameters->without((string) $index);
         }
+
         $resolvedParameters = $resolvedParameters->with(
             $unresolvedArrayParameter->withValue($resolvedArray)
         );

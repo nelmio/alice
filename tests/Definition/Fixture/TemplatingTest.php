@@ -102,8 +102,7 @@ class TemplatingTest extends TestCase
 
         $extendsFlagBag = $emptyFlagBag
             ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
-            ->withFlag(new ExtendFlag(new FixtureReference('user_base1')))
-        ;
+            ->withFlag(new ExtendFlag(new FixtureReference('user_base1')));
         yield 'flagbag with extends' => [
             $this->createFixtureWithFlags($extendsFlagBag),
             false,
@@ -118,8 +117,7 @@ class TemplatingTest extends TestCase
             ->withFlag(new TemplateFlag())
             ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
             ->withFlag(new ExtendFlag(new FixtureReference('user_base1')))
-            ->withFlag(new DummyFlag())
-        ;
+            ->withFlag(new DummyFlag());
         yield 'flagbag with template, extends and non templating flags' => [
             $this->createFixtureWithFlags($templateAndExtendsFlagBag),
             true,

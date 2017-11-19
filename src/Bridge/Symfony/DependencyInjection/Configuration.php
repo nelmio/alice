@@ -93,8 +93,7 @@ final class Configuration implements ConfigurationInterface
                         ->always($this->createPositiveIntegerValidatorClosure())
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
 
         return $treeBuilder;
     }

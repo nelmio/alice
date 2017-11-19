@@ -54,8 +54,7 @@ class RemoveConflictingObjectsResolverTest extends TestCase
                         ->with(new SimpleObject('dummy', new \stdClass()))
                         ->with(new SimpleObject('another_injected_object', new \stdClass()))
                 )
-            )
-        ;
+            );
         /** @var FixtureSetResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 

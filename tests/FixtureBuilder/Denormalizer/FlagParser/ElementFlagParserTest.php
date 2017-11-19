@@ -55,22 +55,19 @@ class ElementFlagParserTest extends FlagParserTestCase
             ->parse('flag1')
             ->willReturn(
                 (new FlagBag(''))->withFlag(new ElementFlag('flag1'))
-            )
-        ;
+            );
         $decoratedParserProphecy
             ->parse('flag2')
             ->willReturn(
                 (new FlagBag(''))->withFlag(new ElementFlag('flag2'))->withFlag(new ElementFlag('additional flag'))
-            )
-        ;
+            );
         /** @var FlagParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
         $expected = (new FlagBag('dummy'))
             ->withFlag(new ElementFlag('flag1'))
             ->withFlag(new ElementFlag('flag2'))
-            ->withFlag(new ElementFlag('additional flag'))
-        ;
+            ->withFlag(new ElementFlag('additional flag'));
 
         $parser = new ElementFlagParser($decoratedParser);
         $actual = $parser->parse($element);

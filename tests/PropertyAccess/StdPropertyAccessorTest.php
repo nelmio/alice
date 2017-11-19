@@ -74,8 +74,7 @@ class StdPropertyAccessorTest extends TestCase
                 function ($args) {
                     $args[0]->{$args[1]} = $args[2];
                 }
-            )
-        ;
+            );
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
@@ -122,8 +121,7 @@ class StdPropertyAccessorTest extends TestCase
                 function ($args) {
                     return $args[0]->{$args[1]};
                 }
-            )
-        ;
+            );
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
@@ -151,8 +149,7 @@ class StdPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isWritable($object, $property)
-            ->willReturn($expected = true)
-        ;
+            ->willReturn($expected = true);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
@@ -181,8 +178,7 @@ class StdPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isReadable($object, $property)
-            ->willReturn($expected = true)
-        ;
+            ->willReturn($expected = true);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 

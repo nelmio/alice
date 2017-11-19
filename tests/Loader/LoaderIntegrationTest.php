@@ -862,6 +862,7 @@ class LoaderIntegrationTest extends TestCase
             foreach ($dummy->relatedDummies as $relatedDummy) {
                 $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy'.$relatedDummy->name]);
             }
+
             $self->assertNotEquals($dummy->relatedDummies[0], $dummy->relatedDummies[1]);
 
             $anotherDummy = $set->getObjects()['dummy2'];
@@ -869,6 +870,7 @@ class LoaderIntegrationTest extends TestCase
             foreach ($anotherDummy->relatedDummies as $relatedDummy) {
                 $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy'.$relatedDummy->name]);
             }
+
             $self->assertNotEquals($anotherDummy->relatedDummies[0], $anotherDummy->relatedDummies[1]);
         };
         $assertEachValuesInRelatedDummiesAreUnique($result);

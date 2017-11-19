@@ -83,8 +83,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
         $flagParserProphecy
             ->parse($reference)
-            ->willReturn(new FlagBag('user_base'))
-        ;
+            ->willReturn(new FlagBag('user_base'));
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -92,8 +91,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $expectedSpecs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
         $specsDenormalizerProphecy
             ->denormalize(Argument::type(SimpleFixture::class), $flagParser, $specs)
-            ->willReturn($expectedSpecs)
-        ;
+            ->willReturn($expectedSpecs);
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $specsDenormalizerProphecy->reveal();
 
@@ -134,8 +132,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
             ->parse($reference)
             ->willReturn(
                 (new FlagBag('user_base'))->withFlag(new TemplateFlag())
-            )
-        ;
+            );
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -143,8 +140,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $expectedSpecs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
         $specsDenormalizerProphecy
             ->denormalize(Argument::type(SimpleFixture::class), $flagParser, $specs)
-            ->willReturn($expectedSpecs)
-        ;
+            ->willReturn($expectedSpecs);
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $specsDenormalizerProphecy->reveal();
 

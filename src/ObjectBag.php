@@ -41,6 +41,7 @@ final class ObjectBag implements IteratorAggregate, Countable
                 if ($id !== $object->getId()) {
                     throw InvalidArgumentExceptionFactory::createForReferenceKeyMismatch($id, $object->getId());
                 }
+
                 $this->objects[$id] = $object;
                 $this->array[$id] = $object->getInstance();
 

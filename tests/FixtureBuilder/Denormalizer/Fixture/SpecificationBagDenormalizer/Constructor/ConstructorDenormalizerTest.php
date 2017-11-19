@@ -40,8 +40,7 @@ class ConstructorDenormalizerTest extends TestCase
         $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
         $argumentsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $arguments)
-            ->willReturn($arguments)
-        ;
+            ->willReturn($arguments);
         /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
         $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
 

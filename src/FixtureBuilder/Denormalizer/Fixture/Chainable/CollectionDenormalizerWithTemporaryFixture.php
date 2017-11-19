@@ -108,6 +108,7 @@ final class CollectionDenormalizerWithTemporaryFixture implements CollectionDeno
         if (null === $this->denormalizer) {
             throw DenormalizerExceptionFactory::createDenormalizerNotFoundUnexpectedCall(__METHOD__);
         }
+
         if (null === $this->parser) {
             throw FlagParserExceptionFactory::createForExpectedMethodToBeCalledIfHasAParser(__METHOD__);
         }

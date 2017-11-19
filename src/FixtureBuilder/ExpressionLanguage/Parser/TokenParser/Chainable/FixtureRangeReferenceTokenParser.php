@@ -87,6 +87,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
         if (1 !== preg_match(self::REGEX, (string) $name, $matches)) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
+
         $reference = str_replace(sprintf('{%s}', $matches['range']), $this->token, $name);
 
         return new RangeName($reference, (int) $matches['from'], (int) $matches['to']);

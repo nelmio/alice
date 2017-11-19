@@ -59,8 +59,7 @@ class FunctionLexerTest extends TestCase
                 $expected = [
                     new Token('something', new TokenType(TokenType::FUNCTION_TYPE))
                 ]
-            )
-        ;
+            );
         /** @var LexerInterface $decoratedLexer */
         $decoratedLexer = $decoratedLexerProphecy->reveal();
 
@@ -83,8 +82,7 @@ class FunctionLexerTest extends TestCase
                 $expected = [
                     new Token('something', new TokenType(TokenType::FUNCTION_TYPE))
                 ]
-            )
-        ;
+            );
         /** @var LexerInterface $decoratedLexer */
         $decoratedLexer = $decoratedLexerProphecy->reveal();
 

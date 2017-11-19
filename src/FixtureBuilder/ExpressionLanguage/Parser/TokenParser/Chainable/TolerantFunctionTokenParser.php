@@ -50,6 +50,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
         if (null !== $parser && $functionTokenParser instanceof ParserAwareInterface) {
             $functionTokenParser = $functionTokenParser->withParser($parser);
         }
+
         $this->functionTokenParser = $functionTokenParser;
     }
 
@@ -99,6 +100,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
         if (3 === $splitSize) {
             $values[] = $this->parser->parse('<'.$split[2]);
         }
+
         if (4 === $splitSize) {
             $values[] = $this->parser->parse($split[2]);
             $values[] = $this->parser->parse('<'.$split[3]);

@@ -54,8 +54,7 @@ class StringThenReferenceLexerTest extends TestCase
                     new Token('@example.com', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
                     new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
                 ]
-            )
-        ;
+            );
         /** @var LexerInterface $decoratedLexer */
         $decoratedLexer = $decoratedLexerProphecy->reveal();
 

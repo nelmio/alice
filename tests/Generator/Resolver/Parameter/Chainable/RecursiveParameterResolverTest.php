@@ -110,8 +110,7 @@ class RecursiveParameterResolverTest extends TestCase
                 $resolvedParameters,
                 $context
             )
-            ->willReturn($expected)
-        ;
+            ->willReturn($expected);
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'bar'),
@@ -119,8 +118,7 @@ class RecursiveParameterResolverTest extends TestCase
                 $resolvedParameters,
                 $context
             )
-            ->willReturn($expected)
-        ;
+            ->willReturn($expected);
         /* @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -151,8 +149,7 @@ class RecursiveParameterResolverTest extends TestCase
                     'foo' => 'first result',
                     'another_param1' => 'val1',
                 ])
-            )
-        ;
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'first result'),
@@ -166,8 +163,7 @@ class RecursiveParameterResolverTest extends TestCase
                     'another_param2' => 'val2',
                     // 'another_param1' has already been resolved so is not return in the result set!
                 ])
-            )
-        ;
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'second result'),
@@ -179,8 +175,7 @@ class RecursiveParameterResolverTest extends TestCase
                 new ParameterBag([
                     'foo' => 'second result',   // same as previous
                 ])
-            )
-        ;
+            );
         /* @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -208,8 +203,7 @@ class RecursiveParameterResolverTest extends TestCase
         $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $decoratedResolverProphecy
             ->resolve(Argument::any(), Argument::any(), Argument::any(), $context)
-            ->willReturn(new ParameterBag(['foo' => null]))
-        ;
+            ->willReturn(new ParameterBag(['foo' => null]));
         /* @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -237,8 +231,7 @@ class RecursiveParameterResolverTest extends TestCase
             )
             ->willReturn(
                 new ParameterBag(['foo' => 'result1'])
-            )
-        ;
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'result1'),
@@ -248,8 +241,7 @@ class RecursiveParameterResolverTest extends TestCase
             )
             ->willReturn(
                 new ParameterBag(['foo' => 'result2'])
-            )
-        ;
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'result2'),
@@ -259,8 +251,7 @@ class RecursiveParameterResolverTest extends TestCase
             )
             ->willReturn(
                 new ParameterBag(['foo' => 'result3'])
-            )
-        ;
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'result3'),
@@ -270,8 +261,7 @@ class RecursiveParameterResolverTest extends TestCase
             )
             ->willReturn(
                 $expected = new ParameterBag(['foo' => 'result3'])
-            )
-        ;
+            );
         /* @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -298,8 +288,7 @@ class RecursiveParameterResolverTest extends TestCase
 
                     return new ParameterBag(['foo' => uniqid($hash)]);
                 }
-            )
-        ;
+            );
         /* @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 

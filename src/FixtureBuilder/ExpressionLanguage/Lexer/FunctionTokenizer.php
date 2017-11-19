@@ -65,6 +65,7 @@ final class FunctionTokenizer
         if (false === $this->isTokenized($value)) {
             return $value;
         }
+
         $value = substr($value, 24, strlen($value) - 24 - 2);
 
         return $this->tokenizer->detokenize($value);
@@ -92,6 +93,7 @@ final class FunctionTokenizer
                     if (null === $lastFunctionKey) {
                         throw ExpressionLanguageExceptionFactory::createForMalformedFunction($originalValue);
                     }
+
                     unset($functions[$lastFunctionKey]);
 
                     continue;

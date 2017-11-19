@@ -651,6 +651,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
         if ($realMethod === $this->previous) {
             throw BadMethodCallExceptionFactory::createForUnknownMethod($method);
         }
+
         $this->previous = $realMethod;
 
         $service = $this->$realMethod(...$arguments);

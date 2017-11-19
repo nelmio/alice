@@ -55,8 +55,7 @@ final class StringMergerParser implements ParserInterface
 
         return (1 === count($mergedValues))
             ? $mergedValues[0]
-            : new ListValue($mergedValues)
-        ;
+            : new ListValue($mergedValues);
     }
     
     private function mergeStrings(array $values, $value): array

@@ -96,6 +96,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
         if (false === $this->canDenormalize($name, $matches)) {
             throw LogicExceptionFactory::createForCannotDenormalizerForChainableFixtureBuilderDenormalizer(__METHOD__);
         }
+
         $reference = str_replace(
             sprintf('{%s}', $matches['range']),
             $this->token,

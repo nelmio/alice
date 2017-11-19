@@ -45,8 +45,7 @@ class SimpleArgumentsDenormalizerTest extends TestCase
             ->parse('2 (dummy_flag)')
             ->willReturn(
                 $arg2Flags = (new FlagBag('2'))->withFlag(new ElementFlag('dummy_flag'))
-            )
-        ;
+            );
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -83,8 +82,7 @@ class SimpleArgumentsDenormalizerTest extends TestCase
 
                     return new FlagBag($matches['val']);
                 }
-            )
-        ;
+            );
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 

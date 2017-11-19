@@ -152,8 +152,7 @@ class FixtureReferenceResolverTest extends TestCase
                         'complete' => true,
                     ])
                 ])
-            )
-        ;
+            );
         /** @var ObjectGeneratorInterface $generator */
         $generator = $generatorProphecy->reveal();
 
@@ -198,8 +197,7 @@ class FixtureReferenceResolverTest extends TestCase
             ->generate($referredFixture, $set, $generatorContext)
             ->willReturn(
                 $objects = new ObjectBag(['dummy' => $expectedInstance = new \stdClass()])
-            )
-        ;
+            );
         /** @var ObjectGeneratorInterface $generator */
         $generator = $generatorProphecy->reveal();
 

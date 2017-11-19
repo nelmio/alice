@@ -74,8 +74,7 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
                         new FlagBag('user2')
                     )
                 )
-            )
-        ;
+            );
         $reference = 'user{1..2}';
         $specs = [
             'username' => '<name()>',

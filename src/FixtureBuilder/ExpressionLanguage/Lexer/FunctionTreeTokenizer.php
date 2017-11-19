@@ -77,6 +77,7 @@ final class FunctionTreeTokenizer
                 $count
             );
         }
+
         $value = preg_replace(
             '/IDENTITY_START/',
             '<(',

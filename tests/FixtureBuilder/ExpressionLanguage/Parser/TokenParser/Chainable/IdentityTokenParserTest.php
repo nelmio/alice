@@ -54,8 +54,7 @@ class IdentityTokenParserTest extends TestCase
             ->parse(
                 new Token('<identity(echo "hello world!")>', new TokenType(TokenType::FUNCTION_TYPE))
             )
-            ->willReturn($expected = 'foo')
-        ;
+            ->willReturn($expected = 'foo');
         /** @var ChainableTokenParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 

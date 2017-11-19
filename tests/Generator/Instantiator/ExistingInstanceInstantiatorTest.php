@@ -83,8 +83,7 @@ class ExistingInstanceInstantiatorTest extends TestCase
                         )
                     )
                 )
-            )
-        ;
+            );
         /** @var InstantiatorInterface $decoratedInstantiator */
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
