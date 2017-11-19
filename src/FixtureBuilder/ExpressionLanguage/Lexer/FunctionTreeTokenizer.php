@@ -104,7 +104,7 @@ final class FunctionTreeTokenizer
 
     public function functionIsNotClosed(array $functions): bool
     {
-        return [] != $functions;
+        return [] !== $functions;
     }
 
     public function isTheLastFunction(array $functions): bool

@@ -30,7 +30,7 @@ final class DefaultFileLocator implements FileLocatorInterface
      */
     public function locate(string $name, string $currentPath = null): string
     {
-        if ('' == $name) {
+        if ('' === $name) {
             throw FileNotFoundException::createForEmptyFile();
         }
 
