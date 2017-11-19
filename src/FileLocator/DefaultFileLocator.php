@@ -48,7 +48,7 @@ final class DefaultFileLocator implements FileLocatorInterface
 
     private function isAbsolutePath(string $file): bool
     {
-        return ($file[0] === '/'
+        return $file[0] === '/'
             || $file[0] === '\\'
             || (
                 strlen($file) > 3
@@ -57,6 +57,6 @@ final class DefaultFileLocator implements FileLocatorInterface
                 && ($file[2] === '\\' || $file[2] === '/')
             )
             || null !== parse_url($file, PHP_URL_SCHEME)
-        );
+        ;
     }
 }

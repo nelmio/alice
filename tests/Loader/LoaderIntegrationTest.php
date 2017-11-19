@@ -13,15 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
-use Nelmio\Alice\Entity\DummyWithGetter as NelmioDummyWithGetter;
-use Nelmio\Alice\Entity\InitializationOrder\Address;
-use Nelmio\Alice\Entity\InitializationOrder\Person;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\Caller\DummyWithStaticFunction;
 use Nelmio\Alice\Entity\Caller\StaticService;
 use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
+use Nelmio\Alice\Entity\DummyWithGetter as NelmioDummyWithGetter;
 use Nelmio\Alice\Entity\DummyWithImmutableFunction;
 use Nelmio\Alice\Entity\DummyWithPrivateProperty;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
@@ -31,6 +29,8 @@ use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
 use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
 use Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy;
 use Nelmio\Alice\Entity\ImmutableStd;
+use Nelmio\Alice\Entity\InitializationOrder\Address;
+use Nelmio\Alice\Entity\InitializationOrder\Person;
 use Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructor;
 use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructor;

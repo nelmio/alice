@@ -31,11 +31,11 @@ final class MethodCallWithReferenceProcessor implements ChainableCallProcessorIn
      */
     public function canProcess(MethodCallInterface $methodCall): bool
     {
-        return (
+        return
             $methodCall instanceof MethodCallWithReference
             && null !== $methodCall->getCaller()
             && $methodCall->getCaller() instanceof StaticReference
-        );
+        ;
     }
 
     /**
