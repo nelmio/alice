@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\FixtureBuilder\ExpressionLanguage\Parser;
 
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\IsolatedSymfonyBuiltInParser;
 
 /**
  * @group integration
  * @coversNothing
  */
-class ParserIntegrationTest extends \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest
+class ParserIntegrationTest extends ParserIntegrationTest
 {
     /**
      * @inheritdoc

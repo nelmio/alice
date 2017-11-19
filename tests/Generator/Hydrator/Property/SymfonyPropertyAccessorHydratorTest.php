@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Hydrator\Property;
 
+use Nelmio\Alice\Dummy as NelmioDummy;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Entity\DummyWithDate;
@@ -113,7 +114,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
     public function testThrowsNoPropertyExceptionIfPropertyCouldNotBeFound()
     {
         try {
-            $object = new SimpleObject('dummy', new \Nelmio\Alice\Dummy());
+            $object = new SimpleObject('dummy', new NelmioDummy());
             $property = new Property('foo', 'bar');
 
             $this->hydrator->hydrate($object, $property, new GenerationContext());

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\Entity\DummyWithGetter as NelmioDummyWithGetter;
+use Nelmio\Alice\Entity\InitializationOrder\Address;
+use Nelmio\Alice\Entity\InitializationOrder\Person;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\Caller\DummyWithStaticFunction;
@@ -591,7 +594,7 @@ class LoaderIntegrationTest extends TestCase
         );
 
         $actual = $this->loader->loadData([
-            \Nelmio\Alice\Entity\DummyWithConstructorAndCallable::class => [
+            DummyWithConstructorAndCallable::class => [
                 'dummy_template (template)' => [
                     '__calls' => [
                         [
@@ -603,7 +606,7 @@ class LoaderIntegrationTest extends TestCase
                     '__construct' => ['foo']
                 ]
             ],
-            \Nelmio\Alice\Entity\DummyWithConstructorParam::class => [
+            DummyWithConstructorParam::class => [
                 'foo-0' => [
                     '__construct' => ['@dummy->foo']
                 ],
@@ -2629,7 +2632,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[variable] nominal' => [
             [
-                \Nelmio\Alice\Entity\DummyWithGetter::class => [
+                NelmioDummyWithGetter::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'fooVal' => '$foo',
@@ -2643,25 +2646,25 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
+                    'dummy' => (function (NelmioDummyWithGetter $dummy) {
                         $dummy->setFoo('bar');
                         $dummy->fooVal = 'bar';
 
                         return $dummy;
-                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
-                    'another_dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
+                    })(new NelmioDummyWithGetter()),
+                    'another_dummy' => (function (NelmioDummyWithGetter $dummy) {
                         $dummy->setFoo('bar');
                         $dummy->fooVal = 'rab';
 
                         return $dummy;
-                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
+                    })(new NelmioDummyWithGetter()),
                 ],
             ],
         ];
 
         yield '[variable] variables are scoped to the fixture' => [
             [
-                \Nelmio\Alice\Entity\DummyWithGetter::class => [
+                NelmioDummyWithGetter::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'fooVal' => '$foo',
@@ -3492,13 +3495,13 @@ class LoaderIntegrationTest extends TestCase
         yield 'calls and factory order' => (function () {
             return [
                 [
-                    \Nelmio\Alice\Entity\InitializationOrder\Address::class => [
+                    Address::class => [
                         'address' => [
                             'country' => 'France',
                             'city' => 'Paris',
                         ],
                     ],
-                    \Nelmio\Alice\Entity\InitializationOrder\Person::class => [
+                    Person::class => [
                         'person' => [
                             '__factory' => [
                                 'createWithAddress' => [
@@ -3512,14 +3515,14 @@ class LoaderIntegrationTest extends TestCase
                     'parameters' => [],
                     'objects' => [
                         'address' => $address = (function () {
-                            $address = new \Nelmio\Alice\Entity\InitializationOrder\Address();
+                            $address = new Address();
 
                             $address->setCountry('France');
                             $address->setCity('Paris');
 
                             return $address;
                         })(),
-                        'person' => \Nelmio\Alice\Entity\InitializationOrder\Person::createWithAddress($address)
+                        'person' => Person::createWithAddress($address)
                     ],
                 ],
             ];

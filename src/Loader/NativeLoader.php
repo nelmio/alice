@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer as NelmioSimpleDenormalizer;
 use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\DataLoaderInterface;
@@ -343,7 +344,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
         return new FixtureDenormalizerRegistry(
             $this->getFlagParser(),
             [
-                new \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer(
+                new NelmioSimpleDenormalizer(
                     new SimpleSpecificationsDenormalizer(
                         $this->getConstructorDenormalizer(),
                         $this->getPropertyDenormalizer(),

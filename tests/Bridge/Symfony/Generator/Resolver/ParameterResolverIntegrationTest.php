@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\Generator\Resolver;
 
+use Nelmio\Alice\Generator\Resolver\ParameterResolverIntegrationTest;
 use Nelmio\Alice\Generator\Resolver\Parameter\IsolatedSymfonyParameterBagResolver;
 
 /**
  * @group integration
  * @coversNothing
  */
-class ParameterResolverIntegrationTest extends \Nelmio\Alice\Generator\Resolver\ParameterResolverIntegrationTest
+class ParameterResolverIntegrationTest extends ParameterResolverIntegrationTest
 {
     /**
      * @inheritdoc
