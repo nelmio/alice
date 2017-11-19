@@ -30,7 +30,6 @@ final class ResolvedValueWithFixtureSet
 
     /**
      * @param mixed              $resolvedValue
-     * @param ResolvedFixtureSet $set
      */
     public function __construct($resolvedValue, ResolvedFixtureSet $set)
     {

@@ -66,8 +66,6 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
     }
 
     /**
-     * @param Token $token
-     *
      * @throws ParseException
      *
      * @return string[]

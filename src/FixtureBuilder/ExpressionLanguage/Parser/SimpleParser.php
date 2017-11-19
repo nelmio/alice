@@ -70,10 +70,6 @@ final class SimpleParser implements ParserInterface
      * tokens instead of adding the value itself. Another check is done to ensure that successive string tokens are
      * merged.
      *
-     * @param array                $parsedTokens
-     * @param TokenParserInterface $parser
-     * @param Token                $token
-     *
      * @return ValueInterface[]|string[] Parsed tokens
      */
     private function parseToken(array $parsedTokens, TokenParserInterface $parser, Token $token): array

@@ -74,11 +74,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
     }
 
     /**
-     * @param Token $token
-     *
      * @throws ParseException
-     *
-     * @return RangeName
      *
      * @example
      *  "@user{1..10}" => new RangeName('user', 1, 10)

@@ -60,8 +60,6 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
     /**
      * {@inheritdoc}
      *
-     * @param Parameter $parameter
-     *
      * @throws ParameterNotFoundException
      */
     public function resolve(
@@ -95,14 +93,8 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
     }
 
     /**
-     * @param ParameterResolverInterface $resolver
      * @param Parameter                  $parameter Parameter being resolved
      * @param string                     $key       Key of the parameter that need to be resolved to resolve $parameter
-     * @param ParameterBag               $unresolvedParameters
-     * @param ParameterBag               $resolvedParameters
-     * @param ResolvingContext           $context
-     *
-     * @return ParameterBag
      */
     private function resolveStringKey(
         ParameterResolverInterface $resolver = null,

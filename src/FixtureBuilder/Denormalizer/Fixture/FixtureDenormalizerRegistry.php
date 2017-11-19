@@ -31,7 +31,6 @@ final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
     private $denormalizers = [];
 
     /**
-     * @param FlagParserInterface                     $flagParser
      * @param ChainableFixtureDenormalizerInterface[] $denormalizers
      */
     public function __construct(FlagParserInterface $flagParser, array $denormalizers)

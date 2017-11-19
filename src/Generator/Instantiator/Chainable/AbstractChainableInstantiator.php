@@ -59,8 +59,6 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
     }
 
     /**
-     * @param FixtureInterface $fixture
-     *
      * @return object
      */
     abstract protected function createInstance(FixtureInterface $fixture);

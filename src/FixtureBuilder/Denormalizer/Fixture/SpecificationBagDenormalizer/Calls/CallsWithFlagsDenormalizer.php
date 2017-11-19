@@ -35,7 +35,6 @@ final class CallsWithFlagsDenormalizer implements CallsDenormalizerInterface
     private $methodFlagHandlers;
 
     /**
-     * @param CallsDenormalizerInterface $callsDenormalizer
      * @param MethodFlagHandler[]        $methodFlagHandlers
      */
     public function __construct(CallsDenormalizerInterface $callsDenormalizer, array $methodFlagHandlers)

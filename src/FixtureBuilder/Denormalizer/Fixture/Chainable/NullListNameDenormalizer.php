@@ -47,8 +47,6 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
     }
 
     /**
-     * @param string $id
-     *
      * @return string[]
      *
      * @example

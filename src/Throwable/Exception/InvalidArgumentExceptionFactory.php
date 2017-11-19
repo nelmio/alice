@@ -58,8 +58,6 @@ final class InvalidArgumentExceptionFactory
 
     /**
      * @param int|float|string $seed
-     *
-     * @return InvalidArgumentException
      */
     public static function createForInvalidSeedConfigurationValue($seed): InvalidArgumentException
     {

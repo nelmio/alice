@@ -58,8 +58,6 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
     }
 
     /**
-     * @param string $id
-     *
      * @return string[]
      *
      * @example
@@ -89,10 +87,6 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
     }
 
     /**
-     * @param string $name
-     *
-     * @return RangeName
-     *
      * @example
      *  'user{1..10}' => new RangeName('user', 1, 10)
      */

@@ -57,10 +57,6 @@ final class ObjectBag implements IteratorAggregate, Countable
     /**
      * Creates a new instance which will contain the given object. If an object with the same reference already exists,
      * it will be overridden by the new object.
-     *
-     * @param ObjectInterface $object
-     *
-     * @return self
      */
     public function with(ObjectInterface $object): self
     {
@@ -75,8 +71,6 @@ final class ObjectBag implements IteratorAggregate, Countable
      * Creates a new instance which will no longer contain the given object.
      *
      * @param FixtureInterface|ObjectInterface $objectOrFixture
-     *
-     * @return self
      */
     public function without($objectOrFixture): self
     {
@@ -92,8 +86,6 @@ final class ObjectBag implements IteratorAggregate, Countable
      * overridden by the new ones.
      *
      * @param ObjectBag $objects
-     *
-     * @return self
      */
     public function mergeWith(self $objects): self
     {
@@ -112,11 +104,7 @@ final class ObjectBag implements IteratorAggregate, Countable
     }
 
     /**
-     * @param FixtureIdInterface $fixture
-     *
      * @throws ObjectNotFoundException
-     *
-     * @return ObjectInterface
      */
     public function get(FixtureIdInterface $fixture): ObjectInterface
     {

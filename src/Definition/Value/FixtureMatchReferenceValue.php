@@ -26,9 +26,6 @@ final class FixtureMatchReferenceValue implements ValueInterface
      */
     private $pattern;
 
-    /**
-     * @param string $pattern
-     */
     public function __construct(string $pattern)
     {
         $this->pattern = $pattern;

@@ -81,13 +81,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     }
 
     /**
-     * @param FixtureInterface   $fixture
-     * @param ResolvedFixtureSet $set
-     * @param GenerationContext  $context
-     *
      * @throws UnresolvableValueDuringGenerationException
-     *
-     * @return array
      */
     private function resolveFixtureConstructor(
         FixtureInterface $fixture,
@@ -124,12 +118,6 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     }
 
     /**
-     * @param array                  $arguments
-     * @param ValueResolverInterface $resolver
-     * @param FixtureInterface       $fixture
-     * @param ResolvedFixtureSet     $fixtureSet
-     * @param GenerationContext      $context
-     *
      * @throws UnresolvableValueDuringGenerationException
      *
      * @return array The first element is an array ($arguments) which is the resolved arguments and the second the new

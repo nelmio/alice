@@ -70,10 +70,7 @@ final class InstantiationExceptionFactory
     }
 
     /**
-     * @param FixtureInterface $fixture
      * @param object           $instance
-     *
-     * @return InstantiationException
      */
     public static function createForInvalidInstanceType(FixtureInterface $fixture, $instance): InstantiationException
     {

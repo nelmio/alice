@@ -72,11 +72,6 @@ final class FunctionTokenizer
 
     /**
      * Regroup tokens together by detecting when the function starts, closes or when it is nested.
-     *
-     * @param string $originalValue
-     * @param array  $tokens
-     *
-     * @return array
      */
     private function buildTree(string $originalValue, array $tokens): array
     {

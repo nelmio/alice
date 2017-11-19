@@ -26,9 +26,6 @@ final class InstantiatedReference implements ServiceReferenceInterface
      */
     private $id;
 
-    /**
-     * @param string $serviceId
-     */
     public function __construct(string $serviceId)
     {
         $this->id = $serviceId;

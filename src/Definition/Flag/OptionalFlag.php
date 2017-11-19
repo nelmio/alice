@@ -36,7 +36,6 @@ final class OptionalFlag implements FlagInterface
     }
 
     /** Element of ]0;100[.
-     * @return int
      */
     public function getPercentage(): int
     {

@@ -22,9 +22,6 @@ use Symfony\Component\DependencyInjection\Reference;
 final class TaggedDefinitionsLocator
 {
     /**
-     * @param ContainerBuilder $container
-     * @param string           $tagName
-     *
      * @return Reference[]
      */
     public function findReferences(ContainerBuilder $container, string $tagName): array

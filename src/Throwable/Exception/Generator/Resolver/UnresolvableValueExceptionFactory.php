@@ -82,10 +82,7 @@ final class UnresolvableValueExceptionFactory
     }
 
     /**
-     * @param ValueInterface               $quantifier
      * @param null|object|array|float|bool $resolvedQuantifier
-     *
-     * @return UnresolvableValueException
      */
     public static function createForInvalidResolvedQuantifierTypeForOptionalValue(ValueInterface $quantifier, $resolvedQuantifier): UnresolvableValueException
     {

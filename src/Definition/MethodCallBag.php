@@ -31,10 +31,6 @@ final class MethodCallBag implements \IteratorAggregate, \Countable
     /**
      * Creates a new instance to which the given properties have been merged. In case of conflicts, the existing values
      * are kept.
-     *
-     * @param self $methodCallsBag
-     *
-     * @return self
      */
     public function mergeWith(self $methodCallsBag): self
     {

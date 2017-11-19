@@ -78,8 +78,6 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
      *
      * {@inheritdoc}
      *
-     * @param Parameter $parameter
-     *
      * @throws RecursionLimitReachedException
      */
     public function resolve(

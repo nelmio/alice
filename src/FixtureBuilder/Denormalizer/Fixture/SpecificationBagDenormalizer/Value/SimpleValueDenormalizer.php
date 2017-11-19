@@ -59,9 +59,6 @@ final class SimpleValueDenormalizer implements ValueDenormalizerInterface
     }
 
     /**
-     * @param ParserInterface $parser
-     * @param string          $value
-     *
      * @return mixed|ValueInterface
      */
     private function parseValue(ParserInterface $parser, string $value)

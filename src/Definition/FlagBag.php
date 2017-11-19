@@ -25,7 +25,7 @@ final class FlagBag implements \IteratorAggregate, \Countable
      * @var FlagInterface[]
      */
     private $flags = [];
-    
+
     /**
      * @var string
      */
@@ -51,15 +51,13 @@ final class FlagBag implements \IteratorAggregate, \Countable
      * Creates a new instance of the bag with the given flag. If a flag with the same identifier already exists, the
      * existing value will be replaced.
      *
-     * @param FlagInterface $flag
-     *
      * @return FlagBag
      */
     public function withFlag(FlagInterface $flag): self
     {
         $clone = clone $this;
         $clone->flags[$flag->__toString()] = deep_clone($flag);
-        
+
         return $clone;
     }
 
@@ -68,11 +66,8 @@ final class FlagBag implements \IteratorAggregate, \Countable
      *
      * The original key is kept.
      *
-     * @param self $flags
      * @param bool $override If some flags overlaps, the existing one are overridden if the value is true, and left
      *                       untouched otherwise.
-     *
-     * @return self
      */
     public function mergeWith(self $flags, bool $override = true): self
     {

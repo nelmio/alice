@@ -31,13 +31,8 @@ final class TemplateFixtureResolver
      * Resolves a given fixture. The resolution of a fixture may result in the resolution of several fixtures.
      *
      * @param TemplatingFixture|FixtureInterface $fixture Fixture to resolve
-     * @param FixtureBag                         $unresolvedFixtures
-     * @param TemplatingFixtureBag               $resolvedFixtures
-     * @param ResolvingContext                   $context
      *
      * @throws FixtureNotFoundException
-     *
-     * @return TemplatingFixtureBag
      */
     public function resolve(
         TemplatingFixture $fixture,
@@ -68,11 +63,7 @@ final class TemplateFixtureResolver
     }
 
     /**
-     * @param TemplatingFixture    $fixture
      * @param FixtureReference[]   $extendedFixtureReferences
-     * @param FixtureBag           $unresolvedFixtures
-     * @param TemplatingFixtureBag $resolvedFixtures
-     * @param ResolvingContext     $context
      *
      * @throws FixtureNotFoundException
      *
