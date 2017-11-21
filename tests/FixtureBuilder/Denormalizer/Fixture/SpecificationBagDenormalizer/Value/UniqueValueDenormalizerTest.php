@@ -52,7 +52,8 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn($expected = 'denormalized_value');
+            ->willReturn($expected = 'denormalized_value')
+        ;
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
@@ -73,7 +74,8 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn('denormalized_value');
+            ->willReturn('denormalized_value')
+        ;
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
@@ -97,7 +99,8 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn($denormalizedValue);
+            ->willReturn($denormalizedValue)
+        ;
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
@@ -126,7 +129,8 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn($denormalizedValue);
+            ->willReturn($denormalizedValue)
+        ;
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
@@ -144,7 +148,8 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn($denormalizedValue);
+            ->willReturn($denormalizedValue)
+        ;
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 

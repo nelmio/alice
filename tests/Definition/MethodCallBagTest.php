@@ -109,10 +109,12 @@ class MethodCallBagTest extends TestCase
 
         $bagA = (new MethodCallBag())
             ->with($callA1)
-            ->with($callA2);
+            ->with($callA2)
+        ;
         $bagB = (new MethodCallBag())
             ->with($callB1)
-            ->with($callB2);
+            ->with($callB2)
+        ;
 
         $bag = $bagA->mergeWith($bagB);
 

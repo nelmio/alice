@@ -75,7 +75,8 @@ class CallsWithFlagsDenormalizerTest extends TestCase
             )
             ->willReturn(
                 $expected = new FakeMethodCall()
-            );
+            )
+        ;
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
@@ -112,7 +113,8 @@ class CallsWithFlagsDenormalizerTest extends TestCase
                     ->withFlag(
                         $elem2Flag = new ElementFlag('elem2')
                     )
-            );
+            )
+        ;
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -126,7 +128,8 @@ class CallsWithFlagsDenormalizerTest extends TestCase
             )
             ->willReturn(
                 $denormalizedCall = new FakeMethodCall()
-            );
+            )
+        ;
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
         
@@ -142,19 +145,22 @@ class CallsWithFlagsDenormalizerTest extends TestCase
             )
             ->willReturn(
                 $methodAfterDummyFlagMethodHandler = new SimpleMethodCall('method_after_dummy_flag_method_handler')
-            );
+            )
+        ;
         $dummyFlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterDummyFlagMethodHandler,
                 $elem1Flag
             )
-            ->will($returnMethodUnchanged);
+            ->will($returnMethodUnchanged)
+        ;
         $dummyFlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterDummyFlagMethodHandler,
                 $elem2Flag
             )
-            ->will($returnMethodUnchanged);
+            ->will($returnMethodUnchanged)
+        ;
         /** @var MethodFlagHandler $dummyFlagMethodHandler */
         $dummyFlagMethodHandler = $dummyFlagMethodHandlerProphecy->reveal();
 
@@ -164,7 +170,8 @@ class CallsWithFlagsDenormalizerTest extends TestCase
                 $methodAfterDummyFlagMethodHandler,
                 $dummyFlag
             )
-            ->will($returnMethodUnchanged);
+            ->will($returnMethodUnchanged)
+        ;
         $elem1FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterDummyFlagMethodHandler,
@@ -172,13 +179,15 @@ class CallsWithFlagsDenormalizerTest extends TestCase
             )
             ->willReturn(
                 $methodAfterElem1FlagMethodHandler = new SimpleMethodCall('method_after_elem1_flag_method_handler')
-            );
+            )
+        ;
         $elem1FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterElem1FlagMethodHandler,
                 $elem2Flag
             )
-            ->will($returnMethodUnchanged);
+            ->will($returnMethodUnchanged)
+        ;
         /** @var MethodFlagHandler $elem1FlagMethodHandler */
         $elem1FlagMethodHandler = $elem1FlagMethodHandlerProphecy->reveal();
 
@@ -188,19 +197,22 @@ class CallsWithFlagsDenormalizerTest extends TestCase
                 $methodAfterElem1FlagMethodHandler,
                 $dummyFlag
             )
-            ->will($returnMethodUnchanged);
+            ->will($returnMethodUnchanged)
+        ;
         $elem2FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterElem1FlagMethodHandler,
                 $elem1Flag
             )
-            ->will($returnMethodUnchanged);
+            ->will($returnMethodUnchanged)
+        ;
         $elem2FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterElem1FlagMethodHandler,
                 $elem2Flag
             )
-            ->will($returnMethodUnchanged);
+            ->will($returnMethodUnchanged)
+        ;
         /** @var MethodFlagHandler $elem2FlagMethodHandler */
         $elem2FlagMethodHandler = $elem2FlagMethodHandlerProphecy->reveal();
 

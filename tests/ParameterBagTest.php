@@ -90,7 +90,8 @@ class ParameterBagTest extends TestCase
                 'ping' => 'pong',
             ]))
             ->with(new Parameter('ping', 'boo'))
-            ->with(new Parameter('he', 'ho'));
+            ->with(new Parameter('he', 'ho'))
+        ;
 
         $this->assertEquals('bar', $bag->get('foo'));
         $this->assertEquals('pong', $bag->get('ping'));
@@ -123,7 +124,8 @@ class ParameterBagTest extends TestCase
         
         $bag = $bag
             ->with(new Parameter('foo', 'bar'))
-            ->with(new Parameter('ping', 'pong'));
+            ->with(new Parameter('ping', 'pong'))
+        ;
         $this->assertEquals(2, count($bag));
     }
 

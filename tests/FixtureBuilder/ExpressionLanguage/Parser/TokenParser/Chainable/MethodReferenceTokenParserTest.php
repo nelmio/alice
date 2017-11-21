@@ -83,10 +83,12 @@ class MethodReferenceTokenParserTest extends TestCase
         $token = new Token('@@malformed_user->getUserName(arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse('@@malformed_user')->willReturn('string value');
+        $decoratedParserProphecy->parse('@@malformed_user')->willReturn('string value')
+        ;
         $decoratedParserProphecy
             ->parse('<getUserName(arg1, arg2)>')
-            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']));
+            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']))
+        ;
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -105,10 +107,12 @@ class MethodReferenceTokenParserTest extends TestCase
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
         $decoratedParserProphecy
             ->parse('@user')
-            ->willReturn($reference = new FixtureReferenceValue('user'));
+            ->willReturn($reference = new FixtureReferenceValue('user'))
+        ;
         $decoratedParserProphecy
             ->parse('<getUserName((arg1, arg2)>')
-            ->willReturn('string value');
+            ->willReturn('string value')
+        ;
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -123,10 +127,12 @@ class MethodReferenceTokenParserTest extends TestCase
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
         $decoratedParserProphecy
             ->parse('@user')
-            ->willReturn($reference = new FixtureReferenceValue('user'));
+            ->willReturn($reference = new FixtureReferenceValue('user'))
+        ;
         $decoratedParserProphecy
             ->parse('<getUserName(arg1, arg2)>')
-            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']));
+            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']))
+        ;
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 

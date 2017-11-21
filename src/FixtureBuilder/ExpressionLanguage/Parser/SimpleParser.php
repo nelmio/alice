@@ -61,7 +61,8 @@ final class SimpleParser implements ParserInterface
 
         return (1 === count($parsedTokens))
             ? $parsedTokens[0]
-            : new ListValue($parsedTokens);
+            : new ListValue($parsedTokens)
+        ;
     }
 
     /**

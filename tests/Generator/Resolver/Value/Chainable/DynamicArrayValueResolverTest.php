@@ -111,7 +111,8 @@ class DynamicArrayValueResolverTest extends TestCase
             ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(10, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
-            );
+            )
+        ;
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -138,7 +139,8 @@ class DynamicArrayValueResolverTest extends TestCase
             ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(-1, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
-            );
+            )
+        ;
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -163,7 +165,8 @@ class DynamicArrayValueResolverTest extends TestCase
             ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(2, $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
-            );
+            )
+        ;
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -191,13 +194,15 @@ class DynamicArrayValueResolverTest extends TestCase
             ->resolve($element, $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(10, $setAfterFirstResolution)
-            );
+            )
+        ;
         $setAfterSecondResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 1]));
         $decoratedResolverProphecy
             ->resolve($element, $fixture, $setAfterFirstResolution, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(100, $setAfterSecondResolution)
-            );
+            )
+        ;
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 

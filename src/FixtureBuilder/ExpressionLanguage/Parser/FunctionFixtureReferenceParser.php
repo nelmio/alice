@@ -58,7 +58,8 @@ final class FunctionFixtureReferenceParser implements ParserInterface
 
         return (1 === count($mergedValues))
             ? $mergedValues[0]
-            : new ListValue($mergedValues);
+            : new ListValue($mergedValues)
+        ;
     }
     
     private function mergeFunctionFixtureReferences(array $values, $value): array

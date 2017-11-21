@@ -79,11 +79,13 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
         $userFlags = (new FlagBag('Nelmio\Alice\Entity\User'))->withFlag(new ElementFlag('dummy_flag'));
         $flagParserProphecy
             ->parse('Nelmio\Entity\User (dummy_flag)')
-            ->willReturn($userFlags);
+            ->willReturn($userFlags)
+        ;
         $ownerFlags = new FlagBag('Nelmio\Entity\Owner');
         $flagParserProphecy
             ->parse('Nelmio\Entity\Owner')
-            ->willReturn(new FlagBag('Nelmio\Entity\Owner'));
+            ->willReturn(new FlagBag('Nelmio\Entity\Owner'))
+        ;
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -100,7 +102,8 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
                 ],
                 $userFlags
             )
-            ->willReturn($bag1);
+            ->willReturn($bag1)
+        ;
         $bag2 = $bag1->with($fixture2);
         $fixtureDenormalizerProphecy
             ->denormalize(
@@ -112,7 +115,8 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
                 ],
                 $userFlags
             )
-            ->willReturn($bag2);
+            ->willReturn($bag2)
+        ;
         $bag3 = $bag2->with($fixture3);
         $fixtureDenormalizerProphecy
             ->denormalize(
@@ -122,7 +126,8 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
                 [],
                 $ownerFlags
             )
-            ->willReturn($bag3);
+            ->willReturn($bag3)
+        ;
         $bag4 = $bag3->with($fixture4);
         $fixtureDenormalizerProphecy
             ->denormalize(
@@ -132,7 +137,8 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
                 [],
                 $ownerFlags
             )
-            ->willReturn($bag4);
+            ->willReturn($bag4)
+        ;
         /** @var FixtureDenormalizerInterface $fixtureDenormalizer */
         $fixtureDenormalizer = $fixtureDenormalizerProphecy->reveal();
 

@@ -50,7 +50,8 @@ class FunctionDenormalizerTest extends TestCase
         $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
         $argumentsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $unparsedArguments)
-            ->willReturn($parsedArguments = [new \stdClass()]);
+            ->willReturn($parsedArguments = [new \stdClass()])
+        ;
         /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
         $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
 
@@ -80,7 +81,8 @@ class FunctionDenormalizerTest extends TestCase
         $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
         $argumentsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $unparsedArguments)
-            ->willReturn($parsedArguments = [new \stdClass()]);
+            ->willReturn($parsedArguments = [new \stdClass()])
+        ;
         /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
         $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
 
@@ -111,7 +113,8 @@ class FunctionDenormalizerTest extends TestCase
         $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
         $argumentsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $unparsedArguments)
-            ->willReturn($parsedArguments = [new \stdClass()]);
+            ->willReturn($parsedArguments = [new \stdClass()])
+        ;
         /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
         $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
 

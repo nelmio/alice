@@ -127,7 +127,8 @@ class FunctionCallArgumentResolverTest extends TestCase
                     $instance = new \stdClass(),
                     $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
                 )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $argumentResolver */
         $argumentResolver = $argumentResolverProphecy->reveal();
 
@@ -152,7 +153,8 @@ class FunctionCallArgumentResolverTest extends TestCase
                     'end',
                     ResolvedFixtureSetFactory::create(new ParameterBag(['gnip' => 'gnop']))
                 )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 

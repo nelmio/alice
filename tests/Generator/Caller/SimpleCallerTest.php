@@ -123,7 +123,8 @@ class SimpleCallerTest extends TestCase
                     ]),
                     $fixtures
                 )
-            );
+            )
+        ;
         $callProcessorProphecy
             ->process(
                 $object,
@@ -138,7 +139,8 @@ class SimpleCallerTest extends TestCase
                     ]),
                     $fixtures
                 )
-            );
+            )
+        ;
         $callProcessorProphecy
             ->process(
                 $object,
@@ -153,7 +155,8 @@ class SimpleCallerTest extends TestCase
                     ]),
                     $fixtures
                 )
-            );
+            )
+        ;
         /** @var CallProcessorInterface $callProcessor */
         $callProcessor = $callProcessorProphecy->reveal();
 
@@ -219,7 +222,8 @@ class SimpleCallerTest extends TestCase
                         $fixtures
                     )
                 )
-            );
+            )
+        ;
 
         $methodCall1AfterResolution = new SimpleMethodCall(
             'setTitle',
@@ -244,7 +248,8 @@ class SimpleCallerTest extends TestCase
                         'dummy' => new SimpleObject('dummy', $dummy = new stdClass())
                     ])
                 )
-            );
+            )
+        ;
 
         $resolverProphecy
             ->resolve(
@@ -270,7 +275,8 @@ class SimpleCallerTest extends TestCase
                         new ObjectBag($objectsAfterProcessing1)
                     )
                 )
-            );
+            )
+        ;
 
         $methodCall2AfterResolution = new SimpleMethodCall(
             'setTitle',
@@ -293,7 +299,8 @@ class SimpleCallerTest extends TestCase
                     $fixtures,
                     new ObjectBag($objectsAfterProcessing1)
                 )
-            );
+            )
+        ;
         $callProcessorProphecy
             ->process(
                 $object,
@@ -310,7 +317,8 @@ class SimpleCallerTest extends TestCase
                     $fixtures,
                     new ObjectBag($objectsAfterProcessing1)
                 )
-            );
+            )
+        ;
 
         $expected = $setAfterProcessing3;
 
@@ -346,7 +354,8 @@ class SimpleCallerTest extends TestCase
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $resolverProphecy
             ->resolve(Argument::cetera())
-            ->willThrow(RootResolutionException::class);
+            ->willThrow(RootResolutionException::class)
+        ;
         /** @var ValueResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 

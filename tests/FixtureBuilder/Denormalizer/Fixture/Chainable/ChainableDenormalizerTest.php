@@ -106,7 +106,8 @@ abstract class ChainableDenormalizerTest extends TestCase
                 function ($args) {
                     return $args[0]->with(FixtureFactory::create($args[2], ''));
                 }
-            );
+            )
+        ;
 
         return $decoratedDenormalizerProphecy->reveal();
     }

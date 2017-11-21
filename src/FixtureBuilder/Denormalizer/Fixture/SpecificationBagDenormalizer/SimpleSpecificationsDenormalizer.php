@@ -115,7 +115,8 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
     ): MethodCallInterface {
         return (false === $value)
             ? new NoMethodCall()
-            : $this->constructorDenormalizer->denormalize($scope, $parser, $value);
+            : $this->constructorDenormalizer->denormalize($scope, $parser, $value)
+        ;
     }
 
     private function denormalizeFactory(

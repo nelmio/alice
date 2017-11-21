@@ -116,7 +116,8 @@ class FactoryDenormalizerTest extends TestCase
             )
             ->willReturn(
                 $expected = new FakeMethodCall()
-            );
+            )
+        ;
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
@@ -149,7 +150,8 @@ class FactoryDenormalizerTest extends TestCase
             )
             ->willReturn(
                 $expected = new FakeMethodCall()
-            );
+            )
+        ;
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
@@ -182,7 +184,8 @@ class FactoryDenormalizerTest extends TestCase
             )
             ->willReturn(
                 $expected = new FakeMethodCall()
-            );
+            )
+        ;
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 

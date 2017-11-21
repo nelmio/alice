@@ -98,7 +98,8 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
         $dummyProphecy = $this->prophesize(DummyWithGetter::class);
         $dummyProphecy->getFoo('resolved_argument')
             ->shouldBeCalled()
-            ->willReturn('resolved_value');
+            ->willReturn('resolved_value')
+        ;
 
         /** @var DummyWithGetter $dummy */
         $dummy = $dummyProphecy->reveal();
@@ -111,12 +112,14 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
                     'resolved_argument',
                     $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
                 )
-            );
+            )
+        ;
         $valueResolverProphecy
             ->resolve($reference, $fixture, $newSet, $scope, $valueResolverContext)
             ->willReturn(
                 new ResolvedValueWithFixtureSet($dummy, $newSet)
-            );
+            )
+        ;
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -154,7 +157,8 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
                         $instance = $dummyProphecy->reveal(),
                         $newSet = ResolvedFixtureSetFactory::create(new ParameterBag())
                     )
-                );
+                )
+            ;
             /** @var ValueResolverInterface $valueResolver */
             $valueResolver = $valueResolverProphecy->reveal();
 
@@ -188,7 +192,8 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
                 ->resolve(Argument::cetera())
                 ->willReturn(
                     new ResolvedValueWithFixtureSet(new \stdClass(), $set)
-                );
+                )
+            ;
             /** @var ValueResolverInterface $valueResolver */
             $valueResolver = $valueResolverProphecy->reveal();
 

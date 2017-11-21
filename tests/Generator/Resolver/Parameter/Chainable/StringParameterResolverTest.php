@@ -207,7 +207,8 @@ class StringParameterResolverTest extends TestCase
                     'random' => 'param',
                     'bar' => 'Mad Hatter',
                 ])
-            );
+            )
+        ;
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
@@ -247,7 +248,8 @@ class StringParameterResolverTest extends TestCase
                 new ParameterBag([
                     'bar' => 'Mad Hatter',
                 ])
-            );
+            )
+        ;
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 

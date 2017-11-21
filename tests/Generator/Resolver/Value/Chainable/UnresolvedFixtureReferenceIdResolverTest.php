@@ -110,7 +110,8 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
         $decoratedResolverProphecy->willImplement(ObjectGeneratorAwareInterface::class);
         $decoratedResolverProphecy
             ->withObjectGenerator($generator)
-            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver());
+            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver())
+        ;
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -172,7 +173,8 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
         $decoratedResolverProphecy->willImplement(ValueResolverAwareInterface::class);
         $decoratedResolverProphecy
             ->withValueResolver($valueResolver)
-            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver());
+            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver())
+        ;
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -242,7 +244,8 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
                     $resolvedFixture = new SimpleFixture('resolved_fixture', 'Dummy', SpecificationBagFactory::create()),
                     ResolvedFixtureSetFactory::create(null, $fixtureBag->with($resolvedFixture))
                 )
-            );
+            )
+        ;
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -289,7 +292,8 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
                          $newObjectBag = $objectBag->with(new SimpleObject('value_resolver_fixture', new \stdClass()))
                      )
                  )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -301,7 +305,8 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
                     $expectedObject,
                     ResolvedFixtureSetFactory::create(null, $fixtureBag, $newObjectBag->with(new SimpleObject('alice', $expectedObject)))
                 )
-            );
+            )
+        ;
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -337,7 +342,8 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
                     200,    // returns a new value instead of a string
                     ResolvedFixtureSetFactory::create()
                 )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 

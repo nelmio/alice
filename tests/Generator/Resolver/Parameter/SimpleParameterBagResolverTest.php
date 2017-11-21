@@ -57,7 +57,8 @@ class SimpleParameterBagResolverTest extends TestCase
                     'foo' => 'bar',
                     'other_param' => 'yo',
                 ])
-            );
+            )
+        ;
         $injectedResolverProphecy
             ->resolve(
                 new Parameter('ping', '(unresolved) pong'),
@@ -71,7 +72,8 @@ class SimpleParameterBagResolverTest extends TestCase
                     'other_param' => 'yo',
                     'ping' => 'pong',
                 ])
-            );
+            )
+        ;
         /* @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
@@ -134,7 +136,8 @@ class SimpleParameterBagResolverTest extends TestCase
                     'other_param' => 'yo',
                     'foo' => 'bar',
                 ])
-            );
+            )
+        ;
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('ping', '(unresolved) pong'),
@@ -151,7 +154,8 @@ class SimpleParameterBagResolverTest extends TestCase
                     'foo' => 'bar',
                     'ping' => 'pong',
                 ])
-            );
+            )
+        ;
         /* @var ParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 

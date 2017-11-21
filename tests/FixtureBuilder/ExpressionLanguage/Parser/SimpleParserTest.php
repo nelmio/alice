@@ -157,7 +157,8 @@ class SimpleParserTest extends TestCase
                     'first',
                     'second',
                 ])
-            );
+            )
+        ;
         $tokenParserProphecy->parse($token3)->willReturn('parsed_baz');
         /** @var TokenParserInterface $tokenParser */
         $tokenParser = $tokenParserProphecy->reveal();

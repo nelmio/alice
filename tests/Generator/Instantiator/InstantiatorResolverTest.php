@@ -105,7 +105,8 @@ class InstantiatorResolverTest extends TestCase
                     'resolvedFirstArg',
                     $setAfterFirstArgResolution
                 )
-            );
+            )
+        ;
         $setAfterSecondArgResolution = new ResolvedFixtureSet(
             $setAfterFirstArgResolution->getParameters(),
             (new FixtureBag())->with(new DummyFixture('another_dummy')),
@@ -118,7 +119,8 @@ class InstantiatorResolverTest extends TestCase
                     'resolvedSecondArg',
                     $setAfterSecondArgResolution
                 )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
@@ -126,7 +128,8 @@ class InstantiatorResolverTest extends TestCase
         $decoratedInstantiatorProphecy = $this->prophesize(InstantiatorInterface::class);
         $decoratedInstantiatorProphecy
             ->instantiate($fixtureAfterResolution, $setAfterSecondArgResolution, $context)
-            ->willReturn($expected);
+            ->willReturn($expected)
+        ;
         /** @var InstantiatorInterface $decoratedInstantiator */
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
@@ -156,7 +159,8 @@ class InstantiatorResolverTest extends TestCase
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $resolverProphecy
             ->resolve(Argument::cetera())
-            ->willThrow(RootResolutionException::class);
+            ->willThrow(RootResolutionException::class)
+        ;
         /** @var ValueResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 

@@ -62,10 +62,12 @@ class PropertyBagTest extends TestCase
 
         $bagA = (new PropertyBag())
             ->with($propertyA1)
-            ->with($propertyA2);
+            ->with($propertyA2)
+        ;
         $bagB = (new PropertyBag())
             ->with($propertyB1)
-            ->with($propertyB2);
+            ->with($propertyB2)
+        ;
 
         $bag = $bagA->mergeWith($bagB);
 
@@ -101,7 +103,8 @@ class PropertyBagTest extends TestCase
 
         $bag = (new PropertyBag())
             ->with($property1)
-            ->with($property2);
+            ->with($property2)
+        ;
 
         $array = [];
         foreach ($bag as $index => $property) {

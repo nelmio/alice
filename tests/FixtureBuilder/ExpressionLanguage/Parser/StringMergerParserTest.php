@@ -77,7 +77,8 @@ class StringMergerParserTest extends TestCase
                     'er',
                     'ty',
                 ])
-            );
+            )
+        ;
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -114,7 +115,8 @@ class StringMergerParserTest extends TestCase
                     new FakeValue(),
                     'erty',
                 ])
-            );
+            )
+        ;
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 

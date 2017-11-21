@@ -156,7 +156,8 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
             $accessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
             $accessorProphecy
                 ->setValue(Argument::cetera())
-                ->willThrow(GenericPropertyAccessException::class);
+                ->willThrow(GenericPropertyAccessException::class)
+            ;
             /** @var PropertyAccessorInterface $accessor */
             $accessor = $accessorProphecy->reveal();
 

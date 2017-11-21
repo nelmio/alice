@@ -108,7 +108,8 @@ class FixtureBagTest extends TestCase
 
         $bag = (new FixtureBag())
             ->with($fixture1)
-            ->with($fixture2);
+            ->with($fixture2)
+        ;
 
         $this->assertNotSameFixtures(
             [
@@ -133,7 +134,8 @@ class FixtureBagTest extends TestCase
         $bag1 = (new FixtureBag())->with($fixture1);
         $bag2 = (new FixtureBag())
             ->with($fixture2)
-            ->with($fixture3);
+            ->with($fixture3)
+        ;
         $bag3 = $bag1->mergeWith($bag2);
 
         $this->assertInstanceOf(FixtureBag::class, $bag2);
@@ -166,7 +168,8 @@ class FixtureBagTest extends TestCase
 
         $bag = (new FixtureBag())
             ->with($fixture1)
-            ->with($fixture2);
+            ->with($fixture2)
+        ;
 
         $fixtures = [];
         foreach ($bag as $key => $value) {
@@ -183,7 +186,8 @@ class FixtureBagTest extends TestCase
 
         $bag = (new FixtureBag())
             ->with($fixture1)
-            ->with($fixture2);
+            ->with($fixture2)
+        ;
 
         $this->assertEquals(
             [

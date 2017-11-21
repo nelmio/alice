@@ -68,7 +68,8 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
     {
         return ($objectOrArray instanceof \stdClass)
             ? true
-            : $this->decoratedPropertyAccessor->isWritable($objectOrArray, $propertyPath);
+            : $this->decoratedPropertyAccessor->isWritable($objectOrArray, $propertyPath)
+        ;
     }
 
     /**
@@ -78,6 +79,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
     {
         return ($objectOrArray instanceof \stdClass)
             ? isset($objectOrArray->$propertyPath)
-            : $this->decoratedPropertyAccessor->isReadable($objectOrArray, $propertyPath);
+            : $this->decoratedPropertyAccessor->isReadable($objectOrArray, $propertyPath)
+        ;
     }
 }

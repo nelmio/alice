@@ -97,7 +97,8 @@ class FixtureWildcardReferenceResolverTest extends TestCase
                         $fixtures = (new FixtureBag())->with($fixture)
                     )
                 )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -133,7 +134,8 @@ class FixtureWildcardReferenceResolverTest extends TestCase
                         (new FixtureBag())->with($fixture)
                     )
                 )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -167,7 +169,8 @@ class FixtureWildcardReferenceResolverTest extends TestCase
                         (new FixtureBag())->with($fixture)
                     )
                 )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 

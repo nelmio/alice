@@ -87,7 +87,8 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
 
         $realValue = (mt_rand(0, 99) < $quantifier)
             ? $value->getFirstMember()
-            : $value->getSecondMember();
+            : $value->getSecondMember()
+        ;
         if ($realValue instanceof ValueInterface) {
             return $this->resolver->resolve($realValue, $fixture, $fixtureSet, $scope, $context);
         }

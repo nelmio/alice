@@ -65,7 +65,8 @@ class SimpleObjectGeneratorTest extends TestCase
                     null,
                     (new ObjectBag())->with($instantiatedObject)
                 )
-            );
+            )
+        ;
         /** @var InstantiatorInterface $instantiator */
         $instantiator = $instantiatorProphecy->reveal();
 
@@ -83,7 +84,8 @@ class SimpleObjectGeneratorTest extends TestCase
                     null,
                     (new ObjectBag())->with($hydratedObject)
                 )
-            );
+            )
+        ;
         /** @var HydratorInterface $hydrator */
         $hydrator = $hydratorProphecy->reveal();
 
@@ -101,7 +103,8 @@ class SimpleObjectGeneratorTest extends TestCase
                     null,
                     (new ObjectBag())->with($objectAfterCalls)
                 )
-            );
+            )
+        ;
         /** @var CallerInterface $caller */
         $caller = $callerProphecy->reveal();
 

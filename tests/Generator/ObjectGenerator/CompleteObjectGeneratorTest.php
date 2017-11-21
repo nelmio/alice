@@ -83,7 +83,8 @@ class CompleteObjectGeneratorTest extends TestCase
             ->generate($fixture, $set, $context)
             ->willReturn(
                 $expected = (new ObjectBag())->with(new SimpleObject('dummy', new \stdClass()))
-            );
+            )
+        ;
         /** @var ObjectGeneratorInterface $decoratedGenerator */
         $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
@@ -138,7 +139,8 @@ class CompleteObjectGeneratorTest extends TestCase
                                 new SimpleObject('dummy', new \stdClass())
                             )
                         )
-                    );
+                    )
+                ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
@@ -178,7 +180,8 @@ class CompleteObjectGeneratorTest extends TestCase
                         (new ObjectBag())->with(
                             new SimpleObject('dummy', new \stdClass())
                         )
-                    );
+                    )
+                ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
@@ -216,7 +219,8 @@ class CompleteObjectGeneratorTest extends TestCase
                         (new ObjectBag())->with(
                             new SimpleObject('dummy', new \stdClass())
                         )
-                    );
+                    )
+                ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
@@ -250,7 +254,8 @@ class CompleteObjectGeneratorTest extends TestCase
                         (new ObjectBag())->with(
                             new SimpleObject('dummy', new \stdClass())
                         )
-                    );
+                    )
+                ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
@@ -287,7 +292,8 @@ class CompleteObjectGeneratorTest extends TestCase
                         $expected = (new ObjectBag())->with(
                             new SimpleObject('dummy', new \stdClass())
                         )
-                    );
+                    )
+                ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 

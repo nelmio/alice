@@ -178,7 +178,8 @@ class SimpleHydratorTest extends TestCase
             )
             ->willReturn(
                 new ResolvedValueWithFixtureSet('Bob', $setAfterFirstResolution)
-            );
+            )
+        ;
 
         $setAfterSecondResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 2]), $fixtures);
         $resolverProphecy
@@ -194,7 +195,8 @@ class SimpleHydratorTest extends TestCase
             )
             ->willReturn(
                 new ResolvedValueWithFixtureSet('Badass', $setAfterSecondResolution)
-            );
+            )
+        ;
         /** @var ValueResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
@@ -246,7 +248,8 @@ class SimpleHydratorTest extends TestCase
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $resolverProphecy
             ->resolve(Argument::cetera())
-            ->willThrow(RootResolutionException::class);
+            ->willThrow(RootResolutionException::class)
+        ;
         /** @var ValueResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 

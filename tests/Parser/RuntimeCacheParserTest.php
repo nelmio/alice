@@ -98,7 +98,8 @@ class RuntimeCacheParserTest extends TestCase
                         'foo',
                     ],
                 ]
-            );
+            )
+        ;
         $decoratedParserProphecy
             ->parse('/path/to/bar.php')
             ->willReturn(
@@ -107,7 +108,8 @@ class RuntimeCacheParserTest extends TestCase
                         'bar',
                     ],
                 ]
-            );
+            )
+        ;
         /* @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 

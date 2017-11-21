@@ -90,7 +90,8 @@ class PhpFunctionCallValueResolverTest extends TestCase
                     'bar',
                     ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar', 'ping' => 'pong']))
                 )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -125,7 +126,8 @@ class PhpFunctionCallValueResolverTest extends TestCase
                     'bar',
                     ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar', 'ping' => 'pong']))
                 )
-            );
+            )
+        ;
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 

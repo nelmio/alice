@@ -44,7 +44,8 @@ class LLegacyConstructorDenormalizerTest extends TestCase
             ->denormalize($fixture, $flagParser, $constructor)
             ->willReturn(
                 $expected = new FakeMethodCall()
-            );
+            )
+        ;
         /** @var ConstructorDenormalizerInterface $factoryDenormalizer */
         $factoryDenormalizer = $factoryDenormalizerProphecy->reveal();
 
@@ -64,14 +65,16 @@ class LLegacyConstructorDenormalizerTest extends TestCase
         $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
         $constructorDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $constructor)
-            ->willReturn($expected = new FakeMethodCall());
+            ->willReturn($expected = new FakeMethodCall())
+        ;
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
         $factoryDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
         $factoryDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $constructor)
-            ->willThrow(UnexpectedValueException::class);
+            ->willThrow(UnexpectedValueException::class)
+        ;
         /** @var ConstructorDenormalizerInterface $factoryDenormalizer */
         $factoryDenormalizer = $factoryDenormalizerProphecy->reveal();
 

@@ -89,7 +89,8 @@ class FlagBagTest extends TestCase
                     'flag0',
                     new stdClass()
                 )
-            );
+            )
+        ;
         $bag2 = $bag1->withKey('user2');
 
         $this->assertInstanceOf(FlagBag::class, $bag1);
@@ -136,10 +137,12 @@ class FlagBagTest extends TestCase
     {
         $firstBag = (new FlagBag('first'))
             ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
-            ->withFlag(new ElementFlag('foz'));
+            ->withFlag(new ElementFlag('foz'))
+        ;
         $secondBag = (new FlagBag('second'))
             ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
-            ->withFlag(new ElementFlag('baz'));
+            ->withFlag(new ElementFlag('baz'))
+        ;
 
         $mergeFirstWithSecondWithOverriding = $firstBag->mergeWith($secondBag);
         $mergeFirstWithSecondWithoutOverriding = $firstBag->mergeWith($secondBag, false);
@@ -205,7 +208,8 @@ class FlagBagTest extends TestCase
             ->withFlag(new DummyFlag())
             ->withFlag(new DummyFlag())
             ->withFlag(new AnotherDummyFlag())
-            ->withFlag(new AnotherDummyFlag());
+            ->withFlag(new AnotherDummyFlag())
+        ;
 
         $this->assertCount(2, $flags);
     }
@@ -217,7 +221,8 @@ class FlagBagTest extends TestCase
 
         $flags = (new FlagBag('user0'))
             ->withFlag($flag1)
-            ->withFlag($flag2);
+            ->withFlag($flag2)
+        ;
 
         $this->assertSameFlags(
             [
@@ -235,7 +240,8 @@ class FlagBagTest extends TestCase
 
         $flags = (new FlagBag('user0'))
             ->withFlag($extendFlag1)
-            ->withFlag($extendFlag2);
+            ->withFlag($extendFlag2)
+        ;
 
         $this->assertSameFlags(
             [
@@ -253,7 +259,8 @@ class FlagBagTest extends TestCase
 
         $flags = (new FlagBag('user0'))
             ->withFlag($optionalFlag1)
-            ->withFlag($optionalFlag2);
+            ->withFlag($optionalFlag2)
+        ;
 
         $this->assertSameFlags(
             [
@@ -270,7 +277,8 @@ class FlagBagTest extends TestCase
 
         $flags = (new FlagBag('user0'))
             ->withFlag($templateFlag1)
-            ->withFlag($templateFlag2);
+            ->withFlag($templateFlag2)
+        ;
 
         $this->assertSameFlags(
             [
@@ -287,7 +295,8 @@ class FlagBagTest extends TestCase
 
         $flags = (new FlagBag('user0'))
             ->withFlag($uniqueFlag1)
-            ->withFlag($uniqueFlag2);
+            ->withFlag($uniqueFlag2)
+        ;
 
         $this->assertSameFlags(
             [
