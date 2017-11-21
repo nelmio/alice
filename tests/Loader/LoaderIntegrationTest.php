@@ -17,7 +17,6 @@ use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\Caller\DummyWithStaticFunction;
 use Nelmio\Alice\Entity\Caller\StaticService;
-use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
 use Nelmio\Alice\Entity\DummyWithGetter as NelmioDummyWithGetter;
 use Nelmio\Alice\Entity\DummyWithImmutableFunction;
@@ -588,13 +587,13 @@ class LoaderIntegrationTest extends TestCase
         $expected = new ObjectSet(
             new ParameterBag(),
             new ObjectBag([
-                'dummy' => new DummyWithConstructorAndCallable(null),
+                'dummy' => new \Nelmio\Alice\Entity\DummyWithConstructorAndCallable(null),
                 'foo-0' => new DummyWithConstructorParam(null)
             ])
         );
 
         $actual = $this->loader->loadData([
-            DummyWithConstructorAndCallable::class => [
+            \Nelmio\Alice\Entity\DummyWithConstructorAndCallable::class => [
                 'dummy_template (template)' => [
                     '__calls' => [
                         [
