@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\FixtureBuilder\ExpressionLanguage\Parser;
 
+<<<<<<< HEAD
+=======
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest;
+>>>>>>> parent of e51d18e... [cs] drop unused brackets, spaces, order imports
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\IsolatedSymfonyBuiltInParser;
 
 /**

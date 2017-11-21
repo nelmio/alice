@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Hydrator\Property;
 
+use Nelmio\Alice\Dummy as NelmioDummy;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
-use Nelmio\Alice\Dummy as NelmioDummy;
 use Nelmio\Alice\Entity\DummyWithDate;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
 use Nelmio\Alice\Generator\GenerationContext;
