@@ -13,10 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\Generator\Resolver;
 
-<<<<<<< HEAD
-=======
-use Nelmio\Alice\Generator\Resolver\ParameterResolverIntegrationTest;
->>>>>>> parent of e51d18e... [cs] drop unused brackets, spaces, order imports
 use Nelmio\Alice\Generator\Resolver\Parameter\IsolatedSymfonyParameterBagResolver;
 
 /**
