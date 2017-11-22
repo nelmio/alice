@@ -29,10 +29,6 @@ final class FixtureBag implements \IteratorAggregate
     /**
      * Creates a new instance which will have the given fixture. If a fixture of that id already existed, it will be
      * overridden.
-     *
-     * @param FixtureInterface $fixture
-     *
-     * @return self
      */
     public function with(FixtureInterface $fixture): self
     {
@@ -45,10 +41,6 @@ final class FixtureBag implements \IteratorAggregate
     /**
      * Creates a new instance which will not contain the fixture of the given ID. Will still proceed even if such
      * fixture does not exist.
-     *
-     * @param FixtureInterface $fixture
-     *
-     * @return self
      */
     public function without(FixtureInterface $fixture): self
     {
@@ -71,8 +63,6 @@ final class FixtureBag implements \IteratorAggregate
 
     /**
      * @param string $id Fixture ID.
-     *
-     * @return bool
      */
     public function has(string $id): bool
     {
@@ -83,8 +73,6 @@ final class FixtureBag implements \IteratorAggregate
      * @param string $id Fixture ID.
      *
      * @throws FixtureNotFoundException
-     *
-     * @return FixtureInterface
      */
     public function get(string $id): FixtureInterface
     {

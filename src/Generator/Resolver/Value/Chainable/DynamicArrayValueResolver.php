@@ -46,6 +46,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
         if ($limit < 1) {
             throw InvalidArgumentExceptionFactory::createForInvalidLimitValue($limit);
         }
+
         $this->limit = $limit;
     }
 

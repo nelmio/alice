@@ -40,10 +40,6 @@ final class FunctionTreeTokenizer
      *      'IDENTITY_OR_FUNCTION_END',
      *      ' bar',
      *  ]
-     *
-     * @param string $value
-     *
-     * @return array
      */
     public function tokenize(string $value): array
     {
@@ -68,10 +64,6 @@ final class FunctionTreeTokenizer
 
     /**
      * Replaces the tokens by their original values.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     public function detokenize(string $value): string
     {
@@ -85,6 +77,7 @@ final class FunctionTreeTokenizer
                 $count
             );
         }
+
         $value = preg_replace(
             '/IDENTITY_START/',
             '<(',
@@ -111,7 +104,7 @@ final class FunctionTreeTokenizer
 
     public function functionIsNotClosed(array $functions): bool
     {
-        return [] != $functions;
+        return [] !== $functions;
     }
 
     public function isTheLastFunction(array $functions): bool

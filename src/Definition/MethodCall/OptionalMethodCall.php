@@ -31,10 +31,6 @@ final class OptionalMethodCall implements MethodCallInterface
      */
     private $flag;
 
-    /**
-     * @param MethodCallInterface $methodCall
-     * @param OptionalFlag        $flag
-     */
     public function __construct(MethodCallInterface $methodCall, OptionalFlag $flag)
     {
         $this->methodCall = $methodCall;

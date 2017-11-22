@@ -40,8 +40,6 @@ final class GeneratorFactory
 
     /**
      * @param string $locale e.g. 'fr_FR', 'en_US'
-     *
-     * @return FakerGenerator
      */
     public function createOrReturnExistingInstance(string $locale): FakerGenerator
     {

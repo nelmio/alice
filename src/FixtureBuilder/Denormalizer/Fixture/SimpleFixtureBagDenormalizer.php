@@ -51,8 +51,6 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
      *          ],
      *      ],
      *  ];
-     *
-     * @return FixtureBag
      */
     public function denormalize(array $data): FixtureBag
     {

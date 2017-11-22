@@ -47,8 +47,6 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
     }
 
     /**
-     * @param string $id
-     *
      * @return string[]
      *
      * @example
@@ -63,6 +61,7 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
         if (false === $this->canDenormalize($id, $matches)) {
             throw LogicExceptionFactory::createForCannotDenormalizerForChainableFixtureBuilderDenormalizer(__METHOD__);
         }
+
         $listElements = preg_split('/\s*,\s*/', $matches['list']);
 
         $ids = [];

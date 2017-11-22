@@ -59,7 +59,7 @@ final class Templating
 
     public function extendsFixtures(): bool
     {
-        return [] != $this->extends;
+        return [] !== $this->extends;
     }
 
     /**

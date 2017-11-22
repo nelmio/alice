@@ -25,8 +25,6 @@ final class IncludeDataMerger
      *
      * @param array $data        Parsed file data
      * @param array $includeData Parsed file data to merge
-     *
-     * @return array
      */
     public function mergeInclude(array $data, array $includeData): array
     {

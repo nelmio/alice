@@ -284,14 +284,14 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
         $valueResolverProphecy
             ->resolve($idValue, $dummyFixture, $set, $scope, $context)
             ->willReturn(
-                 new ResolvedValueWithFixtureSet(
-                    'alice',
+                new ResolvedValueWithFixtureSet(
+                     'alice',
                      $newSet = ResolvedFixtureSetFactory::create(
-                        null,
-                        $fixtureBag->with(new SimpleFixture('value_resolver_fixture', 'Dummy', SpecificationBagFactory::create())),
-                        $newObjectBag = $objectBag->with(new SimpleObject('value_resolver_fixture', new \stdClass()))
-                    )
-                )
+                         null,
+                         $fixtureBag->with(new SimpleFixture('value_resolver_fixture', 'Dummy', SpecificationBagFactory::create())),
+                         $newObjectBag = $objectBag->with(new SimpleObject('value_resolver_fixture', new \stdClass()))
+                     )
+                 )
             )
         ;
         /** @var ValueResolverInterface $valueResolver */

@@ -38,9 +38,6 @@ final class NelmioAliceExtension extends Extension
     /**
      * Loads alice configuration and add the configuration values to the application parameters.
      *
-     * @param array            $configs
-     * @param ContainerBuilder $container
-     *
      * @throws \InvalidArgumentException
      */
     private function loadConfig(array $configs, ContainerBuilder $container)
@@ -58,8 +55,6 @@ final class NelmioAliceExtension extends Extension
 
     /**
      * Loads all the services declarations.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadServices(ContainerBuilder $container)
     {

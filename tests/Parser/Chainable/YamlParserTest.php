@@ -147,6 +147,7 @@ EOF;
         } else {
             $symfonyYamlParserProphecy->parse($fileContent)->willReturn($expected);
         }
+
         /* @var SymfonyYamlParser $symfonyYamlParser */
         $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
 
@@ -182,6 +183,7 @@ EOF;
         if (!defined('Symfony\\Component\\Yaml\\Yaml::PARSE_CONSTANT')) {
             $this->markTestSkipped('This test needs symfony/yaml v3.2 or higher.');
         }
+
         $symfonyParser = new SymfonyYamlParser();
 
         $parser = new YamlParser($symfonyParser);

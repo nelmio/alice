@@ -103,6 +103,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
                 } catch (ResolutionThrowable $throwable) {
                     throw UnresolvableValueDuringGenerationExceptionFactory::createFromResolutionThrowable($throwable);
                 }
+
                 list($value, $fixtureSet) = [$result->getValue(), $result->getSet()];
             }
         }

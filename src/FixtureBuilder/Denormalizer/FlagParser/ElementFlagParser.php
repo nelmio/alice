@@ -32,9 +32,6 @@ final class ElementFlagParser implements FlagParserInterface
      */
     private $parser;
 
-    /**
-     * @param FlagParserInterface $parser
-     */
     public function __construct(FlagParserInterface $parser)
     {
         $this->parser = $parser;

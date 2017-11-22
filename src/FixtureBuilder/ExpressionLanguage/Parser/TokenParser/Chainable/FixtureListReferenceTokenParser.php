@@ -66,8 +66,6 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
     }
 
     /**
-     * @param Token $token
-     *
      * @throws ParseException
      *
      * @return string[]
@@ -83,6 +81,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
         if (1 !== preg_match(self::REGEX, $name, $matches)) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
+
         $listElements = preg_split('/\s*,\s*/', $matches['list']);
 
         $references = [];

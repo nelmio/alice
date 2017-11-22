@@ -71,7 +71,6 @@ abstract class ChainableDenormalizerTest extends TestCase
     }
 
     /**
-     * @param string     $fixtureId
      * @param array|null $expected
      */
     public function assertBuiltResultIsTheSame(string $fixtureId, array $expected)
@@ -89,6 +88,7 @@ abstract class ChainableDenormalizerTest extends TestCase
         foreach ($expected as $item) {
             $expectedFixtures = $expectedFixtures->with($item);
         }
+
         $this->assertEquals($expectedFixtures, $actual);
     }
 

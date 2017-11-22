@@ -71,13 +71,9 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
     }
 
     /**
-     * @param FixtureInterface     $scope
-     * @param FlagBag              $flags
      * @param mixed|ValueInterface $value
      *
      * @throws InvalidScopeException
-     *
-     * @return ValueInterface
      */
     private function generateValue(FixtureInterface $scope, FlagBag $flags, $value): ValueInterface
     {

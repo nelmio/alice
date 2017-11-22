@@ -37,10 +37,6 @@ final class ParameterBag implements \IteratorAggregate, \Countable
     /**
      * Returns a new instance which will include the passed parameter. If a parameter with that key already exist, it
      * WILL NOT be overridden.
-     *
-     * @param Parameter $parameter
-     *
-     * @return self
      */
     public function with(Parameter $parameter): self
     {
@@ -68,8 +64,6 @@ final class ParameterBag implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @param string $key
-     *
      * @throws ParameterNotFoundException
      *
      * @return mixed

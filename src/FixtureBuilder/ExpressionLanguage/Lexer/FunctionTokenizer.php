@@ -65,6 +65,7 @@ final class FunctionTokenizer
         if (false === $this->isTokenized($value)) {
             return $value;
         }
+
         $value = substr($value, 24, strlen($value) - 24 - 2);
 
         return $this->tokenizer->detokenize($value);
@@ -72,11 +73,6 @@ final class FunctionTokenizer
 
     /**
      * Regroup tokens together by detecting when the function starts, closes or when it is nested.
-     *
-     * @param string $originalValue
-     * @param array  $tokens
-     *
-     * @return array
      */
     private function buildTree(string $originalValue, array $tokens): array
     {
@@ -97,6 +93,7 @@ final class FunctionTokenizer
                     if (null === $lastFunctionKey) {
                         throw ExpressionLanguageExceptionFactory::createForMalformedFunction($originalValue);
                     }
+
                     unset($functions[$lastFunctionKey]);
 
                     continue;

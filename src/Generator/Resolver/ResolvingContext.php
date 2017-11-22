@@ -38,9 +38,6 @@ final class ResolvingContext
      * added also it won't increment the counter if already present.
      *
      * @param self|null $resolving
-     * @param string    $key
-     *
-     * @return self
      */
     public static function createFrom(self $resolving = null, string $key): self
     {
@@ -66,8 +63,6 @@ final class ResolvingContext
     }
 
     /**
-     * @param string $key
-     *
      * @throws CircularReferenceException
      */
     public function checkForCircularReference(string $key)

@@ -93,9 +93,6 @@ final class SubPatternsLexer implements LexerInterface
     }
 
     /**
-     * @param LexerInterface $referenceLexer
-     * @param string         $valueFragment
-     *
      * @throws LexException
      *
      * @return Token[]

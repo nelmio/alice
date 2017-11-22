@@ -44,6 +44,7 @@ final class IdentityTokenParser implements ChainableTokenParserInterface, Parser
         if (null !== $parser && $decoratedTokenParser instanceof ParserAwareInterface) {
             $decoratedTokenParser = $decoratedTokenParser->withParser($parser);
         }
+
         $this->decoratedTokenParser = $decoratedTokenParser;
         $this->tokenizer = new FunctionTokenizer();
     }

@@ -31,8 +31,6 @@ final class AliceProvider
     }
 
     /**
-     * @param FixtureInterface $fixture
-     *
      * @return string
      */
     public static function current(FixtureInterface $fixture)

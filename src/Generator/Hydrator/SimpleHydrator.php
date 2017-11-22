@@ -81,9 +81,11 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
                 } catch (ResolutionThrowable $throwable) {
                     throw UnresolvableValueDuringGenerationExceptionFactory::createFromResolutionThrowable($throwable);
                 }
+
                 list($propertyValue, $fixtureSet) = [$result->getValue(), $result->getSet()];
                 $property = $property->withValue($propertyValue);
             }
+
             $scope[$property->getName()] = $propertyValue;
 
             $object = $this->hydrator->hydrate($object, $property, $context);

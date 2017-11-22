@@ -29,7 +29,6 @@ final class Parameter
     private $value;
 
     /**
-     * @param string $key
      * @param mixed  $value
      */
     public function __construct(string $key, $value)

@@ -120,13 +120,13 @@ class CompleteObjectGeneratorTest extends TestCase
     {
         yield 'decorated generator generates a complete object => complete object' => (function () {
             $fixture = new SimpleFixture(
-                    'dummy',
-                    'Dummy',
-                    SpecificationBagFactory::create(
+                'dummy',
+                'Dummy',
+                SpecificationBagFactory::create(
                         null,
                         (new PropertyBag())->with(new Property('foo', 'bar'))
                     )
-                );
+            );
 
             $context = new GenerationContext();
 
@@ -145,12 +145,12 @@ class CompleteObjectGeneratorTest extends TestCase
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
             $expected = (new ObjectBag())->with(
-                    new CompleteObject(
+                new CompleteObject(
                         new CompleteObject(
                             new SimpleObject('dummy', new \stdClass())
                         )
                     )
-                );
+            );
 
             return [
                     $fixture,
@@ -162,13 +162,13 @@ class CompleteObjectGeneratorTest extends TestCase
 
         yield 'object has been generated during the second pass => complete object' => (function () {
             $fixture = new SimpleFixture(
-                    'dummy',
-                    'Dummy',
-                    SpecificationBagFactory::create(
+                'dummy',
+                'Dummy',
+                SpecificationBagFactory::create(
                         null,
                         (new PropertyBag())->with(new Property('foo', 'bar'))
                     )
-                );
+            );
 
             $context = new GenerationContext();
             $context->setToSecondPass();
@@ -186,10 +186,10 @@ class CompleteObjectGeneratorTest extends TestCase
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
             $expected = (new ObjectBag())->with(
-                    new CompleteObject(
+                new CompleteObject(
                         new SimpleObject('dummy', new \stdClass())
                     )
-                );
+            );
 
             return [
                     $fixture,
@@ -201,13 +201,13 @@ class CompleteObjectGeneratorTest extends TestCase
 
         yield 'object was generated with "complete object" generation context => complete object' => (function () {
             $fixture = new SimpleFixture(
-                    'dummy',
-                    'Dummy',
-                    SpecificationBagFactory::create(
+                'dummy',
+                'Dummy',
+                SpecificationBagFactory::create(
                         null,
                         (new PropertyBag())->with(new Property('foo', 'bar'))
                     )
-                );
+            );
 
             $context = new GenerationContext();
             $context->markAsNeedsCompleteGeneration();
@@ -225,10 +225,10 @@ class CompleteObjectGeneratorTest extends TestCase
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
             $expected = (new ObjectBag())->with(
-                    new CompleteObject(
+                new CompleteObject(
                         new SimpleObject('dummy', new \stdClass())
                     )
-                );
+            );
 
             return [
                     $fixture,
@@ -240,10 +240,10 @@ class CompleteObjectGeneratorTest extends TestCase
 
         yield 'object generated needed only instantiation => complete object' => (function () {
             $fixture = new SimpleFixture(
-                    'dummy',
-                    'Dummy',
-                    SpecificationBagFactory::create()
-                );
+                'dummy',
+                'Dummy',
+                SpecificationBagFactory::create()
+            );
 
             $context = new GenerationContext();
 
@@ -260,10 +260,10 @@ class CompleteObjectGeneratorTest extends TestCase
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
             $expected = (new ObjectBag())->with(
-                    new CompleteObject(
+                new CompleteObject(
                         new SimpleObject('dummy', new \stdClass())
                     )
-                );
+            );
 
             return [
                     $fixture,
@@ -275,13 +275,13 @@ class CompleteObjectGeneratorTest extends TestCase
 
         yield 'object generated during first pass => unchanged' => (function () {
             $fixture = new SimpleFixture(
-                    'dummy',
-                    'Dummy',
-                    SpecificationBagFactory::create(
+                'dummy',
+                'Dummy',
+                SpecificationBagFactory::create(
                         null,
                         (new PropertyBag())->with(new Property('foo', 'bar'))
                     )
-                );
+            );
 
             $context = new GenerationContext();
 

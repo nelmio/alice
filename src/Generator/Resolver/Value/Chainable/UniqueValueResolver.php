@@ -55,6 +55,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         if ($limit < 1) {
             throw InvalidArgumentExceptionFactory::createForInvalidLimitValue($limit);
         }
+
         $this->limit = $limit;
     }
 
@@ -101,6 +102,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         if ($this->pool->has($generatedValue)) {
             return $this->resolve($value, $fixture, $fixtureSet, $scope, $context, $tryCounter);
         }
+
         $this->pool->add($generatedValue);
 
         return new ResolvedValueWithFixtureSet($generatedValue->getValue(), $fixtureSet);

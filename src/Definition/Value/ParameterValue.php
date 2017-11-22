@@ -35,6 +35,7 @@ final class ParameterValue implements ValueInterface
         if (false === is_string($parameterKey) && false === $parameterKey instanceof ValueInterface) {
             throw TypeErrorFactory::createForInvalidParameterKey($parameterKey);
         }
+
         $this->parameterKey = $parameterKey;
     }
 

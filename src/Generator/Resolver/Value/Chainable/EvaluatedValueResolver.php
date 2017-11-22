@@ -85,10 +85,6 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
     /**
      * Replaces references to another fixtures, e.g. "@another_dummy" by the variable of the scope
      * "$_instances['another_dummy']".
-     *
-     * @param string $expression
-     *
-     * @return string
      */
     private function replacePlaceholders(string $expression): string
     {

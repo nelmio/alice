@@ -50,9 +50,11 @@ final class OptionalValue implements ValueInterface
         } else {
             throw TypeErrorFactory::createForOptionalValueQuantifier($quantifier);
         }
+
         if (false === is_string($firstMember) && false === $firstMember instanceof ValueInterface) {
             throw TypeErrorFactory::createForOptionalValueFirstMember($firstMember);
         }
+
         if (null !== $secondMember && false === is_string($secondMember) && false === $secondMember instanceof ValueInterface) {
             throw TypeErrorFactory::createForOptionalValueSecondMember($secondMember);
         }

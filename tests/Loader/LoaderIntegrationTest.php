@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use Nelmio\Alice\Entity\DummyWithGetter as NelmioDummyWithGetter;
+use Nelmio\Alice\Entity\InitializationOrder\Address;
+use Nelmio\Alice\Entity\InitializationOrder\Person;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity\Caller\Dummy;
 use Nelmio\Alice\Entity\Caller\DummyWithStaticFunction;
 use Nelmio\Alice\Entity\Caller\StaticService;
-use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
 use Nelmio\Alice\Entity\DummyWithConstructorParam;
 use Nelmio\Alice\Entity\DummyWithImmutableFunction;
 use Nelmio\Alice\Entity\DummyWithPrivateProperty;
@@ -585,7 +587,7 @@ class LoaderIntegrationTest extends TestCase
         $expected = new ObjectSet(
             new ParameterBag(),
             new ObjectBag([
-                'dummy' => new DummyWithConstructorAndCallable(null),
+                'dummy' => new \Nelmio\Alice\Entity\DummyWithConstructorAndCallable(null),
                 'foo-0' => new DummyWithConstructorParam(null)
             ])
         );
@@ -603,7 +605,7 @@ class LoaderIntegrationTest extends TestCase
                     '__construct' => ['foo']
                 ]
             ],
-            \Nelmio\Alice\Entity\DummyWithConstructorParam::class => [
+            DummyWithConstructorParam::class => [
                 'foo-0' => [
                     '__construct' => ['@dummy->foo']
                 ],
@@ -859,6 +861,7 @@ class LoaderIntegrationTest extends TestCase
             foreach ($dummy->relatedDummies as $relatedDummy) {
                 $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy'.$relatedDummy->name]);
             }
+
             $self->assertNotEquals($dummy->relatedDummies[0], $dummy->relatedDummies[1]);
 
             $anotherDummy = $set->getObjects()['dummy2'];
@@ -866,6 +869,7 @@ class LoaderIntegrationTest extends TestCase
             foreach ($anotherDummy->relatedDummies as $relatedDummy) {
                 $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy'.$relatedDummy->name]);
             }
+
             $self->assertNotEquals($anotherDummy->relatedDummies[0], $anotherDummy->relatedDummies[1]);
         };
         $assertEachValuesInRelatedDummiesAreUnique($result);
@@ -2629,7 +2633,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[variable] nominal' => [
             [
-                \Nelmio\Alice\Entity\DummyWithGetter::class => [
+                NelmioDummyWithGetter::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'fooVal' => '$foo',
@@ -2643,25 +2647,25 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
+                    'dummy' => (function (NelmioDummyWithGetter $dummy) {
                         $dummy->setFoo('bar');
                         $dummy->fooVal = 'bar';
 
                         return $dummy;
-                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
-                    'another_dummy' => (function (\Nelmio\Alice\Entity\DummyWithGetter $dummy) {
+                    })(new NelmioDummyWithGetter()),
+                    'another_dummy' => (function (NelmioDummyWithGetter $dummy) {
                         $dummy->setFoo('bar');
                         $dummy->fooVal = 'rab';
 
                         return $dummy;
-                    })(new \Nelmio\Alice\Entity\DummyWithGetter()),
+                    })(new NelmioDummyWithGetter()),
                 ],
             ],
         ];
 
         yield '[variable] variables are scoped to the fixture' => [
             [
-                \Nelmio\Alice\Entity\DummyWithGetter::class => [
+                NelmioDummyWithGetter::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'fooVal' => '$foo',
@@ -3492,13 +3496,13 @@ class LoaderIntegrationTest extends TestCase
         yield 'calls and factory order' => (function () {
             return [
                 [
-                    \Nelmio\Alice\Entity\InitializationOrder\Address::class => [
+                    Address::class => [
                         'address' => [
                             'country' => 'France',
                             'city' => 'Paris',
                         ],
                     ],
-                    \Nelmio\Alice\Entity\InitializationOrder\Person::class => [
+                    Person::class => [
                         'person' => [
                             '__factory' => [
                                 'createWithAddress' => [
@@ -3512,14 +3516,14 @@ class LoaderIntegrationTest extends TestCase
                     'parameters' => [],
                     'objects' => [
                         'address' => $address = (function () {
-                            $address = new \Nelmio\Alice\Entity\InitializationOrder\Address();
+                            $address = new Address();
 
                             $address->setCountry('France');
                             $address->setCity('Paris');
 
                             return $address;
                         })(),
-                        'person' => \Nelmio\Alice\Entity\InitializationOrder\Person::createWithAddress($address)
+                        'person' => Person::createWithAddress($address)
                     ],
                 ],
             ];

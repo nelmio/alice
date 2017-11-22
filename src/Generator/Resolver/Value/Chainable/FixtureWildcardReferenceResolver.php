@@ -99,10 +99,6 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
     /**
      * Gets all the fixture IDs suitable for the given value.
      *
-     * @param FixtureMatchReferenceValue $value
-     * @param ResolvedFixtureSet         $fixtureSet
-     * @param GenerationContext          $context
-     *
      * @return string[]
      */
     private function getSuitableIds(
@@ -131,9 +127,6 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
     }
 
     /**
-     * @param string             $pattern
-     * @param ResolvedFixtureSet $fixtureSet
-     *
      * @return string[]
      */
     private function findSuitableIds(string $pattern, ResolvedFixtureSet $fixtureSet): array

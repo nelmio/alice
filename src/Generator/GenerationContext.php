@@ -61,8 +61,6 @@ final class GenerationContext
     }
 
     /**
-     * @param string $id
-     *
      * @throws CircularReferenceException
      */
     public function markIsResolvingFixture(string $id)
@@ -107,8 +105,6 @@ final class GenerationContext
     }
 
     /**
-     * @param string $key
-     *
      * @throws CachedValueNotFound
      *
      * @return mixed

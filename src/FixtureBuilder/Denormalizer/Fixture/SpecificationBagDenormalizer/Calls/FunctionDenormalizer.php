@@ -59,9 +59,6 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
     }
 
     /**
-     * @param FixtureInterface $scope
-     * @param string           $method
-     *
      * @return array The first element is a ServiceReferenceInterface ($caller) and the second a string ($method)
      */
     private function getCallerReference(FixtureInterface $scope, string $method): array
