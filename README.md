@@ -170,6 +170,11 @@ For more information, refer to [the documentation](#table-of-contents).
 
 ## Third-party libraries
 
+### Framework Agnostic
+
+- [theofidry/AliceDataFixtures](https://github.com/theofidry/AliceDataFixtures)
+- [trappar/AliceGenerator](https://github.com/trappar/AliceGenerator)
+
 ### Symfony
 
 - [hautelook/AliceBundle](https://github.com/hautelook/AliceBundle)
@@ -184,10 +189,6 @@ For more information, refer to [the documentation](#table-of-contents).
 ### Zend Framework 2:
 
 - [ma-si/aist-alice-fixtures](https://github.com/ma-si/aist-alice-fixtures)
-
-### Framework Agnostic
-
-- [trappar/AliceGenerator](https://github.com/trappar/AliceGenerator)
 
 
 ## Contribute
