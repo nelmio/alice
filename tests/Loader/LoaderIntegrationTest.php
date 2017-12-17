@@ -13,36 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
-use Nelmio\Alice\Entity\DummyWithGetter as NelmioDummyWithGetter;
-use Nelmio\Alice\Entity\InitializationOrder\Address;
-use Nelmio\Alice\Entity\InitializationOrder\Person;
 use Nelmio\Alice\DataLoaderInterface;
-use Nelmio\Alice\Entity\Caller\Dummy;
-use Nelmio\Alice\Entity\Caller\DummyWithStaticFunction;
-use Nelmio\Alice\Entity\Caller\StaticService;
-use Nelmio\Alice\Entity\DummyWithConstructorParam;
-use Nelmio\Alice\Entity\DummyWithImmutableFunction;
-use Nelmio\Alice\Entity\DummyWithPrivateProperty;
-use Nelmio\Alice\Entity\DummyWithPublicProperty;
-use Nelmio\Alice\Entity\DummyWithVariadicConstructorParam;
-use Nelmio\Alice\Entity\Hydrator\CamelCaseDummy;
-use Nelmio\Alice\Entity\Hydrator\MagicCallDummy;
-use Nelmio\Alice\Entity\Hydrator\PascalCaseDummy;
-use Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy;
-use Nelmio\Alice\Entity\ImmutableStd;
-use Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor;
-use Nelmio\Alice\Entity\Instantiator\DummyWithExplicitDefaultConstructor;
-use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructor;
-use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndOptionalParameters;
-use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndRequiredParameters;
-use Nelmio\Alice\Entity\Instantiator\DummyWithNamedPrivateConstructor;
-use Nelmio\Alice\Entity\Instantiator\DummyWithOptionalParameterInConstructor;
-use Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor;
-use Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor;
-use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
+use Nelmio\Alice\Entity as FixtureEntity;
 use Nelmio\Alice\Entity\StdClassFactory;
-use Nelmio\Alice\Entity\ValueResolver\DummyWithGetter;
-use Nelmio\Alice\Entity\ValueResolver\DummyWithMethodArgument;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\FilesLoaderInterface;
 use Nelmio\Alice\ObjectBag;
@@ -287,14 +260,14 @@ class LoaderIntegrationTest extends TestCase
         $loader = new WithReflectionLoader();
 
         $data = [
-            DummyWithPrivateProperty::class => [
+            FixtureEntity\DummyWithPrivateProperty::class => [
                 'dummy' => [
                     'val' => 'bar',
                 ],
             ],
         ];
 
-        $expected = ['dummy' => new DummyWithPrivateProperty('bar')];
+        $expected = ['dummy' => new FixtureEntity\DummyWithPrivateProperty('bar')];
 
         $set = $loader->loadData($data);
 
@@ -341,7 +314,7 @@ class LoaderIntegrationTest extends TestCase
     {
         $set = $this->loader->loadData(
             [
-                ImmutableStd::class => [
+                FixtureEntity\ImmutableStd::class => [
                     'dummy' => [
                         '__construct' => [
                             ['relatedDummy' => '@another_dummy'],
@@ -368,7 +341,7 @@ class LoaderIntegrationTest extends TestCase
 
         $this->assertEquals(
             [
-                'dummy' => new ImmutableStd([
+                'dummy' => new FixtureEntity\ImmutableStd([
                     'relatedDummy' => StdClassFactory::create(['injected' => false]),
                 ]),
                 'another_dummy' => StdClassFactory::create(['injected' => false]),
@@ -588,7 +561,7 @@ class LoaderIntegrationTest extends TestCase
             new ParameterBag(),
             new ObjectBag([
                 'dummy' => new \Nelmio\Alice\Entity\DummyWithConstructorAndCallable(null),
-                'foo-0' => new DummyWithConstructorParam(null)
+                'foo-0' => new FixtureEntity\DummyWithConstructorParam(null)
             ])
         );
 
@@ -605,7 +578,7 @@ class LoaderIntegrationTest extends TestCase
                     '__construct' => ['foo']
                 ]
             ],
-            DummyWithConstructorParam::class => [
+            FixtureEntity\DummyWithConstructorParam::class => [
                 'foo-0' => [
                     '__construct' => ['@dummy->foo']
                 ],
@@ -794,7 +767,7 @@ class LoaderIntegrationTest extends TestCase
     public function testUniqueValueGenerationInAFunctionCall()
     {
         $data = [
-            DummyWithRequiredParameterInConstructor::class => [
+            FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor::class => [
                 'dummy{1..10}' => [
                     '__construct' => [
                         '0 (unique)' => '<numberBetween(1, 10)>',
@@ -820,7 +793,7 @@ class LoaderIntegrationTest extends TestCase
 
         try {
             $this->loader->loadData([
-                DummyWithRequiredParameterInConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor::class => [
                     'dummy{1..10}' => [
                         '__construct' => [
                             '0 (unique)' => '<numberBetween(1, 2)>',
@@ -968,7 +941,7 @@ class LoaderIntegrationTest extends TestCase
                     'val (unique)' => '<numberBetween(1, 10)>',
                 ],
             ],
-            DummyWithPublicProperty::class => [
+            FixtureEntity\DummyWithPublicProperty::class => [
                 'dummy_with_public_property{1..10}' => [
                     'val (unique)' => '<numberBetween(1, 10)>',
                 ],
@@ -983,7 +956,7 @@ class LoaderIntegrationTest extends TestCase
         $objects = $result->getObjects();
         $value = [
             stdClass::class => [],
-            DummyWithPublicProperty::class => [],
+            FixtureEntity\DummyWithPublicProperty::class => [],
         ];
         foreach ($objects as $object) {
             $this->assertTrue(1 <= $object->val);
@@ -992,7 +965,7 @@ class LoaderIntegrationTest extends TestCase
         }
 
         $this->assertCount(10, $value[stdClass::class]);
-        $this->assertCount(10, $value[DummyWithPublicProperty::class]);
+        $this->assertCount(10, $value[FixtureEntity\DummyWithPublicProperty::class]);
     }
 
     /**
@@ -1048,7 +1021,7 @@ class LoaderIntegrationTest extends TestCase
                     'foz' => '<{foo}>',
                     'foo' => 'baz',
                 ],
-                DummyWithConstructorParam::class => [
+                FixtureEntity\DummyWithConstructorParam::class => [
                     'another_dummy' => [
                         '__construct' => ['@dummy'],
                     ],
@@ -1078,7 +1051,7 @@ class LoaderIntegrationTest extends TestCase
                 'dummy' => $dummy = StdClassFactory::create([
                     'injected' => false,
                 ]),
-                'another_dummy' => new DummyWithConstructorParam($dummy),
+                'another_dummy' => new FixtureEntity\DummyWithConstructorParam($dummy),
             ])
         );
 
@@ -1142,9 +1115,7 @@ class LoaderIntegrationTest extends TestCase
                         'related' => '@another*',
                     ],
                 ],
-            ],
-            [],
-            []
+            ]
         );
 
         // This loading will also the caching part of the FixtureWildcardReferenceResolver. The
@@ -1159,9 +1130,7 @@ class LoaderIntegrationTest extends TestCase
                         'related' => '@another*',
                     ],
                 ],
-            ],
-            [],
-            []
+            ]
         );
     }
 
@@ -1187,25 +1156,25 @@ class LoaderIntegrationTest extends TestCase
     {
         yield 'with default constructor – use default constructor' => [
             [
-                DummyWithDefaultConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithDefaultConstructor::class => [
                     'dummy' => [],
                 ],
             ],
-            new DummyWithDefaultConstructor(),
+            new FixtureEntity\Instantiator\DummyWithDefaultConstructor(),
         ];
 
         yield 'with explicit default constructor - use constructor' => [
             [
-                DummyWithExplicitDefaultConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithExplicitDefaultConstructor::class => [
                     'dummy' => [],
                 ],
             ],
-            new DummyWithExplicitDefaultConstructor(),
+            new FixtureEntity\Instantiator\DummyWithExplicitDefaultConstructor(),
         ];
 
         yield 'with named constructor - use factory function' => [
             [
-                DummyWithNamedConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructor::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [],
@@ -1213,30 +1182,30 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructor::namedConstruct(),
+            FixtureEntity\Instantiator\DummyWithNamedConstructor::namedConstruct(),
         ];
 
         yield 'with default constructor and optional parameters without parameters - use constructor function' => [
             [
-                DummyWithOptionalParameterInConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor::class => [
                     'dummy' => [],
                 ],
             ],
-            new DummyWithOptionalParameterInConstructor(),
+            new FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor(),
         ];
 
         yield 'with default constructor and optional parameters without parameters - use constructor function' => [
             [
-                DummyWithOptionalParameterInConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor::class => [
                     'dummy' => [],
                 ],
             ],
-            new DummyWithOptionalParameterInConstructor(),
+            new FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor(),
         ];
 
         yield 'with default constructor and optional parameters with parameters - use constructor function' => [
             [
-                DummyWithOptionalParameterInConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor::class => [
                     'dummy' => [
                         '__construct' => [
                             100
@@ -1244,12 +1213,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            new DummyWithOptionalParameterInConstructor(100),
+            new FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor(100),
         ];
 
         yield 'with default constructor and required parameters with no parameters - throw exception' => [
             [
-                DummyWithRequiredParameterInConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor::class => [
                     'dummy' => [],
                 ],
             ],
@@ -1258,18 +1227,18 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'with default constructor and required parameters with parameters - use constructor function' => [
             [
-                DummyWithRequiredParameterInConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor::class => [
                     'dummy' => [
                         '__construct' => [100],
                     ],
                 ],
             ],
-            new DummyWithRequiredParameterInConstructor(100),
+            new FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor(100),
         ];
 
         yield 'with default constructor and required parameters with parameters and unique value - use constructor function' => [
             [
-                DummyWithRequiredParameterInConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor::class => [
                     'dummy' => [
                         '__construct' => [
                             '0 (unique)' => 100,
@@ -1277,12 +1246,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            new DummyWithRequiredParameterInConstructor(100),
+            new FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor(100),
         ];
 
         yield 'with named constructor and optional parameters with no parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [],
@@ -1290,12 +1259,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
         ];
 
         yield 'with named constructor and optional parameters with parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [
@@ -1305,12 +1274,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
         ];
 
         yield 'with named constructor and optional parameters with parameters and unique value - use factory function' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [
@@ -1320,12 +1289,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
         ];
 
         yield 'with named constructor and required parameters with no parameters - throw exception' => [
             [
-                DummyWithNamedConstructorAndRequiredParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [],
@@ -1338,7 +1307,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'with named constructor and required parameters with parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndRequiredParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [
@@ -1348,12 +1317,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
         ];
 
         yield 'with named constructor and required parameters with named parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndRequiredParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [
@@ -1363,12 +1332,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
         ];
 
         yield 'with unknown named constructor' => [
             [
-                DummyWithDefaultConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithDefaultConstructor::class => [
                     'dummy' => [
                         '__construct' => [
                             'unknown' => [],
@@ -1381,7 +1350,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'with private constructor – throw exception' => [
             [
-                DummyWithPrivateConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithPrivateConstructor::class => [
                     'dummy' => [],
                 ],
             ],
@@ -1390,7 +1359,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'with protected constructor – throw exception' => [
             [
-                DummyWithProtectedConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithProtectedConstructor::class => [
                     'dummy' => [],
                 ],
             ],
@@ -1399,7 +1368,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'with private named constructor – throw exception' => [
             [
-                DummyWithNamedPrivateConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithNamedPrivateConstructor::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [],
@@ -1412,114 +1381,114 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'with default constructor but specified no constructor – use reflection' => [
             [
-                DummyWithDefaultConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithDefaultConstructor::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithDefaultConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithDefaultConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with explicit constructor but specified no constructor – use reflection' => [
             [
-                DummyWithExplicitDefaultConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithExplicitDefaultConstructor::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithExplicitDefaultConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithExplicitDefaultConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with named constructor but specified no constructor – use reflection' => [
             [
-                DummyWithNamedConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructor::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithNamedConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithNamedConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with named constructor and optional parameters but specified no constructor – use reflection' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithNamedConstructorAndOptionalParameters::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with named constructor and required parameters but specified no constructor – use reflection' => [
             [
-                DummyWithNamedConstructorAndRequiredParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithNamedConstructorAndRequiredParameters::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with optional parameters in constructor but specified no constructor – use reflection' => [
             [
-                DummyWithOptionalParameterInConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithOptionalParameterInConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with required parameters in constructor but specified no constructor – use reflection' => [
             [
-                DummyWithRequiredParameterInConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithRequiredParameterInConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor::class))->newInstanceWithoutConstructor(),
         ];
 
         yield 'with private constructor – use reflection' => [
             [
-                DummyWithPrivateConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithPrivateConstructor::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithPrivateConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithPrivateConstructor::class))->newInstanceWithoutConstructor(),
 
         ];
 
         yield 'with protected constructor – use reflection' => [
             [
-                DummyWithProtectedConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithProtectedConstructor::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithProtectedConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithProtectedConstructor::class))->newInstanceWithoutConstructor(),
 
         ];
 
         yield 'with private named constructor – use reflection' => [
             [
-                DummyWithNamedPrivateConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithNamedPrivateConstructor::class => [
                     'dummy' => [
                         '__construct' => false,
                     ],
                 ],
             ],
-            (new ReflectionClass(DummyWithNamedPrivateConstructor::class))->newInstanceWithoutConstructor(),
+            (new ReflectionClass(FixtureEntity\Instantiator\DummyWithNamedPrivateConstructor::class))->newInstanceWithoutConstructor(),
         ];
     }
 
@@ -1527,7 +1496,7 @@ class LoaderIntegrationTest extends TestCase
     {
         yield 'regular factory' => [
             [
-                DummyWithNamedConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructor::class => [
                     'dummy' => [
                         '__factory' => [
                             'namedConstruct' => [],
@@ -1535,12 +1504,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructor::namedConstruct(),
+            FixtureEntity\Instantiator\DummyWithNamedConstructor::namedConstruct(),
         ];
 
         yield 'factory with optional parameters with no parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__factory' => [
                             'namedConstruct' => [],
@@ -1548,12 +1517,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
         ];
 
         yield 'factory with optional parameters with parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__factory' => [
                             'namedConstruct' => [
@@ -1563,12 +1532,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
         ];
 
         yield 'factory with optional parameters with parameters and unique value - use factory function' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__factory' => [
                             'namedConstruct' => [
@@ -1578,12 +1547,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
         ];
 
         yield 'factory with required parameters with no parameters - throw exception' => [
             [
-                DummyWithNamedConstructorAndRequiredParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
                     'dummy' => [
                         '__factory' => [
                             'namedConstruct' => [],
@@ -1596,7 +1565,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'factory with required parameters with parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndRequiredParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
                     'dummy' => [
                         '__factory' => [
                             'namedConstruct' => [
@@ -1606,12 +1575,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
         ];
 
         yield 'factory with required parameters with named parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndRequiredParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
                     'dummy' => [
                         '__factory' => [
                             'namedConstruct' => [
@@ -1621,12 +1590,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
         ];
 
         yield 'unknown named factory' => [
             [
-                DummyWithDefaultConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithDefaultConstructor::class => [
                     'dummy' => [
                         '__factory' => [
                             'unknown' => [],
@@ -1639,7 +1608,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'with private factory – throw exception' => [
             [
-                DummyWithNamedPrivateConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithNamedPrivateConstructor::class => [
                     'dummy' => [
                         '__factory' => [
                             'namedConstruct' => [],
@@ -1655,7 +1624,7 @@ class LoaderIntegrationTest extends TestCase
     {
         yield 'with named constructor - use factory function' => [
             [
-                DummyWithNamedConstructor::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructor::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [],
@@ -1663,12 +1632,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructor::namedConstruct(),
+            FixtureEntity\Instantiator\DummyWithNamedConstructor::namedConstruct(),
         ];
 
         yield 'with named constructor and optional parameters with no parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [],
@@ -1676,12 +1645,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
         ];
 
         yield 'with named constructor and optional parameters with parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [
@@ -1691,12 +1660,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
         ];
 
         yield 'with named constructor and optional parameters with parameters and unique value - use factory function' => [
             [
-                DummyWithNamedConstructorAndOptionalParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [
@@ -1706,12 +1675,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
         ];
 
         yield 'with named constructor and required parameters with parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndRequiredParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [
@@ -1721,12 +1690,12 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
         ];
 
         yield 'with named constructor and required parameters with named parameters - use factory function' => [
             [
-                DummyWithNamedConstructorAndRequiredParameters::class => [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
                     'dummy' => [
                         '__construct' => [
                             'namedConstruct' => [
@@ -1736,7 +1705,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
         ];
     }
 
@@ -1744,75 +1713,75 @@ class LoaderIntegrationTest extends TestCase
     {
         yield 'public camelCase property' => [
             [
-                CamelCaseDummy::class => [
+                FixtureEntity\Hydrator\CamelCaseDummy::class => [
                     'dummy' => [
                         'publicProperty' => 'bob',
                     ],
                 ],
             ],
             [
-                'dummy' => (function (CamelCaseDummy $dummy) {
+                'dummy' => (function (FixtureEntity\Hydrator\CamelCaseDummy $dummy) {
                     $dummy->publicProperty = 'bob';
 
                     return $dummy;
-                })(new CamelCaseDummy())
+                })(new FixtureEntity\Hydrator\CamelCaseDummy())
             ],
         ];
 
         yield 'public snake_case property' => [
             [
-                SnakeCaseDummy::class => [
+                FixtureEntity\Hydrator\SnakeCaseDummy::class => [
                     'dummy' => [
                         'public_property' => 'bob',
                     ],
                 ],
             ],
             [
-                'dummy' => (function (SnakeCaseDummy $dummy) {
+                'dummy' => (function (FixtureEntity\Hydrator\SnakeCaseDummy $dummy) {
                     $dummy->public_property = 'bob';
 
                     return $dummy;
-                })(new SnakeCaseDummy())
+                })(new FixtureEntity\Hydrator\SnakeCaseDummy())
             ],
         ];
 
         yield 'public PascalCase property' => [
             [
-                PascalCaseDummy::class => [
+                FixtureEntity\Hydrator\PascalCaseDummy::class => [
                     'dummy' => [
                         'PublicProperty' => 'bob',
                     ],
                 ],
             ],
             [
-                'dummy' => (function (PascalCaseDummy $dummy) {
+                'dummy' => (function (FixtureEntity\Hydrator\PascalCaseDummy $dummy) {
                     $dummy->PublicProperty = 'bob';
 
                     return $dummy;
-                })(new PascalCaseDummy())
+                })(new FixtureEntity\Hydrator\PascalCaseDummy())
             ],
         ];
 
         yield 'public setter camelCase property' => [
             [
-                CamelCaseDummy::class => [
+                FixtureEntity\Hydrator\CamelCaseDummy::class => [
                     'dummy' => [
                         'setterProperty' => 'bob',
                     ],
                 ],
             ],
             [
-                'dummy' => (function (CamelCaseDummy $dummy) {
+                'dummy' => (function (FixtureEntity\Hydrator\CamelCaseDummy $dummy) {
                     $dummy->setSetterProperty('bob');
 
                     return $dummy;
-                })(new CamelCaseDummy())
+                })(new FixtureEntity\Hydrator\CamelCaseDummy())
             ],
         ];
 
         yield 'public setter snake_case property' => [
             [
-                SnakeCaseDummy::class => [
+                FixtureEntity\Hydrator\SnakeCaseDummy::class => [
                     'dummy' => [
                         'setter_property' => 'bob',
                     ],
@@ -1823,52 +1792,52 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'magic call camelCase property' => [
             [
-                MagicCallDummy::class => [
+                FixtureEntity\Hydrator\MagicCallDummy::class => [
                     'dummy' => [
                         'magicProperty' => 'bob',
                     ],
                 ],
             ],
             [
-                'dummy' => (function (MagicCallDummy $dummy) {
+                'dummy' => (function (FixtureEntity\Hydrator\MagicCallDummy $dummy) {
                     $dummy->setMagicProperty('bob');
 
                     return $dummy;
-                })(new MagicCallDummy())
+                })(new FixtureEntity\Hydrator\MagicCallDummy())
             ],
         ];
 
         yield 'magic call snake_case property' => [
             [
-                MagicCallDummy::class => [
+                FixtureEntity\Hydrator\MagicCallDummy::class => [
                     'dummy' => [
                         'magic_property' => 'bob',
                     ],
                 ],
             ],
             [
-                'dummy' => (function (MagicCallDummy $dummy) {
+                'dummy' => (function (FixtureEntity\Hydrator\MagicCallDummy $dummy) {
                     $dummy->setMagicProperty('bob');
 
                     return $dummy;
-                })(new MagicCallDummy())
+                })(new FixtureEntity\Hydrator\MagicCallDummy())
             ],
         ];
 
         yield 'magic call PascalCase property' => [
             [
-                MagicCallDummy::class => [
+                FixtureEntity\Hydrator\MagicCallDummy::class => [
                     'dummy' => [
                         'MagicProperty' => 'bob',
                     ],
                 ],
             ],
             [
-                'dummy' => (function (MagicCallDummy $dummy) {
+                'dummy' => (function (FixtureEntity\Hydrator\MagicCallDummy $dummy) {
                     $dummy->setMagicProperty('bob');
 
                     return $dummy;
-                })(new MagicCallDummy())
+                })(new FixtureEntity\Hydrator\MagicCallDummy())
             ],
         ];
     }
@@ -2153,7 +2122,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'property reference value with a getter' => [
             [
-                DummyWithGetter::class => [
+                FixtureEntity\ValueResolver\DummyWithGetter::class => [
                     'dummy' => [
                         'name' => 'foo',
                     ],
@@ -2165,15 +2134,15 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => $dummy = (new DummyWithGetter())->setName('foo'),
-                    'another_dummy' => (new DummyWithGetter())->setName('__get__foo'),
+                    'dummy' => $dummy = (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('foo'),
+                    'another_dummy' => (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('__get__foo'),
                 ],
             ]
         ];
 
         yield 'inverted property reference value with a getter' => [
             [
-                DummyWithGetter::class => [
+                FixtureEntity\ValueResolver\DummyWithGetter::class => [
                     'dummy' => [
                         'name' => '@another_dummy->name',
                     ],
@@ -2185,8 +2154,8 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => $dummy = (new DummyWithGetter())->setName('__get__foo'),
-                    'another_dummy' => (new DummyWithGetter())->setName('foo'),
+                    'dummy' => $dummy = (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('__get__foo'),
+                    'another_dummy' => (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('foo'),
                 ],
             ]
         ];
@@ -2633,7 +2602,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[variable] nominal' => [
             [
-                NelmioDummyWithGetter::class => [
+                FixtureEntity\DummyWithGetter::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'fooVal' => '$foo',
@@ -2647,25 +2616,25 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function (NelmioDummyWithGetter $dummy) {
+                    'dummy' => (function (FixtureEntity\DummyWithGetter $dummy) {
                         $dummy->setFoo('bar');
                         $dummy->fooVal = 'bar';
 
                         return $dummy;
-                    })(new NelmioDummyWithGetter()),
-                    'another_dummy' => (function (NelmioDummyWithGetter $dummy) {
+                    })(new FixtureEntity\DummyWithGetter()),
+                    'another_dummy' => (function (FixtureEntity\DummyWithGetter $dummy) {
                         $dummy->setFoo('bar');
                         $dummy->fooVal = 'rab';
 
                         return $dummy;
-                    })(new NelmioDummyWithGetter()),
+                    })(new FixtureEntity\DummyWithGetter()),
                 ],
             ],
         ];
 
         yield '[variable] variables are scoped to the fixture' => [
             [
-                NelmioDummyWithGetter::class => [
+                FixtureEntity\DummyWithGetter::class => [
                     'dummy' => [
                         'foo' => 'bar',
                         'fooVal' => '$foo',
@@ -2887,7 +2856,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[current] in constructor' => [
             [
-                DummyWithConstructorParam::class => [
+                FixtureEntity\DummyWithConstructorParam::class => [
                     'dummy{1..2}' => [
                         '__construct' => ['<current()>'],
                     ],
@@ -2899,10 +2868,10 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy1' => new DummyWithConstructorParam(1),
-                    'dummy2' => new DummyWithConstructorParam(2),
-                    'dummy_alice' => new DummyWithConstructorParam('alice'),
-                    'dummy_bob' => new DummyWithConstructorParam('bob'),
+                    'dummy1' => new FixtureEntity\DummyWithConstructorParam(1),
+                    'dummy2' => new FixtureEntity\DummyWithConstructorParam(2),
+                    'dummy_alice' => new FixtureEntity\DummyWithConstructorParam('alice'),
+                    'dummy_bob' => new FixtureEntity\DummyWithConstructorParam('bob'),
                 ],
             ],
         ];
@@ -3076,7 +3045,7 @@ class LoaderIntegrationTest extends TestCase
                     'ping' => 'pong',
                     'foo' => 'bar',
                 ],
-                DummyWithConstructorParam::class => [
+                FixtureEntity\DummyWithConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             [
@@ -3093,7 +3062,7 @@ class LoaderIntegrationTest extends TestCase
                     'foo' => 'bar',
                 ],
                 'objects' => [
-                    'dummy' => new DummyWithConstructorParam([
+                    'dummy' => new FixtureEntity\DummyWithConstructorParam([
                         'foo' => 'pong',
                         'bar' => 'bar',
                     ]),
@@ -3107,7 +3076,7 @@ class LoaderIntegrationTest extends TestCase
                     'ping' => 'pong',
                     'foo' => 'bar',
                 ],
-                DummyWithVariadicConstructorParam::class => [
+                FixtureEntity\DummyWithVariadicConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             'foo' => '<($ping)>',
@@ -3124,7 +3093,7 @@ class LoaderIntegrationTest extends TestCase
                     'foo' => 'bar',
                 ],
                 'objects' => [
-                    'dummy' => new DummyWithVariadicConstructorParam(
+                    'dummy' => new FixtureEntity\DummyWithVariadicConstructorParam(
                         'pong',
                         'pong',
                         'pong',
@@ -3137,7 +3106,7 @@ class LoaderIntegrationTest extends TestCase
         yield 'argument indexes (ambiguous case, default to argument instead of factory)' => [
             [
                 'parameters' => [],
-                DummyWithVariadicConstructorParam::class => [
+                FixtureEntity\DummyWithVariadicConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             'foo' => 'bar',
@@ -3148,7 +3117,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => new DummyWithVariadicConstructorParam(
+                    'dummy' => new FixtureEntity\DummyWithVariadicConstructorParam(
                         'bar'
                     ),
                 ],
@@ -3175,7 +3144,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'object circular reference' => [
             [
-                DummyWithConstructorParam::class => [
+                FixtureEntity\DummyWithConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             '@another_dummy',
@@ -3217,7 +3186,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'method calls' => [
             [
-                Dummy::class => [
+                FixtureEntity\Caller\Dummy::class => [
                     'dummy' => [
                         '__calls' => [
                             ['setTitle' => ['Fake Title']],
@@ -3230,14 +3199,14 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => Dummy::create('Fake Title', 2),
+                    'dummy' => FixtureEntity\Caller\Dummy::create('Fake Title', 2),
                 ],
             ],
         ];
 
         yield '[current] in method calls' => [
             [
-                Dummy::class => [
+                FixtureEntity\Caller\Dummy::class => [
                     'dummy_{1..2}' => [
                         '__calls' => [
                             ['setTitle' => ['Fake Title <current()>']],
@@ -3249,15 +3218,15 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy_1' => Dummy::create('Fake Title 1', 1),
-                    'dummy_2' => Dummy::create('Fake Title 2', 1),
+                    'dummy_1' => FixtureEntity\Caller\Dummy::create('Fake Title 1', 1),
+                    'dummy_2' => FixtureEntity\Caller\Dummy::create('Fake Title 2', 1),
                 ],
             ],
         ];
 
         yield '[current] in method calls' => [
             [
-                Dummy::class => [
+                FixtureEntity\Caller\Dummy::class => [
                     'dummy_{1..2}' => [
                         '__calls' => [
                             ['setTitle' => ['Fake Title <current()>']],
@@ -3269,15 +3238,15 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy_1' => Dummy::create('Fake Title 1', 1),
-                    'dummy_2' => Dummy::create('Fake Title 2', 1),
+                    'dummy_1' => FixtureEntity\Caller\Dummy::create('Fake Title 1', 1),
+                    'dummy_2' => FixtureEntity\Caller\Dummy::create('Fake Title 2', 1),
                 ],
             ],
         ];
 
         yield 'reference value in method calls' => [
             [
-                Dummy::class => [
+                FixtureEntity\Caller\Dummy::class => [
                     'dummy_1' => [],
                     'dummy_2' => [
                         '__calls' => [
@@ -3290,15 +3259,15 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy_1' => $dummy1 = Dummy::create(null, 0),
-                    'dummy_2' => Dummy::create('Dummy 2', 0, $dummy1),
+                    'dummy_1' => $dummy1 = FixtureEntity\Caller\Dummy::create(null, 0),
+                    'dummy_2' => FixtureEntity\Caller\Dummy::create('Dummy 2', 0, $dummy1),
                 ],
             ],
         ];
 
         yield 'method call reference value' => [
             [
-                DummyWithGetter::class => [
+                FixtureEntity\ValueResolver\DummyWithGetter::class => [
                     'dummy' => [
                         'name' => 'foobar'
                     ],
@@ -3312,7 +3281,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (new DummyWithGetter())->setName('foobar'),
+                    'dummy' => (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('foobar'),
                     'another_dummy' => StdClassFactory::create([
                         'foo' => '__get__foobar',
                     ]),
@@ -3320,16 +3289,16 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
-        $dummyWithMethodArgument = new DummyWithMethodArgument();
+        $dummyWithMethodArgument = new FixtureEntity\ValueResolver\DummyWithMethodArgument();
         $dummyWithMethodArgument->prefix = 'bazbaz__';
         yield 'method call reference value with reference argument' => [
             [
-                DummyWithGetter::class => [
+                FixtureEntity\ValueResolver\DummyWithGetter::class => [
                     'dummy' => [
                         'name' => 'foobar'
                     ],
                 ],
-                DummyWithMethodArgument::class => [
+                FixtureEntity\ValueResolver\DummyWithMethodArgument::class => [
                     'dummy_2' => [
                         'prefix' => 'bazbaz__',
                     ],
@@ -3343,7 +3312,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (new DummyWithGetter())->setName('foobar'),
+                    'dummy' => (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('foobar'),
                     'dummy_2' => $dummyWithMethodArgument,
                     'another_dummy' => StdClassFactory::create([
                         'foo' => 'bazbaz____get__foobar',
@@ -3354,11 +3323,11 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'method call with another static function' => [
             [
-                DummyWithStaticFunction::class => [
+                FixtureEntity\Caller\DummyWithStaticFunction::class => [
                     'dummy' => [
                         '__construct' => false,
                         '__calls' => [
-                            [StaticService::class.'::setTitle' => ['@self', 'Foo']],
+                            [FixtureEntity\Caller\StaticService::class.'::setTitle' => ['@self', 'Foo']],
                         ]
                     ]
                 ]
@@ -3366,18 +3335,18 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => new DummyWithStaticFunction('Foo'),
+                    'dummy' => new FixtureEntity\Caller\DummyWithStaticFunction('Foo'),
                 ],
             ],
         ];
 
         yield 'method call with optional flag' => [
             [
-                DummyWithStaticFunction::class => [
+                FixtureEntity\Caller\DummyWithStaticFunction::class => [
                     'dummy' => [
                         '__construct' => false,
                         '__calls' => [
-                            [StaticService::class.'::setTitle (0%?)' => ['@self', 'Foo']],
+                            [FixtureEntity\Caller\StaticService::class.'::setTitle (0%?)' => ['@self', 'Foo']],
                         ]
                     ]
                 ]
@@ -3385,18 +3354,18 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (new ReflectionClass(DummyWithStaticFunction::class))->newInstanceWithoutConstructor(),
+                    'dummy' => (new ReflectionClass(FixtureEntity\Caller\DummyWithStaticFunction::class))->newInstanceWithoutConstructor(),
                 ],
             ],
         ];
 
         yield 'method call with static function' => [
             [
-                DummyWithStaticFunction::class => [
+                FixtureEntity\Caller\DummyWithStaticFunction::class => [
                     'dummy' => [
                         '__construct' => false,
                         '__calls' => [
-                            [DummyWithStaticFunction::class.'::setTitle' => ['@self', 'Foo']],
+                            [FixtureEntity\Caller\DummyWithStaticFunction::class.'::setTitle' => ['@self', 'Foo']],
                         ]
                     ]
                 ]
@@ -3404,7 +3373,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => new DummyWithStaticFunction('Foo'),
+                    'dummy' => new FixtureEntity\Caller\DummyWithStaticFunction('Foo'),
                 ],
             ],
         ];
@@ -3471,7 +3440,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[configurator] named factory' => [
             [
-                DummyWithImmutableFunction::class => [
+                FixtureEntity\DummyWithImmutableFunction::class => [
                     'dummy' => [
                         '__construct' => false,
                         '__calls' => [
@@ -3487,7 +3456,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => new DummyWithImmutableFunction('foo'),
+                    'dummy' => new FixtureEntity\DummyWithImmutableFunction('foo'),
                 ],
             ],
         ];
@@ -3496,13 +3465,13 @@ class LoaderIntegrationTest extends TestCase
         yield 'calls and factory order' => (function () {
             return [
                 [
-                    Address::class => [
+                    FixtureEntity\InitializationOrder\Address::class => [
                         'address' => [
                             'country' => 'France',
                             'city' => 'Paris',
                         ],
                     ],
-                    Person::class => [
+                    FixtureEntity\InitializationOrder\Person::class => [
                         'person' => [
                             '__factory' => [
                                 'createWithAddress' => [
@@ -3516,14 +3485,14 @@ class LoaderIntegrationTest extends TestCase
                     'parameters' => [],
                     'objects' => [
                         'address' => $address = (function () {
-                            $address = new Address();
+                            $address = new FixtureEntity\InitializationOrder\Address();
 
                             $address->setCountry('France');
                             $address->setCity('Paris');
 
                             return $address;
                         })(),
-                        'person' => Person::createWithAddress($address)
+                        'person' => FixtureEntity\InitializationOrder\Person::createWithAddress($address)
                     ],
                 ],
             ];
