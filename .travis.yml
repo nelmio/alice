@@ -7,6 +7,7 @@ cache:
 php:
   - '7.0'
   - '7.1'
+  - '7.2'
   - nightly
 
 env:
@@ -18,18 +19,19 @@ matrix:
   include:
     - php: '7.0'
       env: COMPOSER_FLAGS='--prefer-lowest'
-    - php: '7.1'
+    - php: '7.2'
       env: COVERAGE='true'
-    - php: '7.1'
+    - php: '7.2'
       env: SYMFONY_VERSION='~3.3.0'
-    - php: '7.1'
-      env: SYMFONY_VERSION='~3.4.0@dev'
-    - php: '7.1'
-      env: SYMFONY_VERSION='~4.0.0@dev'
+    - php: '7.2'
+      env: SYMFONY_VERSION='~3.4.0'
+    - php: '7.2'
+      env: SYMFONY_VERSION='~4.0.0'
+    - php: '7.2'
+      env: SYMFONY_VERSION='~4.1.0@dev'
   allow_failures:
     - php: nightly
-    - env: SYMFONY_VERSION='~3.4.0@dev'
-    - env: SYMFONY_VERSION='~4.0.0@dev'
+    - env: SYMFONY_VERSION='~4.1.0@dev'
 
 before_install:
   - set -eo pipefail
