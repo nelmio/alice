@@ -73,7 +73,6 @@ class LexerIntegrationTest extends TestCase
         }
 
         $this->assertEquals($expected, $actual, var_export($actual, true));
-        $this->assertSameSize($expected, $actual);
     }
 
     /**
@@ -84,9 +83,9 @@ class LexerIntegrationTest extends TestCase
         // simple values
         yield 'empty string' => [
             '',
-            [
-                new Token('', new TokenType(TokenType::STRING_TYPE)),
-            ],
+            new TreeNode(
+                '#root'
+            ),
         ];
 
         yield 'regular string value' => [
