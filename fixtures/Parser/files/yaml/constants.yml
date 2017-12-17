@@ -9,4 +9,4 @@
 
 Nelmio\Alice\Model\User:
     user0:
-        max_int: !php/const:PHP_INT_MAX
+        max_int: !php/const PHP_INT_MAX
