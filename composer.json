@@ -55,6 +55,9 @@
             ]
         }
     },
+    "suggest": {
+        "theofidry/alice-data-fixtures": "Wrapper for Alice to provide a persistence layer."
+    },
 
     "extra": {
         "bamarni-bin": {
