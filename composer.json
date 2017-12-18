@@ -34,6 +34,9 @@
         "symfony/phpunit-bridge": "^3.3 || ^4.0",
         "symfony/var-dumper": "^3.2 || ^4.0"
     },
+    "conflict": {
+        "symfony/framework-bundle": "<3.4"
+    },
 
     "autoload": {
         "files": [
