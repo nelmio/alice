@@ -40,14 +40,14 @@ class GlobalPatternsLexerTest extends TestCase
         $expected = [
             new Token('10x @users', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE)),
         ];
-        
+
         $lexer = new GlobalPatternsLexer(new FakeLexer());
         $actual = $lexer->lex('10x @users');
 
-        $this->assertEquals(count($expected), count($actual));
+        $this->assertCount(count($expected), $actual);
         $this->assertEquals($expected, $actual);
     }
-    
+
     public function testHandOverTheLexificationToTheDecoratedLexerIfNoPatternsMatch()
     {
         $value = 'ali%ce';
@@ -60,7 +60,7 @@ class GlobalPatternsLexerTest extends TestCase
         $lexer = new GlobalPatternsLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        $this->assertEquals(count($expected), count($actual));
+        $this->assertCount(count($expected), $actual);
         $this->assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);

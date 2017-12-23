@@ -219,7 +219,7 @@ class LoaderIntegrationTest extends TestCase
             throw $exception;
         }
 
-        $this->assertEquals(count($expected), count($objects));
+        $this->assertCount(count($expected), $objects);
         $this->assertEquals($expected, $objects);
     }
 
@@ -246,12 +246,12 @@ class LoaderIntegrationTest extends TestCase
 
         $expectedParameters = $expected['parameters'];
         $actualParameters = $set->getParameters();
-        $this->assertEquals(count($expectedParameters), count($actualParameters));
+        $this->assertCount(count($expectedParameters), $actualParameters);
         $this->assertEquals($expectedParameters, $actualParameters);
 
         $expectedObjects = $expected['objects'];
         $actualObjects = $set->getObjects();
-        $this->assertEquals(count($expectedObjects), count($actualObjects));
+        $this->assertCount(count($expectedObjects), $actualObjects);
         $this->assertEquals($expectedObjects, $actualObjects);
     }
 
@@ -272,7 +272,7 @@ class LoaderIntegrationTest extends TestCase
         $set = $loader->loadData($data);
 
         $actual = $set->getObjects();
-        $this->assertEquals(count($expected), count($actual));
+        $this->assertCount(count($expected), $actual);
         $this->assertEquals($expected, $actual);
     }
 
@@ -371,10 +371,10 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($set->getParameters()));
+        $this->assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        $this->assertEquals(4, count($objects));
+        $this->assertCount(4, $objects);
 
         $this->assertContains($objects['user0']->username, ['something', null]);
         $this->assertContains($objects['user1']->username, ['something', 'nothing']);
@@ -394,10 +394,10 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($set->getParameters()));
+        $this->assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        $this->assertEquals(1, count($objects));
+        $this->assertCount(1, $objects);
 
         $user = $objects['user'];
         $this->assertInstanceOf(stdClass::class, $user);
@@ -416,14 +416,14 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($set->getParameters()));
+        $this->assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        $this->assertEquals(1, count($objects));
+        $this->assertCount(1, $objects);
 
         $user = $objects['user'];
         $this->assertInstanceOf(stdClass::class, $user);
-        $this->assertTrue(10 === $user->age);
+        $this->assertSame(10, $user->age);
     }
 
     public function testLoadLocalizedFakerFunctionWithData()
@@ -438,10 +438,10 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($set->getParameters()));
+        $this->assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        $this->assertEquals(1, count($objects));
+        $this->assertCount(1, $objects);
 
         $user = $objects['user'];
         $this->assertInstanceOf(stdClass::class, $user);
@@ -460,10 +460,10 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($set->getParameters()));
+        $this->assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        $this->assertEquals(1, count($objects));
+        $this->assertCount(1, $objects);
 
         $user = $objects['user'];
         $this->assertInstanceOf(stdClass::class, $user);
@@ -487,10 +487,10 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($set->getParameters()));
+        $this->assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        $this->assertEquals(1, count($objects));
+        $this->assertCount(1, $objects);
 
         $expectedDummy = new stdClass();
         $expectedDummy->relatedDummy = $expectedDummy;
@@ -510,10 +510,10 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($set->getParameters()));
+        $this->assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        $this->assertEquals(1, count($objects));
+        $this->assertCount(1, $objects);
 
         $expectedDummy = StdClassFactory::create([
             'email' => 'email@example.com',
@@ -534,10 +534,10 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($set->getParameters()));
+        $this->assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        $this->assertEquals(2, count($objects));
+        $this->assertCount(2, $objects);
     }
 
     public function testTemplatesAreKeptBetweenFiles()
@@ -724,14 +724,14 @@ class LoaderIntegrationTest extends TestCase
 
         $result = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($result->getParameters()));
-        $this->assertEquals(10, count($result->getObjects()));
+        $this->assertCount(0, $result->getParameters());
+        $this->assertCount(10, $result->getObjects());
 
         $objects = $result->getObjects();
         $value = [];
         foreach ($objects as $object) {
-            $this->assertTrue(1 <= $object->number);
-            $this->assertTrue(10 >= $object->number);
+            $this->assertGreaterThanOrEqual(1, $object->number);
+            $this->assertLessThanOrEqual(10, $object->number);
             $value[$object->number] = true;
         }
 
@@ -755,11 +755,9 @@ class LoaderIntegrationTest extends TestCase
             $previous = $exception->getPrevious();
 
             $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
-            $this->assertTrue(
-                1 === preg_match(
-                    '/^Could not generate a unique value after 150 attempts for ".*"\.$/',
-                    $previous->getMessage()
-                )
+            $this->assertRegExp(
+                '/^Could not generate a unique value after 150 attempts for ".*"\.$/',
+                $previous->getMessage()
             );
         }
     }
@@ -778,14 +776,14 @@ class LoaderIntegrationTest extends TestCase
 
         $result = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($result->getParameters()));
-        $this->assertEquals(10, count($result->getObjects()));
+        $this->assertCount(0, $result->getParameters());
+        $this->assertCount(10, $result->getObjects());
 
         $objects = $result->getObjects();
         $value = [];
         foreach ($objects as $object) {
-            $this->assertTrue(1 <= $object->requiredParam);
-            $this->assertTrue(10 >= $object->requiredParam);
+            $this->assertGreaterThanOrEqual(1, $object->requiredParam);
+            $this->assertLessThanOrEqual(10, $object->requiredParam);
             $value[$object->requiredParam] = true;
         }
 
@@ -826,8 +824,8 @@ class LoaderIntegrationTest extends TestCase
 
         $self = $this;
         $assertEachValuesInRelatedDummiesAreUnique = function (ObjectSet $set) use ($self) {
-            $self->assertEquals(0, count($set->getParameters()));
-            $self->assertEquals(4, count($set->getObjects()));
+            $self->assertCount(0, $set->getParameters());
+            $self->assertCount(4, $set->getObjects());
 
             $dummy = $set->getObjects()['dummy1'];
             $self->assertCount(2, $dummy->relatedDummies);
@@ -950,8 +948,8 @@ class LoaderIntegrationTest extends TestCase
 
         $result = $this->loader->loadData($data);
 
-        $this->assertEquals(0, count($result->getParameters()));
-        $this->assertEquals(20, count($result->getObjects()));
+        $this->assertCount(0, $result->getParameters());
+        $this->assertCount(20, $result->getObjects());
 
         $objects = $result->getObjects();
         $value = [
@@ -959,8 +957,8 @@ class LoaderIntegrationTest extends TestCase
             FixtureEntity\DummyWithPublicProperty::class => [],
         ];
         foreach ($objects as $object) {
-            $this->assertTrue(1 <= $object->val);
-            $this->assertTrue(10 >= $object->val);
+            $this->assertGreaterThanOrEqual(1, $object->val);
+            $this->assertLessThanOrEqual(10, $object->val);
             $value[get_class($object)][$object->val] = true;
         }
 

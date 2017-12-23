@@ -50,7 +50,7 @@ class TokenTypeTest extends TestCase
         $reflProp->setAccessible(true);
         $values = $reflProp->getValue(TokenType::class);
 
-        $this->assertEquals(count($this->constants), count($values));
+        $this->assertCount(count($this->constants), $values);
         foreach ($this->constants as $constant) {
             $this->assertTrue($values[$constant]);
         }

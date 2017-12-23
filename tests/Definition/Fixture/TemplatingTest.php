@@ -44,7 +44,7 @@ class TemplatingTest extends TestCase
         $this->assertEquals($isATemplate, $templating->isATemplate());
         $this->assertEquals($extendsFixtures, $templating->extendsFixtures());
         $this->assertEquals($extendedFixtures, $templating->getExtendedFixtures());
-        $this->assertEquals(count($extendedFixtures), count($templating->getExtendedFixtures()));
+        $this->assertCount(count($extendedFixtures), $templating->getExtendedFixtures());
     }
 
     /**
@@ -68,7 +68,7 @@ class TemplatingTest extends TestCase
         ];
         $actual = $templating->getExtendedFixtures();
 
-        $this->assertEquals(count($expected), count($actual));
+        $this->assertCount(count($expected), $actual);
         foreach ($expected as $index => $expectedReference) {
             $this->assertEquals($expectedReference, $actual[$index]);
         }
