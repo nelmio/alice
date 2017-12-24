@@ -116,17 +116,17 @@ class ParameterBagTest extends TestCase
 
         $this->assertSame($params, $traversed);
     }
-    
+
     public function testIsCountable()
     {
         $bag = new ParameterBag();
-        $this->assertEquals(0, count($bag));
-        
+        $this->assertCount(0, $bag);
+
         $bag = $bag
             ->with(new Parameter('foo', 'bar'))
             ->with(new Parameter('ping', 'pong'))
         ;
-        $this->assertEquals(2, count($bag));
+        $this->assertCount(2, $bag);
     }
 
     public function testCanRemoveElements()

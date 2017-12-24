@@ -294,7 +294,7 @@ class ObjectBagTest extends TestCase
             ],
             $bag->toArray()
         );
-        $this->assertEquals(count($bag), count($bag->toArray()));
+        $this->assertCount(count($bag), $bag->toArray());
     }
 
     public function testCountable()
@@ -327,7 +327,7 @@ class ObjectBagTest extends TestCase
         $actualObjects = $this->propRefl->getValue($actual);
 
         $this->assertEquals($expected, $actualObjects);
-        $this->assertEquals(count($expected), count($actualObjects));
+        $this->assertCount(count($expected), $actualObjects);
     }
 
     private function createFixture(string $reference, string $className): FixtureInterface

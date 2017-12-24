@@ -123,16 +123,16 @@ class PropertyBagTest extends TestCase
     public function testIsCountable()
     {
         $bag = new PropertyBag();
-        $this->assertEquals(0, count($bag));
+        $this->assertCount(0, $bag);
 
         $bag = $bag->with(new Property('foo', 'bar'));
-        $this->assertEquals(1, count($bag));
+        $this->assertCount(1, $bag);
 
         $bag = $bag->with(new Property('foo', 'baz'));
-        $this->assertEquals(1, count($bag));
+        $this->assertCount(1, $bag);
 
         $bag = $bag->with(new Property('ping', 'pong'));
-        $this->assertEquals(2, count($bag));
+        $this->assertCount(2, $bag);
     }
 
     public function testIsEmpty()

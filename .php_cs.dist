@@ -74,6 +74,7 @@ LICENSE
         'phpdoc_scalar' => true,
         'phpdoc_separation' => true,
         'phpdoc_trim' => true,
+        'php_unit_dedicate_assert' => true,
         'php_unit_fqcn_annotation' => true,
         'php_unit_test_class_requires_covers' => true,
         'single_quote' => true,

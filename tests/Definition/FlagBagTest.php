@@ -196,10 +196,10 @@ class FlagBagTest extends TestCase
     public function testIsCountable()
     {
         $flags = new FlagBag('user0');
-        $this->assertEquals(0, count($flags));
+        $this->assertCount(0, $flags);
 
         $flags = $flags->withFlag(new DummyFlag());
-        $this->assertEquals(1, count($flags));
+        $this->assertCount(1, $flags);
     }
 
     public function testDoesNotDuplicateFlags()

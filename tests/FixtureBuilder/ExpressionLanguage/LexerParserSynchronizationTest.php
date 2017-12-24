@@ -40,6 +40,6 @@ class LexerParserSynchronizationTest extends TestCase
             $this->assertEquals($lexerProviderKey, $parserProviderKeys[$index]);
         }
 
-        $this->assertEquals(count($lexerProviderKeys), count($parserProviderKeys));
+        $this->assertCount(count($lexerProviderKeys), $parserProviderKeys);
     }
 }

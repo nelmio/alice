@@ -62,7 +62,7 @@ class StringThenReferenceLexerTest extends TestCase
         $lexer = new StringThenReferenceLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        $this->assertEquals(count($expected), count($actual));
+        $this->assertCount(count($expected), $actual);
         $this->assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);

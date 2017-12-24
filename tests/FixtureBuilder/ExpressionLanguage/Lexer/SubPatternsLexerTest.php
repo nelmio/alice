@@ -44,7 +44,7 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer(new FakeLexer());
         $actual = $lexer->lex('<{param}>');
 
-        $this->assertEquals(count($expected), count($actual));
+        $this->assertCount(count($expected), $actual);
         $this->assertEquals($expected, $actual);
     }
 
@@ -63,7 +63,7 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer($referenceLexer);
         $actual = $lexer->lex($value);
 
-        $this->assertEquals(count($expected), count($actual));
+        $this->assertCount(count($expected), $actual);
         $this->assertEquals($expected, $actual);
 
         $referenceLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
