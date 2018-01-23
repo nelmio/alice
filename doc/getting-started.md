@@ -18,7 +18,7 @@ Nelmio\Entity\User:
     user{1..10}:
         username: '<username()>'
         fullname: '<firstName()> <lastName()>'
-        birthDate: '<date()>'
+        birthDate: '<date_create()>'
         email: '<email()>'
         favoriteNumber: '50%? <numberBetween(1, 200)>'
 
@@ -40,7 +40,7 @@ return [
         'user{1..10}' => [
             'username' => '<username()>',
             'fullname' => '<firstName()> <lastName()>',
-            'birthDate' => '<date()>',
+            'birthDate' => '<date_create()>',
             'email' => '<email()>',
             'favoriteNumber' => '50%? <numberBetween(1, 200)>',
         ],
@@ -71,7 +71,7 @@ $objectSet = $loader->loadData([
         'user{1..10}' => [
             'username' => '<username()>',
             'fullname' => '<firstName()> <lastName()>',
-            'birthDate' => '<date()>',
+            'birthDate' => '<date_create()>',
             'email' => '<email()>',
             'favoriteNumber' => '50%? <numberBetween(1, 200)>',
         ],

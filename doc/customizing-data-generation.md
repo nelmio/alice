@@ -23,7 +23,7 @@ Nelmio\Entity\User:
     user{1..10}:
         username: '<username()>'
         fullname: '<firstName()> <lastName()>'
-        birthDate: '<date()>'
+        birthDate: '<date_create()>'
         email: '<email()>'
         favoriteNumber: '<numberBetween(1, 200)>'
 ```
