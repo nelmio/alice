@@ -173,7 +173,9 @@ The case above can be a bit confusing in YAML, in PHP it would be the following:
 
 ```php
 [
-    'parameters' => 'bar',
+    'parameters' => [
+        'foo' => 'bar',
+    ],
     Nelmio\Entity\Dummy::class => [
         'dummy{1..10}' => [
             '__calls' => [
