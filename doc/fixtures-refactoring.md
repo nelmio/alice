@@ -203,7 +203,7 @@ Nelmio\Entity\User:
 parameters:
     key1: NaN
     key2: Bat
-    composite: '<{key1}> <{key2>!'
+    composite: '<{key1}> <{key2}>!'
 
 Nelmio\Entity\User:
     user0:
@@ -233,7 +233,9 @@ The case above can be a bit confusing in YAML, in PHP it would be the following:
 
 ```php
 [
-    'parameters' => 'bar',
+    'parameters' => [
+        'foo' => 'bar',
+    ],
     Nelmio\Entity\Dummy::class => [
         'dummy{1..10}' => [
             '__construct' => [
