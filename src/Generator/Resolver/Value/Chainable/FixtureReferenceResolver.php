@@ -147,11 +147,15 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
 
             $context->markIsResolvingFixture($referredFixtureId);
             $objects = $this->generator->generate($referredFixture, $fixtureSet, $context);
-            $fixtureSet =  $fixtureSet->withObjects($objects);
 
             if (false === $needsCompleteGeneration) {
+                $generatedObject = $objects->get($referredFixture);
+                $objects = $objects->with(new CompleteObject($generatedObject));
+
                 $context->unmarkAsNeedsCompleteGeneration();
             }
+
+            $fixtureSet =  $fixtureSet->withObjects($objects);
 
             return new ResolvedValueWithFixtureSet(
                 $fixtureSet->getObjects()->get($referredFixture)->getInstance(),
