@@ -1842,6 +1842,35 @@ class LoaderIntegrationTest extends TestCase
 
     public function provideFixturesToGenerate()
     {
+
+        yield '[construct] with reference to object with throwable setter' => [
+            [
+                FixtureEntity\DummyWithThrowableSetter::class => [
+                    'another_dummy' => [
+                        'val' => 1
+                    ]
+                ],
+                FixtureEntity\DummyWithConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '@another_dummy'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'another_dummy' => $anotherDummy1 = StdClassFactory::create([
+                        'val' => 1,
+                    ]),
+                    'dummy' => $dummy1 = StdClassFactory::create([
+                        'val' => $anotherDummy1,
+                    ]),
+                ]
+            ]
+        ];
+
         yield 'empty instance' => [
             [
                 stdClass::class => [
