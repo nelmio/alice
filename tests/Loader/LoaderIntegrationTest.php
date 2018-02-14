@@ -1861,12 +1861,12 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'another_dummy' => $anotherDummy1 = StdClassFactory::create([
-                        'val' => 1,
-                    ]),
-                    'dummy' => $dummy1 = StdClassFactory::create([
-                        'val' => $anotherDummy1,
-                    ]),
+                    'another_dummy' => $anotherDummy1 = (function (FixtureEntity\DummyWithThrowableSetter $anotherDummy1) {
+                        $anotherDummy1->setVal(1);
+
+                        return $anotherDummy1;
+                    })(new FixtureEntity\DummyWithThrowableSetter()),
+                    'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($anotherDummy1),
                 ]
             ]
         ];
