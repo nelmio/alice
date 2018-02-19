@@ -15,27 +15,27 @@ namespace Nelmio\Alice\Entity;
 
 class DummyWithThrowableSetter
 {
-    private $val = null;
+    private $relatedDummy;
+    private $hydrate = false;
+    private $call = false;
 
-    private $hydrated = false;
-
-    /**
-     * @param $val
-     */
-    public function setVal($val)
-    {
-        if (!empty($this->val)) {
-            throw new \LogicException('val is already initialised, cant be set again');
+    public function setHydrate($hydrate) {
+        if ($this->hydrate) {
+            throw new \BadMethodCallException();
         }
-
-        $this->val = $val;
+        $this->hydrate = $hydrate;
     }
 
-    /**
-     * @param $hydrated
-     */
-    public function setHydrated($hydrated)
+    public function call($call)
     {
-        $this->hydrated = $hydrated;
+        if ($this->call) {
+            throw new \BadMethodCallException();
+        }
+        $this->call = $call;
+    }
+
+    public function setRelatedDummy($dummy)
+    {
+        $this->relatedDummy = $dummy;
     }
 }
