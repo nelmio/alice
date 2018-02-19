@@ -1861,12 +1861,43 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'another_dummy' => $anotherDummy1 = StdClassFactory::create([
-                        'val' => 1,
-                    ]),
-                    'dummy' => $dummy1 = StdClassFactory::create([
-                        'val' => $anotherDummy1,
-                    ]),
+                    'another_dummy' => $anotherDummy1 = (function (FixtureEntity\DummyWithThrowableSetter $anotherDummy1) {
+                        $anotherDummy1->setVal(1);
+
+                        return $anotherDummy1;
+                    })(new FixtureEntity\DummyWithThrowableSetter()),
+                    'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($anotherDummy1),
+                ]
+            ]
+        ];
+
+        yield '[construct] with reference to object with throwable setter and caller' => [
+            [
+                FixtureEntity\DummyWithThrowableSetter::class => [
+                    'another_dummy' => [
+                        'hydrated' => true,
+                        '__calls' => [
+                            ['setVal' => [1]],
+                        ]
+                    ]
+                ],
+                FixtureEntity\DummyWithConstructorParam::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            '@another_dummy'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'another_dummy' => $anotherDummy1 = (function (FixtureEntity\DummyWithThrowableSetter $anotherDummy1) {
+                        $anotherDummy1->setVal(1);
+                        $anotherDummy1->setHydrated(true);
+                        return $anotherDummy1;
+                    })(new FixtureEntity\DummyWithThrowableSetter()),
+                    'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($anotherDummy1),
                 ]
             ]
         ];
