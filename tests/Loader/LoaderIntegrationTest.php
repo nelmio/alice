@@ -1871,6 +1871,26 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
+                    'anotherDummy1' => $anotherDummy1 = (function (FixtureEntity\DummyWithThrowableSetter $anotherDummy1) {
+                        $anotherDummy1->setHydrate(true);
+                        $anotherDummy1->call(true);
+
+                        return $anotherDummy1;
+                    })(new FixtureEntity\DummyWithThrowableSetter()),
+                    'anotherDummy' => $anotherDummy = (function (FixtureEntity\DummyWithThrowableSetter $anotherDummy, $relatedDummy) {
+                        $anotherDummy->setHydrate(true);
+                        $anotherDummy->call(true);
+                        $anotherDummy->setRelatedDummy($relatedDummy);
+
+                        return $anotherDummy;
+                    })(new FixtureEntity\DummyWithThrowableSetter(), $anotherDummy1),
+                    'dummy' => $dummy = (function (FixtureEntity\DummyWithThrowableSetter $dummy, $relatedDummy) {
+                        $dummy->setHydrate(true);
+                        $dummy->call(true);
+                        $dummy->setRelatedDummy($relatedDummy);
+
+                        return $dummy;
+                    })(new FixtureEntity\DummyWithThrowableSetter(), $anotherDummy),
                 ]
             ]
         ];
