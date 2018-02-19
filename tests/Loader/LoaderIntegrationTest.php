@@ -1875,6 +1875,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 FixtureEntity\DummyWithThrowableSetter::class => [
                     'another_dummy' => [
+                        'hydrated' => true,
                         '__calls' => [
                             ['setVal' => [1]],
                         ]
@@ -1893,7 +1894,7 @@ class LoaderIntegrationTest extends TestCase
                 'objects' => [
                     'another_dummy' => $anotherDummy1 = (function (FixtureEntity\DummyWithThrowableSetter $anotherDummy1) {
                         $anotherDummy1->setVal(1);
-
+                        $anotherDummy1->setHydrated(true);
                         return $anotherDummy1;
                     })(new FixtureEntity\DummyWithThrowableSetter()),
                     'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($anotherDummy1),
