@@ -372,6 +372,18 @@ class LexerIntegrationTest extends TestCase
                 new Token('<aliceTokenizedFunction(FUNCTION_START__f__IDENTITY_OR_FUNCTION_END)> <aliceTokenizedFunction(FUNCTION_START__g__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
+        yield '[Function] correct successive functions with non space 0' => [
+            '<f()>_<g()>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__IDENTITY_OR_FUNCTION_END)>_<aliceTokenizedFunction(FUNCTION_START__g__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Function] correct successive functions with non space 1' => [
+            '<f()>h<g()>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__f__IDENTITY_OR_FUNCTION_END)>h<aliceTokenizedFunction(FUNCTION_START__g__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
         yield '[Function] nested functions' => [
             '<f(<g()>)>',
             [

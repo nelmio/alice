@@ -302,6 +302,22 @@ class ParserIntegrationTest extends TestCase
                 new FunctionCallValue('g'),
             ]),
         ];
+        yield '[Function] correct successive functions with non space 0' => [
+            '<f()>_<g()>',
+            new ListValue([
+                new FunctionCallValue('f'),
+                '_',
+                new FunctionCallValue('g'),
+            ]),
+        ];
+        yield '[Function] correct successive functions with non space 1' => [
+            '<f()>h<g()>',
+            new ListValue([
+                new FunctionCallValue('f'),
+                'h',
+                new FunctionCallValue('g'),
+            ]),
+        ];
         yield '[Function] nested functions' => [
             '<f(<g()>)>',
             new FunctionCallValue(

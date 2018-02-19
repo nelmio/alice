@@ -33,7 +33,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/(\)>)(\ *)</';
+    const REGEX = '/(\)>)(.*?)</';
 
     /**
      * @var ChainableTokenParserInterface
