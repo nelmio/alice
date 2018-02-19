@@ -86,6 +86,47 @@ class LoaderIntegrationTest extends TestCase
         );
     }
 
+    public function testLoadRecursiveFiles()
+    {
+        $objects = $this->loader->loadFiles([
+            self::FIXTURES_FILES_DIR.'/recursive_0/dummy.yml',
+        ])->getObjects();
+
+        $this->assertEquals(
+            [
+                'dummy' => new stdClass(),
+                'another_dummy' => new stdClass(),
+            ],
+            $objects
+        );
+
+        $objects = $this->loader->loadFiles([
+            self::FIXTURES_FILES_DIR.'/recursive_1/dummy.yml',
+        ])->getObjects();
+
+        $this->assertEquals(
+            [
+                'dummy' => new stdClass(),
+                'another_dummy' => new stdClass(),
+                'yet_another_dummy' => new stdClass(),
+            ],
+            $objects
+        );
+
+        $objects = $this->loader->loadFiles([
+            self::FIXTURES_FILES_DIR.'/recursive_1/another_dummy.yml',
+        ])->getObjects();
+
+        $this->assertEquals(
+            [
+                'dummy' => new stdClass(),
+                'another_dummy' => new stdClass(),
+                'yet_another_dummy' => new stdClass(),
+            ],
+            $objects
+        );
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The file "unknown.yml" could not be found.
