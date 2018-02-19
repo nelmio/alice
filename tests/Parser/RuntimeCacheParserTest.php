@@ -220,7 +220,7 @@ class RuntimeCacheParserTest extends TestCase
         $this->assertSame($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(4);
-        $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(4);
+        $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(4 + 2); // nbr of files + includes
 
 
         // As the parser cache the results, parsing each file does not re-trigger a parse call
@@ -239,6 +239,6 @@ class RuntimeCacheParserTest extends TestCase
         $this->assertSame($parsedFile3Content, $actualFile3);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(4);
-        $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(4 + 4);
+        $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(4 + 4 + 2);
     }
 }

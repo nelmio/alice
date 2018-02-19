@@ -74,7 +74,7 @@ final class RuntimeCacheParser implements ParserInterface
         $data = $this->parser->parse($realPath);
 
         if (array_key_exists('include', $data)) {
-            $data = $this->includeProcessor->process($this, $file, $data);
+            $data = $this->includeProcessor->process($this, $realPath, $data);
         }
 
         $this->cache[$realPath] = $data;

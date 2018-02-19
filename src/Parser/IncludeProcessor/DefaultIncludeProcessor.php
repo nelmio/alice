@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
+use function array_key_exists;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
@@ -34,6 +35,12 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
      */
     private $fileLocator;
 
+    /**
+     * @var array Array used to keep track of the included files to avoid including the same file twice which could
+     *            cause infinite loops.
+     */
+    private $included = [];
+
     public function __construct(FileLocatorInterface $fileLocator)
     {
         $this->fileLocator = $fileLocator;
@@ -45,6 +52,8 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
      */
     public function process(ParserInterface $parser, string $file, array $data): array
     {
+        $file = $this->fileLocator->locate($file);
+
         if (false === array_key_exists('include', $data)) {
             throw InvalidArgumentExceptionFactory::createForNoIncludeStatementInData($file);
         }
@@ -60,6 +69,12 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
             throw TypeErrorFactory::createForInvalidIncludeStatementInData($include, $file);
         }
 
+        if (array_key_exists($file, $this->included)) {
+            return $data;
+        }
+
+        $this->included[$file] = true;
+
         foreach ($include as $includeFile) {
             if (false === is_string($includeFile)) {
                 throw TypeErrorFactory::createForInvalidIncludedFilesInData($includeFile, $file);
@@ -69,14 +84,24 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
                 throw InvalidArgumentExceptionFactory::createForEmptyIncludedFileInData($file);
             }
 
+            if (array_key_exists($includeFile, $this->included)) {
+                continue;
+            }
+
             $filePathToInclude = $this->fileLocator->locate($includeFile, dirname($file));
+
             $fileToIncludeData = $parser->parse($filePathToInclude);
+
             if (array_key_exists('include', $fileToIncludeData)) {
-                $fileToIncludeData = $this->process($parser, $file, $fileToIncludeData);
+                $fileToIncludeData = $this->process($parser, $includeFile, $fileToIncludeData);
             }
 
             $data = $this->dataMerger->mergeInclude($data, $fileToIncludeData);
+
+            $this->included[$includeFile] = true;
         }
+
+        $this->included = [];
 
         return $data;
     }

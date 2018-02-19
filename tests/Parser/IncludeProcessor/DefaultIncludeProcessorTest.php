@@ -58,11 +58,12 @@ class DefaultIncludeProcessorTest extends TestCase
         $parser = $parserProphecy->reveal();
 
         $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
-        $fileLocatorProphecy->locate(Argument::any())->shouldNotBeCalled();
+        $fileLocatorProphecy->locate('dummy.php')->willReturn('dummy.php');
         /* @var FileLocatorInterface $fileLocator */
         $fileLocator = $fileLocatorProphecy->reveal();
 
         $processor = new DefaultIncludeProcessor($fileLocator);
+
         $processor->process($parser, 'dummy.php', []);
     }
 
@@ -87,7 +88,7 @@ class DefaultIncludeProcessorTest extends TestCase
         $parser = $parserProphecy->reveal();
 
         $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
-        $fileLocatorProphecy->locate(Argument::any())->shouldNotBeCalled();
+        $fileLocatorProphecy->locate($mainFile)->willReturn('main.yml');
         /* @var FileLocatorInterface $fileLocator */
         $fileLocator = $fileLocatorProphecy->reveal();
 
@@ -179,8 +180,8 @@ class DefaultIncludeProcessorTest extends TestCase
         $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
         $parsedMainFileContent = [
             'include' => [
-                'file1.yml',
-                'another_level/file2.yml',
+                $file1Path = 'file1.yml',
+                $file2Path = 'another_level/file2.yml',
             ],
             'Nelmio\Alice\Model\User' => [
                 'user_main' => [],
@@ -193,7 +194,7 @@ class DefaultIncludeProcessorTest extends TestCase
         ];
         $parsedFile2Content = [
             'include' => [
-                self::$dir.'/file3.yml',
+                $file3Path = self::$dir.'/file3.yml',
             ],
             'Nelmio\Alice\Model\User' => [
                 'user_file2' => [],
@@ -221,7 +222,17 @@ class DefaultIncludeProcessorTest extends TestCase
         /* @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
-        $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
+        $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
+        $fileLocatorProphecy->locate('main.yml', Argument::cetera())->willReturn('main.yml');
+        $fileLocatorProphecy->locate($mainFile, Argument::cetera())->willReturn('main.yml');
+        $fileLocatorProphecy->locate($file1Path, Argument::cetera())->willReturn('file1.yml');
+        $fileLocatorProphecy->locate($file2Path, Argument::cetera())->willReturn('file2.yml');
+        $fileLocatorProphecy->locate($file3Path, Argument::cetera())->willReturn('file3.yml');
+        /* @var FileLocatorInterface $fileLocator */
+        $fileLocator = $fileLocatorProphecy->reveal();
+
+        $processor = new DefaultIncludeProcessor($fileLocator);
+
         $actual = $processor->process($parser, $mainFile, $parsedMainFileContent);
 
         $this->assertSame($expected, $actual);
