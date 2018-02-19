@@ -29,6 +29,7 @@ use Symfony\Component\PropertyAccess\Exception\ExceptionInterface as SymfonyProp
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException as SymfonyInvalidArgumentException;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException as SymfonyNoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use TypeError;
 
 final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
 {
@@ -65,6 +66,8 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
             throw HydrationExceptionFactory::createForInvalidProperty($object, $property, 0, $exception);
         } catch (SymfonyPropertyAccessException $exception) {
             throw HydrationExceptionFactory::create($object, $property, 0, $exception);
+        } catch (TypeError $error) {
+            throw HydrationExceptionFactory::createForInvalidProperty($object, $property, 0, $error);
         }
 
         return new SimpleObject($object->getId(), $instance);

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
+use Faker\Provider\Base as BaseFakerProvider;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -60,11 +61,15 @@ final class NelmioAliceExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(self::SERVICES_DIR));
         $finder = new Finder();
+
         $finder->files()->in(self::SERVICES_DIR);
+
         foreach ($finder as $file) {
             $loader->load(
                 $file->getRelativePathname()
             );
         }
+
+        $container->registerForAutoconfiguration(BaseFakerProvider::class)->addTag('nelmio_alice.faker.provider');
     }
 }

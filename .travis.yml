@@ -5,9 +5,7 @@ cache:
     - "$HOME/.composer/cache/files"
 
 php:
-  - '7.0'
   - '7.1'
-  - '7.2'
   - nightly
 
 env:
@@ -17,12 +15,10 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: '7.0'
+    - php: '7.1'
       env: COMPOSER_FLAGS='--prefer-lowest'
     - php: '7.2'
       env: COVERAGE='true'
-    - php: '7.2'
-      env: SYMFONY_VERSION='~3.3.0'
     - php: '7.2'
       env: SYMFONY_VERSION='~3.4.0'
     - php: '7.2'

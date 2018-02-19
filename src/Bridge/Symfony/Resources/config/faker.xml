@@ -13,7 +13,7 @@
 
     <services>
         
-        <service id="Faker\Generator" public="false"
+        <service id="Faker\Generator" public="true"
             alias="nelmio_alice.faker.generator" />
 
         <service id="nelmio_alice.faker.generator"
