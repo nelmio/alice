@@ -17,6 +17,8 @@ class DummyWithThrowableSetter
 {
     private $val = null;
 
+    private $hydrated = false;
+
     /**
      * @param $val
      */
@@ -27,5 +29,13 @@ class DummyWithThrowableSetter
         }
 
         $this->val = $val;
+    }
+
+    /**
+     * @param $hydrated
+     */
+    public function setHydrated($hydrated)
+    {
+        $this->hydrated = $hydrated;
     }
 }
