@@ -136,6 +136,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
             $property = new Property('immutableDateTime', 'bar');
 
             $this->hydrator->hydrate($object, $property, new GenerationContext());
+
             $this->fail('Expected exception to be thrown.');
         } catch (InvalidArgumentException $exception) {
             $this->assertEquals(
