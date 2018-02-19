@@ -191,7 +191,7 @@ Then you can add it to the Faker Generator used by Alice by either overriding
 the `NativeLoader::createFakerGenerator()` method.
  
 If you are using Symfony, custom Faker providers are registered by adding the
-tag `nelmio_alice.faker.provider` to the service. Note that this is automatically
+tag `nelmio_alice.faker.provider` to the services. Note that this is automatically
 done if your service extends `Faker\Provider\Base`.  
 
 
