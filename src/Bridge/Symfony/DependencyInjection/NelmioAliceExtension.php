@@ -70,6 +70,10 @@ final class NelmioAliceExtension extends Extension
             );
         }
 
-        $container->registerForAutoconfiguration(BaseFakerProvider::class)->addTag('nelmio_alice.faker.provider');
+        // Check if the auto-configuration of the tag is not already done. This is a temporary measure to avoid to break
+        // existing versions of HautelookAliceBundle
+        if ( 0 === count($container->findTaggedServiceIds('nelmio_alice.faker.provider')) ) {
+            $container->registerForAutoconfiguration(BaseFakerProvider::class)->addTag('nelmio_alice.faker.provider');
+        }
     }
 }
