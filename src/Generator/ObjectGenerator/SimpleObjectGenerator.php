@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\ObjectGenerator;
 
+use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -103,6 +104,13 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
         $set = $this->hydrator->hydrate($instantiatedObject, $set, $context);
         $hydratedObject = $set->getObjects()->get($fixture);
 
-        return $this->caller->doCallsOn($hydratedObject, $set, $context);
+        $set = $this->caller->doCallsOn($hydratedObject, $set, $context);
+        $configuredObject = $set->getObjects()->get($fixture);
+
+        return $set->withObjects(
+            $set->getObjects()->with(
+                new CompleteObject($configuredObject)
+            )
+        );
     }
 }

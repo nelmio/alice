@@ -114,7 +114,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         string $referredFixtureId,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        bool $passIncompleteObject = null
+        bool $passIncompleteObject = false
     ): ResolvedValueWithFixtureSet {
         if ($fixtureSet->getObjects()->has($referredFixture)) {
             $referredObject = $fixtureSet->getObjects()->get($referredFixture);
@@ -141,21 +141,23 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         try {
             $needsCompleteGeneration = $context->needsCompleteGeneration();
 
-            if (!$passIncompleteObject) {
-                $context->markAsNeedsCompleteGeneration();
-            }
+            // Attempts to provide a complete object whenever possible
+            $passIncompleteObject ? $context->unmarkAsNeedsCompleteGeneration() : $context->markAsNeedsCompleteGeneration();
 
             $context->markIsResolvingFixture($referredFixtureId);
             $objects = $this->generator->generate($referredFixture, $fixtureSet, $context);
-
-            if (false === $needsCompleteGeneration) {
-                $generatedObject = $objects->get($referredFixture);
-                $objects = $objects->with(new CompleteObject($generatedObject));
-
-                $context->unmarkAsNeedsCompleteGeneration();
-            }
-
             $fixtureSet =  $fixtureSet->withObjects($objects);
+
+            // Restore the context
+            $needsCompleteGeneration ? $context->markAsNeedsCompleteGeneration() : $context->unmarkAsNeedsCompleteGeneration();
+//            if (false === $needsCompleteGeneration) {
+//                $generatedObject = $objects->get($referredFixture);
+//                $objects = $objects->with(new CompleteObject($generatedObject));
+
+//                $context->unmarkAsNeedsCompleteGeneration();
+//            }
+
+//            $fixtureSet =  $fixtureSet->withObjects($objects);
 
             return new ResolvedValueWithFixtureSet(
                 $fixtureSet->getObjects()->get($referredFixture)->getInstance(),

@@ -15,7 +15,6 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
-use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\DummyValue;
@@ -198,7 +197,7 @@ class FixtureReferenceResolverTest extends TestCase
         $generatorProphecy
             ->generate($referredFixture, $set, $generatorContext)
             ->willReturn(
-                $objects = new ObjectBag(['dummy' => $generatedObject = new SimpleObject('dummy', $expectedInstance = new \stdClass())])
+                $objects = new ObjectBag(['dummy' => $expectedInstance = new \stdClass()])
             )
         ;
         /** @var ObjectGeneratorInterface $generator */
@@ -209,7 +208,7 @@ class FixtureReferenceResolverTest extends TestCase
             ResolvedFixtureSetFactory::create(
                 null,
                 $fixtures,
-                $objects = $objects->with(new CompleteObject($generatedObject))
+                $objects
             )
         );
 

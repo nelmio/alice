@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Entity;
 
-class DummyWithThrowableSetter
+use BadMethodCallException;
+
+class OnceTimerDummy
 {
     private $relatedDummy;
     private $hydrate = false;
@@ -21,21 +23,27 @@ class DummyWithThrowableSetter
 
     public function setHydrate($hydrate) {
         if ($this->hydrate) {
-            throw new \BadMethodCallException();
+            throw new BadMethodCallException();
         }
+
         $this->hydrate = $hydrate;
     }
 
     public function call($call)
     {
         if ($this->call) {
-            throw new \BadMethodCallException();
+            throw new BadMethodCallException();
         }
+
         $this->call = $call;
     }
 
     public function setRelatedDummy($dummy)
     {
+        if (null !== $this->relatedDummy) {
+            throw new BadMethodCallException();
+        }
+
         $this->relatedDummy = $dummy;
     }
 }
