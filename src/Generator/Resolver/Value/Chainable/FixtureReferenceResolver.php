@@ -150,14 +150,6 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
 
             // Restore the context
             $needsCompleteGeneration ? $context->markAsNeedsCompleteGeneration() : $context->unmarkAsNeedsCompleteGeneration();
-//            if (false === $needsCompleteGeneration) {
-//                $generatedObject = $objects->get($referredFixture);
-//                $objects = $objects->with(new CompleteObject($generatedObject));
-
-//                $context->unmarkAsNeedsCompleteGeneration();
-//            }
-
-//            $fixtureSet =  $fixtureSet->withObjects($objects);
 
             return new ResolvedValueWithFixtureSet(
                 $fixtureSet->getObjects()->get($referredFixture)->getInstance(),

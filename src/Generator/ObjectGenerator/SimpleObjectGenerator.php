@@ -85,6 +85,8 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
             $fixtureSet = $this->instantiator->instantiate($fixture, $fixtureSet, $context);
 
             if (false === $context->needsCompleteGeneration()) {
+                $fixtureSet = $this->tryToMarkObjectAsComplete($fixture, $fixtureSet, $context);
+
                 return $fixtureSet->getObjects();
             }
         }
@@ -105,11 +107,42 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
         $hydratedObject = $set->getObjects()->get($fixture);
 
         $set = $this->caller->doCallsOn($hydratedObject, $set, $context);
-        $configuredObject = $set->getObjects()->get($fixture);
+
+        return $this->tryToMarkObjectAsComplete($fixture, $set, $context);
+    }
+
+    // TODO: This could be moved back to CompleteObjectGenerator in 4.0. Indeed this is done here meanwhile because
+    // the generator injected to the value resolver is this one instead of the parent CompleteObjectGenerator. As a
+    // result the objects are not properly marked as completed if the generation is induced by the value resolver
+    // unless this is done here.
+    // I however see no way to do that while still complying with the BC break policy, hence for 4.0.
+    private function tryToMarkObjectAsComplete(FixtureInterface $fixture, ResolvedFixtureSet $set, GenerationContext $context): ResolvedFixtureSet
+    {
+        $object = $set->getObjects()->get($fixture);
+
+        if ($object instanceof CompleteObject || false === $this->isObjectComplete($fixture, $set, $context)) {
+            return $set;
+        }
 
         return $set->withObjects(
             $set->getObjects()->with(
-                new CompleteObject($configuredObject)
+                new CompleteObject($object)
+            )
+        );
+    }
+
+    private function isObjectComplete(FixtureInterface $fixture, ResolvedFixtureSet $set, GenerationContext $context): bool
+    {
+        $object = $set->getObjects()->get($fixture);
+
+        return (
+            $object instanceof CompleteObject
+            || $context->needsCompleteGeneration()
+            || false === $context->isFirstPass()
+            || (
+                false === $context->needsCompleteGeneration()
+                && $fixture->getSpecs()->getProperties()->isEmpty()
+                && $fixture->getSpecs()->getMethodCalls()->isEmpty()
             )
         );
     }
