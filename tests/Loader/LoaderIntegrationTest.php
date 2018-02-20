@@ -1883,42 +1883,13 @@ class LoaderIntegrationTest extends TestCase
 
     public function provideFixturesToGenerate()
     {
-
-        yield '[construct] with reference to object with throwable setter' => [
-            [
-                FixtureEntity\DummyWithThrowableSetter::class => [
-                    'another_dummy' => [
-                        'val' => 1
-                    ]
-                ],
-                FixtureEntity\DummyWithConstructorParam::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            '@another_dummy'
-                        ]
-                    ]
-                ]
-            ],
-            [
-                'parameters' => [],
-                'objects' => [
-                    'another_dummy' => $anotherDummy1 = (function (FixtureEntity\DummyWithThrowableSetter $anotherDummy1) {
-                        $anotherDummy1->setVal(1);
-
-                        return $anotherDummy1;
-                    })(new FixtureEntity\DummyWithThrowableSetter()),
-                    'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($anotherDummy1),
-                ]
-            ]
-        ];
-
         yield '[construct] with reference to object with throwable setter and caller' => [
             [
-                FixtureEntity\DummyWithThrowableSetter::class => [
+                FixtureEntity\OnceTimerDummy::class => [
                     'another_dummy' => [
-                        'hydrated' => true,
+                        'hydrate' => true,
                         '__calls' => [
-                            ['setVal' => [1]],
+                            ['call' => [true]],
                         ]
                     ]
                 ],
@@ -1933,12 +1904,12 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'another_dummy' => $anotherDummy1 = (function (FixtureEntity\DummyWithThrowableSetter $anotherDummy1) {
-                        $anotherDummy1->setVal(1);
-                        $anotherDummy1->setHydrated(true);
+                    'another_dummy' => $yetAnotherDummy1 = (function (FixtureEntity\OnceTimerDummy $anotherDummy1) {
+                        $anotherDummy1->call(true);
+                        $anotherDummy1->setHydrate(true);
                         return $anotherDummy1;
-                    })(new FixtureEntity\DummyWithThrowableSetter()),
-                    'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($anotherDummy1),
+                    })(new FixtureEntity\OnceTimerDummy()),
+                    'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($yetAnotherDummy1),
                 ]
             ]
         ];
@@ -2081,14 +2052,14 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'another_dummy1' => $anotherDummy1 = StdClassFactory::create([
+                    'another_dummy1' => $yetAnotherDummy1 = StdClassFactory::create([
                         'name' => '1',
                     ]),
                     'another_dummy2' => $anotherDummy2 = StdClassFactory::create([
                         'name' => '2',
                     ]),
                     'dummy1' => StdClassFactory::create([
-                        'relatedDummy' => $anotherDummy1,
+                        'relatedDummy' => $yetAnotherDummy1,
                     ]),
                     'dummy2' => StdClassFactory::create([
                         'relatedDummy' => $anotherDummy2,
@@ -3597,6 +3568,61 @@ class LoaderIntegrationTest extends TestCase
             ];
         })();
 
+        // https://github.com/nelmio/alice/issues/851
+        yield 'construct with multiple references to objects with throwable setter' => (function () {
+            return [
+                [
+                    FixtureEntity\OnceTimerDummy::class => [
+                        'dummy' => [
+                            'relatedDummy' => '@anotherDummy',
+                            'hydrate' => true,
+                            '__calls' => [
+                                ['call' => [true]],
+                            ]
+                        ],
+                        'anotherDummy' => [
+                            'relatedDummy' => '@yetAnotherDummy',
+                            'hydrate' => true,
+                            '__calls' => [
+                                ['call' => [true]],
+                            ]
+                        ],
+                        'yetAnotherDummy' => [
+                            'hydrate' => true,
+                            '__calls' => [
+                                ['call' => [true]],
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'parameters' => [],
+                    'objects' => [
+                        'yetAnotherDummy' => $yetAnotherDummy = (function (FixtureEntity\OnceTimerDummy $dummy) {
+                            $dummy->setHydrate(true);
+                            $dummy->call(true);
+
+                            return $dummy;
+                        })(new FixtureEntity\OnceTimerDummy()),
+                        'anotherDummy' => $anotherDummy = (function (FixtureEntity\OnceTimerDummy $dummy, $relatedDummy) {
+                            $dummy->setRelatedDummy($relatedDummy);
+                            $dummy->setHydrate(true);
+                            $dummy->call(true);
+
+                            return $dummy;
+                        })(new FixtureEntity\OnceTimerDummy(), $yetAnotherDummy),
+                        'dummy' => $dummy = (function (FixtureEntity\OnceTimerDummy $dummy, $relatedDummy) {
+                            $dummy->setRelatedDummy($relatedDummy);
+                            $dummy->setHydrate(true);
+                            $dummy->call(true);
+
+                            return $dummy;
+                        })(new FixtureEntity\OnceTimerDummy(), $anotherDummy),
+                    ]
+                ]
+            ];
+        })();
+
         // https://github.com/nelmio/alice/issues/770
         yield 'typed parameters' => (function () {
             return [
@@ -3619,8 +3645,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                     'objects' => [
                         'dummy' => StdClassFactory::create([
-                           'intParam' => 100,
-                           'stringParam' => '100',
+                            'intParam' => 100,
+                            'stringParam' => '100',
                         ]),
                     ],
                 ],

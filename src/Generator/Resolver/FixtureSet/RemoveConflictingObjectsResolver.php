@@ -46,6 +46,7 @@ final class RemoveConflictingObjectsResolver implements FixtureSetResolverInterf
 
         $fixtures = $resolvedFixtureSet->getFixtures();
         $objects = $resolvedFixtureSet->getObjects();
+
         foreach ($fixtures as $fixture) {
             if ($objects->has($fixture)) {
                 $objects = $objects->without($fixture);
