@@ -124,7 +124,7 @@ option, you will get something like:
 
 ### Profiling
 
-A Profiling of different scenari is done with [Blackfire][5]. The scenario can be found under `profiling`. If you wish
+A Profiling of different scenarii is done with [Blackfire][5]. The scenario can be found under `profiling`. If you wish
 to run them, you can try to simply run `make tp` (for "test performances"). You may however have to touch some elements
 of the blackfire configuration (see the `profiling/scenarioX/blackfire.php` files).
 
