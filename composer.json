@@ -47,9 +47,6 @@
         }
     },
     "autoload-dev": {
-        "files": [
-            "vendor/symfony/var-dumper/Resources/functions/dump.php"
-        ],
         "psr-4": {
             "Nelmio\\Alice\\": [
                 "fixtures",
