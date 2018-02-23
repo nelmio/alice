@@ -167,7 +167,7 @@ Nelmio\Entity\Dummy:
 ```
 
 **Note**: as you can see, arguments can be used as parameters as you go. They however will only in the scope of that 
-function, i.e. in the above the parameter `$arg0` is usable only within the `__construct` declaration above.
+function, i.e. in the above the parameter `$arg0` is usable only within the `setLocation` declaration above.
 
 The case above can be a bit confusing in YAML, in PHP it would be the following:
 
@@ -179,7 +179,7 @@ The case above can be a bit confusing in YAML, in PHP it would be the following:
     Nelmio\Entity\Dummy::class => [
         'dummy{1..10}' => [
             '__calls' => [
-                [
+                'setLocation' => [
                     'arg0' => '<{foo}>',
                     'arg1' => '$arg0',
                     500,
