@@ -6,7 +6,7 @@
 
 [![Package version](https://img.shields.io/packagist/v/nelmio/alice.svg?style=flat-square)](https://packagist.org/packages/nelmio/alice)
 [![Build Status](https://img.shields.io/travis/nelmio/alice.svg?branch=master&style=flat-square)](https://travis-ci.org/nelmio/alice?branch=master)
-[![Slack](https://img.shields.io/badge/slack-%23alice--fixtures-red.svg?style=flat-square)](https://symfony-devs.slack.com/shared_invite/MTYxMjcxMjc0MTc5LTE0OTA3ODE4OTQtYzc4NWVmMzRmZQ)
+[![Slack](https://img.shields.io/badge/slack-%23alice--fixtures-red.svg?style=flat-square)](https://symfony.com/slack-invite)
 [![License](https://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](LICENSE)
 
 
@@ -94,7 +94,7 @@ for 2.x, head [here](https://github.com/nelmio/alice/tree/2.x)**.
     1. [Contributing](CONTRIBUTING.md#contributing)
         1. [Testing](CONTRIBUTING.md#testing)
         1. [Profiling](CONTRIBUTING.md#profiling)
-1. [Backward Compatibility Promise (BCP)](backward-compatibility-promise-bcp)
+1. [Backward Compatibility Promise (BCP)](#backward-compatibility-promise-bcp)
 1. [Upgrade](#upgrade)
     1. [Breaking changes between Alice 2.x and 3.0](UPGRADE.md#breaking-changes-between-alice-2x-and-30)
 
