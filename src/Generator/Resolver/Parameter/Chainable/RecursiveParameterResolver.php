@@ -45,7 +45,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
     {
         $this->resolver = $resolver;
 
-        if (2 >= $limit) {
+        if (2 > $limit) {
             throw InvalidArgumentExceptionFactory::createForInvalidLimitValueForRecursiveCalls($limit);
         }
 
