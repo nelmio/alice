@@ -15,7 +15,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
-use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -46,13 +46,13 @@ class PhpFunctionCallValueResolverTest extends TestCase
     {
         $resolver = new PhpFunctionCallValueResolver([], new FakeValueResolver());
 
-        $this->assertTrue($resolver->canResolve(new FunctionCallValue('')));
+        $this->assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testReturnsSetWithEvaluatedValueIfFunctionIsAPhpNativeFunction()
     {
-        $value = new FunctionCallValue('strtolower', ['BAR']);
+        $value = new ResolvedFunctionCallValue('strtolower', ['BAR']);
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
         $scope = ['val' => 'scopie'];
@@ -69,7 +69,7 @@ class PhpFunctionCallValueResolverTest extends TestCase
 
     public function testReturnsResultOfTheDecoratedResolverIfFunctionIsNotAPhpNativeFunction()
     {
-        $value = new FunctionCallValue('foo');
+        $value = new ResolvedFunctionCallValue('foo');
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
         $scope = ['val' => 'scopie'];
@@ -105,7 +105,7 @@ class PhpFunctionCallValueResolverTest extends TestCase
 
     public function testReturnsResultOfTheDecoratedResolverIfFunctionIsBlacklisted()
     {
-        $value = new FunctionCallValue('strtolower', ['BAR']);
+        $value = new ResolvedFunctionCallValue('strtolower', ['BAR']);
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
         $scope = ['val' => 'scopie'];

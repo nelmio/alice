@@ -17,7 +17,7 @@ use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
-use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -46,13 +46,13 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
     {
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
 
-        $this->assertTrue($resolver->canResolve(new FunctionCallValue('')));
+        $this->assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testReturnsSetWithResolvedValue()
     {
-        $value = new FunctionCallValue('foo');
+        $value = new ResolvedFunctionCallValue('foo');
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
         $scope = ['val' => 'scopie'];
@@ -74,7 +74,7 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
 
     public function testCallAProviderFunction()
     {
-        $value = new FunctionCallValue('lexify', ['Hello ???']);
+        $value = new ResolvedFunctionCallValue('lexify', ['Hello ???']);
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
 
@@ -91,7 +91,7 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
      */
     public function testThrowsAnExceptionIfTriesToCallAnUndefinedProviderFunction()
     {
-        $value = new FunctionCallValue('unknown');
+        $value = new ResolvedFunctionCallValue('unknown');
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
 
