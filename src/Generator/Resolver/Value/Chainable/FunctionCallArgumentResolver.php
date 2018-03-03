@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -91,7 +92,7 @@ final class FunctionCallArgumentResolver implements ChainableValueResolverInterf
         }
 
         return $this->resolver->resolve(
-            new FunctionCallValue($value->getName(), $arguments),
+            new ResolvedFunctionCallValue($value->getName(), $arguments),
             $fixture,
             $fixtureSet,
             $scope,

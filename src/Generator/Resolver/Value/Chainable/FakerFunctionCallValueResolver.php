@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Faker\Generator as FakerGenerator;
-use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Faker\GeneratorFactory;
 use Nelmio\Alice\FixtureInterface;
@@ -44,13 +44,13 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
      */
     public function canResolve(ValueInterface $value): bool
     {
-        return $value instanceof FunctionCallValue;
+        return $value instanceof ResolvedFunctionCallValue;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param FunctionCallValue $value
+     * @param ResolvedFunctionCallValue $value
      */
     public function resolve(
         ValueInterface $value,

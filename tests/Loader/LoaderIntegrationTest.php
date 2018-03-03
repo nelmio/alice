@@ -1191,6 +1191,27 @@ class LoaderIntegrationTest extends TestCase
         ]);
     }
 
+    public function testFunctionCallArgumentResolverWithObjectsKeepsSameInstances()
+    {
+        $set = $this->loader->loadData([
+            stdClass::class => [
+                'dummy1' => [
+                    'foo' => 'bar',
+                    'sibling' => '<(@dummy2)>',
+                ],
+                'dummy2' => [
+                    'foo' => 'baz',
+                ]
+            ]
+        ]);
+
+        $this->assertCount(2, $set->getObjects());
+        list('dummy1' => $dummy1, 'dummy2' => $dummy2) = $set->getObjects();
+
+        $this->assertNotSame($dummy1, $dummy2);
+        $this->assertSame($dummy2, $dummy1->sibling);
+    }
+
     public function provideFixturesToInstantiate()
     {
         yield 'with default constructor – use default constructor' => [

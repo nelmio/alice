@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
@@ -135,7 +136,7 @@ class FunctionCallArgumentResolverTest extends TestCase
         $decoratedResolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $decoratedResolverProphecy
             ->resolve(
-                new FunctionCallValue(
+                new ResolvedFunctionCallValue(
                     'foo',
                     [
                         'scalar',

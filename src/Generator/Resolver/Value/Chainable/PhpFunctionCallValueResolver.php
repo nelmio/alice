@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
-use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -52,13 +52,13 @@ final class PhpFunctionCallValueResolver implements ChainableValueResolverInterf
      */
     public function canResolve(ValueInterface $value): bool
     {
-        return $value instanceof FunctionCallValue;
+        return $value instanceof ResolvedFunctionCallValue;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param FunctionCallValue $value
+     * @param ResolvedFunctionCallValue $value
      */
     public function resolve(
         ValueInterface $value,
