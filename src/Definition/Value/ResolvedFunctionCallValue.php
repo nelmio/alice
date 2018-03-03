@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * Value object representing '<name()>' (no arguments cloning)
+ * Value object representing a function arguments which have already been re-solved.
  */
 final class ResolvedFunctionCallValue implements ValueInterface
 {
