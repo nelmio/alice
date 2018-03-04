@@ -166,6 +166,8 @@ nelmio_alice:
                                    # failing.
 ```
 
+Note: When using `<current()>` with the Alice built-in provider, be sure `current`
+is in the `functions_blacklist` if you append more functions.
 
 <br />
 <hr />
