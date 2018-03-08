@@ -88,7 +88,7 @@ $objectSet = $loader->loadData([
 ]);
 ```
 
-When loading a file or an array of data, you can injected parameters and objects:
+When loading a file or an array of data, you can inject parameters and objects:
 
 ```php
 $loader = new Nelmio\Alice\Loader\NativeLoader();
