@@ -139,4 +139,4 @@ of the blackfire configuration (see the `profiling/scenarioX/blackfire.php` file
 [2]: https://github.com/sebastianbergmann/phpunit
 [3]: https://github.com/bamarni/composer-bin-plugin
 [4]: https://github.com/theofidry/composer-inheritance-plugin
-[5]: https://blackfire.io/dashboard/mine/profiles
+[5]: https://blackfire.io/
