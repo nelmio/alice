@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
+use function gettype;
+use InvalidArgumentException;
+use function is_array;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
@@ -58,6 +61,16 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
         foreach ($data as $fqcnWithFlags => $rawFixtureSet) {
             $flags = $this->flagParser->parse($fqcnWithFlags);
             $fqcn = $flags->getKey();
+
+            if (false === is_array($rawFixtureSet)) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Expected an array for the class "%s", found "%s" instead.',
+                        $fqcnWithFlags,
+                        gettype($rawFixtureSet)
+                    )
+                );
+            }
 
             foreach ($rawFixtureSet as $reference => $specs) {
                 if (null === $specs) {
