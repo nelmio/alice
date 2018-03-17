@@ -38,27 +38,35 @@ done depending on the case, but no Alice maintainer will actively work on it
 
 ## User-land changes
 
-- `addXxx()` methods are no longer supported, you need to define a setter for the collection.
+- `addX()` methods are no longer supported unless you have the corresponding
+  `removeX()` method. You will need to define a setter for the collection if
+  you do not want to have the `removeX()` method.
 
-    ```php
-    class Recipe
-    {
-        // no longer supported
-        public function addServing(Serving $serving)
-        {
-            // …
-        }
-        
-        // the setter must be defined
-        public function setServings(iterable $servings)
-        {
-            // …
-        }
-    }
-    ```
-    
-    This change is mostly the result of moving from a custom property accessor to the
-    [Symfony Property Access Component](https://symfony.com/doc/current/components/property_access.html)
-    which does not support this.
-    
-    [See the original discussion](https://github.com/nelmio/alice/issues/654)
+  ```php
+  class Recipe
+  
+      // no longer supported
+      public function addServing(Serving $serving)
+      {
+          // …
+      }
+      
+      // the setter must be defined
+      public function setServings(iterable $servings)
+      {
+          // …
+      }
+  }
+  ```
+  
+  Also note that previously if an `addX($object)` method existed but the
+  argument in alice was an array, then `addX($object)` was called for
+  each elements of the array. This is no longer the case in 3.x. 
+  
+  Those changes are mostly the result of moving from a custom property accessor to the
+  [Symfony Property Access Component](https://symfony.com/doc/current/components/property_access.html).
+  
+  [See the original discussion](https://github.com/nelmio/alice/issues/654)
+
+- The fixture range syntax has been hardened: `user{1..10}`
+- The fixture list syntax has been hardened: `user_{alice, bob}`

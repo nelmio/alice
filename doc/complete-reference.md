@@ -4,6 +4,7 @@
     1. [YAML](#yaml)
     1. [PHP](#php)
 1. [Fixture Ranges](#fixture-ranges)
+1. [Fixture Lists](#fixture-lists)
 1. [Calling Methods](#calling-methods)
     1. [Method arguments with flags](#method-arguments-with-flags)
     1. [Method arguments with parameters](#method-arguments-with-parameters)
