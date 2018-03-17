@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBag;
@@ -149,5 +150,36 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
         $fixtureDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(4);
+    }
+
+    public function testThrowsAnExceptionIfInvalidRawDataFixtureSetGiven()
+    {
+        $data = [
+            'Nelmio\Entity\User' => 'something',
+        ];
+
+        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
+        $userFlags = new FlagBag('Nelmio\Alice\Entity\User');
+        $flagParserProphecy
+            ->parse('Nelmio\Entity\User')
+            ->willReturn($userFlags)
+        ;
+        /** @var FlagParserInterface $flagParser */
+        $flagParser = $flagParserProphecy->reveal();
+
+        $denormalizer = new SimpleFixtureBagDenormalizer(new FakeFixtureDenormalizer(), $flagParser);
+
+        try {
+            $denormalizer->denormalize($data);
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (InvalidArgumentException $exception) {
+            $this->assertSame(
+                'Expected an array for the class "Nelmio\Entity\User", found "string" instead.',
+                $exception->getMessage()
+            );
+        }
+
+        $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 }
