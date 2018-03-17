@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
+use function gettype;
 use InvalidArgumentException;
+use function is_array;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\MethodCallBag;
 use Nelmio\Alice\Definition\MethodCallInterface;
@@ -25,6 +27,7 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
+use function sprintf;
 
 final class SimpleSpecificationsDenormalizer implements SpecificationsDenormalizerInterface
 {
@@ -113,6 +116,15 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         FixtureInterface $scope,
         FlagParserInterface $parser
     ): MethodCallInterface {
+        if (false !== $value && false === is_array($value)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Expected "__construct" argument to be an array or `false` but got "%s" instead.',
+                    gettype($value)
+                )
+            );
+        }
+
         return (false === $value)
             ? new NoMethodCall()
             : $this->constructorDenormalizer->denormalize($scope, $parser, $value)
