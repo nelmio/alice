@@ -62,3 +62,6 @@ done depending on the case, but no Alice maintainer will actively work on it
     which does not support this.
     
     [See the original discussion](https://github.com/nelmio/alice/issues/654)
+
+- The fixture range syntax has been hardened: `user{1..10}`
+- The fixture list syntax has been hardened: `user_{alice, bob}`
