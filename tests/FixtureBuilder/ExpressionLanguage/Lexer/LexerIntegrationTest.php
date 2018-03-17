@@ -808,6 +808,13 @@ class LexerIntegrationTest extends TestCase
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
             ],
         ];
+        yield '[Reference] with function call' => [
+            '@user0_<current()>',
+            [
+                new Token('@user0_', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
         yield '[Reference] escaped alone with strings' => [
             '\@user0',
             [

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
+use function key;
+use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
+use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\NestedValue;
 use Nelmio\Alice\Definition\ValueInterface;
@@ -75,6 +78,24 @@ final class SimpleParser implements ParserInterface
     private function parseToken(array $parsedTokens, TokenParserInterface $parser, Token $token): array
     {
         $parsedToken = $parser->parse($token);
+
+        if ($parsedToken instanceof FunctionCallValue) {
+            // Check if the pattern was something like @value_<func()> in which case the function call should be part of the reference
+            // name
+            $lastParsedToken = end($parsedTokens);
+
+            if ($lastParsedToken instanceof FixtureReferenceValue) {
+                $parsedTokens[key($parsedTokens)] = new FixtureReferenceValue(
+                    new ListValue([
+                        $lastParsedToken->getValue(),
+                        $parsedToken,
+                    ])
+                );
+
+                return $parsedTokens;
+            }
+        }
+
         $parsedToken = ($parsedToken instanceof NestedValue)
             ? $parsedToken->getValue()
             : [$parsedToken]
