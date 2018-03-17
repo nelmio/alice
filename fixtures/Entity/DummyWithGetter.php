@@ -15,7 +15,7 @@ namespace Nelmio\Alice\Entity;
 
 class DummyWithGetter
 {
-    private $foo;
+    private $foo = 'default foo';
     public $fooVal;
 
     public function setFoo(string $foo)

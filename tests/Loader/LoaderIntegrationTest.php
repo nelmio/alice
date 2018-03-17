@@ -3673,5 +3673,35 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ];
         })();
+
+        // https://github.com/nelmio/alice/issues/882
+        yield 'typded parameters' => (function () {
+            return [
+                [
+                    FixtureEntity\DummyWithGetter::class => [
+                        'dummy' => [
+                            'fooVal' => '@self->getFoo()',
+                        ],
+                    ],
+                    FixtureEntity\DummyWithConstructorParam::class => [
+                        'another_dummy' => [
+                            '__construct' => ['@dummy']
+                        ],
+                    ],
+                ],
+                [
+                    'parameters' => [],
+                    'objects' => [
+                        'dummy' => $dummy = (function () {
+                            $dummy = new FixtureEntity\DummyWithGetter();
+                            $dummy->fooVal = $dummy->getFoo();
+
+                            return $dummy;
+                        })(),
+                        'another_dummy' => new FixtureEntity\DummyWithConstructorParam($dummy),
+                    ],
+                ],
+            ];
+        })();
     }
 }
