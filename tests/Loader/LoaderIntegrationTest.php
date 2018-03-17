@@ -3673,5 +3673,86 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ];
         })();
+
+        // https://github.com/nelmio/alice/issues/894
+        yield 'complex circular reference case' => (function () {
+            for ($i = 1; $i < 13; $i++) {
+                $var = 's'.$i;
+                $$var = new stdClass();
+            }
+
+            $s1->related = [$s3, $s1];
+            $s2->related = [$s2, $s10, $s8, $s9, $s11, $s6, $s4];
+            $s3->related = [$s2, $s4, $s3, $s5, $s8, $s9, $s6];
+            $s4->related = [$s2, $s4, $s7, $s9, $s11, $s8, $s6];
+            $s5->related = [$s5, $s6];
+            $s6->related = [$s6];
+            $s7->related = [$s7, $s8];
+            $s8->related = [$s8, $s2, $s9, $s4, $s3];
+            $s9->related = [$s9, $s2, $s8];
+            $s10->related = [$s10, $s2, $s8, $s3, $s4, $s11];
+            $s11->related = [$s11, $s2, $s8];
+            $s12->related = [$s12];
+
+            return [
+                [
+                    stdClass::class => [
+                        's1' => [
+                            'related' => ['@s3', '@s1'],
+                        ],
+                        's2' => [
+                            'related' => ['@s2', '@s10', '@s8', '@s9', '@s11', '@s6', '@s4'],
+                        ],
+                        's3' => [
+                            'related' => ['@s2', '@s4', '@s3', '@s5', '@s8', '@s9', '@s6'],
+                        ],
+                        's4' => [
+                            'related' => ['@s2', '@s4', '@s7', '@s9', '@s11', '@s8', '@s6'],
+                        ],
+                        's5' => [
+                            'related' => ['@s5', '@s6'],
+                        ],
+                        's6' => [
+                            'related' => ['@s6'],
+                        ],
+                        's7' => [
+                            'related' => ['@s7', '@s8'],
+                        ],
+                        's8' => [
+                            'related' => ['@s8', '@s2', '@s9', '@s4', '@s3'],
+                        ],
+                        's9' => [
+                            'related' => ['@s9', '@s2', '@s8'],
+                        ],
+                        's10' => [
+                            'related' => ['@s10', '@s2', '@s8', '@s3', '@s4', '@s11'],
+                        ],
+                        's11' => [
+                            'related' => ['@s11', '@s2', '@s8'],
+                        ],
+                        's12' => [
+                            'related' => ['@s12'],
+                        ],
+                    ],
+                ],
+                [
+                    'parameters' => [],
+                    'objects' => [
+                        's1' => $s1,
+                        's2' => $s2,
+                        's3' => $s3,
+                        's4' => $s4,
+                        's5' => $s5,
+                        's6' => $s6,
+                        's7' => $s7,
+                        's8' => $s8,
+                        's9' => $s9,
+                        's10' => $s10,
+                        's11' => $s11,
+                        's12' => $s12,
+                    ],
+                ],
+            ];
+        })();
     }
 }
