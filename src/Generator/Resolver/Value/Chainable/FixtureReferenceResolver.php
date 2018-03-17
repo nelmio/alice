@@ -114,7 +114,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         string $referredFixtureId,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        bool $passIncompleteObject = false
+        bool $passIncompleteObject = null
     ): ResolvedValueWithFixtureSet {
         if ($fixtureSet->getObjects()->has($referredFixture)) {
             $referredObject = $fixtureSet->getObjects()->get($referredFixture);
