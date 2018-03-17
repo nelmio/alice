@@ -854,6 +854,18 @@ class ParserIntegrationTest extends TestCase
             '@user0',
             new FixtureReferenceValue('user0'),
         ];
+        yield '[Reference] with function call' => [
+            '@user0_<current()>',
+            new FixtureReferenceValue(
+                new ListValue([
+                    'user0_',
+                    new FunctionCallValue(
+                        'current',
+                        [new ValueForCurrentValue()]
+                    )
+                ])
+            ),
+        ];
         yield '[Reference] escaped alone with strings' => [
             '\@user0',
             '@user0',
