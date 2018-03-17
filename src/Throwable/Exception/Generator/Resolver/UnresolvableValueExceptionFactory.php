@@ -52,7 +52,7 @@ final class UnresolvableValueExceptionFactory
         return new UnresolvableValueException(
             sprintf(
                 'Could not evaluate the expression "%s".',
-                $value->getValue()
+                $value->__toString()
             ),
             $code,
             $previous
@@ -64,7 +64,7 @@ final class UnresolvableValueExceptionFactory
         return new UnresolvableValueException(
             sprintf(
                 'Could not find a variable "%s".',
-                $value->getValue()
+                $value->__toString()
             ),
             $code,
             $previous
@@ -100,7 +100,7 @@ final class UnresolvableValueExceptionFactory
         return new UnresolvableValueException(
             sprintf(
                 'Could not find a fixture or object ID matching the pattern "%s".',
-                $value->getValue()
+                $value->__toString()
             )
         );
     }

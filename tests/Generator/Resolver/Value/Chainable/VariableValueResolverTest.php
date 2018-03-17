@@ -65,7 +65,7 @@ class VariableValueResolverTest extends TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not find a variable "foo".
+     * @expectedExceptionMessage Could not find a variable "$foo".
      */
     public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope()
     {
