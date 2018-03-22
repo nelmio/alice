@@ -98,11 +98,10 @@ final class NullRangeNameReferenceDenormalizer
                     $className,
                     $specs,
                     $flags,
-                    $valueForCurrent->getId()
+                    $valueForCurrent
                 )
             );
         }
-
 
         return $builtFixtures;
     }
@@ -158,11 +157,11 @@ final class NullRangeNameReferenceDenormalizer
     }
 
     /**
-     * @param string  $fixtureId
-     * @param string  $className
-     * @param array   $specs
-     * @param FlagBag $flags
-     * @param string  $valueForCurrent
+     * @param string           $fixtureId
+     * @param string           $className
+     * @param array            $specs
+     * @param FlagBag          $flags
+     * @param FixtureInterface $valueForCurrent
      *
      * @return FixtureInterface
      * @throws \Nelmio\Alice\Throwable\DenormalizationThrowable
@@ -172,7 +171,7 @@ final class NullRangeNameReferenceDenormalizer
         string $className,
         array $specs,
         FlagBag $flags,
-        string $valueForCurrent
+        FixtureInterface $valueForCurrent
     ): FixtureInterface {
         $fixture = new SimpleFixture(
             $fixtureId,
