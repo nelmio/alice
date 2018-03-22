@@ -27,6 +27,7 @@ use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\Throwable\HydrationThrowable;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 use Nelmio\Alice\User;
+use Nelmio\Alice\UserDetail;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -593,7 +594,7 @@ class LoaderIntegrationTest extends TestCase
                     'name' => '<username()>',
                 ],
             ],
-            stdClass::class => [
+            UserDetail::class => [
                 'userdetail_{@user*}' => [
                     'email' => '<email()>',
                     'user'  => '<current()>',
@@ -614,9 +615,9 @@ class LoaderIntegrationTest extends TestCase
         $this->assertArrayHasKey('userdetail_user1', $objects);
         $this->assertArrayHasKey('userdetail_single_user1', $objects);
 
-        $this->assertInstanceOf(User::class, $objects['userdetail_user0']->user);
-        $this->assertInstanceOf(User::class, $objects['userdetail_user1']->user);
-        $this->assertInstanceOf(User::class, $objects['userdetail_single_user1']->user);
+        $this->assertInstanceOf(User::class, $objects['userdetail_user0']->getUser());
+        $this->assertInstanceOf(User::class, $objects['userdetail_user1']->getUser());
+        $this->assertInstanceOf(User::class, $objects['userdetail_single_user1']->getUser());
     }
 
     public function testTemplatesAreKeptBetweenFiles()
