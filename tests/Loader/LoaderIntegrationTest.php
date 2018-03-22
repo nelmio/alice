@@ -26,6 +26,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringG
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\Throwable\HydrationThrowable;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use Nelmio\Alice\User;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -579,6 +580,43 @@ class LoaderIntegrationTest extends TestCase
 
         $objects = $set->getObjects();
         $this->assertCount(2, $objects);
+    }
+
+    public function testLoadRangeReference()
+    {
+        $data = [
+            User::class => [
+                'user0' => [
+                    'name' => '<username()>',
+                ],
+                'user1' => [
+                    'name' => '<username()>',
+                ],
+            ],
+            stdClass::class => [
+                'userdetail_{@user*}' => [
+                    'email' => '<email()>',
+                    'user'  => '<current()>',
+                ],
+                'userdetail_single_{@user1}' => [
+                    'email' => '<email()>',
+                    'user'  => '<current()>',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $objects = $set->getObjects();
+        $this->assertCount(5, $objects);
+
+        $this->assertArrayHasKey('userdetail_user0', $objects);
+        $this->assertArrayHasKey('userdetail_user1', $objects);
+        $this->assertArrayHasKey('userdetail_single_user1', $objects);
+
+        $this->assertInstanceOf(User::class, $objects['userdetail_user0']->user);
+        $this->assertInstanceOf(User::class, $objects['userdetail_user1']->user);
+        $this->assertInstanceOf(User::class, $objects['userdetail_single_user1']->user);
     }
 
     public function testTemplatesAreKeptBetweenFiles()
