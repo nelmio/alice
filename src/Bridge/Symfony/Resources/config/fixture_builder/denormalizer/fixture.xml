@@ -53,6 +53,10 @@
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer">
         </service>
 
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_range_reference"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameReferenceDenormalizer">
+        </service>
+
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_range"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizerWithTemporaryFixture">
             <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.chainable.null_range" />
