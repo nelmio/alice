@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -49,8 +50,21 @@ final class ValueForCurrentValueResolver implements ChainableValueResolverInterf
         array $scope,
         GenerationContext $context
     ): ResolvedValueWithFixtureSet {
+        $valueForCurrent = $fixture->getValueForCurrent();
+
+        if ($valueForCurrent instanceof FixtureInterface) {
+            $valueForCurrent = new SimpleFixture(
+                $valueForCurrent->getId(),
+                $valueForCurrent->getClassName(),
+                $valueForCurrent->getSpecs(),
+                $fixtureSet->getObjects()->get($valueForCurrent)->getInstance()
+            );
+        } else {
+            $valueForCurrent = $fixtureSet->getFixtures()->get($fixture->getId());
+        }
+
         return new ResolvedValueWithFixtureSet(
-            $fixtureSet->getFixtures()->get($fixture->getId()),
+            $valueForCurrent,
             $fixtureSet
         );
     }
