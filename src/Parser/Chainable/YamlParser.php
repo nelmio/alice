@@ -16,8 +16,8 @@ namespace Nelmio\Alice\Parser\Chainable;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
-use Nelmio\Alice\Throwable\Exception\Parser\ParseException;
 use Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 use Symfony\Component\Yaml\Yaml;
@@ -56,7 +56,7 @@ final class YamlParser implements ChainableParserInterface
      *
      * @param string $file Local YAML file
      *
-     * @throws ParseException
+     * @throws UnparsableFileException
      */
     public function parse(string $file): array
     {
