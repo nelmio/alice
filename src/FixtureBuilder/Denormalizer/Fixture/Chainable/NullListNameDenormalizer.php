@@ -23,14 +23,18 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/\{(?<list>[^,\s]+(?:,\s[^,\s]+)+)\}/';
+    const REGEX = '/\{(?<list>[\p{L}\d\._\/]+(?:,\s[^,\s]+)*)\}/u';
 
     /**
      * @inheritdoc
      */
     public function canDenormalize(string $reference, array &$matches = []): bool
     {
-        return 1 === preg_match(self::REGEX, $reference, $matches);
+        if (1 === preg_match(self::REGEX, $reference, $matches)) {
+            return false === strpos($matches['list'], '..');
+        }
+
+        return false;
     }
 
     /**

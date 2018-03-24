@@ -175,10 +175,6 @@ final class Reference
                     'user_{2...2}',
                     null,
                 ],
-                'with only one dot' => [
-                    'user_{0.2}',
-                    null,
-                ],
                 'with inverted values' => [
                     'user_{2..}',
                     null,

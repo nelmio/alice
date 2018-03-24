@@ -61,9 +61,9 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
      * @return string[]
      *
      * @example
-     *  'user_{alice, bob}' => [
-     *      'user_alice',
-     *      'user_bob',
+     *  'user_{1..2}' => [
+     *      'user_1',
+     *      'user_2',
      *  ]
      */
     public function buildIds(string $id): array
