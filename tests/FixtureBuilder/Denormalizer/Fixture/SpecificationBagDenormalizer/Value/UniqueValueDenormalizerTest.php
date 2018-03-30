@@ -83,7 +83,7 @@ class UniqueValueDenormalizerTest extends TestCase
         $result = $denormalizer->denormalize($fixture, $flags, $value);
 
         $this->assertInstanceOf(UniqueValue::class, $result);
-        $this->stringContains('dummy_id', $result->getId());
+        $this->assertStringStartsWith('Dummy#', $result->getId());
         $this->assertEquals('denormalized_value', $result->getValue());
 
         $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
@@ -111,7 +111,7 @@ class UniqueValueDenormalizerTest extends TestCase
         /** @var DynamicArrayValue $result */
         $this->assertEquals(10, $result->getQuantifier());
         $this->assertInstanceOf(UniqueValue::class, $result->getElement());
-        $this->stringContains('dummy_id', $result->getElement()->getId());
+        $this->assertStringStartsWith('Dummy#', $result->getElement()->getId());
         $this->assertEquals('parsed_value', $result->getElement()->getValue());
     }
 
@@ -159,11 +159,11 @@ class UniqueValueDenormalizerTest extends TestCase
         $this->assertInstanceOf(ArrayValue::class, $result);
         /** @var ArrayValue $result */
         $this->assertInstanceOf(UniqueValue::class, $result->getValue()[0]);
-        $this->stringContains('dummy_id', $result->getValue()[0]->getId());
+        $this->assertStringStartsWith('Dummy#', $result->getValue()[0]->getId());
         $this->assertEquals('foo', $result->getValue()[0]->getValue());
 
         $this->assertInstanceOf(UniqueValue::class, $result->getValue()[1]);
-        $this->stringContains('dummy_id', $result->getValue()[1]->getId());
+        $this->assertStringStartsWith('Dummy#', $result->getValue()[1]->getId());
         $this->assertEquals('bar', $result->getValue()[1]->getValue());
     }
 
