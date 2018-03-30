@@ -30,8 +30,8 @@
         "bamarni/composer-bin-plugin": "^1.1.0",
         "php-mock/php-mock": "^2.0",
         "phpspec/prophecy": "^1.6",
-        "phpunit/phpunit": "^6.0",
-        "symfony/phpunit-bridge": "^3.4 || ^4.0",
+        "phpunit/phpunit": "^7.0",
+        "symfony/phpunit-bridge": "^3.4.5 || ^4.0.5",
         "symfony/var-dumper": "^3.4 || ^4.0"
     },
     "conflict": {
