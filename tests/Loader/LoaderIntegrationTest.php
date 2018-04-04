@@ -803,6 +803,32 @@ class LoaderIntegrationTest extends TestCase
         }
     }
 
+    public function testUniqueValueGenerationFailureWithRelation()
+    {
+        $data = [
+            stdClass::class => [
+                'dummy{1..2}' => [
+                    'related (unique)' => 'another_dummy*',
+                ],
+                'another_dummy' => [],
+            ],
+        ];
+
+        try {
+            $this->loader->loadData($data);
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (UnresolvableValueDuringGenerationException $exception) {
+            $previous = $exception->getPrevious();
+
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
+            $this->assertRegExp(
+                '/^Could not generate a unique value after 150 attempts for ".*"\.$/',
+                $previous->getMessage()
+            );
+        }
+    }
+
     public function testUniqueValueGenerationInAFunctionCall()
     {
         $data = [
