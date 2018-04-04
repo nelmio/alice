@@ -83,7 +83,11 @@ class YamlTest extends TestCase
         if (!defined('Symfony\\Component\\Yaml\\Yaml::PARSE_CONSTANT')) {
             $this->markTestSkipped('This test needs symfony/yaml v3.2 or higher.');
         }
-        $data = $this->parser->parse(self::$dir.'/file_with_constants.yml');
+        $fixture = self::$dir.'/file_with_constants.yml';
+        if (method_exists(\Symfony\Component\Yaml\Yaml::class, 'parseFile')) {
+            $fixture = self::$dir.'/file_with_constants_sf34.yml';
+        }
+        $data = $this->parser->parse($fixture);
 
         $this->assertSame(
             [
