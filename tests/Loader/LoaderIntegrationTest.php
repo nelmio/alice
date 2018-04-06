@@ -583,7 +583,7 @@ class LoaderIntegrationTest extends TestCase
         $this->assertCount(2, $objects);
     }
 
-    public function testLoadRangeReference()
+    public function testLoadReferenceRange()
     {
         $data = [
             User::class => [

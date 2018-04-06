@@ -23,7 +23,7 @@ use Nelmio\Alice\FilesLoaderInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\CollectionDenormalizerWithTemporaryFixture;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullListNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer;
-use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameReferenceDenormalizer;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ReferenceRangeNameDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleCollectionDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer as NelmioSimpleDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerInterface;
@@ -362,7 +362,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
                         new NullRangeNameDenormalizer()
                     )
                 ),
-                new NullRangeNameReferenceDenormalizer(
+                new ReferenceRangeNameDenormalizer(
                     new SimpleSpecificationsDenormalizer(
                         $this->getConstructorDenormalizer(),
                         $this->getPropertyDenormalizer(),

@@ -29,7 +29,7 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
 
-final class NullRangeNameReferenceDenormalizer implements ChainableFixtureDenormalizerInterface, FlagParserAwareInterface
+final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormalizerInterface, FlagParserAwareInterface
 {
     use IsAServiceTrait;
 
