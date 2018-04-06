@@ -1,33 +1,34 @@
 <?php
 
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace Nelmio\Alice;
 
-/**
- * @package Nelmio\Alice
- */
 class User
 {
+    /**
+     * @var string|null
+     */
     private $name;
 
-    /**
-     * @return mixed
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     *
-     * @return User
-     */
-    public function setName($name)
+    public function setName(?string $name): User
     {
         $this->name = $name;
 
         return $this;
     }
-
-
 }

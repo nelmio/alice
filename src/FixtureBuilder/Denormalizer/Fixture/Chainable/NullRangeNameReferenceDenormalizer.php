@@ -29,13 +29,11 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
 
-final class NullRangeNameReferenceDenormalizer
-    implements ChainableFixtureDenormalizerInterface, FlagParserAwareInterface
+final class NullRangeNameReferenceDenormalizer implements ChainableFixtureDenormalizerInterface, FlagParserAwareInterface
 {
     use IsAServiceTrait;
 
-    /** @private */
-    const REGEX = '/.+\{(?<expression>@(?<name>([A-Za-z0-9-_]+))(?<flag>(\*+))?)\}/';
+    private const REGEX = '/.+\{(?<expression>@(?<name>([A-Za-z0-9-_]+))(?<flag>(\*+))?)\}/';
 
     /**
      * @var FlagParserInterface|null
@@ -135,15 +133,8 @@ final class NullRangeNameReferenceDenormalizer
         return $matchedFixtures;
     }
 
-    /**
-     * @param string $fixtureId
-     *
-     * @return string
-     * @throws \LogicException
-     */
-    private function determineFixtureIdPrefix(
-        string $fixtureId
-    ): string {
+    private function determineFixtureIdPrefix(string $fixtureId): string
+    {
         $matches = [];
         if (false === $this->canDenormalize($fixtureId, $matches)) {
             throw LogicExceptionFactory::createForCannotDenormalizerForChainableFixtureBuilderDenormalizer(__METHOD__);
@@ -156,16 +147,6 @@ final class NullRangeNameReferenceDenormalizer
         );
     }
 
-    /**
-     * @param string           $fixtureId
-     * @param string           $className
-     * @param array            $specs
-     * @param FlagBag          $flags
-     * @param FixtureInterface $valueForCurrent
-     *
-     * @return FixtureInterface
-     * @throws \Nelmio\Alice\Throwable\DenormalizationThrowable
-     */
     private function buildFixture(
         string $fixtureId,
         string $className,

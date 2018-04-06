@@ -1,12 +1,23 @@
 <?php
 
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace Nelmio\Alice;
 
-/**
- * @package Nelmio\Alice
- */
 class UserDetail
 {
+    /**
+     * @var string|null
+     */
     private $email;
 
     /**
@@ -14,40 +25,24 @@ class UserDetail
      */
     private $user;
 
-    /**
-     * @return mixed
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param mixed $email
-     *
-     * @return UserDetail
-     */
-    public function setEmail($email)
+    public function setEmail(?string $email): UserDetail
     {
         $this->email = $email;
 
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return UserDetail
-     */
-    public function setUser(User $user)
+    public function setUser(User $user): UserDetail
     {
         $this->user = $user;
 

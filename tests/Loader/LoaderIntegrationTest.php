@@ -1967,6 +1967,7 @@ class LoaderIntegrationTest extends TestCase
                     'another_dummy' => $yetAnotherDummy1 = (function (FixtureEntity\OnceTimerDummy $anotherDummy1) {
                         $anotherDummy1->call(true);
                         $anotherDummy1->setHydrate(true);
+
                         return $anotherDummy1;
                     })(new FixtureEntity\OnceTimerDummy()),
                     'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($yetAnotherDummy1),
