@@ -618,6 +618,10 @@ class LoaderIntegrationTest extends TestCase
         $this->assertInstanceOf(User::class, $objects['userdetail_user0']->getUser());
         $this->assertInstanceOf(User::class, $objects['userdetail_user1']->getUser());
         $this->assertInstanceOf(User::class, $objects['userdetail_single_user1']->getUser());
+
+        $this->assertSame($objects['user0'], $objects['userdetail_user0']->getUser());
+        $this->assertSame($objects['user1'], $objects['userdetail_user1']->getUser());
+        $this->assertSame($objects['user1'], $objects['userdetail_single_user1']->getUser());
     }
 
     public function testTemplatesAreKeptBetweenFiles()
