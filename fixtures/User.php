@@ -15,10 +15,21 @@ namespace Nelmio\Alice;
 
 class User
 {
-    /**
-     * @var string|null
-     */
+    private $id;
+
     private $name;
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function setId(string $id): User
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     public function getName(): ?string
     {

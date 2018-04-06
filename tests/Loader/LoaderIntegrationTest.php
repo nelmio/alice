@@ -587,7 +587,10 @@ class LoaderIntegrationTest extends TestCase
     {
         $data = [
             User::class => [
-                'user0' => [
+                'usertemplate (template)' => [
+                    'id' => '<uuid()>',
+                ],
+                'user0 (extends usertemplate)' => [
                     'name' => '<username()>',
                 ],
                 'user1' => [

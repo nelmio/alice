@@ -90,6 +90,10 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
         $fixtureIdPrefix = $this->determineFixtureIdPrefix($fixtureId);
 
         foreach ($fixtureIds as $referencedFixtureId => $valueForCurrent) {
+            if ($valueForCurrent->isATemplate()) {
+                continue;
+            }
+
             $builtFixtures = $builtFixtures->with(
                 $this->buildFixture(
                     $fixtureIdPrefix . $referencedFixtureId,
@@ -109,7 +113,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
      * @param string     $referencedName
      * @param bool       $allFlag
      *
-     * @return array
+     * @return TemplatingFixture[]
      */
     private function buildReferencedValues(
         FixtureBag $builtFixtures,
