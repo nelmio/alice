@@ -2131,6 +2131,23 @@ class LoaderTest extends TestCase
     }
 
     /**
+     * @issue https://github.com/nelmio/alice/issues/906
+     */
+    public function testFakerWithLatinLocale()
+    {        
+        $res = $this->loadData([
+            self::USER => [
+                'user0' => [
+                    'family_name' => '<sr_Latn_RS:lastName()>',
+                ],
+            ],
+        ]);
+
+        $this->assertNotEquals('<sr_Latn_RS:lastName()>', $res['user0']->family_name);
+        $this->assertNotEmpty($res['user0']->family_name);
+    }
+
+    /**
      * Always return the same structure, see the first sample.
      */
     public function provideSpecialCharactersData()

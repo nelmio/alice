@@ -120,7 +120,7 @@ class Faker implements MethodInterface
      */
     public function process(ProcessableInterface $processable, array $variables)
     {
-        $fakerRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)?\((?<args>(?:[^)]*|\)(?!>))*)\)>';
+        $fakerRegex = '<(?:(?<locale>[a-z]+(?:_[a-z]+)?(?:_[a-z]+)?):)?(?<name>[a-z0-9_]+?)?\((?<args>(?:[^)]*|\)(?!>))*)\)>';
         if ($processable->valueMatches('#^'.$fakerRegex.'$#i')) {
             return $this->replacePlaceholder($processable->getMatches(), $variables);
         }
