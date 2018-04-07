@@ -26,6 +26,8 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringG
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\Throwable\HydrationThrowable;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use Nelmio\Alice\User;
+use Nelmio\Alice\UserDetail;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -579,6 +581,50 @@ class LoaderIntegrationTest extends TestCase
 
         $objects = $set->getObjects();
         $this->assertCount(2, $objects);
+    }
+
+    public function testLoadReferenceRange()
+    {
+        $data = [
+            User::class => [
+                'usertemplate (template)' => [
+                    'id' => '<uuid()>',
+                ],
+                'user0 (extends usertemplate)' => [
+                    'name' => '<username()>',
+                ],
+                'user1' => [
+                    'name' => '<username()>',
+                ],
+            ],
+            UserDetail::class => [
+                'userdetail_{@user*}' => [
+                    'email' => '<email()>',
+                    'user'  => '<current()>',
+                ],
+                'userdetail_single_{@user1}' => [
+                    'email' => '<email()>',
+                    'user'  => '<current()>',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $objects = $set->getObjects();
+        $this->assertCount(5, $objects);
+
+        $this->assertArrayHasKey('userdetail_user0', $objects);
+        $this->assertArrayHasKey('userdetail_user1', $objects);
+        $this->assertArrayHasKey('userdetail_single_user1', $objects);
+
+        $this->assertInstanceOf(User::class, $objects['userdetail_user0']->getUser());
+        $this->assertInstanceOf(User::class, $objects['userdetail_user1']->getUser());
+        $this->assertInstanceOf(User::class, $objects['userdetail_single_user1']->getUser());
+
+        $this->assertSame($objects['user0'], $objects['userdetail_user0']->getUser());
+        $this->assertSame($objects['user1'], $objects['userdetail_user1']->getUser());
+        $this->assertSame($objects['user1'], $objects['userdetail_single_user1']->getUser());
     }
 
     public function testTemplatesAreKeptBetweenFiles()
@@ -1928,6 +1974,7 @@ class LoaderIntegrationTest extends TestCase
                     'another_dummy' => $yetAnotherDummy1 = (function (FixtureEntity\OnceTimerDummy $anotherDummy1) {
                         $anotherDummy1->call(true);
                         $anotherDummy1->setHydrate(true);
+
                         return $anotherDummy1;
                     })(new FixtureEntity\OnceTimerDummy()),
                     'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($yetAnotherDummy1),

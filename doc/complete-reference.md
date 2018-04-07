@@ -4,6 +4,7 @@
     1. [YAML](#yaml)
     1. [PHP](#php)
 1. [Fixture Ranges](#fixture-ranges)
+1. [Fixture Reference](#fixture-reference)
 1. [Fixture Lists](#fixture-lists)
 1. [Calling Methods](#calling-methods)
     1. [Method arguments with flags](#method-arguments-with-flags)
@@ -121,6 +122,35 @@ Nelmio\Entity\User:
 
 To go further we the example above, we can just randomize data.
 
+## Fixture Reference
+
+You can also specify a reference to a previously created list of fixtures:
+
+```yaml
+Nelmio\Entity\User:
+    user_{1..10}:
+        username: '<name()>'
+
+Nelmio\Entity\UserDetail:
+    userdetail_{@user_*}:  # is going to generate `userdetail_user_1`, `userdetail_user_2`, ..., `userdetail_user_10`
+        user: <current()>
+        email: '<email()>'
+```
+
+You could either use a star to get all created fixtures matched by the reference or use just one by giving the full fixture name.
+
+```yaml
+Nelmio\Entity\User:
+    user_bob:
+        username: 'bob'
+
+Nelmio\Entity\UserDetail:
+    userdetail_{@user_bob}:
+        user: <current()>   # holds `@user_bob`
+        email: 'bob@test.de'
+```
+
+>The `<current()>` function holds the value of the referenced fixture.
 
 ## Calling Methods
 

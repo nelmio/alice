@@ -36,6 +36,7 @@ for 2.x, head [here](https://github.com/nelmio/alice/tree/2.x)**.
         1. [PHP](doc/complete-reference.md#php)
     1. [Fixture Ranges](doc/complete-reference.md#fixture-ranges)
     1. [Fixture Lists](doc/complete-reference.md#fixture-lists)
+    1. [Fixture Reference](doc/complete-reference.md#fixture-reference)
     1. [Calling Methods](doc/complete-reference.md#calling-methods)
         1. [Method arguments with flags](doc/complete-reference.md#method-arguments-with-flags)
         1. [Method arguments with parameters](doc/complete-reference.md#method-arguments-with-parameters)

@@ -38,11 +38,17 @@ final class SimpleFixture implements FixtureInterface
     private $specs;
 
     /**
-     * @var string
+     * @var string|int|FixtureInterface
      */
     private $valueForCurrent;
 
-    public function __construct(string $id, string $className, SpecificationBag $specs, string $valueForCurrent = null)
+    /**
+     * @param string                           $id
+     * @param string                           $className
+     * @param SpecificationBag                 $specs
+     * @param string|int|FixtureInterface|null $valueForCurrent
+     */
+    public function __construct(string $id, string $className, SpecificationBag $specs, $valueForCurrent = null)
     {
         $this->id = $id;
         $this->className = $className;
