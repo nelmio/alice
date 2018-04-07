@@ -96,4 +96,19 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    public function testReturnsAChoiceListWithStepsIfCanParseToken()
+    {
+        $token = new Token('@user{1..5, 2}', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
+        $expected = new ArrayValue([
+            new FixtureReferenceValue('user1'),
+            new FixtureReferenceValue('user3'),
+            new FixtureReferenceValue('user5'),
+        ]);
+
+        $parser = new FixtureRangeReferenceTokenParser();
+        $actual = $parser->parse($token);
+
+        $this->assertEquals($expected, $actual);
+    }
 }

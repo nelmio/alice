@@ -131,6 +131,13 @@ final class Reference
                         FixtureFactory::createTemplating('user_2', '2'),
                     ],
                 ],
+                'nominal with step' => [
+                    'user_{0..2, 2}',
+                    [
+                        FixtureFactory::createTemplating('user_0', '0'),
+                        FixtureFactory::createTemplating('user_2', '2'),
+                    ],
+                ],
                 'nominal with flag' => [
                     'user_{0..2} (dummy_flag)',
                     [

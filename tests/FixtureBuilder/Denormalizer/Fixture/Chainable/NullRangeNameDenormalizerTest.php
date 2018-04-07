@@ -88,6 +88,36 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $this->assertSame($expected, $actual);
     }
 
+    public function testDenormalizesListWithStepToBuildFixtures()
+    {
+        $className = 'Nelmio\Alice\Entity\User';
+        $fixtures = $expected = (new FixtureBag())
+            ->with(
+                new TemplatingFixture(
+                    new SimpleFixtureWithFlags(
+                        new SimpleFixture(
+                            'user1',
+                            $className,
+                            SpecificationBagFactory::create(),
+                            'alice'
+                        ),
+                        new FlagBag('user1')
+                    )
+                )
+            )
+        ;
+        $reference = 'user{1..2, 2}';
+        $specs = [
+            'username' => '<name()>',
+        ];
+        $flags = new FlagBag('');
+
+        $denormalizer = new NullListNameDenormalizer();
+        $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
+
+        $this->assertSame($expected, $actual);
+    }
+
     /**
      * @dataProvider provideSimpleFixtures
      */

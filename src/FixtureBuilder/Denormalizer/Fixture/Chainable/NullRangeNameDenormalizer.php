@@ -24,7 +24,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+))\}/';
+    const REGEX = '/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+)((,\s?(?<step>[0-9]+))?))\}/';
 
     /**
      * @var string Unique token
@@ -65,6 +65,11 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
      *      'user_1',
      *      'user_2',
      *  ]
+     * @example
+     *  'user_{1..3, 2}' => [
+     *      'user_1',
+     *      'user_3',
+     *  ]
      */
     public function buildIds(string $id): array
     {
@@ -73,7 +78,8 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
 
         $from = $range->getFrom();
         $to = $range->getTo();
-        for ($currentIndex = $from; $currentIndex <= $to; $currentIndex++) {
+        $step = $range->getStep();
+        for ($currentIndex = $from; $currentIndex <= $to; $currentIndex += $step) {
             $ids[
                 str_replace(
                     $this->token,
@@ -89,6 +95,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
     /**
      * @example
      *  'user{1..10}' => new RangeName('user', 1, 10)
+     *  'user{1..10, 2}' => new RangeName('user', 1, 10, 2)
      */
     private function buildRange(string $name): RangeName
     {
@@ -103,6 +110,12 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
             $name
         );
 
-        return new RangeName($reference, (int) $matches['from'], (int) $matches['to']);
+        $step = 1;
+
+        if (isset($matches['step'])) {
+            $step = ((int) $matches['step']) ?: 1;
+        }
+
+        return new RangeName($reference, (int) $matches['from'], (int) $matches['to'], $step);
     }
 }
