@@ -24,7 +24,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+)(,?\s?(?<step>[0-9]+)?))\}/';
+    const REGEX = '/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+)((,\s?(?<step>[0-9]+))?))\}/';
 
     /**
      * @var string Unique token
