@@ -65,7 +65,8 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
         $references = [];
         $from = $range->getFrom();
         $to = $range->getTo();
-        for ($currentIndex = $from; $currentIndex <= $to; $currentIndex++) {
+        $step = $range->getStep();
+        for ($currentIndex = $from; $currentIndex <= $to; $currentIndex += $step) {
             $fixtureId = str_replace($this->token, $currentIndex, $range->getName());
             $references[] = new FixtureReferenceValue($fixtureId);
         }
@@ -90,6 +91,12 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
 
         $reference = str_replace(sprintf('{%s}', $matches['range']), $this->token, $name);
 
-        return new RangeName($reference, (int) $matches['from'], (int) $matches['to']);
+        $step = 1;
+
+        if (isset($matches['step'])) {
+            $step = ((int) $matches['step']) ?: 1;
+        }
+
+        return new RangeName($reference, (int) $matches['from'], (int) $matches['to'], $step);
     }
 }
