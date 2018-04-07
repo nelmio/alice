@@ -93,6 +93,19 @@ Now it will generate ten users, with IDs `user1` to `user10`. Pretty good but
 we only have 10 bobs with the same name, username and email, which is not
 so fancy yet.
 
+If you need gaps between the numbers you can add a step argument.
+
+```yaml
+Nelmio\Entity\User:
+    user{1..10, 2}:
+        username: bob
+        fullname: Bob
+        birthDate: 1980-10-10
+        email: bob@example.org
+        favoriteNumber: 42
+```
+
+Now it will only generate 5 users with IDs `user1`, `user3`, `user5`, `user7` and `user9`.
 
 ## Fixture Lists
 
