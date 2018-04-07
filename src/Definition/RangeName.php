@@ -30,7 +30,12 @@ final class RangeName
      */
     private $to;
 
-    public function __construct(string $name, int $from, int $to)
+    /**
+     * @var int
+     */
+    private $step;
+
+    public function __construct(string $name, int $from, int $to, int $step = 1)
     {
         if ($from > $to) {
             list($to, $from) = [$from, $to];
@@ -39,6 +44,7 @@ final class RangeName
         $this->name = $name;
         $this->from = $from;
         $this->to = $to;
+        $this->step = $step;
     }
 
     public function getName(): string
@@ -54,5 +60,10 @@ final class RangeName
     public function getTo(): int
     {
         return $this->to;
+    }
+
+    public function getStep(): int
+    {
+        return $this->step;
     }
 }
