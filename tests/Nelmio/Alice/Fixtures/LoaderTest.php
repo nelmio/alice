@@ -2133,7 +2133,7 @@ class LoaderTest extends TestCase
     /**
      * @issue https://github.com/nelmio/alice/issues/906
      */
-    public function testFakerWithSrLatnRs()
+    public function testFakerWithLatinLocale()
     {        
         $res = $this->loadData([
             self::USER => [
