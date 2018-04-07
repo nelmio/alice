@@ -583,6 +583,29 @@ class LoaderIntegrationTest extends TestCase
         $this->assertCount(2, $objects);
     }
 
+    public function testLoadRangeWithStepFixtures()
+    {
+        $data = [
+            stdClass::class => [
+                'dummy{1..4, 2}' => [
+                    'name' => '<username()>',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $this->assertCount(0, $set->getParameters());
+
+        $objects = $set->getObjects();
+        $this->assertCount(2, $objects);
+
+        $this->assertArrayHasKey('dummy1', $objects);
+        $this->assertArrayNotHasKey('dummy2', $objects);
+        $this->assertArrayHasKey('dummy3', $objects);
+        $this->assertArrayNotHasKey('dummy4', $objects);
+    }
+
     public function testLoadReferenceRange()
     {
         $data = [
