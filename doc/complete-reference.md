@@ -3,6 +3,7 @@
 1. [Creating Fixtures](#creating-fixtures)
     1. [YAML](#yaml)
     1. [PHP](#php)
+    1. [JSON](#json)
 1. [Fixture Ranges](#fixture-ranges)
 1. [Fixture Reference](#fixture-reference)
 1. [Fixture Lists](#fixture-lists)
@@ -70,7 +71,19 @@ return [
 ];
 ```
 
+### JSON
 
+You can also specify fixtures in a JSON file:
+
+```json
+{
+    "Nelmio\\Alice\\support\\models\\User": {
+        "user0": {
+            "fullname": "John Doe"
+        }
+    }
+}
+```
 
 ## Fixture Ranges
 
