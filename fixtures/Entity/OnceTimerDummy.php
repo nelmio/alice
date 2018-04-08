@@ -21,7 +21,8 @@ class OnceTimerDummy
     private $hydrate = false;
     private $call = false;
 
-    public function setHydrate($hydrate) {
+    public function setHydrate($hydrate)
+    {
         if ($this->hydrate) {
             throw new BadMethodCallException();
         }
