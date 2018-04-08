@@ -87,12 +87,13 @@ stdClass:
 
 ### Cast
 
-The cast method was added at some point, but you should use PHP `settype` instead:
+The cast method was added at some point, but you should use PHP interals like `intval` or `boolval` instead:
 
 ```yaml
 stdClass:
     dummy{1..2}:
-        val: <settype('int', $current)>
+        intval: <intval("1")>
+        boolval: <boolval(1)>
 ```
 
 
