@@ -92,6 +92,16 @@ class PhpParserTest extends TestCase
     }
 
     /**
+     * @dataProvider provideJsonList
+     */
+    public function testCannotParseJsonFiles(string $file)
+    {
+        $actual = $this->parser->canParse($file);
+
+        $this->assertFalse($actual);
+    }
+
+    /**
      * @dataProvider provideUnsupportedList
      */
     public function testCannotParseUnsupportedFiles(string $file)
