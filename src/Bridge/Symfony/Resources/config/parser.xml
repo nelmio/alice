@@ -44,7 +44,7 @@
             <tag name="nelmio_alice.file_parser" />
         </service>
 
-        <service id="nelmio_alice.file_parser.chainable.php" class="Nelmio\Alice\Parser\Chainable\JsonParser">
+        <service id="nelmio_alice.file_parser.chainable.json" class="Nelmio\Alice\Parser\Chainable\JsonParser">
             <tag name="nelmio_alice.file_parser" />
         </service>
 
