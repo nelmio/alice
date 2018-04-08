@@ -59,6 +59,10 @@ final class JsonParser implements ChainableParserInterface
 
             return $data;
         } catch (\Exception $exception) {
+            if ($exception instanceof UnparsableFileException) {
+                throw $exception;
+            }
+
             throw ParseExceptionFactory::createForUnparsableFile($file, 0, $exception);
         }
     }
