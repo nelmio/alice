@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
-use function gettype;
 use InvalidArgumentException;
-use function is_array;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use function gettype;
+use function is_array;
 
 final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterface
 {
