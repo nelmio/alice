@@ -153,6 +153,7 @@ use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectSet;
+use Nelmio\Alice\Parser\Chainable\JsonParser;
 use Nelmio\Alice\Parser\Chainable\PhpParser;
 use Nelmio\Alice\Parser\Chainable\YamlParser;
 use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
@@ -313,6 +314,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
         $registry = new ParserRegistry([
             new YamlParser(new SymfonyYamlParser()),
             new PhpParser(),
+            new JsonParser(),
         ]);
 
         return new RuntimeCacheParser(
