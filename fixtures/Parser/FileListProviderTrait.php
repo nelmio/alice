@@ -25,6 +25,11 @@ trait FileListProviderTrait
         return FilesReference::getYamlList();
     }
 
+    public function provideJsonList()
+    {
+        return FilesReference::getJsonList();
+    }
+
     public function provideUnsupportedList()
     {
         return FilesReference::getUnsupportedList();
