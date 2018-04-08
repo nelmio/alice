@@ -87,7 +87,7 @@ stdClass:
 
 ### Cast
 
-The cast method was added at some point, but you should use PHP interals like `intval` or `boolval` instead:
+The cast method was added at some point, but you should use PHP internals like `intval` or `boolval` instead:
 
 ```yaml
 stdClass:
