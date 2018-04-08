@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
+use Nelmio\Alice\Parser\Chainable\JsonParser;
 use Nelmio\Alice\Parser\Chainable\PhpParser;
 use Nelmio\Alice\Parser\Chainable\YamlParser;
 
@@ -110,6 +111,32 @@ final class FilesReference
                     [],
                 ],
             ],
+            'json' => [
+                'regular JSON file' => [
+                    'dummy.json',
+                    [JsonParser::class],
+                ],
+                'JSON file with uppercase extension' => [
+                    'dummy.JSON',
+                    [JsonParser::class],
+                ],
+                'remote JSON file with HTTP' => [
+                    'http://example.com/dummy.json',
+                    [],
+                ],
+                'remote JSON file with HTTPS' => [
+                    'https://example.com/dummy.json',
+                    [],
+                ],
+                'remote JSON file with FTP' => [
+                    'ftp://user:password@example.com/dummy.json',
+                    [],
+                ],
+                'remote JSON file with FTPS' => [
+                    'ftps://user:password@example.com/dummy.json',
+                    [],
+                ],
+            ],
             'unsupported' => [
                 'XML file' => ['dummy.xml'],
                 'CSV file' => ['dummy.csv'],
@@ -125,6 +152,11 @@ final class FilesReference
     public static function getYamlList(): array
     {
         return self::getList('yaml');
+    }
+
+    public static function getJsonList(): array
+    {
+        return self::getList('json');
     }
 
     public static function getUnsupportedList(): array

@@ -44,6 +44,10 @@
             <tag name="nelmio_alice.file_parser" />
         </service>
 
+        <service id="nelmio_alice.file_parser.chainable.json" class="Nelmio\Alice\Parser\Chainable\JsonParser">
+            <tag name="nelmio_alice.file_parser" />
+        </service>
+
     </services>
 
 </container>

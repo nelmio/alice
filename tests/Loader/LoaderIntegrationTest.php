@@ -88,6 +88,21 @@ class LoaderIntegrationTest extends TestCase
         );
     }
 
+    public function testLoadJsonFile()
+    {
+        $objects = $this->loader->loadFiles([
+            self::FIXTURES_FILES_DIR.'/dummy.json',
+        ])->getObjects();
+
+        $this->assertEquals(
+            [
+                'dummy1' => new stdClass(),
+                'dummy2' => new stdClass(),
+            ],
+            $objects
+        );
+    }
+
     public function testLoadRecursiveFiles()
     {
         $objects = $this->loader->loadFiles([

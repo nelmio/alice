@@ -21,14 +21,14 @@ use ReflectionClass;
 /**
  * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
  */
-class PhpParserTest extends TestCase
+class JsonParserTest extends TestCase
 {
     use FileListProviderTrait;
 
     private static $dir;
 
     /**
-     * @var PhpParser
+     * @var JsonParser
      */
     private $parser;
 
@@ -39,7 +39,7 @@ class PhpParserTest extends TestCase
     {
         parent::setUpBeforeClass();
 
-        self::$dir = __DIR__.'/../../../fixtures/Parser/files/php';
+        self::$dir = __DIR__.'/../../../fixtures/Parser/files/json';
     }
 
     /**
@@ -57,23 +57,23 @@ class PhpParserTest extends TestCase
      */
     public function setUp()
     {
-        $this->parser = new PhpParser();
+        $this->parser = new JsonParser();
     }
 
     public function testIsAChainableParser()
     {
-        $this->assertTrue(is_a(PhpParser::class, ChainableParserInterface::class, true));
+        $this->assertTrue(is_a(JsonParser::class, ChainableParserInterface::class, true));
     }
 
     public function testIsNotClonable()
     {
-        $this->assertFalse((new ReflectionClass(PhpParser::class))->isCloneable());
+        $this->assertFalse((new ReflectionClass(JsonParser::class))->isCloneable());
     }
 
     /**
-     * @dataProvider providePhpList
+     * @dataProvider provideJsonList
      */
-    public function testCanParsePhpFiles(string $file, array $expectedParsers)
+    public function testCanParseJsonFiles(string $file, array $expectedParsers)
     {
         $actual = $this->parser->canParse($file);
         $expected = (in_array(get_class($this->parser), $expectedParsers));
@@ -82,9 +82,9 @@ class PhpParserTest extends TestCase
     }
 
     /**
-     * @dataProvider provideYamlList
+     * @dataProvider providePhpList
      */
-    public function testCannotParseYamlFiles(string $file)
+    public function testCanNotParsePhpFiles(string $file)
     {
         $actual = $this->parser->canParse($file);
 
@@ -92,9 +92,9 @@ class PhpParserTest extends TestCase
     }
 
     /**
-     * @dataProvider provideJsonList
+     * @dataProvider provideYamlList
      */
-    public function testCannotParseJsonFiles(string $file)
+    public function testCannotParseYamlFiles(string $file)
     {
         $actual = $this->parser->canParse($file);
 
@@ -113,16 +113,16 @@ class PhpParserTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The file "/nowhere.php" could not be found.
+     * @expectedExceptionMessage The file "/nowhere.json" could not be found.
      */
     public function testThrowsAnExceptionIfFileDoesNotExist()
     {
-        $this->parser->parse('/nowhere.php');
+        $this->parser->parse('/nowhere.json');
     }
 
     public function testReturnsParsedFileContent()
     {
-        $actual = $this->parser->parse(self::$dir.'/basic.php');
+        $actual = $this->parser->parse(self::$dir.'/basic.json');
 
         $this->assertSame(
             [
@@ -138,26 +138,17 @@ class PhpParserTest extends TestCase
 
     public function testParsingEmptyFileResultsInEmptySet()
     {
-        $actual = $this->parser->parse(self::$dir.'/empty.php');
+        $actual = $this->parser->parse(self::$dir.'/empty.json');
 
         $this->assertSame([], $actual);
     }
 
     /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /^The file ".+\/no_return\.php" must return a PHP array\.$/
+     * @expectedException \Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException
+     * @expectedExceptionMessageRegExp /^The file ".+\/invalid\.json" does not contain valid JSON\.$/
      */
-    public function testThrowsAnExceptionIfNoArrayReturnedInParsedFile()
+    public function testThrowsAnExceptionIfInvalidJson()
     {
-        $this->parser->parse(self::$dir.'/no_return.php');
-    }
-
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /^The file ".+\/wrong_return\.php" must return a PHP array\.$/
-     */
-    public function testThrowsAnExceptionIfWrongValueReturnedInParsedFile()
-    {
-        $this->parser->parse(self::$dir.'/wrong_return.php');
+        $this->parser->parse(self::$dir.'/invalid.json');
     }
 }
