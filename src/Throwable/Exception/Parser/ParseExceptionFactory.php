@@ -52,6 +52,18 @@ final class ParseExceptionFactory
         );
     }
 
+    public static function createForInvalidJson(string $file, int $code = 0, \Throwable $previous = null): UnparsableFileException
+    {
+        return new UnparsableFileException(
+            sprintf(
+                'The file "%s" does not contain valid JSON.',
+                $file
+            ),
+            $code,
+            $previous
+        );
+    }
+
     private function __construct()
     {
     }
