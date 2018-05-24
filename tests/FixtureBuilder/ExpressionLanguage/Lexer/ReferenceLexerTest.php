@@ -126,5 +126,10 @@ class ReferenceLexerTest extends TestCase
             $value = '@ user',
             [new Token('@', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE))],
         ];
+
+        yield 'property reference with interpolation' => [
+            $value = '@user_<current()>->email',
+            [new Token($value, new TokenType(TokenType::PROPERTY_REFERENCE_TYPE))],
+        ];
     }
 }

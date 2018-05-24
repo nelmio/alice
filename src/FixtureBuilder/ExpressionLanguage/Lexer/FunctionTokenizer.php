@@ -57,7 +57,7 @@ final class FunctionTokenizer
 
     public function isTokenized(string $value): bool
     {
-        return '<aliceTokenizedFunction(' === substr($value, 0, 24);
+        return strpos($value, '<aliceTokenizedFunction(') !== false;
     }
 
     public function detokenize(string $value): string

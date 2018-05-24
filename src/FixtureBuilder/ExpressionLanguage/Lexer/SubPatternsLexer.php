@@ -50,6 +50,7 @@ final class SubPatternsLexer implements LexerInterface
         '/^(@[^\ @\{\<]+\(.*\))/' => self::REFERENCE_LEXER, // Function with text
         '/^(@[^\ @\<]+\{.*\}->\S+\(.*\))/' => self::REFERENCE_LEXER, // Range or list with function
         '/^(@[^\ @\<]+\{.*\}->[^\(\)\ \{]+)/' => self::REFERENCE_LEXER, // Range or list with property
+        '/^(@[^\ @\<]+\<[^>]+\([^)]*\)\>->[^\(\)\ \{]+)/' => self::REFERENCE_LEXER, // function with property, e.g. entity_<current()>->property
         '/^(@[^\ @\<]+\{.*\})/' => self::REFERENCE_LEXER,   // Range or list
         '/^(@[^\ @\{\<]+)/' => self::REFERENCE_LEXER,
         '/^(@)<\S+\(.*\)>/' => self::REFERENCE_LEXER,
