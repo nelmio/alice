@@ -1243,6 +1243,23 @@ class ParserIntegrationTest extends TestCase
             ]),
         ];
 
+        yield '[Reference] property reference with a function call' => [
+            'foo @user0<current()>->prop bar',
+            new ListValue([
+                'foo ',
+                new FixturePropertyValue(
+                    new FixtureReferenceValue(
+                        new ListValue([
+                            'user0',
+                            new FunctionCallValue('current', [new ValueForCurrentValue()])
+                        ])
+                    ),
+                    'prop'
+                ),
+                ' bar',
+            ]),
+        ];
+
         // Variables
         yield '[Variable] empty variable' => [
             '$',

@@ -1125,6 +1125,15 @@ class LexerIntegrationTest extends TestCase
             ],
         ];
 
+        yield '[Reference] property reference with a function call' => [
+            'foo @user0<current()>->prop bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('@user0<aliceTokenizedFunction(FUNCTION_START__current__IDENTITY_OR_FUNCTION_END)>->prop', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
+                new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
         // Variables
         yield '[Variable] empty variable' => [
             '$',
