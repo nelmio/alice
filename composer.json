@@ -64,7 +64,7 @@
             "bin-links": false
         },
         "branch-alias": {
-            "dev-master": "3.1.0-dev"
+            "dev-master": "3.x-dev"
         }
     },
     "config": {
