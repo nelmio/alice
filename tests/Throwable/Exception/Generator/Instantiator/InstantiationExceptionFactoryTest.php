@@ -58,7 +58,7 @@ class InstantiationExceptionFactoryTest extends TestCase
         );
 
         $this->assertEquals(
-            'Could not instantiate "foo", the constructor has mandatory parameters but no parameters has been given.',
+            'Could not instantiate "foo", the constructor has mandatory parameters but no parameters have been given.',
             $exception->getMessage()
         );
         $this->assertEquals(0, $exception->getCode());

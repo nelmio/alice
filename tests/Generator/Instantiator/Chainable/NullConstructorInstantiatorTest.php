@@ -103,7 +103,7 @@ class NullConstructorInstantiatorTest extends TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate "dummy", the constructor has mandatory parameters but no parameters has been given.
+     * @expectedExceptionMessage Could not instantiate "dummy", the constructor has mandatory parameters but no parameters have been given.
      */
     public function testThrowsAnExceptionIfObjectConstructorHasMandatoryParameters()
     {

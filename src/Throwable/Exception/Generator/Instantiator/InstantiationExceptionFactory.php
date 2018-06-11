@@ -48,7 +48,7 @@ final class InstantiationExceptionFactory
     {
         return new InstantiationException(
             sprintf(
-                'Could not instantiate "%s", the constructor has mandatory parameters but no parameters has been given.',
+                'Could not instantiate "%s", the constructor has mandatory parameters but no parameters have been given.',
                 $fixture->getId()
             )
         );
