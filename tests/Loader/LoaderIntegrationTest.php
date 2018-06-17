@@ -665,6 +665,41 @@ class LoaderIntegrationTest extends TestCase
         $this->assertSame($objects['user1'], $objects['userdetail_single_user1']->getUser());
     }
 
+    public function testLoadReferenceRangeWithDotInName()
+    {
+        $data = [
+            User::class => [
+                'foo.user.{1..3}' => [
+                    'id' => '<uuid()>',
+                    'name' => '<username()>',
+                ],
+            ],
+            UserDetail::class => [
+                'foo.user_detail.{@foo.user.*}' => [
+                    'email' => '<email()>',
+                    'user'  => '<current()>',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $objects = $set->getObjects();
+        $this->assertCount(6, $objects);
+
+        $this->assertArrayHasKey('foo.user.1', $objects);
+        $this->assertArrayHasKey('foo.user.2', $objects);
+        $this->assertArrayHasKey('foo.user.3',$objects);
+
+        $this->assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.1']->getUser());
+        $this->assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.2']->getUser());
+        $this->assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.3']->getUser());
+
+        $this->assertSame($objects['foo.user.1'], $objects['foo.user_detail.foo.user.1']->getUser());
+        $this->assertSame($objects['foo.user.2'], $objects['foo.user_detail.foo.user.2']->getUser());
+        $this->assertSame($objects['foo.user.3'], $objects['foo.user_detail.foo.user.3']->getUser());
+    }
+
     public function testTemplatesAreKeptBetweenFiles()
     {
         $expected = new ObjectSet(

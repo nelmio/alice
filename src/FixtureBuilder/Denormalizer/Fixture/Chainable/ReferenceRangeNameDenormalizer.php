@@ -33,7 +33,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
 {
     use IsAServiceTrait;
 
-    private const REGEX = '/.+\{(?<expression>@(?<name>([A-Za-z0-9-_]+))(?<flag>(\*+))?)\}/';
+    private const REGEX = '/.+\{(?<expression>@(?<name>([A-Za-z0-9-_\.]+))(?<flag>(\*+))?)\}/';
 
     /**
      * @var FlagParserInterface|null
