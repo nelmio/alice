@@ -51,7 +51,7 @@ final class UniqueValuesPool
         }
 
         if (is_object($val1)) {
-            return $val1 == $val2;
+            return $val1 === $val2;
         }
 
         if (is_scalar($val1) || null === $val1) {
