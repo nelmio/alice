@@ -50,8 +50,15 @@ final class UniqueValuesPool
             return false;
         }
 
-        if (is_object($val1)) {
-            return $val1 === $val2;
+        if (is_object($val1) && is_object($val2)) {
+            return $this->objectsAreIdentical($val1, $val2);
+        }
+
+        if (
+            (is_object($val1) && !is_object($val2))
+            || (!is_object($val1) && is_object($val2))
+        ) {
+            return false;
         }
 
         if (is_scalar($val1) || null === $val1) {
@@ -74,7 +81,7 @@ final class UniqueValuesPool
 
         return true;
     }
-    
+
     private function arrayHasValue($value, array $array): bool
     {
         foreach ($array as $arrayValue) {
@@ -94,5 +101,44 @@ final class UniqueValuesPool
         }
 
         $this->pool[$valueId][] = $value->getValue();
+    }
+
+    private function objectsAreIdentical($o1, $o2): bool
+    {
+        //Only compare instances of the same class, all others are unequal
+        if (!($o1 instanceof $o2)) {
+            return false;
+        }
+
+        //Now prepare strict(er) comparison using reflection.
+        $objReflection1 = new \ReflectionObject($o1);
+        $objReflection2 = new \ReflectionObject($o2);
+
+        //do compare internal objects in loose type mode
+        //no chance of cyclic reference here
+        if (!$objReflection1->isUserDefined()) {
+            return $o1 == $o2;
+        }
+
+        //get properties, assumed to be equal between objects of the same class
+        $arrProperties1 = $objReflection1->getProperties();
+
+        //compare properties between objects
+        //used to avoid infinite recursions due to cyclic redundancy (a->b->a like data modell)
+        foreach ($arrProperties1 as $key=>$propName) {
+            //loose-compare scalar properties (by value),
+            if (!is_object($objReflection1->getProperty($propName->name))) {
+                return $o1 == $o2;
+            } elseif ($objReflection1->getProperty($propName->name) instanceof \ArrayAccess) {
+                //recursive compare array-like objects, which may hold other sub-objects
+                return $this->objectsAreIdentical($objReflection1->getProperty($propName->name), $objReflection2->getProperty($propName->name));
+            } else {
+                //strict-compare all other objects
+                return $objReflection1->getProperty($propName->name) === $objReflection2->getProperty($propName->name);
+            }
+        }
+
+        //All tests passed.
+        return true;
     }
 }
