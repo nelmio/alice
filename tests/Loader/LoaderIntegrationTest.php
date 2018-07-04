@@ -1001,7 +1001,7 @@ class LoaderIntegrationTest extends TestCase
                 $this->assertEquals($relatedDummy, $set->getObjects()['related_dummy'.$relatedDummy->name]);
             }
 
-            $self->assertEquals($anotherDummy->relatedDummies[0], $anotherDummy->relatedDummies[1]);
+            $self->assertNotEquals($anotherDummy->relatedDummies[0], $anotherDummy->relatedDummies[1]);
         };
         $assertEachValuesInRelatedDummiesAreUnique($result);
 
