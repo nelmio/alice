@@ -16,7 +16,6 @@ namespace Nelmio\Alice\Generator\Resolver;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use SebastianBergmann\Comparator\Factory;
 use SebastianBergmann\Comparator\ComparisonFailure;
-use SebastianBergmann\Comparator\ObjectComparator;
 
 /**
  * Class storing all the unique values.
@@ -54,7 +53,7 @@ final class UniqueValuesPool
         }
 
         if (is_object($val1) && is_object($val2)) {
-            $comparator = new ObjectComparator();
+            $comparator = (new Factory())->getComparatorFor($val1, $val2);
 
             try {
                 $comparator->assertEquals($val1, $val2);
