@@ -36,9 +36,6 @@
 
         <service id="nelmio_alice.generator.resolver.value.chainable.dynamic_array_value_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver">
-            <argument>null</argument>
-            <argument>%nelmio_alice.loading_limit%</argument>
-
             <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 

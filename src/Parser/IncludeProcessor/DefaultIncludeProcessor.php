@@ -19,7 +19,6 @@ use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
-use function array_key_exists;
 
 final class DefaultIncludeProcessor implements IncludeProcessorInterface
 {

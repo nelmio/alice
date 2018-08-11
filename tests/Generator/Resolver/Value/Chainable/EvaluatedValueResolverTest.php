@@ -78,7 +78,7 @@ class EvaluatedValueResolverTest extends TestCase
             $this->fail('Expected exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
             $this->assertEquals(
-                'Could not evaluate the expression ""unclosed string".',
+                'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file, expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN)',
                 $exception->getMessage()
             );
             $this->assertEquals(0, $exception->getCode());
@@ -153,7 +153,7 @@ class EvaluatedValueResolverTest extends TestCase
             $this->fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
             $this->assertEquals(
-                'Could not evaluate the expression "$scope".',
+                'Could not evaluate the expression "$scope": Undefined variable: scope',
                 $exception->getMessage()
             );
         }
@@ -191,7 +191,7 @@ class EvaluatedValueResolverTest extends TestCase
             $this->fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
             $this->assertEquals(
-                'Could not evaluate the expression "$scope".',
+                'Could not evaluate the expression "$scope": Undefined variable: scope',
                 $exception->getMessage()
             );
         }

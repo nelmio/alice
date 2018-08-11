@@ -290,7 +290,7 @@ class InvalidArgumentExceptionFactoryTest extends TestCase
         );
 
         $this->assertEquals(
-            'Expected quantifier to be a positive integer. Got "200" for "dummy", check you dynamic  arrays '
+            'Expected quantifier to be a positive integer. Got "200" for "dummy", check you dynamic arrays '
             .'declarations (e.g. "<numberBetween(1, 2)>x @user*").',
             $exception->getMessage()
         );

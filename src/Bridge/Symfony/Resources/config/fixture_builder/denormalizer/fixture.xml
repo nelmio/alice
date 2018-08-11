@@ -23,7 +23,12 @@
         </service>
 
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture"
-                 alias="nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer" />
+                 alias="nelmio_alice.fixture_builder.denormalizer.fixture.tolerant_denormalizer" />
+
+        <service id="nelmio_alice.fixture_builder.denormalizer.fixture.tolerant_denormalizer"
+                 class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\TolerantFixtureDenormalizer">
+            <argument type="service" id="nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer" />
+        </service>
 
         <service id="nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer"
                  class="Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry">

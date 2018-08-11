@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use LogicException;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity as FixtureEntity;
 use Nelmio\Alice\Entity\StdClassFactory;
@@ -21,16 +22,17 @@ use Nelmio\Alice\FilesLoaderInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\DebugUnexpectedValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
+use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
-use Nelmio\Alice\Throwable\HydrationThrowable;
-use Nelmio\Alice\Throwable\InstantiationThrowable;
 use Nelmio\Alice\User;
 use Nelmio\Alice\UserDetail;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
+use Throwable;
 
 /**
  * @group integration
@@ -187,20 +189,29 @@ class LoaderIntegrationTest extends TestCase
      * @group legacy
      *
      * @dataProvider provideFixturesToInstantiate
+     *
+     * @param object|string $expected
      */
-    public function testObjectInstantiation(array $data, $expected)
+    public function testObjectInstantiation(array $data, $expected, string $instanceof = null)
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
-            if (null === $expected) {
+
+            if (is_string($expected)) {
                 $this->fail('Expected exception to be thrown.');
             }
-        } catch (InstantiationThrowable $exception) {
-            if (null === $expected) {
+        } catch (Throwable $throwable) {
+            if (is_string($expected)) {
+                $this->assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+
+                $this->assertInstanceOf($instanceof, $throwable);
+
+                $this->assertSame($expected, $throwable->getMessage());
+
                 return;
             }
 
-            throw $exception;
+            throw $throwable;
         }
 
         $this->assertCount(1, $objects);
@@ -209,20 +220,29 @@ class LoaderIntegrationTest extends TestCase
 
     /**
      * @dataProvider provideFixturesToInstantiateWithFactory
+     *
+     * @param array|string $expected
      */
-    public function testObjectInstantiationWithFactory(array $data, $expected)
+    public function testObjectInstantiationWithFactory(array $data, $expected, string $instanceof = null)
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
-            if (null === $expected) {
+
+            if (is_string($expected)) {
                 $this->fail('Expected exception to be thrown.');
             }
-        } catch (InstantiationThrowable $exception) {
-            if (null === $expected) {
+        } catch (Throwable $throwable) {
+            if (is_string($expected)) {
+                $this->assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+
+                $this->assertInstanceOf($instanceof, $throwable);
+
+                $this->assertSame($expected, $throwable->getMessage());
+
                 return;
             }
 
-            throw $exception;
+            throw $throwable;
         }
 
         $this->assertCount(1, $objects);
@@ -261,20 +281,29 @@ class LoaderIntegrationTest extends TestCase
 
     /**
      * @dataProvider provideFixturesToHydrate
+     *
+     * @param array|string $expected
      */
-    public function testObjectHydration(array $data, array $expected = null)
+    public function testObjectHydration(array $data, $expected, string $instanceof = null)
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
-            if (null === $expected) {
+
+            if (!is_array($expected)) {
                 $this->fail('Expected exception to be thrown.');
             }
-        } catch (HydrationThrowable $exception) {
-            if (null === $expected) {
+        } catch (Throwable $throwable) {
+            if (is_string($expected)) {
+                $this->assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+
+                $this->assertInstanceOf($instanceof, $throwable);
+
+                $this->assertSame($expected, $throwable->getMessage());
+
                 return;
             }
 
-            throw $exception;
+            throw $throwable;
         }
 
         $this->assertCount(count($expected), $objects);
@@ -283,18 +312,24 @@ class LoaderIntegrationTest extends TestCase
 
     /**
      * @dataProvider provideFixturesToGenerate
+     *
+     * @param string|array $expected
      */
-    public function testFixtureGeneration(array $data, array $expected = null)
+    public function testFixtureGeneration(array $data, $expected, string $instanceof = null)
     {
         try {
             $set = $this->loader->loadData($data);
 
-            if (null === $expected) {
+            if (!is_array($expected)) {
                 $this->fail('Expected exception to be thrown.');
             }
-        } catch (GenerationThrowable $exception) {
-            if (null === $expected) {
-                $this->assertTrue(true);
+        } catch (Throwable $exception) {
+            if (is_string($expected)) {
+                $this->assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+
+                $this->assertInstanceOf($instanceof, $exception);
+
+                $this->assertSame($expected, $exception->getMessage());
 
                 return;
             }
@@ -910,9 +945,14 @@ class LoaderIntegrationTest extends TestCase
 
         try {
             $this->loader->loadData($data);
+
             $this->fail('Expected exception to be thrown.');
-        } catch (UnresolvableValueDuringGenerationException $exception) {
+        } catch (GenerationThrowable $exception) {
             $previous = $exception->getPrevious();
+
+            $this->assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+
+            $previous = $previous->getPrevious();
 
             $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
             $this->assertRegExp(
@@ -960,8 +1000,14 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ]);
             $this->fail('Expected exception to be thrown.');
-        } catch (UnresolvableValueDuringGenerationException $exception) {
-            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $exception->getPrevious());
+        } catch (GenerationThrowable $throwable) {
+            $this->assertInstanceOf(DebugUnexpectedValueException::class, $throwable);
+
+            $previous = $throwable->getPrevious();
+
+            $this->assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous->getPrevious());
         }
     }
 
@@ -1034,8 +1080,14 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ]);
             $this->fail('Expected exception to be thrown.');
-        } catch (UnresolvableValueDuringGenerationException $exception) {
-            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $exception->getPrevious());
+        } catch (GenerationThrowable $throwable) {
+            $this->assertInstanceOf(DebugUnexpectedValueException::class, $throwable);
+
+            $previous = $throwable->getPrevious();
+
+            $this->assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous->getPrevious());
         }
     }
 
@@ -1083,8 +1135,14 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ]);
             $this->fail('Expected exception to be thrown.');
-        } catch (UnresolvableValueDuringGenerationException $exception) {
-            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $exception->getPrevious());
+        } catch (GenerationThrowable $throwable) {
+            $this->assertInstanceOf(DebugUnexpectedValueException::class, $throwable);
+
+            $previous = $throwable->getPrevious();
+
+            $this->assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous->getPrevious());
         }
     }
 
@@ -1155,10 +1213,6 @@ class LoaderIntegrationTest extends TestCase
         $this->loader->loadData($data);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\NoValueForCurrentException
-     * @expectedExceptionMessage No value for '<current()>' found for the fixture "dummy".
-     */
     public function testThrowsAnExceptionIfUsingCurrentOutOfACollection()
     {
         $data = [
@@ -1168,7 +1222,22 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
         ];
-        $this->loader->loadData($data);
+
+        try {
+            $this->loader->loadData($data);
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (DebugUnexpectedValueException $exception) {
+            $this->assertSame(
+                'An error occurred while generating the fixture "dummy" (stdClass): No value for '
+                .'\'<current()>\' found for the fixture "dummy".',
+                $exception->getMessage()
+            );
+
+            $previous = $exception->getPrevious();
+
+            $this->assertInstanceOf(NoValueForCurrentException::class, $previous);
+        }
     }
 
     public function testInjectedParametersAndObjectsAreOverriddenByLocalParameters()
@@ -1240,21 +1309,24 @@ class LoaderIntegrationTest extends TestCase
         $this->assertEquals($uniqueId, $dummy->bar);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException
-     */
     public function testLoadParsesReferencesInQuotes()
     {
-        $this->loader->loadData([
-            stdClass::class => [
-                'dummy1' => [
-                    'name' => 'foo',
+        try {
+            $this->loader->loadData([
+                stdClass::class => [
+                    'dummy1' => [
+                        'name' => 'foo',
+                    ],
+                    'dummy2' => [
+                        'dummy' => '\'@dummy1\''
+                    ],
                 ],
-                'dummy2' => [
-                    'dummy' => '\'@dummy1\''
-                ],
-            ],
-        ]);
+            ]);
+
+            $this->fail('Expected exception to be thrown.');
+        } catch (DebugUnexpectedValueException $exception) {
+            $this->assertInstanceOf(UnresolvableValueDuringGenerationException::class, $exception->getPrevious());
+        }
     }
 
     /**
@@ -1292,22 +1364,29 @@ class LoaderIntegrationTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException
-     * @expectedExceptionMessage Could not resolve value during the generation process.
-     */
     public function testInstancesAreNotInjectedInTheScopeDuringInstantiation()
     {
-        $this->loader->loadData([
-            stdClass::class => [
-                'dummy' => [],
-                'another_dummy' => [
-                    '__construct' => [
-                        '<(@dummy)>',
+        try {
+            $this->loader->loadData([
+                stdClass::class => [
+                    'dummy' => [],
+                    'another_dummy' => [
+                        '__construct' => [
+                            '<(@dummy)>',
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]);
+        } catch (DebugUnexpectedValueException $exception) {
+            $this->assertSame(
+                'An error occurred while generating the fixture "another_dummy" (stdClass): Could not resolve value during the generation process.',
+                $exception->getMessage()
+            );
+
+            $previous = $exception->getPrevious();
+
+            $this->assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+        }
     }
 
     public function testFunctionCallArgumentResolverWithObjectsKeepsSameInstances()
@@ -1401,7 +1480,8 @@ class LoaderIntegrationTest extends TestCase
                     'dummy' => [],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor): Could not instantiate "dummy", the constructor has mandatory parameters but no parameters have been given.',
+            GenerationThrowable::class,
         ];
 
         yield 'with default constructor and required parameters with parameters - use constructor function' => [
@@ -1481,7 +1561,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndRequiredParameters): Could not instantiate fixture "dummy".',
+            GenerationThrowable::class,
         ];
 
         yield 'with named constructor and required parameters with parameters - use factory function' => [
@@ -1524,7 +1605,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor): Could not instantiate fixture "dummy".',
+            GenerationThrowable::class,
         ];
 
         yield 'with private constructor – throw exception' => [
@@ -1533,7 +1615,8 @@ class LoaderIntegrationTest extends TestCase
                     'dummy' => [],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor): Could not instantiate "dummy", the constructor of "Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor" is not public.',
+            GenerationThrowable::class,
         ];
 
         yield 'with protected constructor – throw exception' => [
@@ -1542,7 +1625,8 @@ class LoaderIntegrationTest extends TestCase
                     'dummy' => [],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor): Could not instantiate "dummy", the constructor of "Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor" is not public.',
+            GenerationThrowable::class,
         ];
 
         yield 'with private named constructor – throw exception' => [
@@ -1555,7 +1639,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedPrivateConstructor): Could not instantiate fixture "dummy".',
+            GenerationThrowable::class,
         ];
 
         yield 'with default constructor but specified no constructor – use reflection' => [
@@ -1739,7 +1824,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndRequiredParameters): Could not instantiate fixture "dummy".',
+            GenerationThrowable::class,
         ];
 
         yield 'factory with required parameters with parameters - use factory function' => [
@@ -1782,7 +1868,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor): Could not instantiate fixture "dummy".',
+            GenerationThrowable::class,
         ];
 
         yield 'with private factory – throw exception' => [
@@ -1795,7 +1882,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedPrivateConstructor): Could not instantiate fixture "dummy".',
+            GenerationThrowable::class,
         ];
     }
 
@@ -1966,7 +2054,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy): Could not hydrate the property "setter_property" of the object "dummy" (class: Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy).',
+            GenerationThrowable::class,
         ];
 
         yield 'magic call camelCase property' => [
@@ -2328,7 +2417,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "another_dummy" (stdClass): Could not resolve value during the generation process.',
+            GenerationThrowable::class,
         ];
 
         yield 'property reference value with a getter' => [
@@ -2855,7 +2945,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "another_dummy" (Nelmio\Alice\Entity\DummyWithGetter): Could not resolve value during the generation process.',
+            GenerationThrowable::class,
         ];
 
         yield '[identity] evaluate the argument as if it was a plain PHP function' => [
@@ -2876,6 +2967,18 @@ class LoaderIntegrationTest extends TestCase
                     ]),
                 ],
             ],
+        ];
+
+        yield '[identity] invalid PHP expression' => [
+            [
+                stdClass::class => [
+                    'dummy' => [
+                        'foo' => '<("Hello)>',
+                    ],
+                ],
+            ],
+            'An error occurred while generating the fixture "dummy" (stdClass): Could not resolve value during the generation process.',
+            GenerationThrowable::class,
         ];
 
         yield '[identity] has access to variables' => [
@@ -3220,7 +3323,8 @@ class LoaderIntegrationTest extends TestCase
                     'bar' => '<{foo}>',
                 ],
             ],
-            null,
+            'Circular reference detected for the parameter "foo" while resolving ["foo", "bar"].',
+            GenerationThrowable::class,
         ];
 
         yield 'parameters in identity' => [
@@ -3353,6 +3457,18 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
+        yield 'dynamic array with scalar value with an invalid quantifier' => [
+            [
+                stdClass::class => [
+                    'dummy' => [
+                        'foo' => '-5x bar',
+                    ],
+                ],
+            ],
+            'An error occurred while denormalizing the fixture "dummy" (stdClass): Invalid token "-5x bar" found.',
+            LogicException::class,
+        ];
+
         yield 'object circular reference' => [
             [
                 FixtureEntity\DummyWithConstructorParam::class => [
@@ -3368,7 +3484,8 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            null,
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\DummyWithConstructorParam): Could not resolve value during the generation process.',
+            GenerationThrowable::class,
         ];
 
         yield 'has proper stdClass support' => [

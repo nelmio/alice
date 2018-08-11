@@ -197,7 +197,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
 
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not resolve value "dummy->publicProperty".
+     * @expectedExceptionMessage Could not resolve value "dummy->publicProperty": PropertyAccessor requires a graph of objects or arrays to operate on, but it found type "string" while trying to traverse path "publicProperty" at property "publicProperty".
      */
     public function testThrowsAnExceptionIfReferenceResolvedIsNotAnObject()
     {
