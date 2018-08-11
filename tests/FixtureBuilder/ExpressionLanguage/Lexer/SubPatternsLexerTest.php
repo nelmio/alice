@@ -69,14 +69,18 @@ class SubPatternsLexerTest extends TestCase
         $referenceLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException
-     * @expectedExceptionMessage Could not lex the value "<{foo".
-     */
-    public function testThrowsAnExceptionIfCannotLexValue()
+    public function testReturnsAStringTokenIfCannotLexValue()
     {
+        $value = '<{foo';
+        $expected = [
+            new Token('<{foo', new TokenType(TokenType::STRING_TYPE)),
+        ];
+
         $lexer = new SubPatternsLexer(new FakeLexer());
-        $lexer->lex('<{foo');
+        $actual = $lexer->lex($value);
+
+        $this->assertCount(count($expected), $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**

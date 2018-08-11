@@ -116,6 +116,16 @@ class ParserIntegrationTest extends TestCase
             'foo55@example.com',
         ];
 
+        yield 'string with percentage #1' => [
+            '%',
+            '%',
+        ];
+
+        yield 'string with percentage #2' => [
+            'foo % bar',
+            'foo % bar',
+        ];
+
         // Escaped character
         yield '[Escape character] nominal (1)' => [
             '\\',
@@ -142,7 +152,7 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Escape character] double escape with reference' => [
             '\\\\@',
-            null,
+            '\\@',
         ];
         yield '[Escape character] with empty reference' => [
             '\\\\\\@',
@@ -196,11 +206,11 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Parameter] escaped unbalanced (1)' => [
             '\<{dummy_param>',
-            null,
+            '<{dummy_param>',
         ];
         yield '[Parameter] unbalanced (2)' => [
             '<{dummy_param',
-            null,
+            '<{dummy_param',
         ];
         yield '[Parameter] escaped unbalanced (2)' => [
             '\<{dummy_param',
@@ -216,7 +226,7 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Parameter] unbalanced (4)' => [
             'dummy_param}>',
-            null,
+            'dummy_param}>',
         ];
         yield '[Parameter] escaped unbalanced (4)' => [
             'dummy_param}\>',
@@ -757,11 +767,11 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Optional] without members' => [
             '80%? ',
-            null,
+            '80%? ',
         ];
         yield '[Optional] without members 2' => [
             '80%?',
-            null,
+            '80%?',
         ];
         yield '[Optional] without first member but with second' => [
             '80%? :Z',
@@ -810,11 +820,11 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Optional] without space after quantifier' => [
             '80%?foo bar',
-            null,
+            '80%?foo bar',
         ];
         yield '[Optional] without space after quantifier with second member' => [
             '80%?foo: bar baz',
-            null,
+            '80%?foo: bar baz',
         ];
         yield '[Optional] surrounded with params' => [
             'foo 80%? <{dummy}>: <another()> baz',
@@ -830,13 +840,31 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Optional] surrounded with params and nested' => [
             '<foo()> -80%? <{dum10}>%? y: z my>: \<another\> <baz()>',
-            null,
+            new ListValue([
+                new OptionalValue(
+                    new ListValue([
+                        new FunctionCallValue(
+                            'foo',
+                            []
+                        ),
+                        ' -',
+                        new OptionalValue(
+                            '80',
+                            new ParameterValue('dum10'),
+                            null
+                        ),
+                    ]),
+                    'y',
+                    'z'
+                ),
+                ' my>: \<another\> <aliceTokenizedFunction(FUNCTION_START__baz__IDENTITY_OR_FUNCTION_END)>'
+            ]),
         ];
 
         // References
         yield '[Reference] empty reference' => [
             '@',
-            null,
+            '@',
         ];
         yield '[Reference] empty escaped reference' => [
             '\@',
@@ -844,7 +872,7 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Reference] empty reference with second member' => [
             '@ foo',
-            null,
+            '@ foo',
         ];
         yield '[Reference] escaped empty reference with second member' => [
             '\@ foo',
@@ -1263,11 +1291,11 @@ class ParserIntegrationTest extends TestCase
         // Variables
         yield '[Variable] empty variable' => [
             '$',
-            null,
+            '$',
         ];
         yield '[Variable] empty variable with second member' => [
             '$ foo',
-            null,
+            '$ foo',
         ];
         yield '[Variable] alone' => [
             '$username',
