@@ -1,0 +1,16 @@
+stdClass:
+    dummy_{A, B}:
+        var: 'foo'
+        val: 'val'
+
+    dummy_A:
+        var: 'A'
+
+
+    another_dummy_A:
+        var: 'A'
+
+    another_dummy_{A, B}:
+        var: 'foo'
+        val: 'val'
+

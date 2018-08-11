@@ -207,9 +207,9 @@ class DefaultIncludeProcessorTest extends TestCase
         ];
         $expected = [
             'Nelmio\Alice\Model\User' => [
+                'user_file1' => [],
                 'user_file3' => [],
                 'user_file2' => [],
-                'user_file1' => [],
                 'user_main' => [],
             ],
         ];

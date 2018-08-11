@@ -73,3 +73,41 @@ done depending on the case, but no Alice maintainer will actively work on it
     - `user_{alice, bob}`
     - `admin (template)`
     - `user {extends admin}`
+
+- It is no longer possible to "extend" from a non template fixture:
+
+```yaml
+stdClass:
+    dummy_{A, B}:
+        var1: 'foo'
+        var2: 'bar'
+
+    dummy_A:    # This fixture definition will completely override the 'dummy_A' derived from 'dummy_{A, B}'
+        var: 'A'
+```
+
+In other words, the result will be:
+
+```
+dummy_A: #stdClass {
+    +var: 'A'
+}
+dummy_B: #stdClass {
+    +var1: 'foo'
+    +var2: 'bar'
+}
+```
+
+As opposed to in 2.x:
+
+```
+dummy_A: #stdClass {
+    +var1: 'foo'
+    +var2: 'bar'
+    +var: 'A'
+}
+dummy_B: #stdClass {
+    +var1: 'foo'
+    +var2: 'bar'
+}
+```
