@@ -68,5 +68,8 @@ done depending on the case, but no Alice maintainer will actively work on it
   
   [See the original discussion](https://github.com/nelmio/alice/issues/654)
 
-- The fixture range syntax has been hardened: `user{1..10}`
-- The fixture list syntax has been hardened: `user_{alice, bob}`
+- The fixture extended notations have been hardened and are now less flexible. The correct syntax expected are:
+    - `user{1..10}`
+    - `user_{alice, bob}`
+    - `admin (template)`
+    - `user {extends admin}`
