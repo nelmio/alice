@@ -17,7 +17,7 @@ use Nelmio\Alice\Throwable\Exception\RootParseException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\ParseThrowable
+ * @coversNothing
  */
 class ParseThrowableTest extends TestCase
 {

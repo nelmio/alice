@@ -17,7 +17,7 @@ use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\ResolutionThrowable
+ * @coversNothing
  */
 class ResolutionThrowableTest extends TestCase
 {

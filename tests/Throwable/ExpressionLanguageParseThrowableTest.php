@@ -17,7 +17,7 @@ use Nelmio\Alice\Throwable\Exception\RootExpressionLanguageParseException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable
+ * @coversNothing
  */
 class ExpressionLanguageParseThrowableTest extends TestCase
 {

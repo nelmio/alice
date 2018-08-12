@@ -17,7 +17,7 @@ use Nelmio\Alice\Throwable\Exception\RootDenormalizationException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\DenormalizationThrowable
+ * @coversNothing
  */
 class DenormalizationThrowableTest extends TestCase
 {
