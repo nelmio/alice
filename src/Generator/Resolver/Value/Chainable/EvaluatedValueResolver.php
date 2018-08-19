@@ -24,6 +24,7 @@ use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
+use Throwable;
 
 final class EvaluatedValueResolver implements ChainableValueResolverInterface
 {
@@ -75,7 +76,7 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
 
         try {
             $evaluatedExpression = $evaluateExpression($expression);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             throw UnresolvableValueExceptionFactory::createForCouldNotEvaluateExpression($value, 0, $throwable);
         }
 

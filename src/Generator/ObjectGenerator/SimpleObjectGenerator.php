@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\ObjectGenerator;
 
+use Error;
+use LogicException;
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\CallerInterface;
@@ -26,6 +28,9 @@ use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\Throwable\Exception\Generator\DebugUnexpectedValueException;
+use RuntimeException;
+use Throwable;
 
 final class SimpleObjectGenerator implements ObjectGeneratorInterface
 {
@@ -77,6 +82,39 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
      * @inheritdoc
      */
     public function generate(
+        FixtureInterface $fixture,
+        ResolvedFixtureSet $fixtureSet,
+        GenerationContext $context
+    ): ObjectBag {
+        // TODO: move this outside of this in a dedicated class e.g. TolerantObjectGenerator which could decorate the
+        // root ObjectGeneratorInterface instance used
+        try {
+            return $this->generateObject(...func_get_args());
+        } catch (DebugUnexpectedValueException $exception) {
+            throw $exception;
+        } catch (RuntimeException $throwable) {
+            $throwableClass = DebugUnexpectedValueException::class;
+        } catch (LogicException $throwable) {
+            $throwableClass = LogicException::class;
+        } catch (Throwable $throwable) {
+            $throwableClass = Error::class;
+        }
+
+        $arguments = [
+            sprintf(
+                'An error occurred while generating the fixture "%s" (%s): %s',
+                $fixture->getId(),
+                $fixture->getClassName(),
+                $throwable->getMessage()
+            ),
+            $throwable->getCode(),
+            $throwable
+        ];
+
+        throw new $throwableClass(...$arguments);
+    }
+
+    private function generateObject(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context

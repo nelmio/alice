@@ -17,7 +17,6 @@ use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Bridge\Symfony\Application\AppKernel;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver;
-use Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Symfony\KernelFactory;
 use PHPUnit\Framework\TestCase;
@@ -60,18 +59,6 @@ class DynamicServicesConfigurationTest extends TestCase
 
         $this->assertInstanceOf(RecursiveParameterResolver::class, $resolver);
         $limitRefl = (new \ReflectionClass(RecursiveParameterResolver::class))->getProperty('limit');
-        $limitRefl->setAccessible(true);
-
-        $this->assertEquals(50, $limitRefl->getValue($resolver));
-    }
-
-    public function testDynamicArrayResolverUsesTheLimitIsDefinedInTheConfiguration()
-    {
-        /** @var DynamicArrayValueResolver $resolver */
-        $resolver = $this->kernel->getContainer()->get('nelmio_alice.generator.resolver.value.chainable.dynamic_array_value_resolver');
-
-        $this->assertInstanceOf(DynamicArrayValueResolver::class, $resolver);
-        $limitRefl = (new \ReflectionClass(DynamicArrayValueResolver::class))->getProperty('limit');
         $limitRefl->setAccessible(true);
 
         $this->assertEquals(50, $limitRefl->getValue($resolver));

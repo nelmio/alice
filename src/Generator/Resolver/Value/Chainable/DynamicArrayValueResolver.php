@@ -35,19 +35,9 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
      */
     private $resolver;
 
-    /**
-     * @var int
-     */
-    private $limit;
-
-    public function __construct(ValueResolverInterface $resolver = null, int $limit = 5)
+    public function __construct(ValueResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
-        if ($limit < 1) {
-            throw InvalidArgumentExceptionFactory::createForInvalidLimitValue($limit);
-        }
-
-        $this->limit = $limit;
     }
 
     /**
@@ -55,7 +45,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
      */
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
-        return new self($resolver, $this->limit);
+        return new self($resolver);
     }
 
     /**

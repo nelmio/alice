@@ -18,8 +18,6 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\IsAServiceTrait;
-use function gettype;
-use function is_array;
 
 final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterface
 {

@@ -238,7 +238,7 @@ final class InvalidArgumentExceptionFactory
     {
         return new InvalidArgumentException(
             sprintf(
-                'Expected quantifier to be a positive integer. Got "%d" for "%s", check you dynamic  arrays '
+                'Expected quantifier to be a positive integer. Got "%d" for "%s", check you dynamic arrays '
                 .'declarations (e.g. "<numberBetween(1, 2)>x @user*").',
                 $quantifier,
                 $fixture->getId()

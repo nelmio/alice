@@ -87,15 +87,6 @@ class DynamicArrayValueResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected limit value to be a strictly positive integer, got "0" instead.
-     */
-    public function testThrowsAnExceptionIfAnInvalidLimitIsGiven()
-    {
-        new DynamicArrayValueResolver(null, 0);
-    }
-
     public function testIfQuantifierIsAValueThenItWillBeResolvedAsWell()
     {
         $quantifier = new FakeValue();
@@ -122,7 +113,7 @@ class DynamicArrayValueResolverTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected quantifier to be a positive integer. Got "-1" for "dummy", check you dynamic  arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").
+     * @expectedExceptionMessage Expected quantifier to be a positive integer. Got "-1" for "dummy", check you dynamic arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").
      */
     public function testThrowsExceptionIfAnInvalidQuantifierIsGiven()
     {

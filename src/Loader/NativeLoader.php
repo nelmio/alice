@@ -46,6 +46,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
+use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\TolerantFixtureDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ConfiguratorFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ExtendFlagParser;
@@ -344,34 +345,36 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     protected function createFixtureDenormalizer(): FixtureDenormalizerInterface
     {
-        return new FixtureDenormalizerRegistry(
-            $this->getFlagParser(),
-            [
-                new NelmioSimpleDenormalizer(
-                    new SimpleSpecificationsDenormalizer(
-                        $this->getConstructorDenormalizer(),
-                        $this->getPropertyDenormalizer(),
-                        $this->getCallsDenormalizer()
+        return new TolerantFixtureDenormalizer(
+            new FixtureDenormalizerRegistry(
+                $this->getFlagParser(),
+                [
+                    new NelmioSimpleDenormalizer(
+                        new SimpleSpecificationsDenormalizer(
+                            $this->getConstructorDenormalizer(),
+                            $this->getPropertyDenormalizer(),
+                            $this->getCallsDenormalizer()
+                        )
+                    ),
+                    new SimpleCollectionDenormalizer(
+                        new CollectionDenormalizerWithTemporaryFixture(
+                            new NullListNameDenormalizer()
+                        )
+                    ),
+                    new SimpleCollectionDenormalizer(
+                        new CollectionDenormalizerWithTemporaryFixture(
+                            new NullRangeNameDenormalizer()
+                        )
+                    ),
+                    new ReferenceRangeNameDenormalizer(
+                        new SimpleSpecificationsDenormalizer(
+                            $this->getConstructorDenormalizer(),
+                            $this->getPropertyDenormalizer(),
+                            $this->getCallsDenormalizer()
+                        )
                     )
-                ),
-                new SimpleCollectionDenormalizer(
-                    new CollectionDenormalizerWithTemporaryFixture(
-                        new NullListNameDenormalizer()
-                    )
-                ),
-                new SimpleCollectionDenormalizer(
-                    new CollectionDenormalizerWithTemporaryFixture(
-                        new NullRangeNameDenormalizer()
-                    )
-                ),
-                new ReferenceRangeNameDenormalizer(
-                    new SimpleSpecificationsDenormalizer(
-                        $this->getConstructorDenormalizer(),
-                        $this->getPropertyDenormalizer(),
-                        $this->getCallsDenormalizer()
-                    )
-                )
-            ]
+                ]
+            )
         );
     }
 
