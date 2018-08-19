@@ -750,6 +750,50 @@ class LoaderIntegrationTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testLoadDuplicatedDummyKeysWithIncludeFiles()
+    {
+        $expected = new ObjectSet(
+            new ParameterBag(),
+            new ObjectBag([
+                'dummy' => StdClassFactory::create([
+                    'var' => 'bar'
+                ]),
+            ])
+        );
+
+        $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/duplicates/dummies.yml');
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testLoadDuplicatedDummyKeysWithLists()
+    {
+        $expected = new ObjectSet(
+            new ParameterBag(),
+            new ObjectBag([
+                'dummy_A' => StdClassFactory::create([
+                    'var' => 'A',
+                ]),
+                'dummy_B' => StdClassFactory::create([
+                    'var' => 'foo',
+                    'val' => 'val',
+                ]),
+                'another_dummy_A' => StdClassFactory::create([
+                    'var' => 'foo',
+                    'val' => 'val',
+                ]),
+                'another_dummy_B' => StdClassFactory::create([
+                    'var' => 'foo',
+                    'val' => 'val',
+                ]),
+            ])
+        );
+
+        $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/duplicates/dummy_list.yml');
+
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testTemplatesAreBuildBeforeUsage()
     {
         $expected = new ObjectSet(

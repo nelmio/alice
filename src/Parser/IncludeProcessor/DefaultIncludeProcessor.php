@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
+use function array_reverse;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
@@ -74,6 +75,42 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
 
         $this->included[$file] = true;
 
+        // The order the the include statements needs to be reversed. Indeed when merging two sets of data, e.g.
+        // mergeInclude($data1, $data2), the elements of $data1 take precedence in case of conflict keys. And what
+        // we want when we have:
+        //
+        // root (fixture file with the following include statements)
+        //   - file1
+        //   - file2
+        //   - file3
+        //
+        // Is the data to be merged as follows:
+        //
+        // merge (
+        //     rootData, <-- root data: is the one from which the data takes precedence over the included files
+        //     merge(
+        //         file3Data, <-- last included file: is the one from which the data takes precedence over the other already included files
+        //         merge(
+        //             file2Data,
+        //             file1Data <-- first included so is the one which data can be overridden during the merge
+        //         )
+        //     )
+        // )
+        //
+        $includeData = $this->retrieveIncludeData($parser, $file, array_reverse($include));
+
+        $this->included = [];
+
+        return $this->dataMerger->mergeInclude($data, $includeData);
+    }
+
+    /**
+     * @param string[] $include
+     */
+    private function retrieveIncludeData(ParserInterface $parser, string $file, array $include): array
+    {
+        $data = [];
+
         foreach ($include as $includeFile) {
             if (false === is_string($includeFile)) {
                 throw TypeErrorFactory::createForInvalidIncludedFilesInData($includeFile, $file);
@@ -99,9 +136,6 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
 
             $this->included[$includeFile] = true;
         }
-
-        $this->included = [];
-
         return $data;
     }
 }
