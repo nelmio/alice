@@ -17,7 +17,7 @@ use Nelmio\Alice\Throwable\Exception\RootGenerationException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\GenerationThrowable
+ * @coversNothing
  */
 class GenerationThrowableTest extends TestCase
 {

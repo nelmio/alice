@@ -689,7 +689,7 @@ class LoaderIntegrationTest extends TestCase
 
         $this->assertArrayHasKey('foo.user.1', $objects);
         $this->assertArrayHasKey('foo.user.2', $objects);
-        $this->assertArrayHasKey('foo.user.3',$objects);
+        $this->assertArrayHasKey('foo.user.3', $objects);
 
         $this->assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.1']->getUser());
         $this->assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.2']->getUser());
