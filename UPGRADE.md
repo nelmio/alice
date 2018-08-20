@@ -74,6 +74,11 @@ done depending on the case, but no Alice maintainer will actively work on it
     - `admin (template)`
     - `user {extends admin}`
 
+- The DSL rules are now detailed in [Expression Language (DSL)](doc/advanced-guide.md#expression-language-dsl).
+  Despite hard efforts to keep a maximum of compatibility, due to the too little testing in 2.x and the difference of
+  implementation between 2.x and 3.x for this part of alice, a few differences are bound to happen. Please report those
+  whenever you encounter one.
+
 - It is no longer possible to "extend" from a non template fixture:
 
 ```yaml

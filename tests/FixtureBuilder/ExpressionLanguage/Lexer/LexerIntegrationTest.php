@@ -126,6 +126,21 @@ class LexerIntegrationTest extends TestCase
             ],
         ];
 
+        yield 'string with percentage #1' => [
+            '%',
+            [
+                new Token('%', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
+        yield 'string with percentage #2' => [
+            'foo % bar',
+            [
+                new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
+                new Token('% bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
+        ];
+
         // Escaped character
         yield '[Escape character] nominal (1)' => [
             '\\',
@@ -160,7 +175,10 @@ class LexerIntegrationTest extends TestCase
         ];
         yield '[Escape character] double escape with reference' => [
             '\\\\@',
-            null,
+            [
+                new Token('\\\\', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('@', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Escape character] with empty reference' => [
             '\\\\\\@',
@@ -250,7 +268,9 @@ class LexerIntegrationTest extends TestCase
         ];
         yield '[Parameter] unbalanced (2)' => [
             '<{dummy_param',
-            null,
+            [
+                new Token('<{dummy_param', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Parameter] escaped unbalanced (2)' => [
             '\<{dummy_param',
@@ -273,7 +293,10 @@ class LexerIntegrationTest extends TestCase
         ];
         yield '[Parameter] unbalanced (4)' => [
             'dummy_param}>',
-            null,
+            [
+                new Token('dummy_param}', new TokenType(TokenType::STRING_TYPE)),
+                new Token('>', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Parameter] escaped unbalanced (4)' => [
             'dummy_param}\>',
@@ -711,11 +734,17 @@ class LexerIntegrationTest extends TestCase
         ];
         yield '[Optional] without members' => [
             '80%? ',
-            null,
+            [
+                new Token('80', new TokenType(TokenType::STRING_TYPE)),
+                new Token('%? ', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Optional] without members 2' => [
             '80%?',
-            null,
+            [
+                new Token('80', new TokenType(TokenType::STRING_TYPE)),
+                new Token('%?', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Optional] without first member but with second' => [
             '80%? :Z',
@@ -753,11 +782,17 @@ class LexerIntegrationTest extends TestCase
         ];
         yield '[Optional] without space after quantifier' => [
             '80%?foo bar',
-            null,
+            [
+                new Token('80', new TokenType(TokenType::STRING_TYPE)),
+                new Token('%?foo bar', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Optional] without space after quantifier with second member' => [
             '80%?foo: bar baz',
-            null,
+            [
+                new Token('80', new TokenType(TokenType::STRING_TYPE)),
+                new Token('%?foo: bar baz', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Optional] surrounded with params' => [
             'foo 80%? <{dummy}>: <another()> baz',
@@ -783,7 +818,9 @@ class LexerIntegrationTest extends TestCase
         // References
         yield '[Reference] empty reference' => [
             '@',
-            null,
+            [
+                new Token('@', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Reference] empty escaped reference' => [
             '\@',
@@ -793,7 +830,9 @@ class LexerIntegrationTest extends TestCase
         ];
         yield '[Reference] empty reference with second member' => [
             '@ foo',
-            null,
+            [
+                new Token('@ foo', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Reference] escaped empty reference with second member' => [
             '\@ foo',
@@ -1137,11 +1176,15 @@ class LexerIntegrationTest extends TestCase
         // Variables
         yield '[Variable] empty variable' => [
             '$',
-            null,
+            [
+                new Token('$', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Variable] empty variable with second member' => [
             '$ foo',
-            null,
+            [
+                new Token('$ foo', new TokenType(TokenType::STRING_TYPE)),
+            ],
         ];
         yield '[Variable] alone' => [
             '$username',

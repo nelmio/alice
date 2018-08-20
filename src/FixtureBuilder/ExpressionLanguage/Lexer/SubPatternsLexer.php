@@ -17,7 +17,6 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\IsAServiceTrait;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 
@@ -115,6 +114,6 @@ final class SubPatternsLexer implements LexerInterface
             }
         }
 
-        throw ExpressionLanguageExceptionFactory::createForCouldNotLexValue($valueFragment);
+        return [new Token($valueFragment, new TokenType(TokenType::STRING_TYPE))];
     }
 }
