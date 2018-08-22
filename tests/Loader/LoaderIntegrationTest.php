@@ -1403,7 +1403,7 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @sestdox The cache of the loader
+     * @testdox The cache of the loader
      */
     public function testGenerationCache()
     {
