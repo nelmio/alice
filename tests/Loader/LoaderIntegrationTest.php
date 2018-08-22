@@ -1228,6 +1228,34 @@ class LoaderIntegrationTest extends TestCase
         $this->assertCount(10, $value[FixtureEntity\DummyWithPublicProperty::class]);
     }
 
+    // https://github.com/nelmio/alice/issues/936
+    /**
+     */
+    public function testUniqueCircularReferencesThrowNoFatal()
+    {
+        //sample data, random members, which may or not be also owners of (other) groups
+        //this will cause a fatal error with the old UniqueValuesPool comparison logic (==)
+        $data = [
+            stdClass::class => [
+                'member{1..20}' => [],
+                'group{1..5}' => [
+                    'owner' => '@member*',
+                    'members (unique)' => '<numberBetween(1,3)>x @member*',
+                ],
+            ],
+        ];
+
+        try {
+            $result = $this->loader->loadData($data);
+            $this->assertCount(30, $result->getObjects());
+        } catch (\Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException $e) {
+            //This is necessary, since there may not be enough member objects to choose from.
+            //Alice is not very good at picking pseudo-random elements, it needs large sets and few samples to work reliably.
+            $this->addToAssertionCount(1);
+        }
+
+    }
+
     /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
      * @expectedExceptionMessage Could not find the fixture "unknown".
@@ -1374,7 +1402,7 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @testdox The cache of the loader
+     * @sestdox The cache of the loader
      */
     public function testGenerationCache()
     {
