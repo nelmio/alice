@@ -1237,7 +1237,7 @@ class LoaderIntegrationTest extends TestCase
         //this will cause a fatal error with the old UniqueValuesPool comparison logic (==)
         $data = [
             stdClass::class => [
-                'member{1..20}' => [],
+                'member{1..20}' => [ 'id' => '<current()>' ],
                 'group{1..5}' => [
                     'owner' => '@member*',
                     'members (unique)' => '<numberBetween(1,3)>x @member*',
@@ -1247,11 +1247,12 @@ class LoaderIntegrationTest extends TestCase
 
         try {
             $result = $this->loader->loadData($data);
-            $this->assertCount(30, $result->getObjects());
+            $this->assertCount(25, $result->getObjects());
         } catch (\Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException $e) {
             //This is necessary, since there may not be enough member objects to choose from.
             //Alice is not very good at picking pseudo-random elements, it needs large sets and few samples to work reliably.
-            $this->addToAssertionCount(1);
+        } catch (Nelmio\Alice\Throwable\Exception\Generator\DebugUnexpectedValueException $e) {
+            //This exception may be wrapping the above one
         }
 
     }
