@@ -68,6 +68,15 @@ done depending on the case, but no Alice maintainer will actively work on it
   
   [See the original discussion](https://github.com/nelmio/alice/issues/654)
 
+- Calls to custom methods (not setters) must not go under the special `__calls` key:
+
+```yaml
+User:
+    user_{A, B}:
+        __calls:
+            - markAsInvited: []
+```
+
 - The fixture extended notations have been hardened and are now less flexible. The correct syntax expected are:
     - `user{1..10}`
     - `user_{alice, bob}`
