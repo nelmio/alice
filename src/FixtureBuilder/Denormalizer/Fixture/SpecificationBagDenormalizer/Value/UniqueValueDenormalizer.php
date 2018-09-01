@@ -24,6 +24,7 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException;
+use function random_bytes;
 
 final class UniqueValueDenormalizer implements ValueDenormalizerInterface
 {
@@ -83,7 +84,7 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
         }
 
         if ($value instanceof DynamicArrayValue) {
-            $uniqueId = uniqid($uniqueId.'::', true);
+            $uniqueId = $uniqueId.'::__array_element_id#'.bin2hex(random_bytes(16));
 
             return new DynamicArrayValue(
                 $value->getQuantifier(),

@@ -1228,33 +1228,35 @@ class LoaderIntegrationTest extends TestCase
         $this->assertCount(10, $value[FixtureEntity\DummyWithPublicProperty::class]);
     }
 
-    // https://github.com/nelmio/alice/issues/936
     /**
+     * @see https://github.com/nelmio/alice/pull/950
      */
     public function testUniqueCircularReferencesThrowNoFatal()
     {
-        //sample data, random members, which may or not be also owners of (other) groups
-        //this will cause a fatal error with the old UniqueValuesPool comparison logic (==)
         $data = [
             stdClass::class => [
-                'member{1..20}' => [ 'id' => '<current()>' ],
-                'group{1..5}' => [
+                'member{1..5}' => [
+                    'id' => '<current()>',
+                    'self' => '@self',
+                ],
+                'group' => [
                     'owner' => '@member*',
-                    'members (unique)' => '<numberBetween(1,3)>x @member*',
+                    'members (unique)' => '100x @member*',
                 ],
             ],
         ];
 
         try {
-            $result = $this->loader->loadData($data);
-            $this->assertCount(25, $result->getObjects());
-        } catch (\Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException $e) {
-            //This is necessary, since there may not be enough member objects to choose from.
-            //Alice is not very good at picking pseudo-random elements, it needs large sets and few samples to work reliably.
-        } catch (Nelmio\Alice\Throwable\Exception\Generator\DebugUnexpectedValueException $e) {
-            //This exception may be wrapping the above one
-        }
+            $this->loader->loadData($data);
+        } catch (DebugUnexpectedValueException $exception) {
+            $this->assertNotNull($previous = $exception->getPrevious());
 
+            $this->assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+
+            $this->assertNotNull($previous = $previous->getPrevious());
+
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
+        }
     }
 
     /**
