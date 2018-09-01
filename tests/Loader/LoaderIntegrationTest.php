@@ -1229,6 +1229,37 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
+     * @see https://github.com/nelmio/alice/pull/950
+     */
+    public function testUniqueCircularReferencesThrowNoFatal()
+    {
+        $data = [
+            stdClass::class => [
+                'member{1..5}' => [
+                    'id' => '<current()>',
+                    'self' => '@self',
+                ],
+                'group' => [
+                    'owner' => '@member*',
+                    'members (unique)' => '100x @member*',
+                ],
+            ],
+        ];
+
+        try {
+            $this->loader->loadData($data);
+        } catch (DebugUnexpectedValueException $exception) {
+            $this->assertNotNull($previous = $exception->getPrevious());
+
+            $this->assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+
+            $this->assertNotNull($previous = $previous->getPrevious());
+
+            $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
+        }
+    }
+
+    /**
      * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
      * @expectedExceptionMessage Could not find the fixture "unknown".
      */
