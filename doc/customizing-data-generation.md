@@ -193,7 +193,28 @@ the `NativeLoader::createFakerGenerator()` method.
  
 If you are using Symfony, custom Faker providers are registered by adding the
 tag `nelmio_alice.faker.provider` to the services. Note that this is automatically
-done if your service extends `Faker\Provider\Base`.  
+done if your service extends `Faker\Provider\Base` and have `autoconfigure` enabled:
+
+```yaml
+# config/services.yaml
+
+services:
+    _defaults:
+        autoconfigure: true
+
+    App\Faker\Provider\JobProvider: ~
+```
+
+or:
+
+
+```yaml
+# config/services.yaml
+
+services:
+    App\Faker\Provider\JobProvider:
+        tags: [ { name: nelmio_alice.faker.provider } ]
+```
 
 
 <br />
