@@ -677,7 +677,7 @@ class LoaderIntegrationTest extends TestCase
                 ],
                 'userdetail_single_{@user1}' => [
                     'email' => '<email()>',
-                    'user'  => '<current()>',
+                    'user'  => '<($current)>',
                 ],
             ],
         ];
