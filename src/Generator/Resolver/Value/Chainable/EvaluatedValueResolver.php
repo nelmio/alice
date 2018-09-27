@@ -58,6 +58,10 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         $_scope = $scope;
         try {
             $_scope['current'] = $fixture->getValueForCurrent();
+
+            if ($_scope['current'] instanceof FixtureInterface) {
+                $_scope['current'] = $fixtureSet->getObjects()->get($_scope['current'])->getInstance();
+            }
         } catch (NoValueForCurrentException $exception) {
             // Continue
         }
