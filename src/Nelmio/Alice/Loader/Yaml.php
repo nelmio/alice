@@ -33,7 +33,7 @@ class Yaml extends Base
     /**
      * {@inheritDoc}
      */
-    public function load($file)
+    public function load($file = array())
     {
         $data = $this->parse($file);
         return parent::load($data);
