@@ -11,7 +11,9 @@
 
 namespace Nelmio\Alice\Loader;
 
-class YamlTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class YamlTest extends TestCase
 {
     public function testIncludeFiles()
     {

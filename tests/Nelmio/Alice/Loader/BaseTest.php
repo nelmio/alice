@@ -14,8 +14,9 @@ namespace Nelmio\Alice\Loader;
 use Nelmio\Alice\TestORM;
 use Nelmio\Alice\Loader\Base;
 use Nelmio\Alice\fixtures\User;
+use PHPUnit\Framework\TestCase;
 
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTest extends TestCase
 {
     const USER = 'Nelmio\Alice\fixtures\User';
     const GROUP = 'Nelmio\Alice\fixtures\Group';

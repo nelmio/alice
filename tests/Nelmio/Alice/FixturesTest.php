@@ -12,8 +12,9 @@
 namespace Nelmio\Alice;
 
 use Nelmio\Alice\fixtures\User;
+use PHPUnit\Framework\TestCase;
 
-class FixturesTest extends \PHPUnit_Framework_TestCase
+class FixturesTest extends TestCase
 {
     const USER = 'Nelmio\Alice\fixtures\User';
     const GROUP = 'Nelmio\Alice\fixtures\Group';
