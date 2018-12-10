@@ -48,6 +48,19 @@ class SubPatternsLexerTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testLexAFunctionContainingLineBreaks()
+    {
+        $expected = [
+            new Token('<identity("foo'.PHP_EOL.'bar")>', new TokenType(TokenType::FUNCTION_TYPE)),
+        ];
+
+        $lexer = new SubPatternsLexer(new FakeLexer());
+        $actual = $lexer->lex('<identity("foo'.PHP_EOL.'bar")>');
+
+        $this->assertCount(count($expected), $actual);
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testUsesDecoratedLexerToLexReferenceValues()
     {
         $value = '@user';
