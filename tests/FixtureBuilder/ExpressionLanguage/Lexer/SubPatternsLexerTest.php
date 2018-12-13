@@ -48,14 +48,17 @@ class SubPatternsLexerTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testLexAFunctionContainingLineBreaks()
+    /**
+     * @dataProvider lineBreaksProvider
+     */
+    public function testLexAFunctionContainingLineBreaks(string $lineBreak)
     {
         $expected = [
-            new Token('<identity("foo'.PHP_EOL.'bar")>', new TokenType(TokenType::FUNCTION_TYPE)),
+            new Token('<identity("foo'.$lineBreak.'bar")>', new TokenType(TokenType::FUNCTION_TYPE)),
         ];
 
         $lexer = new SubPatternsLexer(new FakeLexer());
-        $actual = $lexer->lex('<identity("foo'.PHP_EOL.'bar")>');
+        $actual = $lexer->lex('<identity("foo'.$lineBreak.'bar")>');
 
         $this->assertCount(count($expected), $actual);
         $this->assertEquals($expected, $actual);
@@ -104,5 +107,13 @@ class SubPatternsLexerTest extends TestCase
     {
         $lexer = new SubPatternsLexer(new FakeLexer());
         $lexer->lex('<foo>');
+    }
+
+    public function lineBreaksProvider()
+    {
+        return [
+            ['\n'],
+            ['\r\n'],
+        ];
     }
 }

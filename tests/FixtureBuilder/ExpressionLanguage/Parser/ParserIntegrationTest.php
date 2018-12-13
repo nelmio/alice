@@ -519,6 +519,26 @@ class ParserIntegrationTest extends TestCase
             ),
         ];
 
+        yield '[Function] with unix type line break in string arguments' => [
+            '<function(\'foo\nbar\')>',
+            new FunctionCallValue(
+                'function',
+                [
+                    'foo\nbar',
+                ]
+            ),
+        ];
+
+        yield '[Function] with windows type line break in string arguments' => [
+            '<function(\'foo\\r\\nbar\')>',
+            new FunctionCallValue(
+                'function',
+                [
+                    'foo\\r\\nbar',
+                ]
+            ),
+        ];
+
         // Arrays
         yield '[Array] nominal string array' => [
             '10x @user',
