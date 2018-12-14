@@ -542,17 +542,31 @@ class LexerIntegrationTest extends TestCase
             ],
         ];
 
-        yield '[Function] with unix type line break in string arguments' => [
+        yield '[Function] with unix type line break in single quoted string argument' => [
             '<function(\'foo\nbar\')>',
             [
                 new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\nbar\'IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ]
         ];
 
-        yield '[Function] with windows type line break in string arguments' => [
+        yield '[Function] with windows type line break in single quoted string argument' => [
             '<function(\'foo\\r\\nbar\')>',
             [
                 new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\r\nbar\'IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ]
+        ];
+
+        yield '[Function] with unix type line break in double quoted string argument' => [
+            '<function("foo\nbar")>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__"foo\nbar"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE))
+            ]
+        ];
+
+        yield '[Function] with windows type line break in double quoted string argument' => [
+            '<function("foo\r\nbar")>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__"foo\r\nbar"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE))
             ]
         ];
 
