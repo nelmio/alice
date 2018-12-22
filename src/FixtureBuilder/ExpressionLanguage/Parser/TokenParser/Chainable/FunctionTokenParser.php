@@ -33,7 +33,7 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/^<(?<function>.+?)\((?<arguments>.*)\)>$/';
+    const REGEX = '/^<(?<function>(.|\r?\n)+?)\((?<arguments>.*)\)>$/';
 
     /**
      * @var ArgumentEscaper
@@ -117,7 +117,13 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         $escapedString = preg_replace_callback(
             '/\'(.*?)\'|"(.*?)"/',
             function (array $matches) use ($argumentEscaper): string {
-                return $argumentEscaper->escape(end($matches));
+                $string = end($matches);
+                if (preg_match('/"(.*?)"/', reset($matches))) {
+                    $lineBreak = \DIRECTORY_SEPARATOR === '\\' ? '\r\n' : '\n';
+                    $string = str_replace($lineBreak, PHP_EOL, $string);
+                }
+
+                return $argumentEscaper->escape($string);
             },
             $argumentsString
         );

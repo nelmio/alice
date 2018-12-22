@@ -43,7 +43,7 @@ final class SubPatternsLexer implements LexerInterface
         '/^\\\$/' => null,
         '/^(<{[^\ <]+}>)/' => TokenType::PARAMETER_TYPE,
         '/^(<\(.+\)>)/' => TokenType::IDENTITY_TYPE,
-        '/^(<\S+\(.*\)>)/' => TokenType::FUNCTION_TYPE,
+        '/^(<\S+\((.|\r?\n)*\)>)/' => TokenType::FUNCTION_TYPE,
         '/^(<\S+>)/' => null,
         '/^(\[[^\[\]]*\])/' => TokenType::STRING_ARRAY_TYPE,
         '/^(@[^\ @\{\<]+\(.*\))/' => self::REFERENCE_LEXER, // Function with text

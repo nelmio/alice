@@ -519,6 +519,48 @@ class ParserIntegrationTest extends TestCase
             ),
         ];
 
+        yield '[Function] with unix type line break in single quoted string argument' => [
+            '<function(\'foo\nbar\')>',
+            new FunctionCallValue(
+                'function',
+                [
+                    'foo\nbar',
+                ]
+            ),
+        ];
+
+        yield '[Function] with windows type line break in single quoted string argument' => [
+            '<function(\'foo\\r\\nbar\')>',
+            new FunctionCallValue(
+                'function',
+                [
+                    'foo\\r\\nbar',
+                ]
+            ),
+        ];
+
+        yield '[Function] with unix type line break in double quoted string argument' => [
+            '<function("foo\nbar")>',
+            new FunctionCallValue(
+                'function',
+                [
+                    // On windows if true
+                    \DIRECTORY_SEPARATOR === '\\' ? 'foo\nbar' : 'foo'.PHP_EOL.'bar',
+                ]
+            ),
+        ];
+
+        yield '[Function] with windows type line break in double quoted string argument' => [
+            '<function("foo\r\nbar")>',
+            new FunctionCallValue(
+                'function',
+                [
+                    // On windows if true
+                    \DIRECTORY_SEPARATOR === '\\' ? 'foo'.PHP_EOL.'bar' : 'foo\r'.PHP_EOL.'bar',
+                ]
+            ),
+        ];
+
         // Arrays
         yield '[Array] nominal string array' => [
             '10x @user',
