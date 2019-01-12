@@ -54,7 +54,7 @@ parameters:
 stdClass:
     dummy:
         foo: '<{foo}>'
-        escapedFoo: '\<{foo}>
+        escapedFoo: '\<{foo}>'
 ```
 
 will result in:
@@ -63,7 +63,7 @@ will result in:
 ```
 [
     'dummy' => stdClass {
-       +"foo": "foo",
+       +"foo": "bar",
        +"escapedFoo": "<{foo}>",
     }
 ]
