@@ -580,7 +580,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     protected function createFakerGenerator(): FakerGenerator
     {
-        $generator = FakerGeneratorFactory::create(self::LOCALE);
+        $generator = FakerGeneratorFactory::create(static::LOCALE);
         $generator->addProvider(new AliceProvider());
         $generator->seed($this->getSeed());
 
