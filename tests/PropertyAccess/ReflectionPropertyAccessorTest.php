@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\PropertyAccess;
 
 use Nelmio\Alice\Entity\DummyWithPrivateProperty;
+use Nelmio\Alice\Entity\DummyWithPrivatePropertyChild;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -50,7 +51,27 @@ class ReflectionPropertyAccessorTest extends TestCase
         $property = 'val';
         $value = 'bar';
 
-        $expected = new DummyWithPrivateProperty('bar');
+        $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
+        $decoratedAccessorProphecy
+            ->setValue($object, $property, $value)
+            ->willThrow(NoSuchPropertyException::class)
+        ;
+        /** @var PropertyAccessorInterface $decoratedAccessor */
+        $decoratedAccessor = $decoratedAccessorProphecy->reveal();
+
+        $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
+        $accessor->setValue($object, $property, $value);
+
+        $this->assertSame($value, $object->test_get_val());
+    }
+
+    public function testSetParentValueOnNoSuchPropertyException()
+    {
+        $object = new DummyWithPrivatePropertyChild();
+        $property = 'val';
+        $value = 'bar';
+
+        $expected = new DummyWithPrivatePropertyChild('bar');
 
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
@@ -63,7 +84,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
         $accessor->setValue($object, $property, $value);
 
-        $this->assertEquals($expected, $object);
+        $this->assertSame($value, $object->test_get_val());
     }
 
     /**
@@ -282,10 +303,15 @@ class ReflectionPropertyAccessorTest extends TestCase
     public function testExistingClassPropertiesAreAlwaysWritable()
     {
         $object = new DummyWithPrivateProperty();
+        $objectWithInheritance = new DummyWithPrivatePropertyChild();
 
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isWritable($object, Argument::any())
+            ->willReturn(false)
+        ;
+        $decoratedAccessorProphecy
+            ->isWritable($objectWithInheritance, Argument::any())
             ->willReturn(false)
         ;
         /** @var PropertyAccessorInterface $decoratedAccessor */
@@ -296,6 +322,11 @@ class ReflectionPropertyAccessorTest extends TestCase
         $this->assertTrue($accessor->isWritable($object, 'val'), 'writable if the property exists');
         $this->assertFalse($accessor->isWritable($object, 'foo'), 'non writable if the property does not exist');
         $this->assertFalse($accessor->isWritable($object, 'staticVal'), 'non writable if the property is static');
+
+        $this->assertTrue($accessor->isWritable($objectWithInheritance, 'val'), 'writable if the property exists');
+        $this->assertTrue($accessor->isWritable($objectWithInheritance, 'val2'), 'writable if the property exists');
+        $this->assertFalse($accessor->isWritable($objectWithInheritance, 'foo'), 'non writable if the property does not exist');
+        $this->assertFalse($accessor->isWritable($objectWithInheritance, 'staticVal'), 'non writable if the property is static');
     }
 
     public function testUsesDecoratedAccessorToDetermineIfPropertyIsWritable()
@@ -322,10 +353,15 @@ class ReflectionPropertyAccessorTest extends TestCase
     public function testPrivateClassPropertiesAreReadableOnlyIfTheyExists()
     {
         $object = new DummyWithPrivateProperty();
+        $objectWithInheritance = new DummyWithPrivatePropertyChild();
 
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isReadable($object, Argument::any())
+            ->willReturn(false)
+        ;
+        $decoratedAccessorProphecy
+            ->isReadable($objectWithInheritance, Argument::any())
             ->willReturn(false)
         ;
         /** @var PropertyAccessorInterface $decoratedAccessor */
@@ -336,6 +372,11 @@ class ReflectionPropertyAccessorTest extends TestCase
         $this->assertTrue($accessor->isReadable($object, 'val'), 'readable if the property exists');
         $this->assertFalse($accessor->isReadable($object, 'foo'), 'non readable if the property does not exist');
         $this->assertFalse($accessor->isReadable($object, 'staticVal'), 'non readable if the property is static');
+
+        $this->assertTrue($accessor->isReadable($objectWithInheritance, 'val'), 'readable if the property exists');
+        $this->assertTrue($accessor->isReadable($objectWithInheritance, 'val2'), 'readable if the property exists');
+        $this->assertFalse($accessor->isReadable($objectWithInheritance, 'foo'), 'non readable if the property does not exist');
+        $this->assertFalse($accessor->isReadable($objectWithInheritance, 'staticVal'), 'non readable if the property is static');
     }
 
     public function testUsesDecoratedAccessorToDetermineIfPropertyIsReadable()
