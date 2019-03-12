@@ -28,6 +28,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory;
 
 final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormalizerInterface, FlagParserAwareInterface
 {
@@ -80,6 +81,10 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
         $matches = [];
         if (false === $this->canDenormalize($fixtureId, $matches)) {
             throw LogicExceptionFactory::createForCannotDenormalizerForChainableFixtureBuilderDenormalizer(__METHOD__);
+        }
+
+        if (null === $this->flagParser) {
+            throw FlagParserExceptionFactory::createForExpectedMethodToBeCalledIfHasAParser(__METHOD__);
         }
 
         $referencedName = $matches['name'];
