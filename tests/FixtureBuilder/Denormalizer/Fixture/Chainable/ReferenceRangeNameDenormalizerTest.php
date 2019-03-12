@@ -86,13 +86,15 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $fixtures = (new FixtureBag())->with($valueForCurrent);
         $className = 'Nelmio\Alice\Entity\User';
         $reference = 'user_{@userDetails} (extends timestamp)';
+        $fixtureName = 'user_userDetails';
         $specs = [];
         $flags = new FlagBag('');
+        $parsedFlags = (new FlagBag($fixtureName))->withFlag(new ExtendFlag(new FixtureReference('timestamp')));
 
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
         $flagParserProphecy
             ->parse($reference)
-            ->willReturn((new FlagBag('user_userDetails'))->withFlag(new ExtendFlag(new FixtureReference('timestamp'))))
+            ->willReturn($parsedFlags)
         ;
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
@@ -113,12 +115,12 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
             new TemplatingFixture(
                 new SimpleFixtureWithFlags(
                     new SimpleFixture(
-                        'user_userDetails',
+                        $fixtureName,
                         $className,
                         $expectedSpecs,
                         $valueForCurrent
                     ),
-                    (new FlagBag('user_userDetails'))->withFlag(new ExtendFlag(new FixtureReference('timestamp')))
+                    $parsedFlags
                 )
             )
         );
