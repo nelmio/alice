@@ -84,6 +84,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
 
         $referencedName = $matches['name'];
         $allFlag = ($matches['flag'] ?? null) === '*';
+		$idFlags = $this->flagParser->parse($fixtureId);
 
         $fixtureIds = $this->buildReferencedValues($builtFixtures, $referencedName, $allFlag);
 
@@ -99,7 +100,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
                     $fixtureIdPrefix . $referencedFixtureId,
                     $className,
                     $specs,
-                    $flags,
+                    $idFlags->mergeWith($flags),
                     $valueForCurrent
                 )
             );
