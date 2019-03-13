@@ -570,6 +570,14 @@ class LexerIntegrationTest extends TestCase
             ]
         ];
 
+        $arg = \str_repeat('a', 2000);
+        yield '[Function] with long argument' => [
+            '<function("'.$arg.'")>',
+            [
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__"'.$arg.'"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE))
+            ]
+        ];
+
         // Arrays
         yield '[Array] nominal string array' => [
             '10x @user',

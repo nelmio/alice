@@ -561,6 +561,18 @@ class ParserIntegrationTest extends TestCase
             ),
         ];
 
+        $args = \str_repeat('a', 2000);
+        yield '[Function] with long argument' => [
+            '<function("'.$args.'")>',
+            new FunctionCallValue(
+                'function',
+                [
+                    // On windows if true
+                    $args,
+                ]
+            ),
+        ];
+
         // Arrays
         yield '[Array] nominal string array' => [
             '10x @user',
