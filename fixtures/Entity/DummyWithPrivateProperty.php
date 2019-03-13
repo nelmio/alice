@@ -22,4 +22,9 @@ class DummyWithPrivateProperty
     {
         $this->val = $val;
     }
+
+    public function test_get_val()
+    {
+        return $this->val;
+    }
 }

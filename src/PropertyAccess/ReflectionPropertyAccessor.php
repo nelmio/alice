@@ -44,8 +44,17 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
         try {
             $this->decoratedPropertyAccessor->setValue($objectOrArray, $propertyPath, $value);
         } catch (NoSuchPropertyException $exception) {
-            if (false === $this->propertyExists($objectOrArray, $propertyPath)) {
+            $propertyReflectionProperty = $this->getPropertyReflectionProperty($objectOrArray, $propertyPath);
+            if (null === $propertyReflectionProperty) {
                 throw $exception;
+            }
+
+            if ($propertyReflectionProperty->getDeclaringClass()->getName() !== get_class($objectOrArray)) {
+                $propertyReflectionProperty->setAccessible(true);
+
+                $propertyReflectionProperty->setValue($objectOrArray, $value);
+
+                return;
             }
 
             $setPropertyClosure = Closure::bind(
@@ -68,8 +77,15 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
         try {
             return $this->decoratedPropertyAccessor->getValue($objectOrArray, $propertyPath);
         } catch (NoSuchPropertyException $exception) {
-            if (false === $this->propertyExists($objectOrArray, $propertyPath)) {
+            $propertyReflectionProperty = $this->getPropertyReflectionProperty($objectOrArray, $propertyPath);
+            if (null === $propertyReflectionProperty) {
                 throw $exception;
+            }
+
+            if ($propertyReflectionProperty->getDeclaringClass()->getName() !== get_class($objectOrArray)) {
+                $propertyReflectionProperty->setAccessible(true);
+
+                return $propertyReflectionProperty->getValue($objectOrArray);
             }
 
             $getPropertyClosure = Closure::bind(
@@ -108,15 +124,26 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
      */
     private function propertyExists($objectOrArray, $propertyPath)
     {
+        return null !== $this->getPropertyReflectionProperty($objectOrArray, $propertyPath);
+    }
+
+    private function getPropertyReflectionProperty($objectOrArray, $propertyPath)
+    {
         if (false === is_object($objectOrArray)) {
-            return false;
+            return null;
         }
 
         $reflectionClass = (new ReflectionClass(get_class($objectOrArray)));
+        while ($reflectionClass instanceof ReflectionClass) {
+            if ($reflectionClass->hasProperty($propertyPath)
+                && false === $reflectionClass->getProperty($propertyPath)->isStatic()
+            ) {
+                return $reflectionClass->getProperty($propertyPath);
+            }
 
-        return (
-            $reflectionClass->hasProperty($propertyPath)
-            && false === $reflectionClass->getProperty($propertyPath)->isStatic()
-        );
+            $reflectionClass = $reflectionClass->getParentClass();
+        }
+
+        return null;
     }
 }
