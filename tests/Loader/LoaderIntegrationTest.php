@@ -3195,6 +3195,44 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
+        yield '[templating] reference range' => [
+            [
+                stdClass::class => [
+                    'detailedDummy (template)' => [
+                        'field' => 'value',
+                    ],
+                    'dummy_1' => [
+                        'email' => 'dummy1@mail.com',
+                    ],
+                    'dummy_2' => [
+                        'email' => 'dummy2@mail.com',
+                    ],
+                    'detailedDummy_{@dummy_*} (extends detailedDummy)' => [
+                        'dummy' => '<current()>'
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'dummy_1' => $dummy1 = StdClassFactory::create([
+                        'email' => 'dummy1@mail.com',
+                    ]),
+                    'dummy_2' => $dummy2 = StdClassFactory::create([
+                        'email' => 'dummy2@mail.com',
+                    ]),
+                    'detailedDummy_dummy_1' => StdClassFactory::create([
+                        'field' => 'value',
+                        'dummy' => $dummy1
+                    ]),
+                    'detailedDummy_dummy_2' => StdClassFactory::create([
+                        'field' => 'value',
+                        'dummy' => $dummy2
+                    ]),
+                ],
+            ],
+        ];
+
         yield '[current] nominal' => [
             [
                 stdClass::class => [
