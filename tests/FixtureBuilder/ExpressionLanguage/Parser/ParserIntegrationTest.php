@@ -391,9 +391,9 @@ class ParserIntegrationTest extends TestCase
             '<function([\'foo\', "bar"])>',
             new FunctionCallValue(
                 'function',
-                new ArrayValue([
-                    ['foo', 'bar'],
-                ])
+                [
+                    new ArrayValue(['foo', 'bar']),
+                ]
             ),
         ];
         yield '[Function] unbalanced with arguments (1)' => [

@@ -103,10 +103,6 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         } else {
             /** @var ArrayValue $arguments */
             $arguments = $this->parseArguments($this->parser, trim($matches['arguments']));
-
-            if ($arguments instanceof ArrayValue) {
-                $arguments = $arguments->getValue();
-            }
         }
 
         return new FunctionCallValue($function, $arguments);
