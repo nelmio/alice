@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
@@ -100,7 +101,12 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         } elseif ('current' === $function) {
             $arguments = [new ValueForCurrentValue()];
         } else {
+            /** @var ArrayValue $arguments */
             $arguments = $this->parseArguments($this->parser, trim($matches['arguments']));
+
+            if ($arguments instanceof ArrayValue) {
+                $arguments = $arguments->getValue();
+            }
         }
 
         return new FunctionCallValue($function, $arguments);
