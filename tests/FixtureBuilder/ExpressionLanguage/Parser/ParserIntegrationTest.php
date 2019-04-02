@@ -392,7 +392,7 @@ class ParserIntegrationTest extends TestCase
             new FunctionCallValue(
                 'function',
                 [
-                    ['foo', 'bar'],
+                    new ArrayValue(['foo', 'bar']),
                 ]
             ),
         ];
@@ -607,7 +607,7 @@ class ParserIntegrationTest extends TestCase
             '10x [@user->name, @group->getName()]',
             new DynamicArrayValue(
                 10,
-                [
+                new ArrayValue([
                     new FixturePropertyValue(
                         new FixtureReferenceValue('user'),
                         'name'
@@ -616,7 +616,7 @@ class ParserIntegrationTest extends TestCase
                         new FixtureReferenceValue('group'),
                         new FunctionCallValue('getName')
                     ),
-                ]
+                ])
             ),
         ];
         yield '[Array] escaped array' => [
@@ -645,7 +645,7 @@ class ParserIntegrationTest extends TestCase
         ];
         yield '[Array] simple string array' => [
             '[@user->name, @group->getName()]',
-            [
+            new ArrayValue([
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user'),
                     'name'
@@ -654,7 +654,7 @@ class ParserIntegrationTest extends TestCase
                     new FixtureReferenceValue('group'),
                     new FunctionCallValue('getName')
                 ),
-            ],
+            ]),
         ];
 
         // Optional

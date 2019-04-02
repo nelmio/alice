@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
@@ -88,7 +89,7 @@ class StringArrayTokenParserTest extends TestCase
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $expected = ['parsed_val1', 'parsed_val2'];
+        $expected = new ArrayValue(['parsed_val1', 'parsed_val2']);
 
         $parser = new StringArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
@@ -107,7 +108,7 @@ class StringArrayTokenParserTest extends TestCase
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $expected = [];
+        $expected = new ArrayValue([]);
 
         $parser = new StringArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
@@ -125,7 +126,7 @@ class StringArrayTokenParserTest extends TestCase
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
-        $expected = ['parsed_val1', 'parsed_val2'];
+        $expected = new ArrayValue(['parsed_val1', 'parsed_val2']);
 
         $parser = new StringArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Nelmio\Alice\Definition\Value\ArrayValue;
+use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -36,7 +38,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
      *
      * {@inheritdoc}
      */
-    public function parse(Token $token): array
+    public function parse(Token $token): ValueInterface
     {
         parent::parse($token);
 
@@ -44,7 +46,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
         try {
             $elements = substr($value, 1, strlen($value) - 2);
 
-            return $this->parseElements($this->parser, $elements);
+            return new ArrayValue($this->parseElements($this->parser, $elements));
         } catch (\TypeError $error) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $error);
         }
