@@ -126,7 +126,7 @@ $objectSet = $loader->loadFile(
 ### Symfony
 
 Alice comes with a Symfony Bundle
-[`NelmioAliceBundle`](/src/Bridge/Symfony/NelmioAliceBundle.php). To enabled it,
+[`NelmioAliceBundle`](/src/Bridge/Symfony/NelmioAliceBundle.php). To enable it,
 update your application kernel:
 
 ```php
@@ -152,7 +152,7 @@ You can then configure the bundle to your needs:
 
 nelmio_alice:
     locale: 'en_US' # Default locale for the Faker Generator
-    seed: 1 # Value used make sure Faker generates data consistently across
+    seed: 1 # Value used to make sure Faker generates data consistently across
             # runs, set to null to disable.
     functions_blacklist: # Some Faker formatter may have the same name as PHP
         - 'current'      # native functions. PHP functions have the priority,
