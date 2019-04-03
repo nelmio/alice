@@ -304,7 +304,7 @@ If the static factory belongs to another class, you can call it as follows:
 ```yaml
 Nelmio\Entity\User:
     user1:
-        __factory: { Nelmio\User\UserFactory::create: ['<username()>'] }
+        __factory: { 'Nelmio\User\UserFactory::create': ['<username()>'] }
 ```
 
 
