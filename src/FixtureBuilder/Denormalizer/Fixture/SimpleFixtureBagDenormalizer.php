@@ -18,11 +18,12 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FixtureBagDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\IsAServiceTrait;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 
 final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterface
 {
     use IsAServiceTrait;
-    
+
     /**
      * @var FixtureDenormalizerInterface
      */
@@ -56,7 +57,12 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
     public function denormalize(array $data): FixtureBag
     {
         $fixtures = new FixtureBag();
-        foreach ($data as $fqcnWithFlags => $rawFixtureSet) {
+
+        $alreadyRetired = [];
+        while ($result = array_splice($data, 0, 1)) {
+            $fqcnWithFlags = key($result);
+            $rawFixtureSet = current($result);
+
             $flags = $this->flagParser->parse($fqcnWithFlags);
             $fqcn = $flags->getKey();
 
@@ -69,22 +75,30 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
                     )
                 );
             }
+            try {
+                foreach ($rawFixtureSet as $reference => $specs) {
+                    if (null === $specs) {
+                        $specs = [];
+                    }
 
-            foreach ($rawFixtureSet as $reference => $specs) {
-                if (null === $specs) {
-                    $specs = [];
+                    $fixtures = $this->fixtureDenormalizer->denormalize(
+                        $fixtures,
+                        $fqcn,
+                        $reference,
+                        $specs ?? [],
+                        $flags
+                    );
                 }
-
-                $fixtures = $this->fixtureDenormalizer->denormalize(
-                    $fixtures,
-                    $fqcn,
-                    $reference,
-                    $specs ?? [],
-                    $flags
-                );
+            } catch (UnexpectedValueException $e) {
+                if (!isset($alreadyRetired[$fqcnWithFlags])) {
+                    $data [$fqcnWithFlags] = $rawFixtureSet;
+                    $alreadyRetired[$fqcnWithFlags] = true;
+                } else {
+                    throw $e;
+                }
             }
         }
-        
+
         return $fixtures;
     }
 }
