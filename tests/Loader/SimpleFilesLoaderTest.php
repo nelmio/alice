@@ -17,6 +17,8 @@ use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\FilesLoaderInterface;
 use Nelmio\Alice\ObjectSetFactory;
 use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\User;
+use Nelmio\Alice\UserDetail;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -103,5 +105,47 @@ class SimpleFilesLoaderTest extends TestCase
 
         $parserProphecy->parse(Argument::cetera())->shouldHaveBeenCalledTimes(3);
         $dataLoaderProphecy->loadData(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testLoadFilesWithDifferentOrder()
+    {
+        $file1 = 'dummy1.yml';
+        $file2 = 'dummy2.yml';
+
+        $file1Data = [
+            User::class => [
+                'user1' => [
+                    'name' => '<username()>',
+                ],
+            ],
+        ];
+        $file2Data = [
+            UserDetail::class => [
+                'userdetail_{@user*}' => [
+                    'email' => '<email()>',
+                ],
+                'userdetail_single_{@user1}' => [
+                    'email' => '<email()>',
+                ],
+            ],
+        ];
+
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse($file1)->willReturn($file1Data);
+        $parserProphecy->parse($file2)->willReturn($file2Data);
+        /** @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $loader = new SimpleFilesLoader($parser, new IsolatedLoader());
+
+        $objects = $loader->loadFiles([$file2, $file1], [], [])->getObjects();
+        self::assertArrayHasKey('user1', $objects);
+        self::assertArrayHasKey('userdetail_user1', $objects);
+        self::assertArrayHasKey('userdetail_single_user1', $objects);
+
+        $objects = $loader->loadFiles([$file1, $file2], [], [])->getObjects();
+        self::assertArrayHasKey('user1', $objects);
+        self::assertArrayHasKey('userdetail_user1', $objects);
+        self::assertArrayHasKey('userdetail_single_user1', $objects);
     }
 }
