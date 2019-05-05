@@ -58,7 +58,7 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
     {
         $fixtures = new FixtureBag();
 
-        $alreadyRetired = [];
+        $alreadyRetried = [];
         while ($result = array_splice($data, 0, 1)) {
             $fqcnWithFlags = key($result);
             $rawFixtureSet = current($result);
@@ -89,12 +89,12 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
                         $flags
                     );
                 }
-            } catch (UnexpectedValueException $e) {
-                if (!isset($alreadyRetired[$fqcnWithFlags])) {
-                    $data [$fqcnWithFlags] = $rawFixtureSet;
-                    $alreadyRetired[$fqcnWithFlags] = true;
+            } catch (UnexpectedValueException $exception) {
+                if (!isset($alreadyRetried[$fqcnWithFlags])) {
+                    $data[$fqcnWithFlags] = $rawFixtureSet;
+                    $alreadyRetried[$fqcnWithFlags] = true;
                 } else {
-                    throw $e;
+                    throw $exception;
                 }
             }
         }
