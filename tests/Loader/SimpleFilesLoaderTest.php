@@ -148,4 +148,59 @@ class SimpleFilesLoaderTest extends TestCase
         self::assertArrayHasKey('userdetail_user1', $objects);
         self::assertArrayHasKey('userdetail_single_user1', $objects);
     }
+
+    public function testLoadFixturesWithDifferentOrder()
+    {
+        $file1 = 'dummy1.yml';
+        $file2 = 'dummy2.yml';
+
+        $file1Data = [
+            User::class => [
+                'user1' => [
+                    'name' => '<username()>',
+                ],
+            ],
+            UserDetail::class => [
+                'userdetail_{@user*}' => [
+                    'email' => '<email()>',
+                ],
+                'userdetail_single_{@user1}' => [
+                    'email' => '<email()>',
+                ],
+            ],
+        ];
+        $file2Data = [
+            UserDetail::class => [
+                'userdetail_{@user*}' => [
+                    'email' => '<email()>',
+                ],
+                'userdetail_single_{@user1}' => [
+                    'email' => '<email()>',
+                ],
+            ],
+            User::class => [
+                'user1' => [
+                    'name' => '<username()>',
+                ],
+            ],
+        ];
+
+        $parserProphecy = $this->prophesize(ParserInterface::class);
+        $parserProphecy->parse($file1)->willReturn($file1Data);
+        $parserProphecy->parse($file2)->willReturn($file2Data);
+        /** @var ParserInterface $parser */
+        $parser = $parserProphecy->reveal();
+
+        $loader = new SimpleFilesLoader($parser, new IsolatedLoader());
+
+        $objects = $loader->loadFiles([$file1], [], [])->getObjects();
+        self::assertArrayHasKey('user1', $objects);
+        self::assertArrayHasKey('userdetail_user1', $objects);
+        self::assertArrayHasKey('userdetail_single_user1', $objects);
+
+        $objects = $loader->loadFiles([$file2], [], [])->getObjects();
+        self::assertArrayHasKey('user1', $objects);
+        self::assertArrayHasKey('userdetail_user1', $objects);
+        self::assertArrayHasKey('userdetail_single_user1', $objects);
+    }
 }
