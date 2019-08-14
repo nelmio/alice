@@ -170,7 +170,7 @@ Will give you `'<{shop_id}>'` for the `id` of `shop1`, `shop2`, ... `shop10`. In
 you really need parameters that benefit from that feature in alice 3.x you can use the following workaround:
 
 ```yaml
-stdClass
+stdClass:
     parameters:
         shop_id: '<uniqid()>'
 
