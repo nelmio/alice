@@ -6,6 +6,5 @@ parameters:
     ignoreErrors:
         # Prophecy
         - '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::[a-zA-Z0-9_]+\(\)#'
-        - '#Access to an undefined property Prophecy\\Prophecy\\ObjectProphecy::\$[a-zA-Z0-9_]+#'
 
         # False positives
