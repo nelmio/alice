@@ -92,7 +92,7 @@ will result in:
 [
     'dummy' => stdClass {
         +"functionValue": "bar",
-        +"nestedFunctionValue": "hellow world <bar()>",
+        +"nestedFunctionValue": "hellow world <foo()> <bar()>",
     }
 ]
 ```
