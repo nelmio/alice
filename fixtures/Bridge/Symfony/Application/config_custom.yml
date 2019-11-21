@@ -9,6 +9,8 @@
 
 framework:
     secret:                  NelmioAliceBundleSecret
+    serializer:
+        enabled: true
     router:
         resource:            ~
         strict_requirements: '%kernel.debug%'
