@@ -12,7 +12,7 @@ php:
 
 env:
   global:
-    - PHPUNIT_FLAGS='--stop-on-failure --verbose'
+    - PHPUNIT_FLAGS='--verbose'
 
 matrix:
   fast_finish: true
