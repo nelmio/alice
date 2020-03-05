@@ -63,7 +63,7 @@ class YamlParserTest extends TestCase
     public function setUp()
     {
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
-        $symfonyYamlParserProphecy->parse(Argument::any())->shouldNotBeCalled();
+        $symfonyYamlParserProphecy->parse(Argument::cetera())->shouldNotBeCalled();
         /* @var SymfonyYamlParser $symfonyYamlParser */
         $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
 
@@ -248,7 +248,7 @@ EOF;
             $file = self::$dir.'/basic.yml';
 
             $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
-            $symfonyYamlParserProphecy->parse(Argument::any())->willThrow(\Exception::class);
+            $symfonyYamlParserProphecy->parse(Argument::cetera())->willThrow(\Exception::class);
             /* @var SymfonyYamlParser $symfonyYamlParser */
             $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
 
