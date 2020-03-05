@@ -7,11 +7,12 @@ cache:
 php:
   - '7.1'
   - '7.2'
-  - nightly
+  - '7.3'
+  - '7.4'
 
 env:
   global:
-    - PHPUNIT_FLAGS='--stop-on-failure --verbose'
+    - PHPUNIT_FLAGS='--verbose'
 
 matrix:
   fast_finish: true
@@ -26,11 +27,8 @@ matrix:
       env: SYMFONY_VERSION='~4.4.0'
     - php: '7.2'
       env: SYMFONY_VERSION='~5.0.0'
-  allow_failures:
-    - php: nightly
 
 before_install:
-  - set -eo pipefail
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv config-rm xdebug.ini || true
   - |

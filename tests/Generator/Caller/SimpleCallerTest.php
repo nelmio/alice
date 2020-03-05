@@ -130,7 +130,7 @@ class SimpleCallerTest extends TestCase
                 $object,
                 $set1,
                 $context,
-                $methodCall2
+                $methodCall2->withArguments([])
             )
             ->willReturn(
                 $set2 = ResolvedFixtureSetFactory::create(
@@ -146,7 +146,7 @@ class SimpleCallerTest extends TestCase
                 $object,
                 $set2,
                 $context,
-                $methodCall3
+                $methodCall3->withArguments([])
             )
             ->willReturn(
                 $set3 = ResolvedFixtureSetFactory::create(

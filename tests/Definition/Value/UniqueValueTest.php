@@ -89,7 +89,13 @@ class UniqueValueTest extends TestCase
         $this->assertEquals('(unique) \'foo\'', (string) $value);
 
         $value = new UniqueValue('', new \stdClass());
-        $this->assertEquals("(unique) stdClass::__set_state(array(\n))", (string) $value);
+
+        if (\PHP_VERSION_ID >= 70300) {
+            $expectedStdClass = "(unique) (object) array(\n)";
+        } else {
+            $expectedStdClass = "(unique) stdClass::__set_state(array(\n))";
+        }
+        $this->assertEquals($expectedStdClass, (string) $value);
 
         $value = new UniqueValue('', new DummyValue('foo'));
         $this->assertEquals('(unique) foo', (string) $value);
