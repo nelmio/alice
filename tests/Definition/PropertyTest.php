@@ -17,7 +17,7 @@ use Nelmio\Alice\Entity\StdClassFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Property
+ * @covers \Nelmio\Alice\Definition\PropertyBroken
  */
 class PropertyTest extends TestCase
 {
