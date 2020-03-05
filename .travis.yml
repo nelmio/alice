@@ -7,7 +7,8 @@ cache:
 php:
   - '7.1'
   - '7.2'
-  - nightly
+  - '7.3'
+  - '7.4'
 
 env:
   global:
@@ -26,8 +27,6 @@ matrix:
       env: SYMFONY_VERSION='~4.4.0'
     - php: '7.2'
       env: SYMFONY_VERSION='~5.0.0'
-  allow_failures:
-    - php: nightly
 
 before_install:
   - set -eo pipefail
