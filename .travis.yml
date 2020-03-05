@@ -29,7 +29,6 @@ matrix:
       env: SYMFONY_VERSION='~5.0.0'
 
 before_install:
-  - set -eo pipefail
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv config-rm xdebug.ini || true
   - |
