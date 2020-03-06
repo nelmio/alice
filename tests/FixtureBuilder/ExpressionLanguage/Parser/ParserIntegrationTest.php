@@ -154,7 +154,7 @@ class ParserIntegrationTest extends TestCase
             '\\\\@',
             '\\@',
         ];
-        yield '[Escape character] with empty reference' => [
+        yield '[Escape character] triple escape with empty reference' => [
             '\\\\\\@',
             '\\@',
         ];
@@ -186,11 +186,11 @@ class ParserIntegrationTest extends TestCase
             '\%',
             '%',
         ];
-        yield '[Escaped percent sign]' => [
+        yield '[Escaped percent sign] in string' => [
             'a\%b',
             'a%b',
         ];
-        yield '[Escaped percent sign]' => [
+        yield '[Escaped percent sign] with number' => [
             '100\%',
             '100%',
         ];

@@ -116,7 +116,7 @@ class ReferenceLexerTest extends TestCase
             [new Token($value, new TokenType(TokenType::SIMPLE_REFERENCE_TYPE))],
         ];
 
-        yield 'simple reference' => [
+        yield 'simple empty reference' => [
             $value = '@',
             [new Token($value, new TokenType(TokenType::SIMPLE_REFERENCE_TYPE))],
         ];

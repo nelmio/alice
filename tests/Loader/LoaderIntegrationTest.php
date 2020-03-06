@@ -1525,15 +1525,6 @@ class LoaderIntegrationTest extends TestCase
             new FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor(),
         ];
 
-        yield 'with default constructor and optional parameters without parameters - use constructor function' => [
-            [
-                FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor::class => [
-                    'dummy' => [],
-                ],
-            ],
-            new FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor(),
-        ];
-
         yield 'with default constructor and optional parameters with parameters - use constructor function' => [
             [
                 FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor::class => [
@@ -2654,30 +2645,6 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
-        yield 'array value' => [
-            [
-                stdClass::class => [
-                    'dummy' => [
-                        'foo' => 'bar',
-                    ],
-                    'another_dummy' => [
-                        'dummies' => ['@dummy', '@dummy', '@dummy'],
-                    ],
-                ],
-            ],
-            [
-                'parameters' => [],
-                'objects' => [
-                    'dummy' => $dummy = StdClassFactory::create([
-                        'foo' => 'bar',
-                    ]),
-                    'another_dummy' => StdClassFactory::create([
-                        'dummies' => [$dummy, $dummy, $dummy]
-                    ]),
-                ],
-            ],
-        ];
-
         yield 'dynamic array value with wildcard' => [
             [
                 stdClass::class => [
@@ -2950,50 +2917,6 @@ class LoaderIntegrationTest extends TestCase
                         'foo' => 'bar_baz',
                         'identity_foo' => 'bar baz',
                     ]),
-                ],
-            ],
-        ];
-
-        yield '[self reference] alone' => [
-            [
-                stdClass::class => [
-                    'dummy' => [
-                        'itself' => '@self',
-                    ],
-                ],
-            ],
-            [
-                'parameters' => [],
-                'objects' => [
-                    'dummy' => (function () {
-                        $dummy = new stdClass();
-                        $dummy->itself = $dummy;
-
-                        return $dummy;
-                    })(),
-                ],
-            ],
-        ];
-
-        yield '[self reference] property' => [
-            [
-                stdClass::class => [
-                    'dummy' => [
-                        'foo' => 'bar',
-                        'itself' => '@self',
-                    ],
-                ],
-            ],
-            [
-                'parameters' => [],
-                'objects' => [
-                    'dummy' => (function () {
-                        $dummy = new stdClass();
-                        $dummy->foo = 'bar';
-                        $dummy->itself = $dummy;
-
-                        return $dummy;
-                    })(),
                 ],
             ],
         ];
@@ -3663,26 +3586,6 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => FixtureEntity\Caller\Dummy::create('Fake Title', 2),
-                ],
-            ],
-        ];
-
-        yield '[current] in method calls' => [
-            [
-                FixtureEntity\Caller\Dummy::class => [
-                    'dummy_{1..2}' => [
-                        '__calls' => [
-                            ['setTitle' => ['Fake Title <current()>']],
-                            ['addFoo' => []],
-                        ]
-                    ]
-                ]
-            ],
-            [
-                'parameters' => [],
-                'objects' => [
-                    'dummy_1' => FixtureEntity\Caller\Dummy::create('Fake Title 1', 1),
-                    'dummy_2' => FixtureEntity\Caller\Dummy::create('Fake Title 2', 1),
                 ],
             ],
         ];
