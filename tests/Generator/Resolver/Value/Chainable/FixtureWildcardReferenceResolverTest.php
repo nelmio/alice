@@ -28,6 +28,8 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -64,13 +66,13 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver::resolve" to be called only if it has a resolver.
-     */
     public function testCannotResolveValueIfHasNoResolver()
     {
         $resolver = new FixtureWildcardReferenceResolver();
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver::resolve" to be called only if it has a resolver.');
+
         $resolver->resolve(new FakeValue(), new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
@@ -180,10 +182,6 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not find a fixture or object ID matching the pattern
-     */
     public function testThrowsAnExceptionIfNotMathcingIdFound()
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('dummy');
@@ -193,6 +191,10 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $context = new GenerationContext();
 
         $resolver = new FixtureWildcardReferenceResolver(new FakeValueResolver());
+
+        $this->expectException(UnresolvableValueException::class);
+        $this->expectExceptionMessage('Could not find a fixture or object ID matching the pattern');
+
         $resolver->resolve($value, $fixture, $set, $scope, $context);
     }
 }

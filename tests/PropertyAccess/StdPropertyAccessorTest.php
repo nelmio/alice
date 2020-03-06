@@ -27,6 +27,7 @@ use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
@@ -97,15 +98,15 @@ class StdPropertyAccessorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     * @expectedExceptionMessage Cannot read property "foo" from stdClass.
-     */
     public function testThrowsAnExceptionIfPropertyNotFoundOnStdClass()
     {
         $object = new \stdClass();
 
         $accessor = new StdPropertyAccessor(new FakePropertyAccessor());
+
+        $this->expectException(NoSuchPropertyException::class);
+        $this->expectExceptionMessage('Cannot read property "foo" from stdClass.');
+
         $accessor->getValue($object, 'foo');
     }
 

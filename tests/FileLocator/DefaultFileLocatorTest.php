@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FileLocator;
 
 use Nelmio\Alice\FileLocatorInterface;
+use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -67,30 +68,27 @@ class DefaultFileLocatorTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException
-     * @expectedExceptionMessage An empty file name is not valid to be located.
-     */
     public function testThrowsExceptionIfEmptyFileNamePassed()
     {
+        $this->expectException(FileNotFoundException::class);
+        $this->expectExceptionMessage('An empty file name is not valid to be located.');
+
         $this->locator->locate('');
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException
-     * @expectedExceptionMessageRegExp /^The file "(.+?)foobar.xml" does not exist\.$/
-     */
     public function testThrowsExceptionIfTheFileDoesNotExists()
     {
+        $this->expectException(FileNotFoundException::class);
+        $this->expectExceptionMessageRegExp('/^The file "(.+?)foobar.xml" does not exist\.$/');
+
         $this->locator->locate('foobar.xml', __DIR__);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException
-     * @expectedExceptionMessageRegExp /^The file "(.+?)foobar.xml" does not exist\.$/
-     */
     public function testLocatingFileThrowsExceptionIfTheFileDoesNotExistsInAbsolutePath()
     {
+        $this->expectException(FileNotFoundException::class);
+        $this->expectExceptionMessageRegExp('/^The file "(.+?)foobar.xml" does not exist\.$/');
+
         $this->locator->locate(__DIR__.'/Fixtures/foobar.xml');
     }
 

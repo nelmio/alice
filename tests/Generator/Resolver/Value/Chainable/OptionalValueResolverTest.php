@@ -21,6 +21,7 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use phpmock\functions\FixedValueFunction;
 use phpmock\MockBuilder;
 use PHPUnit\Framework\TestCase;
@@ -58,14 +59,14 @@ class OptionalValueResolverTest extends TestCase
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver::resolve" to be called only if it has a resolver.
-     */
     public function testCannotResolveValueIfHasNoResolver()
     {
         $value = new FixturePropertyValue(new FakeValue(), '');
         $resolver = new OptionalValueResolver();
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver::resolve" to be called only if it has a resolver.');
+
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 

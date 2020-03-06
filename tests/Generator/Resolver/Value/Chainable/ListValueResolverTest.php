@@ -23,6 +23,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -59,14 +60,14 @@ class ListValueResolverTest extends TestCase
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver::resolve" to be called only if it has a resolver.
-     */
     public function testCannotResolveValueIfHasNoResolver()
     {
         $value = new ListValue([]);
         $resolver = new ListValueResolver();
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver::resolve" to be called only if it has a resolver.');
+
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 

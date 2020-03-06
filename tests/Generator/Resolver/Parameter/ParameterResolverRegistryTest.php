@@ -19,6 +19,7 @@ use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\FakeChainableParameterRe
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -61,12 +62,11 @@ class ParameterResolverRegistryTest extends TestCase
         $this->assertFalse((new ReflectionClass(ParameterResolverRegistry::class))->isCloneable());
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessage Expected resolvers to be "Nelmio\Alice\Generator\Resolver\ParameterResolverInterface" objects. Got "stdClass" instead.
-     */
     public function testThrowsAnExceptionIfInvalidResolverIsPassed()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Expected resolvers to be "Nelmio\Alice\Generator\Resolver\ParameterResolverInterface" objects. Got "stdClass" instead.');
+
         new ParameterResolverRegistry([new \stdClass()]);
     }
 
@@ -105,13 +105,13 @@ class ParameterResolverRegistryTest extends TestCase
         $resolver2Prophecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage No resolver found to resolve parameter "foo".
-     */
     public function testThrowsAnExceptionIfNoSuitableParserIsFound()
     {
         $registry = new ParameterResolverRegistry([]);
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('No resolver found to resolve parameter "foo".');
+
         $registry->resolve(new Parameter('foo', null), new ParameterBag(), new ParameterBag());
     }
 }

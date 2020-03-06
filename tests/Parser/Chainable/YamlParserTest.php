@@ -121,12 +121,11 @@ class YamlParserTest extends TestCase
         $this->assertFalse($actual);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The file "/nowhere.yml" could not be found.
-     */
     public function testThrowExceptionIfFileDoesNotExist()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The file "/nowhere.yml" could not be found.');
+
         $this->parser->parse('/nowhere.yml');
     }
 

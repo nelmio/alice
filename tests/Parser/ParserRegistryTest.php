@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Parser;
 
 use Nelmio\Alice\ParserInterface;
+use Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -39,11 +40,10 @@ class ParserRegistryTest extends TestCase
         new ParserRegistry([$parser]);
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testThrowsAnExceptionIfInvalidParserIsPassed()
     {
+        $this->expectException(\TypeError::class);
+
         new ParserRegistry([new stdClass()]);
     }
 
@@ -87,13 +87,13 @@ class ParserRegistryTest extends TestCase
         $parser2Prophecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException
-     * @expectedExceptionMessage No suitable parser found for the file "dummy.php".
-     */
     public function testThrowsAnExceptionIfNoSuitableParserIsFound()
     {
         $registry = new ParserRegistry([]);
+
+        $this->expectException(ParserNotFoundException::class);
+        $this->expectExceptionMessage('No suitable parser found for the file "dummy.php".');
+
         $registry->parse('dummy.php');
     }
 }

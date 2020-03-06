@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\FakeChainableFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -35,11 +36,10 @@ class FlagParserRegistryTest extends TestCase
         $this->assertFalse((new ReflectionClass(FlagParserRegistry::class))->isCloneable());
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testThrowsAnExceptionIfAnInvalidParserInjected()
     {
+        $this->expectException(\TypeError::class);
+
         new FlagParserRegistry([new \stdClass()]);
     }
 
@@ -78,13 +78,13 @@ class FlagParserRegistryTest extends TestCase
         $parser2Prophecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
-     * @expectedExceptionMessage No suitable flag parser found to handle the element "string to parse".
-     */
     public function testThrowsAnExceptionIfNotSuitableParserFound()
     {
         $parser = new FlagParserRegistry([]);
+
+        $this->expectException(FlagParserNotFoundException::class);
+        $this->expectExceptionMessage('No suitable flag parser found to handle the element "string to parse".');
+
         $parser->parse('string to parse');
     }
 }

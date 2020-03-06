@@ -26,6 +26,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\FakePropertyDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
@@ -171,10 +172,6 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid property name: 0.
-     */
     public function testCannotProceedWithInvalidProperty()
     {
         $unparsedSpecs = [
@@ -187,13 +184,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             new FakeCallsDenormalizer()
         );
 
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid property name: 0.');
+
         $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $unparsedSpecs);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Cannot use the fixture property "__construct" and "__factory" together.
-     */
     public function testCannotDenormalizeAnInvalidFactory()
     {
         $fixture = new FakeFixture();
@@ -228,13 +224,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
 
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot use the fixture property "__construct" and "__factory" together.');
+
         $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
-     * @expectedExceptionMessage Could not denormalize the given factory.
-     */
     public function testCannotDenormalizeAFactoryAndAConstructor()
     {
         $fixture = new FakeFixture();
@@ -259,6 +254,9 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Could not denormalize the given factory.');
 
         $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
     }
@@ -438,10 +436,6 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $callsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessage Expected method call value to be an array. Got "string" instead.
-     */
     public function testDenormalizeInvalidCalls()
     {
         $specs = [
@@ -451,13 +445,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         ];
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Expected method call value to be an array. Got "string" instead.');
+
         $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessage Expected method name. Got "NULL" instead.
-     */
     public function testDenormalizeCallsWithInvalidMethod()
     {
         $specs = [
@@ -467,13 +461,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         ];
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Expected method name. Got "NULL" instead.');
+
         $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessage Expected method call value to be an array. Got "NULL" instead.
-     */
     public function testDenormalizeWithInvalidMethodCalls()
     {
         $specs = [
@@ -483,6 +477,10 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         ];
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Expected method call value to be an array. Got "NULL" instead.');
+
         $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
     }
 }

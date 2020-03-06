@@ -24,6 +24,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -68,12 +69,11 @@ class UniqueValueResolverTest extends TestCase
         $this->assertFalse((new ReflectionClass(UniqueValueResolver::class))->isCloneable());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected limit value to be a strictly positive integer, got "0" instead.
-     */
     public function testThrowsExceptionIfInvalidLimitGiven()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected limit value to be a strictly positive integer, got "0" instead.');
+
         new UniqueValueResolver(new UniqueValuesPool(), null, 0);
     }
 
@@ -100,20 +100,16 @@ class UniqueValueResolverTest extends TestCase
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver::resolve" to be called only if it has a resolver.
-     */
     public function testCannotResolveValueIfHasNoResolver()
     {
         $resolver = new UniqueValueResolver(new UniqueValuesPool());
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver::resolve" to be called only if it has a resolver.');
+
         $resolver->resolve(new UniqueValue('', ''), new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
-     * @expectedExceptionMessage Could not generate a unique value after 1 attempts for "uniqid".
-     */
     public function testThrowsExceptionIfLimitReached()
     {
         $value = new UniqueValue('uniqid', '');
@@ -121,6 +117,10 @@ class UniqueValueResolverTest extends TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new UniqueValueResolver(new UniqueValuesPool(), new FakeValueResolver(), 1);
+
+        $this->expectException(UniqueValueGenerationLimitReachedException::class);
+        $this->expectExceptionMessage('Could not generate a unique value after 1 attempts for "uniqid".');
+
         $resolver->resolve($value, $fixture, $set, [], new GenerationContext(), 1);
     }
 

@@ -29,7 +29,7 @@ class SimpleFixtureWithFlagsTest extends TestCase
     {
         $this->assertTrue(is_a(SimpleFixtureWithFlags::class, FixtureWithFlagsInterface::class, true));
     }
-    
+
     public function testReadAccessorsReturnPropertiesValues()
     {
         $reference = 'user0';
@@ -93,14 +93,13 @@ class SimpleFixtureWithFlagsTest extends TestCase
         $this->assertEquals($flags, $newFixture->getFlags());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected the fixture ID and the flags key to be the same. Got "foo" and "bar" instead.
-     */
     public function testThrowsAnExceptionIfFixtureIdAndFlagKeyMistmatch()
     {
         $fixture = new DummyFixture('foo');
         $flags = new FlagBag('bar');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected the fixture ID and the flags key to be the same. Got "foo" and "bar" instead.');
 
         new SimpleFixtureWithFlags($fixture, $flags);
     }

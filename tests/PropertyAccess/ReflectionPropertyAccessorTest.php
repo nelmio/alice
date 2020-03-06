@@ -87,10 +87,6 @@ class ReflectionPropertyAccessorTest extends TestCase
         $this->assertSame($value, $object->test_get_val());
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     * @expectedExceptionMessage Cannot set property "unknown".
-     */
     public function testThrowsAnOriginalExceptionIfSetValueForANonExistentProperty()
     {
         $property = 'unknown';
@@ -108,13 +104,12 @@ class ReflectionPropertyAccessorTest extends TestCase
 
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
 
+        $this->expectException(NoSuchPropertyException::class);
+        $this->expectExceptionMessage('Cannot set property "unknown".');
+
         $accessor->setValue($object, $property, $value);
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     * @expectedExceptionMessage Cannot set property "unknown".
-     */
     public function testThrowsAnOriginalExceptionIfSetValueForANonExistentPropertyOnNonObject()
     {
         $property = 'unknown';
@@ -132,13 +127,12 @@ class ReflectionPropertyAccessorTest extends TestCase
 
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
 
+        $this->expectException(NoSuchPropertyException::class);
+        $this->expectExceptionMessage('Cannot set property "unknown".');
+
         $accessor->setValue($object, $property, $value);
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     * @expectedExceptionMessage Cannot set property "staticVal".
-     */
     public function testThrowsAnOriginalExceptionIfSetValueForANonExistentPropertyIsStatic()
     {
         $property = 'staticVal';
@@ -155,6 +149,9 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
+
+        $this->expectException(NoSuchPropertyException::class);
+        $this->expectExceptionMessage('Cannot set property "staticVal".');
 
         $accessor->setValue($object, $property, $value);
     }
@@ -209,10 +206,6 @@ class ReflectionPropertyAccessorTest extends TestCase
         $this->assertEquals($value, $actual);
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     * @expectedExceptionMessage Cannot read property "foo".
-     */
     public function testThrowsAnOriginalExceptionIfPropertyDoesNotExist()
     {
         $property = 'foo';
@@ -229,13 +222,12 @@ class ReflectionPropertyAccessorTest extends TestCase
 
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
 
+        $this->expectException(NoSuchPropertyException::class);
+        $this->expectExceptionMessage('Cannot read property "foo".');
+
         $accessor->getValue($object, $property);
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     * @expectedExceptionMessage Cannot read property "foo".
-     */
     public function testThrowsAnOriginalExceptionIfPropertyDoesNotExistOnNonObject()
     {
         $property = 'foo';
@@ -252,13 +244,12 @@ class ReflectionPropertyAccessorTest extends TestCase
 
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
 
+        $this->expectException(NoSuchPropertyException::class);
+        $this->expectExceptionMessage('Cannot read property "foo".');
+
         $accessor->getValue($object, $property);
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     * @expectedExceptionMessage Cannot read property "staticVal".
-     */
     public function testThrowsAnOriginalExceptionIfPropertyIsStatic()
     {
         $property = 'staticVal';
@@ -274,6 +265,9 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
+
+        $this->expectException(NoSuchPropertyException::class);
+        $this->expectExceptionMessage('Cannot read property "staticVal".');
 
         $accessor->getValue($object, $property);
     }

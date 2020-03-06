@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -47,27 +48,27 @@ class FixtureListReferenceTokenParserTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: LIST_REFERENCE_TYPE).
-     */
     public function testThrowsAnExceptionIfInvalidTokenIsGiven()
     {
         $token = new Token('', new TokenType(TokenType::LIST_REFERENCE_TYPE));
 
         $parser = new FixtureListReferenceTokenParser();
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse the token "" (type: LIST_REFERENCE_TYPE).');
+
         $parser->parse($token);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: LIST_REFERENCE_TYPE).
-     */
     public function testThrowsAnExceptionIfAMalformedTokenIsGiven()
     {
         $token = new Token('', new TokenType(TokenType::LIST_REFERENCE_TYPE));
 
         $parser = new FixtureListReferenceTokenParser();
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse the token "" (type: LIST_REFERENCE_TYPE).');
+
         $parser->parse($token);
     }
 

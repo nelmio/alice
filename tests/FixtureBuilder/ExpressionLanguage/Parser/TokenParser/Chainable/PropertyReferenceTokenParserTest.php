@@ -20,6 +20,8 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -49,34 +51,28 @@ class PropertyReferenceTokenParserTest extends TestCase
         $this->assertFalse($parser->canParse($anotherToken));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\AbstractChainableParserAwareParser::parse" to be called only if it has a parser.
-     */
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
     {
         $token = new Token('', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE));
         $parser = new PropertyReferenceTokenParser();
 
+        $this->expectException(ParserNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\AbstractChainableParserAwareParser::parse" to be called only if it has a parser.');
+
         $parser->parse($token);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: PROPERTY_REFERENCE_TYPE).
-     */
     public function testThrowsAnExceptionIfCouldNotParseToken()
     {
         $token = new Token('', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE));
         $parser = new PropertyReferenceTokenParser(new FakeParser());
 
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse the token "" (type: PROPERTY_REFERENCE_TYPE).');
+
         $parser->parse($token);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "@@malformed_user->username" (type: PROPERTY_REFERENCE_TYPE).
-     */
     public function testThrowsAnExceptionIfParsingReferenceReturnsUnexpectedResult()
     {
         $token = new Token('@@malformed_user->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE));
@@ -87,6 +83,10 @@ class PropertyReferenceTokenParserTest extends TestCase
         $decoratedParser = $decoratedParserProphecy->reveal();
 
         $parser = new PropertyReferenceTokenParser($decoratedParser);
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse the token "@@malformed_user->username" (type: PROPERTY_REFERENCE_TYPE).');
+
         $parser->parse($token);
     }
 

@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -47,12 +48,11 @@ class ReferenceLexerTest extends TestCase
         $this->assertFalse((new ReflectionClass(ReferenceLexer::class))->isCloneable());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid token "@u->" found.
-     */
     public function testThrowsAnExceptionWhenAnInvalidValueIsGiven()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid token "@u->" found.');
+
         $this->lexer->lex('@u->');
     }
 
@@ -76,12 +76,11 @@ class ReferenceLexerTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException
-     * @expectedExceptionMessage Could not lex the value "foo".
-     */
     public function testThrowsAnExceptionIfNoMatchingPatternFound()
     {
+        $this->expectException(LexException::class);
+        $this->expectExceptionMessage('Could not lex the value "foo".');
+
         $this->lexer->lex('foo');
     }
 

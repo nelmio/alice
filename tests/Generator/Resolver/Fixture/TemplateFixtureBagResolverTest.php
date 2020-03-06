@@ -25,6 +25,7 @@ use Nelmio\Alice\Definition\PropertyBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -309,10 +310,6 @@ class TemplateFixtureBagResolverTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
-     * @expectedExceptionMessage Could not find the fixture "user_base".
-     */
     public function testThrowsAnExceptionIfFixtureExtendsANonExistingFixture()
     {
         $unresolvedFixtures = (new FixtureBag())
@@ -334,13 +331,13 @@ class TemplateFixtureBagResolverTest extends TestCase
                 )
             )
         ;
+
+        $this->expectException(FixtureNotFoundException::class);
+        $this->expectExceptionMessage('Could not find the fixture "user_base".');
+
         $this->resolver->resolve($unresolvedFixtures);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Fixture "user0" extends "user_base" but "user_base" is not a template.
-     */
     public function testThrowsAnExceptionIfAFixtureExtendANonTemplateFixture()
     {
         $unresolvedFixtures = (new FixtureBag())
@@ -369,6 +366,10 @@ class TemplateFixtureBagResolverTest extends TestCase
                 )
             )
         ;
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Fixture "user0" extends "user_base" but "user_base" is not a template.');
+
         $this->resolver->resolve($unresolvedFixtures);
     }
 

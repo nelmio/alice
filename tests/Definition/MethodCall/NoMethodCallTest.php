@@ -33,43 +33,43 @@ class NoMethodCallTest extends TestCase
         $this->assertEquals('none', $call->__toString());
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::withArguments()" should not be called.
-     */
     public function testCannotCreateNewInstanceWithNewArguments()
     {
         $call = new NoMethodCall();
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::withArguments()" should not be called.');
+
         $call->withArguments();
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getCaller()" should not be called.
-     */
     public function testCannotGetCaller()
     {
         $call = new NoMethodCall();
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getCaller()" should not be called.');
+
         $call->getCaller();
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getMethod()" should not be called.
-     */
     public function testCannotGetMethod()
     {
         $call = new NoMethodCall();
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getMethod()" should not be called.');
+
         $call->getMethod();
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getArguments()" should not be called.
-     */
     public function testCannotGetArguments()
     {
         $call = new NoMethodCall();
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('By its nature, "Nelmio\Alice\Definition\MethodCall\NoMethodCall::getArguments()" should not be called.');
+
         $call->getArguments();
     }
 }

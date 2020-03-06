@@ -31,6 +31,7 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use PHPUnit\Framework\TestCase;
@@ -54,13 +55,13 @@ class SimpleHydratorTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Hydrator\SimpleHydrator::hydrate" to be called only if it has a resolver.
-     */
     public function testThrowsAnExceptionIfDoesNotHaveAResolver()
     {
         $hydrator = new SimpleHydrator(new FakePropertyHydrator());
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Hydrator\SimpleHydrator::hydrate" to be called only if it has a resolver.');
+
         $hydrator->hydrate(new FakeObject(), ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 

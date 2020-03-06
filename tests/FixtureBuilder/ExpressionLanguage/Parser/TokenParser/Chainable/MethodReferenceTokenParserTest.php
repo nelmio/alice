@@ -21,6 +21,8 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -50,34 +52,28 @@ class MethodReferenceTokenParserTest extends TestCase
         $this->assertFalse($parser->canParse($anotherToken));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\AbstractChainableParserAwareParser::parse" to be called only if it has a parser.
-     */
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
     {
         $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $parser = new MethodReferenceTokenParser();
 
+        $this->expectException(ParserNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\AbstractChainableParserAwareParser::parse" to be called only if it has a parser.');
+
         $parser->parse($token);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: METHOD_REFERENCE_TYPE).
-     */
     public function testThrowsAnExceptionIfCouldNotParseToken()
     {
         $token = new Token('', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
         $parser = new MethodReferenceTokenParser(new FakeParser());
 
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse the token "" (type: METHOD_REFERENCE_TYPE).');
+
         $parser->parse($token);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "@@malformed_user->getUserName(arg1, arg2)" (type: METHOD_REFERENCE_TYPE).
-     */
     public function testThrowsAnExceptionIfParsingReferenceGivesAnUnexpectedResult()
     {
         $token = new Token('@@malformed_user->getUserName(arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
@@ -93,13 +89,13 @@ class MethodReferenceTokenParserTest extends TestCase
         $decoratedParser = $decoratedParserProphecy->reveal();
 
         $parser = new MethodReferenceTokenParser($decoratedParser);
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse the token "@@malformed_user->getUserName(arg1, arg2)" (type: METHOD_REFERENCE_TYPE).');
+
         $parser->parse($token);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "@user->getUserName((arg1, arg2)" (type: METHOD_REFERENCE_TYPE).
-     */
     public function testThrowsAnExceptionIfParsingFunctionCallGivesAnUnexpectedResult()
     {
         $token = new Token('@user->getUserName((arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
@@ -117,6 +113,10 @@ class MethodReferenceTokenParserTest extends TestCase
         $decoratedParser = $decoratedParserProphecy->reveal();
 
         $parser = new MethodReferenceTokenParser($decoratedParser);
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse the token "@user->getUserName((arg1, arg2)" (type: METHOD_REFERENCE_TYPE).');
+
         $parser->parse($token);
     }
 

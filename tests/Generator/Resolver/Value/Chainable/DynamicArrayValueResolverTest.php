@@ -24,6 +24,7 @@ use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -76,14 +77,14 @@ class DynamicArrayValueResolverTest extends TestCase
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver::resolve" to be called only if it has a resolver.
-     */
     public function testCannotResolveValueIfHasNoResolver()
     {
         $value = new DynamicArrayValue(1, '');
         $resolver = new DynamicArrayValueResolver();
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver::resolve" to be called only if it has a resolver.');
+
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
@@ -111,10 +112,6 @@ class DynamicArrayValueResolverTest extends TestCase
         $resolver->resolve($value, $fixture, $set, $scope, $context);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected quantifier to be a positive integer. Got "-1" for "dummy", check you dynamic arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").
-     */
     public function testThrowsExceptionIfAnInvalidQuantifierIsGiven()
     {
         $quantifier = new FakeValue();
@@ -136,9 +133,11 @@ class DynamicArrayValueResolverTest extends TestCase
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
-        $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected quantifier to be a positive integer. Got "-1" for "dummy", check you dynamic arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").');
+
+        $resolver->resolve($value, $fixture, $set, $scope, $context);
     }
 
     public function testDoesNotResolveElementIfIsNotAValue()

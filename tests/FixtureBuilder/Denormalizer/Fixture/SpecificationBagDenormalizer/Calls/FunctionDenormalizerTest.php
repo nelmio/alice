@@ -131,10 +131,6 @@ class FunctionDenormalizerTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid constructor method "Invalid::method::reference".
-     */
     public function testThrowsExceptionIfInvalidConstructor()
     {
         $method = 'Invalid::method::reference';
@@ -144,6 +140,9 @@ class FunctionDenormalizerTest extends TestCase
         $argumentsDenormalizer = new FakeArgumentsDenormalizer();
 
         $denormalizer = new FunctionDenormalizer($argumentsDenormalizer);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid constructor method "Invalid::method::reference".');
 
         $denormalizer->denormalize($fixture, $flagParser, $method, $unparsedArguments);
     }

@@ -24,6 +24,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -130,10 +131,6 @@ class NoCallerMethodCallInstantiatorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate fixture "dummy".
-     */
     public function testThrowsAnExceptionIfCouldNotInstantiateObject()
     {
         $fixture = new SimpleFixture(
@@ -143,6 +140,9 @@ class NoCallerMethodCallInstantiatorTest extends TestCase
                 new SimpleMethodCall('fake', [10])
             )
         );
+
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate fixture "dummy".');
 
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }

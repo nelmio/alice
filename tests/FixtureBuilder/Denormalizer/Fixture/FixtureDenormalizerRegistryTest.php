@@ -22,6 +22,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use TypeError;
@@ -162,10 +163,6 @@ class FixtureDenormalizerRegistryTest extends TestCase
         $chainableDenormalizer2Prophecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
-     * @expectedExceptionMessage No suitable fixture denormalizer found to handle the fixture with the reference "user0".
-     */
     public function testThrowsExceptionIfNotSuitableDenormalizer()
     {
         $builtFixtures = new FixtureBag();
@@ -180,6 +177,10 @@ class FixtureDenormalizerRegistryTest extends TestCase
         $flagParser = $flagParserProphecy->reveal();
 
         $denormalizer = new FixtureDenormalizerRegistry($flagParser, []);
+
+        $this->expectException(DenormalizerNotFoundException::class);
+        $this->expectExceptionMessage('No suitable fixture denormalizer found to handle the fixture with the reference "user0".');
+
         $denormalizer->denormalize($builtFixtures, $className, $reference, $specs, $flags);
     }
 }

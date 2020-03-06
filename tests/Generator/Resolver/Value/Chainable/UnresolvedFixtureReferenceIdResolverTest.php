@@ -32,6 +32,8 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -77,14 +79,14 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
         $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver::resolve" to be called only if it has a resolver.
-     */
     public function testCannotResolveValueIfHasNoResolver()
     {
         $value = new FakeValue();
         $resolver = new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver());
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver::resolve" to be called only if it has a resolver.');
+
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
@@ -319,10 +321,6 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Expected fixture reference value "@bob" to be resolved into a string. Got "(integer) 200" instead.
-     */
     public function testThrowsAnExceptionIfResolvedIdIsInvalid()
     {
         $idValue = new DummyValue('bob');
@@ -348,6 +346,10 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver(), $valueResolver);
+
+        $this->expectException(UnresolvableValueException::class);
+        $this->expectExceptionMessage('Expected fixture reference value "@bob" to be resolved into a string. Got "(integer) 200" instead.');
+
         $resolver->resolve($value, $dummyFixture, $set, $scope, $context);
     }
 }

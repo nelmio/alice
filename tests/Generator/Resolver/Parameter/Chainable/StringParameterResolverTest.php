@@ -21,6 +21,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -263,10 +264,6 @@ class StringParameterResolverTest extends TestCase
         $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver::resolveStringKey" to be called only if it has a resolver.
-     */
     public function testThrowsAnExceptionIfNoResolverInjectedWhenRequired()
     {
         $parameter = new Parameter('foo', '<{bar}>');
@@ -276,6 +273,10 @@ class StringParameterResolverTest extends TestCase
         $resolvedParameters = new ParameterBag();
 
         $resolver = new StringParameterResolver();
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver::resolveStringKey" to be called only if it has a resolver.');
+
         $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
     }
 }

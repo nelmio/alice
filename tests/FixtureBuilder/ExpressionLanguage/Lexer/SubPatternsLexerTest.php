@@ -99,13 +99,13 @@ class SubPatternsLexerTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid token "<foo>" found.
-     */
     public function testThrowsAnExceptionWhenAnInvalidValueIsGiven()
     {
         $lexer = new SubPatternsLexer(new FakeLexer());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid token "<foo>" found.');
+
         $lexer->lex('<foo>');
     }
 

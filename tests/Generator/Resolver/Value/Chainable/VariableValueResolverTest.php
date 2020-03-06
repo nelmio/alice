@@ -21,6 +21,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -63,16 +64,16 @@ class VariableValueResolverTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not find a variable "$foo".
-     */
     public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope()
     {
         $value = new VariableValue('foo');
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new VariableValueResolver();
+
+        $this->expectException(UnresolvableValueException::class);
+        $this->expectExceptionMessage('Could not find a variable "$foo".');
+
         $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
     }
 }

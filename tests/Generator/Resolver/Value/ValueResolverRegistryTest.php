@@ -23,6 +23,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -43,11 +44,10 @@ class ValueResolverRegistryTest extends TestCase
         new ValueResolverRegistry([new FakeChainableValueResolver()]);
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testThrowExceptionIfInvalidParserIsPassed()
     {
+        $this->expectException(\TypeError::class);
+
         new ValueResolverRegistry([new stdClass()]);
     }
 
@@ -99,10 +99,6 @@ class ValueResolverRegistryTest extends TestCase
         $instantiator2Prophecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage No resolver found to resolve value "foo".
-     */
     public function testThrowExceptionIfNoSuitableParserIsFound()
     {
         $fixture = new DummyFixture('dummy');
@@ -110,6 +106,10 @@ class ValueResolverRegistryTest extends TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $registry = new ValueResolverRegistry([]);
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('No resolver found to resolve value "foo".');
+
         $registry->resolve(new DummyValue('foo'), $fixture, $set, [], new GenerationContext());
     }
 }

@@ -28,6 +28,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\DummyFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
 use Prophecy\Argument;
 use ReflectionClass;
 
@@ -57,16 +58,16 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $this->assertFalse((new ReflectionClass(SimpleDenormalizer::class))->isCloneable());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer::denormalize" to be called only if it has a flag parser.
-     */
     public function testCannotDenormalizeFixtureIfHasNoFlagParser()
     {
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $this->prophesize(SpecificationsDenormalizerInterface::class)->reveal();
 
         $denormalizer = new SimpleDenormalizer($specsDenormalizer);
+
+        $this->expectException(FlagParserNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer::denormalize" to be called only if it has a flag parser.');
+
         $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Alice\Entity\User', 'user0', [], new FlagBag(''));
     }
 
