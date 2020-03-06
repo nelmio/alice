@@ -24,7 +24,7 @@ class ParameterResolverIntegrationTest extends \Nelmio\Alice\Generator\Resolver\
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resolver = new IsolatedSymfonyParameterBagResolver();
     }

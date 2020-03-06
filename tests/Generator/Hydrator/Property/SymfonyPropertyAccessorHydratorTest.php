@@ -50,7 +50,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->propertyAccessor = new PropertyAccessor();
         $this->hydrator = new SymfonyPropertyAccessorHydrator($this->propertyAccessor);

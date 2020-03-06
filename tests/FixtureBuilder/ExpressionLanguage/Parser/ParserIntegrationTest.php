@@ -44,7 +44,7 @@ class ParserIntegrationTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = (new NativeLoader())->getExpressionLanguageParser();
     }

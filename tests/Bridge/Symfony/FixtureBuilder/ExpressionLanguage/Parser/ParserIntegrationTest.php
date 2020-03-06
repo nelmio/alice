@@ -25,7 +25,7 @@ class ParserIntegrationTest extends CoreParserIntegrationTest
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new IsolatedSymfonyBuiltInParser();
     }

@@ -25,7 +25,7 @@ class TemplateFlagParserTest extends FlagParserTestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new TemplateFlagParser();
     }

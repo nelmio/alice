@@ -39,7 +39,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->denormalizer = new SimpleDenormalizer(
             new DummySpecificationBagDenormalizer(),

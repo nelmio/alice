@@ -28,7 +28,7 @@ class PropertyBagTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $refl = new \ReflectionClass(PropertyBag::class);
         $propRefl = $refl->getProperty('properties');

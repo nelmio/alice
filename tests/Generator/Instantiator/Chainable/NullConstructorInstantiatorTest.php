@@ -41,7 +41,7 @@ class NullConstructorInstantiatorTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->instantiator = new NullConstructorInstantiator();
     }

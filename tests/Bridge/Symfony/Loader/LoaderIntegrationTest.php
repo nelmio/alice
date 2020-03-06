@@ -32,7 +32,7 @@ class LoaderIntegrationTest extends CoreLoaderIntegrationTest
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -42,7 +42,7 @@ class LoaderIntegrationTest extends CoreLoaderIntegrationTest
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         static::$kernel->boot();
 
@@ -52,7 +52,7 @@ class LoaderIntegrationTest extends CoreLoaderIntegrationTest
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         static::$kernel->shutdown();
     }
@@ -60,7 +60,7 @@ class LoaderIntegrationTest extends CoreLoaderIntegrationTest
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::$kernel = null;
 

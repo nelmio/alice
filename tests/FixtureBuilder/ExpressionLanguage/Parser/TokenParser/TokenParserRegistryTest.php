@@ -38,7 +38,7 @@ class TokenParserRegistryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parsersRefl = (new \ReflectionClass(TokenParserRegistry::class))->getProperty('parsers');
         $this->parsersRefl->setAccessible(true);

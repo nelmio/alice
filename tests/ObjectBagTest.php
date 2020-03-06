@@ -32,7 +32,7 @@ class ObjectBagTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->propRefl = (new \ReflectionClass(ObjectBag::class))->getProperty('objects');
         $this->propRefl->setAccessible(true);

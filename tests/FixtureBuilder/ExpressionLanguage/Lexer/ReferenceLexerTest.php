@@ -32,7 +32,7 @@ class ReferenceLexerTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->lexer = new ReferenceLexer();
     }

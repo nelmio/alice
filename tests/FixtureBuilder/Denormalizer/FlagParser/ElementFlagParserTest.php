@@ -25,7 +25,7 @@ class ElementFlagParserTest extends FlagParserTestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new ElementFlagParser(new ElementParser());
     }

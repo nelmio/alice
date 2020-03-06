@@ -47,7 +47,7 @@ class TemplateFixtureBagResolverTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(TemplatingFixture::class))->getProperty('fixture');
         $this->propRefl->setAccessible(true);

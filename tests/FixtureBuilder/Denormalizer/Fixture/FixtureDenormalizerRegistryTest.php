@@ -39,7 +39,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $propRelf = (new \ReflectionClass(FixtureDenormalizerRegistry::class))->getProperty('denormalizers');
         $propRelf->setAccessible(true);
@@ -78,7 +78,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
             );
         }
     }
-    
+
     public function testInjectsParserInParserAwareDenormalizersAndItselfInDenormalizerAwareDenormalizers()
     {
         $flagParser = new FakeFlagParser();
@@ -110,7 +110,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
         $this->assertNotNull($actualDenormalizers[1]->parser);
         $this->assertSame($denormalizer, $denormalizerAwareDenormalizer->denormalizer);
     }
-    
+
     public function testUsesTheFirstSuitableDenormalizer()
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
@@ -134,7 +134,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
         $chainableDenormalizer1Prophecy->canDenormalize($reference)->willReturn(false);
         /** @var ChainableFixtureDenormalizerInterface $chainableDenormalizer1 */
         $chainableDenormalizer1 = $chainableDenormalizer1Prophecy->reveal();
-        
+
         $chainableDenormalizer2Prophecy = $this->prophesize(ChainableFixtureDenormalizerInterface::class);
         $chainableDenormalizer2Prophecy->canDenormalize($reference)->willReturn(true);
         $chainableDenormalizer2Prophecy->denormalize($builtFixtures, $className, $reference, $specs, $flags)->willReturn($expected);

@@ -30,7 +30,7 @@ class SimpleObjectTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->propRefl = (new \ReflectionClass(SimpleObject::class))->getProperty('instance');
         $this->propRefl->setAccessible(true);

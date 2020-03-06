@@ -29,7 +29,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->denormalizer = new NullListNameDenormalizer();
     }

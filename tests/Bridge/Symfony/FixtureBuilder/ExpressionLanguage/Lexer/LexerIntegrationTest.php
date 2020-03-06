@@ -27,7 +27,7 @@ class LexerIntegrationTest extends CoreLexerIntegrationTest
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->lexer = new IsolatedSymfonyBuiltInLexer();
     }

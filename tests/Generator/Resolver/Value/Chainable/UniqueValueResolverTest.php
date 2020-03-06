@@ -47,7 +47,7 @@ class UniqueValueResolverTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $reflClass = new \ReflectionClass(UniqueValueResolver::class);
 
