@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,12 +42,11 @@ class ParameterBagTest extends TestCase
         $this->assertBagSize(2, $bag);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\ParameterNotFoundException
-     * @expectedExceptionMessage Could not find the parameter "foo".
-     */
     public function testThrowsAnExceptionWhenATryingToGetAnInexistingParameter()
     {
+        $this->expectException(ParameterNotFoundException::class);
+        $this->expectExceptionMessage('Could not find the parameter "foo".');
+
         $bag = new ParameterBag();
         $bag->get('foo');
     }

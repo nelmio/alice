@@ -36,12 +36,11 @@ class CallsWithFlagsDenormalizerTest extends TestCase
         $this->assertFalse((new ReflectionClass(CallsWithFlagsDenormalizer::class))->isCloneable());
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /must be an instance of Nelmio\\Alice\\FixtureBuilder\\Denormalizer\\Fixture\\SpecificationBagDenormalizer\\Calls\\MethodFlagHandler\, instance of stdClass given/
-     */
     public function testCannotAcceptInvalidMethodHandlers()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/must be an instance of Nelmio\\\\Alice\\\\FixtureBuilder\\\\Denormalizer\\\\Fixture\\\\SpecificationBagDenormalizer\\\\Calls\\\\MethodFlagHandler, instance of stdClass given/');
+
         new CallsWithFlagsDenormalizer(
             new FakeCallsDenormalizer(),
             [
@@ -132,11 +131,11 @@ class CallsWithFlagsDenormalizerTest extends TestCase
         ;
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
-        
+
         $returnMethodUnchanged = function (array $args) {
             return $args[0];
         };
-        
+
         $dummyFlagMethodHandlerProphecy = $this->prophesize(MethodFlagHandler::class);
         $dummyFlagMethodHandlerProphecy
             ->handleMethodFlags(

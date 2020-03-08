@@ -27,6 +27,7 @@ use Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndOptionalParamet
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -43,7 +44,7 @@ class StaticFactoryInstantiatorTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->instantiator = new StaticFactoryInstantiator();
     }
@@ -156,10 +157,6 @@ class StaticFactoryInstantiatorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate fixture "dummy".
-     */
     public function testThrowsAnExceptionIfCouldNotInstantiateObject()
     {
         $fixture = new SimpleFixture(
@@ -173,13 +170,12 @@ class StaticFactoryInstantiatorTest extends TestCase
             )
         );
 
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate fixture "dummy".');
+
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate fixture "dummy".
-     */
     public function testThrowsAnExceptionIfCouldNotFindFactoryMethod()
     {
         $fixture = new SimpleFixture(
@@ -193,13 +189,12 @@ class StaticFactoryInstantiatorTest extends TestCase
             )
         );
 
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate fixture "dummy".');
+
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate fixture "dummy".
-     */
     public function testThrowsAnExceptionIfCouldNotFindFactoryClass()
     {
         $fixture = new SimpleFixture(
@@ -213,13 +208,12 @@ class StaticFactoryInstantiatorTest extends TestCase
             )
         );
 
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate fixture "dummy".');
+
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate fixture "dummy".
-     */
     public function testThrowsAnExceptionIfCouldNotCallOnTheFactory()
     {
         $fixture = new SimpleFixture(
@@ -234,13 +228,12 @@ class StaticFactoryInstantiatorTest extends TestCase
             )
         );
 
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate fixture "dummy".');
+
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Instantiated fixture was expected to be an instance of "Dummy". Got "Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndOptionalParameters" instead.
-     */
     public function testThrowsAnExceptionIfFixtureClassDoesNotMatchObjectClass()
     {
         $fixture = new SimpleFixture(
@@ -254,18 +247,13 @@ class StaticFactoryInstantiatorTest extends TestCase
                 )
             )
         );
-        $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
-        $expected = DummyWithNamedConstructorAndOptionalParameters::namedConstruct(10);
-        $actual = $set->getObjects()->get($fixture)->getInstance();
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Instantiated fixture was expected to be an instance of "Dummy". Got "Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndOptionalParameters" instead.');
 
-        $this->assertEquals($expected, $actual);
+        $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Instantiated fixture was expected to be an instance of "Nelmio\Alice\Entity\Instantiator\DummyWithFakeNamedConstructor". Got "null" instead.
-     */
     public function testThrowsAnExceptionIfFactoryDoesNotReturnAnInstance()
     {
         $fixture = new SimpleFixture(
@@ -278,6 +266,9 @@ class StaticFactoryInstantiatorTest extends TestCase
                 )
             )
         );
+
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Instantiated fixture was expected to be an instance of "Nelmio\Alice\Entity\Instantiator\DummyWithFakeNamedConstructor". Got "null" instead.');
 
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }

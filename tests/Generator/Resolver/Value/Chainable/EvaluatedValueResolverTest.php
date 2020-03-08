@@ -86,10 +86,6 @@ class EvaluatedValueResolverTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not evaluate the expression "(function () { throw new \Exception(""); })()".
-     */
     public function testThrowsAnExceptionIfAnErrorOccurredDuringEvaluation()
     {
         $value = new EvaluatedValue('(function () { throw new \\Exception(""); })()');
@@ -97,6 +93,10 @@ class EvaluatedValueResolverTest extends TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new EvaluatedValueResolver();
+
+        $this->expectException(UnresolvableValueException::class);
+        $this->expectExceptionMessage('Could not evaluate the expression "(function () { throw new \Exception(""); })()".');
+
         $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
     }
 

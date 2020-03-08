@@ -35,7 +35,7 @@ class PhpParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -45,7 +45,7 @@ class PhpParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$dir = null;
 
@@ -55,7 +55,7 @@ class PhpParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new PhpParser();
     }
@@ -111,12 +111,11 @@ class PhpParserTest extends TestCase
         $this->assertFalse($actual);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The file "/nowhere.php" could not be found.
-     */
     public function testThrowsAnExceptionIfFileDoesNotExist()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The file "/nowhere.php" could not be found.');
+
         $this->parser->parse('/nowhere.php');
     }
 
@@ -143,21 +142,19 @@ class PhpParserTest extends TestCase
         $this->assertSame([], $actual);
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /^The file ".+\/no_return\.php" must return a PHP array\.$/
-     */
     public function testThrowsAnExceptionIfNoArrayReturnedInParsedFile()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/^The file ".+\/no_return\.php" must return a PHP array\.$/');
+
         $this->parser->parse(self::$dir.'/no_return.php');
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /^The file ".+\/wrong_return\.php" must return a PHP array\.$/
-     */
     public function testThrowsAnExceptionIfWrongValueReturnedInParsedFile()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/^The file ".+\/wrong_return\.php" must return a PHP array\.$/');
+
         $this->parser->parse(self::$dir.'/wrong_return.php');
     }
 }

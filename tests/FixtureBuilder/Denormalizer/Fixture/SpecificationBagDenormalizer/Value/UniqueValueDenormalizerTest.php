@@ -24,6 +24,7 @@ use Nelmio\Alice\Definition\Value\DynamicArrayValue;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -115,10 +116,6 @@ class UniqueValueDenormalizerTest extends TestCase
         $this->assertEquals('parsed_value', $result->getElement()->getValue());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException
-     * @expectedExceptionMessage Cannot bind a unique value scope to a temporary fixture.
-     */
     public function testThrowsAnExceptionIsATemporaryFixtureWithAUniqueValue()
     {
         $fixture = new SimpleFixture(uniqid('temporary_id'), 'Dummy', SpecificationBagFactory::create());
@@ -135,6 +132,10 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
         $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
+
+        $this->expectException(InvalidScopeException::class);
+        $this->expectExceptionMessage('Cannot bind a unique value scope to a temporary fixture.');
+
         $denormalizer->denormalize($fixture, $flags, $value);
     }
 

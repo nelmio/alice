@@ -65,10 +65,6 @@ final class Reference
                     '0',
                     new FlagBag('0'),
                 ],
-                'with an numeric index' => [
-                    0,
-                    new FlagBag('0'),
-                ],
             ],
             'malformed-element' => [
                 'non-empty string with empty flags' => [

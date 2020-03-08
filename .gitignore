@@ -9,3 +9,4 @@
 /vendor-bin/*/composer.lock
 /humbuglog.json
 /humbuglog.txt
+/.phpunit.result.cache

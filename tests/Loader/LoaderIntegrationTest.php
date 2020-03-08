@@ -22,10 +22,12 @@ use Nelmio\Alice\FilesLoaderInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use Nelmio\Alice\Throwable\Exception\Generator\DebugUnexpectedValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException;
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
+use Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\User;
 use Nelmio\Alice\UserDetail;
@@ -56,7 +58,7 @@ class LoaderIntegrationTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->loader = new IsolatedLoader();
         $this->nonIsolatedLoader = new NativeLoader();
@@ -146,30 +148,27 @@ class LoaderIntegrationTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The file "unknown.yml" could not be found.
-     */
     public function testLoadInexistingFile()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The file "unknown.yml" could not be found.');
+
         $this->loader->loadFile('unknown.yml');
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException
-     * @expectedExceptionMessageRegExp /^No suitable parser found for the file ".*?plain_file"\.$/
-     */
     public function testLoadUnsupportedFileFormat()
     {
+        $this->expectException(ParserNotFoundException::class);
+        $this->expectExceptionMessageRegExp('/^No suitable parser found for the file ".*?plain_file"\.$/');
+
         $this->loader->loadFile(self::PARSER_FILES_DIR.'/unsupported/plain_file');
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /^The file ".*?no_return.php" must return a PHP array\.$/
-     */
     public function testLoadPhpFileWhichDoesNotReturnAnything()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/^The file ".*?no_return.php" must return a PHP array\.$/');
+
         $this->loader->loadFile(self::PARSER_FILES_DIR.'/php/no_return.php');
     }
 
@@ -249,12 +248,11 @@ class LoaderIntegrationTest extends TestCase
         $this->assertEquals($expected, $objects['dummy']);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Cannot use the fixture property "__construct" and "__factory" together.
-     */
     public function testCannotUseBothConstructAndFactoryAtTheSameTime()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot use the fixture property "__construct" and "__factory" together.');
+
         $this->loader->loadData([
             stdClass::class => [
                 'dummy' => [
@@ -1259,10 +1257,6 @@ class LoaderIntegrationTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureNotFoundException
-     * @expectedExceptionMessage Could not find the fixture "unknown".
-     */
     public function testThrowsAnExceptionIfInheritFromAnNonExistingFixture()
     {
         $data = [
@@ -1270,13 +1264,13 @@ class LoaderIntegrationTest extends TestCase
                 'dummy (extends unknown)' => [],
             ],
         ];
+
+        $this->expectException(FixtureNotFoundException::class);
+        $this->expectExceptionMessage('Could not find the fixture "unknown".');
+
         $this->loader->loadData($data);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Fixture "dummy" extends "another_dummy" but "another_dummy" is not a template.
-     */
     public function testThrowsAnExceptionIfInheritFromAnInexistingTemplate()
     {
         $data = [
@@ -1285,6 +1279,10 @@ class LoaderIntegrationTest extends TestCase
                 'dummy (extends another_dummy)' => [],
             ],
         ];
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Fixture "dummy" extends "another_dummy" but "another_dummy" is not a template.');
+
         $this->loader->loadData($data);
     }
 
@@ -1516,15 +1514,6 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             FixtureEntity\Instantiator\DummyWithNamedConstructor::namedConstruct(),
-        ];
-
-        yield 'with default constructor and optional parameters without parameters - use constructor function' => [
-            [
-                FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor::class => [
-                    'dummy' => [],
-                ],
-            ],
-            new FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor(),
         ];
 
         yield 'with default constructor and optional parameters without parameters - use constructor function' => [
@@ -2656,30 +2645,6 @@ class LoaderIntegrationTest extends TestCase
             ],
         ];
 
-        yield 'array value' => [
-            [
-                stdClass::class => [
-                    'dummy' => [
-                        'foo' => 'bar',
-                    ],
-                    'another_dummy' => [
-                        'dummies' => ['@dummy', '@dummy', '@dummy'],
-                    ],
-                ],
-            ],
-            [
-                'parameters' => [],
-                'objects' => [
-                    'dummy' => $dummy = StdClassFactory::create([
-                        'foo' => 'bar',
-                    ]),
-                    'another_dummy' => StdClassFactory::create([
-                        'dummies' => [$dummy, $dummy, $dummy]
-                    ]),
-                ],
-            ],
-        ];
-
         yield 'dynamic array value with wildcard' => [
             [
                 stdClass::class => [
@@ -2952,50 +2917,6 @@ class LoaderIntegrationTest extends TestCase
                         'foo' => 'bar_baz',
                         'identity_foo' => 'bar baz',
                     ]),
-                ],
-            ],
-        ];
-
-        yield '[self reference] alone' => [
-            [
-                stdClass::class => [
-                    'dummy' => [
-                        'itself' => '@self',
-                    ],
-                ],
-            ],
-            [
-                'parameters' => [],
-                'objects' => [
-                    'dummy' => (function () {
-                        $dummy = new stdClass();
-                        $dummy->itself = $dummy;
-
-                        return $dummy;
-                    })(),
-                ],
-            ],
-        ];
-
-        yield '[self reference] property' => [
-            [
-                stdClass::class => [
-                    'dummy' => [
-                        'foo' => 'bar',
-                        'itself' => '@self',
-                    ],
-                ],
-            ],
-            [
-                'parameters' => [],
-                'objects' => [
-                    'dummy' => (function () {
-                        $dummy = new stdClass();
-                        $dummy->foo = 'bar';
-                        $dummy->itself = $dummy;
-
-                        return $dummy;
-                    })(),
                 ],
             ],
         ];
@@ -3665,26 +3586,6 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => FixtureEntity\Caller\Dummy::create('Fake Title', 2),
-                ],
-            ],
-        ];
-
-        yield '[current] in method calls' => [
-            [
-                FixtureEntity\Caller\Dummy::class => [
-                    'dummy_{1..2}' => [
-                        '__calls' => [
-                            ['setTitle' => ['Fake Title <current()>']],
-                            ['addFoo' => []],
-                        ]
-                    ]
-                ]
-            ],
-            [
-                'parameters' => [],
-                'objects' => [
-                    'dummy_1' => FixtureEntity\Caller\Dummy::create('Fake Title 1', 1),
-                    'dummy_2' => FixtureEntity\Caller\Dummy::create('Fake Title 2', 1),
                 ],
             ],
         ];

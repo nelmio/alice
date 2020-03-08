@@ -30,7 +30,7 @@ class SimpleObjectTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->propRefl = (new \ReflectionClass(SimpleObject::class))->getProperty('instance');
         $this->propRefl->setAccessible(true);
@@ -88,12 +88,12 @@ class SimpleObjectTest extends TestCase
 
     /**
      * @dataProvider provideInvalidInstances
-     *
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /^Expected instance argument to be an object. Got ".+?" instead\.$/
      */
     public function testThrowsAnErrorIfInstanceIsNotAnObject($instance)
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/^Expected instance argument to be an object. Got ".+?" instead\.$/');
+
         new SimpleObject('user0', $instance);
     }
 

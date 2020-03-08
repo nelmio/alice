@@ -16,6 +16,7 @@ namespace Nelmio\Alice;
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Entity\StdClassFactory;
+use Nelmio\Alice\Throwable\Exception\ObjectNotFoundException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -32,7 +33,7 @@ class ObjectBagTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->propRefl = (new \ReflectionClass(ObjectBag::class))->getProperty('objects');
         $this->propRefl->setAccessible(true);
@@ -78,12 +79,11 @@ class ObjectBagTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Reference key mismatch, the keys "foo" and "bar" refers to the same fixture but the keys are different.
-     */
     public function testThrowsAnExceptionIfAReferenceMismatchIsFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Reference key mismatch, the keys "foo" and "bar" refers to the same fixture but the keys are different.');
+
         new ObjectBag([
             'foo' => new CompleteObject(new SimpleObject('bar', new stdClass())),
         ]);
@@ -124,12 +124,11 @@ class ObjectBagTest extends TestCase
         $this->assertFalse($bag->has($inexistingReference));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\ObjectNotFoundException
-     * @expectedExceptionMessage Could not find the object "foo" of the class "Dummy".
-     */
     public function testThrowsExceptionWhenTryingToGetInexistingObject()
     {
+        $this->expectException(ObjectNotFoundException::class);
+        $this->expectExceptionMessage('Could not find the object "foo" of the class "Dummy".');
+
         $bag = new ObjectBag();
         $bag->get($this->createFixture('foo', 'Dummy'));
     }

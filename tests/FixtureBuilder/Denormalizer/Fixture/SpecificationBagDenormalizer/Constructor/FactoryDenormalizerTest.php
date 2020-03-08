@@ -19,6 +19,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\CallsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -32,10 +33,6 @@ class FactoryDenormalizerTest extends TestCase
         $this->assertFalse((new ReflectionClass(FactoryDenormalizer::class))->isCloneable());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
-     * @expectedExceptionMessage Could not denormalize the given factory.
-     */
     public function testCannotDenormalizeEmptyFactory()
     {
         $factory = [];
@@ -46,13 +43,12 @@ class FactoryDenormalizerTest extends TestCase
             new FakeCallsDenormalizer()
         );
 
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Could not denormalize the given factory.');
+
         $denormalizer->denormalize($fixture, $flagParser, $factory);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
-     * @expectedExceptionMessage Could not denormalize the given factory.
-     */
     public function testCannotDenormalizeFactoryWithMultipleNames()
     {
         $factory = [
@@ -66,13 +62,12 @@ class FactoryDenormalizerTest extends TestCase
             new FakeCallsDenormalizer()
         );
 
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Could not denormalize the given factory.');
+
         $denormalizer->denormalize($fixture, $flagParser, $factory);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
-     * @expectedExceptionMessage Could not denormalize the given factory.
-     */
     public function testCannotDenormalizeFactoryWithNoFactoryName()
     {
         $factory = [
@@ -84,6 +79,9 @@ class FactoryDenormalizerTest extends TestCase
         $denormalizer = new FactoryDenormalizer(
             new FakeCallsDenormalizer()
         );
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Could not denormalize the given factory.');
 
         $denormalizer->denormalize($fixture, $flagParser, $factory);
     }

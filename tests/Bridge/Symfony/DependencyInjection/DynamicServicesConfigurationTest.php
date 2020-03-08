@@ -36,7 +36,7 @@ class DynamicServicesConfigurationTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->kernel = KernelFactory::createKernel(__DIR__.'/../../../../fixtures/Bridge/Symfony/Application/config_custom.yml');
         $this->kernel->boot();
@@ -45,7 +45,7 @@ class DynamicServicesConfigurationTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (null !== $this->kernel) {
             $this->kernel->shutdown();

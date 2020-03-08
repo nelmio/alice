@@ -41,7 +41,7 @@ class AbstractChainableInstantiatorTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->instantiator = new DummyChainableInstantiator();
     }
@@ -81,10 +81,6 @@ class AbstractChainableInstantiatorTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage custom exception
-     */
     public function testIfCannotCreateInstanceAndExceptionThrownIsAnInstantiationExceptionThenItLetsTheExceptionPass()
     {
         $fixture = new DummyFixture('dummy');
@@ -96,6 +92,10 @@ class AbstractChainableInstantiatorTest extends TestCase
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
         $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
+
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('custom exception');
+
         $instantiator->instantiate($fixture, $set, new GenerationContext());
     }
 

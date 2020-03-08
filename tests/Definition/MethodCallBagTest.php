@@ -30,7 +30,7 @@ class MethodCallBagTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $refl = new \ReflectionClass(MethodCallBag::class);
         $propRefl = $refl->getProperty('methodCalls');

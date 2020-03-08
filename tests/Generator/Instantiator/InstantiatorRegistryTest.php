@@ -22,6 +22,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -42,11 +43,10 @@ class InstantiatorRegistryTest extends TestCase
         new InstantiatorRegistry([new FakeChainableInstantiator()]);
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testThrowExceptionIfInvalidParserIsPassed()
     {
+        $this->expectException(\TypeError::class);
+
         new InstantiatorRegistry([new stdClass()]);
     }
 
@@ -141,10 +141,6 @@ class InstantiatorRegistryTest extends TestCase
         $instantiator2Prophecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException
-     * @expectedExceptionMessage No suitable instantiator found for the fixture "dummy".
-     */
     public function testThrowExceptionIfNoSuitableParserIsFound()
     {
         $fixture = new DummyFixture('dummy');
@@ -152,6 +148,10 @@ class InstantiatorRegistryTest extends TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $registry = new InstantiatorRegistry([]);
+
+        $this->expectException(InstantiatorNotFoundException::class);
+        $this->expectExceptionMessage('No suitable instantiator found for the fixture "dummy".');
+
         $registry->instantiate($fixture, $set, new GenerationContext());
     }
 }

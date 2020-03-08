@@ -85,10 +85,6 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $this->assertEquals('Hello ', substr($result->getValue(), 0, 6));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown formatter "unknown"
-     */
     public function testThrowsAnExceptionIfTriesToCallAnUndefinedProviderFunction()
     {
         $value = new ResolvedFunctionCallValue('unknown');
@@ -96,6 +92,10 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown formatter "unknown"');
+
         $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
     }
 }

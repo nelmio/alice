@@ -35,7 +35,7 @@ class LexerIntegrationTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->lexer = (new NativeLoader())->getLexer();
     }
@@ -180,7 +180,7 @@ class LexerIntegrationTest extends TestCase
                 new Token('@', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
-        yield '[Escape character] with empty reference' => [
+        yield '[Escape character] triple escape with empty reference' => [
             '\\\\\\@',
             [
                 new Token('\\\\', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
@@ -231,7 +231,7 @@ class LexerIntegrationTest extends TestCase
                 new Token('\%', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
-        yield '[Escaped percent sign]' => [
+        yield '[Escaped percent sign] in string' => [
             'a\%b',
             [
                 new Token('a', new TokenType(TokenType::STRING_TYPE)),
@@ -239,7 +239,7 @@ class LexerIntegrationTest extends TestCase
                 new Token('b', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
-        yield '[Escaped percent sign]' => [
+        yield '[Escaped percent sign] with number' => [
             '100\%',
             [
                 new Token('100', new TokenType(TokenType::STRING_TYPE)),

@@ -29,6 +29,9 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
+use Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -67,13 +70,13 @@ class FixtureReferenceResolverTest extends TestCase
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver::resolve" to be called only if it has a generator.
-     */
     public function testCannotResolveValueIfHasNoGenerator()
     {
         $resolver = new FixtureReferenceResolver();
+
+        $this->expectException(ObjectGeneratorNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver::resolve" to be called only if it has a generator.');
+
         $resolver->resolve(
             new FakeValue(),
             new FakeFixture(),
@@ -83,13 +86,13 @@ class FixtureReferenceResolverTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not resolve value "@foo".
-     */
     public function testCannotResolveReferenceIsTheReferenceIsAValue()
     {
         $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
+
+        $this->expectException(UnresolvableValueException::class);
+        $this->expectExceptionMessage('Could not resolve value "@foo".');
+
         $resolver->resolve(
             new FixtureReferenceValue(new DummyValue('foo')),
             new FakeFixture(),
@@ -223,10 +226,6 @@ class FixtureReferenceResolverTest extends TestCase
         $generatorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundException
-     * @expectedExceptionMessage Could not find the fixture "dummy".
-     */
     public function testIfTheReferenceRefersToANonExistentFixtureAndNoInstanceIsAvailableThenThrowsAnException()
     {
         $value = new FixtureReferenceValue('dummy');
@@ -236,6 +235,10 @@ class FixtureReferenceResolverTest extends TestCase
         $context = new GenerationContext();
 
         $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
+
+        $this->expectException(FixtureNotFoundException::class);
+        $this->expectExceptionMessage('Could not find the fixture "dummy".');
+
         $resolver->resolve($value, $fixture, $set, $scope, $context);
     }
 }

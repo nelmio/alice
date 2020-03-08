@@ -29,6 +29,7 @@ use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -68,14 +69,14 @@ class FixturePropertyReferenceResolverTest extends TestCase
         $this->assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver::resolve" to be called only if it has a resolver.
-     */
     public function testCannotResolveValueIfHasNoResolver()
     {
         $value = new FixturePropertyValue(new FakeValue(), '');
         $resolver = new FixturePropertyReferenceResolver(new FakePropertyAccessor());
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver::resolve" to be called only if it has a resolver.');
+
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
@@ -195,10 +196,6 @@ class FixturePropertyReferenceResolverTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not resolve value "dummy->publicProperty": PropertyAccessor requires a graph of objects or arrays to operate on, but it found type "string" while trying to traverse path "publicProperty" at property "publicProperty".
-     */
     public function testThrowsAnExceptionIfReferenceResolvedIsNotAnObject()
     {
         $value = new FixturePropertyValue(
@@ -222,6 +219,10 @@ class FixturePropertyReferenceResolverTest extends TestCase
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixturePropertyReferenceResolver(PropertyAccess::createPropertyAccessor(), $valueResolver);
+
+        $this->expectException(UnresolvableValueException::class);
+        $this->expectExceptionMessage('Could not resolve value "dummy->publicProperty": PropertyAccessor requires a graph of objects or arrays to operate on, but it found type "string" while trying to traverse path "publicProperty" at property "publicProperty".');
+
         $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
     }
 

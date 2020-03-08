@@ -66,13 +66,13 @@ class GlobalPatternsLexerTest extends TestCase
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid token "foo 10x @users" found.
-     */
     public function testThrowsAnExceptionWhenInvalidValue()
     {
         $lexer = new GlobalPatternsLexer(new FakeLexer());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid token "foo 10x @users" found.');
+
         $lexer->lex('foo 10x @users');
     }
 }

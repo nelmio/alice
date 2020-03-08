@@ -16,6 +16,8 @@ namespace Nelmio\Alice\Generator\Resolver;
 use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
+use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,7 +34,7 @@ class ParameterResolverIntegrationTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resolver = (new NativeLoader())->getParameterResolver();
     }
@@ -52,20 +54,19 @@ class ParameterResolverIntegrationTest extends TestCase
 
     /**
      * @dataProvider provideCircularReferences
-     *
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException
-     * @expectedExceptionMessageRegExp /^Circular reference detected for the parameter "[^\"]+" while resolving \[.+]\.$/
      */
     public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null)
     {
+        $this->expectException(CircularReferenceException::class);
+        $this->expectExceptionMessageRegExp('/^Circular reference detected for the parameter "[^\"]+" while resolving \[.+]\.$/');
+
         $this->resolver->resolve($unresolvedParameters, $injectedParameters);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\ParameterNotFoundException
-     */
     public function testThrowExceptionWhenResolvingNonExistentParameter()
     {
+        $this->expectException(ParameterNotFoundException::class);
+
         $this->resolver->resolve(
             new ParameterBag([
                 'param1' => '<{inexisting_param}>',

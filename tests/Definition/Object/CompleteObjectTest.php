@@ -127,13 +127,12 @@ class CompleteObjectTest extends TestCase
         $this->assertEquals(new \stdClass(), $clone->getInstance());
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Cannot create a new object from a complete object.
-     */
     public function testCannotCreateANewInstance()
     {
         $object = new CompleteObject(new FakeObject());
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot create a new object from a complete object.');
 
         $object->withInstance(null);
     }

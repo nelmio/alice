@@ -41,7 +41,7 @@ class NullConstructorInstantiatorTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->instantiator = new NullConstructorInstantiator();
     }
@@ -74,13 +74,13 @@ class NullConstructorInstantiatorTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate fixture "dummy".
-     */
     public function testThrowsAnExceptionIfInstantiatingObjectWithoutArgumentsFails()
     {
         $fixture = new SimpleFixture('dummy', AbstractDummy::class, SpecificationBagFactory::create());
+
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate fixture "dummy".');
+
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
@@ -101,43 +101,43 @@ class NullConstructorInstantiatorTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate "dummy", the constructor has mandatory parameters but no parameters have been given.
-     */
     public function testThrowsAnExceptionIfObjectConstructorHasMandatoryParameters()
     {
         $fixture = new SimpleFixture('dummy', DummyWithRequiredParameterInConstructor::class, SpecificationBagFactory::create());
+
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate "dummy", the constructor has mandatory parameters but no parameters have been given.');
+
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate fixture "dummy".
-     */
     public function testThrowsAnExceptionIfObjectInstantiationFailsUnderNominalConditions()
     {
         $fixture = new SimpleFixture('dummy', DummyWithExplicitDefaultConstructorThrowingException::class, SpecificationBagFactory::create());
+
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate fixture "dummy".');
+
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate "dummy", the constructor of "Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor" is not public.
-     */
     public function testThrowsAnExceptionIfObjectConstructorIsPrivate()
     {
         $fixture = new SimpleFixture('dummy', DummyWithPrivateConstructor::class, SpecificationBagFactory::create());
+
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate "dummy", the constructor of "Nelmio\Alice\Entity\Instantiator\DummyWithPrivateConstructor" is not public.');
+
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
-     * @expectedExceptionMessage Could not instantiate "dummy", the constructor of "Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor" is not public.
-     */
     public function testThrowsAnExceptionIfObjectConstructorIsProtected()
     {
         $fixture = new SimpleFixture('dummy', DummyWithProtectedConstructor::class, SpecificationBagFactory::create());
+
+        $this->expectException(InstantiationException::class);
+        $this->expectExceptionMessage('Could not instantiate "dummy", the constructor of "Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor" is not public.');
+
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 }

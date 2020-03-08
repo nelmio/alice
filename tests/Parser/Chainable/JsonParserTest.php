@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Parser\Chainable;
 
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
+use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -35,7 +36,7 @@ class JsonParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -45,7 +46,7 @@ class JsonParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$dir = null;
 
@@ -55,7 +56,7 @@ class JsonParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new JsonParser();
     }
@@ -111,12 +112,11 @@ class JsonParserTest extends TestCase
         $this->assertFalse($actual);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The file "/nowhere.json" could not be found.
-     */
     public function testThrowsAnExceptionIfFileDoesNotExist()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The file "/nowhere.json" could not be found.');
+
         $this->parser->parse('/nowhere.json');
     }
 
@@ -143,12 +143,11 @@ class JsonParserTest extends TestCase
         $this->assertSame([], $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException
-     * @expectedExceptionMessageRegExp /^The file ".+\/invalid\.json" does not contain valid JSON\.$/
-     */
     public function testThrowsAnExceptionIfInvalidJson()
     {
+        $this->expectException(UnparsableFileException::class);
+        $this->expectExceptionMessageRegExp('/^The file ".+\/invalid\.json" does not contain valid JSON\.$/');
+
         $this->parser->parse(self::$dir.'/invalid.json');
     }
 }

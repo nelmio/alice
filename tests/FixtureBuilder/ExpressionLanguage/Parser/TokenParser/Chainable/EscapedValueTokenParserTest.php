@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -45,15 +46,15 @@ class EscapedValueTokenParserTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
-     * @expectedExceptionMessage Could not parse the token "" (type: ESCAPED_VALUE_TYPE).
-     */
     public function testThrowsAnExceptionIfAMalformedTokenIsGiven()
     {
         $token = new Token('', new TokenType(TokenType::ESCAPED_VALUE_TYPE));
 
         $parser = new EscapedValueTokenParser();
+
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage('Could not parse the token "" (type: ESCAPED_VALUE_TYPE).');
+
         $parser->parse($token);
     }
 

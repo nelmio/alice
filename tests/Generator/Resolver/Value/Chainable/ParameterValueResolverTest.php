@@ -21,6 +21,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -62,16 +63,16 @@ class ParameterValueResolverTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
-     * @expectedExceptionMessage Could not find the parameter "foo".
-     */
     public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope()
     {
         $value = new ParameterValue('foo');
         $set = ResolvedFixtureSetFactory::create();
 
         $resolver = new ParameterValueResolver();
+
+        $this->expectException(UnresolvableValueException::class);
+        $this->expectExceptionMessage('Could not find the parameter "foo".');
+
         $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
     }
 }

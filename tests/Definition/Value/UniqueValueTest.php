@@ -39,13 +39,13 @@ class UniqueValueTest extends TestCase
         $this->assertEquals($value, $definition->getValue());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot create a unique value of a unique value for value "".
-     */
     public function testCannotCreateUniqueOfUniqueValue()
     {
         $definition = new UniqueValue('', new \stdClass());
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot create a unique value of a unique value for value "".');
+
         new UniqueValue('', $definition);
     }
 

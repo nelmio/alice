@@ -28,7 +28,7 @@ class TokenTypeTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $reflClass = new \ReflectionClass(TokenType::class);
         $this->constants = $reflClass->getConstants();
@@ -65,12 +65,11 @@ class TokenTypeTest extends TestCase
         $this->assertEquals($type->getValue(), constant(sprintf('%s::%s', TokenType::class, $typeConstant)));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Expected type to be a known token type but got "unknown".
-     */
     public function testThrowsAnExceptionIfAnInvalidTypeIsGiven()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected type to be a known token type but got "unknown".');
+
         new TokenType('unknown');
     }
 

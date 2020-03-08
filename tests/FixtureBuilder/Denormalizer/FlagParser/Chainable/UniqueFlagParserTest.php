@@ -25,7 +25,7 @@ class UniqueFlagParserTest extends FlagParserTestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new UniqueFlagParser();
     }

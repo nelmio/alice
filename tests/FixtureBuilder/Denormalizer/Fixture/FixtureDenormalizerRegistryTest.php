@@ -22,6 +22,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use TypeError;
@@ -39,7 +40,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $propRelf = (new \ReflectionClass(FixtureDenormalizerRegistry::class))->getProperty('denormalizers');
         $propRelf->setAccessible(true);
@@ -78,7 +79,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
             );
         }
     }
-    
+
     public function testInjectsParserInParserAwareDenormalizersAndItselfInDenormalizerAwareDenormalizers()
     {
         $flagParser = new FakeFlagParser();
@@ -110,7 +111,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
         $this->assertNotNull($actualDenormalizers[1]->parser);
         $this->assertSame($denormalizer, $denormalizerAwareDenormalizer->denormalizer);
     }
-    
+
     public function testUsesTheFirstSuitableDenormalizer()
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
@@ -134,7 +135,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
         $chainableDenormalizer1Prophecy->canDenormalize($reference)->willReturn(false);
         /** @var ChainableFixtureDenormalizerInterface $chainableDenormalizer1 */
         $chainableDenormalizer1 = $chainableDenormalizer1Prophecy->reveal();
-        
+
         $chainableDenormalizer2Prophecy = $this->prophesize(ChainableFixtureDenormalizerInterface::class);
         $chainableDenormalizer2Prophecy->canDenormalize($reference)->willReturn(true);
         $chainableDenormalizer2Prophecy->denormalize($builtFixtures, $className, $reference, $specs, $flags)->willReturn($expected);
@@ -162,10 +163,6 @@ class FixtureDenormalizerRegistryTest extends TestCase
         $chainableDenormalizer2Prophecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
-     * @expectedExceptionMessage No suitable fixture denormalizer found to handle the fixture with the reference "user0".
-     */
     public function testThrowsExceptionIfNotSuitableDenormalizer()
     {
         $builtFixtures = new FixtureBag();
@@ -180,6 +177,10 @@ class FixtureDenormalizerRegistryTest extends TestCase
         $flagParser = $flagParserProphecy->reveal();
 
         $denormalizer = new FixtureDenormalizerRegistry($flagParser, []);
+
+        $this->expectException(DenormalizerNotFoundException::class);
+        $this->expectExceptionMessage('No suitable fixture denormalizer found to handle the fixture with the reference "user0".');
+
         $denormalizer->denormalize($builtFixtures, $className, $reference, $specs, $flags);
     }
 }

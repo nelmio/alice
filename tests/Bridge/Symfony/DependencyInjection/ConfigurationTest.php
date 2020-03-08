@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 use Nelmio\Alice\Symfony\KernelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * @covers \Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
@@ -68,14 +69,13 @@ class ConfigurationTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "nelmio_alice.locale": Expected a string value but got "boolean" instead.
-     */
     public function testLocaleMustBeAStringValues()
     {
         $configuration = new Configuration();
         $processor = new Processor();
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "nelmio_alice.locale": Expected a string value but got "boolean" instead.');
 
         $processor->processConfiguration(
             $configuration,
@@ -111,14 +111,13 @@ class ConfigurationTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessageRegExp /^Invalid type for path "nelmio_alice.functions_blacklist"\. Expected array, but got string/
-     */
     public function testFunctionsBlacklistMustAnArray()
     {
         $configuration = new Configuration();
         $processor = new Processor();
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessageRegExp('/^Invalid type for path "nelmio_alice.functions_blacklist"\. Expected array, but got string/');
 
         $processor->processConfiguration(
             $configuration,
@@ -130,14 +129,13 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "nelmio_alice.functions_blacklist": Expected an array of strings but got "boolean" element in the array instead.
-     */
     public function testFunctionsBlacklistMustBeStrings()
     {
         $configuration = new Configuration();
         $processor = new Processor();
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "nelmio_alice.functions_blacklist": Expected an array of strings but got "boolean" element in the array instead.');
 
         $processor->processConfiguration(
             $configuration,
@@ -149,14 +147,13 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "nelmio_alice.max_unique_values_retry": Expected a strictly positive integer but got "0" instead.
-     */
     public function testMaxUniqueValuesRetryMustBeAStrictlyPositiveValues()
     {
         $configuration = new Configuration();
         $processor = new Processor();
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "nelmio_alice.max_unique_values_retry": Expected a strictly positive integer but got "0" instead.');
 
         $processor->processConfiguration(
             $configuration,
@@ -168,14 +165,13 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessageRegExp /^Invalid type for path "nelmio_alice.loading_limit"\. Expected int, but got boolean\./
-     */
     public function testLoadingLimitMustBeAnInteger()
     {
         $configuration = new Configuration();
         $processor = new Processor();
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessageRegExp('/^Invalid type for path "nelmio_alice.loading_limit"\. Expected int, but got boolean\./');
 
         $processor->processConfiguration(
             $configuration,
@@ -187,14 +183,13 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "nelmio_alice.loading_limit": Expected a strictly positive integer but got "0" instead.
-     */
     public function testLoadingLimitMustBeAStrictlyPositiveValues()
     {
         $configuration = new Configuration();
         $processor = new Processor();
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "nelmio_alice.loading_limit": Expected a strictly positive integer but got "0" instead.');
 
         $processor->processConfiguration(
             $configuration,
@@ -206,14 +201,13 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessageRegExp /^Invalid type for path "nelmio_alice.max_unique_values_retry"\. Expected int, but got boolean\./
-     */
     public function testMaxUniqueValuesRetryMustBeAnInteger()
     {
         $configuration = new Configuration();
         $processor = new Processor();
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessageRegExp('/^Invalid type for path "nelmio_alice.max_unique_values_retry"\. Expected int, but got boolean\./');
 
         $processor->processConfiguration(
             $configuration,

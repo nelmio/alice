@@ -21,6 +21,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -38,7 +39,7 @@ class TokenParserRegistryTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parsersRefl = (new \ReflectionClass(TokenParserRegistry::class))->getProperty('parsers');
         $this->parsersRefl->setAccessible(true);
@@ -54,16 +55,11 @@ class TokenParserRegistryTest extends TestCase
         $this->assertFalse((new ReflectionClass(TokenParserRegistry::class))->isCloneable());
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testAcceptsOnlyChainableParsers()
     {
-        try {
-            new TokenParserRegistry([new FakeChainableTokenParser()]);
-        } catch (\Throwable $exception) {
-            $this->fails('Did not expect exception to be thrown.');
-        }
+        new TokenParserRegistry([new FakeChainableTokenParser()]);
+
+        $this->expectException(\TypeError::class);
 
         new TokenParserRegistry([new \stdClass()]);
     }
@@ -140,13 +136,13 @@ class TokenParserRegistryTest extends TestCase
         $parser2Prophecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
-     * @expectedExceptionMessage No suitable token parser found to handle the token "foo" (type: STRING_TYPE).
-     */
     public function testThrowsAnExceptionIfNoSuitableParserIsFound()
     {
         $registry = new TokenParserRegistry([]);
+
+        $this->expectException(ParserNotFoundException::class);
+        $this->expectExceptionMessage('No suitable token parser found to handle the token "foo" (type: STRING_TYPE).');
+
         $registry->parse(new Token('foo', new TokenType(TokenType::STRING_TYPE)));
     }
 }

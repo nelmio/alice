@@ -20,23 +20,23 @@ use PHPUnit\Framework\TestCase;
  */
 class NativeLoaderTest extends TestCase
 {
-    /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Unknown method "foo".
-     */
     public function testThrowsAnExceptionIfCallUnknownMethod()
     {
         $loader = new NativeLoader();
+
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('Unknown method "foo".');
+
         $loader->foo();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Unknown method "createFoo".
-     */
     public function testThrowsAnExceptionIfCallUnknownGetMethod()
     {
         $loader = new NativeLoader();
+
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('Unknown method "createFoo".');
+
         $loader->getFoo();
     }
 

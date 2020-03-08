@@ -40,7 +40,7 @@ class YamlParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -50,7 +50,7 @@ class YamlParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$dir = null;
 
@@ -60,7 +60,7 @@ class YamlParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
         $symfonyYamlParserProphecy->parse(Argument::cetera())->shouldNotBeCalled();
@@ -121,12 +121,11 @@ class YamlParserTest extends TestCase
         $this->assertFalse($actual);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The file "/nowhere.yml" could not be found.
-     */
     public function testThrowExceptionIfFileDoesNotExist()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The file "/nowhere.yml" could not be found.');
+
         $this->parser->parse('/nowhere.yml');
     }
 

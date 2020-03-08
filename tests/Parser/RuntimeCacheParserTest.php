@@ -33,7 +33,7 @@ class RuntimeCacheParserTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         self::$dir = __DIR__.'/../../fixtures/Parser/files/cache';
     }

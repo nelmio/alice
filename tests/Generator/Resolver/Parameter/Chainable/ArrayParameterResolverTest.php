@@ -20,6 +20,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use ReflectionClass;
@@ -82,13 +83,12 @@ class ArrayParameterResolverTest extends TestCase
         })));
     }
 
-    /**
-     * @expectedException \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
-     * @expectedExceptionMessage Expected method "Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver::resolve" to be called only if it has a resolver.
-     */
     public function testRequiresInjectedResolverToResolverAParameter()
     {
         $resolver = new ArrayParameterResolver();
+
+        $this->expectException(ResolverNotFoundException::class);
+        $this->expectExceptionMessage('Expected method "Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver::resolve" to be called only if it has a resolver.');
 
         $resolver->resolve(new Parameter('foo', null), new ParameterBag(), new ParameterBag());
     }
