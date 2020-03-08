@@ -17,7 +17,7 @@ very easy to generate complex data with constraints in a readable and easy
 to edit way, so that everyone on your team can tweak the fixtures if needed.
 
 **Warning: this doc is for alice 3.0. If you want to check the documentation
-for 2.x, read [here](https://github.com/nelmio/alice/tree/2.x)**.
+for 2.x, follow [this link](https://github.com/nelmio/alice/tree/2.x)**.
 
 **2.x is in maintenance mode: PRs are accepted, but no active development is done on it by the maintainers any longer.**
 
