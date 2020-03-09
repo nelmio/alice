@@ -92,7 +92,7 @@ class SimpleObjectTest extends TestCase
     public function testThrowsAnErrorIfInstanceIsNotAnObject($instance)
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageRegExp('/^Expected instance argument to be an object. Got ".+?" instead\.$/');
+        $this->expectExceptionMessageMatches('/^Expected instance argument to be an object. Got ".+?" instead\.$/');
 
         new SimpleObject('user0', $instance);
     }

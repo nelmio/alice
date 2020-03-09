@@ -159,7 +159,7 @@ class LoaderIntegrationTest extends TestCase
     public function testLoadUnsupportedFileFormat()
     {
         $this->expectException(ParserNotFoundException::class);
-        $this->expectExceptionMessageRegExp('/^No suitable parser found for the file ".*?plain_file"\.$/');
+        $this->expectExceptionMessageMatches('/^No suitable parser found for the file ".*?plain_file"\.$/');
 
         $this->loader->loadFile(self::PARSER_FILES_DIR.'/unsupported/plain_file');
     }
@@ -167,7 +167,7 @@ class LoaderIntegrationTest extends TestCase
     public function testLoadPhpFileWhichDoesNotReturnAnything()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageRegExp('/^The file ".*?no_return.php" must return a PHP array\.$/');
+        $this->expectExceptionMessageMatches('/^The file ".*?no_return.php" must return a PHP array\.$/');
 
         $this->loader->loadFile(self::PARSER_FILES_DIR.'/php/no_return.php');
     }

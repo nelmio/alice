@@ -79,7 +79,7 @@ class DefaultFileLocatorTest extends TestCase
     public function testThrowsExceptionIfTheFileDoesNotExists()
     {
         $this->expectException(FileNotFoundException::class);
-        $this->expectExceptionMessageRegExp('/^The file "(.+?)foobar.xml" does not exist\.$/');
+        $this->expectExceptionMessageMatches('/^The file "(.+?)foobar.xml" does not exist\.$/');
 
         $this->locator->locate('foobar.xml', __DIR__);
     }
@@ -87,7 +87,7 @@ class DefaultFileLocatorTest extends TestCase
     public function testLocatingFileThrowsExceptionIfTheFileDoesNotExistsInAbsolutePath()
     {
         $this->expectException(FileNotFoundException::class);
-        $this->expectExceptionMessageRegExp('/^The file "(.+?)foobar.xml" does not exist\.$/');
+        $this->expectExceptionMessageMatches('/^The file "(.+?)foobar.xml" does not exist\.$/');
 
         $this->locator->locate(__DIR__.'/Fixtures/foobar.xml');
     }
