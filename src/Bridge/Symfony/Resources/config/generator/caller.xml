@@ -20,6 +20,7 @@
                  class="Nelmio\Alice\Generator\Caller\SimpleCaller">
             <argument type="service" id="nelmio_alice.generator.caller.registry" />
             <argument type="service" id="nelmio_alice.generator.resolver.value" />
+            <argument type="service" id="nelmio_alice.generator.named_arguments_resolver" />
         </service>
 
         <service id="nelmio_alice.generator.caller.registry"

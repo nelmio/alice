@@ -1719,6 +1719,61 @@ class LoaderIntegrationTest extends TestCase
             ],
             (new ReflectionClass(FixtureEntity\Instantiator\DummyWithNamedPrivateConstructor::class))->newInstanceWithoutConstructor(),
         ];
+
+        yield 'with constructor named parameters' => [
+            [
+                FixtureEntity\DummyWithMethods::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'foo2' => 'value 2',
+                            'foo1' => 'value 1',
+                        ],
+                    ],
+                ],
+            ],
+            new FixtureEntity\DummyWithMethods('value 1', 'value 2'),
+        ];
+
+        yield 'with factory named parameters' => [
+            [
+                FixtureEntity\DummyWithMethods::class => [
+                    'dummy' => [
+                        '__factory' => [
+                            'create' => [
+                                'foo2' => 'value 2',
+                                'foo1' => 'value 1',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            FixtureEntity\DummyWithMethods::create('value 1', 'value 2'),
+        ];
+
+        $expected = new FixtureEntity\DummyWithMethods('value 1', 'value 2');
+        $expected->bar('value 3', 'value 4');
+
+        yield 'with method call named parameters' => [
+            [
+                FixtureEntity\DummyWithMethods::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'foo2' => 'value 2',
+                            'foo1' => 'value 1',
+                        ],
+                        '__calls' => [
+                            [
+                                'bar' => [
+                                    'bar2' => 'value 4',
+                                    'bar1' => 'value 3',
+                                ],
+                            ]
+                        ],
+                    ],
+                ],
+            ],
+            $expected,
+        ];
     }
 
     public function provideLegacyFixturesToInstantiate()

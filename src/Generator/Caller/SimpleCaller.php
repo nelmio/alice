@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\CallerInterface;
 use Nelmio\Alice\Generator\GenerationContext;
+use Nelmio\Alice\Generator\NamedArgumentsResolver;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\Generator\ValueResolverInterface;
@@ -41,10 +42,20 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
      */
     private $resolver;
 
-    public function __construct(CallProcessorInterface $callProcessor, ValueResolverInterface $resolver = null)
-    {
+    /**
+     * @var NamedArgumentsResolver|null
+     */
+    private $namedArgumentsResolver;
+
+    // TODO: make $namedArgumentsResolver non-nullable in 4.0. It is currently nullable only for BC purposes
+    public function __construct(
+        CallProcessorInterface $callProcessor,
+        ValueResolverInterface $resolver = null,
+        NamedArgumentsResolver $namedArgumentsResolver = null
+    ) {
         $this->callProcessor = $callProcessor;
         $this->resolver = $resolver;
+        $this->namedArgumentsResolver = $namedArgumentsResolver;
     }
 
     /**
@@ -52,7 +63,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
      */
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
-        return new self($this->callProcessor, $resolver);
+        return new self($this->callProcessor, $resolver, $this->namedArgumentsResolver);
     }
 
     /**
@@ -106,6 +117,10 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
 
                 list($value, $fixtureSet) = [$result->getValue(), $result->getSet()];
             }
+        }
+
+        if (null !== $this->namedArgumentsResolver) {
+            $arguments = $this->namedArgumentsResolver->resolveArguments($arguments, $fixture->getClassName(), $methodCall->getMethod());
         }
 
         return [$methodCall->withArguments($arguments), $fixtureSet];

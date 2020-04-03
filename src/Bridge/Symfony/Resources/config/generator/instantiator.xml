@@ -35,6 +35,7 @@
         <!-- Chainables -->
         <service id="nelmio_alice.generator.instantiator.chainable.no_caller_method_instantiator"
                  class="Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator">
+            <argument type="service" id="nelmio_alice.generator.named_arguments_resolver" />
             <tag name="nelmio_alice.generator.instantiator.chainable_instantiator" />
         </service>
 
@@ -50,6 +51,7 @@
 
         <service id="nelmio_alice.generator.instantiator.chainable.static_factory_instantiator"
                  class="Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator">
+            <argument type="service" id="nelmio_alice.generator.named_arguments_resolver" />
             <tag name="nelmio_alice.generator.instantiator.chainable_instantiator" />
         </service>
 

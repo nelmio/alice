@@ -116,6 +116,7 @@ use Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry;
 use Nelmio\Alice\Generator\Instantiator\InstantiatorResolver;
 use Nelmio\Alice\Generator\InstantiatorInterface;
+use Nelmio\Alice\Generator\NamedArgumentsResolver;
 use Nelmio\Alice\Generator\ObjectGenerator\CompleteObjectGenerator;
 use Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
@@ -204,6 +205,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  * @method PropertyAccessorInterface getPropertyAccessor()
  * @method CallerInterface getCaller()
  * @method CallProcessorInterface getCallProcessor()
+ * @method NamedArgumentsResolver getNamedArgumentsResolver()
  */
 class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoaderInterface
 {
@@ -589,16 +591,23 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     protected function createInstantiator(): InstantiatorInterface
     {
+        $namedArgumentsResolver = $this->getNamedArgumentsResolver();
+
         return new ExistingInstanceInstantiator(
             new InstantiatorResolver(
                 new InstantiatorRegistry([
-                    new NoCallerMethodCallInstantiator(),
+                    new NoCallerMethodCallInstantiator($namedArgumentsResolver),
                     new NullConstructorInstantiator(),
                     new NoMethodCallInstantiator(),
-                    new StaticFactoryInstantiator(),
+                    new StaticFactoryInstantiator($namedArgumentsResolver),
                 ])
             )
         );
+    }
+
+    private function createNamedArgumentsResolver(): NamedArgumentsResolver
+    {
+        return new NamedArgumentsResolver();
     }
 
     protected function createHydrator(): HydratorInterface
@@ -626,7 +635,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     protected function createCaller(): CallerInterface
     {
-        return new SimpleCaller($this->getCallProcessor(), $this->getValueResolver());
+        return new SimpleCaller($this->getCallProcessor(), $this->getValueResolver(), $this->getNamedArgumentsResolver());
     }
 
     protected function createCallProcessor(): CallProcessorInterface

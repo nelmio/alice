@@ -16,10 +16,22 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\NamedArgumentsResolver;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory;
 
 final class StaticFactoryInstantiator extends AbstractChainableInstantiator
 {
+    /**
+     * @var NamedArgumentsResolver|null
+     */
+    private $namedArgumentsResolver;
+
+    // TODO: make $namedArgumentsResolver non-nullable in 4.0. It is currently nullable only for BC purposes
+    public function __construct(NamedArgumentsResolver $namedArgumentsResolver = null)
+    {
+        $this->namedArgumentsResolver = $namedArgumentsResolver;
+    }
+
     /**
      * @inheritDoc
      */
@@ -45,6 +57,10 @@ final class StaticFactoryInstantiator extends AbstractChainableInstantiator
 
         if (null === $arguments) {
             $arguments = [];
+        }
+
+        if (null !== $this->namedArgumentsResolver) {
+            $arguments = $this->namedArgumentsResolver->resolveArguments($arguments, $factory, $method);
         }
 
         $instance = $factory::$method(...array_values($arguments));
