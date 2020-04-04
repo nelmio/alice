@@ -73,14 +73,14 @@ final class FlagBag implements \IteratorAggregate, \Countable
     {
         if ($override) {
             $clone = clone ($this);
-            foreach ($flags as $stringFlag => $flag) {
+            foreach ($flags as $flag) {
                 /** @var FlagInterface $flag */
                 $clone->flags[$flag->__toString()] = clone ($flag);
             }
         } else {
             $clone = clone ($flags);
             $clone->key = $this->key;
-            foreach ($this as $stringFlag => $flag) {
+            foreach ($this as $flag) {
                 /** @var FlagInterface $flag */
                 $clone->flags[$flag->__toString()] = clone ($flag);
             }
