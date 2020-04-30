@@ -38,12 +38,11 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserIntegrationTest extends TestCase
 {
-    /** @var ParserInterface */
+    /**
+     * @var ParserInterface
+     */
     protected $parser;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->parser = (new NativeLoader())->getExpressionLanguageParser();
@@ -378,12 +377,52 @@ class ParserIntegrationTest extends TestCase
             ),
         ];
         yield '[Function] nominal with string arguments which contains quotes' => [
-            '<function(\'foo\', "bar")>',
+            '<function(\'foo\', "bar", "true", "false", "null", "10", "10.20", "+10", "-10", "+10.20", "-10.20")>',
             new FunctionCallValue(
                 'function',
                 [
                     'foo',
                     'bar',
+                    'true',
+                    'false',
+                    'null',
+                    '10',
+                    '10.20',
+                    '+10',
+                    '-10',
+                    '+10.20',
+                    '-10.20',
+                ]
+            ),
+        ];
+        yield '[Function] nominal with boolean arguments' => [
+            '<function(true, false)>',
+            new FunctionCallValue(
+                'function',
+                [
+                    true,
+                    false,
+                ]
+            ),
+        ];
+        yield '[Function] nominal with null arguments' => [
+            '<function(null)>',
+            new FunctionCallValue(
+                'function',
+                [null]
+            ),
+        ];
+        yield '[Function] nominal with numeric arguments' => [
+            '<function(10, 10.20, +10, -10, +10.20, -10.20)>',
+            new FunctionCallValue(
+                'function',
+                [
+                    10,
+                    10.20,
+                    10,
+                    -10,
+                    10.20,
+                    -10.20,
                 ]
             ),
         ];
