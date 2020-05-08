@@ -143,32 +143,30 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         switch (true) {
             case $value === 'true':
                 return true;
+
             case $value === 'false':
                 return false;
+
             case $value === 'null':
                 return null;
-            case ctype_digit($value):
+
+            case preg_match('/^([-+])?([0-9]+)$/', $value, $matches):
                 $castedValue = (int) $value;
 
-                if (0 === $value[0]) {
-                    return octdec($value);
-                } elseif ($value === (string) $castedValue) {
+                if ('0' === $matches[2][0]) {
+                    return '-' === $matches[1] ? -octdec($matches[2]) : octdec($matches[2]);
+                }
+
+                if ($value === (string) $castedValue || ('+' === $matches[1] && $matches[2] === (string) $castedValue)) {
                     return $castedValue;
                 }
 
                 return $value;
-            case $value[0] === '-' && ctype_digit(substr($value, 1)):
-                $castedValue = (int) $value;
 
-                if (0 === $value[0]) {
-                    return -octdec($value);
-                } elseif ($value === (string) $castedValue) {
-                    return $castedValue;
-                }
-
-                return $value;
+            case is_numeric($value):
             case preg_match('/^[-+]?[0-9]*(\.[0-9]+)?$/', $value):
                 return (float) $value;
+
             default:
                 return $parser->parse($value);
         }

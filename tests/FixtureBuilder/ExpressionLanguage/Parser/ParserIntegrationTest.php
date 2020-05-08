@@ -377,7 +377,7 @@ class ParserIntegrationTest extends TestCase
             ),
         ];
         yield '[Function] nominal with string arguments which contains quotes' => [
-            '<function(\'foo\', "bar", "true", "false", "null", "10", "10.20", "+10", "-10", "+10.20", "-10.20")>',
+            '<function(\'foo\', "bar", "true", "false", "null", "10", "10.20", "+10", "-10", "+10.20", "-10.20", "012", "+012", "-012")>',
             new FunctionCallValue(
                 'function',
                 [
@@ -392,6 +392,9 @@ class ParserIntegrationTest extends TestCase
                     '-10',
                     '+10.20',
                     '-10.20',
+                    '012',
+                    '+012',
+                    '-012',
                 ]
             ),
         ];
@@ -413,7 +416,7 @@ class ParserIntegrationTest extends TestCase
             ),
         ];
         yield '[Function] nominal with numeric arguments' => [
-            '<function(10, 10.20, +10, -10, +10.20, -10.20)>',
+            '<function(10, 10.20, +10, -10, +10.20, -10.20, 012, +012, -012)>',
             new FunctionCallValue(
                 'function',
                 [
@@ -423,6 +426,9 @@ class ParserIntegrationTest extends TestCase
                     -10,
                     10.20,
                     -10.20,
+                    10,
+                    10,
+                    -10,
                 ]
             ),
         ];

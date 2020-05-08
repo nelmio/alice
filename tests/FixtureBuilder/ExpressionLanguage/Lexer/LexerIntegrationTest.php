@@ -457,9 +457,9 @@ class LexerIntegrationTest extends TestCase
             ],
         ];
         yield '[Function] nominal with string arguments which contains quotes' => [
-            '<function(\'foo\', "bar", "true", "false", "null", "10", "10.20", "+10", "-10", "+10.20", "-10.20")>',
+            '<function(\'foo\', "bar", "true", "false", "null", "10", "10.20", "+10", "-10", "+10.20", "-10.20", "012", "+012", "-012")>',
             [
-                new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\', "bar", "true", "false", "null", "10", "10.20", "+10", "-10", "+10.20", "-10.20"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\', "bar", "true", "false", "null", "10", "10.20", "+10", "-10", "+10.20", "-10.20", "012", "+012", "-012"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] nominal with boolean arguments' => [
@@ -475,9 +475,9 @@ class LexerIntegrationTest extends TestCase
             ],
         ];
         yield '[Function] nominal with numeric arguments' => [
-            '<function(10, 10.20, +10, -10, +10.20, -10.20)>',
+            '<function(10, 10.20, +10, -10, +10.20, -10.20, 012, +012, -012)>',
             [
-                new Token('<aliceTokenizedFunction(FUNCTION_START__function__10, 10.20, +10, -10, +10.20, -10.20IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__10, 10.20, +10, -10, +10.20, -10.20, 012, +012, -012IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Function] nominal with array argument which contains string elements in quotes' => [
