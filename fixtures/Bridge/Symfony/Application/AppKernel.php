@@ -85,5 +85,4 @@ class AppKernel extends Kernel
     {
         return __DIR__;
     }
-
 }
