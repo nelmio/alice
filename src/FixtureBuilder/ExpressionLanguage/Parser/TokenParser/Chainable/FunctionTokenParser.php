@@ -113,7 +113,6 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         }
 
         $argumentEscaper = $this->argumentEscaper;
-
         $escapedString = preg_replace_callback(
             '/\'(.*?)\'|"(.*?)"/',
             function (array $matches) use ($argumentEscaper): string {
@@ -129,13 +128,47 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         );
 
         $arguments = [];
-        preg_match_all('/\[[^[]+\]|[^,\s]+/', $escapedString, $argumentsList);
-        foreach ($argumentsList[0] as $index => $argument) {
-            $argument = $parser->parse($argument);
 
-            $arguments[$index] = $argument;
+        preg_match_all('/\[[^[]+\]|[^,\s]+/', $escapedString, $argumentsList);
+
+        foreach ($argumentsList[0] as $index => $argument) {
+            $arguments[$index] = $this->parseArgument($parser, $argument);
         }
 
         return $arguments;
+    }
+
+    private function parseArgument(ParserInterface $parser, string $value)
+    {
+        switch (true) {
+            case $value === 'true':
+                return true;
+
+            case $value === 'false':
+                return false;
+
+            case $value === 'null':
+                return null;
+
+            case preg_match('/^([-+])?([0-9]+)$/', $value, $matches):
+                $castedValue = (int) $value;
+
+                if ('0' === $matches[2][0]) {
+                    return '-' === $matches[1] ? -octdec($matches[2]) : octdec($matches[2]);
+                }
+
+                if ($value === (string) $castedValue || ('+' === $matches[1] && $matches[2] === (string) $castedValue)) {
+                    return $castedValue;
+                }
+
+                return $value;
+
+            case is_numeric($value):
+            case preg_match('/^[-+]?[0-9]*(\.[0-9]+)?$/', $value):
+                return (float) $value;
+
+            default:
+                return $parser->parse($value);
+        }
     }
 }
