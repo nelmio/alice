@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Object;
 
-use Nelmio\Alice\ObjectInterface;
 use function Nelmio\Alice\deep_clone;
+use Nelmio\Alice\ObjectInterface;
 
 class ImmutableObject implements ObjectInterface
 {

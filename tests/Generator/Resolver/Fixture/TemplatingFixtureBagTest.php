@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
+use function Nelmio\Alice\deep_clone;
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\MutableFixture;
@@ -25,7 +26,6 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use PHPUnit\Framework\TestCase;
-use function Nelmio\Alice\deep_clone;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplatingFixtureBag

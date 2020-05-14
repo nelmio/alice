@@ -146,7 +146,7 @@ class JsonParserTest extends TestCase
     public function testThrowsAnExceptionIfInvalidJson()
     {
         $this->expectException(UnparsableFileException::class);
-        $this->expectExceptionMessageRegExp('/^The file ".+\/invalid\.json" does not contain valid JSON\.$/');
+        $this->expectExceptionMessageMatches('/^The file ".+\/invalid\.json" does not contain valid JSON\.$/');
 
         $this->parser->parse(self::$dir.'/invalid.json');
     }
