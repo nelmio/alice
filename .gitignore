@@ -2,7 +2,8 @@
 /bin/
 /composer.lock
 /dist/
-/fixtures/Bridge/Symfony/Application/cache/
+/fixtures/Bridge/Symfony/Application/var/
+!/fixtures/Bridge/Symfony/Application/var/.gitkeep
 /vendor/
 /vendor-bin/*/bin/
 /vendor-bin/*/vendor/
