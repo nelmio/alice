@@ -66,7 +66,7 @@ class InstantiatorRegistryTest extends TestCase
         $newRegistry = $registry->withValueResolver($resolver);
 
         $this->assertEquals(new InstantiatorRegistry([]), $registry);
-        $this->assertEquals(new InstantiatorRegistry([], $resolver), $newRegistry);
+        $this->assertEquals(new InstantiatorRegistry([]), $newRegistry);
 
 
         $registry = new InstantiatorRegistry([new FakeChainableInstantiator()]);
@@ -74,7 +74,7 @@ class InstantiatorRegistryTest extends TestCase
 
         $this->assertEquals(new InstantiatorRegistry([new FakeChainableInstantiator()]), $registry);
         $this->assertEquals(
-            new InstantiatorRegistry([new FakeChainableInstantiator()], $resolver),
+            new InstantiatorRegistry([new FakeChainableInstantiator()]),
             $newRegistry
         );
 
@@ -94,7 +94,7 @@ class InstantiatorRegistryTest extends TestCase
 
         $this->assertEquals(new InstantiatorRegistry([$nonAwareInstantiator, $instantiator]), $registry);
         $this->assertEquals(
-            new InstantiatorRegistry([$nonAwareInstantiator, new FakeChainableInstantiator()], $resolver),
+            new InstantiatorRegistry([$nonAwareInstantiator, new FakeChainableInstantiator()]),
             $newRegistry
         );
 

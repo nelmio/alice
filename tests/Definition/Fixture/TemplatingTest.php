@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 class TemplatingTest extends TestCase
 {
     /**
-     * @depends Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
+     * @depends \Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
      */
     public function testIsImmutable()
     {

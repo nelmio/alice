@@ -190,9 +190,7 @@ class TemplateFixtureBagResolverTest extends TestCase
                             )
                         ),
                         $this->getDecoratedFixturesFlag($user1)
-                    ),
-                    (new FlagBag('user1'))
-                        ->withFlag(new ElementFlag('dummy_flag'))
+                    )
                 )
             )
             ->with($user5)
@@ -300,8 +298,7 @@ class TemplateFixtureBagResolverTest extends TestCase
                             )
                         ),
                         $this->getDecoratedFixturesFlag($user1)
-                    ),
-                    (new FlagBag('user1'))
+                    )
                 )
             )
         ;

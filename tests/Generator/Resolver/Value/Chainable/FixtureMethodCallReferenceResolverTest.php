@@ -85,7 +85,7 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
     {
         $value = new FixtureMethodCallValue(
             $reference = new FakeValue(),
-            $functionCall = new FunctionCallValue('getFoo', [
+            new FunctionCallValue('getFoo', [
                 $arg1 = new FakeValue(),
             ])
         );
@@ -143,7 +143,7 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
         try {
             $value = new FixtureMethodCallValue(
                 $reference = new MutableValue(new DummyWithGetter()),
-                $functionCall = new FunctionCallValue('getFoo')
+                new FunctionCallValue('getFoo')
             );
             $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
 
@@ -185,8 +185,8 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
         try {
             $instance = new DummyWithGetter();
             $value = new FixtureMethodCallValue(
-                $reference = new MutableValue($instance),
-                $functionCall = new FunctionCallValue('getNonExistent')
+                new MutableValue($instance),
+                new FunctionCallValue('getNonExistent')
             );
 
             $set = ResolvedFixtureSetFactory::create();

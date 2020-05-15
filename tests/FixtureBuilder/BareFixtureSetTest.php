@@ -36,8 +36,8 @@ class BareFixtureSetTest extends TestCase
     }
 
     /**
-     * @depends Nelmio\Alice\ParameterBagTest::testIsImmutable
-     * @depends Nelmio\Alice\FixtureBagTest::testIsImmutable
+     * @depends \Nelmio\Alice\ParameterBagTest::testIsImmutable
+     * @depends \Nelmio\Alice\FixtureBagTest::testIsImmutable
      */
     public function testIsImmutable()
     {
