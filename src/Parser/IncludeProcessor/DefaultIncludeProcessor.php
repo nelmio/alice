@@ -104,9 +104,6 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
         return $this->dataMerger->mergeInclude($data, $includeData);
     }
 
-    /**
-     * @param string[] $include
-     */
     private function retrieveIncludeData(ParserInterface $parser, string $file, array $include): array
     {
         $data = [];

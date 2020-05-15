@@ -50,7 +50,7 @@ final class CompleteObject implements ObjectInterface
     /**
      * @inheritdoc
      */
-    public function withInstance($newInstance)
+    public function withInstance(object $newInstance)
     {
         throw new LogicException('Cannot create a new object from a complete object.');
     }

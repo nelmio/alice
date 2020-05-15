@@ -23,16 +23,6 @@ use TypeError;
  */
 final class TypeErrorFactory
 {
-    public static function createForObjectArgument($instance): TypeError
-    {
-        return new TypeError(
-            sprintf(
-                'Expected instance argument to be an object. Got "%s" instead.',
-                gettype($instance)
-            )
-        );
-    }
-
     public static function createForDynamicArrayQuantifier($quantifier): TypeError
     {
         return new TypeError(

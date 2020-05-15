@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Object;
 
 use Nelmio\Alice\ObjectInterface;
-use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 /**
  * Minimalist implementation of ObjectInterface.
@@ -31,15 +30,8 @@ final class SimpleObject implements ObjectInterface
      */
     private $instance;
 
-    /**
-     * @param object $instance
-     */
-    public function __construct(string $id, $instance)
+    public function __construct(string $id, object $instance)
     {
-        if (false === is_object($instance)) {
-            throw TypeErrorFactory::createForObjectArgument($instance);
-        }
-        
         $this->reference = $id;
         $this->instance = $instance;
     }

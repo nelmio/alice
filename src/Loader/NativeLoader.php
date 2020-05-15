@@ -182,7 +182,7 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  * @method GeneratorInterface getGenerator()
  * @method ParserInterface getParser()
  * @method DenormalizerInterface getDenormalizer()
- * @method FixtureBagDenormalizerInterface getFixtureBagDenormalizer
+ * @method FixtureBagDenormalizerInterface getFixtureBagDenormalizer()
  * @method FixtureDenormalizerInterface getFixtureDenormalizer()
  * @method FlagParserInterface getFlagParser()
  * @method ConstructorDenormalizerInterface getConstructorDenormalizer()
