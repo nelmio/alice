@@ -33,7 +33,7 @@ class TokenTest extends TestCase
     }
 
     /**
-     * @depends Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenTypeTest::testIsImmutable
+     * @depends \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenTypeTest::testIsImmutable
      */
     public function testIsImmutable()
     {

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable;
 
-interface LoadingThrowable
+use Throwable;
+
+interface LoadingThrowable extends Throwable
 {
 }

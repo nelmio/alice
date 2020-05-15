@@ -52,7 +52,7 @@ class ListValueResolverTest extends TestCase
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
         $this->assertEquals(new ListValueResolver(), $resolver);
-        $this->assertEquals(new ListValueResolver(new FakeValueResolver(), new FakeValueResolver()), $newResolver);
+        $this->assertEquals(new ListValueResolver(new FakeValueResolver()), $newResolver);
     }
 
     public function testCanResolveOptionalValues()

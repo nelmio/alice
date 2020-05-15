@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
-use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
@@ -57,7 +56,7 @@ class ResolvedFixtureSetTest extends TestCase
             $newSet
         );
 
-        $newFixtures = new FixtureBag(['foo' => new DummyFixture('foo')]);
+        $newFixtures = new FixtureBag();
         $newSet = $set->withFixtures($newFixtures);
 
         $this->assertEquals(

@@ -18,6 +18,7 @@ use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Object\CompleteObject
@@ -129,6 +130,6 @@ class CompleteObjectTest extends TestCase
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Cannot create a new object from a complete object.');
 
-        $object->withInstance(null);
+        $object->withInstance(new stdClass());
     }
 }

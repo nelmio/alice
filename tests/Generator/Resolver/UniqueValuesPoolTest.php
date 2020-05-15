@@ -29,7 +29,7 @@ class UniqueValuesPoolTest extends TestCase
     }
 
     /**
-     * @depends Nelmio\Alice\Definition\Value\UniqueValueTest::testIsImmutable
+     * @depends \Nelmio\Alice\Definition\Value\UniqueValueTest::testIsImmutable
      */
     public function testIsImmutable()
     {

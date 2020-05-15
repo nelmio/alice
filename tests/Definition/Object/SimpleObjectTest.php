@@ -85,25 +85,4 @@ class SimpleObjectTest extends TestCase
         $this->assertEquals(new SimpleObject($reference, $originalInstance), $object);
         $this->assertEquals(new SimpleObject($reference, $originalNewInstance), $newObject);
     }
-
-    /**
-     * @dataProvider provideInvalidInstances
-     */
-    public function testThrowsAnErrorIfInstanceIsNotAnObject($instance)
-    {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageMatches('/^Expected instance argument to be an object. Got ".+?" instead\.$/');
-
-        new SimpleObject('user0', $instance);
-    }
-
-    public function provideInvalidInstances()
-    {
-        return [
-            'null' => [null],
-            'string' => ['string value'],
-            'int' => [10],
-            'float' => [1.01],
-        ];
-    }
 }

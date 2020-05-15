@@ -48,7 +48,7 @@ class OptionalValueResolverTest extends TestCase
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
         $this->assertEquals(new OptionalValueResolver(), $resolver);
-        $this->assertEquals(new OptionalValueResolver(new FakeValueResolver(), new FakeValueResolver()), $newResolver);
+        $this->assertEquals(new OptionalValueResolver(new FakeValueResolver()), $newResolver);
     }
 
     public function testCanResolveOptionalValues()

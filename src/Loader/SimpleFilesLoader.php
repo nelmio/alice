@@ -18,7 +18,6 @@ use Nelmio\Alice\FilesLoaderInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\Parser\IncludeProcessor\IncludeDataMerger;
-use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
 
 final class SimpleFilesLoader implements FilesLoaderInterface
@@ -31,7 +30,7 @@ final class SimpleFilesLoader implements FilesLoaderInterface
     private $dataLoader;
 
     /**
-     * @var IncludeProcessorInterface
+     * @var IncludeDataMerger
      */
     private $dataMerger;
 

@@ -44,7 +44,7 @@ class ParameterResolverIntegrationTest extends TestCase
      */
     public function testResolveParameters(
         ParameterBag $unresolvedParameters,
-        ParameterBag $injectedParameters = null,
+        ?ParameterBag $injectedParameters,
         ParameterBag $expected
     ) {
         $actual = $this->resolver->resolve($unresolvedParameters, $injectedParameters);

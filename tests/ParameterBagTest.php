@@ -72,7 +72,7 @@ class ParameterBagTest extends TestCase
     }
 
     /**
-     * @depends Nelmio\Alice\ParameterTest::testIsImmutable
+     * @depends \Nelmio\Alice\ParameterTest::testIsImmutable
      */
     public function testWithersReturnNewModifiedObject()
     {

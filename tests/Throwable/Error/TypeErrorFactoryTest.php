@@ -24,18 +24,6 @@ use stdClass;
  */
 class TypeErrorFactoryTest extends TestCase
 {
-    public function testCreateForObjectArgument()
-    {
-        $error = TypeErrorFactory::createForObjectArgument(10);
-
-        $this->assertEquals(
-            'Expected instance argument to be an object. Got "integer" instead.',
-            $error->getMessage()
-        );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
-    }
-
     public function testCreateForDynamicArrayQuantifier()
     {
         $error = TypeErrorFactory::createForDynamicArrayQuantifier(new stdClass());
