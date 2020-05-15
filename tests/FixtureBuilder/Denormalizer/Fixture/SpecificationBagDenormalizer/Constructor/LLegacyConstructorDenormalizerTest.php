@@ -19,6 +19,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -26,6 +27,8 @@ use ReflectionClass;
  */
 class LLegacyConstructorDenormalizerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsNotClonable()
     {
         $this->assertFalse((new ReflectionClass(LegacyConstructorDenormalizer::class))->isCloneable());

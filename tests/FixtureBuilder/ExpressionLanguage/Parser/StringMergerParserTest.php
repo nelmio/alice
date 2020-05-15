@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -25,6 +26,8 @@ use ReflectionClass;
  */
 class StringMergerParserTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAParser()
     {
         $this->assertTrue(is_a(StringMergerParser::class, ParserInterface::class, true));

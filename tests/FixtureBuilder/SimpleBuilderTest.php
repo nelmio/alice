@@ -20,6 +20,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -27,6 +28,8 @@ use ReflectionClass;
  */
 class SimpleBuilderTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAFixtureBuilder()
     {
         $this->assertTrue(is_a(SimpleBuilder::class, FixtureBuilderInterface::class, true));

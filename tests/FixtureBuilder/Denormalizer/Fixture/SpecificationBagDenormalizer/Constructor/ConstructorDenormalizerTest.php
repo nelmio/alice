@@ -19,6 +19,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -26,6 +27,8 @@ use ReflectionClass;
  */
 class ConstructorDenormalizerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsNotClonable()
     {
         $this->assertFalse((new ReflectionClass(ConstructorDenormalizer::class))->isCloneable());

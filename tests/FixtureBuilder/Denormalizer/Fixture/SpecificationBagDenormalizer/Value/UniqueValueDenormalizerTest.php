@@ -27,6 +27,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -34,6 +35,8 @@ use ReflectionClass;
  */
 class UniqueValueDenormalizerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAValueDenormalizer()
     {
         $this->assertTrue(is_a(UniqueValueDenormalizer::class, ValueDenormalizerInterface::class, true));

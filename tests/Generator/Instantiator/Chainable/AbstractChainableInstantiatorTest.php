@@ -26,6 +26,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -33,6 +34,8 @@ use ReflectionClass;
  */
 class AbstractChainableInstantiatorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var AbstractChainableInstantiator
      */

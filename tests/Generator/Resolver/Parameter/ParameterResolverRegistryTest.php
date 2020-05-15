@@ -22,6 +22,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -29,6 +30,8 @@ use ReflectionClass;
  */
 class ParameterResolverRegistryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAParameterResolver()
     {
         $this->assertTrue(is_a(ParameterResolverRegistry::class, ParameterResolverInterface::class, true));

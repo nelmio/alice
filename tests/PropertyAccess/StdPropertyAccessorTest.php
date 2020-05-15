@@ -18,6 +18,7 @@ use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -27,6 +28,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  */
 class StdPropertyAccessorTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAPropertyAccessor()
     {
         $this->assertTrue(is_a(StdPropertyAccessor::class, PropertyAccessorInterface::class, true));

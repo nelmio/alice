@@ -20,6 +20,7 @@ use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use stdClass;
 
@@ -28,6 +29,8 @@ use stdClass;
  */
 class RuntimeCacheParserTest extends TestCase
 {
+    use ProphecyTrait;
+
     private static $dir;
 
     /**

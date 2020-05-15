@@ -24,6 +24,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -31,6 +32,8 @@ use ReflectionClass;
  */
 class TokenParserRegistryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var \ReflectionProperty
      */

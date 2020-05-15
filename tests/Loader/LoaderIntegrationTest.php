@@ -183,15 +183,45 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * Only a few tests samples are legacy.
-     *
-     * @group legacy
-     *
      * @dataProvider provideFixturesToInstantiate
      *
      * @param object|string $expected
      */
     public function testObjectInstantiation(array $data, $expected, string $instanceof = null)
+    {
+        try {
+            $objects = $this->loader->loadData($data)->getObjects();
+
+            if (is_string($expected)) {
+                $this->fail('Expected exception to be thrown.');
+            }
+        } catch (Throwable $throwable) {
+            if (is_string($expected)) {
+                $this->assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+
+                $this->assertInstanceOf($instanceof, $throwable);
+
+                $this->assertSame($expected, $throwable->getMessage());
+
+                return;
+            }
+
+            throw $throwable;
+        }
+
+        $this->assertCount(1, $objects);
+        $this->assertEquals($expected, $objects['dummy']);
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
+     *
+     * @dataProvider provideLegacyFixturesToInstantiate
+     *
+     * @param object|string $expected
+     */
+    public function testObjectInstantiationWithLegacyConstruct(array $data, $expected, string $instanceof = null)
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
@@ -397,9 +427,8 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * Only a few tests samples are legacy.
-     *
      * @group legacy
+     * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      */
     public function testIfAFixtureAndAnInjectedObjectHaveTheSameIdThenTheInjectedObjectIsOverridden()
     {
@@ -492,7 +521,7 @@ class LoaderIntegrationTest extends TestCase
 
         $user = $objects['user'];
         $this->assertInstanceOf(stdClass::class, $user);
-        $this->assertRegExp('/^[\w\']+ [\w\']+$/i', $user->username);
+        $this->assertMatchesRegularExpression('/^[\w\']+ [\w\']+$/i', $user->username);
     }
 
     public function testLoadFakerFunctionWithData()
@@ -536,7 +565,7 @@ class LoaderIntegrationTest extends TestCase
 
         $user = $objects['user'];
         $this->assertInstanceOf(stdClass::class, $user);
-        $this->assertRegExp('/^\d{3} \d{3} \d{3}$/', $user->siren);
+        $this->assertMatchesRegularExpression('/^\d{3} \d{3} \d{3}$/', $user->siren);
     }
 
     public function testLoadFakerFunctionWithPhpArguments()
@@ -997,7 +1026,7 @@ class LoaderIntegrationTest extends TestCase
             $previous = $previous->getPrevious();
 
             $this->assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
-            $this->assertRegExp(
+            $this->assertMatchesRegularExpression(
                 '/^Could not generate a unique value after 150 attempts for ".*"\.$/',
                 $previous->getMessage()
             );
@@ -1503,18 +1532,18 @@ class LoaderIntegrationTest extends TestCase
             new FixtureEntity\Instantiator\DummyWithExplicitDefaultConstructor(),
         ];
 
-        yield 'with named constructor - use factory function' => [
-            [
-                FixtureEntity\Instantiator\DummyWithNamedConstructor::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            'namedConstruct' => [],
-                        ],
-                    ],
-                ],
-            ],
-            FixtureEntity\Instantiator\DummyWithNamedConstructor::namedConstruct(),
-        ];
+//        yield 'with named constructor - use factory function' => [
+//            [
+//                FixtureEntity\Instantiator\DummyWithNamedConstructor::class => [
+//                    'dummy' => [
+//                        '__construct' => [
+//                            'namedConstruct' => [],
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            FixtureEntity\Instantiator\DummyWithNamedConstructor::namedConstruct(),
+//        ];
 
         yield 'with default constructor and optional parameters without parameters - use constructor function' => [
             [
@@ -1572,107 +1601,107 @@ class LoaderIntegrationTest extends TestCase
             new FixtureEntity\Instantiator\DummyWithRequiredParameterInConstructor(100),
         ];
 
-        yield 'with named constructor and optional parameters with no parameters - use factory function' => [
-            [
-                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            'namedConstruct' => [],
-                        ],
-                    ],
-                ],
-            ],
-            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
-        ];
-
-        yield 'with named constructor and optional parameters with parameters - use factory function' => [
-            [
-                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            'namedConstruct' => [
-                                100,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
-        ];
-
-        yield 'with named constructor and optional parameters with parameters and unique value - use factory function' => [
-            [
-                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            'namedConstruct' => [
-                                '0 (unique)' => 100,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
-        ];
-
-        yield 'with named constructor and required parameters with no parameters - throw exception' => [
-            [
-                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            'namedConstruct' => [],
-                        ],
-                    ],
-                ],
-            ],
-            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndRequiredParameters): Could not instantiate fixture "dummy".',
-            GenerationThrowable::class,
-        ];
-
-        yield 'with named constructor and required parameters with parameters - use factory function' => [
-            [
-                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            'namedConstruct' => [
-                                100,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
-        ];
-
-        yield 'with named constructor and required parameters with named parameters - use factory function' => [
-            [
-                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            'namedConstruct' => [
-                                'param' => 100,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
-        ];
-
-        yield 'with unknown named constructor' => [
-            [
-                FixtureEntity\Instantiator\DummyWithDefaultConstructor::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            'unknown' => [],
-                        ],
-                    ],
-                ],
-            ],
-            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor): Could not instantiate fixture "dummy".',
-            GenerationThrowable::class,
-        ];
-
+//        yield 'with named constructor and optional parameters with no parameters - use factory function' => [
+//            [
+//                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
+//                    'dummy' => [
+//                        '__construct' => [
+//                            'namedConstruct' => [],
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
+//        ];
+//
+//        yield 'with named constructor and optional parameters with parameters - use factory function' => [
+//            [
+//                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
+//                    'dummy' => [
+//                        '__construct' => [
+//                            'namedConstruct' => [
+//                                100,
+//                            ],
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+//        ];
+//
+//        yield 'with named constructor and optional parameters with parameters and unique value - use factory function' => [
+//            [
+//                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
+//                    'dummy' => [
+//                        '__construct' => [
+//                            'namedConstruct' => [
+//                                '0 (unique)' => 100,
+//                            ],
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+//        ];
+//
+//        yield 'with named constructor and required parameters with no parameters - throw exception' => [
+//            [
+//                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
+//                    'dummy' => [
+//                        '__construct' => [
+//                            'namedConstruct' => [],
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndRequiredParameters): Could not instantiate fixture "dummy".',
+//            GenerationThrowable::class,
+//        ];
+//
+//        yield 'with named constructor and required parameters with parameters - use factory function' => [
+//            [
+//                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
+//                    'dummy' => [
+//                        '__construct' => [
+//                            'namedConstruct' => [
+//                                100,
+//                            ],
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+//        ];
+//
+//        yield 'with named constructor and required parameters with named parameters - use factory function' => [
+//            [
+//                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
+//                    'dummy' => [
+//                        '__construct' => [
+//                            'namedConstruct' => [
+//                                'param' => 100,
+//                            ],
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+//        ];
+//
+//        yield 'with unknown named constructor' => [
+//            [
+//                FixtureEntity\Instantiator\DummyWithDefaultConstructor::class => [
+//                    'dummy' => [
+//                        '__construct' => [
+//                            'unknown' => [],
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor): Could not instantiate fixture "dummy".',
+//            GenerationThrowable::class,
+//        ];
+//
         yield 'with private constructor – throw exception' => [
             [
                 FixtureEntity\Instantiator\DummyWithPrivateConstructor::class => [
@@ -1692,21 +1721,21 @@ class LoaderIntegrationTest extends TestCase
             'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor): Could not instantiate "dummy", the constructor of "Nelmio\Alice\Entity\Instantiator\DummyWithProtectedConstructor" is not public.',
             GenerationThrowable::class,
         ];
-
-        yield 'with private named constructor – throw exception' => [
-            [
-                FixtureEntity\Instantiator\DummyWithNamedPrivateConstructor::class => [
-                    'dummy' => [
-                        '__construct' => [
-                            'namedConstruct' => [],
-                        ],
-                    ],
-                ],
-            ],
-            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedPrivateConstructor): Could not instantiate fixture "dummy".',
-            GenerationThrowable::class,
-        ];
-
+//
+//        yield 'with private named constructor – throw exception' => [
+//            [
+//                FixtureEntity\Instantiator\DummyWithNamedPrivateConstructor::class => [
+//                    'dummy' => [
+//                        '__construct' => [
+//                            'namedConstruct' => [],
+//                        ],
+//                    ],
+//                ],
+//            ],
+//            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedPrivateConstructor): Could not instantiate fixture "dummy".',
+//            GenerationThrowable::class,
+//        ];
+//
         yield 'with default constructor but specified no constructor – use reflection' => [
             [
                 FixtureEntity\Instantiator\DummyWithDefaultConstructor::class => [
@@ -1817,6 +1846,137 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             (new ReflectionClass(FixtureEntity\Instantiator\DummyWithNamedPrivateConstructor::class))->newInstanceWithoutConstructor(),
+        ];
+    }
+
+    public function provideLegacyFixturesToInstantiate()
+    {
+        yield 'with named constructor - use factory function' => [
+            [
+                FixtureEntity\Instantiator\DummyWithNamedConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            FixtureEntity\Instantiator\DummyWithNamedConstructor::namedConstruct(),
+        ];
+
+        yield 'with named constructor and optional parameters with no parameters - use factory function' => [
+            [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(),
+        ];
+
+        yield 'with named constructor and optional parameters with parameters - use factory function' => [
+            [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and optional parameters with parameters and unique value - use factory function' => [
+            [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                '0 (unique)' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndOptionalParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and required parameters with no parameters - throw exception' => [
+            [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedConstructorAndRequiredParameters): Could not instantiate fixture "dummy".',
+            GenerationThrowable::class,
+        ];
+
+        yield 'with named constructor and required parameters with parameters - use factory function' => [
+            [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'with named constructor and required parameters with named parameters - use factory function' => [
+            [
+                FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [
+                                'param' => 100,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            FixtureEntity\Instantiator\DummyWithNamedConstructorAndRequiredParameters::namedConstruct(100),
+        ];
+
+        yield 'with unknown named constructor' => [
+            [
+                FixtureEntity\Instantiator\DummyWithDefaultConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'unknown' => [],
+                        ],
+                    ],
+                ],
+            ],
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithDefaultConstructor): Could not instantiate fixture "dummy".',
+            GenerationThrowable::class,
+        ];
+
+        yield 'with private named constructor – throw exception' => [
+            [
+                FixtureEntity\Instantiator\DummyWithNamedPrivateConstructor::class => [
+                    'dummy' => [
+                        '__construct' => [
+                            'namedConstruct' => [],
+                        ],
+                    ],
+                ],
+            ],
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Instantiator\DummyWithNamedPrivateConstructor): Could not instantiate fixture "dummy".',
+            GenerationThrowable::class,
         ];
     }
 

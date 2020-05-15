@@ -34,6 +34,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundException
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -41,6 +42,8 @@ use ReflectionClass;
  */
 class FixtureReferenceResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableResolver()
     {
         $this->assertTrue(is_a(FixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));

@@ -20,6 +20,7 @@ use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -27,6 +28,8 @@ use ReflectionClass;
  */
 class SimpleDenormalizerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsADenormalizer()
     {
         $this->assertTrue(is_a(SimpleDenormalizer::class, DenormalizerInterface::class, true));

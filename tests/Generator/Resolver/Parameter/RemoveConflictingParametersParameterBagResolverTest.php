@@ -17,6 +17,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -24,6 +25,8 @@ use ReflectionClass;
  */
 class RemoveConflictingParametersParameterBagResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAParameterBagResolver()
     {
         $this->assertTrue(is_a(

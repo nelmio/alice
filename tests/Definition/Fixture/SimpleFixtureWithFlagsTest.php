@@ -19,12 +19,15 @@ use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags
  */
 class SimpleFixtureWithFlagsTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAFixtureWithFlags()
     {
         $this->assertTrue(is_a(SimpleFixtureWithFlags::class, FixtureWithFlagsInterface::class, true));

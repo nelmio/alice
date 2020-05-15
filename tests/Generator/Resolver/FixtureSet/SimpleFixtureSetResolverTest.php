@@ -24,6 +24,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -31,6 +32,8 @@ use ReflectionClass;
  */
 class SimpleFixtureSetResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAFixtureResolver()
     {
         $this->assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));

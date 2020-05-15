@@ -30,6 +30,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\DummyFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -37,6 +38,8 @@ use ReflectionClass;
  */
 class SimpleDenormalizerTest extends ChainableDenormalizerTest
 {
+    use ProphecyTrait;
+
     /**
      * @inheritdoc
      */

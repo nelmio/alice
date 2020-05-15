@@ -32,6 +32,7 @@ use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -39,6 +40,8 @@ use ReflectionClass;
  */
 class InstantiatorResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAnInstantiator()
     {
         $this->assertTrue(is_a(InstantiatorResolver::class, InstantiatorInterface::class, true));

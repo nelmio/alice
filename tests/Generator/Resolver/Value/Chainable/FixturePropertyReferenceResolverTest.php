@@ -33,6 +33,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -42,6 +43,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  */
 class FixturePropertyReferenceResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableResolver()
     {
         $this->assertTrue(is_a(FixturePropertyReferenceResolver::class, ChainableValueResolverInterface::class, true));

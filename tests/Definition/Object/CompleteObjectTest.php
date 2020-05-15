@@ -17,12 +17,15 @@ use Nelmio\Alice\Definition\Value\FakeObject;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers \Nelmio\Alice\Definition\Object\CompleteObject
  */
 class CompleteObjectTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAnObject()
     {
         $this->assertTrue(is_a(CompleteObject::class, ObjectInterface::class, true));

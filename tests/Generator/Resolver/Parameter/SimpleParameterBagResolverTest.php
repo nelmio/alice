@@ -20,6 +20,7 @@ use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -27,6 +28,8 @@ use ReflectionClass;
  */
 class SimpleParameterBagResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAParameterBagResolver()
     {
         $this->assertTrue(is_a(SimpleParameterBagResolver::class, ParameterBagResolverInterface::class, true));

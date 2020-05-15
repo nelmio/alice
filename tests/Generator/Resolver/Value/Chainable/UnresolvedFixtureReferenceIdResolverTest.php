@@ -36,6 +36,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -43,6 +44,8 @@ use ReflectionClass;
  */
 class UnresolvedFixtureReferenceIdResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableResolver()
     {
         $this->assertTrue(is_a(UnresolvedFixtureReferenceIdResolver::class, ChainableValueResolverInterface::class, true));
@@ -289,10 +292,10 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
                 new ResolvedValueWithFixtureSet(
                     'alice',
                     $newSet = ResolvedFixtureSetFactory::create(
-                         null,
-                         $fixtureBag->with(new SimpleFixture('value_resolver_fixture', 'Dummy', SpecificationBagFactory::create())),
-                         $newObjectBag = $objectBag->with(new SimpleObject('value_resolver_fixture', new \stdClass()))
-                     )
+                        null,
+                        $fixtureBag->with(new SimpleFixture('value_resolver_fixture', 'Dummy', SpecificationBagFactory::create())),
+                        $newObjectBag = $objectBag->with(new SimpleObject('value_resolver_fixture', new \stdClass()))
+                    )
                 )
             )
         ;

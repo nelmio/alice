@@ -22,6 +22,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -29,6 +30,8 @@ use ReflectionClass;
  */
 class RecursiveParameterResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableParameterResolver()
     {
         $this->assertTrue(is_a(RecursiveParameterResolver::class, ChainableParameterResolverInterface::class, true));

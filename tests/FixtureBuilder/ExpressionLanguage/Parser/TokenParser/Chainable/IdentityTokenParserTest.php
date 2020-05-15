@@ -18,6 +18,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -25,6 +26,8 @@ use ReflectionClass;
  */
 class IdentityTokenParserTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableTokenParser()
     {
         $this->assertTrue(is_a(IdentityTokenParser::class, ChainableTokenParserInterface::class, true));

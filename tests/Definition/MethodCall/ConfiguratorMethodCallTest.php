@@ -18,12 +18,15 @@ use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\MutableReference;
 use Nelmio\Alice\Entity\StdClassFactory;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall
  */
 class ConfiguratorMethodCallTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAMethodCall()
     {
         $this->assertTrue(is_a(ConfiguratorMethodCall::class, MethodCallInterface::class, true));

@@ -29,6 +29,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\ObjectBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -36,6 +37,8 @@ use ReflectionClass;
  */
 class CompleteObjectGeneratorTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAnObjectGenerator()
     {
         $this->assertTrue(is_a(CompleteObjectGenerator::class, ObjectGeneratorInterface::class, true));
@@ -147,8 +150,8 @@ class CompleteObjectGeneratorTest extends TestCase
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
                     new CompleteObject(
-                            new SimpleObject('dummy', new \stdClass())
-                        )
+                        new SimpleObject('dummy', new \stdClass())
+                    )
                 )
             );
 

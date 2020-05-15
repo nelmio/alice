@@ -19,6 +19,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -26,6 +27,8 @@ use ReflectionClass;
  */
 class FlagParserRegistryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAFlagParser()
     {
         $this->assertTrue(is_a(FlagParserRegistry::class, FlagParserInterface::class, true));

@@ -25,6 +25,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -32,6 +33,8 @@ use ReflectionClass;
  */
 class StringParameterResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableParameterResolver()
     {
         $this->assertTrue(is_a(StringParameterResolver::class, ChainableParameterResolverInterface::class, true));

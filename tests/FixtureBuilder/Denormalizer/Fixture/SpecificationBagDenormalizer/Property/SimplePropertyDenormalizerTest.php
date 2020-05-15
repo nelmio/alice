@@ -19,6 +19,7 @@ use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ValueDenormalizerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -26,6 +27,8 @@ use ReflectionClass;
  */
 class SimplePropertyDenormalizerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsNotClonable()
     {
         $this->assertFalse((new ReflectionClass(SimplePropertyDenormalizer::class))->isCloneable());

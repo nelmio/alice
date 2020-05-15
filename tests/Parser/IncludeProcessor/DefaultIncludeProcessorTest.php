@@ -19,6 +19,7 @@ use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -26,6 +27,8 @@ use ReflectionClass;
  */
 class DefaultIncludeProcessorTest extends TestCase
 {
+    use ProphecyTrait;
+
     private static $dir;
 
     /**
