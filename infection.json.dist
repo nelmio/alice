@@ -1,4 +1,5 @@
 {
+    "$schema": "./vendor-bin/infection/vendor/infection/infection/resources/schema.json",
     "source": {
         "directories": [
             "src"
@@ -14,8 +15,11 @@
             "vendor"
         ]
     },
+    "phpUnit": {
+        "customPath": "./bin/phpunit"
+    },
     "timeout": 10,
     "logs": {
-        "text": "dist/humbuglog.txt"
+        "text": "dist/infection.txt"
     }
 }

@@ -42,7 +42,6 @@ class CallsWithFlagsDenormalizerTest extends TestCase
     public function testCannotAcceptInvalidMethodHandlers()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageMatches('/must be an instance of Nelmio\\\\Alice\\\\FixtureBuilder\\\\Denormalizer\\\\Fixture\\\\SpecificationBagDenormalizer\\\\Calls\\\\MethodFlagHandler, instance of stdClass given/');
 
         new CallsWithFlagsDenormalizer(
             new FakeCallsDenormalizer(),
