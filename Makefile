@@ -1,5 +1,5 @@
 COVERS_VALIDATOR=php -d zend.enable_gc=0 vendor-bin/covers-validator/bin/covers-validator
-HUMBUG=phpdbg -qrr vendor-bin/humbug/bin/humbug --options="--exclude-group=integration"
+INFECTION=vendor-bin/infection/bin/infection --test-framework-options="--exclude-group=integration"
 PHPDBG=phpdbg -qrr -d zend.enable_gc=0 bin/phpunit
 PHP_CS_FIXER=php -d zend.enable_gc=0 vendor-bin/php-cs-fixer/bin/php-cs-fixer
 PHPSTAN=php -d zend.enable_gc=0 -dmemory_limit=1G vendor-bin/phpstan/bin/phpstan
@@ -36,8 +36,8 @@ tc: vendor/phpunit
 	$(PHPDBG) --exclude-group=integration --coverage-text --coverage-html=dist/coverage --coverage-clover=dist/clover.xml
 
 tm:             ## Run the tests for mutation testing
-tm: vendor/phpunit vendor-bin/humbug/vendor
-	$(HUMBUG)
+tm: vendor/phpunit vendor-bin/infection/vendor
+	$(INFECTION)
 
 tp:             ## Run Blackfire performance tests
 tp: vendor vendor-bin/profiling/vendor
@@ -104,11 +104,11 @@ vendor-bin/profiling/vendor: vendor-bin/profiling/composer.lock
 vendor-bin/profiling/composer.lock: vendor-bin/profiling/composer.json
 	@echo profiling composer.lock is not up to date
 
-vendor-bin/humbug/vendor: vendor-bin/humbug/composer.lock
-	composer bin humbug install
+vendor-bin/infection/vendor: vendor-bin/infection/composer.lock
+	composer bin infection install
 
-vendor-bin/humbug/composer.lock: vendor-bin/humbug/composer.json
-	@echo humbug composer.lock is not up to date
+vendor-bin/infection/composer.lock: vendor-bin/infection/composer.json
+	@echo infection composer.lock is not up to date
 
 vendor-bin/covers-validator/vendor: vendor-bin/covers-validator/composer.lock
 	composer bin covers-validator install

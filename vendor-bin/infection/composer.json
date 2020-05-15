@@ -1,6 +1,6 @@
 {
     "require-dev": {
-        "humbug/humbug": "^1.0@rc",
+        "infection/infection": "^0.16",
         "theofidry/composer-inheritance-plugin": "^1.0"
     },
     "config": {
