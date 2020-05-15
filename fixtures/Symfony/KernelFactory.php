@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Symfony;
 
+use function bin2hex;
 use Nelmio\Alice\Bridge\Symfony\Application\AppKernel;
+use function random_bytes;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class KernelFactory
@@ -28,7 +30,7 @@ class KernelFactory
     ): KernelInterface {
         if (null !== $config) {
             if (false === array_key_exists($config, static::$environments)) {
-                static::$environments[$config] = uniqid();
+                static::$environments[$config] = bin2hex(random_bytes(8));
             }
 
             $environment = static::$environments[$config];

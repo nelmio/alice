@@ -23,6 +23,7 @@ use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use Nelmio\Alice\Throwable\Exception\RootParseException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -30,6 +31,8 @@ use ReflectionClass;
  */
 class SimpleValueDenormalizerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAValueDenormalizer()
     {
         $this->assertTrue(is_a(SimpleValueDenormalizer::class, ValueDenormalizerInterface::class, true));

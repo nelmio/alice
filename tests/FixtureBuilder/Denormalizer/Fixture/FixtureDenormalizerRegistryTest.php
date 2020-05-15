@@ -25,6 +25,7 @@ use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TypeError;
 
 /**
@@ -32,6 +33,8 @@ use TypeError;
  */
 class FixtureDenormalizerRegistryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var \ReflectionProperty
      */

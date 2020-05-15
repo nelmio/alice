@@ -29,6 +29,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\ObjectBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -36,6 +37,8 @@ use ReflectionClass;
  */
 class CompleteObjectGeneratorTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAnObjectGenerator()
     {
         $this->assertTrue(is_a(CompleteObjectGenerator::class, ObjectGeneratorInterface::class, true));
@@ -123,9 +126,9 @@ class CompleteObjectGeneratorTest extends TestCase
                 'dummy',
                 'Dummy',
                 SpecificationBagFactory::create(
-                        null,
-                        (new PropertyBag())->with(new Property('foo', 'bar'))
-                    )
+                    null,
+                    (new PropertyBag())->with(new Property('foo', 'bar'))
+                )
             );
 
             $context = new GenerationContext();
@@ -146,10 +149,10 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
-                        new CompleteObject(
-                            new SimpleObject('dummy', new \stdClass())
-                        )
+                    new CompleteObject(
+                        new SimpleObject('dummy', new \stdClass())
                     )
+                )
             );
 
             return [
@@ -165,9 +168,9 @@ class CompleteObjectGeneratorTest extends TestCase
                 'dummy',
                 'Dummy',
                 SpecificationBagFactory::create(
-                        null,
-                        (new PropertyBag())->with(new Property('foo', 'bar'))
-                    )
+                    null,
+                    (new PropertyBag())->with(new Property('foo', 'bar'))
+                )
             );
 
             $context = new GenerationContext();
@@ -187,8 +190,8 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
-                        new SimpleObject('dummy', new \stdClass())
-                    )
+                    new SimpleObject('dummy', new \stdClass())
+                )
             );
 
             return [
@@ -204,9 +207,9 @@ class CompleteObjectGeneratorTest extends TestCase
                 'dummy',
                 'Dummy',
                 SpecificationBagFactory::create(
-                        null,
-                        (new PropertyBag())->with(new Property('foo', 'bar'))
-                    )
+                    null,
+                    (new PropertyBag())->with(new Property('foo', 'bar'))
+                )
             );
 
             $context = new GenerationContext();
@@ -226,8 +229,8 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
-                        new SimpleObject('dummy', new \stdClass())
-                    )
+                    new SimpleObject('dummy', new \stdClass())
+                )
             );
 
             return [
@@ -261,8 +264,8 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
-                        new SimpleObject('dummy', new \stdClass())
-                    )
+                    new SimpleObject('dummy', new \stdClass())
+                )
             );
 
             return [
@@ -278,9 +281,9 @@ class CompleteObjectGeneratorTest extends TestCase
                 'dummy',
                 'Dummy',
                 SpecificationBagFactory::create(
-                        null,
-                        (new PropertyBag())->with(new Property('foo', 'bar'))
-                    )
+                    null,
+                    (new PropertyBag())->with(new Property('foo', 'bar'))
+                )
             );
 
             $context = new GenerationContext();

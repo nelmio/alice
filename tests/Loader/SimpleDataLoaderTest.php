@@ -20,6 +20,7 @@ use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\ObjectSetFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -27,6 +28,8 @@ use ReflectionClass;
  */
 class SimpleDataLoaderTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsADataLoader()
     {
         $this->assertTrue(is_a(SimpleDataLoader::class, DataLoaderInterface::class, true));

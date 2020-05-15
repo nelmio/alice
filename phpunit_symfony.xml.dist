@@ -18,6 +18,14 @@
          enforceTimeLimit="true"
 >
 
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0" />
+    </php>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
+
     <testsuites>
         <testsuite name="Independent tests">
             <directory>tests/Bridge/Symfony</directory>
@@ -29,8 +37,4 @@
             <directory>src/Bridge/Symfony</directory>
         </whitelist>
     </filter>
-
-    <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0" />
-    </php>
 </phpunit>

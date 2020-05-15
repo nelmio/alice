@@ -26,6 +26,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use stdClass;
 
@@ -34,6 +35,8 @@ use stdClass;
  */
 class ValueResolverRegistryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAValueResolver()
     {
         $this->assertTrue(is_a(ValueResolverRegistry::class, ValueResolverInterface::class, true));

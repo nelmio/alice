@@ -16,12 +16,15 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser
  */
 class ElementFlagParserTest extends FlagParserTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @inheritdoc
      */

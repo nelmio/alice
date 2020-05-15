@@ -28,6 +28,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -35,6 +36,8 @@ use ReflectionClass;
  */
 class UniqueValueResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var \ReflectionProperty
      */

@@ -21,12 +21,15 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\TemplatingFixture
  */
 class TemplatingFixtureTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAFixture()
     {
         $this->assertTrue(is_a(TemplatingFixture::class, FixtureInterface::class, true));

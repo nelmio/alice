@@ -22,6 +22,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -29,6 +30,8 @@ use ReflectionClass;
  */
 class RemoveConflictingObjectsResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAFixtureResolver()
     {
         $this->assertTrue(is_a(RemoveConflictingObjectsResolver::class, FixtureSetResolverInterface::class, true));

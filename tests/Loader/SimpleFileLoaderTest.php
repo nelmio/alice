@@ -19,6 +19,7 @@ use Nelmio\Alice\ObjectSetFactory;
 use Nelmio\Alice\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -26,6 +27,8 @@ use ReflectionClass;
  */
 class SimpleFileLoaderTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsALoader()
     {
         $this->assertTrue(is_a(SimpleFileLoader::class, FileLoaderInterface::class, true));

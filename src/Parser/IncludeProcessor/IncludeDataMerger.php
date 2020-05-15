@@ -31,10 +31,10 @@ final class IncludeDataMerger
         foreach ($data as $class => $fixtures) {
             // $class is either a FQCN or 'parameters'
             $includeData[$class] = (
-                    array_key_exists($class, $includeData)
+                array_key_exists($class, $includeData)
                     && is_array($includeData[$class])
                     && is_array($fixtures)
-                )
+            )
                 ? array_merge($includeData[$class], $fixtures)
                 : $fixtures
             ;

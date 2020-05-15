@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Throwable\Exception\ObjectNotFoundException;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
 
 /**
@@ -25,6 +26,8 @@ use stdClass;
  */
 class ObjectBagTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var \ReflectionProperty
      */

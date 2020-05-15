@@ -36,12 +36,15 @@ use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers \Nelmio\Alice\Generator\Hydrator\SimpleHydrator
  */
 class SimpleHydratorTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAnHydrator()
     {
         $this->assertTrue(is_a(SimpleHydrator::class, HydratorInterface::class, true));

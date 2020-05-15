@@ -22,6 +22,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -29,6 +30,8 @@ use ReflectionClass;
  */
 class SimpleFixtureBagDenormalizerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAFixtureBagDenormalizer()
     {
         $this->assertTrue(is_a(SimpleFixtureBagDenormalizer::class, FixtureBagDenormalizerInterface::class, true));

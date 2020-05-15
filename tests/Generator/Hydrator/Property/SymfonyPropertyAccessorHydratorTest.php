@@ -27,6 +27,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException;
 use Nelmio\Alice\Throwable\Exception\Symfony\PropertyAccess\RootException as GenericPropertyAccessException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -37,6 +38,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  */
 class SymfonyPropertyAccessorHydratorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var SymfonyPropertyAccessorHydrator
      */

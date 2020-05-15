@@ -25,6 +25,7 @@ use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -32,6 +33,8 @@ use ReflectionClass;
  */
 class DoublePassGeneratorTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAGenerator()
     {
         $this->assertTrue(is_a(DoublePassGenerator::class, GeneratorInterface::class, true));

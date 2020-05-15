@@ -22,6 +22,7 @@ use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\ObjectBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -29,6 +30,8 @@ use ReflectionClass;
  */
 class ExistingInstanceInstantiatorTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAnInstantiator()
     {
         $this->assertTrue(is_a(ExistingInstanceInstantiator::class, InstantiatorInterface::class, true));

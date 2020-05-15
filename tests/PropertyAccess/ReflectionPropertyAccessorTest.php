@@ -10,14 +10,6 @@
  */
 
 declare(strict_types=1);
-/*
- * This file is part of the Alice package.
- *
- * (c) Nelmio <hello@nelm.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace Nelmio\Alice\PropertyAccess;
 
@@ -26,6 +18,7 @@ use Nelmio\Alice\Entity\DummyWithPrivatePropertyChild;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -35,6 +28,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  */
 class ReflectionPropertyAccessorTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAPropertyAccessor()
     {
         $this->assertTrue(is_a(ReflectionPropertyAccessor::class, PropertyAccessorInterface::class, true));

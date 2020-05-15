@@ -30,6 +30,7 @@ use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\ObjectBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -37,6 +38,8 @@ use ReflectionClass;
  */
 class SelfFixtureReferenceResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableResolver()
     {
         $this->assertTrue(is_a(SelfFixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));

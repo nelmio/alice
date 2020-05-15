@@ -26,6 +26,7 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\ObjectBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -33,6 +34,8 @@ use ReflectionClass;
  */
 class SimpleObjectGeneratorTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAnObjectGenerator()
     {
         $this->assertTrue(is_a(SimpleObjectGenerator::class, ObjectGeneratorInterface::class, true));

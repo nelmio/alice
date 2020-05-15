@@ -23,6 +23,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use stdClass;
 
@@ -31,6 +32,8 @@ use stdClass;
  */
 class CallsWithFlagsDenormalizerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsNotClonable()
     {
         $this->assertFalse((new ReflectionClass(CallsWithFlagsDenormalizer::class))->isCloneable());
@@ -39,7 +42,7 @@ class CallsWithFlagsDenormalizerTest extends TestCase
     public function testCannotAcceptInvalidMethodHandlers()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageRegExp('/must be an instance of Nelmio\\\\Alice\\\\FixtureBuilder\\\\Denormalizer\\\\Fixture\\\\SpecificationBagDenormalizer\\\\Calls\\\\MethodFlagHandler, instance of stdClass given/');
+        $this->expectExceptionMessageMatches('/must be an instance of Nelmio\\\\Alice\\\\FixtureBuilder\\\\Denormalizer\\\\Fixture\\\\SpecificationBagDenormalizer\\\\Calls\\\\MethodFlagHandler, instance of stdClass given/');
 
         new CallsWithFlagsDenormalizer(
             new FakeCallsDenormalizer(),

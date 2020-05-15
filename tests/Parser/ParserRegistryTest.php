@@ -17,6 +17,7 @@ use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use stdClass;
 
@@ -25,6 +26,8 @@ use stdClass;
  */
 class ParserRegistryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAParser()
     {
         $this->assertTrue(is_a(ParserRegistry::class, ParserInterface::class, true));

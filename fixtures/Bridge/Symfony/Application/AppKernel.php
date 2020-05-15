@@ -80,4 +80,9 @@ class AppKernel extends Kernel
     {
         $this->config = $resource;
     }
+
+    public function getProjectDir()
+    {
+        return __DIR__;
+    }
 }

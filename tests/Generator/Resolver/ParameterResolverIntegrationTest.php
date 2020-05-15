@@ -58,7 +58,7 @@ class ParameterResolverIntegrationTest extends TestCase
     public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null)
     {
         $this->expectException(CircularReferenceException::class);
-        $this->expectExceptionMessageRegExp('/^Circular reference detected for the parameter "[^\"]+" while resolving \[.+]\.$/');
+        $this->expectExceptionMessageMatches('/^Circular reference detected for the parameter "[^\"]+" while resolving \[.+]\.$/');
 
         $this->resolver->resolve($unresolvedParameters, $injectedParameters);
     }

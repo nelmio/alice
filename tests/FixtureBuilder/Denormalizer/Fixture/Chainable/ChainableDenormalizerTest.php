@@ -21,9 +21,11 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureFactory;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ReferenceProviderTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 abstract class ChainableDenormalizerTest extends TestCase
 {
+    use ProphecyTrait;
     use ReferenceProviderTrait;
 
     /**

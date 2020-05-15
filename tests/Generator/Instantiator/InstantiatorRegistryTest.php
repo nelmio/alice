@@ -25,6 +25,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use stdClass;
 
@@ -33,6 +34,8 @@ use stdClass;
  */
 class InstantiatorRegistryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAnInstantiator()
     {
         $this->assertTrue(is_a(InstantiatorRegistry::class, InstantiatorInterface::class, true));

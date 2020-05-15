@@ -19,6 +19,7 @@ use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -26,6 +27,8 @@ use ReflectionClass;
  */
 class DefaultIncludeProcessorTest extends TestCase
 {
+    use ProphecyTrait;
+
     private static $dir;
 
     /**
@@ -116,7 +119,7 @@ class DefaultIncludeProcessorTest extends TestCase
         $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageRegExp('/^Expected include statement to be either null or an array of files to include\. Got "string" instead in file ".+\/main\.yml"\.$/');
+        $this->expectExceptionMessageMatches('/^Expected include statement to be either null or an array of files to include\. Got "string" instead in file ".+\/main\.yml"\.$/');
 
         $processor->process($parser, $mainFile, $parsedMainFileContent);
     }
@@ -141,7 +144,7 @@ class DefaultIncludeProcessorTest extends TestCase
         $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageRegExp('/^Expected elements of include statement to be file names\. Got "boolean" instead in file ".+\/main\.yml"\.$/');
+        $this->expectExceptionMessageMatches('/^Expected elements of include statement to be file names\. Got "boolean" instead in file ".+\/main\.yml"\.$/');
 
         $processor->process($parser, $mainFile, $parsedMainFileContent);
     }
@@ -166,7 +169,7 @@ class DefaultIncludeProcessorTest extends TestCase
         $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/^Expected elements of include statement to be file names\. Got empty string instead in file ".+\/main\.yml"\.$/');
+        $this->expectExceptionMessageMatches('/^Expected elements of include statement to be file names\. Got empty string instead in file ".+\/main\.yml"\.$/');
 
         $processor->process($parser, $mainFile, $parsedMainFileContent);
     }

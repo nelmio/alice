@@ -18,6 +18,7 @@ use Nelmio\Alice\Parser\FileListProviderTrait;
 use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
@@ -28,6 +29,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class YamlParserTest extends TestCase
 {
+    use ProphecyTrait;
     use FileListProviderTrait;
 
     private static $dir;
@@ -235,7 +237,7 @@ EOF;
 
             $this->fail('Expected exception to be thrown.');
         } catch (UnparsableFileException $exception) {
-            $this->assertRegExp('/^The file ".+\/basic\.yml" does not contain valid YAML\.$/', $exception->getMessage());
+            $this->assertMatchesRegularExpression('/^The file ".+\/basic\.yml" does not contain valid YAML\.$/', $exception->getMessage());
             $this->assertEquals(0, $exception->getCode());
             $this->assertNotNull($exception->getPrevious());
         }
@@ -256,7 +258,7 @@ EOF;
 
             $this->fail('Expected exception to be thrown.');
         } catch (UnparsableFileException $exception) {
-            $this->assertRegExp('/^Could not parse the file ".+\/basic\.yml"\.$/', $exception->getMessage());
+            $this->assertMatchesRegularExpression('/^Could not parse the file ".+\/basic\.yml"\.$/', $exception->getMessage());
             $this->assertEquals(0, $exception->getCode());
             $this->assertNotNull($exception->getPrevious());
         }

@@ -28,6 +28,7 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('nelmio_alice');
+
         if (method_exists($treeBuilder, 'getRootNode')) {
             $rootNode = $treeBuilder->getRootNode();
         } else {
@@ -41,7 +42,7 @@ final class Configuration implements ConfigurationInterface
                     ->defaultValue('en_US')
                     ->info('Default locale for the Faker Generator')
                     ->validate()
-                        ->always($this->createStringValidatorClosure('nelmio_alice.locale'))
+                        ->always($this->createStringValidatorClosure())
                     ->end()
                 ->end()
                 ->scalarNode('seed')

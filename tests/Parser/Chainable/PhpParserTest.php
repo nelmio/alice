@@ -145,7 +145,7 @@ class PhpParserTest extends TestCase
     public function testThrowsAnExceptionIfNoArrayReturnedInParsedFile()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageRegExp('/^The file ".+\/no_return\.php" must return a PHP array\.$/');
+        $this->expectExceptionMessageMatches('/^The file ".+\/no_return\.php" must return a PHP array\.$/');
 
         $this->parser->parse(self::$dir.'/no_return.php');
     }
@@ -153,7 +153,7 @@ class PhpParserTest extends TestCase
     public function testThrowsAnExceptionIfWrongValueReturnedInParsedFile()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageRegExp('/^The file ".+\/wrong_return\.php" must return a PHP array\.$/');
+        $this->expectExceptionMessageMatches('/^The file ".+\/wrong_return\.php" must return a PHP array\.$/');
 
         $this->parser->parse(self::$dir.'/wrong_return.php');
     }

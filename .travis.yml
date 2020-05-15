@@ -5,8 +5,6 @@ cache:
     - "$HOME/.composer/cache/files"
 
 php:
-  - '7.1'
-  - '7.2'
   - '7.3'
   - '7.4'
 
@@ -17,15 +15,15 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: '7.1'
+    - php: '7.3'
       env: COMPOSER_FLAGS='--prefer-lowest'
-    - php: '7.2'
+    - php: '7.4'
       env: COVERAGE='true'
-    - php: '7.2'
+    - php: '7.4'
       env: SYMFONY_VERSION='~3.4.0'
-    - php: '7.2'
+    - php: '7.4'
       env: SYMFONY_VERSION='~4.4.0'
-    - php: '7.2'
+    - php: '7.4'
       env: SYMFONY_VERSION='~5.0.0'
 
 before_install:

@@ -23,6 +23,7 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseExce
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -30,6 +31,8 @@ use ReflectionClass;
  */
 class StringArrayTokenParserTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableTokenParser()
     {
         $this->assertTrue(is_a(StringArrayTokenParser::class, ChainableTokenParserInterface::class, true));

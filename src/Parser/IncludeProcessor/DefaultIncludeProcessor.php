@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
+use function array_reverse;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
-use function array_reverse;
 
 final class DefaultIncludeProcessor implements IncludeProcessorInterface
 {

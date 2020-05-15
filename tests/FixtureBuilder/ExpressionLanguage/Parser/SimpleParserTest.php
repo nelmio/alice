@@ -25,6 +25,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -32,6 +33,8 @@ use ReflectionClass;
  */
 class SimpleParserTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAParser()
     {
         $this->assertTrue(is_a(SimpleParser::class, ParserInterface::class, true));

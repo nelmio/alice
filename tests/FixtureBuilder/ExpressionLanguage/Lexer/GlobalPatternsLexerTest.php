@@ -18,6 +18,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -25,6 +26,8 @@ use ReflectionClass;
  */
 class GlobalPatternsLexerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsALexer()
     {
         $this->assertTrue(is_a(GlobalPatternsLexer::class, LexerInterface::class, true));

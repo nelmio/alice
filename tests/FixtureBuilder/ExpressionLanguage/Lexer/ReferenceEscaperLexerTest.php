@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -23,6 +24,8 @@ use ReflectionClass;
  */
 class ReferenceEscaperLexerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsALexer()
     {
         $this->assertTrue(is_a(ReferenceEscaperLexer::class, LexerInterface::class, true));
