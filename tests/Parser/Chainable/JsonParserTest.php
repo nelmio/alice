@@ -143,6 +143,33 @@ class JsonParserTest extends TestCase
         $this->assertSame([], $actual);
     }
 
+    public function testParseReturnsNamedParameters()
+    {
+        $actual = $this->parser->parse(self::$dir.'/named_parameters.json');
+
+        $this->assertSame(
+            [
+                'Nelmio\Alice\DummyWithMethods' => [
+                    'dummy_with_methods' => [
+                        '__construct' => [
+                            '$foo1' => 'foo1',
+                            '$foo2' => 'foo2',
+                        ],
+                        '__calls' => [
+                            [
+                                'bar' => [
+                                    '$bar1' => 'bar1',
+                                    '$bar2' => 'bar2',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            $actual
+        );
+    }
+
     public function testThrowsAnExceptionIfInvalidJson()
     {
         $this->expectException(UnparsableFileException::class);

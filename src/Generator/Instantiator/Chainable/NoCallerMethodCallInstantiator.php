@@ -15,9 +15,21 @@ namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\FixtureInterface;
+use Nelmio\Alice\Generator\NamedArgumentsResolver;
 
 final class NoCallerMethodCallInstantiator extends AbstractChainableInstantiator
 {
+    /**
+     * @var NamedArgumentsResolver|null
+     */
+    private $namedArgumentsResolver;
+
+    // TODO: make $namedArgumentsResolver non-nullable in 4.0. It is currently nullable only for BC purposes
+    public function __construct(NamedArgumentsResolver $namedArgumentsResolver = null)
+    {
+        $this->namedArgumentsResolver = $namedArgumentsResolver;
+    }
+
     /**
      * @inheritDoc
      */
@@ -35,9 +47,13 @@ final class NoCallerMethodCallInstantiator extends AbstractChainableInstantiator
     {
         list($class, $arguments) = [
             $fixture->getClassName(),
-            array_values($fixture->getSpecs()->getConstructor()->getArguments())
+            $fixture->getSpecs()->getConstructor()->getArguments()
         ];
 
-        return new $class(...$arguments);
+        if (null !== $this->namedArgumentsResolver) {
+            $arguments = $this->namedArgumentsResolver->resolveArguments($arguments, $class, '__construct');
+        }
+
+        return new $class(...array_values($arguments));
     }
 }
