@@ -56,6 +56,6 @@ final class CallProcessorRegistry implements CallProcessorInterface
             }
         }
 
-        throw CallProcessorExceptionFactory::createForNoParserFoundForElement($methodCall);
+        throw CallProcessorExceptionFactory::createForNoProcessorFoundForMethodCall($methodCall);
     }
 }
