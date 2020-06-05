@@ -186,6 +186,10 @@ For more information, refer to [the documentation](#table-of-contents).
 
 -  [Zenify/DoctrineFixtures](https://github.com/Zenify/DoctrineFixtures)
 
+### WordPress
+
+- [rmp-up/wp-fixtures](https://github.com/rmp-up/wp-fixtures)
+
 ### Zend Framework 2:
 
 - [ma-si/aist-alice-fixtures](https://github.com/ma-si/aist-alice-fixtures)
