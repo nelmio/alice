@@ -59,7 +59,7 @@ for 2.x, follow [this link](https://github.com/nelmio/alice/tree/2.x)**.
         1. [Dynamic parameters](doc/fixtures-refactoring.md#dynamic-parameters)
         1. [Composite parameters](doc/fixtures-refactoring.md#composite-parameters)
         1. [Usage with functions (constructor included)](doc/fixtures-refactoring.md#usage-with-functions-constructor-included)
-        1. [Inject external parameters](#inject-external-parameters)
+        1. [Inject external parameters](doc/fixtures-refactoring.md#inject-external-parameters)
 1. [Customize Data Generation](doc/customizing-data-generation.md)
     1. [Faker Data](doc/customizing-data-generation.md#faker-data)
         1. [Localized Fake Data](doc/customizing-data-generation.md#localized-fake-data)
