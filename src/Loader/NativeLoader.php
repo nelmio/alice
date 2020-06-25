@@ -15,6 +15,8 @@ namespace Nelmio\Alice\Loader;
 
 use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
+use Hoa\Compiler\Llk\Llk;
+use Hoa\File\Read;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\FileLoaderInterface;
@@ -59,13 +61,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\HoaLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser;
@@ -213,6 +209,14 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     /** @protected */
     const LOCALE = 'en_US';
+
+    /**
+     * @Path to Alice grammar defined in the PP language.
+     *
+     * @protected
+     * @see https://hoa-project.net/En/Literature/Hack/Compiler.html#PP_language
+     */
+    const GRAMMAR = __DIR__ . '/../../src/Grammar.pp';
 
     private $previous = '';
 
@@ -401,8 +405,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             ),
             new FactoryDenormalizer(
                 $this->getCallsDenormalizer()
-            ),
-            $this->getArgumentsDenormalizer()
+            )
         );
     }
 
@@ -456,19 +459,9 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     protected function createLexer(): LexerInterface
     {
-        return new EmptyValueLexer(
-            new ReferenceEscaperLexer(
-                new GlobalPatternsLexer(
-                    new FunctionLexer(
-                        new StringThenReferenceLexer(
-                            new SubPatternsLexer(
-                                new ReferenceLexer()
-                            )
-                        )
-                    )
-                )
-            )
-        );
+        $parser = Llk::load(new Read(self::GRAMMAR));
+
+        return new HoaLexer($parser);
     }
 
     protected function createExpressionLanguageTokenParser(): TokenParserInterface
