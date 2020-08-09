@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
+use Nelmio\Alice\Entity\DummyWithNoArgumentConstructor;
 use Nelmio\Alice\Entity\DummyWithMethods;
 use Nelmio\Alice\Entity\EmptyDummy;
 use PHPUnit\Framework\TestCase;
@@ -299,6 +300,19 @@ class NamedArgumentsResolverTest extends TestCase
             [
                 'bar1' => 'hello',
                 'bar2' => null,
+            ],
+        ];
+
+        yield 'with arguments passed to a constructor that does not expect arguments' => [
+            DummyWithNoArgumentConstructor::class,
+            '__construct',
+            [
+                'foo',
+                'bar',
+            ],
+            [
+                'foo',
+                'bar',
             ],
         ];
     }
