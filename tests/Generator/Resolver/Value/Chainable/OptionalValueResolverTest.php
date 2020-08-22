@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use Faker\Generator;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
@@ -70,48 +71,43 @@ class OptionalValueResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    public function testCanHandleExtremaQuantifiersCorrectly()
-    {
-        $resolver = new OptionalValueResolver(new FakeValueResolver());
+    /**
+     * @dataProvider optionalValueProvider
+     */
+    public function testCanHandleExtremaQuantifiersCorrectly(
+        OptionalValue $value,
+        int $randomValue,
+        string $expectedValue
+    ) {
+        $generatorProphecy = $this->prophesize(Generator::class);
+        $generatorProphecy->numberBetween(0, 99)->willReturn($randomValue);
+        $generator = $generatorProphecy->reveal();
 
-        $builder = new MockBuilder();
-        $builder->setNamespace(__NAMESPACE__)
-            ->setName('mt_rand');
+        $resolver = new OptionalValueResolver(new FakeValueResolver(), $generator);
 
-        $builder->setFunctionProvider(new FixedValueFunction(0));
-        $mock = $builder->build();
-        $mock->enable();
+        $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
-        $value = new OptionalValue(0, 'first_0', 'second_0');
-        $resolvedValueFor0 = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
-
-        $mock->disable();
-
-        $builder->setFunctionProvider(new FixedValueFunction(99));
-        $mock = $builder->build();
-        $mock->enable();
-
-        $value = new OptionalValue(100, 'first_100', 'second_100');
-        $resolvedValueFor100 = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
-
-        $mock->disable();
-
-        $builder->setFunctionProvider(new FixedValueFunction(49));
-        $mock = $builder->build();
-        $mock->enable();
-
-        $value = new OptionalValue(50, 'first_50', 'second_50');
-        $resolvedValueFor50 = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
-
-        $mock->disable();
-
-        $this->assertEquals('second_0', $resolvedValueFor0->getValue());
-        $this->assertEquals('first_100', $resolvedValueFor100->getValue());
-        $this->assertEquals('first_50', $resolvedValueFor50->getValue());
+        $this->assertSame($expectedValue, $resolvedValue->getValue());
     }
 
-    public function testReturnsSetWithResolvedValue()
+    public static function optionalValueProvider(): iterable
     {
-        //TODO
+        yield 'min' => [
+            new OptionalValue(0, 'first_0', 'second_0'),
+            0,
+            'second_0',
+        ];
+
+        yield 'max' => [
+            new OptionalValue(100, 'first_100', 'second_100'),
+            99,
+            'first_100',
+        ];
+
+        yield 'mid' => [
+            new OptionalValue(50, 'first_50', 'second_50'),
+            49,
+            'first_50',
+        ];
     }
 }
