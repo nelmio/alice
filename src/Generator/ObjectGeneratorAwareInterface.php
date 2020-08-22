@@ -16,8 +16,6 @@ namespace Nelmio\Alice\Generator;
 interface ObjectGeneratorAwareInterface
 {
     /**
-     * @param ObjectGeneratorInterface $generator
-     *
      * @return static
      */
     public function withObjectGenerator(ObjectGeneratorInterface $generator);

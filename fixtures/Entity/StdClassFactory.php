@@ -27,10 +27,6 @@ class StdClassFactory
      * $std = new \stdClass();
      * $std->foo = 'bar';
      * $std->ping = 'pong';
-     *
-     * @param array $attributes
-     *
-     * @return stdClass
      */
     public static function create(array $attributes = []): stdClass
     {

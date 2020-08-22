@@ -27,8 +27,6 @@ interface IncludeProcessorInterface
      * @param array           $data   Parse result of the loaded file.
      *
      * @throws ParseThrowable
-     *
-     * @return array
      */
     public function process(ParserInterface $parser, string $file, array $data): array;
 }

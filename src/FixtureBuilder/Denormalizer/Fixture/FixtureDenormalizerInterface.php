@@ -22,9 +22,7 @@ interface FixtureDenormalizerInterface
     /**
      * A more specific version of {@see \Nelmio\Alice\BuilderInterface} dedicated to fixtures.
      *
-     * @param FixtureBag $builtFixtures
      * @param string     $className FQCN (no flags)
-     * @param string     $fixtureId
      * @param array      $specs     Contains the list of property calls, constructor specification and method calls
      * @param FlagBag    $flags     Flags inherited from the namespace.
      *

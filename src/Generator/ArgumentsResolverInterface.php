@@ -25,7 +25,6 @@ interface ArgumentsResolverInterface
      *
      * @param ValueInterface[]|mixed[] $arguments Arguments to resolved
      * @param FixtureInterface         $fixture   Fixture to which belongs the arguments.
-     * @param ResolvedFixtureSet       $fixtureSet
      * @param array                    $scope     List of variables accessible while resolving the arguments.
      *
      * @throws ResolutionThrowable

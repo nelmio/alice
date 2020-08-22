@@ -19,8 +19,6 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 interface ParserAwareInterface
 {
     /**
-     * @param ParserInterface $parser
-     *
      * @return static New instance with the parser.
      */
     public function withParser(ParserInterface $parser);

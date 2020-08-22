@@ -26,8 +26,6 @@ interface ParameterBagDenormalizerInterface
      * @param array $data PHP data coming from the parser
      *
      * @throws DenormalizationThrowable
-     *
-     * @return ParameterBag
      */
     public function denormalize(array $data): ParameterBag;
 }

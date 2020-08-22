@@ -26,9 +26,7 @@ class MutableMethodCall implements MethodCallInterface
      */
     private $caller;
 
-    /**
-     * @var mixed
-     */
+    
     private $method;
 
     /**

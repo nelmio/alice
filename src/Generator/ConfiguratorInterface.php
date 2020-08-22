@@ -23,11 +23,8 @@ interface ConfiguratorInterface
      * configured object.
      *
      * @param ObjectInterface    $object Object to configure
-     * @param ResolvedFixtureSet $fixtureSet
      *
      * @throws ConfigurationThrowable
-     *
-     * @return ResolvedFixtureSet
      */
     public function configure(ObjectInterface $object, ResolvedFixtureSet $fixtureSet): ResolvedFixtureSet;
 }

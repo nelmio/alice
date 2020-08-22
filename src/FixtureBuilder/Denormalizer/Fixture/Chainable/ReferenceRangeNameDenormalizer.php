@@ -115,10 +115,6 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
     }
 
     /**
-     * @param FixtureBag $builtFixtures
-     * @param string     $referencedName
-     * @param bool       $allFlag
-     *
      * @return TemplatingFixture[]
      */
     private function buildReferencedValues(

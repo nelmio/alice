@@ -22,13 +22,8 @@ interface InstantiatorInterface
      * Instantiates the object described by the given fixture. Has access to the current fixture set and returns the new
      * fixture set containing the instantiated the object.
      *
-     * @param FixtureInterface   $fixture
-     * @param ResolvedFixtureSet $fixtureSet
-     * @param GenerationContext  $context
      *
      * @throws InstantiationThrowable
-     *
-     * @return ResolvedFixtureSet
      */
     public function instantiate(
         FixtureInterface $fixture,

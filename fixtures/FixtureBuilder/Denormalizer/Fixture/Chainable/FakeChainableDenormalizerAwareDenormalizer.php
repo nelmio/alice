@@ -30,8 +30,6 @@ class FakeChainableDenormalizerAwareDenormalizer implements ChainableFixtureDeno
     public $denormalizer;
 
     /**
-     * @param FixtureDenormalizerInterface $denormalizer
-     *
      * @return static
      */
     public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)

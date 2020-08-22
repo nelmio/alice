@@ -17,9 +17,6 @@ use Nelmio\Alice\Definition\ValueInterface;
 
 class MutableValue implements ValueInterface
 {
-    /**
-     * @var mixed
-     */
     private $value;
 
     public function __construct($value)

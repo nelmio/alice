@@ -68,8 +68,6 @@ final class ParameterBag implements IteratorAggregate, Countable
 
     /**
      * @throws ParameterNotFoundException
-     *
-     * @return mixed
      */
     public function get(string $key)
     {

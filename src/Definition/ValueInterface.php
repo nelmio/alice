@@ -19,9 +19,6 @@ namespace Nelmio\Alice\Definition;
  */
 interface ValueInterface
 {
-    /**
-     * @return mixed
-     */
     public function getValue();
 
     public function __toString(): string;

@@ -19,10 +19,6 @@ interface ChainableFlagParserInterface extends FlagParserInterface
 {
     /**
      * Checks if can parse element.
-     *
-     * @param string $element
-     *
-     * @return bool
      */
     public function canParse(string $element): bool;
 }

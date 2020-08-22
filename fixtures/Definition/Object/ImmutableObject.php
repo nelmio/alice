@@ -29,7 +29,6 @@ class ImmutableObject implements ObjectInterface
     private $instance;
 
     /**
-     * @param string $id
      * @param object $instance
      */
     public function __construct(string $id, $instance)

@@ -26,9 +26,6 @@ interface ArgumentsDenormalizerInterface
     /**
      * Denormalizes an array of arguments.
      *
-     * @param FixtureInterface    $scope
-     * @param FlagParserInterface $parser
-     * @param array               $unparsedArguments
      *
      * @throws DenormalizationThrowable
      *

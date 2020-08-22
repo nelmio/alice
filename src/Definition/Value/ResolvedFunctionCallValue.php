@@ -32,7 +32,6 @@ final class ResolvedFunctionCallValue implements ValueInterface
 
     /**
      * @param string $name e.g. 'randomElement'
-     * @param array  $arguments
      */
     public function __construct(string $name, array $arguments = [])
     {

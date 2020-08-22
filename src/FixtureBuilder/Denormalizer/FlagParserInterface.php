@@ -21,8 +21,6 @@ interface FlagParserInterface
      * Parses a string element to extract the flags from it.
      *
      * @param string $element e.g. 'user0 (dummy_flag, another_flag)'
-     *
-     * @return FlagBag
      */
     public function parse(string $element): FlagBag;
 }

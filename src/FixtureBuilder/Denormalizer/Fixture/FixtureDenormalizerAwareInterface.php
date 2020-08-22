@@ -16,8 +16,6 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 interface FixtureDenormalizerAwareInterface
 {
     /**
-     * @param FixtureDenormalizerInterface $denormalizer
-     *
      * @return static
      */
     public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer);

@@ -106,8 +106,6 @@ final class GenerationContext
 
     /**
      * @throws CachedValueNotFound
-     *
-     * @return mixed
      */
     public function getCachedValue(string $key)
     {

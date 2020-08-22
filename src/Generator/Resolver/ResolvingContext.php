@@ -36,8 +36,6 @@ final class ResolvingContext
     /**
      * Returns the existing instance if is an object or create a new one otherwise. It also ensure that the key will be
      * added also it won't increment the counter if already present.
-     *
-     * @param self|null $resolving
      */
     public static function createFrom(self $resolving = null, string $key): self
     {

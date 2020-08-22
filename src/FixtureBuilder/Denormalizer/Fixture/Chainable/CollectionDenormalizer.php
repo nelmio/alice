@@ -18,8 +18,6 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalize
 interface CollectionDenormalizer extends ChainableFixtureDenormalizerInterface
 {
     /**
-     * @param string $id
-     *
      * @return string[]
      *
      * @example
