@@ -25,6 +25,12 @@ if (false === function_exists('Nelmio\Alice\deep_clone')) {
      */
     function deep_clone($value)
     {
-        return (new DeepCopy())->copy($value);
+        static $deepCopy;
+
+        if (null === $deepCopy) {
+            $deepCopy = (new DeepCopy())->skipUncloneable(true);
+        }
+
+        return $deepCopy->copy($value);
     }
 }
