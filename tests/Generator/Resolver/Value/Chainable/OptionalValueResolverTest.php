@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Faker\Generator;
+use function in_array;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
@@ -23,12 +24,9 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
-use phpmock\functions\FixedValueFunction;
-use phpmock\MockBuilder;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
-use function in_array;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver

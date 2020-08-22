@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Faker\Generator as FakerGenerator;
+use function mt_rand;
 use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -27,7 +28,6 @@ use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
-use function mt_rand;
 
 final class OptionalValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
