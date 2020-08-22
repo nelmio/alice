@@ -5,6 +5,7 @@
 /fixtures/Bridge/Symfony/Application/cache/
 /fixtures/Bridge/Symfony/Application/var/
 !/fixtures/Bridge/Symfony/Application/var/.gitkeep
+!/fixtures/Bridge/Symfony/Application/var/cache/.gitkeep
 /vendor/
 /vendor-bin/*/bin/
 /vendor-bin/*/vendor/
