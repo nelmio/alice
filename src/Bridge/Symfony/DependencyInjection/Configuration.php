@@ -61,8 +61,7 @@ final class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('functions_blacklist')
-                    ->prototype('scalar')
-                    ->end()
+                    ->scalarPrototype()->end()
                     ->defaultValue(['current'])
                     ->info(
                         'Some PHP native functions may conflict with Faker formatters. By default, PHP native '
