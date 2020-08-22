@@ -38,25 +38,19 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
         $this->processor = $processor;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withProcessor(CallProcessorInterface $processor): self
     {
         return new self($processor);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canProcess(MethodCallInterface $methodCall): bool
     {
         return $methodCall instanceof OptionalMethodCall;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param OptionalMethodCall $methodCall
      */
     public function process(

@@ -96,17 +96,13 @@ final class FlagBag implements IteratorAggregate, Countable
         return $this->key;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getIterator()
     {
         return new ArrayIterator(array_values($this->flags));
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function count()
     {
         return count($this->flags);

@@ -26,9 +26,7 @@ final class JsonParser implements ChainableParserInterface
 
     private const REGEX = '/.{1,}\.json$/i';
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(string $file): bool
     {
         if (false === stream_is_local($file)) {
@@ -39,8 +37,6 @@ final class JsonParser implements ChainableParserInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param string $file Local JSON file
      *
      * @throws UnparsableFileException

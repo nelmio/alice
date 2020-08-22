@@ -119,17 +119,13 @@ final class ObjectBag implements IteratorAggregate, Countable
         );
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function count()
     {
         return count($this->objects);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getIterator()
     {
         return new ArrayIterator($this->objects);

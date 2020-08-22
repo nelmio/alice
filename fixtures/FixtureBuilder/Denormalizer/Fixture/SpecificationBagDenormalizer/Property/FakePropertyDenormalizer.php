@@ -23,9 +23,7 @@ class FakePropertyDenormalizer implements PropertyDenormalizerInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(FixtureInterface $scope, string $name, $value, FlagBag $flags): Property
     {
         $this->__call(__FUNCTION__, func_get_args());

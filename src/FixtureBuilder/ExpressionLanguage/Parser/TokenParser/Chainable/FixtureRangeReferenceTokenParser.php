@@ -44,9 +44,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
         $this->token = uniqid(__CLASS__);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::RANGE_REFERENCE_TYPE;

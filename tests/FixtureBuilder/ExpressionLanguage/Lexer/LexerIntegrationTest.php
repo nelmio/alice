@@ -33,9 +33,7 @@ class LexerIntegrationTest extends TestCase
      */
     protected $lexer;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->lexer = (new NativeLoader())->getLexer();

@@ -20,9 +20,7 @@ class FakeReference implements ServiceReferenceInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         $this->__call(__METHOD__, func_get_args());

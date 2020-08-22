@@ -32,9 +32,7 @@ final class EmptyValueLexer implements LexerInterface
         $this->lexer = $decoratedLexer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function lex(string $value): array
     {
         if ('' === $value) {

@@ -41,8 +41,6 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param array $data subset of PHP data coming from the parser (does not contains any parameters)
      *
      * @example

@@ -69,8 +69,6 @@ final class DynamicArrayValue implements ValueInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array The first element is the quantifier and the second the element.
      */
     public function getValue(): array
@@ -81,9 +79,7 @@ final class DynamicArrayValue implements ValueInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return sprintf('%sx %s', $this->quantifier, $this->element);

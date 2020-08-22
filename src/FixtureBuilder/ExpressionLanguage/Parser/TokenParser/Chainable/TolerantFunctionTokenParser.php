@@ -40,9 +40,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
      */
     private $functionTokenParser;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __construct(ChainableTokenParserInterface $functionTokenParser, ParserInterface $parser = null)
     {
         parent::__construct($parser);
@@ -54,17 +52,13 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
         $this->functionTokenParser = $functionTokenParser;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withParser(ParserInterface $parser): self
     {
         return new self($this->functionTokenParser, $parser);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::FUNCTION_TYPE;

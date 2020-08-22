@@ -24,9 +24,7 @@ class MutableReference implements ServiceReferenceInterface
         $this->id = $id;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         return $this->id;

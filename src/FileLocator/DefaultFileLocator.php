@@ -25,9 +25,6 @@ use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
  */
 final class DefaultFileLocator implements FileLocatorInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function locate(string $name, string $currentPath = null): string
     {
         if ('' === $name) {

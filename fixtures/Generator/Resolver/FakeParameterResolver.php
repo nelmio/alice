@@ -21,9 +21,7 @@ class FakeParameterResolver implements ParameterResolverInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,

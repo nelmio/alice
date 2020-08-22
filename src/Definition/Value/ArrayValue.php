@@ -32,8 +32,6 @@ final class ArrayValue implements ValueInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array The first element is the quantifier and the second the element.
      */
     public function getValue(): array
@@ -41,9 +39,7 @@ final class ArrayValue implements ValueInterface
         return deep_clone($this->values);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return var_export($this->values, true);

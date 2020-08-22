@@ -27,9 +27,7 @@ class TokenTypeTest extends TestCase
      */
     private $constants;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $reflClass = new ReflectionClass(TokenType::class);

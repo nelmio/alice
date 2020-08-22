@@ -31,8 +31,6 @@ final class NestedValue implements ValueInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return ValueInterface[]|array
      */
     public function getValue(): array
@@ -40,9 +38,7 @@ final class NestedValue implements ValueInterface
         return $this->values;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return sprintf('(nested) %s', var_export($this->values, true));

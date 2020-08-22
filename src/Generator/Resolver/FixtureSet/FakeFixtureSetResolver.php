@@ -22,9 +22,7 @@ class FakeFixtureSetResolver implements FixtureSetResolverInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(FixtureSet $fixtureSet): ResolvedFixtureSet
     {
         $this->__call(__FUNCTION__, func_get_args());

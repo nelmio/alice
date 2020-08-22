@@ -49,25 +49,19 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
         $this->faker = $faker;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver, $this->faker);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof OptionalValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param OptionalValue $value
      *
      * @throws UnresolvableValueException

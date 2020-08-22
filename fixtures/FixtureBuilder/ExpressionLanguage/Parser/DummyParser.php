@@ -17,9 +17,6 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 
 class DummyParser implements ParserInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function parse(string $value)
     {
         return $value;

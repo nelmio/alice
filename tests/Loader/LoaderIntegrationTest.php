@@ -58,9 +58,7 @@ class LoaderIntegrationTest extends TestCase
      */
     protected $nonIsolatedLoader;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->loader = new IsolatedLoader();

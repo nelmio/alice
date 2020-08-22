@@ -30,9 +30,7 @@ class SimpleParameterBagDenormalizerTest extends TestCase
      */
     private $denormalizer;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->denormalizer = new SimpleParameterBagDenormalizer();

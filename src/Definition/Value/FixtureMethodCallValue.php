@@ -46,9 +46,7 @@ final class FixtureMethodCallValue implements ValueInterface
         return $this->function;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue(): array
     {
         return [
@@ -57,9 +55,7 @@ final class FixtureMethodCallValue implements ValueInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return sprintf(

@@ -38,9 +38,7 @@ final class DoublePassGenerator implements GeneratorInterface
         $this->generator = $generator;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function generate(FixtureSet $fixtureSet): ObjectSet
     {
         $resolvedFixtureSet = $this->resolver->resolve($fixtureSet);

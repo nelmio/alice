@@ -20,9 +20,7 @@ class FakeParser implements ParserInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $value): void
     {
         $this->__call(__METHOD__, func_get_args());

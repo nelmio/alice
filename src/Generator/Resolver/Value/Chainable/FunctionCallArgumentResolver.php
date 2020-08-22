@@ -49,25 +49,19 @@ final class FunctionCallArgumentResolver implements ChainableValueResolverInterf
         $this->argumentResolver = $argumentResolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $argumentsResolver): self
     {
         return new self($this->resolver, $argumentsResolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FunctionCallValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param FunctionCallValue $value
      */
     public function resolve(

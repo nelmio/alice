@@ -31,9 +31,7 @@ class ReferenceLexerTest extends TestCase
      */
     private $lexer;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->lexer = new ReferenceLexer();

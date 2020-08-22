@@ -18,17 +18,12 @@ use stdClass;
 
 class DummyChainableInstantiator extends AbstractChainableInstantiator
 {
-    /**
-     * @inheritdoc
-     */
     protected function createInstance(FixtureInterface $fixture)
     {
         return new stdClass();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         return true;

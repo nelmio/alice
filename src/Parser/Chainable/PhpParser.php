@@ -25,9 +25,7 @@ final class PhpParser implements ChainableParserInterface
     /** @interval */
     const REGEX = '/.+\.php[7]?$/i';
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(string $file): bool
     {
         if (false === stream_is_local($file)) {
@@ -38,8 +36,6 @@ final class PhpParser implements ChainableParserInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param string $file Local PHP file
      */
     public function parse(string $file): array

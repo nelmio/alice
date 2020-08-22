@@ -25,9 +25,7 @@ class FakeValueResolver implements ValueResolverInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(
         ValueInterface $value,
         FixtureInterface $fixture,

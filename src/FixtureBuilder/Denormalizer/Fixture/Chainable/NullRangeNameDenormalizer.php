@@ -36,17 +36,13 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
         $this->token = uniqid(__CLASS__, true);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canDenormalize(string $name, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $name, $matches);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,

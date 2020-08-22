@@ -51,25 +51,19 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         $this->generator = $generator;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withObjectGenerator(ObjectGeneratorInterface $generator): self
     {
         return new self($generator);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FixtureReferenceValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param FixtureReferenceValue $value
      *
      * @throws UnresolvableValueException

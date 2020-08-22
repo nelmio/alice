@@ -28,9 +28,7 @@ final class FixtureMethodReferenceTokenParser extends AbstractChainableParserAwa
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::METHOD_REFERENCE_TYPE;
@@ -39,7 +37,7 @@ final class FixtureMethodReferenceTokenParser extends AbstractChainableParserAwa
     /**
      * Parses expressions such as "@username->getName()".
      *
-     * {@inheritdoc}
+     *
      *
      * @throws ParseException
      */

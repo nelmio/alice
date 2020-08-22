@@ -31,25 +31,19 @@ class NonIsolatedSymfonyLoader implements FilesLoaderInterface, FileLoaderInterf
         $this->container = $container;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->container->get('nelmio_alice.data_loader')->loadData($data, $parameters, $objects);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->container->get('nelmio_alice.files_loader')->loadFiles($files, $parameters, $objects);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->container->get('nelmio_alice.file_loader')->loadFile($file, $parameters, $objects);

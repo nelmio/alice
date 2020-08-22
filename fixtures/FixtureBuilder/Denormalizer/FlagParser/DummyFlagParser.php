@@ -21,9 +21,7 @@ class DummyFlagParser implements FlagParserInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $element): FlagBag
     {
         return new FlagBag($element);

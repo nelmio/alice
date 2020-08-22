@@ -59,9 +59,7 @@ final class MethodCallWithReference implements MethodCallInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withArguments(array $arguments = null): self
     {
         $clone = clone $this;
@@ -70,33 +68,25 @@ final class MethodCallWithReference implements MethodCallInterface
         return $clone;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getCaller()
     {
         return clone $this->caller;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getMethod(): string
     {
         return $this->method;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getArguments()
     {
         return $this->arguments;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return $this->stringValue;

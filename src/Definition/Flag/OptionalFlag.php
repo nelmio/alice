@@ -42,9 +42,7 @@ final class OptionalFlag implements FlagInterface
         return $this->percentage;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return '%?';

@@ -39,25 +39,19 @@ final class ArrayValueResolver implements ChainableValueResolverInterface, Value
         $this->resolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ArrayValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param ArrayValue $list
      */
     public function resolve(

@@ -22,17 +22,13 @@ final class ConfiguratorFlagParser implements ChainableFlagParserInterface
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(string $element): bool
     {
         return 'configurator' === $element;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $element): FlagBag
     {
         return (new FlagBag(''))->withFlag(new ConfiguratorFlag());

@@ -26,9 +26,6 @@ use TypeError;
  */
 final class StringArrayTokenParser extends AbstractChainableParserAwareParser
 {
-    /**
-     * @inheritdoc
-     */
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::STRING_ARRAY_TYPE;

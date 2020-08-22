@@ -26,9 +26,6 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseExce
  */
 final class MethodReferenceTokenParser extends AbstractChainableParserAwareParser
 {
-    /**
-     * @inheritdoc
-     */
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::METHOD_REFERENCE_TYPE;
@@ -37,7 +34,7 @@ final class MethodReferenceTokenParser extends AbstractChainableParserAwareParse
     /**
      * Parses tokens values like "@user->getUserName()".
      *
-     * {@inheritdoc}
+     *
      *
      * @throws ParseException
      */

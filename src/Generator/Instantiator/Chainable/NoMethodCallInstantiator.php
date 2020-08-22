@@ -21,17 +21,12 @@ use ReflectionException;
 
 final class NoMethodCallInstantiator extends AbstractChainableInstantiator
 {
-    /**
-     * @inheritDoc
-     */
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         return $fixture->getSpecs()->getConstructor() instanceof NoMethodCall;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function createInstance(FixtureInterface $fixture)
     {
         try {

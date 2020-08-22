@@ -52,25 +52,19 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
         $this->flagParser = $parser;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withFlagParser(FlagParserInterface $parser): self
     {
         return new self($this->specsDenormalizer, $parser);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canDenormalize(string $name, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $name, $matches);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,

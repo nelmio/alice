@@ -70,8 +70,6 @@ final class SubPatternsLexer implements LexerInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws LexException
      */
     public function lex(string $value): array

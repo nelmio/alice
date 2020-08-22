@@ -46,17 +46,13 @@ final class FixtureMatchReferenceValue implements ValueInterface
         return 1 === preg_match($this->pattern, $value);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue(): string
     {
         return $this->pattern;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return sprintf('@(regex: %s)', $this->pattern);

@@ -32,9 +32,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
         $this->decoratedPropertyAccessor = $decoratedPropertyAccessor;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function setValue(&$objectOrArray, $propertyPath, $value): void
     {
         if ($objectOrArray instanceof stdClass) {
@@ -46,9 +44,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
         $this->decoratedPropertyAccessor->setValue($objectOrArray, $propertyPath, $value);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue($objectOrArray, $propertyPath)
     {
         if (false === $objectOrArray instanceof stdClass) {
@@ -62,9 +58,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
         return $objectOrArray->$propertyPath;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function isWritable($objectOrArray, $propertyPath)
     {
         return ($objectOrArray instanceof stdClass)
@@ -73,9 +67,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function isReadable($objectOrArray, $propertyPath)
     {
         return ($objectOrArray instanceof stdClass)

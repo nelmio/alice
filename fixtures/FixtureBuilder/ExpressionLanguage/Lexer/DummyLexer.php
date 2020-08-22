@@ -20,9 +20,7 @@ class DummyLexer implements LexerInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function lex(string $value): array
     {
         return [$value];

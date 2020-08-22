@@ -34,8 +34,6 @@ final class FixtureReference implements ServiceReferenceInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string fixture ID e.g. 'user0'
      */
     public function getId(): string

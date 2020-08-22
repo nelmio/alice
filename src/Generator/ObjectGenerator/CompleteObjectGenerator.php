@@ -36,9 +36,7 @@ final class CompleteObjectGenerator implements ObjectGeneratorInterface
         $this->objectGenerator = $objectGenerator;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function generate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,

@@ -37,9 +37,7 @@ final class SimpleParameterBagResolver implements ParameterBagResolverInterface
         $this->resolver = $decoratedResolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(
         ParameterBag $unresolvedParameters,
         ParameterBag $injectedParameters = null

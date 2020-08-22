@@ -32,8 +32,6 @@ final class InstantiatedReference implements ServiceReferenceInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string Service ID coming from a framework DIC or an instantiated fixture e.g. 'nelmio.alice.user_factory'
      */
     public function getId(): string

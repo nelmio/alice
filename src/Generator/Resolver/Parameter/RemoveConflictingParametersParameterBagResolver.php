@@ -34,9 +34,7 @@ final class RemoveConflictingParametersParameterBagResolver implements Parameter
         $this->resolver = $decoratedResolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(
         ParameterBag $unresolvedParameters,
         ParameterBag $injectedParameters = null

@@ -25,17 +25,13 @@ class DummyChainableTokenParserAware implements ChainableTokenParserInterface, P
      */
     public $parser;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return false;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withParser(ParserInterface $parser)
     {
         $this->parser = $parser;
@@ -43,9 +39,7 @@ class DummyChainableTokenParserAware implements ChainableTokenParserInterface, P
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(Token $token)
     {
         return '';

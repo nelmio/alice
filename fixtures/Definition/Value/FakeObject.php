@@ -20,25 +20,19 @@ class FakeObject implements ObjectInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getInstance(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withInstance($newInstance): void
     {
         $this->__call(__METHOD__, func_get_args());

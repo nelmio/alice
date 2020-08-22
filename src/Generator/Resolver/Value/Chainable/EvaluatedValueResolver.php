@@ -30,17 +30,13 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof EvaluatedValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param EvaluatedValue $value
      *
      * @throws UnresolvableValueException

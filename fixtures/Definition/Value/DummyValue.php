@@ -27,17 +27,13 @@ class DummyValue implements ValueInterface
         $this->value = $value;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return $this->value;

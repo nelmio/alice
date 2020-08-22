@@ -30,16 +30,13 @@ final class TolerantFixtureDenormalizer implements FixtureDenormalizerInterface
      * @var FixtureDenormalizerInterface
      */
     private $denormalizer;
-
     
     public function __construct(FixtureDenormalizerInterface $denormalizer)
     {
         $this->denormalizer = $denormalizer;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(FixtureBag $builtFixtures, string $className, string $fixtureId, array $specs, FlagBag $flags): FixtureBag
     {
         try {

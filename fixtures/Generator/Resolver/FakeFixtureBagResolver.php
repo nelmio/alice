@@ -20,9 +20,7 @@ class FakeFixtureBagResolver implements FixtureBagResolverInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(FixtureBag $unresolvedFixtures): FixtureBag
     {
         $this->__call(__FUNCTION__, func_get_args());

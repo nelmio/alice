@@ -50,9 +50,7 @@ final class SimpleParser implements ParserInterface
         ;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $value)
     {
         $tokens = $this->lexer->lex($value);

@@ -42,9 +42,7 @@ final class FlagParserRegistry implements FlagParserInterface
         )(...$parsers);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $element): FlagBag
     {
         foreach ($this->parsers as $parser) {

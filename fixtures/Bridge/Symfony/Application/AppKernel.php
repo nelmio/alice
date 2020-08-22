@@ -28,17 +28,13 @@ class AppKernel extends Kernel
      */
     private $config;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __construct($environment, $debug)
     {
         parent::__construct($environment, $debug);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function registerBundles()
     {
         return [
@@ -47,9 +43,7 @@ class AppKernel extends Kernel
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         if (3 === self::MAJOR_VERSION) {
@@ -61,9 +55,7 @@ class AppKernel extends Kernel
         $loader->load($config);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new class() implements CompilerPassInterface {

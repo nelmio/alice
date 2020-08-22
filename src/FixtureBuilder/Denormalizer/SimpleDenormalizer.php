@@ -37,9 +37,7 @@ final class SimpleDenormalizer implements DenormalizerInterface
         $this->fixturesDenormalizer = $fixturesDenormalizer;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(array $data): BareFixtureSet
     {
         $parameters = $this->parametersDenormalizer->denormalize($data);

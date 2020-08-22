@@ -18,9 +18,6 @@ use Nelmio\Alice\Symfony\KernelIsolatedServiceCall;
 
 class IsolatedSymfonyBuiltInParser implements ParserInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function parse(string $value)
     {
         return KernelIsolatedServiceCall::call(

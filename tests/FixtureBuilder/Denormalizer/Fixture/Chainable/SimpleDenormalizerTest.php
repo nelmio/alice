@@ -40,9 +40,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
 {
     use ProphecyTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->denormalizer = new SimpleDenormalizer(

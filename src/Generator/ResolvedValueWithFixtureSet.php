@@ -24,14 +24,12 @@ final class ResolvedValueWithFixtureSet
      * @var ResolvedFixtureSet
      */
     private $set;
-
     
     public function __construct($resolvedValue, ResolvedFixtureSet $set)
     {
         $this->value = $resolvedValue;
         $this->set = $set;
     }
-
     
     public function getValue()
     {

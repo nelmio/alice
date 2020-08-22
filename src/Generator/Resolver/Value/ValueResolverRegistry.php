@@ -58,17 +58,13 @@ final class ValueResolverRegistry implements ValueResolverInterface, ObjectGener
         )($generator, ...$resolvers);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withObjectGenerator(ObjectGeneratorInterface $generator)
     {
         return new self($this->resolvers, $generator);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ResolverNotFoundException
      */
     public function resolve(

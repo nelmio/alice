@@ -32,9 +32,7 @@ final class StaticFactoryInstantiator extends AbstractChainableInstantiator
         $this->namedArgumentsResolver = $namedArgumentsResolver;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         $constructor = $fixture->getSpecs()->getConstructor();
@@ -42,9 +40,7 @@ final class StaticFactoryInstantiator extends AbstractChainableInstantiator
         return null !== $constructor && false === $constructor instanceof NoMethodCall && $constructor->getCaller() instanceof StaticReference;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function createInstance(FixtureInterface $fixture)
     {
         $constructor = $fixture->getSpecs()->getConstructor();

@@ -23,9 +23,7 @@ class FakeCallsDenormalizer implements CallsDenormalizerInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,

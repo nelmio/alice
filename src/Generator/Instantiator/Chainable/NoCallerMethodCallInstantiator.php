@@ -30,9 +30,7 @@ final class NoCallerMethodCallInstantiator extends AbstractChainableInstantiator
         $this->namedArgumentsResolver = $namedArgumentsResolver;
     }
 
-    /**
-     * @inheritDoc
-     */
+    
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         $constructor = $fixture->getSpecs()->getConstructor();
@@ -40,9 +38,7 @@ final class NoCallerMethodCallInstantiator extends AbstractChainableInstantiator
         return null !== $constructor && false === $constructor instanceof NoMethodCall && null === $constructor->getCaller();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function createInstance(FixtureInterface $fixture)
     {
         list($class, $arguments) = [

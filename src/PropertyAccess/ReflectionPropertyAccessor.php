@@ -36,9 +36,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
         $this->decoratedPropertyAccessor = $decoratedPropertyAccessor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setValue(&$objectOrArray, $propertyPath, $value): void
     {
         try {
@@ -69,9 +67,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function getValue($objectOrArray, $propertyPath)
     {
         try {
@@ -100,17 +96,13 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function isWritable($objectOrArray, $propertyPath)
     {
         return $this->decoratedPropertyAccessor->isWritable($objectOrArray, $propertyPath) || $this->propertyExists($objectOrArray, $propertyPath);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function isReadable($objectOrArray, $propertyPath)
     {
         return $this->decoratedPropertyAccessor->isReadable($objectOrArray, $propertyPath) || $this->propertyExists($objectOrArray, $propertyPath);

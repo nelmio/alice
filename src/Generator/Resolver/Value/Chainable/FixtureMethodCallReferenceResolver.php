@@ -44,25 +44,19 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
         $this->argumentResolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FixtureMethodCallValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param FixtureMethodCallValue $value
      *
      * @throws NoSuchPropertyException

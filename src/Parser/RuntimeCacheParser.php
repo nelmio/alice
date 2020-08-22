@@ -56,9 +56,7 @@ final class RuntimeCacheParser implements ParserInterface
         $this->includeProcessor = $includeProcessor;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $file): array
     {
         try {

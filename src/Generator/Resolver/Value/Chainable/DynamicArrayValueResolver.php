@@ -40,25 +40,19 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
         $this->resolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof DynamicArrayValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param DynamicArrayValue $value
      */
     public function resolve(

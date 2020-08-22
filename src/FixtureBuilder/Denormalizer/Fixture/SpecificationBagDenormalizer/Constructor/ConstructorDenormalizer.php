@@ -37,8 +37,6 @@ final class ConstructorDenormalizer implements ConstructorDenormalizerInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnexpectedValueException
      */
     public function denormalize(

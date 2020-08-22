@@ -23,9 +23,7 @@ class FakeSpecificationBagDenormalizer implements SpecificationsDenormalizerInte
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureInterface $fixture,
         FlagParserInterface $parser,

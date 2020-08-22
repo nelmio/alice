@@ -21,9 +21,7 @@ class FakeDenormalizer implements DenormalizerInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(array $data): BareFixtureSet
     {
         $this->__call(__METHOD__, func_get_args());

@@ -25,7 +25,6 @@ final class Parameter
 
     
     private $value;
-
     
     public function __construct(string $key, $value)
     {
@@ -45,7 +44,6 @@ final class Parameter
     {
         return $this->key;
     }
-
     
     public function getValue()
     {

@@ -20,17 +20,12 @@ use Nelmio\Alice\Definition\ValueInterface;
  */
 final class ValueForCurrentValue implements ValueInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function getValue(): string
     {
         return 'current';
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return 'current';

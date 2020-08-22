@@ -26,9 +26,6 @@ use ReflectionClass;
  */
 class NullListNameDenormalizerTest extends ChainableDenormalizerTest
 {
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->denormalizer = new NullListNameDenormalizer();

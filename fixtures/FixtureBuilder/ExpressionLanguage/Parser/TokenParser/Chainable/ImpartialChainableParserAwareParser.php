@@ -20,9 +20,7 @@ class ImpartialChainableParserAwareParser extends AbstractChainableParserAwarePa
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         $this->__call(__FUNCTION__, func_get_args());

@@ -27,17 +27,13 @@ class ProphecyChainableInstantiator extends AbstractChainableInstantiator
         $this->instantiator = $instantiator;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function createInstance(FixtureInterface $fixture)
     {
         return $this->instantiator->createInstance($fixture);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         return $this->instantiator->canInstantiate($fixture);

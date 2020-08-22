@@ -44,41 +44,31 @@ final class SimpleFixtureWithFlags implements FixtureWithFlagsInterface
         $this->flags = $flags;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         return $this->fixture->getId();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getClassName(): string
     {
         return $this->fixture->getClassName();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getSpecs(): SpecificationBag
     {
         return $this->fixture->getSpecs();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValueForCurrent()
     {
         return $this->fixture->getValueForCurrent();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withSpecs(SpecificationBag $specs): self
     {
         $clone = clone $this;
@@ -87,9 +77,7 @@ final class SimpleFixtureWithFlags implements FixtureWithFlagsInterface
         return $clone;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getFlags(): FlagBag
     {
         return $this->flags;

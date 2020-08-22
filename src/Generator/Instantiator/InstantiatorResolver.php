@@ -55,9 +55,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         $this->valueResolver = $valueResolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->instantiator, $resolver);

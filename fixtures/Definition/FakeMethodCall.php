@@ -19,41 +19,31 @@ class FakeMethodCall implements MethodCallInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withArguments(array $arguments = null): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getCaller(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getMethod(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getArguments(): array
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         $this->__call(__METHOD__, func_get_args());

@@ -37,9 +37,7 @@ final class ElementFlagParser implements FlagParserInterface
         $this->parser = $parser;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $element): FlagBag
     {
         if (1 !== preg_match(self::REGEX, $element, $matches)) {

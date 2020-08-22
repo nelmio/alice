@@ -36,9 +36,7 @@ final class SimpleObject implements ObjectInterface
         $this->instance = $instance;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withInstance($newInstance): self
     {
         $clone = clone $this;
@@ -47,17 +45,13 @@ final class SimpleObject implements ObjectInterface
         return $clone;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         return $this->reference;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getInstance()
     {
         return $this->instance;

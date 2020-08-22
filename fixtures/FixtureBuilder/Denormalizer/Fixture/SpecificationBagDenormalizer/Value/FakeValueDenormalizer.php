@@ -22,9 +22,7 @@ class FakeValueDenormalizer implements ValueDenormalizerInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(FixtureInterface $scope, FlagBag $flags = null, $value): void
     {
         $this->__call(__FUNCTION__, func_get_args());

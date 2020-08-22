@@ -24,25 +24,18 @@ use Nelmio\Alice\ObjectSet;
  */
 class IsolatedLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoaderInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
         return (new NativeLoader())->loadData($data, $parameters, $objects);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
     {
         return (new NativeLoader())->loadFiles($files, $parameters, $objects);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
         return (new NativeLoader())->loadFile($file, $parameters, $objects);

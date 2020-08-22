@@ -17,9 +17,6 @@ use Nelmio\Alice\Definition\FlagInterface;
 
 final class UniqueFlag implements FlagInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function __toString(): string
     {
         return 'unique';

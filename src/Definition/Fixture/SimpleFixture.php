@@ -53,33 +53,25 @@ final class SimpleFixture implements FixtureInterface
         $this->valueForCurrent = $valueForCurrent;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getClassName(): string
     {
         return $this->className;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getSpecs(): SpecificationBag
     {
         return $this->specs;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValueForCurrent()
     {
         if (null === $this->valueForCurrent) {
@@ -89,9 +81,7 @@ final class SimpleFixture implements FixtureInterface
         return $this->valueForCurrent;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withSpecs(SpecificationBag $specs): self
     {
         $clone = clone $this;

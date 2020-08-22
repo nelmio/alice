@@ -35,8 +35,6 @@ final class FunctionTokenizer
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws MalformedFunctionException
      */
     public function tokenize(string $value): string

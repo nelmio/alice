@@ -34,9 +34,7 @@ final class SimplePropertyDenormalizer implements PropertyDenormalizerInterface
         $this->valueDenormalizer = $valueDenormalizer;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(FixtureInterface $scope, string $name, $value, FlagBag $flags): Property
     {
         $value = $this->valueDenormalizer->denormalize($scope, $flags, $value);

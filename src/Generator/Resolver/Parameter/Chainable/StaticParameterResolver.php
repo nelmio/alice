@@ -25,9 +25,7 @@ final class StaticParameterResolver implements ChainableParameterResolverInterfa
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(Parameter $parameter): bool
     {
         $value = $parameter->getValue();
@@ -36,8 +34,6 @@ final class StaticParameterResolver implements ChainableParameterResolverInterfa
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param bool|int|float $parameter
      */
     public function resolve(Parameter $parameter, ParameterBag $unresolvedParameters, ParameterBag $resolvedParameters): ParameterBag

@@ -52,17 +52,13 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         $this->parser = $parser;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withParser(ParserInterface $parser)
     {
         return new static($this->argumentEscaper, $parser);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::FUNCTION_TYPE;

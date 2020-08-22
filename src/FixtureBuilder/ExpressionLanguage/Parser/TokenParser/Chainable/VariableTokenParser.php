@@ -31,9 +31,7 @@ final class VariableTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::VARIABLE_TYPE;

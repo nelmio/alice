@@ -41,17 +41,13 @@ class MutableMethodCall implements MethodCallInterface
         $this->arguments = $arguments;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withArguments(array $arguments = null): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getCaller()
     {
         return $this->caller;
@@ -62,9 +58,7 @@ class MutableMethodCall implements MethodCallInterface
         $this->caller = $caller;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getMethod(): string
     {
         return $this->method;
@@ -75,9 +69,7 @@ class MutableMethodCall implements MethodCallInterface
         $this->method = $method;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getArguments()
     {
         return $this->arguments;
@@ -88,9 +80,7 @@ class MutableMethodCall implements MethodCallInterface
         $this->arguments = $arguments;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return 'mutable_method_call';

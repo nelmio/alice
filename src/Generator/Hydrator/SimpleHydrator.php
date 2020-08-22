@@ -46,17 +46,13 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
         $this->resolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->hydrator, $resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function hydrate(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,

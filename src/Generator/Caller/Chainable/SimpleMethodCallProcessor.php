@@ -25,17 +25,13 @@ final class SimpleMethodCallProcessor implements ChainableCallProcessorInterface
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canProcess(MethodCallInterface $methodCall): bool
     {
         return $methodCall instanceof SimpleMethodCall;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function process(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,

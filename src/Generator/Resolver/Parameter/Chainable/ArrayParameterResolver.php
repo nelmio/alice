@@ -39,25 +39,19 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
         $this->resolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withResolver(ParameterResolverInterface $resolver): self
     {
         return new self($resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(Parameter $parameter): bool
     {
         return is_array($parameter->getValue());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(
         Parameter $unresolvedArrayParameter,
         ParameterBag $unresolvedParameters,

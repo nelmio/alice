@@ -43,25 +43,19 @@ class MutableFixture implements FixtureInterface
         $this->specs = $specs;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getClassName(): string
     {
         return $this->className;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getSpecs(): SpecificationBag
     {
         return $this->specs;
@@ -72,17 +66,13 @@ class MutableFixture implements FixtureInterface
         $this->specs = $specs;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValueForCurrent(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withSpecs(SpecificationBag $specs): void
     {
         $this->__call(__METHOD__, func_get_args());

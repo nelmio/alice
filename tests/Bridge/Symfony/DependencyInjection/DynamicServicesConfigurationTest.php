@@ -35,9 +35,7 @@ class DynamicServicesConfigurationTest extends TestCase
      */
     private $kernel;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         if (3 === AppKernel::MAJOR_VERSION) {
@@ -50,9 +48,7 @@ class DynamicServicesConfigurationTest extends TestCase
         $this->kernel->boot();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function tearDown(): void
     {
         if (null !== $this->kernel) {
