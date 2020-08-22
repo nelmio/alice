@@ -26,6 +26,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 use phpmock\functions\FixedValueFunction;
 use phpmock\MockBuilder;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -33,6 +34,8 @@ use ReflectionClass;
  */
 class OptionalValueResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableResolver()
     {
         $this->assertTrue(is_a(OptionalValueResolver::class, ChainableValueResolverInterface::class, true));
