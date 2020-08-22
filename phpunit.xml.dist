@@ -15,16 +15,25 @@
          colors="true"
          enforceTimeLimit="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
-         executionOrder="random"
->
+         executionOrder="random">
 
     <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0"/>
     </php>
 
     <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
     </listeners>
+
+    <coverage>
+        <include>
+            <directory>src</directory>
+        </include>
+        <exclude>
+            <directory>src/Bridge</directory>
+            <file>src/deep_clone.php</file>
+        </exclude>
+    </coverage>
 
     <testsuites>
         <testsuite name="Dependent tests">
@@ -65,15 +74,4 @@
             <exclude>tests/Bridge</exclude>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>src</directory>
-            <exclude>
-                <directory>src/Bridge</directory>
-
-                <file>src/deep_clone.php</file>
-            </exclude>
-        </whitelist>
-    </filter>
 </phpunit>

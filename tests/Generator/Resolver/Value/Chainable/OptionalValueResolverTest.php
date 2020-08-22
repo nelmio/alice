@@ -28,6 +28,7 @@ use phpmock\MockBuilder;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use function in_array;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
@@ -91,6 +92,17 @@ class OptionalValueResolverTest extends TestCase
         $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
         $this->assertSame($expectedValue, $resolvedValue->getValue());
+    }
+
+    public function testCanHandleExtremaQuantifiersCorrectlyWithoutGenerator()
+    {
+        $resolver = new OptionalValueResolver(new FakeValueResolver());
+
+        $value = new OptionalValue(0, 'first_0', 'second_0');
+
+        $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
+
+        $this->assertTrue(in_array($resolvedValue->getValue(), ['first_0', 'second_0'], true));
     }
 
     public static function optionalValueProvider(): iterable

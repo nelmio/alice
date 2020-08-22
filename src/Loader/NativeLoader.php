@@ -560,7 +560,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             ),
             new FixtureWildcardReferenceResolver(),
             new ListValueResolver(),
-            new OptionalValueResolver(),
+            new OptionalValueResolver(null, $this->getFakerGenerator()),
             new ParameterValueResolver(),
             new UniqueValueResolver(
                 new UniqueValuesPool()
