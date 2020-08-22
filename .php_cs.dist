@@ -54,6 +54,12 @@ file that was distributed with this source code.
 LICENSE
         ],
         'lowercase_cast' => true,
+        'general_phpdoc_annotation_remove' => true,
+        'global_namespace_import' => [
+            'import_classes' => true,
+            'import_constants' => true,
+            'import_functions' => true,
+        ],
         'method_separation' => true,
         'modernize_types_casting' => true,
         'native_function_casing' => true,
@@ -70,6 +76,7 @@ LICENSE
         'no_spaces_around_offset' => true,
         'no_unused_imports' => true,
         'ordered_imports' => true,
+        'phpdoc_no_empty_return' => true,
         'phpdoc_order' => true,
         'phpdoc_scalar' => true,
         'phpdoc_separation' => true,
@@ -81,6 +88,7 @@ LICENSE
         'space_after_semicolon' => true,
         'standardize_not_equals' => true,
         'trim_array_spaces' => true,
+        'void_return' => true,
         'whitespace_after_comma_in_array' => true,
     ])
     ->setFinder($finder)
