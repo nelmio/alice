@@ -20,33 +20,25 @@ class FakePropertyAccessor implements PropertyAccessorInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function setValue(&$objectOrArray, $propertyPath, $value): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue($objectOrArray, $propertyPath): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function isWritable($objectOrArray, $propertyPath): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function isReadable($objectOrArray, $propertyPath): void
     {
         $this->__call(__METHOD__, func_get_args());

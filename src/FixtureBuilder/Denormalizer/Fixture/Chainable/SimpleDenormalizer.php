@@ -48,25 +48,19 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
         $this->flagParser = $parser;
     }
     
-    /**
-     * @inheritdoc
-     */
+    
     public function withFlagParser(FlagParserInterface $parser): self
     {
         return new self($this->specsDenormalizer, $parser);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canDenormalize(string $reference): bool
     {
         return false === strpos($reference, '{');
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(FixtureBag $builtFixtures, string $className, string $unparsedFixtureId, array $specs, FlagBag $flags): FixtureBag
     {
         if (null === $this->flagParser) {

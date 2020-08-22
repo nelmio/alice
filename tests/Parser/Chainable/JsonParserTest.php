@@ -34,9 +34,7 @@ class JsonParserTest extends TestCase
      */
     private $parser;
 
-    /**
-     * @inheritdoc
-     */
+    
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -44,9 +42,7 @@ class JsonParserTest extends TestCase
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/json';
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public static function tearDownAfterClass(): void
     {
         self::$dir = null;
@@ -54,9 +50,7 @@ class JsonParserTest extends TestCase
         parent::tearDownAfterClass();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->parser = new JsonParser();

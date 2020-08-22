@@ -21,17 +21,13 @@ class FakeChainableTokenParser implements ChainableTokenParserInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(Token $token): void
     {
         $this->__call(__METHOD__, func_get_args());

@@ -22,17 +22,13 @@ class FakeChainableParameterResolver implements ChainableParameterResolverInterf
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(Parameter $parameter): bool
     {
         $this->__call(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,

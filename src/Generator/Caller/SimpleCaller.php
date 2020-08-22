@@ -58,17 +58,13 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
         $this->namedArgumentsResolver = $namedArgumentsResolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->callProcessor, $resolver, $this->namedArgumentsResolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function doCallsOn(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,

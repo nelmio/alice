@@ -27,9 +27,7 @@ class PropertyBagTest extends TestCase
      */
     private $propRefl;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $refl = new ReflectionClass(PropertyBag::class);

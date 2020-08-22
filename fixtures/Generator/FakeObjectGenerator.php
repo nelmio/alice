@@ -21,9 +21,7 @@ class FakeObjectGenerator implements ObjectGeneratorInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function generate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ObjectBag
     {
         $this->__call(__FUNCTION__, func_get_args());

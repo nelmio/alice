@@ -59,25 +59,19 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         $this->limit = $limit;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->pool, $resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof UniqueValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param UniqueValue $value
      *
      * @throws UniqueValueGenerationLimitReachedException

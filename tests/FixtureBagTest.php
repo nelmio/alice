@@ -33,9 +33,7 @@ class FixtureBagTest extends TestCase
      */
     private $propRefl;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $propRelf = (new ReflectionClass(FixtureBag::class))->getProperty('fixtures');

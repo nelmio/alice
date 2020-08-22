@@ -25,9 +25,6 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseExce
  */
 final class PropertyReferenceTokenParser extends AbstractChainableParserAwareParser
 {
-    /**
-     * @inheritdoc
-     */
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::PROPERTY_REFERENCE_TYPE;
@@ -36,7 +33,7 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
     /**
      * Parses tokens values like "@user->username".
      *
-     * {@inheritdoc}
+     *
      *
      * @throws ParseException
      */

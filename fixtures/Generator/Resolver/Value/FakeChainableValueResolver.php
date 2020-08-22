@@ -24,17 +24,13 @@ class FakeChainableValueResolver implements ChainableValueResolverInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(
         ValueInterface $value,
         FixtureInterface $fixture,

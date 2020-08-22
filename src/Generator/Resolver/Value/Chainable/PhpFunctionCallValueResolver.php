@@ -47,17 +47,13 @@ final class PhpFunctionCallValueResolver implements ChainableValueResolverInterf
         $this->resolver = $decoratedResolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ResolvedFunctionCallValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param ResolvedFunctionCallValue $value
      */
     public function resolve(

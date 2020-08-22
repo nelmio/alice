@@ -22,9 +22,6 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserTestCase;
  */
 class UniqueFlagParserTest extends FlagParserTestCase
 {
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->parser = new UniqueFlagParser();

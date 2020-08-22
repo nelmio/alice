@@ -52,9 +52,7 @@ final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(FixtureBag $builtFixtures, string $className, string $fixtureId, array $specs, FlagBag $flags): FixtureBag
     {
         foreach ($this->denormalizers as $denormalizer) {

@@ -249,25 +249,19 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
         $this->filesLoader = $this->getFilesLoader();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->filesLoader->loadFiles($files, $parameters, $objects);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->fileLoader->loadFile($file, $parameters, $objects);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->dataLoader->loadData($data, $parameters, $objects);

@@ -74,7 +74,9 @@ LICENSE
         'no_multiline_whitespace_around_double_arrow' => true,
         'no_short_bool_cast' => true,
         'no_spaces_around_offset' => true,
-        'no_superfluous_phpdoc_tags' => true,
+        'no_superfluous_phpdoc_tags' => [
+            'remove_inheritdoc' => true,
+        ],
         'no_unused_imports' => true,
         'ordered_imports' => true,
         'phpdoc_no_empty_return' => true,

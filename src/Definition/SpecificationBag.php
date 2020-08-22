@@ -33,7 +33,6 @@ final class SpecificationBag
      * @var MethodCallBag
      */
     private $calls;
-
     
     public function __construct(MethodCallInterface $constructor = null, PropertyBag $properties, MethodCallBag $calls)
     {

@@ -45,9 +45,7 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
         )(...$parsers);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withParser(ParserInterface $parser): self
     {
         $parsers = [];
@@ -61,9 +59,7 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
         return new self($parsers);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(Token $token)
     {
         foreach ($this->parsers as $parser) {

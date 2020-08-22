@@ -27,9 +27,7 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
     /** @private */
     const REGEX = '/^(?<quantifier>\d+|<.*>)x (?<elements>.*)/';
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::DYNAMIC_ARRAY_TYPE;
@@ -38,7 +36,7 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
     /**
      * Parses "10x @user*", "<randomNumber(0, 10)x @user<{param}>*", etc.
      *
-     * {@inheritdoc}
+     *
      *
      * @throws ParseException
      */

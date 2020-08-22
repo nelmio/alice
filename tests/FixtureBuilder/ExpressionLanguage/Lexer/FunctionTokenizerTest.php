@@ -28,9 +28,7 @@ class FunctionTokenizerTest extends TestCase
      */
     private $tokenizer;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->tokenizer = new FunctionTokenizer();

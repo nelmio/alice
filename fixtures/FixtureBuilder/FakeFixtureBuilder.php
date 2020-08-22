@@ -21,9 +21,7 @@ class FakeFixtureBuilder implements FixtureBuilderInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function build(array $data, array $parameters = [], array $objects = []): FixtureSet
     {
         $this->__call(__METHOD__, func_get_args());

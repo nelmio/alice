@@ -28,9 +28,7 @@ class DefaultFileLocatorTest extends TestCase
      */
     private $locator;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->locator = new DefaultFileLocator();

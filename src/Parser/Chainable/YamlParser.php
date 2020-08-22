@@ -40,9 +40,7 @@ final class YamlParser implements ChainableParserInterface
         $this->yamlParser = $yamlParser;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(string $file): bool
     {
         if (false === stream_is_local($file)) {
@@ -53,8 +51,6 @@ final class YamlParser implements ChainableParserInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param string $file Local YAML file
      *
      * @throws UnparsableFileException

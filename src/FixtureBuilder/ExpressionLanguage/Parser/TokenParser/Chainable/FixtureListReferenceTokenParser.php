@@ -43,9 +43,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
         $this->token = uniqid(__CLASS__);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::LIST_REFERENCE_TYPE;

@@ -35,9 +35,7 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
         $this->callsDenormalizer = $callsDenormalizer;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,

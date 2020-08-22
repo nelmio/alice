@@ -27,9 +27,7 @@ final class OptionalTokenParser extends AbstractChainableParserAwareParser
     /** @private */
     const REGEX = '/^(?<quantifier>\d+|\d*\.\d+|<.+>)%\? \ *?(?<first_member>[^:]+)(?:\: +(?<second_member>[^\ ]+))?/';
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::OPTIONAL_TYPE;

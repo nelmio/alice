@@ -21,9 +21,7 @@ class FakeFixtureDenormalizer implements FixtureDenormalizerInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,

@@ -19,9 +19,6 @@ use Nelmio\Alice\Symfony\KernelIsolatedServiceCall;
 
 class IsolatedSymfonyParameterBagResolver implements ParameterBagResolverInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function resolve(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null): ParameterBag
     {
         return KernelIsolatedServiceCall::call(

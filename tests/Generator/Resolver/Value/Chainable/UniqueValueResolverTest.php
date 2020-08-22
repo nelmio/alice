@@ -50,9 +50,7 @@ class UniqueValueResolverTest extends TestCase
      */
     private $poolRefl;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $reflClass = new ReflectionClass(UniqueValueResolver::class);

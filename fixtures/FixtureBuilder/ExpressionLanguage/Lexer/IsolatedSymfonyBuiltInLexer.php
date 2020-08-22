@@ -18,9 +18,6 @@ use Nelmio\Alice\Symfony\KernelIsolatedServiceCall;
 
 class IsolatedSymfonyBuiltInLexer implements LexerInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function lex(string $value): array
     {
         return KernelIsolatedServiceCall::call(

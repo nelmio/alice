@@ -17,9 +17,6 @@ use Nelmio\Alice\Definition\ServiceReferenceInterface;
 
 class DummyReference implements ServiceReferenceInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function getId(): string
     {
         return 'dummy';

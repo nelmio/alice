@@ -20,9 +20,7 @@ class FakeParameterBagResolver implements ParameterBagResolverInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null): ParameterBag
     {
         $this->__call(__FUNCTION__, func_get_args());

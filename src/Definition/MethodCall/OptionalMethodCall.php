@@ -37,9 +37,7 @@ final class OptionalMethodCall implements MethodCallInterface
         $this->flag = $flag;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withArguments(array $arguments = null): self
     {
         $clone = clone $this;
@@ -48,25 +46,19 @@ final class OptionalMethodCall implements MethodCallInterface
         return $clone;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getCaller()
     {
         return $this->methodCall->getCaller();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getMethod(): string
     {
         return $this->methodCall->getMethod();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getArguments()
     {
         return $this->methodCall->getArguments();
@@ -85,9 +77,7 @@ final class OptionalMethodCall implements MethodCallInterface
         return $this->methodCall;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return $this->methodCall->__toString();

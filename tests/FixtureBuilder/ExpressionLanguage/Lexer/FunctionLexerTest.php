@@ -33,9 +33,7 @@ class FunctionLexerTest extends TestCase
      */
     private $lexer;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->lexer = new FunctionLexer(new DummyLexer());

@@ -51,17 +51,13 @@ final class UniqueValue implements ValueInterface
         return $this->id;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue()
     {
         return deep_clone($this->value);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return sprintf(

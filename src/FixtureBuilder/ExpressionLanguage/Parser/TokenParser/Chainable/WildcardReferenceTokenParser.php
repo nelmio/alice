@@ -28,9 +28,7 @@ final class WildcardReferenceTokenParser implements ChainableTokenParserInterfac
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::WILDCARD_REFERENCE_TYPE;

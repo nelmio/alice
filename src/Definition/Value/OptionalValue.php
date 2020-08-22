@@ -89,8 +89,6 @@ final class OptionalValue implements ValueInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array The first element is the quantifier and the second the elements.
      */
     public function getValue(): array
@@ -102,9 +100,7 @@ final class OptionalValue implements ValueInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return sprintf(

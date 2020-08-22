@@ -52,9 +52,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
         $this->limit = $limit;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withResolver(ParameterResolverInterface $resolver)
     {
         $decoratedResolver = $this->resolver;
@@ -65,9 +63,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
         return new self($decoratedResolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(Parameter $parameter): bool
     {
         return $this->resolver->canResolve($parameter);

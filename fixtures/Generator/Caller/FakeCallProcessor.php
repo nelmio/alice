@@ -23,9 +23,7 @@ class FakeCallProcessor implements CallProcessorInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function process(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,

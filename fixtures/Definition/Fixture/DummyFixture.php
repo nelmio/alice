@@ -31,41 +31,31 @@ class DummyFixture implements FixtureInterface
         $this->id = $id;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getClassName(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getSpecs(): SpecificationBag
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValueForCurrent(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withSpecs(SpecificationBag $specs): void
     {
         $this->__call(__METHOD__, func_get_args());

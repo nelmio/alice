@@ -28,8 +28,6 @@ final class EvaluatedValue implements ValueInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array The first element is the quantifier and the second the elements.
      */
     public function getValue(): string
@@ -37,9 +35,7 @@ final class EvaluatedValue implements ValueInterface
         return $this->expression;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return $this->expression;

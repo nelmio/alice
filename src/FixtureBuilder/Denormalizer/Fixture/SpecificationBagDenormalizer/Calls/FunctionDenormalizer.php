@@ -39,9 +39,7 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
         $this->argumentsDenormalizer = $argumentsDenormalizer;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,

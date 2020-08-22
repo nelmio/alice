@@ -32,8 +32,6 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
     use IsAServiceTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @throws InstantiationException
      */
     public function instantiate(

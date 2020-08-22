@@ -47,8 +47,6 @@ final class FixtureReferenceValue implements ValueInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string|ValueInterface
      */
     public function getValue()
@@ -57,8 +55,6 @@ final class FixtureReferenceValue implements ValueInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string|ValueInterface
      */
     public function __toString(): string

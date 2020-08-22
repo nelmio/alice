@@ -28,17 +28,13 @@ final class ValueForCurrentValueResolver implements ChainableValueResolverInterf
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ValueForCurrentValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param ValueForCurrentValue $value
      *
      * @throws NoValueForCurrentException

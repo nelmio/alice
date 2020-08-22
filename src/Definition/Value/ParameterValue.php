@@ -39,17 +39,13 @@ final class ParameterValue implements ValueInterface
         $this->parameterKey = $parameterKey;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue()
     {
         return deep_clone($this->parameterKey);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return sprintf('<{%s}>', $this->parameterKey);

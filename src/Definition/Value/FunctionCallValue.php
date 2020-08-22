@@ -50,9 +50,7 @@ final class FunctionCallValue implements ValueInterface
         return deep_clone($this->arguments);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue()
     {
         return [
@@ -61,9 +59,7 @@ final class FunctionCallValue implements ValueInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return sprintf('<%s(%s)>', $this->name, [] === $this->arguments ? '' : var_export($this->arguments, true));

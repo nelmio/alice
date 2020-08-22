@@ -26,9 +26,7 @@ class ElementFlagParserTest extends FlagParserTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->parser = new ElementFlagParser(new ElementParser());

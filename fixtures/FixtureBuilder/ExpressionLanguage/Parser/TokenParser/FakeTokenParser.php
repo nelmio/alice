@@ -21,9 +21,7 @@ class FakeTokenParser implements TokenParserInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(Token $token): void
     {
         $this->__call(__METHOD__, func_get_args());

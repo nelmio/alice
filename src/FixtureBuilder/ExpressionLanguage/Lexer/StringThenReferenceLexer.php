@@ -35,9 +35,7 @@ final class StringThenReferenceLexer implements LexerInterface
         $this->decoratedLexer = $decoratedLexer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    
     public function lex(string $value): array
     {
         $tokens = $this->decoratedLexer->lex($value);

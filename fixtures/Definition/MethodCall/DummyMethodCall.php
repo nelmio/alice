@@ -36,41 +36,31 @@ final class DummyMethodCall implements MethodCallInterface
         $this->toString = $toString;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withArguments(array $arguments = null): self
     {
         $this->__call(__METHOD__, func_get_args());
     }
     
-    /**
-     * @inheritdoc
-     */
+    
     public function getCaller(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getMethod(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getArguments(): array
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return $this->toString;

@@ -24,9 +24,6 @@ use Nelmio\Alice\Symfony\KernelIsolatedServiceCall;
  */
 class IsolatedSymfonyLoader implements FileLoaderInterface, DataLoaderInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
         return KernelIsolatedServiceCall::call(
@@ -37,9 +34,7 @@ class IsolatedSymfonyLoader implements FileLoaderInterface, DataLoaderInterface
         );
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
         return KernelIsolatedServiceCall::call(

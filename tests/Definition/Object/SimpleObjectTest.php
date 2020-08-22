@@ -30,9 +30,7 @@ class SimpleObjectTest extends TestCase
      */
     private $propRefl;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(SimpleObject::class))->getProperty('instance');

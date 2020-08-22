@@ -53,9 +53,7 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
         $this->resolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withObjectGenerator(ObjectGeneratorInterface $generator): self
     {
         $decoratedResolver = ($this->decoratedResolver instanceof ObjectGeneratorAwareInterface)
@@ -66,9 +64,7 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
         return new self($decoratedResolver, $this->resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         $decoratedResolver = ($this->decoratedResolver instanceof ValueResolverAwareInterface)
@@ -79,17 +75,13 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
         return new self($decoratedResolver, $resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $this->decoratedResolver->canResolve($value);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param FixtureReferenceValue $value
      *
      * @throws UnresolvableValueException

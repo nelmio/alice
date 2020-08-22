@@ -22,9 +22,7 @@ class FakeArgumentsDenormalizer implements ArgumentsDenormalizerInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedArguments): array
     {
         $this->__call(__FUNCTION__, func_get_args());

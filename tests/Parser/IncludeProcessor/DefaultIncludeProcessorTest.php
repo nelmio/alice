@@ -33,9 +33,7 @@ class DefaultIncludeProcessorTest extends TestCase
 
     private static $dir;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/cache';

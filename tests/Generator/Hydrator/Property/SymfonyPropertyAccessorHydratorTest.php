@@ -50,9 +50,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
      */
     private $propertyAccessor;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->propertyAccessor = new PropertyAccessor();

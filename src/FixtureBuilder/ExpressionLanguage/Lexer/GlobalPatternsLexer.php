@@ -44,8 +44,6 @@ final class GlobalPatternsLexer implements LexerInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws LexException
      */
     public function lex(string $value): array

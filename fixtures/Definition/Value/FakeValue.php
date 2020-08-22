@@ -20,17 +20,13 @@ class FakeValue implements ValueInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         $this->__call(__METHOD__, func_get_args());

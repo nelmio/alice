@@ -43,7 +43,7 @@ final class ReferenceLexer implements LexerInterface
     /**
      * Lex a value with the mask "@X" where X is a valid possible reference
      *
-     * {@inheritdoc}
+     *
      *
      * @throws LexException
      */

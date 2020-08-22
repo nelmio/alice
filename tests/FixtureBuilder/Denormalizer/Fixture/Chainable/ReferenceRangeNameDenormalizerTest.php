@@ -40,9 +40,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 {
     use ProphecyTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->denormalizer = new ReferenceRangeNameDenormalizer(

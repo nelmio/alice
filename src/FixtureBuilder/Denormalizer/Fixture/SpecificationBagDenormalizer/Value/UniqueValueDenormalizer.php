@@ -41,8 +41,6 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws InvalidScopeException
      */
     public function denormalize(FixtureInterface $scope, FlagBag $flags = null, $value)

@@ -43,9 +43,7 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
         )(...$instantiators);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         $instantiators = [];
@@ -59,9 +57,7 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
         return new self($instantiators, $resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function instantiate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,

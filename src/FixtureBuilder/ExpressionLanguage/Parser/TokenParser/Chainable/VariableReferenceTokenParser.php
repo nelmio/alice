@@ -32,9 +32,7 @@ final class VariableReferenceTokenParser implements ChainableTokenParserInterfac
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::VARIABLE_REFERENCE_TYPE;
@@ -42,8 +40,6 @@ final class VariableReferenceTokenParser implements ChainableTokenParserInterfac
 
     /**
      * Parses expressions such as "@user$foo".
-     *
-     * {@inheritdoc}
      */
     public function parse(Token $token): FixtureReferenceValue
     {

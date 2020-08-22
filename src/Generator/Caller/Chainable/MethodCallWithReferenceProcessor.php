@@ -27,9 +27,7 @@ final class MethodCallWithReferenceProcessor implements ChainableCallProcessorIn
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canProcess(MethodCallInterface $methodCall): bool
     {
         return (
@@ -40,8 +38,6 @@ final class MethodCallWithReferenceProcessor implements ChainableCallProcessorIn
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param MethodCallWithReference $methodCall
      */
     public function process(

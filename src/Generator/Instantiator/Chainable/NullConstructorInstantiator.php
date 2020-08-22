@@ -20,17 +20,12 @@ use ReflectionMethod;
 
 final class NullConstructorInstantiator extends AbstractChainableInstantiator
 {
-    /**
-     * @inheritdoc
-     */
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         return null === $fixture->getSpecs()->getConstructor();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function createInstance(FixtureInterface $fixture)
     {
         $class = $fixture->getClassName();

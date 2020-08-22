@@ -45,9 +45,7 @@ final class CallsWithFlagsDenormalizer implements CallsDenormalizerInterface
         })(...$methodFlagHandlers);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,

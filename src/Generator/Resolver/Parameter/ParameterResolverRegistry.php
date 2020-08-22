@@ -50,9 +50,7 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
         $this->resolvers = $resolvers;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,

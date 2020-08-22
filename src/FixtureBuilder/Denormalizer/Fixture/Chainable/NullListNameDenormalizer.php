@@ -25,9 +25,7 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
     /** @private */
     const REGEX = '/\{(?<list>[\p{L}\d\._\/]+(?:,\s[^,\s]+)*)\}/u';
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canDenormalize(string $reference, array &$matches = []): bool
     {
         if (1 === preg_match(self::REGEX, $reference, $matches)) {
@@ -37,9 +35,7 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
         return false;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,

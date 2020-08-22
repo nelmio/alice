@@ -23,9 +23,7 @@ class FakeConstructorDenormalizer implements ConstructorDenormalizerInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,

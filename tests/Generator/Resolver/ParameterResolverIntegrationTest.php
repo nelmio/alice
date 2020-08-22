@@ -32,9 +32,7 @@ class ParameterResolverIntegrationTest extends TestCase
      */
     protected $resolver;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->resolver = (new NativeLoader())->getParameterResolver();

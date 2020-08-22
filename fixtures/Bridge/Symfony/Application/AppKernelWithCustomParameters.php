@@ -17,9 +17,6 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernelWithCustomParameters extends AppKernel
 {
-    /**
-     * @inheritdoc
-     */
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         if (3 === self::MAJOR_VERSION) {

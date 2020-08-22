@@ -63,41 +63,31 @@ final class CollectionDenormalizerWithTemporaryFixture implements CollectionDeno
         $this->parser = $parser;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withFlagParser(FlagParserInterface $parser): self
     {
         return new static($this->collectionDenormalizer, $this->denormalizer, $parser);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
     {
         return new static($this->collectionDenormalizer, $denormalizer, $this->parser);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canDenormalize(string $reference): bool
     {
         return $this->collectionDenormalizer->canDenormalize($reference);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function buildIds(string $id): array
     {
         return $this->collectionDenormalizer->buildIds($id);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,

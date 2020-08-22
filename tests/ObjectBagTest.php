@@ -37,9 +37,7 @@ class ObjectBagTest extends TestCase
      */
     private $propRefl;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(ObjectBag::class))->getProperty('objects');

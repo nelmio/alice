@@ -34,8 +34,6 @@ final class StaticReference implements ServiceReferenceInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string FQCN e.g. 'Nelmio\User\UserFactory'
      */
     public function getId(): string

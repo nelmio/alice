@@ -30,33 +30,25 @@ final class ConfiguratorMethodCall implements MethodCallInterface
         $this->methodCall = $methodCall;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withArguments(array $arguments = null): self
     {
         return new self($this->methodCall->withArguments($arguments));
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getCaller()
     {
         return $this->methodCall->getCaller();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getMethod(): string
     {
         return $this->methodCall->getMethod();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getArguments()
     {
         return $this->methodCall->getArguments();
@@ -67,9 +59,7 @@ final class ConfiguratorMethodCall implements MethodCallInterface
         return $this->methodCall;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return $this->methodCall->__toString();

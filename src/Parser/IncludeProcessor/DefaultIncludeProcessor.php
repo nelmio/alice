@@ -47,9 +47,7 @@ final class DefaultIncludeProcessor implements IncludeProcessorInterface
         $this->dataMerger = new IncludeDataMerger();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function process(ParserInterface $parser, string $file, array $data): array
     {
         $file = $this->fileLocator->locate($file);

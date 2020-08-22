@@ -33,9 +33,7 @@ class MutableFlag implements FlagInterface
         $this->object = $object;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return $this->stringValue;

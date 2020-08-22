@@ -21,9 +21,7 @@ class FakeFlagParser implements FlagParserInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $element): FlagBag
     {
         $this->__call(__METHOD__, func_get_args());

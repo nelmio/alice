@@ -28,9 +28,7 @@ final class NelmioAliceExtension extends Extension
 {
     const SERVICES_DIR = __DIR__.'/../Resources/config';
 
-    /**
-     * @inheritdoc
-     */
+    
     public function load(array $configs, ContainerBuilder $container): void
     {
         $this->loadConfig($configs, $container);

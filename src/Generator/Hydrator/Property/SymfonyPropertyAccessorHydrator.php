@@ -46,8 +46,6 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws NoSuchPropertyException
      * @throws InaccessiblePropertyException
      * @throws InvalidArgumentException When the typehint does not match for example

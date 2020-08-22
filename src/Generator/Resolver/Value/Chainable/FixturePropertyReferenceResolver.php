@@ -52,25 +52,19 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
         $this->resolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->propertyAccessor, $resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FixturePropertyValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param FixturePropertyValue $value
      *
      * @throws NoSuchPropertyException

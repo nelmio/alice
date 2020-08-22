@@ -22,9 +22,7 @@ class FakePropertyHydrator implements PropertyHydratorInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function hydrate(ObjectInterface $object, Property $property, GenerationContext $context): ObjectInterface
     {
         $this->__call(__METHOD__, func_get_args());

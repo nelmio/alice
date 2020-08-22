@@ -33,9 +33,7 @@ class ElementWithToStringFlag implements FlagInterface
         $this->toString = $toString;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return $this->toString;

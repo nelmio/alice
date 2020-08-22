@@ -28,17 +28,13 @@ final class ParameterValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ParameterValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param ParameterValue $value
      *
      * @throws UnresolvableValueException

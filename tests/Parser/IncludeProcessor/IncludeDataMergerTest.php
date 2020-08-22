@@ -25,9 +25,7 @@ class IncludeDataMergerTest extends TestCase
      */
     private $merger;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->merger = new IncludeDataMerger();

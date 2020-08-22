@@ -25,17 +25,13 @@ final class OptionalFlagParser implements ChainableFlagParserInterface
     /** @interval */
     const REGEX = '/^(?<percentage>\d+)\%\?$/';
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(string $element, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $element, $matches);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $element): FlagBag
     {
         $matches = [];

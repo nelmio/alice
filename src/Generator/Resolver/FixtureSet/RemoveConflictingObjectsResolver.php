@@ -37,9 +37,7 @@ final class RemoveConflictingObjectsResolver implements FixtureSetResolverInterf
         $this->resolver = $decoratedResolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(FixtureSet $unresolvedFixtureSet): ResolvedFixtureSet
     {
         $resolvedFixtureSet = $this->resolver->resolve($unresolvedFixtureSet);

@@ -38,9 +38,7 @@ class NoCallerMethodCallInstantiatorTest extends TestCase
      */
     private $instantiator;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $this->instantiator = new NoCallerMethodCallInstantiator();

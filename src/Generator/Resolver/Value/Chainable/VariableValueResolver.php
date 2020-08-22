@@ -28,17 +28,13 @@ final class VariableValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof VariableValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param VariableValue $value
      *
      * @throws UnresolvableValueException

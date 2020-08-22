@@ -49,9 +49,7 @@ final class ResolvedFunctionCallValue implements ValueInterface
         return $this->arguments;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue()
     {
         return [
@@ -60,9 +58,7 @@ final class ResolvedFunctionCallValue implements ValueInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return sprintf('<%s(%s)>', $this->name, [] === $this->arguments ? '' : var_export($this->arguments, true));

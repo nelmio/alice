@@ -38,25 +38,19 @@ final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInt
         $this->processor = $processor;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withProcessor(CallProcessorInterface $processor): self
     {
         return new self($processor);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canProcess(MethodCallInterface $methodCall): bool
     {
         return $methodCall instanceof ConfiguratorMethodCall;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function process(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,

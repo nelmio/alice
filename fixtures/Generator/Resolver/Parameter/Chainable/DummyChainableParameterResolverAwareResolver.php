@@ -31,25 +31,19 @@ class DummyChainableParameterResolverAwareResolver implements ChainableParameter
         $this->resolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withResolver(ParameterResolverInterface $resolver)
     {
         return new self($resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(Parameter $parameter): bool
     {
         $this->__call(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,

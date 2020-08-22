@@ -22,17 +22,13 @@ class FakeChainableDenormalizer implements ChainableFixtureDenormalizerInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canDenormalize(string $reference): bool
     {
         $this->__call(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,

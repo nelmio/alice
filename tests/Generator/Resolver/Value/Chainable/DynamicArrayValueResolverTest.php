@@ -43,9 +43,7 @@ class DynamicArrayValueResolverTest extends TestCase
      */
     private $resolverRefl;
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $reflClass = new ReflectionClass(DynamicArrayValueResolver::class);

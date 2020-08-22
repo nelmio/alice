@@ -46,9 +46,7 @@ final class SimpleFilesLoader implements FilesLoaderInterface
         $this->dataLoader = $dataLoader;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
     {
         $data = array_reduce(

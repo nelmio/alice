@@ -39,9 +39,7 @@ abstract class AbstractChainableParserAwareParser implements ChainableTokenParse
         $this->parser = $parser;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withParser(ParserInterface $parser)
     {
         return new static($parser);

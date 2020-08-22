@@ -47,25 +47,19 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
         $this->resolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FixtureMatchReferenceValue;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param FixtureMatchReferenceValue $value
      *
      * @throws UnresolvableValueException

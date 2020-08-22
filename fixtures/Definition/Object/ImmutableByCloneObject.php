@@ -26,7 +26,6 @@ class ImmutableByCloneObject implements ObjectInterface
      * @var object
      */
     private $instance;
-
     
     public function __construct(string $id, object $instance)
     {
@@ -34,25 +33,19 @@ class ImmutableByCloneObject implements ObjectInterface
         $this->instance = $instance;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getInstance()
     {
         return $this->instance;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withInstance(object $newInstance)
     {
         return new self($this->id, $newInstance);

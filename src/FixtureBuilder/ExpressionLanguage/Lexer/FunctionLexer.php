@@ -44,8 +44,6 @@ final class FunctionLexer implements LexerInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws MalformedFunctionException
      */
     public function lex(string $value): array

@@ -78,9 +78,7 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
         $this->caller = $caller;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function generate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,

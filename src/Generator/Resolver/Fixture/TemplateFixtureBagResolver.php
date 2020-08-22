@@ -37,9 +37,7 @@ final class TemplateFixtureBagResolver implements FixtureBagResolverInterface
         $this->resolver = new TemplateFixtureResolver();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function resolve(FixtureBag $unresolvedFixtures): FixtureBag
     {
         $resolvedFixtures = new TemplatingFixtureBag();

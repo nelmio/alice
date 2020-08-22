@@ -40,9 +40,7 @@ final class SimpleMethodCall implements MethodCallInterface
         $this->arguments = $arguments;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withArguments(array $arguments = null): self
     {
         $clone = clone $this;
@@ -51,33 +49,25 @@ final class SimpleMethodCall implements MethodCallInterface
         return $clone;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getCaller()
     {
         return null;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getMethod(): string
     {
         return $this->method;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getArguments()
     {
         return $this->arguments;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return $this->method;

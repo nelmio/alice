@@ -39,9 +39,7 @@ final class SimpleDataLoader implements DataLoaderInterface
         $this->generator = $generator;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
         $fixtureSet = $this->builder->build($data, $parameters, $objects);

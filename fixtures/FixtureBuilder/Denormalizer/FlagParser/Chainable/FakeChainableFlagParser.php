@@ -21,17 +21,13 @@ class FakeChainableFlagParser implements ChainableFlagParserInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(string $element): bool
     {
         $this->__call(__FUNCTION__, func_get_args());
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function parse(string $element): FlagBag
     {
         $this->__call(__FUNCTION__, func_get_args());

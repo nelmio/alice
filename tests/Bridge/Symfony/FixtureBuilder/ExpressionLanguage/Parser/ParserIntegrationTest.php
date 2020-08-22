@@ -22,9 +22,6 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest 
  */
 class ParserIntegrationTest extends CoreParserIntegrationTest
 {
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->parser = new IsolatedSymfonyBuiltInParser();

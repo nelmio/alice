@@ -41,25 +41,19 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         $this->resolver = $resolver;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withResolver(ParameterResolverInterface $resolver)
     {
         return new self($resolver);
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canResolve(Parameter $parameter): bool
     {
         return is_string($parameter->getValue());
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ParameterNotFoundException
      */
     public function resolve(

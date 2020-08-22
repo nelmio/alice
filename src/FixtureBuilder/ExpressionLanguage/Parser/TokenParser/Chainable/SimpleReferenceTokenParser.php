@@ -28,9 +28,7 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::SIMPLE_REFERENCE_TYPE;
@@ -38,8 +36,6 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
 
     /**
      * Parses expressions such as "@user".
-     *
-     * {@inheritdoc}
      */
     public function parse(Token $token): FixtureReferenceValue
     {

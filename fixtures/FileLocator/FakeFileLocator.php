@@ -20,9 +20,7 @@ class FakeFileLocator implements FileLocatorInterface
 {
     use NotCallableTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function locate(string $name, string $currentPath = null): string
     {
         $this->__call(__FUNCTION__, func_get_args());

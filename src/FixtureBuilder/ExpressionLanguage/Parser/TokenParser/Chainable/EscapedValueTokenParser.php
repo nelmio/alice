@@ -37,9 +37,7 @@ final class EscapedValueTokenParser implements ChainableTokenParserInterface
         $this->tokenizer = new FunctionTokenizer();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function canParse(Token $token): bool
     {
         return TokenType::ESCAPED_VALUE_TYPE === $token->getType();
@@ -47,8 +45,6 @@ final class EscapedValueTokenParser implements ChainableTokenParserInterface
 
     /**
      * Parses '<<', '@@'...
-     *
-     * {@inheritdoc}
      */
     public function parse(Token $token): string
     {

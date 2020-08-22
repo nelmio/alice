@@ -42,9 +42,7 @@ class YamlParserTest extends TestCase
      */
     private $parser;
 
-    /**
-     * @inheritdoc
-     */
+    
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -52,9 +50,7 @@ class YamlParserTest extends TestCase
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/yaml';
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public static function tearDownAfterClass(): void
     {
         self::$dir = null;
@@ -62,9 +58,7 @@ class YamlParserTest extends TestCase
         parent::tearDownAfterClass();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     protected function setUp(): void
     {
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);

@@ -23,8 +23,6 @@ final class SimpleParameterBagDenormalizer implements ParameterBagDenormalizerIn
     use IsAServiceTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @param array $data Full set of parsed data, will look for the parameter subset itself.
      */
     public function denormalize(array $data): ParameterBag

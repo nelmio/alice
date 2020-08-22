@@ -19,9 +19,6 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 
 final class ElementParser implements FlagParserInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function parse(string $element): FlagBag
     {
         return (new FlagBag($element))->withFlag(new ElementFlag($element));

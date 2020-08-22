@@ -24,9 +24,7 @@ class MutableValue implements ValueInterface
         $this->value = $value;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getValue()
     {
         return $this->value;
@@ -37,9 +35,7 @@ class MutableValue implements ValueInterface
         $this->value = $value;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function __toString(): string
     {
         return 'mutable';

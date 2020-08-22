@@ -31,25 +31,19 @@ final class CompleteObject implements ObjectInterface
         $this->object = $object;
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getId(): string
     {
         return $this->object->getId();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function getInstance()
     {
         return $this->object->getInstance();
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function withInstance(object $newInstance): void
     {
         throw new LogicException('Cannot create a new object from a complete object.');

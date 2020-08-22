@@ -24,9 +24,7 @@ final class OptionalFlagHandler implements MethodFlagHandler
 {
     use IsAServiceTrait;
 
-    /**
-     * @inheritdoc
-     */
+    
     public function handleMethodFlags(MethodCallInterface $methodCall, FlagInterface $flag): MethodCallInterface
     {
         return $flag instanceof OptionalFlag
