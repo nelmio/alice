@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use Exception;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 
-class RootInstantiationException extends \Exception implements InstantiationThrowable
+class RootInstantiationException extends Exception implements InstantiationThrowable
 {
 }

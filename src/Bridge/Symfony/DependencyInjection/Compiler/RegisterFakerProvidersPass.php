@@ -34,7 +34,7 @@ final class RegisterFakerProvidersPass implements CompilerPassInterface
     /**
      * @inheritdoc
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $fakerGenerator = $container->findDefinition('nelmio_alice.faker.generator');
         $providers = $this->taggedDefinitionsLocator->findReferences($container, 'nelmio_alice.faker.provider');

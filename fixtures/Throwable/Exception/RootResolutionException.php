@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use Exception;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 
-class RootResolutionException extends \Exception implements ResolutionThrowable
+class RootResolutionException extends Exception implements ResolutionThrowable
 {
 }

@@ -24,13 +24,8 @@ interface CallsDenormalizerInterface
      * Denormalizes a method call.
      *
      * @param FixtureInterface    $scope See SpecificationsDenormalizerInterface
-     * @param FlagParserInterface $parser
-     * @param string              $unparsedMethod
-     * @param array               $unparsedArguments
      *
      * @throws DenormalizationThrowable
-     *
-     * @return MethodCallInterface
      *
      * @example
      *  $unparsedMethod = 'setLocation (50%?)'

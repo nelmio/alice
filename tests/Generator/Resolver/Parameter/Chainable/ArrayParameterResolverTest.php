@@ -25,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
@@ -33,60 +34,60 @@ class ArrayParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableParameterResolver()
+    public function testIsAChainableParameterResolver(): void
     {
-        $this->assertTrue(is_a(ArrayParameterResolver::class, ChainableParameterResolverInterface::class, true));
+        static::assertTrue(is_a(ArrayParameterResolver::class, ChainableParameterResolverInterface::class, true));
     }
 
-    public function testIsAParameterResolverAwareResolver()
+    public function testIsAParameterResolverAwareResolver(): void
     {
-        $this->assertTrue(is_a(ArrayParameterResolver::class, ParameterResolverAwareInterface::class, true));
+        static::assertTrue(is_a(ArrayParameterResolver::class, ParameterResolverAwareInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ArrayParameterResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ArrayParameterResolver::class))->isCloneable());
     }
 
-    public function testCanBeInstantiatedWithoutAResolver()
+    public function testCanBeInstantiatedWithoutAResolver(): void
     {
         new ArrayParameterResolver();
     }
 
-    public function testCanBeInstantiatedWithAResolver()
+    public function testCanBeInstantiatedWithAResolver(): void
     {
         new ArrayParameterResolver(new FakeParameterResolver());
     }
 
-    public function testWithersReturnANewModifiedInstance()
+    public function testWithersReturnANewModifiedInstance(): void
     {
-        $propertyRefl = (new \ReflectionClass(ArrayParameterResolver::class))->getProperty('resolver');
+        $propertyRefl = (new ReflectionClass(ArrayParameterResolver::class))->getProperty('resolver');
         $propertyRefl->setAccessible(true);
 
         $resolver = new ArrayParameterResolver();
         $newResolver = $resolver->withResolver(new FakeParameterResolver());
 
-        $this->assertEquals(new ArrayParameterResolver(), $resolver);
-        $this->assertEquals(new ArrayParameterResolver(new FakeParameterResolver()), $newResolver);
+        static::assertEquals(new ArrayParameterResolver(), $resolver);
+        static::assertEquals(new ArrayParameterResolver(new FakeParameterResolver()), $newResolver);
     }
 
-    public function testCanOnlyResolveArrayValues()
+    public function testCanOnlyResolveArrayValues(): void
     {
         $resolver = new ArrayParameterResolver();
         $parameter = new Parameter('foo', null);
 
-        $this->assertTrue($resolver->canResolve($parameter->withValue([])));
+        static::assertTrue($resolver->canResolve($parameter->withValue([])));
 
-        $this->assertFalse($resolver->canResolve($parameter->withValue(null)));
-        $this->assertFalse($resolver->canResolve($parameter->withValue(10)));
-        $this->assertFalse($resolver->canResolve($parameter->withValue(.75)));
-        $this->assertFalse($resolver->canResolve($parameter->withValue('string')));
-        $this->assertFalse($resolver->canResolve($parameter->withValue(new \stdClass())));
-        $this->assertFalse($resolver->canResolve($parameter->withValue(function () {
+        static::assertFalse($resolver->canResolve($parameter->withValue(null)));
+        static::assertFalse($resolver->canResolve($parameter->withValue(10)));
+        static::assertFalse($resolver->canResolve($parameter->withValue(.75)));
+        static::assertFalse($resolver->canResolve($parameter->withValue('string')));
+        static::assertFalse($resolver->canResolve($parameter->withValue(new stdClass())));
+        static::assertFalse($resolver->canResolve($parameter->withValue(function (): void {
         })));
     }
 
-    public function testRequiresInjectedResolverToResolverAParameter()
+    public function testRequiresInjectedResolverToResolverAParameter(): void
     {
         $resolver = new ArrayParameterResolver();
 
@@ -96,7 +97,7 @@ class ArrayParameterResolverTest extends TestCase
         $resolver->resolve(new Parameter('foo', null), new ParameterBag(), new ParameterBag());
     }
 
-    public function testIteratesOverEachElementAndUsesTheDecoratedResolverToResolveEachValue()
+    public function testIteratesOverEachElementAndUsesTheDecoratedResolverToResolveEachValue(): void
     {
         $parameter = new Parameter(
             'array_param',
@@ -147,7 +148,7 @@ class ArrayParameterResolverTest extends TestCase
         $resolver = (new ArrayParameterResolver())->withResolver($injectedResolver);
         $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ParameterBag([
                 'name' => 'resolvedParams',
                 'array_param' => [
@@ -160,10 +161,10 @@ class ArrayParameterResolverTest extends TestCase
         $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testIfResolutionResultsInMultipleParametersBeingResolvedThenTheyAreAllIncludedInTheResult()
+    public function testIfResolutionResultsInMultipleParametersBeingResolvedThenTheyAreAllIncludedInTheResult(): void
     {
         $array = [
-            $val1 = new \stdClass(),
+            $val1 = new stdClass(),
         ];
 
         $parameter = new Parameter('array_param', $array);
@@ -188,7 +189,7 @@ class ArrayParameterResolverTest extends TestCase
         $resolver = (new ArrayParameterResolver())->withResolver($injectedResolver);
         $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ParameterBag([
                 'array_param' => [
                     '0' => 'val1',
@@ -202,7 +203,7 @@ class ArrayParameterResolverTest extends TestCase
     /**
      * @dataProvider provideContexts
      */
-    public function testTheContextPassedToTheInjectedResolverIsAlwaysValid(ResolvingContext $context = null, ResolvingContext $expected)
+    public function testTheContextPassedToTheInjectedResolverIsAlwaysValid(ResolvingContext $context = null, ResolvingContext $expected): void
     {
         $array = [
             $val1 = 'foo',
@@ -249,7 +250,7 @@ class ArrayParameterResolverTest extends TestCase
         $resolver = (new ArrayParameterResolver())->withResolver($injectedResolver);
         $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ParameterBag([
                 'name' => 'resolvedParams',
                 'array_param' => [

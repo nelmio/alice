@@ -15,63 +15,64 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue
  */
 class ResolvedFunctionCallValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(ResolvedFunctionCallValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(ResolvedFunctionCallValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $name = 'setUsername';
-        $arguments = [new \stdClass()];
+        $arguments = [new stdClass()];
 
         $value = new ResolvedFunctionCallValue($name, $arguments);
 
-        $this->assertEquals($name, $value->getName());
-        $this->assertEquals($arguments, $value->getArguments());
-        $this->assertEquals([$name, $arguments], $value->getValue());
+        static::assertEquals($name, $value->getName());
+        static::assertEquals($arguments, $value->getArguments());
+        static::assertEquals([$name, $arguments], $value->getValue());
     }
 
-    public function testIsMutable()
+    public function testIsMutable(): void
     {
         $arguments = [
-            $arg0 = new \stdClass(),
+            $arg0 = new stdClass(),
         ];
         $value = new ResolvedFunctionCallValue('setUsername', $arguments);
 
         // Mutate injected value
         $arg0->foo = 'bar';
 
-        $this->assertEquals($arg0->foo, $value->getArguments()[0]->foo);
-        $this->assertSame($arg0, $value->getArguments()[0]);
+        static::assertEquals($arg0->foo, $value->getArguments()[0]->foo);
+        static::assertSame($arg0, $value->getArguments()[0]);
 
-        $this->assertNotEquals(
+        static::assertNotEquals(
             [
-                new \stdClass(),
+                new stdClass(),
             ],
             $value->getArguments()
         );
-        $this->assertNotEquals(
+        static::assertNotEquals(
             [
                 'setUsername',
-                [new \stdClass()],
+                [new stdClass()],
             ],
             $value->getValue()
         );
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new ResolvedFunctionCallValue('foo');
-        $this->assertEquals('<foo()>', (string) $value);
+        static::assertEquals('<foo()>', (string) $value);
 
         $value = new ResolvedFunctionCallValue('foo', ['bar']);
-        $this->assertEquals("<foo(array (\n  0 => 'bar',\n))>", (string) $value);
+        static::assertEquals("<foo(array (\n  0 => 'bar',\n))>", (string) $value);
     }
 }

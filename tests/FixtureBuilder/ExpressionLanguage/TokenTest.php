@@ -20,27 +20,27 @@ use PHPUnit\Framework\TestCase;
  */
 class TokenTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $value = 'bob';
         $type = new TokenType(TokenType::DYNAMIC_ARRAY_TYPE);
 
         $token = new Token($value, $type);
 
-        $this->assertEquals($value, $token->getValue());
-        $this->assertEquals($type->getValue(), $token->getType());
-        $this->assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
+        static::assertEquals($value, $token->getValue());
+        static::assertEquals($type->getValue(), $token->getType());
+        static::assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
     }
 
     /**
      * @depends \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenTypeTest::testIsImmutable
      */
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $value = 'bob';
         $newValue = 'alice';
@@ -49,11 +49,11 @@ class TokenTest extends TestCase
         $token = new Token($value, $type);
         $newToken = $token->withValue($newValue);
 
-        $this->assertEquals($value, $token->getValue());
-        $this->assertEquals($type->getValue(), $token->getType());
+        static::assertEquals($value, $token->getValue());
+        static::assertEquals($type->getValue(), $token->getType());
 
-        $this->assertInstanceOf(Token::class, $newToken);
-        $this->assertEquals($newValue, $newToken->getValue());
-        $this->assertEquals($type->getValue(), $newToken->getType());
+        static::assertInstanceOf(Token::class, $newToken);
+        static::assertEquals($newValue, $newToken->getValue());
+        static::assertEquals($type->getValue(), $newToken->getType());
     }
 }

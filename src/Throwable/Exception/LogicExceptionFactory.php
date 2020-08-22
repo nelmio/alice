@@ -13,14 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use LogicException;
+
 /**
  * @private
  */
 final class LogicExceptionFactory
 {
-    public static function createForUncallableMethod(string $method): \LogicException
+    public static function createForUncallableMethod(string $method): LogicException
     {
-        return new \LogicException(
+        return new LogicException(
             sprintf(
                 'By its nature, "%s()" should not be called.',
                 $method
@@ -28,9 +30,9 @@ final class LogicExceptionFactory
         );
     }
 
-    public static function createForCannotDenormalizerForChainableFixtureBuilderDenormalizer(string $method): \LogicException
+    public static function createForCannotDenormalizerForChainableFixtureBuilderDenormalizer(string $method): LogicException
     {
-        return new \LogicException(
+        return new LogicException(
             sprintf(
                 'As a chainable denormalizer, "%s" should be called only if "::canDenormalize() returns true. Got '
                 .'false instead.',
@@ -39,9 +41,9 @@ final class LogicExceptionFactory
         );
     }
 
-    public static function createForCannotHaveBothConstructorAndFactory(): \LogicException
+    public static function createForCannotHaveBothConstructorAndFactory(): LogicException
     {
-        return new \LogicException(
+        return new LogicException(
             'Cannot use the fixture property "__construct" and "__factory" together.'
         );
     }

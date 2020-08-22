@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType
@@ -30,44 +32,44 @@ class TokenTypeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $reflClass = new \ReflectionClass(TokenType::class);
+        $reflClass = new ReflectionClass(TokenType::class);
         $this->constants = $reflClass->getConstants();
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 
     /**
      * @testdox Test that the static values used to control the input are grouping all the constants.
      */
-    public function testStaticValues()
+    public function testStaticValues(): void
     {
-        $reflClass = new \ReflectionClass(TokenType::class);
+        $reflClass = new ReflectionClass(TokenType::class);
 
         $reflProp = $reflClass->getProperty('values');
         $reflProp->setAccessible(true);
         $values = $reflProp->getValue(TokenType::class);
 
-        $this->assertCount(count($this->constants), $values);
+        static::assertCount(count($this->constants), $values);
         foreach ($this->constants as $constant) {
-            $this->assertTrue($values[$constant]);
+            static::assertTrue($values[$constant]);
         }
     }
 
     /**
      * @dataProvider provideAcceptableTypes
      */
-    public function testCanCreateType(string $typeConstant)
+    public function testCanCreateType(string $typeConstant): void
     {
         $type = new TokenType($typeConstant);
-        $this->assertEquals($type->getValue(), constant(sprintf('%s::%s', TokenType::class, $typeConstant)));
+        static::assertEquals($type->getValue(), constant(sprintf('%s::%s', TokenType::class, $typeConstant)));
     }
 
-    public function testThrowsAnExceptionIfAnInvalidTypeIsGiven()
+    public function testThrowsAnExceptionIfAnInvalidTypeIsGiven(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected type to be a known token type but got "unknown".');
 
         new TokenType('unknown');
@@ -75,7 +77,7 @@ class TokenTypeTest extends TestCase
 
     public function provideAcceptableTypes()
     {
-        $reflClass = new \ReflectionClass(TokenType::class);
+        $reflClass = new ReflectionClass(TokenType::class);
         $constants = $reflClass->getConstants();
 
         foreach ($constants as $constant) {

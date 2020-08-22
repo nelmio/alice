@@ -17,7 +17,7 @@ class MagicCallDummy
 {
     public $properties = [];
 
-    public function __call(string $method, array $arguments)
+    public function __call(string $method, array $arguments): void
     {
         $this->properties[$method] = $arguments[0];
     }

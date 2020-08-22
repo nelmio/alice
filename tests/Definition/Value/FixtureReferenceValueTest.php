@@ -13,28 +13,30 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\FixtureReferenceValue
  */
 class FixtureReferenceValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(FixtureReferenceValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(FixtureReferenceValue::class, ValueInterface::class, true));
     }
 
-    public function testCanBeInstantiatedWithOnlyAStringOrAValue()
+    public function testCanBeInstantiatedWithOnlyAStringOrAValue(): void
     {
         new FixtureReferenceValue('user0');
         new FixtureReferenceValue(new FakeValue());
 
         try {
             new FixtureReferenceValue(null);
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "null" instead.',
                 $exception->getMessage()
@@ -43,8 +45,8 @@ class FixtureReferenceValueTest extends TestCase
 
         try {
             new FixtureReferenceValue(true);
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "boolean" instead.',
                 $exception->getMessage()
@@ -53,8 +55,8 @@ class FixtureReferenceValueTest extends TestCase
 
         try {
             new FixtureReferenceValue(10);
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "integer" instead.',
                 $exception->getMessage()
@@ -63,8 +65,8 @@ class FixtureReferenceValueTest extends TestCase
 
         try {
             new FixtureReferenceValue(.5);
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "double" instead.',
                 $exception->getMessage()
@@ -73,8 +75,8 @@ class FixtureReferenceValueTest extends TestCase
 
         try {
             new FixtureReferenceValue([]);
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "array" instead.',
                 $exception->getMessage()
@@ -82,9 +84,9 @@ class FixtureReferenceValueTest extends TestCase
         }
 
         try {
-            new FixtureReferenceValue(new \stdClass());
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
+            new FixtureReferenceValue(new stdClass());
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "stdClass" instead.',
                 $exception->getMessage()
@@ -92,10 +94,10 @@ class FixtureReferenceValueTest extends TestCase
         }
 
         try {
-            new FixtureReferenceValue(function () {
+            new FixtureReferenceValue(function (): void {
             });
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "Closure" instead.',
                 $exception->getMessage()
@@ -103,24 +105,24 @@ class FixtureReferenceValueTest extends TestCase
         }
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $value = new FixtureReferenceValue('user0');
 
-        $this->assertEquals('user0', $value->getValue());
+        static::assertEquals('user0', $value->getValue());
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new FixtureReferenceValue('');
-        $this->assertEquals('@', (string) $value);
+        static::assertEquals('@', (string) $value);
 
         $value = new FixtureReferenceValue('user0');
-        $this->assertEquals('@user0', (string) $value);
+        static::assertEquals('@user0', (string) $value);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator\Chainable;
 
+use Error;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Dummy;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\AbstractChainableInstantiator
@@ -49,42 +51,42 @@ class AbstractChainableInstantiatorTest extends TestCase
         $this->instantiator = new DummyChainableInstantiator();
     }
 
-    public function testIsAChainableInstantiator()
+    public function testIsAChainableInstantiator(): void
     {
-        $this->assertTrue(is_a(AbstractChainableInstantiator::class, ChainableInstantiatorInterface::class, true));
+        static::assertTrue(is_a(AbstractChainableInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(AbstractChainableInstantiator::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(AbstractChainableInstantiator::class))->isCloneable());
     }
 
-    public function testThrowsExceptionIfCannotCreateInstance()
+    public function testThrowsExceptionIfCannotCreateInstance(): void
     {
         try {
             $fixture = new DummyFixture('dummy');
             $set = ResolvedFixtureSetFactory::create();
 
             $decoratedInstantiatorProphecy = $this->prophesize(AbstractChainableInstantiator::class);
-            $decoratedInstantiatorProphecy->createInstance($fixture)->willThrow(\Error::class);
+            $decoratedInstantiatorProphecy->createInstance($fixture)->willThrow(Error::class);
             /** @var AbstractChainableInstantiator $decoratedInstantiator */
             $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
             $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
             $instantiator->instantiate($fixture, $set, new GenerationContext());
 
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (InstantiationException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not instantiate fixture "dummy".',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNotNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
         }
     }
 
-    public function testIfCannotCreateInstanceAndExceptionThrownIsAnInstantiationExceptionThenItLetsTheExceptionPass()
+    public function testIfCannotCreateInstanceAndExceptionThrownIsAnInstantiationExceptionThenItLetsTheExceptionPass(): void
     {
         $fixture = new DummyFixture('dummy');
         $set = ResolvedFixtureSetFactory::create();
@@ -102,7 +104,7 @@ class AbstractChainableInstantiatorTest extends TestCase
         $instantiator->instantiate($fixture, $set, new GenerationContext());
     }
 
-    public function testReturnsNewSetWithInstantiatedObject()
+    public function testReturnsNewSetWithInstantiatedObject(): void
     {
         $fixture = new DummyFixture('dummy');
         $set = new ResolvedFixtureSet(
@@ -111,7 +113,7 @@ class AbstractChainableInstantiatorTest extends TestCase
             $objects = new ObjectBag(['ping' => new Dummy()])
         );
 
-        $instantiatedObject = new \stdClass();
+        $instantiatedObject = new stdClass();
         $instantiatedObject->instantiated = true;
 
         $decoratedInstantiatorProphecy = $this->prophesize(AbstractChainableInstantiator::class);
@@ -128,7 +130,7 @@ class AbstractChainableInstantiatorTest extends TestCase
         $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
         $actual = $instantiator->instantiate($fixture, $set, new GenerationContext());
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedInstantiatorProphecy->createInstance(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

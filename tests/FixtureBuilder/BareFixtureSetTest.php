@@ -24,23 +24,23 @@ use PHPUnit\Framework\TestCase;
  */
 class BareFixtureSetTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $set = new BareFixtureSet(
             $parameters = (new ParameterBag())->with(new Parameter('foo', 'bar')),
             $fixtures = (new FixtureBag())->with(new DummyFixture('foo'))
         );
 
-        $this->assertEquals($parameters, $set->getParameters());
-        $this->assertEquals($fixtures, $set->getFixtures());
+        static::assertEquals($parameters, $set->getParameters());
+        static::assertEquals($fixtures, $set->getFixtures());
     }
 
     /**
      * @depends \Nelmio\Alice\ParameterBagTest::testIsImmutable
      * @depends \Nelmio\Alice\FixtureBagTest::testIsImmutable
      */
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 }

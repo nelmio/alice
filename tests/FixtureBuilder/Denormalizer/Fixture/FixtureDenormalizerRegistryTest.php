@@ -26,6 +26,9 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNot
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 use TypeError;
 
 /**
@@ -36,7 +39,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var \ReflectionProperty
+     * @var ReflectionProperty
      */
     private $propRefl;
 
@@ -45,26 +48,26 @@ class FixtureDenormalizerRegistryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $propRelf = (new \ReflectionClass(FixtureDenormalizerRegistry::class))->getProperty('denormalizers');
+        $propRelf = (new ReflectionClass(FixtureDenormalizerRegistry::class))->getProperty('denormalizers');
         $propRelf->setAccessible(true);
 
         $this->propRefl = $propRelf;
     }
 
-    public function testIsADenormalizer()
+    public function testIsADenormalizer(): void
     {
-        $this->assertTrue(is_a(FixtureDenormalizerRegistry::class, FixtureDenormalizerInterface::class, true));
+        static::assertTrue(is_a(FixtureDenormalizerRegistry::class, FixtureDenormalizerInterface::class, true));
     }
 
-    public function testOnlyAcceptsChainableFixtureDenormalizers()
+    public function testOnlyAcceptsChainableFixtureDenormalizers(): void
     {
         $flagParser = new FakeFlagParser();
 
         try {
-            new FixtureDenormalizerRegistry($flagParser, [new \stdClass()]);
-            $this->fail('Expected exception to be thrown.');
+            new FixtureDenormalizerRegistry($flagParser, [new stdClass()]);
+            static::fail('Expected exception to be thrown.');
         } catch (TypeError $error) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Expected denormalizer 0 to be a "'.ChainableFixtureDenormalizerInterface::class.'". Got '
                 .'"stdClass" instead.',
                 $error->getMessage()
@@ -73,9 +76,9 @@ class FixtureDenormalizerRegistryTest extends TestCase
 
         try {
             new FixtureDenormalizerRegistry($flagParser, [1]);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (TypeError $error) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Expected denormalizer 0 to be a "'.ChainableFixtureDenormalizerInterface::class.'". Got '
                 .'"integer" instead.',
                 $error->getMessage()
@@ -83,7 +86,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
         }
     }
 
-    public function testInjectsParserInParserAwareDenormalizersAndItselfInDenormalizerAwareDenormalizers()
+    public function testInjectsParserInParserAwareDenormalizersAndItselfInDenormalizerAwareDenormalizers(): void
     {
         $flagParser = new FakeFlagParser();
         $chainableDenormalizer1 = new FakeChainableDenormalizer();
@@ -107,15 +110,15 @@ class FixtureDenormalizerRegistryTest extends TestCase
         );
         $actualDenormalizers = $this->propRefl->getValue($denormalizer);
 
-        $this->assertCount(3, $actualDenormalizers);
-        $this->assertSame($chainableDenormalizer1, $actualDenormalizers[0]);
-        $this->assertNotSame($flagParserAwareDenormalizer, $actualDenormalizers[1]);
-        $this->assertNull($flagParserAwareDenormalizer->parser);
-        $this->assertNotNull($actualDenormalizers[1]->parser);
-        $this->assertSame($denormalizer, $denormalizerAwareDenormalizer->denormalizer);
+        static::assertCount(3, $actualDenormalizers);
+        static::assertSame($chainableDenormalizer1, $actualDenormalizers[0]);
+        static::assertNotSame($flagParserAwareDenormalizer, $actualDenormalizers[1]);
+        static::assertNull($flagParserAwareDenormalizer->parser);
+        static::assertNotNull($actualDenormalizers[1]->parser);
+        static::assertSame($denormalizer, $denormalizerAwareDenormalizer->denormalizer);
     }
 
-    public function testUsesTheFirstSuitableDenormalizer()
+    public function testUsesTheFirstSuitableDenormalizer(): void
     {
         $fixtureProphecy = $this->prophesize(FixtureInterface::class);
         $fixtureProphecy->getId()->willReturn('dummy');
@@ -160,13 +163,13 @@ class FixtureDenormalizerRegistryTest extends TestCase
         );
         $actual = $denormalizer->denormalize($builtFixtures, $className, $reference, $specs, $flags);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
         $chainableDenormalizer1Prophecy->canDenormalize(Argument::any())->shouldHaveBeenCalledTimes(1);
         $chainableDenormalizer2Prophecy->canDenormalize(Argument::any())->shouldHaveBeenCalledTimes(1);
         $chainableDenormalizer2Prophecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testThrowsExceptionIfNotSuitableDenormalizer()
+    public function testThrowsExceptionIfNotSuitableDenormalizer(): void
     {
         $builtFixtures = new FixtureBag();
         $className = 'Nelmio\Alice\Entity\User';

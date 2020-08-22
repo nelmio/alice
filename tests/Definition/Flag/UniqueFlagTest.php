@@ -21,15 +21,15 @@ use PHPUnit\Framework\TestCase;
  */
 class UniqueFlagTest extends TestCase
 {
-    public function testIsAFlag()
+    public function testIsAFlag(): void
     {
-        $this->assertTrue(is_a(UniqueFlag::class, FlagInterface::class, true));
+        static::assertTrue(is_a(UniqueFlag::class, FlagInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $flag = new UniqueFlag();
 
-        $this->assertEquals('unique', $flag->__toString());
+        static::assertEquals('unique', $flag->__toString());
     }
 }

@@ -36,8 +36,6 @@ final class ResolvingContext
     /**
      * Returns the existing instance if is an object or create a new one otherwise. It also ensure that the key will be
      * added also it won't increment the counter if already present.
-     *
-     * @param self|null $resolving
      */
     public static function createFrom(self $resolving = null, string $key): self
     {
@@ -54,7 +52,7 @@ final class ResolvingContext
         return array_key_exists($key, $this->resolving);
     }
 
-    public function add(string $key)
+    public function add(string $key): void
     {
         $this->resolving[$key] = array_key_exists($key, $this->resolving)
             ? $this->resolving[$key] + 1
@@ -65,7 +63,7 @@ final class ResolvingContext
     /**
      * @throws CircularReferenceException
      */
-    public function checkForCircularReference(string $key)
+    public function checkForCircularReference(string $key): void
     {
         if (true === $this->has($key) && 1 < $this->resolving[$key]) {
             throw CircularReferenceExceptionFactory::createForParameter($key, $this->resolving);

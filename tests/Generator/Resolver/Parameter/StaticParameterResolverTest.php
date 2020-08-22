@@ -19,45 +19,46 @@ use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
  */
 class StaticParameterResolverTest extends TestCase
 {
-    public function testIsAChainableParameterResolver()
+    public function testIsAChainableParameterResolver(): void
     {
-        $this->assertTrue(is_a(StaticParameterResolver::class, ChainableParameterResolverInterface::class, true));
+        static::assertTrue(is_a(StaticParameterResolver::class, ChainableParameterResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(StaticParameterResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(StaticParameterResolver::class))->isCloneable());
     }
 
-    public function testCanOnlyResolveSimpleValues()
+    public function testCanOnlyResolveSimpleValues(): void
     {
         $resolver = new StaticParameterResolver();
         $parameter = new Parameter('foo', null);
 
-        $this->assertTrue($resolver->canResolve($parameter->withValue(null)));
-        $this->assertTrue($resolver->canResolve($parameter->withValue(10)));
-        $this->assertTrue($resolver->canResolve($parameter->withValue(.75)));
-        $this->assertTrue($resolver->canResolve($parameter->withValue(new \stdClass())));
-        $this->assertTrue($resolver->canResolve($parameter->withValue(function () {
+        static::assertTrue($resolver->canResolve($parameter->withValue(null)));
+        static::assertTrue($resolver->canResolve($parameter->withValue(10)));
+        static::assertTrue($resolver->canResolve($parameter->withValue(.75)));
+        static::assertTrue($resolver->canResolve($parameter->withValue(new stdClass())));
+        static::assertTrue($resolver->canResolve($parameter->withValue(function (): void {
         })));
 
-        $this->assertFalse($resolver->canResolve($parameter->withValue('string')));
+        static::assertFalse($resolver->canResolve($parameter->withValue('string')));
     }
 
-    public function testReturnsResolvedParameter()
+    public function testReturnsResolvedParameter(): void
     {
         $parameter = new Parameter('foo', null);
         $resolver = new StaticParameterResolver();
 
         $result = $resolver->resolve($parameter, new ParameterBag(), new ParameterBag());
 
-        $this->assertEquals(
+        static::assertEquals(
             new ParameterBag([
                 'foo' => null,
             ]),

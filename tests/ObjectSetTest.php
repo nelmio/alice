@@ -14,35 +14,36 @@ declare(strict_types=1);
 namespace Nelmio\Alice;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\ObjectSet
  */
 class ObjectSetTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $parameters = new ParameterBag([
             'foo' => 'bar',
         ]);
         $objects = new ObjectBag([
-            'dummy' => $std = new \stdClass(),
+            'dummy' => $std = new stdClass(),
         ]);
 
         $set = new ObjectSet($parameters, $objects);
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'foo' => 'bar',
             ],
             $set->getParameters()
         );
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'dummy' => $std
             ],
             $set->getObjects()
         );
-        $this->assertCount(1, $set->getObjects());
+        static::assertCount(1, $set->getObjects());
     }
 }

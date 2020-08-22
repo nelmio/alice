@@ -34,7 +34,7 @@ final class NoMethodCall implements MethodCallInterface
     /**
      * @inheritdoc
      */
-    public function getCaller()
+    public function getCaller(): void
     {
         $this->throwException(__METHOD__);
     }
@@ -50,7 +50,7 @@ final class NoMethodCall implements MethodCallInterface
     /**
      * @inheritdoc
      */
-    public function getArguments()
+    public function getArguments(): void
     {
         $this->throwException(__METHOD__);
     }
@@ -63,7 +63,7 @@ final class NoMethodCall implements MethodCallInterface
         return 'none';
     }
 
-    private function throwException(string $method)
+    private function throwException(string $method): void
     {
         throw LogicExceptionFactory::createForUncallableMethod($method);
     }

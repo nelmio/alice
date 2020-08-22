@@ -107,7 +107,6 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
 
     /**
      * @param FixtureIdInterface|FixtureInterface $referredFixture
-     * @param bool|null                           $passIncompleteObject
      */
     private function resolveReferredFixture(
         FixtureIdInterface $referredFixture,

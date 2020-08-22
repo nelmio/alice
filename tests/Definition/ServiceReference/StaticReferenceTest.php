@@ -21,16 +21,16 @@ use PHPUnit\Framework\TestCase;
  */
 class StaticReferenceTest extends TestCase
 {
-    public function testIsAReference()
+    public function testIsAReference(): void
     {
-        $this->assertTrue(is_a(StaticReference::class, ServiceReferenceInterface::class, true));
+        static::assertTrue(is_a(StaticReference::class, ServiceReferenceInterface::class, true));
     }
     
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = 'Nelmio\User\UserFactory';
         $definition = new StaticReference($reference);
         
-        $this->assertEquals($reference, $definition->getId());
+        static::assertEquals($reference, $definition->getId());
     }
 }

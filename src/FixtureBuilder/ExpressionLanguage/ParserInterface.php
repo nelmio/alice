@@ -26,7 +26,6 @@ interface ParserInterface
      * must be processed (like '$username'). If the value must be processed, it will be parsed to generate a value (a
      * ValueInterface instance) ready for processing.
      *
-     * @param string $value
      *
      * @throws ExpressionLanguageParseThrowable
      *

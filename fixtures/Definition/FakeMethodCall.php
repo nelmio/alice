@@ -22,7 +22,7 @@ class FakeMethodCall implements MethodCallInterface
     /**
      * @inheritdoc
      */
-    public function withArguments(array $arguments = null)
+    public function withArguments(array $arguments = null): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
@@ -30,7 +30,7 @@ class FakeMethodCall implements MethodCallInterface
     /**
      * @inheritdoc
      */
-    public function getCaller()
+    public function getCaller(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }

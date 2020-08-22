@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\UniqueValue;
@@ -30,6 +31,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver
@@ -39,12 +41,12 @@ class UniqueValueResolverTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var \ReflectionProperty
+     * @var ReflectionProperty
      */
     private $resolverRefl;
 
     /**
-     * @var \ReflectionProperty
+     * @var ReflectionProperty
      */
     private $poolRefl;
 
@@ -53,7 +55,7 @@ class UniqueValueResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $reflClass = new \ReflectionClass(UniqueValueResolver::class);
+        $reflClass = new ReflectionClass(UniqueValueResolver::class);
 
         $this->resolverRefl = $reflClass->getProperty('resolver');
         $this->resolverRefl->setAccessible(true);
@@ -62,48 +64,48 @@ class UniqueValueResolverTest extends TestCase
         $this->poolRefl->setAccessible(true);
     }
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(UniqueValueResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(UniqueValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(UniqueValueResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(UniqueValueResolver::class))->isCloneable());
     }
 
-    public function testThrowsExceptionIfInvalidLimitGiven()
+    public function testThrowsExceptionIfInvalidLimitGiven(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected limit value to be a strictly positive integer, got "0" instead.');
 
         new UniqueValueResolver(new UniqueValuesPool(), null, 0);
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $resolver = new UniqueValueResolver(new UniqueValuesPool());
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        $this->assertEquals(
+        static::assertEquals(
             new UniqueValueResolver(new UniqueValuesPool()),
             $resolver
         );
-        $this->assertEquals(
+        static::assertEquals(
             new UniqueValueResolver(new UniqueValuesPool(), new FakeValueResolver()),
             $newResolver
         );
     }
 
-    public function testCanResolveDynamicArrayValues()
+    public function testCanResolveDynamicArrayValues(): void
     {
         $resolver = new UniqueValueResolver(new UniqueValuesPool());
 
-        $this->assertTrue($resolver->canResolve(new UniqueValue('', '')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new UniqueValue('', '')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testCannotResolveValueIfHasNoResolver()
+    public function testCannotResolveValueIfHasNoResolver(): void
     {
         $resolver = new UniqueValueResolver(new UniqueValuesPool());
 
@@ -113,7 +115,7 @@ class UniqueValueResolverTest extends TestCase
         $resolver->resolve(new UniqueValue('', ''), new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    public function testThrowsExceptionIfLimitReached()
+    public function testThrowsExceptionIfLimitReached(): void
     {
         $value = new UniqueValue('uniqid', '');
         $fixture = new FakeFixture();
@@ -127,7 +129,7 @@ class UniqueValueResolverTest extends TestCase
         $resolver->resolve($value, $fixture, $set, [], new GenerationContext(), 1);
     }
 
-    public function testReturnsResultIfResultDoesNotAlreadyExists()
+    public function testReturnsResultIfResultDoesNotAlreadyExists(): void
     {
         $value = new UniqueValue('uniqid', 10);
         $fixture = new FakeFixture();
@@ -136,11 +138,11 @@ class UniqueValueResolverTest extends TestCase
         $resolver = new UniqueValueResolver(new UniqueValuesPool(), new FakeValueResolver());
         $result = $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
-        $this->assertEquals(10, $result->getValue());
-        $this->assertEquals($set, $result->getSet());
+        static::assertEquals(10, $result->getValue());
+        static::assertEquals($set, $result->getSet());
     }
 
-    public function testResolvesValueFirstIfNecessary()
+    public function testResolvesValueFirstIfNecessary(): void
     {
         $realValue = new FakeValue();
         $value = new UniqueValue('uniqid', $realValue);
@@ -166,13 +168,13 @@ class UniqueValueResolverTest extends TestCase
         $resolver = new UniqueValueResolver(new UniqueValuesPool(), $decoratedResolver);
         $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals(10, $result->getValue());
-        $this->assertEquals($newSet, $result->getSet());
+        static::assertEquals(10, $result->getValue());
+        static::assertEquals($newSet, $result->getSet());
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testResolvesValueAsMuchAsNecessaryIfValueIsNotUnique()
+    public function testResolvesValueAsMuchAsNecessaryIfValueIsNotUnique(): void
     {
         $uniqueId = 'uniqid';
         $realValue = new FakeValue();
@@ -225,13 +227,13 @@ class UniqueValueResolverTest extends TestCase
         $resolver = new UniqueValueResolver($pool, $decoratedResolver);
         $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals(12, $result->getValue());
-        $this->assertEquals($setAfterResolution2, $result->getSet());
+        static::assertEquals(12, $result->getValue());
+        static::assertEquals($setAfterResolution2, $result->getSet());
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
-    public function testThrowsIfLimitForGenerationOfUniqueValuesIsReached()
+    public function testThrowsIfLimitForGenerationOfUniqueValuesIsReached(): void
     {
         $uniqueId = 'uniqid';
         $realValue = new FakeValue();
@@ -260,7 +262,7 @@ class UniqueValueResolverTest extends TestCase
         $resolver = new UniqueValueResolver($pool, $decoratedResolver);
         try {
             $resolver->resolve($value, $fixture, $set, $scope, $context);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (UniqueValueGenerationLimitReachedException $exception) {
             $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(150);
         }

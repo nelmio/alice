@@ -34,17 +34,17 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
         $this->denormalizer = new NullListNameDenormalizer();
     }
 
-    public function testIsACollectionDenormalizer()
+    public function testIsACollectionDenormalizer(): void
     {
-        $this->assertTrue(is_a(NullListNameDenormalizer::class, CollectionDenormalizer::class, true));
+        static::assertTrue(is_a(NullListNameDenormalizer::class, CollectionDenormalizer::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(NullListNameDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(NullListNameDenormalizer::class))->isCloneable());
     }
 
-    public function testDenormalizesListToBuildFixtures()
+    public function testDenormalizesListToBuildFixtures(): void
     {
         $className = 'Nelmio\Alice\Entity\User';
         $fixtures = $expected = (new FixtureBag())
@@ -84,13 +84,13 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
         $denormalizer = new NullListNameDenormalizer();
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
     /**
      * @dataProvider provideSimpleFixtures
      */
-    public function testCanBuildSimpleFixtures($name)
+    public function testCanBuildSimpleFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
@@ -98,7 +98,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideListFixtures
      */
-    public function testCanBuildListFixtures($name)
+    public function testCanBuildListFixtures($name): void
     {
         $this->assertCanBuild($name);
     }
@@ -106,7 +106,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideMalformedListFixtures
      */
-    public function testCanBuildMalformedListFixtures($name)
+    public function testCanBuildMalformedListFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
@@ -114,7 +114,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideSegmentFixtures
      */
-    public function testCanBuildSegmentFixtures($name)
+    public function testCanBuildSegmentFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
@@ -122,7 +122,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideMalformedSegmentFixtures
      */
-    public function testCanBuildMalformedSegmentFixtures($name)
+    public function testCanBuildMalformedSegmentFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
@@ -130,7 +130,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideSimpleFixtures
      */
-    public function testBuildSimpleFixtures($name, $expected)
+    public function testBuildSimpleFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
@@ -138,7 +138,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideListFixtures
      */
-    public function testBuildListFixtures($name, $expected)
+    public function testBuildListFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
@@ -146,7 +146,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideMalformedListFixtures
      */
-    public function testBuildMalformedListFixtures($name, $expected)
+    public function testBuildMalformedListFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
@@ -154,7 +154,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideSegmentFixtures
      */
-    public function testBuildSegmentFixtures($name, $expected)
+    public function testBuildSegmentFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
@@ -162,7 +162,7 @@ class NullListNameDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideMalformedSegmentFixtures
      */
-    public function testBuildMalformedSegmentFixtures($name, $expected)
+    public function testBuildMalformedSegmentFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }

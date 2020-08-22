@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Parser;
 
-class ParserNotFoundException extends \LogicException
+use LogicException;
+
+class ParserNotFoundException extends LogicException
 {
 }

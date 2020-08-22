@@ -22,7 +22,7 @@ class DummyWithConstructorAndCallable
         $this->foo = $foo;
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->foo = null;
     }

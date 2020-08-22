@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use DomainException;
+
 trait NotCallableTrait
 {
-    public function __call($method, $arguments)
+    public function __call($method, $arguments): void
     {
-        throw new \DomainException(
+        throw new DomainException(
             sprintf(
                 'Did not expect "%s" to be called.',
                 $method

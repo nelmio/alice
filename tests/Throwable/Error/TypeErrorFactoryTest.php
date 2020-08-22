@@ -24,276 +24,276 @@ use stdClass;
  */
 class TypeErrorFactoryTest extends TestCase
 {
-    public function testCreateForDynamicArrayQuantifier()
+    public function testCreateForDynamicArrayQuantifier(): void
     {
         $error = TypeErrorFactory::createForDynamicArrayQuantifier(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
             .'"stdClass" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
 
 
         $error = TypeErrorFactory::createForDynamicArrayQuantifier(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
             .'"integer" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForDynamicArrayElement()
+    public function testCreateForDynamicArrayElement(): void
     {
         $error = TypeErrorFactory::createForDynamicArrayElement(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
             .'"stdClass" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
 
 
         $error = TypeErrorFactory::createForDynamicArrayElement(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
             .'"integer" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForOptionalValueQuantifier()
+    public function testCreateForOptionalValueQuantifier(): void
     {
         $error = TypeErrorFactory::createForOptionalValueQuantifier(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected quantifier to be either a scalar value or an instance of "'.ValueInterface::class.'". '
             .'Got "stdClass" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
 
 
         $error = TypeErrorFactory::createForOptionalValueQuantifier(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected quantifier to be either a scalar value or an instance of "'.ValueInterface::class.'". '
             .'Got "integer" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForOptionalValueFirstMember()
+    public function testCreateForOptionalValueFirstMember(): void
     {
         $error = TypeErrorFactory::createForOptionalValueFirstMember(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected first member to be either a string or an instance of "'.ValueInterface::class.'". '
             .'Got "stdClass" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
 
 
         $error = TypeErrorFactory::createForOptionalValueFirstMember(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected first member to be either a string or an instance of "'.ValueInterface::class.'". '
             .'Got "integer" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForOptionalValueSecondMember()
+    public function testCreateForOptionalValueSecondMember(): void
     {
         $error = TypeErrorFactory::createForOptionalValueSecondMember(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected second member to be either null, a string or an instance of "'.ValueInterface::class.'". '
             .'Got "stdClass" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
 
 
         $error = TypeErrorFactory::createForOptionalValueSecondMember(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected second member to be either null, a string or an instance of "'.ValueInterface::class.'". '
             .'Got "integer" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForInvalidParameterKey()
+    public function testCreateForInvalidParameterKey(): void
     {
         $error = TypeErrorFactory::createForInvalidParameterKey(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected parameter key to be either a string or an instance of "'.ValueInterface::class.'". '
             .'Got "stdClass" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
 
 
         $error = TypeErrorFactory::createForInvalidParameterKey(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected parameter key to be either a string or an instance of "'.ValueInterface::class.'". '
             .'Got "integer" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForInvalidDenormalizerType()
+    public function testCreateForInvalidDenormalizerType(): void
     {
         $error = TypeErrorFactory::createForInvalidDenormalizerType(2, new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected denormalizer 2 to be a "'.ChainableFixtureDenormalizerInterface::class.'". Got '
             .'"stdClass" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
 
 
         $error = TypeErrorFactory::createForInvalidDenormalizerType(2, 10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected denormalizer 2 to be a "'.ChainableFixtureDenormalizerInterface::class.'". Got '
             .'"integer" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForInvalidSpecificationBagMethodCall()
+    public function testCreateForInvalidSpecificationBagMethodCall(): void
     {
         $error = TypeErrorFactory::createForInvalidSpecificationBagMethodCall(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected method call value to be an array. Got "object" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForInvalidSpecificationBagMethodCallName()
+    public function testCreateForInvalidSpecificationBagMethodCallName(): void
     {
         $error = TypeErrorFactory::createForInvalidSpecificationBagMethodCallName(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected method name. Got "object" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForInvalidFixtureBagParameters()
+    public function testCreateForInvalidFixtureBagParameters(): void
     {
         $error = TypeErrorFactory::createForInvalidFixtureBagParameters(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected parameters to be an array. Got "stdClass" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
 
 
         $error = TypeErrorFactory::createForInvalidFixtureBagParameters(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected parameters to be an array. Got "integer" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForInvalidIncludeStatementInData()
+    public function testCreateForInvalidIncludeStatementInData(): void
     {
         $error = TypeErrorFactory::createForInvalidIncludeStatementInData(new stdClass(), 'foo.yml');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected include statement to be either null or an array of files to include. Got "object" '
             .'instead in file "foo.yml".',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForInvalidIncludedFilesInData()
+    public function testCreateForInvalidIncludedFilesInData(): void
     {
         $error = TypeErrorFactory::createForInvalidIncludedFilesInData(new stdClass(), 'foo.yml');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected elements of include statement to be file names. Got "object" instead in file "foo.yml".',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForInvalidFixtureFileReturnedData()
+    public function testCreateForInvalidFixtureFileReturnedData(): void
     {
         $error = TypeErrorFactory::createForInvalidFixtureFileReturnedData('foo.yml');
 
-        $this->assertEquals(
+        static::assertEquals(
             'The file "foo.yml" must return a PHP array.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 
-    public function testCreateForInvalidChainableParameterResolver()
+    public function testCreateForInvalidChainableParameterResolver(): void
     {
         $error = TypeErrorFactory::createForInvalidChainableParameterResolver(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected resolvers to be "'.ParameterResolverInterface::class.'" objects. Got "stdClass" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
 
 
         $error = TypeErrorFactory::createForInvalidChainableParameterResolver(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected resolvers to be "'.ParameterResolverInterface::class.'" objects. Got "10" instead.',
             $error->getMessage()
         );
-        $this->assertEquals(0, $error->getCode());
-        $this->assertNull($error->getPrevious());
+        static::assertEquals(0, $error->getCode());
+        static::assertNull($error->getPrevious());
     }
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Parser;
 
+use Throwable;
+
 /**
  * @private
  */
@@ -28,7 +30,7 @@ final class ParseExceptionFactory
         );
     }
 
-    public static function createForUnparsableFile(string $file, int $code = 0, \Throwable $previous = null): UnparsableFileException
+    public static function createForUnparsableFile(string $file, int $code = 0, Throwable $previous = null): UnparsableFileException
     {
         return new UnparsableFileException(
             sprintf(
@@ -40,7 +42,7 @@ final class ParseExceptionFactory
         );
     }
 
-    public static function createForInvalidYaml(string $file, int $code = 0, \Throwable $previous = null): UnparsableFileException
+    public static function createForInvalidYaml(string $file, int $code = 0, Throwable $previous = null): UnparsableFileException
     {
         return new UnparsableFileException(
             sprintf(
@@ -52,7 +54,7 @@ final class ParseExceptionFactory
         );
     }
 
-    public static function createForInvalidJson(string $file, int $code = 0, \Throwable $previous = null): UnparsableFileException
+    public static function createForInvalidJson(string $file, int $code = 0, Throwable $previous = null): UnparsableFileException
     {
         return new UnparsableFileException(
             sprintf(

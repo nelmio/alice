@@ -24,13 +24,8 @@ interface PropertyDenormalizerInterface
      * Denormalizes a property.
      *
      * @param FixtureInterface $scope See SpecificationsDenormalizerInterface::denormalize()
-     * @param string           $name
-     * @param mixed            $value
-     * @param FlagBag          $flags
      *
      * @throws DenormalizationThrowable
-     *
-     * @return Property
      */
     public function denormalize(FixtureInterface $scope, string $name, $value, FlagBag $flags): Property;
 }

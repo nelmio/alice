@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller\Chainable;
 
+use LogicException;
 use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Generator\Caller\CallProcessorAwareInterface;
@@ -65,11 +66,11 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
         MethodCallInterface $methodCall
     ): ResolvedFixtureSet {
         if (false === ($methodCall instanceof OptionalMethodCall)) {
-            throw new \LogicException('TODO');
+            throw new LogicException('TODO');
         }
 
         if (null === $this->processor) {
-            throw new \LogicException('TODO');
+            throw new LogicException('TODO');
         }
 
         if (mt_rand(0, 99) >= $methodCall->getPercentage()) {

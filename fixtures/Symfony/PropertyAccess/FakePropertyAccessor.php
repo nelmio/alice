@@ -23,7 +23,7 @@ class FakePropertyAccessor implements PropertyAccessorInterface
     /**
      * @inheritdoc
      */
-    public function setValue(&$objectOrArray, $propertyPath, $value)
+    public function setValue(&$objectOrArray, $propertyPath, $value): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
@@ -31,7 +31,7 @@ class FakePropertyAccessor implements PropertyAccessorInterface
     /**
      * @inheritdoc
      */
-    public function getValue($objectOrArray, $propertyPath)
+    public function getValue($objectOrArray, $propertyPath): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
@@ -39,7 +39,7 @@ class FakePropertyAccessor implements PropertyAccessorInterface
     /**
      * @inheritdoc
      */
-    public function isWritable($objectOrArray, $propertyPath)
+    public function isWritable($objectOrArray, $propertyPath): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
@@ -47,7 +47,7 @@ class FakePropertyAccessor implements PropertyAccessorInterface
     /**
      * @inheritdoc
      */
-    public function isReadable($objectOrArray, $propertyPath)
+    public function isReadable($objectOrArray, $propertyPath): void
     {
         $this->__call(__METHOD__, func_get_args());
     }

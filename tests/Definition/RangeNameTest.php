@@ -23,16 +23,16 @@ class RangeNameTest extends TestCase
     /**
      * @dataProvider provideRanges
      */
-    public function testReadAccessorsReturnPropertiesValues(array $input, array $expected)
+    public function testReadAccessorsReturnPropertiesValues(array $input, array $expected): void
     {
         $name = 'user';
         list($from, $to) = $input;
         
         $range = new RangeName($name, $from, $to);
         
-        $this->assertEquals($name, $range->getName());
-        $this->assertEquals($expected[0], $range->getFrom());
-        $this->assertEquals($expected[1], $range->getTo());
+        static::assertEquals($name, $range->getName());
+        static::assertEquals($expected[0], $range->getFrom());
+        static::assertEquals($expected[1], $range->getTo());
     }
 
     public function provideRanges()

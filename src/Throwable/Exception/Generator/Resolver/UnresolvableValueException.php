@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\ResolutionThrowable;
+use RuntimeException;
 
-class UnresolvableValueException extends \RuntimeException implements ResolutionThrowable
+class UnresolvableValueException extends RuntimeException implements ResolutionThrowable
 {
 }

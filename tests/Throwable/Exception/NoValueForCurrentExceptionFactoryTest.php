@@ -21,15 +21,15 @@ use PHPUnit\Framework\TestCase;
  */
 class NoValueForCurrentExceptionFactoryTest extends TestCase
 {
-    public function testCreateException()
+    public function testCreateException(): void
     {
         $exception = NoValueForCurrentExceptionFactory::create(new DummyFixture('dummy'));
 
-        $this->assertEquals(
+        static::assertEquals(
             'No value for \'<current()>\' found for the fixture "dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

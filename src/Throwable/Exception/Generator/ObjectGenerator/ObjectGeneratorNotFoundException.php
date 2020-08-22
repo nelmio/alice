@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator;
 
-class ObjectGeneratorNotFoundException extends \LogicException
+use LogicException;
+
+class ObjectGeneratorNotFoundException extends LogicException
 {
 }

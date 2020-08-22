@@ -21,15 +21,15 @@ use PHPUnit\Framework\TestCase;
  */
 class CallProcessorExceptionFactoryTest extends TestCase
 {
-    public function testCreateForNoProcessorFoundForMethodCall()
+    public function testCreateForNoProcessorFoundForMethodCall(): void
     {
         $exception = CallProcessorExceptionFactory::createForNoProcessorFoundForMethodCall(new DummyMethodCall('dummy'));
 
-        $this->assertEquals(
+        static::assertEquals(
             'No suitable processor found to handle the method call "dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

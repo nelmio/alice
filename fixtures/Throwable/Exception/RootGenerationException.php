@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use Exception;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 
-class RootGenerationException extends \Exception implements GenerationThrowable
+class RootGenerationException extends Exception implements GenerationThrowable
 {
 }

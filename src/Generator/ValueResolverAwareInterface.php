@@ -16,8 +16,6 @@ namespace Nelmio\Alice\Generator;
 interface ValueResolverAwareInterface
 {
     /**
-     * @param ValueResolverInterface $resolver
-     *
      * @return static
      */
     public function withValueResolver(ValueResolverInterface $resolver);

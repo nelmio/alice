@@ -32,17 +32,17 @@ class SimpleFilesLoaderTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsALoader()
+    public function testIsALoader(): void
     {
-        $this->assertTrue(is_a(SimpleFilesLoader::class, FilesLoaderInterface::class, true));
+        static::assertTrue(is_a(SimpleFilesLoader::class, FilesLoaderInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleFilesLoader::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleFilesLoader::class))->isCloneable());
     }
 
-    public function testLoadFilesAndReturnsAnObjectSet()
+    public function testLoadFilesAndReturnsAnObjectSet(): void
     {
         $files = [
             $file1 = 'dummy.yml',
@@ -104,13 +104,13 @@ class SimpleFilesLoaderTest extends TestCase
         $loader = new SimpleFilesLoader($parser, $dataLoader);
         $result = $loader->loadFiles($files, $parameters, $objects);
 
-        $this->assertSame($objectSet, $result);
+        static::assertSame($objectSet, $result);
 
         $parserProphecy->parse(Argument::cetera())->shouldHaveBeenCalledTimes(3);
         $dataLoaderProphecy->loadData(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testLoadFilesWithDifferentOrder()
+    public function testLoadFilesWithDifferentOrder(): void
     {
         $file1 = 'dummy1.yml';
         $file2 = 'dummy2.yml';
@@ -142,17 +142,17 @@ class SimpleFilesLoaderTest extends TestCase
         $loader = new SimpleFilesLoader($parser, new IsolatedLoader());
 
         $objects = $loader->loadFiles([$file2, $file1], [], [])->getObjects();
-        self::assertArrayHasKey('user1', $objects);
-        self::assertArrayHasKey('userdetail_user1', $objects);
-        self::assertArrayHasKey('userdetail_single_user1', $objects);
+        static::assertArrayHasKey('user1', $objects);
+        static::assertArrayHasKey('userdetail_user1', $objects);
+        static::assertArrayHasKey('userdetail_single_user1', $objects);
 
         $objects = $loader->loadFiles([$file1, $file2], [], [])->getObjects();
-        self::assertArrayHasKey('user1', $objects);
-        self::assertArrayHasKey('userdetail_user1', $objects);
-        self::assertArrayHasKey('userdetail_single_user1', $objects);
+        static::assertArrayHasKey('user1', $objects);
+        static::assertArrayHasKey('userdetail_user1', $objects);
+        static::assertArrayHasKey('userdetail_single_user1', $objects);
     }
 
-    public function testLoadFixturesWithDifferentOrder()
+    public function testLoadFixturesWithDifferentOrder(): void
     {
         $file1 = 'dummy1.yml';
         $file2 = 'dummy2.yml';
@@ -197,13 +197,13 @@ class SimpleFilesLoaderTest extends TestCase
         $loader = new SimpleFilesLoader($parser, new IsolatedLoader());
 
         $objects = $loader->loadFiles([$file1], [], [])->getObjects();
-        self::assertArrayHasKey('user1', $objects);
-        self::assertArrayHasKey('userdetail_user1', $objects);
-        self::assertArrayHasKey('userdetail_single_user1', $objects);
+        static::assertArrayHasKey('user1', $objects);
+        static::assertArrayHasKey('userdetail_user1', $objects);
+        static::assertArrayHasKey('userdetail_single_user1', $objects);
 
         $objects = $loader->loadFiles([$file2], [], [])->getObjects();
-        self::assertArrayHasKey('user1', $objects);
-        self::assertArrayHasKey('userdetail_user1', $objects);
-        self::assertArrayHasKey('userdetail_single_user1', $objects);
+        static::assertArrayHasKey('user1', $objects);
+        static::assertArrayHasKey('userdetail_user1', $objects);
+        static::assertArrayHasKey('userdetail_single_user1', $objects);
     }
 }

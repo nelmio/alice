@@ -19,17 +19,17 @@ class Dummy
     private $counter = 0;
     private $related;
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    public function addFoo()
+    public function addFoo(): void
     {
         $this->counter++;
     }
 
-    public function setRelatedDummy(self $related)
+    public function setRelatedDummy(self $related): void
     {
         $this->related = $related;
     }

@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Symfony\PropertyAccess;
 
+use Exception;
 use Symfony\Component\PropertyAccess\Exception\ExceptionInterface;
 
-class RootException extends \Exception implements ExceptionInterface
+class RootException extends Exception implements ExceptionInterface
 {
 }

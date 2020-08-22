@@ -16,8 +16,6 @@ namespace Nelmio\Alice\Generator\Caller;
 interface CallProcessorAwareInterface
 {
     /**
-     * @param CallProcessorInterface $processor
-     *
      * @return static
      */
     public function withProcessor(CallProcessorInterface $processor);

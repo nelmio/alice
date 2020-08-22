@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use Error;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use PHPUnit\Framework\TestCase;
@@ -22,279 +23,279 @@ use PHPUnit\Framework\TestCase;
  */
 class InvalidArgumentExceptionFactoryTest extends TestCase
 {
-    public function testCreateForInvalidReferenceType()
+    public function testCreateForInvalidReferenceType(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidReferenceType('foo');
         
-        $this->assertEquals(
+        static::assertEquals(
             'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got "foo"'
             .' instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForReferenceKeyMismatch()
+    public function testCreateForReferenceKeyMismatch(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForReferenceKeyMismatch('foo', 'bar');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Reference key mismatch, the keys "foo" and "bar" refers to the same fixture but the keys are different.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForFlagBagKeyMismatch()
+    public function testCreateForFlagBagKeyMismatch(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForFlagBagKeyMismatch(
             new DummyFixture('foo'),
             new FlagBag('bar')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected the fixture ID and the flags key to be the same. Got "foo" and "bar" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForInvalidSeedConfigurationValue()
+    public function testCreateForInvalidSeedConfigurationValue(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidSeedConfigurationValue(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected value to be either null or a strictly positive integer but got "10" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForExpectedConfigurationStringValue()
+    public function testCreateForExpectedConfigurationStringValue(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForExpectedConfigurationStringValue(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected a string value but got "integer" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForExpectedConfigurationPositiveIntegerValue()
+    public function testCreateForExpectedConfigurationPositiveIntegerValue(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForExpectedConfigurationPositiveIntegerValue(-1);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected a strictly positive integer but got "-1" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForExpectedConfigurationArrayOfStringValue()
+    public function testCreateForExpectedConfigurationArrayOfStringValue(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForExpectedConfigurationArrayOfStringValue(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected an array of strings but got "integer" element in the array instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForRedundantUniqueValue()
+    public function testCreateForRedundantUniqueValue(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForRedundantUniqueValue('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Cannot create a unique value of a unique value for value "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForInvalidExpressionLanguageTokenType()
+    public function testCreateForInvalidExpressionLanguageTokenType(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageTokenType('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected type to be a known token type but got "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForInvalidExpressionLanguageToken()
+    public function testCreateForInvalidExpressionLanguageToken(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageToken('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Invalid token "foo" found.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForNoIncludeStatementInData()
+    public function testCreateForNoIncludeStatementInData(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForNoIncludeStatementInData('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find any include statement in the file "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForEmptyIncludedFileInData()
+    public function testCreateForEmptyIncludedFileInData(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForEmptyIncludedFileInData('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected elements of include statement to be file names. Got empty string instead in file "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForFileCouldNotBeFound()
+    public function testCreateForFileCouldNotBeFound(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForFileCouldNotBeFound('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'The file "foo" could not be found.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
-        $previous = new \Error();
+        $previous = new Error();
 
         $exception = InvalidArgumentExceptionFactory::createForFileCouldNotBeFound('foo', $code, $previous);
 
-        $this->assertEquals(
+        static::assertEquals(
             'The file "foo" could not be found.',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 
-    public function testCreateForInvalidLimitValue()
+    public function testCreateForInvalidLimitValue(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidLimitValue(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected limit value to be a strictly positive integer, got "10" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForInvalidLimitValueForRecursiveCalls()
+    public function testCreateForInvalidLimitValueForRecursiveCalls(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidLimitValueForRecursiveCalls(10);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected limit for recursive calls to be of at least 2. Got "10" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForInvalidFakerFormatter()
+    public function testCreateForInvalidFakerFormatter(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidFakerFormatter('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Invalid faker formatter "foo" found.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForFixtureExtendingANonTemplateFixture()
+    public function testCreateForFixtureExtendingANonTemplateFixture(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForFixtureExtendingANonTemplateFixture(
             new DummyFixture('foo'),
             'bar'
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             'Fixture "foo" extends "bar" but "bar" is not a template.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForUnsupportedTypeForIdenticalValuesCheck()
+    public function testCreateForUnsupportedTypeForIdenticalValuesCheck(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForUnsupportedTypeForIdenticalValuesCheck(true);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Unsupported type "boolean": cannot determine if two values of this type are identical.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForInvalidConstructorMethod()
+    public function testCreateForInvalidConstructorMethod(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidConstructorMethod('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Invalid constructor method "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForInvalidOptionalFlagBoundaries()
+    public function testCreateForInvalidOptionalFlagBoundaries(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidOptionalFlagBoundaries(200);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected optional flag to be an integer element of [0;100]. Got "200" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForInvalidDynamicArrayQuantifier()
+    public function testCreateForInvalidDynamicArrayQuantifier(): void
     {
         $exception = InvalidArgumentExceptionFactory::createForInvalidDynamicArrayQuantifier(
             new DummyFixture('dummy'),
             200
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected quantifier to be a positive integer. Got "200" for "dummy", check you dynamic arrays '
             .'declarations (e.g. "<numberBetween(1, 2)>x @user*").',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

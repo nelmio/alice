@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use RuntimeException;
 
-class InstantiationException extends \RuntimeException implements InstantiationThrowable
+class InstantiationException extends RuntimeException implements InstantiationThrowable
 {
 }

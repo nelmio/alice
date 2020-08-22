@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator;
 
+use LogicException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use PHPUnit\Framework\TestCase;
 
@@ -21,19 +22,19 @@ use PHPUnit\Framework\TestCase;
  */
 class ObjectGeneratorNotFoundExceptionTest extends TestCase
 {
-    public function testIsALogicException()
+    public function testIsALogicException(): void
     {
-        $this->assertTrue(is_a(ObjectGeneratorNotFoundException::class, \LogicException::class, true));
+        static::assertTrue(is_a(ObjectGeneratorNotFoundException::class, LogicException::class, true));
     }
 
-    public function testIsNotAGenerationThrowable()
+    public function testIsNotAGenerationThrowable(): void
     {
-        $this->assertFalse(is_a(ObjectGeneratorNotFoundException::class, GenerationThrowable::class, true));
+        static::assertFalse(is_a(ObjectGeneratorNotFoundException::class, GenerationThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildObjectGeneratorNotFoundException();
-        $this->assertInstanceOf(ChildObjectGeneratorNotFoundException::class, $exception);
+        static::assertInstanceOf(ChildObjectGeneratorNotFoundException::class, $exception);
     }
 }

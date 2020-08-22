@@ -20,17 +20,17 @@ class CamelCaseDummy
     private $propertyWithPrivateSetter;
     private $propertyWithProtectedSetter;
 
-    public function setSetterProperty($val)
+    public function setSetterProperty($val): void
     {
         $this->setterProperty = $val;
     }
 
-    private function setPropertyWithPrivateSetter($propertyWithPrivateSetter)
+    private function setPropertyWithPrivateSetter($propertyWithPrivateSetter): void
     {
         $this->propertyWithPrivateSetter = $propertyWithPrivateSetter;
     }
 
-    protected function setPropertyWithProtectedSetter($propertyWithProtectedSetter)
+    protected function setPropertyWithProtectedSetter($propertyWithProtectedSetter): void
     {
         $this->propertyWithProtectedSetter = $propertyWithProtectedSetter;
     }

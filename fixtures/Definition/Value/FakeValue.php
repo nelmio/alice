@@ -23,7 +23,7 @@ class FakeValue implements ValueInterface
     /**
      * @inheritdoc
      */
-    public function getValue()
+    public function getValue(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }

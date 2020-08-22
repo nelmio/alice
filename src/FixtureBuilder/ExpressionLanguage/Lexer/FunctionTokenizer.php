@@ -121,7 +121,7 @@ final class FunctionTokenizer
         return $tree;
     }
 
-    private function append(array &$tree, array $values, int $startKey, int $endKey)
+    private function append(array &$tree, array $values, int $startKey, int $endKey): void
     {
         $value = '';
         for ($i = $startKey; $i < $endKey; $i++) {

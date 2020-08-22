@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Parameter
@@ -23,17 +24,17 @@ class ParameterTest extends TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testAccessors($value)
+    public function testAccessors($value): void
     {
         $parameter = new Parameter('foo', $value);
 
-        $this->assertEquals('foo', $parameter->getKey());
-        $this->assertEquals($value, $parameter->getValue());
+        static::assertEquals('foo', $parameter->getKey());
+        static::assertEquals($value, $parameter->getValue());
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $parameter = new Parameter('foo', [$std = new \stdClass()]);
+        $parameter = new Parameter('foo', [$std = new stdClass()]);
 
         // Mutate injected object
         $std->foo = 'bar';
@@ -41,17 +42,17 @@ class ParameterTest extends TestCase
         // Mutate retrieved object
         $parameter->getValue()[0]->foo = 'baz';
 
-        $this->assertEquals(new Parameter('foo', [new \stdClass()]), $parameter);
+        static::assertEquals(new Parameter('foo', [new stdClass()]), $parameter);
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $parameter = new Parameter('foo', 'bar');
         $newParam = $parameter->withValue('rab');
 
-        $this->assertNotSame($newParam, $parameter);
-        $this->assertEquals('bar', $parameter->getValue());
-        $this->assertEquals('rab', $newParam->getValue());
+        static::assertNotSame($newParam, $parameter);
+        static::assertEquals('bar', $parameter->getValue());
+        static::assertEquals('rab', $newParam->getValue());
     }
 
     public function provideValues()
@@ -62,10 +63,10 @@ class ParameterTest extends TestCase
             'float' => [.5],
             'string' => ['foo'],
             'null' => [null],
-            'object' => [new \stdClass()],
-            'closure' => [function () {
+            'object' => [new stdClass()],
+            'closure' => [function (): void {
             }],
-            'array' => [[new \stdClass()]],
+            'array' => [[new stdClass()]],
         ];
     }
 }

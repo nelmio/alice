@@ -34,27 +34,27 @@ class DummyWithMethods
         return new self($foo1, $foo2);
     }
 
-    public function bar(string $bar1, string $bar2)
+    public function bar(string $bar1, string $bar2): void
     {
         $this->bar1 = $bar1;
         $this->bar2 = $bar2;
     }
 
-    public function methodWithVariadic(string $baz1, string $baz2, array ...$baz3)
+    public function methodWithVariadic(string $baz1, string $baz2, array ...$baz3): void
     {
         $this->baz1 = $baz1;
         $this->baz2 = $baz2;
         $this->baz3 = $baz3;
     }
 
-    public function methodWithDefaultValues(string $baz1 = 'value 1', string $baz2 = 'value 2', string $baz3 = 'value 3')
+    public function methodWithDefaultValues(string $baz1 = 'value 1', string $baz2 = 'value 2', string $baz3 = 'value 3'): void
     {
         $this->baz1 = $baz1;
         $this->baz2 = $baz2;
         $this->baz3 = $baz3;
     }
 
-    public function methodWithNullables(?string $bar1, ?string $bar2)
+    public function methodWithNullables(?string $bar1, ?string $bar2): void
     {
         $this->bar1 = $bar1;
         $this->bar2 = $bar2;

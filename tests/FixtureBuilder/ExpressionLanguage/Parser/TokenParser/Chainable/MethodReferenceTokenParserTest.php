@@ -35,27 +35,27 @@ class MethodReferenceTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(MethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(MethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(MethodReferenceTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(MethodReferenceTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseMethodTokens()
+    public function testCanParseMethodTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new MethodReferenceTokenParser();
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
+    public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
     {
         $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $parser = new MethodReferenceTokenParser();
@@ -66,7 +66,7 @@ class MethodReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfCouldNotParseToken()
+    public function testThrowsAnExceptionIfCouldNotParseToken(): void
     {
         $token = new Token('', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
         $parser = new MethodReferenceTokenParser(new FakeParser());
@@ -77,7 +77,7 @@ class MethodReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfParsingReferenceGivesAnUnexpectedResult()
+    public function testThrowsAnExceptionIfParsingReferenceGivesAnUnexpectedResult(): void
     {
         $token = new Token('@@malformed_user->getUserName(arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
@@ -99,7 +99,7 @@ class MethodReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfParsingFunctionCallGivesAnUnexpectedResult()
+    public function testThrowsAnExceptionIfParsingFunctionCallGivesAnUnexpectedResult(): void
     {
         $token = new Token('@user->getUserName((arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
@@ -123,7 +123,7 @@ class MethodReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testReturnsAFixtureMethodCallValueIfCanParseToken()
+    public function testReturnsAFixtureMethodCallValueIfCanParseToken(): void
     {
         $token = new Token('@user->getUserName(arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
@@ -144,7 +144,7 @@ class MethodReferenceTokenParserTest extends TestCase
         $parser = new MethodReferenceTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }

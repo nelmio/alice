@@ -16,6 +16,9 @@ namespace Nelmio\Alice\Definition\Object;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Object\SimpleObject
@@ -23,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 class SimpleObjectTest extends TestCase
 {
     /**
-     * @var \ReflectionProperty
+     * @var ReflectionProperty
      */
     private $propRefl;
 
@@ -32,30 +35,30 @@ class SimpleObjectTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->propRefl = (new \ReflectionClass(SimpleObject::class))->getProperty('instance');
+        $this->propRefl = (new ReflectionClass(SimpleObject::class))->getProperty('instance');
         $this->propRefl->setAccessible(true);
     }
 
-    public function testIsAnObject()
+    public function testIsAnObject(): void
     {
-        $this->assertTrue(is_a(SimpleObject::class, ObjectInterface::class, true));
+        static::assertTrue(is_a(SimpleObject::class, ObjectInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = 'user0';
-        $instance = new \stdClass();
+        $instance = new stdClass();
 
         $object = new SimpleObject($reference, $instance);
 
-        $this->assertEquals($reference, $object->getId());
-        $this->assertEquals($instance, $object->getInstance());
+        static::assertEquals($reference, $object->getId());
+        static::assertEquals($instance, $object->getInstance());
     }
 
-    public function testIsNotImmutable()
+    public function testIsNotImmutable(): void
     {
         $reference = 'user0';
-        $instance = new \stdClass();
+        $instance = new stdClass();
 
         $object = new SimpleObject($reference, $instance);
 
@@ -68,10 +71,10 @@ class SimpleObjectTest extends TestCase
         $expected = StdClassFactory::create(['foo' => 'bar', 'ping' => 'pong']);
         $actual = $object->getInstance();
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testNamedConstructor()
+    public function testNamedConstructor(): void
     {
         $reference = 'user0';
         $instance = StdClassFactory::create(['original' => true]);
@@ -82,7 +85,7 @@ class SimpleObjectTest extends TestCase
         $originalNewInstance = clone $newInstance;
         $newObject = $object->withInstance($newInstance);
 
-        $this->assertEquals(new SimpleObject($reference, $originalInstance), $object);
-        $this->assertEquals(new SimpleObject($reference, $originalNewInstance), $newObject);
+        static::assertEquals(new SimpleObject($reference, $originalInstance), $object);
+        static::assertEquals(new SimpleObject($reference, $originalNewInstance), $newObject);
     }
 }

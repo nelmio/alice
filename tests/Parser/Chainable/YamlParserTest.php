@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use Exception;
+use InvalidArgumentException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
@@ -20,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 use Symfony\Component\Yaml\Exception\ParseException as SymfonyParseException;
 use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 use Symfony\Component\Yaml\Yaml;
@@ -72,66 +75,66 @@ class YamlParserTest extends TestCase
         $this->parser = new YamlParser($symfonyYamlParser);
     }
 
-    public function testIsAChainableParser()
+    public function testIsAChainableParser(): void
     {
-        $this->assertTrue(is_a(YamlParser::class, ChainableParserInterface::class, true));
+        static::assertTrue(is_a(YamlParser::class, ChainableParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(YamlParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(YamlParser::class))->isCloneable());
     }
 
     /**
      * @dataProvider providePhpList
      */
-    public function testCannotParsePhpFiles(string $file)
+    public function testCannotParsePhpFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
     /**
      * @dataProvider provideYamlList
      */
-    public function testCanParseYamlFiles(string $file, array $expectedParsers)
+    public function testCanParseYamlFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
         $expected = (in_array(get_class($this->parser), $expectedParsers));
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider provideJsonList
      */
-    public function testCannotParseJsonFiles(string $file)
+    public function testCannotParseJsonFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
     /**
      * @dataProvider provideUnsupportedList
      */
-    public function testCannotParseUnsupportedFiles(string $file)
+    public function testCannotParseUnsupportedFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
-    public function testThrowExceptionIfFileDoesNotExist()
+    public function testThrowExceptionIfFileDoesNotExist(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The file "/nowhere.yml" could not be found.');
 
         $this->parser->parse('/nowhere.yml');
     }
 
-    public function testUseSymfonyParserToParseFile()
+    public function testUseSymfonyParserToParseFile(): void
     {
         $file = self::$dir.'/basic.yml';
         $fileContent = <<<'EOF'
@@ -150,7 +153,7 @@ Nelmio\Alice\Model\User:
 
 EOF;
 
-        $expected = [new \stdClass()];
+        $expected = [new stdClass()];
 
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
         if (defined('Symfony\\Component\\Yaml\\Yaml::PARSE_CONSTANT')) {
@@ -165,19 +168,19 @@ EOF;
         $parser = new YamlParser($symfonyYamlParser);
         $actual = $parser->parse($file);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $symfonyYamlParserProphecy->parse(Argument::cetera())->shouldBeCalledTimes(1);
     }
 
-    public function testReturnsParsedFileContent()
+    public function testReturnsParsedFileContent(): void
     {
         $symfonyParser = new SymfonyYamlParser();
 
         $parser = new YamlParser($symfonyParser);
         $actual = $parser->parse(self::$dir.'/basic.yml');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'Nelmio\Alice\Model\User' => [
                     'user0' => [
@@ -189,10 +192,10 @@ EOF;
         );
     }
 
-    public function testParseReturnsInterpretedConstants()
+    public function testParseReturnsInterpretedConstants(): void
     {
         if (!defined('Symfony\\Component\\Yaml\\Yaml::PARSE_CONSTANT')) {
-            $this->markTestSkipped('This test needs symfony/yaml v3.2 or higher.');
+            static::markTestSkipped('This test needs symfony/yaml v3.2 or higher.');
         }
 
         $symfonyParser = new SymfonyYamlParser();
@@ -200,7 +203,7 @@ EOF;
         $parser = new YamlParser($symfonyParser);
         $actual = $parser->parse(self::$dir.'/constants.yml');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'Nelmio\Alice\Model\User' => [
                     'user0' => [
@@ -212,24 +215,24 @@ EOF;
         );
     }
 
-    public function testParsingEmptyFileResultsInEmptySet()
+    public function testParsingEmptyFileResultsInEmptySet(): void
     {
         $symfonyParser = new SymfonyYamlParser();
 
         $parser = new YamlParser($symfonyParser);
         $actual = $parser->parse(self::$dir.'/empty.yml');
 
-        $this->assertSame([], $actual);
+        static::assertSame([], $actual);
     }
 
-    public function testParseReturnsNamedParameters()
+    public function testParseReturnsNamedParameters(): void
     {
         $symfonyParser = new SymfonyYamlParser();
 
         $parser = new YamlParser($symfonyParser);
         $actual = $parser->parse(self::$dir.'/named_parameters.yml');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'Nelmio\Alice\DummyWithMethods' => [
                     'dummy_with_methods' => [
@@ -252,7 +255,7 @@ EOF;
         );
     }
 
-    public function testThrowsAnExceptionIfFileNotParsable()
+    public function testThrowsAnExceptionIfFileNotParsable(): void
     {
         try {
             $file = self::$dir.'/basic.yml';
@@ -265,32 +268,32 @@ EOF;
             $parser = new YamlParser($symfonyYamlParser);
             $parser->parse($file);
 
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (UnparsableFileException $exception) {
             $this->assertMatchesRegularExpression('/^The file ".+\/basic\.yml" does not contain valid YAML\.$/', $exception->getMessage());
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNotNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
         }
     }
 
-    public function testThrowsAnExceptionOnUnexpectedParseException()
+    public function testThrowsAnExceptionOnUnexpectedParseException(): void
     {
         try {
             $file = self::$dir.'/basic.yml';
 
             $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
-            $symfonyYamlParserProphecy->parse(Argument::cetera())->willThrow(\Exception::class);
+            $symfonyYamlParserProphecy->parse(Argument::cetera())->willThrow(Exception::class);
             /* @var SymfonyYamlParser $symfonyYamlParser */
             $symfonyYamlParser = $symfonyYamlParserProphecy->reveal();
 
             $parser = new YamlParser($symfonyYamlParser);
             $parser->parse($file);
 
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (UnparsableFileException $exception) {
             $this->assertMatchesRegularExpression('/^Could not parse the file ".+\/basic\.yml"\.$/', $exception->getMessage());
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNotNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
         }
     }
 }

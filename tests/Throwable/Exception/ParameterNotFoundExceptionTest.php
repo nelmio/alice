@@ -14,20 +14,21 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\ParameterNotFoundException
  */
 class ParameterNotFoundExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(ParameterNotFoundException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(ParameterNotFoundException::class, RuntimeException::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildParameterNotFoundException();
-        $this->assertInstanceOf(ChildParameterNotFoundException::class, $exception);
+        static::assertInstanceOf(ChildParameterNotFoundException::class, $exception);
     }
 }

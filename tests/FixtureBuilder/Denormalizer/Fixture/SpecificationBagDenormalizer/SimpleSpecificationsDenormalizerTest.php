@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer;
 
+use InvalidArgumentException;
+use LogicException;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
@@ -30,6 +32,7 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValue
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer
@@ -38,12 +41,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
         clone new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
     }
 
-    public function testCanDenormalizeEmptySpecs()
+    public function testCanDenormalizeEmptySpecs(): void
     {
         $specs = [];
         $flagParser = new FakeFlagParser();
@@ -57,10 +60,10 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testCanDenormalizeConstructor()
+    public function testCanDenormalizeConstructor(): void
     {
         $fixture = new FakeFixture();
         $specs = [
@@ -92,12 +95,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testCanDenormalizeFactory()
+    public function testCanDenormalizeFactory(): void
     {
         $fixture = new FakeFixture();
         $specs = [
@@ -129,7 +132,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -138,7 +141,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
      * @group legacy
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      */
-    public function testUsingAFactoryWithConstructIsDeprecated()
+    public function testUsingAFactoryWithConstructIsDeprecated(): void
     {
         $fixture = new FakeFixture();
         $specs = [
@@ -170,12 +173,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testCannotProceedWithInvalidProperty()
+    public function testCannotProceedWithInvalidProperty(): void
     {
         $unparsedSpecs = [
             'foo'
@@ -187,13 +190,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             new FakeCallsDenormalizer()
         );
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid property name: 0.');
 
         $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $unparsedSpecs);
     }
 
-    public function testCannotDenormalizeAnInvalidFactory()
+    public function testCannotDenormalizeAnInvalidFactory(): void
     {
         $fixture = new FakeFixture();
         $specs = [
@@ -227,13 +230,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
 
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Cannot use the fixture property "__construct" and "__factory" together.');
 
         $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
     }
 
-    public function testCannotDenormalizeAFactoryAndAConstructor()
+    public function testCannotDenormalizeAFactoryAndAConstructor(): void
     {
         $fixture = new FakeFixture();
         $specs = [
@@ -264,7 +267,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
     }
 
-    public function testCanDenormalizeTheNoConstructor()
+    public function testCanDenormalizeTheNoConstructor(): void
     {
         $specs = [
             '__construct' => false,
@@ -279,10 +282,10 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testCanDenormalizeProperties()
+    public function testCanDenormalizeProperties(): void
     {
         $fixture = new FakeFixture();
         $specs = [
@@ -319,13 +322,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), $propertyDenormalizer, new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
         $propertyDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testCanDenormalizeCalls()
+    public function testCanDenormalizeCalls(): void
     {
         $fixture = new FakeFixture();
         $specs = [
@@ -357,12 +360,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), $callsDenormalizer);
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $callsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testCanDenormalizeCompleteSpecs()
+    public function testCanDenormalizeCompleteSpecs(): void
     {
         $fixture = new FakeFixture();
         $specs = [
@@ -431,7 +434,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, $propertyDenormalizer, $callsDenormalizer);
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
@@ -439,7 +442,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $callsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testDenormalizeInvalidCalls()
+    public function testDenormalizeInvalidCalls(): void
     {
         $specs = [
             '__calls' => [
@@ -449,13 +452,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('Expected method call value to be an array. Got "string" instead.');
 
         $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
     }
 
-    public function testDenormalizeCallsWithInvalidMethod()
+    public function testDenormalizeCallsWithInvalidMethod(): void
     {
         $specs = [
             '__calls' => [
@@ -465,13 +468,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('Expected method name. Got "NULL" instead.');
 
         $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
     }
 
-    public function testDenormalizeWithInvalidMethodCalls()
+    public function testDenormalizeWithInvalidMethodCalls(): void
     {
         $specs = [
             '__calls' => [
@@ -481,7 +484,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('Expected method call value to be an array. Got "NULL" instead.');
 
         $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);

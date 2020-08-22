@@ -50,7 +50,7 @@ class AppKernel extends Kernel
     /**
      * @inheritdoc
      */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         if (3 === self::MAJOR_VERSION) {
             $config = (null === $this->config) ? __DIR__.'/config_34.yml' : $this->config;
@@ -64,10 +64,10 @@ class AppKernel extends Kernel
     /**
      * @inheritdoc
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new class() implements CompilerPassInterface {
-            public function process(ContainerBuilder $container)
+            public function process(ContainerBuilder $container): void
             {
                 foreach ($container->getDefinitions() as $id => $definition) {
                     $definition->setPublic(true);
@@ -80,7 +80,7 @@ class AppKernel extends Kernel
         }, PassConfig::TYPE_OPTIMIZE);
     }
 
-    public function setConfigurationResource(string $resource)
+    public function setConfigurationResource(string $resource): void
     {
         $this->config = $resource;
     }

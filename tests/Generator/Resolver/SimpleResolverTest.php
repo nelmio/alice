@@ -24,6 +24,7 @@ use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
@@ -32,12 +33,12 @@ class SimpleResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAResolver()
+    public function testIsAResolver(): void
     {
-        $this->assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));
+        static::assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));
     }
 
-    public function testCanResolveAFixtureSet()
+    public function testCanResolveAFixtureSet(): void
     {
         $unresolvedFixtureProphecy = $this->prophesize(FixtureInterface::class);
         $unresolvedFixtureProphecy->getId()->willReturn('Nelmio\Entity\User#user1');
@@ -53,7 +54,7 @@ class SimpleResolverTest extends TestCase
         $injectedParameters = new ParameterBag(['fou' => 'baz']);
         $unresolvedFixtures = (new FixtureBag())->with($unresolvedFixture);
         $injectedObjects = new ObjectBag([
-            'std' => new \stdClass(),
+            'std' => new stdClass(),
         ]);
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $unresolvedFixtures, $injectedObjects);
@@ -78,7 +79,7 @@ class SimpleResolverTest extends TestCase
         $resolver = new SimpleFixtureSetResolver($parametersResolver, $fixtureResolver);
         $actual = $resolver->resolve($set);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $parametersResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $fixtureResolverProphecy->resolve(Argument::any())->shouldHaveBeenCalledTimes(1);

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\scenario2;
 
+use DateTimeInterface;
+
 class MutableUser
 {
     /**
@@ -26,7 +28,7 @@ class MutableUser
     private $fullname;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $birthDate;
 
@@ -45,7 +47,7 @@ class MutableUser
         return $this->username;
     }
 
-    public function setUsername(string $username)
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }
@@ -55,17 +57,17 @@ class MutableUser
         return $this->fullname;
     }
 
-    public function setFullname(string $fullname)
+    public function setFullname(string $fullname): void
     {
         $this->fullname = $fullname;
     }
 
-    public function getBirthDate(): \DateTimeInterface
+    public function getBirthDate(): DateTimeInterface
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate(\DateTimeInterface $birthDate)
+    public function setBirthDate(DateTimeInterface $birthDate): void
     {
         $this->birthDate = $birthDate;
     }
@@ -75,7 +77,7 @@ class MutableUser
         return $this->email;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
@@ -85,7 +87,7 @@ class MutableUser
         return $this->favoriteNumber;
     }
 
-    public function setFavoriteNumber(int $favoriteNumber)
+    public function setFavoriteNumber(int $favoriteNumber): void
     {
         $this->favoriteNumber = $favoriteNumber;
     }

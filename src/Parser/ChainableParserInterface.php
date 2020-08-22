@@ -19,8 +19,6 @@ interface ChainableParserInterface extends ParserInterface
 {
     /**
      * @param string $file File path
-     *
-     * @return bool
      */
     public function canParse(string $file): bool;
 }

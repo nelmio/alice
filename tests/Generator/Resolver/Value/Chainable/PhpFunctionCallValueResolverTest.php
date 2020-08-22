@@ -35,25 +35,25 @@ class PhpFunctionCallValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(PhpFunctionCallValueResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(PhpFunctionCallValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(PhpFunctionCallValueResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(PhpFunctionCallValueResolver::class))->isCloneable());
     }
 
-    public function testCanResolvePropertyReferenceValues()
+    public function testCanResolvePropertyReferenceValues(): void
     {
         $resolver = new PhpFunctionCallValueResolver([], new FakeValueResolver());
 
-        $this->assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testReturnsSetWithEvaluatedValueIfFunctionIsAPhpNativeFunction()
+    public function testReturnsSetWithEvaluatedValueIfFunctionIsAPhpNativeFunction(): void
     {
         $value = new ResolvedFunctionCallValue('strtolower', ['BAR']);
         $fixture = new FakeFixture();
@@ -67,10 +67,10 @@ class PhpFunctionCallValueResolverTest extends TestCase
         $resolver = new PhpFunctionCallValueResolver([], new FakeValueResolver());
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testReturnsResultOfTheDecoratedResolverIfFunctionIsNotAPhpNativeFunction()
+    public function testReturnsResultOfTheDecoratedResolverIfFunctionIsNotAPhpNativeFunction(): void
     {
         $value = new ResolvedFunctionCallValue('foo');
         $fixture = new FakeFixture();
@@ -101,12 +101,12 @@ class PhpFunctionCallValueResolverTest extends TestCase
         $resolver = new PhpFunctionCallValueResolver([], $decoratedResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testReturnsResultOfTheDecoratedResolverIfFunctionIsBlacklisted()
+    public function testReturnsResultOfTheDecoratedResolverIfFunctionIsBlacklisted(): void
     {
         $value = new ResolvedFunctionCallValue('strtolower', ['BAR']);
         $fixture = new FakeFixture();
@@ -137,7 +137,7 @@ class PhpFunctionCallValueResolverTest extends TestCase
         $resolver = new PhpFunctionCallValueResolver(['strtolower'], $decoratedResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

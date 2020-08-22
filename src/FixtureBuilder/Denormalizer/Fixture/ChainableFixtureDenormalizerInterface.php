@@ -16,12 +16,8 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 interface ChainableFixtureDenormalizerInterface extends FixtureDenormalizerInterface
 {
     /**
-     * @param string $reference
-     *
      * @example:
      *  'user0', 'user{0..10}'
-     *
-     * @return bool
      */
     public function canDenormalize(string $reference): bool;
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use BadMethodCallException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,32 +21,32 @@ use PHPUnit\Framework\TestCase;
  */
 class NativeLoaderTest extends TestCase
 {
-    public function testThrowsAnExceptionIfCallUnknownMethod()
+    public function testThrowsAnExceptionIfCallUnknownMethod(): void
     {
         $loader = new NativeLoader();
 
-        $this->expectException(\BadMethodCallException::class);
+        $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Unknown method "foo".');
 
         $loader->foo();
     }
 
-    public function testThrowsAnExceptionIfCallUnknownGetMethod()
+    public function testThrowsAnExceptionIfCallUnknownGetMethod(): void
     {
         $loader = new NativeLoader();
 
-        $this->expectException(\BadMethodCallException::class);
+        $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Unknown method "createFoo".');
 
         $loader->getFoo();
     }
 
-    public function testAlwaysReturnsTheSameService()
+    public function testAlwaysReturnsTheSameService(): void
     {
         $loader = new NativeLoader();
         $fileLoader1 = $loader->getFileLoader();
         $fileLoader2 = $loader->getFileLoader();
 
-        $this->assertSame($fileLoader1, $fileLoader2);
+        static::assertSame($fileLoader1, $fileLoader2);
     }
 }

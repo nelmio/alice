@@ -33,27 +33,27 @@ class OptionalTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(OptionalTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(OptionalTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(OptionalTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(OptionalTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseMethodTokens()
+    public function testCanParseMethodTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::OPTIONAL_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new OptionalTokenParser();
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
+    public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
     {
         $token = new Token('', new TokenType(TokenType::OPTIONAL_TYPE));
         $parser = new OptionalTokenParser();
@@ -64,7 +64,7 @@ class OptionalTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfCouldNotParseToken()
+    public function testThrowsAnExceptionIfCouldNotParseToken(): void
     {
         $token = new Token('', new TokenType(TokenType::OPTIONAL_TYPE));
         $parser = new OptionalTokenParser(new FakeParser());
@@ -75,7 +75,7 @@ class OptionalTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testReturnsAnOptionalValueIfCanParseToken()
+    public function testReturnsAnOptionalValueIfCanParseToken(): void
     {
         $token = new Token('60%? foo: bar', new TokenType(TokenType::OPTIONAL_TYPE));
         $anotherToken = new Token('80%? baz', new TokenType(TokenType::OPTIONAL_TYPE));
@@ -96,8 +96,8 @@ class OptionalTokenParserTest extends TestCase
         $actual0 = $parser->parse($token);
         $actual1 = $parser->parse($anotherToken);
 
-        $this->assertEquals($expected0, $actual0);
-        $this->assertEquals($expected1, $actual1);
+        static::assertEquals($expected0, $actual0);
+        static::assertEquals($expected1, $actual1);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(5);
     }

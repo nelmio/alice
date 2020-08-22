@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
 use Nelmio\Alice\Throwable\HydrationThrowable;
+use RuntimeException;
 
-class HydrationException extends \RuntimeException implements HydrationThrowable
+class HydrationException extends RuntimeException implements HydrationThrowable
 {
 }

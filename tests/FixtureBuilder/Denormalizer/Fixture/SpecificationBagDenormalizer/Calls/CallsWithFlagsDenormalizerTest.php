@@ -26,6 +26,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use stdClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\CallsWithFlagsDenormalizer
@@ -34,14 +35,14 @@ class CallsWithFlagsDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(CallsWithFlagsDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(CallsWithFlagsDenormalizer::class))->isCloneable());
     }
 
-    public function testCannotAcceptInvalidMethodHandlers()
+    public function testCannotAcceptInvalidMethodHandlers(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         new CallsWithFlagsDenormalizer(
             new FakeCallsDenormalizer(),
@@ -51,7 +52,7 @@ class CallsWithFlagsDenormalizerTest extends TestCase
         );
     }
 
-    public function testDenomalizeTheCallsWithoutAnyMethodHandler()
+    public function testDenomalizeTheCallsWithoutAnyMethodHandler(): void
     {
         $fixture = new FakeFixture();
 
@@ -84,13 +85,13 @@ class CallsWithFlagsDenormalizerTest extends TestCase
         $denormalizer = new CallsWithFlagsDenormalizer($callsDenormalizer, []);
         $actual = $denormalizer->denormalize($fixture, $flagParser, $unparsedMethod, $unparsedArguments);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $callsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testDenormalizesMethodMethodHandlers()
+    public function testDenormalizesMethodMethodHandlers(): void
     {
         $fixture = new FakeFixture();
 
@@ -230,6 +231,6 @@ class CallsWithFlagsDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $unparsedMethod, $unparsedArguments);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 }

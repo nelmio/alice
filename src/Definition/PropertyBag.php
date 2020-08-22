@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
-final class PropertyBag implements \IteratorAggregate, \Countable
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+
+final class PropertyBag implements IteratorAggregate, Countable
 {
     /**
      * @var Property[]
@@ -56,7 +60,7 @@ final class PropertyBag implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        return new \ArrayIterator(array_values($this->properties));
+        return new ArrayIterator(array_values($this->properties));
     }
 
     /**

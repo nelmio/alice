@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Entity\Hydrator;
 
+use DateTimeInterface;
+
 class Dummy
 {
     public $publicProperty;
@@ -30,22 +32,22 @@ class Dummy
     private $publicGetter;
     private $date;
 
-    public function setPublicAccessor($value)
+    public function setPublicAccessor($value): void
     {
         $this->publicAccessor = $value;
     }
 
-    public function setPublicAccessorWithDefaultValue($value = null)
+    public function setPublicAccessorWithDefaultValue($value = null): void
     {
         $this->publicAccessorWithDefaultValue = $value;
     }
 
-    public function setPublicAccessorWithRequiredAndDefaultValue($value, $optional = null)
+    public function setPublicAccessorWithRequiredAndDefaultValue($value, $optional = null): void
     {
         $this->publicAccessorWithRequiredAndDefaultValue = $value;
     }
 
-    public function setPublicAccessorWithMoreRequiredParameters($value, $needed)
+    public function setPublicAccessorWithMoreRequiredParameters($value, $needed): void
     {
         $this->publicAccessorWithMoreRequiredParameters = $value;
     }
@@ -70,7 +72,7 @@ class Dummy
         return $this->publicAccessorWithMoreRequiredParameters;
     }
 
-    public function setPublicIsAccessor($value)
+    public function setPublicIsAccessor($value): void
     {
         $this->publicIsAccessor = $value;
     }
@@ -80,7 +82,7 @@ class Dummy
         return $this->publicIsAccessor;
     }
 
-    public function setPublicHasAccessor($value)
+    public function setPublicHasAccessor($value): void
     {
         $this->publicHasAccessor = $value;
     }
@@ -104,7 +106,7 @@ class Dummy
         return $this->publicGetSetter;
     }
 
-    protected function setProtectedAccessor($value)
+    protected function setProtectedAccessor($value): void
     {
     }
 
@@ -113,7 +115,7 @@ class Dummy
         return 'foobar';
     }
 
-    protected function setProtectedIsAccessor($value)
+    protected function setProtectedIsAccessor($value): void
     {
     }
 
@@ -122,7 +124,7 @@ class Dummy
         return 'foobar';
     }
 
-    protected function setProtectedHasAccessor($value)
+    protected function setProtectedHasAccessor($value): void
     {
     }
 
@@ -131,7 +133,7 @@ class Dummy
         return 'foobar';
     }
 
-    private function setPrivateAccessor($value)
+    private function setPrivateAccessor($value): void
     {
     }
 
@@ -140,7 +142,7 @@ class Dummy
         return 'foobar';
     }
 
-    private function setPrivateIsAccessor($value)
+    private function setPrivateIsAccessor($value): void
     {
     }
 
@@ -149,7 +151,7 @@ class Dummy
         return 'foobar';
     }
 
-    private function setPrivateHasAccessor($value)
+    private function setPrivateHasAccessor($value): void
     {
     }
 
@@ -163,7 +165,7 @@ class Dummy
         return $this->publicGetter;
     }
 
-    public function setDate(\DateTimeInterface $date)
+    public function setDate(DateTimeInterface $date): void
     {
         $this->date = $date;
     }

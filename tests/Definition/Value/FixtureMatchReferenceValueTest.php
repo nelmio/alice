@@ -21,39 +21,39 @@ use PHPUnit\Framework\TestCase;
  */
 class FixtureMatchReferenceValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(FixtureMatchReferenceValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(FixtureMatchReferenceValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $regex = '/dummy/';
         $value = new FixtureMatchReferenceValue($regex);
 
-        $this->assertEquals($regex, $value->getValue());
+        static::assertEquals($regex, $value->getValue());
     }
 
-    public function testCanMatchAgainstValues()
+    public function testCanMatchAgainstValues(): void
     {
         $regex = '/^d/';
         $value = new FixtureMatchReferenceValue($regex);
 
-        $this->assertTrue($value->match('d'));
-        $this->assertFalse($value->match('a'));
+        static::assertTrue($value->match('d'));
+        static::assertFalse($value->match('a'));
     }
 
-    public function testCanCreateAReferenceForWildcards()
+    public function testCanCreateAReferenceForWildcards(): void
     {
         $expected = new FixtureMatchReferenceValue('/^user.*/');
         $actual = FixtureMatchReferenceValue::createWildcardReference('user');
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('dummy');
-        $this->assertEquals('@(regex: /^dummy.*/)', (string) $value);
+        static::assertEquals('@(regex: /^dummy.*/)', (string) $value);
     }
 }

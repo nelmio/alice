@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Parser;
 
+use Error;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,65 +21,65 @@ use PHPUnit\Framework\TestCase;
  */
 class ParseExceptionFactoryTest extends TestCase
 {
-    public function testCreateForParserNoFoundForFile()
+    public function testCreateForParserNoFoundForFile(): void
     {
         $exception = ParseExceptionFactory::createForParserNoFoundForFile('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'No suitable parser found for the file "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForUnparsableFile()
+    public function testCreateForUnparsableFile(): void
     {
         $exception = ParseExceptionFactory::createForUnparsableFile('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not parse the file "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
-        $previous = new \Error();
+        $previous = new Error();
 
         $exception = ParseExceptionFactory::createForUnparsableFile('foo', $code, $previous);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not parse the file "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 
-    public function testCreateForInvalidYaml()
+    public function testCreateForInvalidYaml(): void
     {
         $exception = ParseExceptionFactory::createForInvalidYaml('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'The file "foo" does not contain valid YAML.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
-        $previous = new \Error();
+        $previous = new Error();
 
         $exception = ParseExceptionFactory::createForInvalidYaml('foo', $code, $previous);
 
-        $this->assertEquals(
+        static::assertEquals(
             'The file "foo" does not contain valid YAML.',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 }

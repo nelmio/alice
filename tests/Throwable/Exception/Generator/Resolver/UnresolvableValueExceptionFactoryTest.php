@@ -13,193 +13,195 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
+use Error;
 use Nelmio\Alice\Definition\Value\DummyValue;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory
  */
 class UnresolvableValueExceptionFactoryTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $exception = UnresolvableValueExceptionFactory::create(new DummyValue('dummy'));
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not resolve value "dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
-        $previous = new \Error();
+        $previous = new Error();
 
         $exception = UnresolvableValueExceptionFactory::create(new DummyValue('dummy'), $code, $previous);
-        $this->assertEquals(
+        static::assertEquals(
             'Could not resolve value "dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 
-    public function testCreateForInvalidReferenceId()
+    public function testCreateForInvalidReferenceId(): void
     {
         $exception = UnresolvableValueExceptionFactory::createForInvalidReferenceId(new DummyValue('dummy'), 100);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected fixture reference value "dummy" to be resolved into a string. Got "(integer) 100" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $exception = UnresolvableValueExceptionFactory::createForInvalidReferenceId(new DummyValue('dummy'), 'alice');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected fixture reference value "dummy" to be resolved into a string. Got "(string) alice" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
-        $exception = UnresolvableValueExceptionFactory::createForInvalidReferenceId(new DummyValue('dummy'), new \stdClass());
+        $exception = UnresolvableValueExceptionFactory::createForInvalidReferenceId(new DummyValue('dummy'), new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected fixture reference value "dummy" to be resolved into a string. Got "stdClass" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
-        $previous = new \Error();
+        $previous = new Error();
 
         $exception = UnresolvableValueExceptionFactory::createForInvalidReferenceId(new DummyValue('dummy'), 100, $code, $previous);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected fixture reference value "dummy" to be resolved into a string. Got "(integer) 100" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 
-    public function testCreateForCouldNotEvaluateExpression()
+    public function testCreateForCouldNotEvaluateExpression(): void
     {
         $exception = UnresolvableValueExceptionFactory::createForCouldNotEvaluateExpression(new DummyValue('dummy'));
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not evaluate the expression "dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
-        $previous = new \Error();
+        $previous = new Error();
 
         $exception = UnresolvableValueExceptionFactory::createForCouldNotEvaluateExpression(new DummyValue('dummy'), $code, $previous);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not evaluate the expression "dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 
-    public function testCreateForCouldNotFindVariable()
+    public function testCreateForCouldNotFindVariable(): void
     {
         $exception = UnresolvableValueExceptionFactory::createForCouldNotFindVariable(new DummyValue('dummy'));
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find a variable "dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
-        $previous = new \Error();
+        $previous = new Error();
 
         $exception = UnresolvableValueExceptionFactory::createForCouldNotFindVariable(new DummyValue('dummy'), $code, $previous);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find a variable "dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 
-    public function testCreateForCouldNotFindParameter()
+    public function testCreateForCouldNotFindParameter(): void
     {
         $exception = UnresolvableValueExceptionFactory::createForCouldNotFindParameter('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find the parameter "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForInvalidResolvedQuantifierTypeForOptionalValue()
+    public function testCreateForInvalidResolvedQuantifierTypeForOptionalValue(): void
     {
         $quantifier = new DummyValue('quantifier');
 
         $exception = UnresolvableValueExceptionFactory::createForInvalidResolvedQuantifierTypeForOptionalValue($quantifier, null);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected the quantifier "Nelmio\Alice\Definition\Value\DummyValue" for the optional value to be resolved '
             .'into a string, got "NULL" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
-        $exception = UnresolvableValueExceptionFactory::createForInvalidResolvedQuantifierTypeForOptionalValue($quantifier, new \stdClass());
+        $exception = UnresolvableValueExceptionFactory::createForInvalidResolvedQuantifierTypeForOptionalValue($quantifier, new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected the quantifier "Nelmio\Alice\Definition\Value\DummyValue" for the optional value to be resolved '
             .'into a string, got "stdClass" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $exception = UnresolvableValueExceptionFactory::createForInvalidResolvedQuantifierTypeForOptionalValue($quantifier, []);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected the quantifier "Nelmio\Alice\Definition\Value\DummyValue" for the optional value to be resolved '
             .'into a string, got "array" instead.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForNoFixtureOrObjectMatchingThePattern()
+    public function testCreateForNoFixtureOrObjectMatchingThePattern(): void
     {
         $exception = UnresolvableValueExceptionFactory::createForNoFixtureOrObjectMatchingThePattern(
             new DummyValue('/foo/')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find a fixture or object ID matching the pattern "/foo/".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

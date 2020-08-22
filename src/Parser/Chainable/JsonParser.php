@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use Exception;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
@@ -58,7 +59,7 @@ final class JsonParser implements ChainableParserInterface
             }
 
             return $data;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             if ($exception instanceof UnparsableFileException) {
                 throw $exception;
             }

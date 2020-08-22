@@ -26,8 +26,6 @@ interface FixtureBagDenormalizerInterface
      * @param array $data subset of PHP data coming from the parser (does not contains any parameters)
      *
      * @throws DenormalizationThrowable
-     *
-     * @return FixtureBag
      */
     public function denormalize(array $data): FixtureBag;
 }

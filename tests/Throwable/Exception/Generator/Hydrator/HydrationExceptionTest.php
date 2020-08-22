@@ -15,25 +15,26 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
 use Nelmio\Alice\Throwable\HydrationThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationException
  */
 class HydrationExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(HydrationException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(HydrationException::class, RuntimeException::class, true));
     }
 
-    public function testIsAHydrationThrowable()
+    public function testIsAHydrationThrowable(): void
     {
-        $this->assertTrue(is_a(HydrationException::class, HydrationThrowable::class, true));
+        static::assertTrue(is_a(HydrationException::class, HydrationThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildHydrationException();
-        $this->assertInstanceOf(ChildHydrationException::class, $exception);
+        static::assertInstanceOf(ChildHydrationException::class, $exception);
     }
 }

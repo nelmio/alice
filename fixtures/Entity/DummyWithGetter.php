@@ -18,7 +18,7 @@ class DummyWithGetter
     private $foo;
     public $fooVal;
 
-    public function setFoo(string $foo)
+    public function setFoo(string $foo): void
     {
         $this->foo = strrev($foo);
     }

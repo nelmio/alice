@@ -55,7 +55,7 @@ final class GenerationContext
         return $this->isFirstPass;
     }
 
-    public function setToSecondPass()
+    public function setToSecondPass(): void
     {
         $this->isFirstPass = false;
     }
@@ -63,18 +63,18 @@ final class GenerationContext
     /**
      * @throws CircularReferenceException
      */
-    public function markIsResolvingFixture(string $id)
+    public function markIsResolvingFixture(string $id): void
     {
         $this->resolving->add($id);
         $this->resolving->checkForCircularReference($id);
     }
 
-    public function markAsNeedsCompleteGeneration()
+    public function markAsNeedsCompleteGeneration(): void
     {
         $this->needsCompleteResolution = true;
     }
 
-    public function unmarkAsNeedsCompleteGeneration()
+    public function unmarkAsNeedsCompleteGeneration(): void
     {
         $this->needsCompleteResolution = false;
     }
@@ -84,17 +84,17 @@ final class GenerationContext
         return $this->needsCompleteResolution;
     }
 
-    public function cacheValue(string $key, $value)
+    public function cacheValue(string $key, $value): void
     {
         $this->cache[$key] = $value;
     }
 
-    public function markRetrieveCallResult()
+    public function markRetrieveCallResult(): void
     {
         $this->retrieveCallResult = true;
     }
 
-    public function unmarkRetrieveCallResult()
+    public function unmarkRetrieveCallResult(): void
     {
         $this->retrieveCallResult = false;
     }
@@ -106,8 +106,6 @@ final class GenerationContext
 
     /**
      * @throws CachedValueNotFound
-     *
-     * @return mixed
      */
     public function getCachedValue(string $key)
     {

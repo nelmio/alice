@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
@@ -60,70 +62,70 @@ class PhpParserTest extends TestCase
         $this->parser = new PhpParser();
     }
 
-    public function testIsAChainableParser()
+    public function testIsAChainableParser(): void
     {
-        $this->assertTrue(is_a(PhpParser::class, ChainableParserInterface::class, true));
+        static::assertTrue(is_a(PhpParser::class, ChainableParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(PhpParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(PhpParser::class))->isCloneable());
     }
 
     /**
      * @dataProvider providePhpList
      */
-    public function testCanParsePhpFiles(string $file, array $expectedParsers)
+    public function testCanParsePhpFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
         $expected = (in_array(get_class($this->parser), $expectedParsers));
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider provideYamlList
      */
-    public function testCannotParseYamlFiles(string $file)
+    public function testCannotParseYamlFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
     /**
      * @dataProvider provideJsonList
      */
-    public function testCannotParseJsonFiles(string $file)
+    public function testCannotParseJsonFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
     /**
      * @dataProvider provideUnsupportedList
      */
-    public function testCannotParseUnsupportedFiles(string $file)
+    public function testCannotParseUnsupportedFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
-    public function testThrowsAnExceptionIfFileDoesNotExist()
+    public function testThrowsAnExceptionIfFileDoesNotExist(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The file "/nowhere.php" could not be found.');
 
         $this->parser->parse('/nowhere.php');
     }
 
-    public function testReturnsParsedFileContent()
+    public function testReturnsParsedFileContent(): void
     {
         $actual = $this->parser->parse(self::$dir.'/basic.php');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'Nelmio\Alice\support\models\User' => [
                     'user0' => [
@@ -135,18 +137,18 @@ class PhpParserTest extends TestCase
         );
     }
 
-    public function testParsingEmptyFileResultsInEmptySet()
+    public function testParsingEmptyFileResultsInEmptySet(): void
     {
         $actual = $this->parser->parse(self::$dir.'/empty.php');
 
-        $this->assertSame([], $actual);
+        static::assertSame([], $actual);
     }
 
-    public function testParseReturnsNamedParameters()
+    public function testParseReturnsNamedParameters(): void
     {
         $actual = $this->parser->parse(self::$dir.'/named_parameters.php');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'Nelmio\Alice\DummyWithMethods' => [
                     'dummy_with_methods' => [
@@ -169,17 +171,17 @@ class PhpParserTest extends TestCase
         );
     }
 
-    public function testThrowsAnExceptionIfNoArrayReturnedInParsedFile()
+    public function testThrowsAnExceptionIfNoArrayReturnedInParsedFile(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessageMatches('/^The file ".+\/no_return\.php" must return a PHP array\.$/');
 
         $this->parser->parse(self::$dir.'/no_return.php');
     }
 
-    public function testThrowsAnExceptionIfWrongValueReturnedInParsedFile()
+    public function testThrowsAnExceptionIfWrongValueReturnedInParsedFile(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessageMatches('/^The file ".+\/wrong_return\.php" must return a PHP array\.$/');
 
         $this->parser->parse(self::$dir.'/wrong_return.php');

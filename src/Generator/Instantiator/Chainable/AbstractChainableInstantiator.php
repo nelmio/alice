@@ -22,6 +22,7 @@ use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use Throwable;
 
 /**
  * @private
@@ -44,7 +45,7 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
             $instance = $this->createInstance($fixture);
         } catch (InstantiationThrowable $throwable) {
             throw $throwable;
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             throw InstantiationExceptionFactory::create($fixture, 0, $throwable);
         }
 

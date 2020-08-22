@@ -25,6 +25,8 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionException;
+use ReflectionObject;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NoMethodCallInstantiator
@@ -44,31 +46,31 @@ class NoMethodCallInstantiatorTest extends TestCase
         $this->instantiator = new NoMethodCallInstantiator();
     }
 
-    public function testIsAChainableInstantiator()
+    public function testIsAChainableInstantiator(): void
     {
-        $this->assertTrue(is_a(NoMethodCallInstantiator::class, ChainableInstantiatorInterface::class, true));
+        static::assertTrue(is_a(NoMethodCallInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(NoMethodCallInstantiator::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(NoMethodCallInstantiator::class))->isCloneable());
     }
 
-    public function testCanInstantiateFixtureWithNoMethodCallConstructor()
+    public function testCanInstantiateFixtureWithNoMethodCallConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create(new NoMethodCall()));
 
-        $this->assertTrue($this->instantiator->canInstantiate($fixture));
+        static::assertTrue($this->instantiator->canInstantiate($fixture));
     }
 
-    public function testCannotInstantiateFixtureWithDefaultConstructor()
+    public function testCannotInstantiateFixtureWithDefaultConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
 
-        $this->assertFalse($this->instantiator->canInstantiate($fixture));
+        static::assertFalse($this->instantiator->canInstantiate($fixture));
     }
 
-    public function testInstantiatesWithReflectionAndNoArguments()
+    public function testInstantiatesWithReflectionAndNoArguments(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -78,20 +80,20 @@ class NoMethodCallInstantiatorTest extends TestCase
         $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $instance = $set->getObjects()->get($fixture)->getInstance();
-        $this->assertInstanceOf(DummyWithRequiredParameterInConstructor::class, $instance);
+        static::assertInstanceOf(DummyWithRequiredParameterInConstructor::class, $instance);
 
         try {
-            (new \ReflectionObject($instance))->getProperty('requiredParam');
-            $this->fail('Expected exception to be thrown.');
-        } catch (\ReflectionException $exception) {
-            $this->assertEquals(
+            (new ReflectionObject($instance))->getProperty('requiredParam');
+            static::fail('Expected exception to be thrown.');
+        } catch (ReflectionException $exception) {
+            static::assertEquals(
                 'Property requiredParam does not exist',
                 $exception->getMessage()
             );
         }
     }
 
-    public function testThrowsAnExceptionIfCouldNotInstantiateObject()
+    public function testThrowsAnExceptionIfCouldNotInstantiateObject(): void
     {
         $fixture = new SimpleFixture(
             'dummy',

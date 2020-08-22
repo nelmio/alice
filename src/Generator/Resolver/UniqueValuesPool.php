@@ -96,7 +96,7 @@ final class UniqueValuesPool
         return false;
     }
 
-    public function add(UniqueValue $value)
+    public function add(UniqueValue $value): void
     {
         $valueId = $value->getId();
         if (false === array_key_exists($valueId, $this->pool)) {

@@ -24,6 +24,7 @@ use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver
@@ -32,17 +33,17 @@ class RemoveConflictingObjectsResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAFixtureResolver()
+    public function testIsAFixtureResolver(): void
     {
-        $this->assertTrue(is_a(RemoveConflictingObjectsResolver::class, FixtureSetResolverInterface::class, true));
+        static::assertTrue(is_a(RemoveConflictingObjectsResolver::class, FixtureSetResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(RemoveConflictingObjectsResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(RemoveConflictingObjectsResolver::class))->isCloneable());
     }
 
-    public function testRemovesConflictingObjectsByIteratingFixturesIfThereIsLessFixturesThanInjectedObjects()
+    public function testRemovesConflictingObjectsByIteratingFixturesIfThereIsLessFixturesThanInjectedObjects(): void
     {
         $set = FixtureSetFactory::create();
 
@@ -54,8 +55,8 @@ class RemoveConflictingObjectsResolverTest extends TestCase
                     $parameters = new ParameterBag(['resolved' => true]),
                     $fixtures = (new FixtureBag())->with(new DummyFixture('dummy')),
                     $objects = (new ObjectBag())
-                        ->with(new SimpleObject('dummy', new \stdClass()))
-                        ->with(new SimpleObject('another_injected_object', new \stdClass()))
+                        ->with(new SimpleObject('dummy', new stdClass()))
+                        ->with(new SimpleObject('another_injected_object', new stdClass()))
                 )
             )
         ;
@@ -66,12 +67,12 @@ class RemoveConflictingObjectsResolverTest extends TestCase
             $parameters,
             $fixtures,
             $objects = (new ObjectBag())
-                ->with(new SimpleObject('another_injected_object', new \stdClass()))
+                ->with(new SimpleObject('another_injected_object', new stdClass()))
         );
 
         $resolver = new RemoveConflictingObjectsResolver($decoratedResolver);
         $actual = $resolver->resolve($set);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

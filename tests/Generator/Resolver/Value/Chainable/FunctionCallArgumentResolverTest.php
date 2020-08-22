@@ -28,6 +28,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver
@@ -36,25 +37,25 @@ class FunctionCallArgumentResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(FunctionCallArgumentResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(FunctionCallArgumentResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FunctionCallArgumentResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FunctionCallArgumentResolver::class))->isCloneable());
     }
 
-    public function testCanResolvePropertyReferenceValues()
+    public function testCanResolvePropertyReferenceValues(): void
     {
         $resolver = new FunctionCallArgumentResolver(new FakeValueResolver());
 
-        $this->assertTrue($resolver->canResolve(new FunctionCallValue('')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new FunctionCallValue('')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testIsResolverAware()
+    public function testIsResolverAware(): void
     {
         $decoratedResolverConstructor = function () {
             $resolver = new FakeValueResolver();
@@ -72,18 +73,18 @@ class FunctionCallArgumentResolverTest extends TestCase
         $resolver = new FunctionCallArgumentResolver($decoratedResolverConstructor());
         $newResolver = $resolver->withValueResolver($argumentResolverConstructor());
 
-        $this->assertNotSame($resolver, $newResolver);
-        $this->assertEquals(
+        static::assertNotSame($resolver, $newResolver);
+        static::assertEquals(
             new FunctionCallArgumentResolver($decoratedResolverConstructor()),
             $resolver
         );
-        $this->assertEquals(
+        static::assertEquals(
             new FunctionCallArgumentResolver($decoratedResolverConstructor(), $argumentResolverConstructor()),
             $newResolver
         );
     }
 
-    public function testThrowsAnExceptionIfDoesNotHaveAnArgumentResolver()
+    public function testThrowsAnExceptionIfDoesNotHaveAnArgumentResolver(): void
     {
         $value = new FunctionCallValue('foo');
         $fixture = new FakeFixture();
@@ -95,19 +96,19 @@ class FunctionCallArgumentResolverTest extends TestCase
 
         try {
             $resolver->resolve($value, $fixture, $set, $scope, $context);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (ResolverNotFoundException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver::resolve"'
                 .' to be called only if it has a resolver.',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNull($exception->getPrevious());
         }
     }
 
-    public function testResolvesAllArgumentsValuesBeforePassingThemToTheDecoratedResolver()
+    public function testResolvesAllArgumentsValuesBeforePassingThemToTheDecoratedResolver(): void
     {
         $value = new FunctionCallValue(
             'foo',
@@ -128,7 +129,7 @@ class FunctionCallArgumentResolverTest extends TestCase
             ->resolve(new FakeValue(), $fixture, $set, $scope, $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
-                    $instance = new \stdClass(),
+                    $instance = new stdClass(),
                     $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
                 )
             )
@@ -165,6 +166,6 @@ class FunctionCallArgumentResolverTest extends TestCase
         $resolver = new FunctionCallArgumentResolver($decoratedResolver, $argumentResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

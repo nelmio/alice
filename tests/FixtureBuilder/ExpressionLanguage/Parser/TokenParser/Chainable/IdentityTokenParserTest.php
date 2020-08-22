@@ -28,27 +28,27 @@ class IdentityTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(IdentityTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(IdentityTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(IdentityTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(IdentityTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseIdentityTokens()
+    public function testCanParseIdentityTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::ESCAPED_VALUE_TYPE));
         $parser = new IdentityTokenParser(new FakeChainableTokenParser());
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testReplaceIdentityIntoAFunctionCallBeforeHandingItOverToItsDecorated()
+    public function testReplaceIdentityIntoAFunctionCallBeforeHandingItOverToItsDecorated(): void
     {
         $token = new Token('<(echo "hello world!")>', new TokenType(TokenType::IDENTITY_TYPE));
 
@@ -65,7 +65,7 @@ class IdentityTokenParserTest extends TestCase
         $parser = new IdentityTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

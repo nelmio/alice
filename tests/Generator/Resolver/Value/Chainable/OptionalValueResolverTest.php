@@ -35,34 +35,34 @@ class OptionalValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(OptionalValueResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(OptionalValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(OptionalValueResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(OptionalValueResolver::class))->isCloneable());
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $resolver = new OptionalValueResolver();
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        $this->assertEquals(new OptionalValueResolver(), $resolver);
-        $this->assertEquals(new OptionalValueResolver(new FakeValueResolver()), $newResolver);
+        static::assertEquals(new OptionalValueResolver(), $resolver);
+        static::assertEquals(new OptionalValueResolver(new FakeValueResolver()), $newResolver);
     }
 
-    public function testCanResolveOptionalValues()
+    public function testCanResolveOptionalValues(): void
     {
         $resolver = new OptionalValueResolver();
 
-        $this->assertTrue($resolver->canResolve(new OptionalValue('', '')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new OptionalValue('', '')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testCannotResolveValueIfHasNoResolver()
+    public function testCannotResolveValueIfHasNoResolver(): void
     {
         $value = new FixturePropertyValue(new FakeValue(), '');
         $resolver = new OptionalValueResolver();
@@ -80,7 +80,7 @@ class OptionalValueResolverTest extends TestCase
         OptionalValue $value,
         int $randomValue,
         string $expectedValue
-    ) {
+    ): void {
         $generatorProphecy = $this->prophesize(Generator::class);
         $generatorProphecy->numberBetween(0, 99)->willReturn($randomValue);
         $generator = $generatorProphecy->reveal();
@@ -89,10 +89,10 @@ class OptionalValueResolverTest extends TestCase
 
         $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
-        $this->assertSame($expectedValue, $resolvedValue->getValue());
+        static::assertSame($expectedValue, $resolvedValue->getValue());
     }
 
-    public function testCanHandleExtremaQuantifiersCorrectlyWithoutGenerator()
+    public function testCanHandleExtremaQuantifiersCorrectlyWithoutGenerator(): void
     {
         $resolver = new OptionalValueResolver(new FakeValueResolver());
 
@@ -100,7 +100,7 @@ class OptionalValueResolverTest extends TestCase
 
         $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
-        $this->assertTrue(in_array($resolvedValue->getValue(), ['first_0', 'second_0'], true));
+        static::assertTrue(in_array($resolvedValue->getValue(), ['first_0', 'second_0'], true));
     }
 
     public static function optionalValueProvider(): iterable

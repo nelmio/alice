@@ -34,6 +34,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver
@@ -42,34 +43,34 @@ class FixtureWildcardReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(FixtureWildcardReferenceResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(FixtureWildcardReferenceResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FixtureWildcardReferenceResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FixtureWildcardReferenceResolver::class))->isCloneable());
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $resolver = new FixtureWildcardReferenceResolver();
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        $this->assertEquals(new FixtureWildcardReferenceResolver(), $resolver);
-        $this->assertEquals(new FixtureWildcardReferenceResolver(new FakeValueResolver()), $newResolver);
+        static::assertEquals(new FixtureWildcardReferenceResolver(), $resolver);
+        static::assertEquals(new FixtureWildcardReferenceResolver(new FakeValueResolver()), $newResolver);
     }
 
-    public function testCanResolveFixtureMatchReferenceValues()
+    public function testCanResolveFixtureMatchReferenceValues(): void
     {
         $resolver = new FixtureWildcardReferenceResolver();
 
-        $this->assertTrue($resolver->canResolve(new FixtureMatchReferenceValue('')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new FixtureMatchReferenceValue('')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testCannotResolveValueIfHasNoResolver()
+    public function testCannotResolveValueIfHasNoResolver(): void
     {
         $resolver = new FixtureWildcardReferenceResolver();
 
@@ -79,7 +80,7 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $resolver->resolve(new FakeValue(), new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    public function testReturnsARandomMatchingFixture()
+    public function testReturnsARandomMatchingFixture(): void
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('dummy');
         $set = ResolvedFixtureSetFactory::create(
@@ -110,12 +111,12 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $resolver = new FixtureWildcardReferenceResolver($valueResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $valueResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testTheMatchingFixtureCanBeFromLoadedFixtures()
+    public function testTheMatchingFixtureCanBeFromLoadedFixtures(): void
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('dummy');
         $fixture = new DummyFixture('injected_fixture');
@@ -147,10 +148,10 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $resolver = new FixtureWildcardReferenceResolver($valueResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testTheMatchingFixtureCanBeFromObjects()
+    public function testTheMatchingFixtureCanBeFromObjects(): void
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('dummy');
         $fixture = new DummyFixture('injected_fixture');
@@ -158,7 +159,7 @@ class FixtureWildcardReferenceResolverTest extends TestCase
             null,
             null,
             (new ObjectBag())
-                ->with(new SimpleObject('dummy', new \stdClass()))
+                ->with(new SimpleObject('dummy', new stdClass()))
         );
         $scope = [];
         $context = new GenerationContext();
@@ -182,10 +183,10 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $resolver = new FixtureWildcardReferenceResolver($valueResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfNotMathcingIdFound()
+    public function testThrowsAnExceptionIfNotMathcingIdFound(): void
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('dummy');
         $fixture = new DummyFixture('injected_fixture');

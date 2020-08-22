@@ -26,12 +26,8 @@ interface SpecificationsDenormalizerInterface
      *                                  uniqueness of the values, a good thing is to make them relative to their
      *                                  fixtures. So in practice we often pass the fixture being instantiated and will
      *                                  assign it the specifications bags to it later.
-     * @param FlagParserInterface $parser
-     * @param array $unparsedSpecs
      *
      * @throws DenormalizationThrowable
-     *
-     * @return SpecificationBag
      *
      * @example
      *  $unrparsedSpecs = [

@@ -16,8 +16,6 @@ namespace Nelmio\Alice\Generator\Resolver;
 interface ParameterResolverAwareInterface
 {
     /**
-     * @param ParameterResolverInterface $resolver
-     *
      * @return static
      */
     public function withResolver(ParameterResolverInterface $resolver);

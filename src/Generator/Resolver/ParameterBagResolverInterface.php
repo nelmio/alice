@@ -24,12 +24,8 @@ interface ParameterBagResolverInterface
      * External parameters can be injected in the process; It is assumed that injected parameters are already resolved
      * and they will be included in the resulting parameter bag.
      *
-     * @param ParameterBag      $unresolvedParameters
-     * @param ParameterBag|null $injectedParameters
      *
      * @throws ResolutionThrowable
-     *
-     * @return ParameterBag
      */
     public function resolve(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null): ParameterBag;
 }

@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver
@@ -34,57 +35,57 @@ class StringParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableParameterResolver()
+    public function testIsAChainableParameterResolver(): void
     {
-        $this->assertTrue(is_a(StringParameterResolver::class, ChainableParameterResolverInterface::class, true));
+        static::assertTrue(is_a(StringParameterResolver::class, ChainableParameterResolverInterface::class, true));
     }
 
-    public function testIsAParameterResolverAwareResolver()
+    public function testIsAParameterResolverAwareResolver(): void
     {
-        $this->assertTrue(is_a(StringParameterResolver::class, ParameterResolverAwareInterface::class, true));
+        static::assertTrue(is_a(StringParameterResolver::class, ParameterResolverAwareInterface::class, true));
     }
 
-    public function testCanBeInstantiatedWithoutAResolver()
+    public function testCanBeInstantiatedWithoutAResolver(): void
     {
         new StringParameterResolver();
     }
 
-    public function testCanBeInstantiatedWithAResolver()
+    public function testCanBeInstantiatedWithAResolver(): void
     {
         new StringParameterResolver(new FakeParameterResolver());
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(StringParameterResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(StringParameterResolver::class))->isCloneable());
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $resolver = new StringParameterResolver();
         $newResolver = $resolver->withResolver(new FakeParameterResolver());
 
-        $this->assertEquals(new StringParameterResolver(), $resolver);
-        $this->assertEquals(new StringParameterResolver(new FakeParameterResolver()), $newResolver);
+        static::assertEquals(new StringParameterResolver(), $resolver);
+        static::assertEquals(new StringParameterResolver(new FakeParameterResolver()), $newResolver);
     }
 
-    public function testCanOnlyResolveStringValues()
+    public function testCanOnlyResolveStringValues(): void
     {
         $resolver = new StringParameterResolver();
         $parameter = new Parameter('foo', null);
 
-        $this->assertTrue($resolver->canResolve($parameter->withValue('string')));
+        static::assertTrue($resolver->canResolve($parameter->withValue('string')));
 
-        $this->assertFalse($resolver->canResolve($parameter->withValue(null)));
-        $this->assertFalse($resolver->canResolve($parameter->withValue(10)));
-        $this->assertFalse($resolver->canResolve($parameter->withValue(.75)));
-        $this->assertFalse($resolver->canResolve($parameter->withValue([])));
-        $this->assertFalse($resolver->canResolve($parameter->withValue(new \stdClass())));
-        $this->assertFalse($resolver->canResolve($parameter->withValue(function () {
+        static::assertFalse($resolver->canResolve($parameter->withValue(null)));
+        static::assertFalse($resolver->canResolve($parameter->withValue(10)));
+        static::assertFalse($resolver->canResolve($parameter->withValue(.75)));
+        static::assertFalse($resolver->canResolve($parameter->withValue([])));
+        static::assertFalse($resolver->canResolve($parameter->withValue(new stdClass())));
+        static::assertFalse($resolver->canResolve($parameter->withValue(function (): void {
         })));
     }
 
-    public function testCanResolveStaticStringsWithoutDecoratedResolver()
+    public function testCanResolveStaticStringsWithoutDecoratedResolver(): void
     {
         $parameter = new Parameter('foo', 'Mad Hatter');
         $expected = new ParameterBag(['foo' => 'Mad Hatter']);
@@ -92,7 +93,7 @@ class StringParameterResolverTest extends TestCase
         $resolver = new StringParameterResolver();
         $result = $resolver->resolve($parameter, new ParameterBag(), new ParameterBag());
 
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $result
         );
@@ -105,13 +106,13 @@ class StringParameterResolverTest extends TestCase
         $resolver = (new StringParameterResolver())->withResolver($injectedResolver);
         $result = $resolver->resolve($parameter, new ParameterBag(), new ParameterBag());
 
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $result
         );
     }
 
-    public function testWhenResolvingDynamicStringLookForResolvedParametersFirst()
+    public function testWhenResolvingDynamicStringLookForResolvedParametersFirst(): void
     {
         $parameter = new Parameter('foo', '<{bar}>');
         $unresolvedParameters = new ParameterBag();
@@ -124,7 +125,7 @@ class StringParameterResolverTest extends TestCase
         $resolver = new StringParameterResolver();
         $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
 
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $result
         );
@@ -137,13 +138,13 @@ class StringParameterResolverTest extends TestCase
         $resolver = (new StringParameterResolver())->withResolver($injectedResolver);
         $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
 
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $result
         );
     }
 
-    public function testChecksIfParameterIsReferencedBeforeTryingToResolveIt()
+    public function testChecksIfParameterIsReferencedBeforeTryingToResolveIt(): void
     {
         $parameter = new Parameter('foo', '<{bar}>');
         $unresolvedParameters = new ParameterBag();
@@ -152,9 +153,9 @@ class StringParameterResolverTest extends TestCase
         $resolver = new StringParameterResolver();
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
-            $this->fail('Expected exception to be thrown');
+            static::fail('Expected exception to be thrown');
         } catch (ParameterNotFoundException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not find the parameter "bar" when resolving "foo".',
                 $exception->getMessage()
             );
@@ -168,16 +169,16 @@ class StringParameterResolverTest extends TestCase
         $resolver = (new StringParameterResolver())->withResolver($injectedResolver);
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
-            $this->fail('Expected exception to be thrown');
+            static::fail('Expected exception to be thrown');
         } catch (ParameterNotFoundException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not find the parameter "bar" when resolving "foo".',
                 $exception->getMessage()
             );
         }
     }
 
-    public function testInjectedResolverToResolveDynamicParameter()
+    public function testInjectedResolverToResolveDynamicParameter(): void
     {
         $parameter = new Parameter('foo', '<{bar}>');
         $unresolvedParameters = new ParameterBag([
@@ -218,14 +219,14 @@ class StringParameterResolverTest extends TestCase
         $resolver = (new StringParameterResolver())->withResolver($injectedResolver);
         $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
 
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $result
         );
         $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testReuseContextIfOneIsFoundWhenResolvingDynamicParameter()
+    public function testReuseContextIfOneIsFoundWhenResolvingDynamicParameter(): void
     {
         $parameter = new Parameter('foo', '<{bar}>');
         $unresolvedParameters = new ParameterBag([
@@ -259,14 +260,14 @@ class StringParameterResolverTest extends TestCase
         $resolver = (new StringParameterResolver())->withResolver($injectedResolver);
         $result = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
             $result
         );
         $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testThrowsAnExceptionIfNoResolverInjectedWhenRequired()
+    public function testThrowsAnExceptionIfNoResolverInjectedWhenRequired(): void
     {
         $parameter = new Parameter('foo', '<{bar}>');
         $unresolvedParameters = new ParameterBag([

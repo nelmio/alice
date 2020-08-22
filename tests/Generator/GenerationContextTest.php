@@ -16,45 +16,46 @@ namespace Nelmio\Alice\Generator;
 use Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\GenerationContext
  */
 class GenerationContextTest extends TestCase
 {
-    public function testAccessors()
+    public function testAccessors(): void
     {
         $context = new GenerationContext();
-        $this->assertTrue($context->isFirstPass());
-        $this->assertFalse($context->needsCompleteGeneration());
+        static::assertTrue($context->isFirstPass());
+        static::assertFalse($context->needsCompleteGeneration());
 
         $context->setToSecondPass();
-        $this->assertFalse($context->isFirstPass());
-        $this->assertFalse($context->needsCompleteGeneration());
-        $this->assertFalse($context->needsCallResult());
+        static::assertFalse($context->isFirstPass());
+        static::assertFalse($context->needsCompleteGeneration());
+        static::assertFalse($context->needsCallResult());
 
         $context->markAsNeedsCompleteGeneration();
-        $this->assertFalse($context->isFirstPass());
-        $this->assertTrue($context->needsCompleteGeneration());
-        $this->assertFalse($context->needsCallResult());
+        static::assertFalse($context->isFirstPass());
+        static::assertTrue($context->needsCompleteGeneration());
+        static::assertFalse($context->needsCallResult());
 
         $context->unmarkAsNeedsCompleteGeneration();
-        $this->assertFalse($context->isFirstPass());
-        $this->assertFalse($context->needsCompleteGeneration());
-        $this->assertFalse($context->needsCallResult());
+        static::assertFalse($context->isFirstPass());
+        static::assertFalse($context->needsCompleteGeneration());
+        static::assertFalse($context->needsCallResult());
 
         $context->markRetrieveCallResult();
-        $this->assertFalse($context->isFirstPass());
-        $this->assertFalse($context->needsCompleteGeneration());
-        $this->assertTrue($context->needsCallResult());
+        static::assertFalse($context->isFirstPass());
+        static::assertFalse($context->needsCompleteGeneration());
+        static::assertTrue($context->needsCallResult());
 
         $context->unmarkRetrieveCallResult();
-        $this->assertFalse($context->isFirstPass());
-        $this->assertFalse($context->needsCompleteGeneration());
-        $this->assertFalse($context->needsCallResult());
+        static::assertFalse($context->isFirstPass());
+        static::assertFalse($context->needsCompleteGeneration());
+        static::assertFalse($context->needsCallResult());
     }
 
-    public function testThrowsAnExceptionWhenACircularReferenceIsDetected()
+    public function testThrowsAnExceptionWhenACircularReferenceIsDetected(): void
     {
         $context = new GenerationContext();
         $context->markIsResolvingFixture('bar');
@@ -62,38 +63,38 @@ class GenerationContextTest extends TestCase
 
         try {
             $context->markIsResolvingFixture('foo');
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (CircularReferenceException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Circular reference detected for the parameter "foo" while resolving ["bar", "foo"].',
                 $exception->getMessage()
             );
         }
     }
 
-    public function testCanSetAnRetrieveAValueFromTheCache()
+    public function testCanSetAnRetrieveAValueFromTheCache(): void
     {
         $context = new GenerationContext();
 
-        $context->cacheValue('foo', $foo = new \stdClass());
+        $context->cacheValue('foo', $foo = new stdClass());
 
-        $this->assertSame($foo, $context->getCachedValue('foo'));
+        static::assertSame($foo, $context->getCachedValue('foo'));
     }
 
-    public function testCannotRetrieveAnInexistingValueFromCache()
+    public function testCannotRetrieveAnInexistingValueFromCache(): void
     {
         $context = new GenerationContext();
 
         try {
             $context->getCachedValue('foo');
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (CachedValueNotFound $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'No value with the key "foo" was found in the cache.',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNull($exception->getPrevious());
         }
     }
 }

@@ -49,31 +49,31 @@ class StaticFactoryInstantiatorTest extends TestCase
         $this->instantiator = new StaticFactoryInstantiator();
     }
 
-    public function testIsAChainableInstantiator()
+    public function testIsAChainableInstantiator(): void
     {
-        $this->assertTrue(is_a(StaticFactoryInstantiator::class, ChainableInstantiatorInterface::class, true));
+        static::assertTrue(is_a(StaticFactoryInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(StaticFactoryInstantiator::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(StaticFactoryInstantiator::class))->isCloneable());
     }
 
-    public function testCannotInstantiateFixtureWithDefaultConstructor()
+    public function testCannotInstantiateFixtureWithDefaultConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
 
-        $this->assertFalse($this->instantiator->canInstantiate($fixture));
+        static::assertFalse($this->instantiator->canInstantiate($fixture));
     }
 
-    public function testCannotInstantiateFixtureWithNoMethodCallConstructor()
+    public function testCannotInstantiateFixtureWithNoMethodCallConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create(new NoMethodCall()));
 
-        $this->assertFalse($this->instantiator->canInstantiate($fixture));
+        static::assertFalse($this->instantiator->canInstantiate($fixture));
     }
 
-    public function testCannotInstantiateFixtureWithIfConstructorIsANonStaticFactory()
+    public function testCannotInstantiateFixtureWithIfConstructorIsANonStaticFactory(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -81,10 +81,10 @@ class StaticFactoryInstantiatorTest extends TestCase
             SpecificationBagFactory::create(new MethodCallWithReference(new DummyReference(), 'fake'))
         );
 
-        $this->assertFalse($this->instantiator->canInstantiate($fixture));
+        static::assertFalse($this->instantiator->canInstantiate($fixture));
     }
 
-    public function testCanInstantiateFixtureWithIfConstructorIsAStaticFactory()
+    public function testCanInstantiateFixtureWithIfConstructorIsAStaticFactory(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -92,10 +92,10 @@ class StaticFactoryInstantiatorTest extends TestCase
             SpecificationBagFactory::create(new MethodCallWithReference(new StaticReference('static_reference'), 'fake'))
         );
 
-        $this->assertTrue($this->instantiator->canInstantiate($fixture));
+        static::assertTrue($this->instantiator->canInstantiate($fixture));
     }
 
-    public function testInstantiatesObjectWithFactory()
+    public function testInstantiatesObjectWithFactory(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -112,10 +112,10 @@ class StaticFactoryInstantiatorTest extends TestCase
         $expected = DummyWithNamedConstructor::namedConstruct();
         $actual = $set->getObjects()->get($fixture)->getInstance();
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testInstantiatesObjectWithFactoryAndArguments()
+    public function testInstantiatesObjectWithFactoryAndArguments(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -133,10 +133,10 @@ class StaticFactoryInstantiatorTest extends TestCase
         $expected = DummyWithNamedConstructorAndOptionalParameters::namedConstruct(10);
         $actual = $set->getObjects()->get($fixture)->getInstance();
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testInstantiatesObjectWithFactoryAndNamedArguments()
+    public function testInstantiatesObjectWithFactoryAndNamedArguments(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -154,10 +154,10 @@ class StaticFactoryInstantiatorTest extends TestCase
         $expected = DummyWithNamedConstructorAndOptionalParameters::namedConstruct(10);
         $actual = $set->getObjects()->get($fixture)->getInstance();
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfCouldNotInstantiateObject()
+    public function testThrowsAnExceptionIfCouldNotInstantiateObject(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -176,7 +176,7 @@ class StaticFactoryInstantiatorTest extends TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testThrowsAnExceptionIfCouldNotFindFactoryMethod()
+    public function testThrowsAnExceptionIfCouldNotFindFactoryMethod(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -195,7 +195,7 @@ class StaticFactoryInstantiatorTest extends TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testThrowsAnExceptionIfCouldNotFindFactoryClass()
+    public function testThrowsAnExceptionIfCouldNotFindFactoryClass(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -214,7 +214,7 @@ class StaticFactoryInstantiatorTest extends TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testThrowsAnExceptionIfCouldNotCallOnTheFactory()
+    public function testThrowsAnExceptionIfCouldNotCallOnTheFactory(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -234,7 +234,7 @@ class StaticFactoryInstantiatorTest extends TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testThrowsAnExceptionIfFixtureClassDoesNotMatchObjectClass()
+    public function testThrowsAnExceptionIfFixtureClassDoesNotMatchObjectClass(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -254,7 +254,7 @@ class StaticFactoryInstantiatorTest extends TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testThrowsAnExceptionIfFactoryDoesNotReturnAnInstance()
+    public function testThrowsAnExceptionIfFactoryDoesNotReturnAnInstance(): void
     {
         $fixture = new SimpleFixture(
             'dummy',

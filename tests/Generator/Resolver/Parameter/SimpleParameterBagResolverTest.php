@@ -30,17 +30,17 @@ class SimpleParameterBagResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAParameterBagResolver()
+    public function testIsAParameterBagResolver(): void
     {
-        $this->assertTrue(is_a(SimpleParameterBagResolver::class, ParameterBagResolverInterface::class, true));
+        static::assertTrue(is_a(SimpleParameterBagResolver::class, ParameterBagResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleParameterBagResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleParameterBagResolver::class))->isCloneable());
     }
 
-    public function testDecoratesResolverToResolveParameterBag()
+    public function testDecoratesResolverToResolveParameterBag(): void
     {
         $unresolvedParameters = new ParameterBag([
             'foo' => '(unresolved) bar',
@@ -83,7 +83,7 @@ class SimpleParameterBagResolverTest extends TestCase
         $resolver = new SimpleParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ParameterBag([
                 'foo' => 'bar',
                 'other_param' => 'yo',
@@ -94,7 +94,7 @@ class SimpleParameterBagResolverTest extends TestCase
         $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testDoesNotResolveAlreadyResolvedParameters()
+    public function testDoesNotResolveAlreadyResolvedParameters(): void
     {
         $unresolvedParameters = new ParameterBag([
             'foo' => '(unresolved) bar',
@@ -113,10 +113,10 @@ class SimpleParameterBagResolverTest extends TestCase
         $resolver = new SimpleParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters, $resolvedParameters);
 
-        $this->assertEquals($resolvedParameters, $result);
+        static::assertEquals($resolvedParameters, $result);
     }
 
-    public function testResolvesBagWithInjectedParameters()
+    public function testResolvesBagWithInjectedParameters(): void
     {
         $unresolvedParameters = new ParameterBag([
             'foo' => '(unresolved) bar',
@@ -165,7 +165,7 @@ class SimpleParameterBagResolverTest extends TestCase
         $resolver = new SimpleParameterBagResolver($decoratedResolver);
         $result = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ParameterBag([
                 'other_param' => 'yo',
                 'foo' => 'bar',

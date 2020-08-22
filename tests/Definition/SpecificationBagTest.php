@@ -21,26 +21,26 @@ use PHPUnit\Framework\TestCase;
  */
 class SpecificationBagTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $constructor = new FakeMethodCall();
         $properties = new PropertyBag();
         $calls = new MethodCallBag();
 
         $bag = new SpecificationBag($constructor, $properties, $calls);
-        $this->assertEquals($constructor, $bag->getConstructor());
-        $this->assertEquals($properties, $bag->getProperties());
-        $this->assertEquals($calls, $bag->getMethodCalls());
+        static::assertEquals($constructor, $bag->getConstructor());
+        static::assertEquals($properties, $bag->getProperties());
+        static::assertEquals($calls, $bag->getMethodCalls());
 
         $constructor = null;
 
         $bag = new SpecificationBag($constructor, $properties, $calls);
-        $this->assertEquals($constructor, $bag->getConstructor());
-        $this->assertEquals($properties, $bag->getProperties());
-        $this->assertEquals($calls, $bag->getMethodCalls());
+        static::assertEquals($constructor, $bag->getConstructor());
+        static::assertEquals($properties, $bag->getProperties());
+        static::assertEquals($calls, $bag->getMethodCalls());
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $constructor = null;
         $properties = new PropertyBag();
@@ -50,18 +50,18 @@ class SpecificationBagTest extends TestCase
         $newConstructor = new FakeMethodCall();
         $newBag = $bag->withConstructor($newConstructor);
 
-        $this->assertInstanceOf(SpecificationBag::class, $newBag);
+        static::assertInstanceOf(SpecificationBag::class, $newBag);
 
-        $this->assertEquals($constructor, $bag->getConstructor());
-        $this->assertEquals($calls, $bag->getMethodCalls());
-        $this->assertEquals($properties, $bag->getProperties());
+        static::assertEquals($constructor, $bag->getConstructor());
+        static::assertEquals($calls, $bag->getMethodCalls());
+        static::assertEquals($properties, $bag->getProperties());
 
-        $this->assertEquals(new FakeMethodCall(), $newBag->getConstructor());
-        $this->assertEquals($calls, $newBag->getMethodCalls());
-        $this->assertEquals($properties, $newBag->getProperties());
+        static::assertEquals(new FakeMethodCall(), $newBag->getConstructor());
+        static::assertEquals($calls, $newBag->getMethodCalls());
+        static::assertEquals($properties, $newBag->getProperties());
     }
 
-    public function testMergeTwoBags()
+    public function testMergeTwoBags(): void
     {
         $constructorA = null;
         $constructorB = null;
@@ -100,22 +100,22 @@ class SpecificationBagTest extends TestCase
         $bagB = new SpecificationBag($constructorB, $propertiesB, $callsB);
         $bag = $bagA->mergeWith($bagB);
 
-        $this->assertInstanceOf(SpecificationBag::class, $bag);
-        $this->assertEquals($constructorA, $bagA->getConstructor());
-        $this->assertEquals($propertiesA, $bagA->getProperties());
-        $this->assertEquals($callsA, $bagA->getMethodCalls());
+        static::assertInstanceOf(SpecificationBag::class, $bag);
+        static::assertEquals($constructorA, $bagA->getConstructor());
+        static::assertEquals($propertiesA, $bagA->getProperties());
+        static::assertEquals($callsA, $bagA->getMethodCalls());
 
-        $this->assertEquals($constructorB, $bagB->getConstructor());
-        $this->assertEquals($propertiesB, $bagB->getProperties());
-        $this->assertEquals($callsB, $bagB->getMethodCalls());
+        static::assertEquals($constructorB, $bagB->getConstructor());
+        static::assertEquals($propertiesB, $bagB->getProperties());
+        static::assertEquals($callsB, $bagB->getMethodCalls());
 
-        $this->assertEquals($constructorA, $bag->getConstructor());
+        static::assertEquals($constructorA, $bag->getConstructor());
     }
 
     /**
      * @testdox Merging a bag that has a constructor method with a new one that does not, the result will have a constructor method.
      */
-    public function testMergeTwoBags1()
+    public function testMergeTwoBags1(): void
     {
         $constructorA = new SimpleMethodCall('create', []);
         $constructorB = null;
@@ -124,15 +124,15 @@ class SpecificationBagTest extends TestCase
         $bagB = new SpecificationBag($constructorB, new PropertyBag(), new MethodCallBag());
         $bag = $bagA->mergeWith($bagB);
 
-        $this->assertEquals($constructorA, $bagA->getConstructor());
-        $this->assertEquals($constructorB, $bagB->getConstructor());
-        $this->assertEquals($constructorA, $bag->getConstructor());
+        static::assertEquals($constructorA, $bagA->getConstructor());
+        static::assertEquals($constructorB, $bagB->getConstructor());
+        static::assertEquals($constructorA, $bag->getConstructor());
     }
 
     /**
      * @testdox Merging a bag that has a constructor method with a new one that has one as well, the result will kept its constructor method.
      */
-    public function testMergeTwoBags2()
+    public function testMergeTwoBags2(): void
     {
         $constructorA = new SimpleMethodCall('childCreate', []);
         $constructorB = new SimpleMethodCall('parentCreate', []);
@@ -141,8 +141,8 @@ class SpecificationBagTest extends TestCase
         $bagB = new SpecificationBag($constructorB, new PropertyBag(), new MethodCallBag());
         $bag = $bagA->mergeWith($bagB);
 
-        $this->assertEquals($constructorA, $bagA->getConstructor());
-        $this->assertEquals($constructorB, $bagB->getConstructor());
-        $this->assertEquals($constructorA, $bag->getConstructor());
+        static::assertEquals($constructorA, $bagA->getConstructor());
+        static::assertEquals($constructorB, $bagB->getConstructor());
+        static::assertEquals($constructorA, $bag->getConstructor());
     }
 }

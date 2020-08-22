@@ -18,6 +18,7 @@ use Faker\Generator;
 use Nelmio\Alice\scenario2\ImmutableUser;
 use Nelmio\Alice\scenario2\MutableUser;
 use Nelmio\Alice\scenario2\PublicUser;
+use stdClass;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -97,7 +98,7 @@ function script(Generator $faker)
     }
 
     for ($i = 0; $i <= 1000; $i++) {
-        $user = new \stdClass();
+        $user = new stdClass();
         $user->username = $faker->userName;
         $user->fullname = $faker->name;
         $user->birthDate = $faker->dateTime;

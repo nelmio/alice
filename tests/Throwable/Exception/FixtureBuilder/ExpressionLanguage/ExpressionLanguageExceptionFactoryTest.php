@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
+use Error;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
@@ -22,77 +23,77 @@ use PHPUnit\Framework\TestCase;
  */
 class ExpressionLanguageExceptionFactoryTest extends TestCase
 {
-    public function testCreateForNoParserFoundForToken()
+    public function testCreateForNoParserFoundForToken(): void
     {
         $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $exception = ExpressionLanguageExceptionFactory::createForNoParserFoundForToken($token);
 
-        $this->assertEquals(
+        static::assertEquals(
             'No suitable token parser found to handle the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForExpectedMethodCallOnlyIfHasAParser()
+    public function testCreateForExpectedMethodCallOnlyIfHasAParser(): void
     {
         $exception = ExpressionLanguageExceptionFactory::createForExpectedMethodCallOnlyIfHasAParser('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected method "foo" to be called only if it has a parser.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForUnparsableToken()
+    public function testCreateForUnparsableToken(): void
     {
         $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $exception = ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not parse the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
-        $previous = new \Error();
+        $previous = new Error();
 
         $exception = ExpressionLanguageExceptionFactory::createForUnparsableToken($token, $code, $previous);
-        $this->assertEquals(
+        static::assertEquals(
             'Could not parse the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 
-    public function testCreateForMalformedFunction()
+    public function testCreateForMalformedFunction(): void
     {
         $exception = ExpressionLanguageExceptionFactory::createForMalformedFunction('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'The value "foo" contains an unclosed function.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForCouldNotLexValue()
+    public function testCreateForCouldNotLexValue(): void
     {
         $exception = ExpressionLanguageExceptionFactory::createForCouldNotLexValue('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not lex the value "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

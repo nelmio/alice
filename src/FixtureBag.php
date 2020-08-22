@@ -13,13 +13,15 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use ArrayIterator;
+use IteratorAggregate;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory;
 
 /**
  * Value object containing a list of fixtures.
  */
-final class FixtureBag implements \IteratorAggregate
+final class FixtureBag implements IteratorAggregate
 {
     /**
      * @var FixtureInterface[]
@@ -88,7 +90,7 @@ final class FixtureBag implements \IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->fixtures);
+        return new ArrayIterator($this->fixtures);
     }
 
     public function toArray(): array

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
@@ -28,6 +29,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver
@@ -37,7 +39,7 @@ class DynamicArrayValueResolverTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var \ReflectionProperty
+     * @var ReflectionProperty
      */
     private $resolverRefl;
 
@@ -46,40 +48,40 @@ class DynamicArrayValueResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $reflClass = new \ReflectionClass(DynamicArrayValueResolver::class);
+        $reflClass = new ReflectionClass(DynamicArrayValueResolver::class);
 
         $this->resolverRefl = $reflClass->getProperty('resolver');
         $this->resolverRefl->setAccessible(true);
     }
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(DynamicArrayValueResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(DynamicArrayValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(DynamicArrayValueResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(DynamicArrayValueResolver::class))->isCloneable());
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $resolver = new DynamicArrayValueResolver();
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        $this->assertEquals(new DynamicArrayValueResolver(), $resolver);
-        $this->assertEquals(new DynamicArrayValueResolver(new FakeValueResolver()), $newResolver);
+        static::assertEquals(new DynamicArrayValueResolver(), $resolver);
+        static::assertEquals(new DynamicArrayValueResolver(new FakeValueResolver()), $newResolver);
     }
 
-    public function testCanResolveDynamicArrayValues()
+    public function testCanResolveDynamicArrayValues(): void
     {
         $resolver = new DynamicArrayValueResolver();
 
-        $this->assertTrue($resolver->canResolve(new DynamicArrayValue(1, '')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new DynamicArrayValue(1, '')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testCannotResolveValueIfHasNoResolver()
+    public function testCannotResolveValueIfHasNoResolver(): void
     {
         $value = new DynamicArrayValue(1, '');
         $resolver = new DynamicArrayValueResolver();
@@ -90,7 +92,7 @@ class DynamicArrayValueResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    public function testIfQuantifierIsAValueThenItWillBeResolvedAsWell()
+    public function testIfQuantifierIsAValueThenItWillBeResolvedAsWell(): void
     {
         $quantifier = new FakeValue();
         $value = new DynamicArrayValue($quantifier, '');
@@ -114,7 +116,7 @@ class DynamicArrayValueResolverTest extends TestCase
         $resolver->resolve($value, $fixture, $set, $scope, $context);
     }
 
-    public function testThrowsExceptionIfAnInvalidQuantifierIsGiven()
+    public function testThrowsExceptionIfAnInvalidQuantifierIsGiven(): void
     {
         $quantifier = new FakeValue();
         $value = new DynamicArrayValue($quantifier, '');
@@ -136,13 +138,13 @@ class DynamicArrayValueResolverTest extends TestCase
 
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected quantifier to be a positive integer. Got "-1" for "dummy", check you dynamic arrays declarations (e.g. "<numberBetween(1, 2)>x @user*").');
 
         $resolver->resolve($value, $fixture, $set, $scope, $context);
     }
 
-    public function testDoesNotResolveElementIfIsNotAValue()
+    public function testDoesNotResolveElementIfIsNotAValue(): void
     {
         $quantifier = new FakeValue();
         $value = new DynamicArrayValue($quantifier, 'static val');
@@ -165,11 +167,11 @@ class DynamicArrayValueResolverTest extends TestCase
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
         $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertSame(['static val', 'static val'], $result->getValue());
-        $this->assertEquals($newSet, $result->getSet());
+        static::assertSame(['static val', 'static val'], $result->getValue());
+        static::assertEquals($newSet, $result->getSet());
     }
 
-    public function testResolvesElementAsManyTimeAsNecessaryIfItIsAValue()
+    public function testResolvesElementAsManyTimeAsNecessaryIfItIsAValue(): void
     {
         $quantifier = 2;
         $element = new FakeValue();
@@ -201,7 +203,7 @@ class DynamicArrayValueResolverTest extends TestCase
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
         $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertSame([10, 100], $result->getValue());
-        $this->assertEquals($setAfterSecondResolution, $result->getSet());
+        static::assertSame([10, 100], $result->getValue());
+        static::assertEquals($setAfterSecondResolution, $result->getSet());
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
+use InvalidArgumentException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -28,17 +29,17 @@ class SubPatternsLexerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsALexer()
+    public function testIsALexer(): void
     {
-        $this->assertTrue(is_a(SubPatternsLexer::class, LexerInterface::class, true));
+        static::assertTrue(is_a(SubPatternsLexer::class, LexerInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SubPatternsLexer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SubPatternsLexer::class))->isCloneable());
     }
 
-    public function testLexAValueToReturnAListOfTokens()
+    public function testLexAValueToReturnAListOfTokens(): void
     {
         $expected = [
             new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE)),
@@ -47,14 +48,14 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer(new FakeLexer());
         $actual = $lexer->lex('<{param}>');
 
-        $this->assertCount(count($expected), $actual);
-        $this->assertEquals($expected, $actual);
+        static::assertCount(count($expected), $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider lineBreaksProvider
      */
-    public function testLexAFunctionContainingLineBreaks(string $lineBreak)
+    public function testLexAFunctionContainingLineBreaks(string $lineBreak): void
     {
         $expected = [
             new Token('<identity("foo'.$lineBreak.'bar")>', new TokenType(TokenType::FUNCTION_TYPE)),
@@ -63,11 +64,11 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer(new FakeLexer());
         $actual = $lexer->lex('<identity("foo'.$lineBreak.'bar")>');
 
-        $this->assertCount(count($expected), $actual);
-        $this->assertEquals($expected, $actual);
+        static::assertCount(count($expected), $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testUsesDecoratedLexerToLexReferenceValues()
+    public function testUsesDecoratedLexerToLexReferenceValues(): void
     {
         $value = '@user';
         $expected = [
@@ -82,13 +83,13 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer($referenceLexer);
         $actual = $lexer->lex($value);
 
-        $this->assertCount(count($expected), $actual);
-        $this->assertEquals($expected, $actual);
+        static::assertCount(count($expected), $actual);
+        static::assertEquals($expected, $actual);
 
         $referenceLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testReturnsAStringTokenIfCannotLexValue()
+    public function testReturnsAStringTokenIfCannotLexValue(): void
     {
         $value = '<{foo';
         $expected = [
@@ -98,15 +99,15 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer(new FakeLexer());
         $actual = $lexer->lex($value);
 
-        $this->assertCount(count($expected), $actual);
-        $this->assertEquals($expected, $actual);
+        static::assertCount(count($expected), $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionWhenAnInvalidValueIsGiven()
+    public function testThrowsAnExceptionWhenAnInvalidValueIsGiven(): void
     {
         $lexer = new SubPatternsLexer(new FakeLexer());
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid token "<foo>" found.');
 
         $lexer->lex('<foo>');

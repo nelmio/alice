@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
-class InstantiatorNotFoundException extends \LogicException
+use LogicException;
+
+class InstantiatorNotFoundException extends LogicException
 {
 }

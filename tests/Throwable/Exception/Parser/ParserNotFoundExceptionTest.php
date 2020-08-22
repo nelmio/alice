@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Parser;
 
+use LogicException;
 use Nelmio\Alice\Throwable\ParseThrowable;
 use PHPUnit\Framework\TestCase;
 
@@ -21,19 +22,19 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserNotFoundExceptionTest extends TestCase
 {
-    public function testIsALogicException()
+    public function testIsALogicException(): void
     {
-        $this->assertTrue(is_a(ParserNotFoundException::class, \LogicException::class, true));
+        static::assertTrue(is_a(ParserNotFoundException::class, LogicException::class, true));
     }
 
-    public function testIsNotAParseThrowable()
+    public function testIsNotAParseThrowable(): void
     {
-        $this->assertFalse(is_a(ParserNotFoundException::class, ParseThrowable::class, true));
+        static::assertFalse(is_a(ParserNotFoundException::class, ParseThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildParserNotFoundException();
-        $this->assertInstanceOf(ChildParserNotFoundException::class, $exception);
+        static::assertInstanceOf(ChildParserNotFoundException::class, $exception);
     }
 }

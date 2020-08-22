@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class NoSuchMethodExceptionFactoryTest extends TestCase
 {
-    public function testCreateForFixture()
+    public function testCreateForFixture(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
         $methodCall = new FixtureMethodCallValue(
@@ -36,12 +36,12 @@ class NoSuchMethodExceptionFactoryTest extends TestCase
 
         $exception = NoSuchMethodExceptionFactory::createForFixture($fixture, $methodCall);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find the method "foo" of the object "dummy" (class: Dummy).',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
@@ -49,11 +49,11 @@ class NoSuchMethodExceptionFactoryTest extends TestCase
 
         $exception = NoSuchMethodExceptionFactory::createForFixture($fixture, $methodCall, $code, $previous);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find the method "foo" of the object "dummy" (class: Dummy).',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 }

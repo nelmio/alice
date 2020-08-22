@@ -27,7 +27,6 @@ interface ObjectGeneratorInterface
      *
      * @param FixtureInterface   $fixture    Fixture to generate
      * @param ResolvedFixtureSet $fixtureSet List of fixtures being generated
-     * @param GenerationContext  $context
      *
      * @throws GenerationThrowable
      *

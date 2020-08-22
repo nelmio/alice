@@ -25,8 +25,8 @@ use ReflectionClass;
  */
 class TemplateFixtureResolverTest extends TestCase
 {
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(TemplateFixtureResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(TemplateFixtureResolver::class))->isCloneable());
     }
 }

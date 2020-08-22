@@ -108,7 +108,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         return new ResolvedValueWithFixtureSet($generatedValue->getValue(), $fixtureSet);
     }
 
-    private function checkResolver(string $checkedMethod)
+    private function checkResolver(string $checkedMethod): void
     {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall($checkedMethod);

@@ -20,6 +20,8 @@ use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\FixtureBag
@@ -27,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 class FixtureBagTest extends TestCase
 {
     /**
-     * @var \ReflectionProperty
+     * @var ReflectionProperty
      */
     private $propRefl;
 
@@ -36,33 +38,33 @@ class FixtureBagTest extends TestCase
      */
     protected function setUp(): void
     {
-        $propRelf = (new \ReflectionClass(FixtureBag::class))->getProperty('fixtures');
+        $propRelf = (new ReflectionClass(FixtureBag::class))->getProperty('fixtures');
         $propRelf->setAccessible(true);
 
         $this->propRefl = $propRelf;
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $fixture = new DummyFixture('foo');
         $bag = (new FixtureBag())->with($fixture);
 
-        $this->assertTrue($bag->has('foo'));
-        $this->assertFalse($bag->has('bar'));
+        static::assertTrue($bag->has('foo'));
+        static::assertFalse($bag->has('bar'));
 
-        $this->assertEquals($fixture, $bag->get('foo'));
+        static::assertEquals($fixture, $bag->get('foo'));
         try {
             $bag->get('bar');
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (FixtureNotFoundException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not find the fixture "bar".',
                 $exception->getMessage()
             );
         }
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $fixture = new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
         $bag = (new FixtureBag())->with($fixture);
@@ -73,14 +75,14 @@ class FixtureBagTest extends TestCase
         // Mutate retrieved fixture
         $bag->get('foo')->setSpecs(SpecificationBagFactory::create(new NoMethodCall()));
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FixtureBag())
                 ->with(new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create())),
             $bag
         );
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $fixture = new DummyFixture('foo');
 
@@ -88,20 +90,20 @@ class FixtureBagTest extends TestCase
         $newBag = $bag->with($fixture);
         $newBagEmptied = $newBag->without($fixture);
 
-        $this->assertInstanceOf(FixtureBag::class, $newBag);
-        $this->assertNotSame($newBag, $bag);
+        static::assertInstanceOf(FixtureBag::class, $newBag);
+        static::assertNotSame($newBag, $bag);
 
-        $this->assertEquals(new FixtureBag(), $bag);
+        static::assertEquals(new FixtureBag(), $bag);
         $this->assertSameFixtures(
             [
                 'foo' => $fixture,
             ],
             $newBag
         );
-        $this->assertEquals(new FixtureBag(), $newBagEmptied);
+        static::assertEquals(new FixtureBag(), $newBagEmptied);
     }
 
-    public function testIfTwoFixturesWithTheSameIdIsAddedThenTheFirstOneWillBeOverridden()
+    public function testIfTwoFixturesWithTheSameIdIsAddedThenTheFirstOneWillBeOverridden(): void
     {
         $fixture1 = new DummyFixture('foo');
         $fixture2 = new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
@@ -125,7 +127,7 @@ class FixtureBagTest extends TestCase
         );
     }
 
-    public function testMergeBagsWillReturnANewInstanceWithTheMergedFixtures()
+    public function testMergeBagsWillReturnANewInstanceWithTheMergedFixtures(): void
     {
         $fixture1 = new DummyFixture('foo');
         $fixture2 = new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
@@ -138,7 +140,7 @@ class FixtureBagTest extends TestCase
         ;
         $bag3 = $bag1->mergeWith($bag2);
 
-        $this->assertInstanceOf(FixtureBag::class, $bag2);
+        static::assertInstanceOf(FixtureBag::class, $bag2);
         $this->assertSameFixtures(
             [
                 'foo' => $fixture1,
@@ -161,7 +163,7 @@ class FixtureBagTest extends TestCase
         );
     }
 
-    public function testIsIterable()
+    public function testIsIterable(): void
     {
         $fixture1 = new DummyFixture('foo');
         $fixture2 = new DummyFixture('bar');
@@ -176,10 +178,10 @@ class FixtureBagTest extends TestCase
             $fixtures[$key] = $value;
         }
 
-        $this->assertSame($fixtures, $this->propRefl->getValue($bag));
+        static::assertSame($fixtures, $this->propRefl->getValue($bag));
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $fixture1 = new DummyFixture('foo');
         $fixture2 = new DummyFixture('bar');
@@ -189,7 +191,7 @@ class FixtureBagTest extends TestCase
             ->with($fixture2)
         ;
 
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'foo' => $fixture1,
                 'bar' => $fixture2,
@@ -198,13 +200,13 @@ class FixtureBagTest extends TestCase
         );
     }
 
-    private function assertSameFixtures(array $expected, FixtureBag $actual)
+    private function assertSameFixtures(array $expected, FixtureBag $actual): void
     {
-        $this->assertEquals($expected, $this->propRefl->getValue($actual));
+        static::assertEquals($expected, $this->propRefl->getValue($actual));
     }
 
-    private function assertNotSameFixtures(array $expected, FixtureBag $actual)
+    private function assertNotSameFixtures(array $expected, FixtureBag $actual): void
     {
-        $this->assertNotEquals($expected, $this->propRefl->getValue($actual));
+        static::assertNotEquals($expected, $this->propRefl->getValue($actual));
     }
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
-class ResolverNotFoundException extends \LogicException
+use LogicException;
+
+class ResolverNotFoundException extends LogicException
 {
 }

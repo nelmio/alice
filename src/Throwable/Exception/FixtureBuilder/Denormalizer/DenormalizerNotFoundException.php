@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
-class DenormalizerNotFoundException extends \LogicException
+use LogicException;
+
+class DenormalizerNotFoundException extends LogicException
 {
 }

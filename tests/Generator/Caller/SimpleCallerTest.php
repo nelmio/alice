@@ -48,19 +48,19 @@ class SimpleCallerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleCaller::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleCaller::class))->isCloneable());
     }
 
-    public function testIsACaller()
+    public function testIsACaller(): void
     {
-        $this->assertTrue(is_a(SimpleCaller::class, CallerInterface::class, true));
+        static::assertTrue(is_a(SimpleCaller::class, CallerInterface::class, true));
     }
 
-    public function testIsValueResolverAware()
+    public function testIsValueResolverAware(): void
     {
-        $this->assertEquals(
+        static::assertEquals(
             (
                 new SimpleCaller(
                     new FakeCallProcessor()
@@ -73,7 +73,7 @@ class SimpleCallerTest extends TestCase
         );
     }
 
-    public function testThrowsAnExceptionIfDoesNotHaveAResolver()
+    public function testThrowsAnExceptionIfDoesNotHaveAResolver(): void
     {
         $obj = new FakeObject();
 
@@ -87,7 +87,7 @@ class SimpleCallerTest extends TestCase
         $caller->doCallsOn($obj, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testCallsMethodsOntoTheGivenObject()
+    public function testCallsMethodsOntoTheGivenObject(): void
     {
         $object = new SimpleObject('dummy', new stdClass());
 
@@ -173,7 +173,7 @@ class SimpleCallerTest extends TestCase
         $callProcessorProphecy->process(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
-    public function testResolvesAllPropertyValues()
+    public function testResolvesAllPropertyValues(): void
     {
         $object = new SimpleObject('dummy', new Dummy());
 
@@ -329,13 +329,13 @@ class SimpleCallerTest extends TestCase
         $caller = new SimpleCaller($callProcessor, $resolver);
         $actual = $caller->doCallsOn($object, $originalSet, $context);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $resolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
         $callProcessorProphecy->process(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
-    public function testThrowsAGenerationThrowableIfResolutionFails()
+    public function testThrowsAGenerationThrowableIfResolutionFails(): void
     {
         $object = new SimpleObject('dummy', new Dummy());
 
@@ -368,7 +368,7 @@ class SimpleCallerTest extends TestCase
         try {
             $caller->doCallsOn($object, $set, new GenerationContext());
 
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (GenerationThrowable $throwable) {
             // Expected result
         }

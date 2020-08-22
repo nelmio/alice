@@ -21,16 +21,16 @@ use PHPUnit\Framework\TestCase;
  */
 class InstantiatedReferenceTest extends TestCase
 {
-    public function testIsAReference()
+    public function testIsAReference(): void
     {
-        $this->assertTrue(is_a(InstantiatedReference::class, ServiceReferenceInterface::class, true));
+        static::assertTrue(is_a(InstantiatedReference::class, ServiceReferenceInterface::class, true));
     }
     
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = 'nelmio.alice.user_factory';
         $definition = new InstantiatedReference($reference);
         
-        $this->assertEquals($reference, $definition->getId());
+        static::assertEquals($reference, $definition->getId());
     }
 }

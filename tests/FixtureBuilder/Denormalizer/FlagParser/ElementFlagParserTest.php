@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser
@@ -33,12 +34,12 @@ class ElementFlagParserTest extends FlagParserTestCase
         $this->parser = new ElementFlagParser(new ElementParser());
     }
 
-    public function testIsAFlagParser()
+    public function testIsAFlagParser(): void
     {
-        $this->assertTrue(is_a(ElementFlagParser::class, FlagParserInterface::class, true));
+        static::assertTrue(is_a(ElementFlagParser::class, FlagParserInterface::class, true));
     }
 
-    public function testIfNoFlagIsFoundThenReturnsEmptyFlagBag()
+    public function testIfNoFlagIsFoundThenReturnsEmptyFlagBag(): void
     {
         $element = 'dummy _';
         $expected = new FlagBag('dummy _');
@@ -46,10 +47,10 @@ class ElementFlagParserTest extends FlagParserTestCase
         $parser = new ElementFlagParser(new FakeFlagParser());
         $actual = $parser->parse($element);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testIfAFlagIsFoundThenParsesItWithDecoratedParserBeforeReturningTheFlags()
+    public function testIfAFlagIsFoundThenParsesItWithDecoratedParserBeforeReturningTheFlags(): void
     {
         $element = 'dummy ( flag1 , flag2 )';
 
@@ -78,38 +79,38 @@ class ElementFlagParserTest extends FlagParserTestCase
         $parser = new ElementFlagParser($decoratedParser);
         $actual = $parser->parse($element);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider provideElements
      */
-    public function testCanParseElements(string $element, FlagBag $expected = null)
+    public function testCanParseElements(string $element, FlagBag $expected = null): void
     {
         $actual = $this->parser->parse($element);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider provideMalformedElements
      */
-    public function testCannotParseMalformedElements(string $element)
+    public function testCannotParseMalformedElements(string $element): void
     {
         try {
             $this->parser->parse($element);
-            $this->fail('Expected exception to be thrown.');
-        } catch (\RuntimeException $exception) {
+            static::fail('Expected exception to be thrown.');
+        } catch (RuntimeException $exception) {
             // expected
         }
     }
 
-    public function assertCanParse(string $element, FlagBag $expected)
+    public function assertCanParse(string $element, FlagBag $expected): void
     {
         // Do nothing: skip those tests as are irrelevant for this parser
     }
 
-    public function assertCannotParse(string $element)
+    public function assertCannotParse(string $element): void
     {
         // Do nothing: skip those tests as are irrelevant for this parser
     }

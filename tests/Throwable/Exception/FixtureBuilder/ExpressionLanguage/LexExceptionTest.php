@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
+use Exception;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 use PHPUnit\Framework\TestCase;
 
@@ -21,19 +22,19 @@ use PHPUnit\Framework\TestCase;
  */
 class LexExceptionTest extends TestCase
 {
-    public function testIsAnException()
+    public function testIsAnException(): void
     {
-        $this->assertTrue(is_a(LexException::class, \Exception::class, true));
+        static::assertTrue(is_a(LexException::class, Exception::class, true));
     }
 
-    public function testIsAParseThrowable()
+    public function testIsAParseThrowable(): void
     {
-        $this->assertTrue(is_a(LexException::class, ExpressionLanguageParseThrowable::class, true));
+        static::assertTrue(is_a(LexException::class, ExpressionLanguageParseThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildLexException();
-        $this->assertInstanceOf(ChildLexException::class, $exception);
+        static::assertInstanceOf(ChildLexException::class, $exception);
     }
 }

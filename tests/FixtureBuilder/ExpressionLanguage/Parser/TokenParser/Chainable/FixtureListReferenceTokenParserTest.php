@@ -27,28 +27,28 @@ use ReflectionClass;
  */
 class FixtureListReferenceTokenParserTest extends TestCase
 {
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(FixtureListReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(FixtureListReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FixtureListReferenceTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FixtureListReferenceTokenParser::class))->isCloneable());
     }
 
     /**
      * @dataProvider provideTokens
      */
-    public function testCanParseListReferenceTokens(Token $token, bool $expected)
+    public function testCanParseListReferenceTokens(Token $token, bool $expected): void
     {
         $parser = new FixtureListReferenceTokenParser();
         $actual = $parser->canParse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfInvalidTokenIsGiven()
+    public function testThrowsAnExceptionIfInvalidTokenIsGiven(): void
     {
         $token = new Token('', new TokenType(TokenType::LIST_REFERENCE_TYPE));
 
@@ -60,7 +60,7 @@ class FixtureListReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfAMalformedTokenIsGiven()
+    public function testThrowsAnExceptionIfAMalformedTokenIsGiven(): void
     {
         $token = new Token('', new TokenType(TokenType::LIST_REFERENCE_TYPE));
 
@@ -72,7 +72,7 @@ class FixtureListReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testReturnsListOfPossibleValues()
+    public function testReturnsListOfPossibleValues(): void
     {
         $token = new Token('@user_{alice, bob}', new TokenType(TokenType::LIST_REFERENCE_TYPE));
         $expected = new ArrayValue([
@@ -83,7 +83,7 @@ class FixtureListReferenceTokenParserTest extends TestCase
         $parser = new FixtureListReferenceTokenParser();
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     public function provideTokens()

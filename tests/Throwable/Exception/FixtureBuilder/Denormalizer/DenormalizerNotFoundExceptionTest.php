@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
+use LogicException;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use PHPUnit\Framework\TestCase;
 
@@ -21,19 +22,19 @@ use PHPUnit\Framework\TestCase;
  */
 class DenormalizerNotFoundExceptionTest extends TestCase
 {
-    public function testIsALogicException()
+    public function testIsALogicException(): void
     {
-        $this->assertTrue(is_a(DenormalizerNotFoundException::class, \LogicException::class, true));
+        static::assertTrue(is_a(DenormalizerNotFoundException::class, LogicException::class, true));
     }
 
-    public function testIsNotADenormalizationThrowable()
+    public function testIsNotADenormalizationThrowable(): void
     {
-        $this->assertFalse(is_a(DenormalizerNotFoundException::class, DenormalizationThrowable::class, true));
+        static::assertFalse(is_a(DenormalizerNotFoundException::class, DenormalizationThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildDenormalizerNotFoundException();
-        $this->assertInstanceOf(ChildDenormalizerNotFoundException::class, $exception);
+        static::assertInstanceOf(ChildDenormalizerNotFoundException::class, $exception);
     }
 }

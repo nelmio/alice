@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Parser;
 
+use Exception;
 use Nelmio\Alice\Throwable\ParseThrowable;
 use PHPUnit\Framework\TestCase;
 
@@ -21,19 +22,19 @@ use PHPUnit\Framework\TestCase;
  */
 class UnparsableFileExceptionTest extends TestCase
 {
-    public function testIsAnException()
+    public function testIsAnException(): void
     {
-        $this->assertTrue(is_a(UnparsableFileException::class, \Exception::class, true));
+        static::assertTrue(is_a(UnparsableFileException::class, Exception::class, true));
     }
 
-    public function testIsAParseThrowable()
+    public function testIsAParseThrowable(): void
     {
-        $this->assertTrue(is_a(UnparsableFileException::class, ParseThrowable::class, true));
+        static::assertTrue(is_a(UnparsableFileException::class, ParseThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildUnparsableFileException();
-        $this->assertInstanceOf(ChildUnparsableFileException::class, $exception);
+        static::assertInstanceOf(ChildUnparsableFileException::class, $exception);
     }
 }

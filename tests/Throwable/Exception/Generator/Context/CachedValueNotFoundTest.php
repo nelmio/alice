@@ -20,15 +20,15 @@ use PHPUnit\Framework\TestCase;
  */
 class CachedValueNotFoundTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $exception = CachedValueNotFound::create('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'No value with the key "foo" was found in the cache.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

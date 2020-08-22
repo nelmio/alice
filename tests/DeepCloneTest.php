@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use DateTime;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers ::\Nelmio\Alice\deep_clone
@@ -23,25 +26,25 @@ class DeepCloneTest extends TestCase
     /**
      * @dataProvider provideScalarValues
      */
-    public function testDeepCloneScalarsReturnsScalar($value)
+    public function testDeepCloneScalarsReturnsScalar($value): void
     {
         $clone = deep_clone($value);
 
-        $this->assertEquals($value, $clone);
+        static::assertEquals($value, $clone);
     }
 
-    public function testDeepCloneObjects()
+    public function testDeepCloneObjects(): void
     {
-        $foo = new \stdClass();
-        $bar = new \stdClass();
+        $foo = new stdClass();
+        $bar = new stdClass();
 
         $foo->name = 'foo';
         $foo->bar = $bar;
-        $foo->date = new \DateTime();
+        $foo->date = new DateTime();
 
         $bar->name = 'bar';
         $bar->foo = $foo;
-        $bar->date = new \DateTimeImmutable();
+        $bar->date = new DateTimeImmutable();
 
         $fooClone = deep_clone($foo);
 
@@ -54,10 +57,10 @@ class DeepCloneTest extends TestCase
         $this->assertEqualsButNotSame($foo, $barClone->foo);
     }
 
-    public function testDeepCloneArrays()
+    public function testDeepCloneArrays(): void
     {
-        $foo = new \stdClass();
-        $bar = new \stdClass();
+        $foo = new stdClass();
+        $bar = new stdClass();
 
         $arr1 = [$foo];
         $arr2 = [$bar];
@@ -79,10 +82,10 @@ class DeepCloneTest extends TestCase
         $this->assertEqualsButNotSame($foo, $barClone->foo);
     }
 
-    public function testDeepCloneClosure()
+    public function testDeepCloneClosure(): void
     {
-        $foo = new \stdClass();
-        $bar = new \stdClass();
+        $foo = new stdClass();
+        $bar = new stdClass();
 
         $c1 = function () use ($foo) {
             return $foo;
@@ -96,8 +99,8 @@ class DeepCloneTest extends TestCase
 
         $fooClone = deep_clone($c1)();
 
-        $this->assertSame($foo, $fooClone);
-        $this->assertSame($bar, $fooClone->bar);
+        static::assertSame($foo, $fooClone);
+        static::assertSame($bar, $fooClone->bar);
     }
 
     public function provideScalarValues()
@@ -117,9 +120,9 @@ class DeepCloneTest extends TestCase
         ];
     }
 
-    private function assertEqualsButNotSame($expected, $value)
+    private function assertEqualsButNotSame($expected, $value): void
     {
-        $this->assertEquals($expected, $value);
-        $this->assertNotSame($expected, $value);
+        static::assertEquals($expected, $value);
+        static::assertNotSame($expected, $value);
     }
 }

@@ -15,6 +15,7 @@ namespace Nelmio\Alice\PropertyAccess;
 
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\PropertyAccess\NoSuchPropertyExceptionFactory;
+use stdClass;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class StdPropertyAccessor implements PropertyAccessorInterface
@@ -34,9 +35,9 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
     /**
      * @inheritdoc
      */
-    public function setValue(&$objectOrArray, $propertyPath, $value)
+    public function setValue(&$objectOrArray, $propertyPath, $value): void
     {
-        if ($objectOrArray instanceof \stdClass) {
+        if ($objectOrArray instanceof stdClass) {
             $objectOrArray->{$propertyPath} = $value;
 
             return;
@@ -50,7 +51,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
      */
     public function getValue($objectOrArray, $propertyPath)
     {
-        if (false === $objectOrArray instanceof \stdClass) {
+        if (false === $objectOrArray instanceof stdClass) {
             return $this->decoratedPropertyAccessor->getValue($objectOrArray, $propertyPath);
         }
 
@@ -66,7 +67,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
      */
     public function isWritable($objectOrArray, $propertyPath)
     {
-        return ($objectOrArray instanceof \stdClass)
+        return ($objectOrArray instanceof stdClass)
             ? true
             : $this->decoratedPropertyAccessor->isWritable($objectOrArray, $propertyPath)
         ;
@@ -77,7 +78,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
      */
     public function isReadable($objectOrArray, $propertyPath)
     {
-        return ($objectOrArray instanceof \stdClass)
+        return ($objectOrArray instanceof stdClass)
             ? isset($objectOrArray->$propertyPath)
             : $this->decoratedPropertyAccessor->isReadable($objectOrArray, $propertyPath)
         ;

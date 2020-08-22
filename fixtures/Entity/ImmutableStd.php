@@ -24,7 +24,7 @@ class ImmutableStd
         $this->properties = deep_clone($properties);
     }
 
-    public function __set(string $name, $value)
+    public function __set(string $name, $value): void
     {
         $this->properties[$name] = deep_clone($value);
     }

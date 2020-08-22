@@ -34,27 +34,27 @@ class DynamicArrayTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(DynamicArrayTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(DynamicArrayTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(DynamicArrayTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(DynamicArrayTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseDynamicArrayTokens()
+    public function testCanParseDynamicArrayTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new DynamicArrayTokenParser();
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
+    public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
     {
         $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $parser = new DynamicArrayTokenParser();
@@ -65,7 +65,7 @@ class DynamicArrayTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfCouldNotParseToken()
+    public function testThrowsAnExceptionIfCouldNotParseToken(): void
     {
         $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $parser = new DynamicArrayTokenParser(new FakeParser());
@@ -76,7 +76,7 @@ class DynamicArrayTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testReturnsADynamicArrayIfCanParseToken()
+    public function testReturnsADynamicArrayIfCanParseToken(): void
     {
         $token = new Token('10x @user', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
 
@@ -91,12 +91,12 @@ class DynamicArrayTokenParserTest extends TestCase
         $parser = new DynamicArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testParsedDynamicArrayQuantifierCanBeAValue()
+    public function testParsedDynamicArrayQuantifierCanBeAValue(): void
     {
         $token = new Token('10x @user', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
 
@@ -111,7 +111,7 @@ class DynamicArrayTokenParserTest extends TestCase
         $parser = new DynamicArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }

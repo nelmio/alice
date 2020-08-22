@@ -47,7 +47,7 @@ final class DummyMethodCall implements MethodCallInterface
     /**
      * @inheritdoc
      */
-    public function getCaller()
+    public function getCaller(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }

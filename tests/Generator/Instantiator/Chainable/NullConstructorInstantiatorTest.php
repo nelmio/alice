@@ -46,24 +46,24 @@ class NullConstructorInstantiatorTest extends TestCase
         $this->instantiator = new NullConstructorInstantiator();
     }
 
-    public function testIsAChainableInstantiator()
+    public function testIsAChainableInstantiator(): void
     {
-        $this->assertTrue(is_a(NullConstructorInstantiator::class, ChainableInstantiatorInterface::class, true));
+        static::assertTrue(is_a(NullConstructorInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(NullConstructorInstantiator::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(NullConstructorInstantiator::class))->isCloneable());
     }
 
-    public function testCanInstantiateFixtureUsingADefaultConstructor()
+    public function testCanInstantiateFixtureUsingADefaultConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
 
-        $this->assertTrue($this->instantiator->canInstantiate($fixture));
+        static::assertTrue($this->instantiator->canInstantiate($fixture));
     }
 
-    public function testIfCannotGetConstructorReflectionTriesToInstantiateObjectWithoutArguments()
+    public function testIfCannotGetConstructorReflectionTriesToInstantiateObjectWithoutArguments(): void
     {
         $fixture = new SimpleFixture('dummy', DummyWithDefaultConstructor::class, SpecificationBagFactory::create());
         $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
@@ -71,10 +71,10 @@ class NullConstructorInstantiatorTest extends TestCase
         $expected = new DummyWithDefaultConstructor();
         $actual = $set->getObjects()->get($fixture)->getInstance();
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfInstantiatingObjectWithoutArgumentsFails()
+    public function testThrowsAnExceptionIfInstantiatingObjectWithoutArgumentsFails(): void
     {
         $fixture = new SimpleFixture('dummy', AbstractDummy::class, SpecificationBagFactory::create());
 
@@ -84,24 +84,24 @@ class NullConstructorInstantiatorTest extends TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testThrowsAnExceptionIfReflectionFailsWithAnotherErrorThanMethodNotExisting()
+    public function testThrowsAnExceptionIfReflectionFailsWithAnotherErrorThanMethodNotExisting(): void
     {
         try {
             $fixture = new SimpleFixture('dummy', 'Unknown', SpecificationBagFactory::create());
             $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (InstantiationException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not get the necessary data on the constructor to instantiate "dummy".',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNotNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
         }
     }
 
-    public function testThrowsAnExceptionIfObjectConstructorHasMandatoryParameters()
+    public function testThrowsAnExceptionIfObjectConstructorHasMandatoryParameters(): void
     {
         $fixture = new SimpleFixture('dummy', DummyWithRequiredParameterInConstructor::class, SpecificationBagFactory::create());
 
@@ -111,7 +111,7 @@ class NullConstructorInstantiatorTest extends TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testThrowsAnExceptionIfObjectInstantiationFailsUnderNominalConditions()
+    public function testThrowsAnExceptionIfObjectInstantiationFailsUnderNominalConditions(): void
     {
         $fixture = new SimpleFixture('dummy', DummyWithExplicitDefaultConstructorThrowingException::class, SpecificationBagFactory::create());
 
@@ -121,7 +121,7 @@ class NullConstructorInstantiatorTest extends TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testThrowsAnExceptionIfObjectConstructorIsPrivate()
+    public function testThrowsAnExceptionIfObjectConstructorIsPrivate(): void
     {
         $fixture = new SimpleFixture('dummy', DummyWithPrivateConstructor::class, SpecificationBagFactory::create());
 
@@ -131,7 +131,7 @@ class NullConstructorInstantiatorTest extends TestCase
         $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
     }
 
-    public function testThrowsAnExceptionIfObjectConstructorIsProtected()
+    public function testThrowsAnExceptionIfObjectConstructorIsProtected(): void
     {
         $fixture = new SimpleFixture('dummy', DummyWithProtectedConstructor::class, SpecificationBagFactory::create());
 

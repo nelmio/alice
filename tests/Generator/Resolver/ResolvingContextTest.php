@@ -21,36 +21,36 @@ use PHPUnit\Framework\TestCase;
  */
 class ResolvingContextTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $context = new ResolvingContext();
-        $this->assertFalse($context->has('foo'));
+        static::assertFalse($context->has('foo'));
 
         $context = new ResolvingContext('foo');
-        $this->assertTrue($context->has('foo'));
+        static::assertTrue($context->has('foo'));
     }
 
-    public function testMutator()
+    public function testMutator(): void
     {
         $context = new ResolvingContext();
 
-        $this->assertFalse($context->has('foo'));
+        static::assertFalse($context->has('foo'));
         $context->add('foo');
-        $this->assertTrue($context->has('foo'));
+        static::assertTrue($context->has('foo'));
     }
 
-    public function testStaticFactoryMethodReturnsExistingInstance()
+    public function testStaticFactoryMethodReturnsExistingInstance(): void
     {
         $context = ResolvingContext::createFrom(null, 'foo');
-        $this->assertTrue($context->has('foo'));
+        static::assertTrue($context->has('foo'));
 
         $newContext = ResolvingContext::createFrom($context, 'ping');
-        $this->assertSame($context, $newContext);
-        $this->assertTrue($context->has('foo'));
-        $this->assertTrue($context->has('ping'));
+        static::assertSame($context, $newContext);
+        static::assertTrue($context->has('foo'));
+        static::assertTrue($context->has('ping'));
     }
 
-    public function testFactoryMethodCannotTriggerACircularReference()
+    public function testFactoryMethodCannotTriggerACircularReference(): void
     {
         $context = new ResolvingContext('foo');
         $context->checkForCircularReference('foo');
@@ -64,13 +64,13 @@ class ResolvingContextTest extends TestCase
         $context->add('foo');
         try {
             $context->checkForCircularReference('foo');
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (CircularReferenceException $exception) {
             // Expected result
         }
     }
 
-    public function testThrowsAnExceptionWhenACircularReferenceIsDetected()
+    public function testThrowsAnExceptionWhenACircularReferenceIsDetected(): void
     {
         $context = new ResolvingContext('bar');
         $context->checkForCircularReference('foo');
@@ -81,9 +81,9 @@ class ResolvingContextTest extends TestCase
         $context->add('foo');
         try {
             $context->checkForCircularReference('foo');
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (CircularReferenceException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Circular reference detected for the parameter "foo" while resolving ["bar", "foo"].',
                 $exception->getMessage()
             );
@@ -95,9 +95,9 @@ class ResolvingContextTest extends TestCase
         $context->add('foo');
         try {
             $context->checkForCircularReference('foo');
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (CircularReferenceException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Circular reference detected for the parameter "foo" while resolving ["foo"].',
                 $exception->getMessage()
             );

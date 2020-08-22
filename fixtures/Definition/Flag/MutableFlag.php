@@ -41,7 +41,7 @@ class MutableFlag implements FlagInterface
         return $this->stringValue;
     }
 
-    public function setStringValue(string $value)
+    public function setStringValue(string $value): void
     {
         $this->stringValue = $value;
     }

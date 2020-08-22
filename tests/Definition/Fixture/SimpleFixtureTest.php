@@ -25,17 +25,17 @@ use PHPUnit\Framework\TestCase;
  */
 class SimpleFixtureTest extends TestCase
 {
-    public function testIsAFixtureId()
+    public function testIsAFixtureId(): void
     {
-        $this->assertTrue(is_a(SimpleFixture::class, FixtureIdInterface::class, true));
+        static::assertTrue(is_a(SimpleFixture::class, FixtureIdInterface::class, true));
     }
 
-    public function testIsAFixture()
+    public function testIsAFixture(): void
     {
-        $this->assertTrue(is_a(SimpleFixture::class, FixtureInterface::class, true));
+        static::assertTrue(is_a(SimpleFixture::class, FixtureInterface::class, true));
     }
     
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = 'user0';
         $className = 'Nelmio\Alice\Entity\User';
@@ -43,14 +43,14 @@ class SimpleFixtureTest extends TestCase
 
         $fixture = new SimpleFixture($reference, $className, $specs);
 
-        $this->assertEquals($reference, $fixture->getId());
-        $this->assertEquals($className, $fixture->getClassName());
-        $this->assertEquals($specs, $fixture->getSpecs());
+        static::assertEquals($reference, $fixture->getId());
+        static::assertEquals($className, $fixture->getClassName());
+        static::assertEquals($specs, $fixture->getSpecs());
         try {
             $fixture->getValueForCurrent();
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (NoValueForCurrentException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'No value for \'<current()>\' found for the fixture "user0".',
                 $exception->getMessage()
             );
@@ -58,13 +58,13 @@ class SimpleFixtureTest extends TestCase
 
         $fixture = new SimpleFixture($reference, $className, $specs, 'alice');
 
-        $this->assertEquals($reference, $fixture->getId());
-        $this->assertEquals($className, $fixture->getClassName());
-        $this->assertEquals($specs, $fixture->getSpecs());
-        $this->assertEquals('alice', $fixture->getValueForCurrent());
+        static::assertEquals($reference, $fixture->getId());
+        static::assertEquals($className, $fixture->getClassName());
+        static::assertEquals($specs, $fixture->getSpecs());
+        static::assertEquals('alice', $fixture->getValueForCurrent());
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $reference = 'user0';
         $className = 'Nelmio\Alice\Entity\User';
@@ -74,10 +74,10 @@ class SimpleFixtureTest extends TestCase
         $fixture = new SimpleFixture($reference, $className, $specs);
         $newFixture = $fixture->withSpecs($newSpecs);
 
-        $this->assertInstanceOf(SimpleFixture::class, $newFixture);
-        $this->assertNotSame($fixture, $newFixture);
+        static::assertInstanceOf(SimpleFixture::class, $newFixture);
+        static::assertNotSame($fixture, $newFixture);
 
-        $this->assertEquals($specs, $fixture->getSpecs());
-        $this->assertEquals($newSpecs, $newFixture->getSpecs());
+        static::assertEquals($specs, $fixture->getSpecs());
+        static::assertEquals($newSpecs, $newFixture->getSpecs());
     }
 }

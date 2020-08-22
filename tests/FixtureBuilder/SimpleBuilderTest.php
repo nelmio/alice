@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\SimpleBuilder
@@ -30,24 +31,24 @@ class SimpleBuilderTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAFixtureBuilder()
+    public function testIsAFixtureBuilder(): void
     {
-        $this->assertTrue(is_a(SimpleBuilder::class, FixtureBuilderInterface::class, true));
+        static::assertTrue(is_a(SimpleBuilder::class, FixtureBuilderInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleBuilder::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleBuilder::class))->isCloneable());
     }
 
-    public function testBuildSet()
+    public function testBuildSet(): void
     {
         $data = [
-            'dummy' => new \stdClass(),
+            'dummy' => new stdClass(),
         ];
         $injectedParameters = ['foo' => 'bar'];
         $injectedObjects = [
-            'another_dummy' => new \stdClass(),
+            'another_dummy' => new stdClass(),
         ];
         $loadedParameters = new ParameterBag(['rab' => 'oof']);
         $loadedFixtures = new FixtureBag();
@@ -63,14 +64,14 @@ class SimpleBuilderTest extends TestCase
         $builder = new SimpleBuilder($denormalizer);
         $actual = $builder->build($data, $injectedParameters, $injectedObjects);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $denormalizerProphecy->denormalize(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testBuildSetWithoutInjectingParametersOrObjects()
+    public function testBuildSetWithoutInjectingParametersOrObjects(): void
     {
-        $data = ['dummy' => new \stdClass()];
+        $data = ['dummy' => new stdClass()];
         $loadedParameters = new ParameterBag(['rab' => 'oof']);
         $loadedFixtures = new FixtureBag();
         $set = new BareFixtureSet($loadedParameters, $loadedFixtures);
@@ -85,6 +86,6 @@ class SimpleBuilderTest extends TestCase
         $builder = new SimpleBuilder($denormalizer);
         $actual = $builder->build($data);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

@@ -30,12 +30,12 @@ class SimpleArgumentsDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleArgumentsDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleArgumentsDenormalizer::class))->isCloneable());
     }
 
-    public function testParsesStringKeys()
+    public function testParsesStringKeys(): void
     {
         $arguments = [
             0 => 'foo',
@@ -66,7 +66,7 @@ class SimpleArgumentsDenormalizerTest extends TestCase
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testDenormalizesEachArgument()
+    public function testDenormalizesEachArgument(): void
     {
         $arguments = [
             '0 (dummy_flag)' => '<latitude()>',
@@ -101,7 +101,7 @@ class SimpleArgumentsDenormalizerTest extends TestCase
         $denormalizer = new SimpleArgumentsDenormalizer($valueDenormalizer);
         $result = $denormalizer->denormalize($fixture, $flagParser, $arguments);
 
-        $this->assertEquals(
+        static::assertEquals(
             [
                 0 => '<latitude()>',
                 'foo' => '<longitude()>',

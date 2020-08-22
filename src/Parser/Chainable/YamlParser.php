@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use Exception;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
@@ -71,7 +72,7 @@ final class YamlParser implements ChainableParserInterface
 
             // $data is null only if the YAML file was empty; otherwise an exception is thrown
             return (null === $data) ? [] : $data;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             if ($exception instanceof SymfonyParseException) {
                 throw ParseExceptionFactory::createForInvalidYaml($file, 0, $exception);
             }

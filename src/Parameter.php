@@ -23,14 +23,10 @@ final class Parameter
      */
     private $key;
 
-    /**
-     * @var mixed
-     */
+    
     private $value;
 
-    /**
-     * @param mixed  $value
-     */
+    
     public function __construct(string $key, $value)
     {
         $this->key = $key;
@@ -50,9 +46,7 @@ final class Parameter
         return $this->key;
     }
 
-    /**
-     * @return mixed
-     */
+    
     public function getValue()
     {
         return deep_clone($this->value);

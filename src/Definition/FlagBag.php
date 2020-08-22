@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition;
 
 use ArrayIterator;
+use Countable;
+use IteratorAggregate;
 use function Nelmio\Alice\deep_clone;
 
 /**
  * Collection of flags.
  */
-final class FlagBag implements \IteratorAggregate, \Countable
+final class FlagBag implements IteratorAggregate, Countable
 {
     /**
      * @var FlagInterface[]

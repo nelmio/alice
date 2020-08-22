@@ -21,14 +21,14 @@ use PHPUnit\Framework\TestCase;
  */
 class FixtureIdTest extends TestCase
 {
-    public function testIsAFixtureId()
+    public function testIsAFixtureId(): void
     {
-        $this->assertTrue(is_a(FixtureId::class, FixtureIdInterface::class, true));
+        static::assertTrue(is_a(FixtureId::class, FixtureIdInterface::class, true));
     }
 
-    public function testAccessor()
+    public function testAccessor(): void
     {
         $id = new FixtureId('foo');
-        $this->assertEquals('foo', $id->getId());
+        static::assertEquals('foo', $id->getId());
     }
 }

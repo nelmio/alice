@@ -29,6 +29,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use stdClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
@@ -37,29 +38,29 @@ class ValueResolverRegistryTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAValueResolver()
+    public function testIsAValueResolver(): void
     {
-        $this->assertTrue(is_a(ValueResolverRegistry::class, ValueResolverInterface::class, true));
+        static::assertTrue(is_a(ValueResolverRegistry::class, ValueResolverInterface::class, true));
     }
 
-    public function testAcceptChainableInstantiators()
+    public function testAcceptChainableInstantiators(): void
     {
         new ValueResolverRegistry([new FakeChainableValueResolver()]);
     }
 
-    public function testThrowExceptionIfInvalidParserIsPassed()
+    public function testThrowExceptionIfInvalidParserIsPassed(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         new ValueResolverRegistry([new stdClass()]);
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ValueResolverRegistry::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ValueResolverRegistry::class))->isCloneable());
     }
 
-    public function testPicksTheFirstSuitableResolverToResolveTheGivenValue()
+    public function testPicksTheFirstSuitableResolverToResolveTheGivenValue(): void
     {
         $value = new FakeValue();
         $fixture = new FakeFixture();
@@ -95,14 +96,14 @@ class ValueResolverRegistryTest extends TestCase
         ]);
         $actual = $registry->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $instantiator1Prophecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
         $instantiator2Prophecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
         $instantiator2Prophecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testThrowExceptionIfNoSuitableParserIsFound()
+    public function testThrowExceptionIfNoSuitableParserIsFound(): void
     {
         $fixture = new DummyFixture('dummy');
 

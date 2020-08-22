@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FileLocator;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
 use PHPUnit\Framework\TestCase;
+use ReflectionObject;
 
 /**
  * @covers \Nelmio\Alice\FileLocator\DefaultFileLocator
@@ -35,40 +36,40 @@ class DefaultFileLocatorTest extends TestCase
         $this->locator = new DefaultFileLocator();
     }
 
-    public function testIsAFileLocator()
+    public function testIsAFileLocator(): void
     {
-        $this->assertTrue(is_a(DefaultFileLocator::class, FileLocatorInterface::class, true));
+        static::assertTrue(is_a(DefaultFileLocator::class, FileLocatorInterface::class, true));
     }
 
     /**
      * @dataProvider provideAbsolutePaths
      */
-    public function testCanDetectAbsolutePaths($path)
+    public function testCanDetectAbsolutePaths($path): void
     {
-        $reflectionObject = new \ReflectionObject($this->locator);
+        $reflectionObject = new ReflectionObject($this->locator);
         $methodReflection = $reflectionObject->getMethod('isAbsolutePath');
         $methodReflection->setAccessible(true);
 
-        $this->assertTrue(
+        static::assertTrue(
             $methodReflection->invoke($this->locator, $path),
             '->isAbsolutePath() returns true for an absolute path'
         );
     }
 
-    public function testCanLocateFiles()
+    public function testCanLocateFiles(): void
     {
-        $this->assertEquals(
+        static::assertEquals(
             __FILE__,
             $this->locator->locate('DefaultFileLocatorTest.php', __DIR__)
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             __FILE__,
             $this->locator->locate(__DIR__.DIRECTORY_SEPARATOR.'DefaultFileLocatorTest.php')
         );
     }
 
-    public function testThrowsExceptionIfEmptyFileNamePassed()
+    public function testThrowsExceptionIfEmptyFileNamePassed(): void
     {
         $this->expectException(FileNotFoundException::class);
         $this->expectExceptionMessage('An empty file name is not valid to be located.');
@@ -76,7 +77,7 @@ class DefaultFileLocatorTest extends TestCase
         $this->locator->locate('');
     }
 
-    public function testThrowsExceptionIfTheFileDoesNotExists()
+    public function testThrowsExceptionIfTheFileDoesNotExists(): void
     {
         $this->expectException(FileNotFoundException::class);
         $this->expectExceptionMessageMatches('/^The file "(.+?)foobar.xml" does not exist\.$/');
@@ -84,7 +85,7 @@ class DefaultFileLocatorTest extends TestCase
         $this->locator->locate('foobar.xml', __DIR__);
     }
 
-    public function testLocatingFileThrowsExceptionIfTheFileDoesNotExistsInAbsolutePath()
+    public function testLocatingFileThrowsExceptionIfTheFileDoesNotExistsInAbsolutePath(): void
     {
         $this->expectException(FileNotFoundException::class);
         $this->expectExceptionMessageMatches('/^The file "(.+?)foobar.xml" does not exist\.$/');

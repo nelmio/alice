@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
 use Faker\Provider\Base as BaseFakerProvider;
+use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -30,7 +31,7 @@ final class NelmioAliceExtension extends Extension
     /**
      * @inheritdoc
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $this->loadConfig($configs, $container);
         $this->loadServices($container);
@@ -39,9 +40,9 @@ final class NelmioAliceExtension extends Extension
     /**
      * Loads alice configuration and add the configuration values to the application parameters.
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    private function loadConfig(array $configs, ContainerBuilder $container)
+    private function loadConfig(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $processedConfiguration = $this->processConfiguration($configuration, $configs);
@@ -57,7 +58,7 @@ final class NelmioAliceExtension extends Extension
     /**
      * Loads all the services declarations.
      */
-    private function loadServices(ContainerBuilder $container)
+    private function loadServices(ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(self::SERVICES_DIR));
         $finder = new Finder();

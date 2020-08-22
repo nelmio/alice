@@ -15,25 +15,26 @@ namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
  */
 class UnexpectedValueExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(UnexpectedValueException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(UnexpectedValueException::class, RuntimeException::class, true));
     }
 
-    public function testIsADenormalizationThrowable()
+    public function testIsADenormalizationThrowable(): void
     {
-        $this->assertTrue(is_a(UnexpectedValueException::class, DenormalizationThrowable::class, true));
+        static::assertTrue(is_a(UnexpectedValueException::class, DenormalizationThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildUnexpectedValueException();
-        $this->assertInstanceOf(ChildUnexpectedValueException::class, $exception);
+        static::assertInstanceOf(ChildUnexpectedValueException::class, $exception);
     }
 }

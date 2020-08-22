@@ -24,7 +24,7 @@ use Symfony\Component\Config\Definition\Processor;
  */
 class ConfigurationTest extends TestCase
 {
-    public function testDefaultValues()
+    public function testDefaultValues(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -38,10 +38,10 @@ class ConfigurationTest extends TestCase
         ];
         $actual = $processor->processConfiguration($configuration, []);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testOverriddeValues()
+    public function testOverriddeValues(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -66,10 +66,10 @@ class ConfigurationTest extends TestCase
             ]
         );
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testLocaleMustBeAStringValues()
+    public function testLocaleMustBeAStringValues(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -87,7 +87,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testSeedCanBeNull()
+    public function testSeedCanBeNull(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -108,10 +108,10 @@ class ConfigurationTest extends TestCase
             ]
         );
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testFunctionsBlacklistMustAnArray()
+    public function testFunctionsBlacklistMustAnArray(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -129,7 +129,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testFunctionsBlacklistMustBeStrings()
+    public function testFunctionsBlacklistMustBeStrings(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -147,7 +147,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testMaxUniqueValuesRetryMustBeAStrictlyPositiveValues()
+    public function testMaxUniqueValuesRetryMustBeAStrictlyPositiveValues(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -165,7 +165,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testLoadingLimitMustBeAnInteger()
+    public function testLoadingLimitMustBeAnInteger(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -183,7 +183,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testLoadingLimitMustBeAStrictlyPositiveValues()
+    public function testLoadingLimitMustBeAStrictlyPositiveValues(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -201,7 +201,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testMaxUniqueValuesRetryMustBeAnInteger()
+    public function testMaxUniqueValuesRetryMustBeAnInteger(): void
     {
         $configuration = new Configuration();
         $processor = new Processor();
@@ -219,7 +219,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testConfigurationParametersAreInjectedAsParameters()
+    public function testConfigurationParametersAreInjectedAsParameters(): void
     {
         $kernel = KernelFactory::createKernel();
         $kernel->boot();
@@ -233,7 +233,7 @@ class ConfigurationTest extends TestCase
         ];
 
         foreach ($expected as $parameterName => $value) {
-            $this->assertEquals($value, $kernel->getContainer()->getParameter($parameterName));
+            static::assertEquals($value, $kernel->getContainer()->getParameter($parameterName));
         }
 
         $kernel->shutdown();

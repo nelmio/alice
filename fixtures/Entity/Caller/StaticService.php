@@ -17,10 +17,10 @@ use Closure;
 
 class StaticService
 {
-    public static function setTitle(DummyWithStaticFunction $instance, string $title)
+    public static function setTitle(DummyWithStaticFunction $instance, string $title): void
     {
         Closure::bind(
-            function (DummyWithStaticFunction $dummy) use ($title) {
+            function (DummyWithStaticFunction $dummy) use ($title): void {
                 $dummy->title = $title;
             },
             null,

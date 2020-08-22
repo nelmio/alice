@@ -32,17 +32,17 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAFixtureBagDenormalizer()
+    public function testIsAFixtureBagDenormalizer(): void
     {
-        $this->assertTrue(is_a(SimpleFixtureBagDenormalizer::class, FixtureBagDenormalizerInterface::class, true));
+        static::assertTrue(is_a(SimpleFixtureBagDenormalizer::class, FixtureBagDenormalizerInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleFixtureBagDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleFixtureBagDenormalizer::class))->isCloneable());
     }
 
-    public function testDenormalizesASetOfDataIntoAFixtureBag()
+    public function testDenormalizesASetOfDataIntoAFixtureBag(): void
     {
         $fixture1Prophecy = $this->prophesize(FixtureInterface::class);
         $fixture1Prophecy->getId()->willReturn('user_alice');
@@ -149,13 +149,13 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
         $denormalizer = new SimpleFixtureBagDenormalizer($fixtureDenormalizer, $flagParser);
         $actual = $denormalizer->denormalize($data);
 
-        $this->assertSame($bag4, $actual);
+        static::assertSame($bag4, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
         $fixtureDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(4);
     }
 
-    public function testThrowsAnExceptionIfInvalidRawDataFixtureSetGiven()
+    public function testThrowsAnExceptionIfInvalidRawDataFixtureSetGiven(): void
     {
         $data = [
             'Nelmio\Entity\User' => 'something',
@@ -175,9 +175,9 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
         try {
             $denormalizer->denormalize($data);
 
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (InvalidArgumentException $exception) {
-            $this->assertSame(
+            static::assertSame(
                 'Expected an array for the class "Nelmio\Entity\User", found "string" instead.',
                 $exception->getMessage()
             );

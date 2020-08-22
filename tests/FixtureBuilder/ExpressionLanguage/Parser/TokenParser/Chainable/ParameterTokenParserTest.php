@@ -26,45 +26,45 @@ use ReflectionClass;
  */
 class ParameterTokenParserTest extends TestCase
 {
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(ParameterTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(ParameterTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ParameterTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ParameterTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseMethodTokens()
+    public function testCanParseMethodTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::PARAMETER_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new ParameterTokenParser();
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testThrowsAnErrorIfPassedParameterIsMalformed()
+    public function testThrowsAnErrorIfPassedParameterIsMalformed(): void
     {
         try {
             $token = new Token('', new TokenType(TokenType::PARAMETER_TYPE));
             $parser = new ParameterTokenParser();
 
             $parser->parse($token);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (ParseException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not parse the token "" (type: PARAMETER_TYPE).',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNotNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
         }
     }
 
-    public function testReturnsAParameterValueIfCanParseToken()
+    public function testReturnsAParameterValueIfCanParseToken(): void
     {
         $token = new Token('<{param}>', new TokenType(TokenType::PARAMETER_TYPE));
         $expected = new ParameterValue('param');
@@ -72,6 +72,6 @@ class ParameterTokenParserTest extends TestCase
         $parser = new ParameterTokenParser();
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

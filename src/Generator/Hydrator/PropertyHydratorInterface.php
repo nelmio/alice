@@ -21,11 +21,6 @@ interface PropertyHydratorInterface
 {
     /**
      * Hydrate the object with the provided.
-     *
-     * @param ObjectInterface $object
-     * @param Property        $property
-     *
-     * @return ObjectInterface
      */
     public function hydrate(ObjectInterface $object, Property $property, GenerationContext $context): ObjectInterface;
 }

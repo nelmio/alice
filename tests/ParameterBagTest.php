@@ -15,13 +15,15 @@ namespace Nelmio\Alice;
 
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use PHPUnit\Framework\TestCase;
+use ReflectionObject;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\ParameterBag
  */
 class ParameterBagTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $parameters = [
             'foo' => 'bar',
@@ -30,19 +32,19 @@ class ParameterBagTest extends TestCase
 
         $bag = new ParameterBag($parameters);
 
-        $this->assertTrue($bag->has('foo'));
-        $this->assertTrue($bag->has('ping'));
+        static::assertTrue($bag->has('foo'));
+        static::assertTrue($bag->has('ping'));
 
-        $this->assertFalse($bag->has('bar'));
-        $this->assertFalse($bag->has('pong'));
+        static::assertFalse($bag->has('bar'));
+        static::assertFalse($bag->has('pong'));
 
-        $this->assertEquals('bar', $bag->get('foo'));
-        $this->assertEquals('pong', $bag->get('ping'));
+        static::assertEquals('bar', $bag->get('foo'));
+        static::assertEquals('pong', $bag->get('ping'));
 
         $this->assertBagSize(2, $bag);
     }
 
-    public function testThrowsAnExceptionWhenATryingToGetAnInexistingParameter()
+    public function testThrowsAnExceptionWhenATryingToGetAnInexistingParameter(): void
     {
         $this->expectException(ParameterNotFoundException::class);
         $this->expectExceptionMessage('Could not find the parameter "foo".');
@@ -51,10 +53,10 @@ class ParameterBagTest extends TestCase
         $bag->get('foo');
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $bag = new ParameterBag([
-            'foo' => $std = new \stdClass(),
+            'foo' => $std = new stdClass(),
         ]);
 
         // Mutate injected object
@@ -63,9 +65,9 @@ class ParameterBagTest extends TestCase
         // Mutate retrieved object
         $bag->get('foo')->foo = 'baz';
 
-        $this->assertEquals(
+        static::assertEquals(
             new ParameterBag([
-                'foo' => new \stdClass(),
+                'foo' => new stdClass(),
             ]),
             $bag
         );
@@ -74,16 +76,16 @@ class ParameterBagTest extends TestCase
     /**
      * @depends \Nelmio\Alice\ParameterTest::testIsImmutable
      */
-    public function testWithersReturnNewModifiedObject()
+    public function testWithersReturnNewModifiedObject(): void
     {
         $bag = new ParameterBag(['foo' => 'bar']);
         $newBag = $bag->with(new Parameter('ping', 'pong'));
 
-        $this->assertEquals(new ParameterBag(['foo' => 'bar']), $bag);
-        $this->assertEquals(new ParameterBag(['foo' => 'bar', 'ping' => 'pong']), $newBag);
+        static::assertEquals(new ParameterBag(['foo' => 'bar']), $bag);
+        static::assertEquals(new ParameterBag(['foo' => 'bar', 'ping' => 'pong']), $newBag);
     }
 
-    public function testIfTwoParametersWithTheSameKeyAreAddedThenTheNewerOneWillBeDiscarded()
+    public function testIfTwoParametersWithTheSameKeyAreAddedThenTheNewerOneWillBeDiscarded(): void
     {
         $bag = (new ParameterBag([
                 'foo' => 'bar',
@@ -93,14 +95,14 @@ class ParameterBagTest extends TestCase
             ->with(new Parameter('he', 'ho'))
         ;
 
-        $this->assertEquals('bar', $bag->get('foo'));
-        $this->assertEquals('pong', $bag->get('ping'));
-        $this->assertEquals('ho', $bag->get('he'));
+        static::assertEquals('bar', $bag->get('foo'));
+        static::assertEquals('pong', $bag->get('ping'));
+        static::assertEquals('ho', $bag->get('he'));
 
         $this->assertBagSize(3, $bag);
     }
 
-    public function testIsTraversable()
+    public function testIsTraversable(): void
     {
         $params = [
             'foo' => 'bar',
@@ -114,49 +116,49 @@ class ParameterBagTest extends TestCase
             $traversed[$key] = $param;
         }
 
-        $this->assertSame($params, $traversed);
+        static::assertSame($params, $traversed);
     }
 
-    public function testIsCountable()
+    public function testIsCountable(): void
     {
         $bag = new ParameterBag();
-        $this->assertCount(0, $bag);
+        static::assertCount(0, $bag);
 
         $bag = $bag
             ->with(new Parameter('foo', 'bar'))
             ->with(new Parameter('ping', 'pong'))
         ;
-        $this->assertCount(2, $bag);
+        static::assertCount(2, $bag);
     }
 
-    public function testCanRemoveElements()
+    public function testCanRemoveElements(): void
     {
         $bag = (new ParameterBag(['foo' => 'bar']))->without('foo')->without('foo');
 
-        $this->assertEquals(new ParameterBag(), $bag);
+        static::assertEquals(new ParameterBag(), $bag);
     }
 
-    private function assertBagSize(int $size, ParameterBag $bag)
+    private function assertBagSize(int $size, ParameterBag $bag): void
     {
-        $reflectionObject = new \ReflectionObject($bag);
+        $reflectionObject = new ReflectionObject($bag);
         $paramReflection = $reflectionObject->getProperty('parameters');
         $paramReflection->setAccessible(true);
 
-        $this->assertCount($size, $paramReflection->getValue($bag));
+        static::assertCount($size, $paramReflection->getValue($bag));
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $bag = new ParameterBag();
 
-        $this->assertEquals([], $bag->toArray());
+        static::assertEquals([], $bag->toArray());
 
         $bag = new ParameterBag([
             'foo' => 'bar',
-            'baz' => $std = new \stdClass(),
+            'baz' => $std = new stdClass(),
         ]);
 
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'foo' => 'bar',
                 'baz' => $std,

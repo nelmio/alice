@@ -16,35 +16,36 @@ namespace Nelmio\Alice\Generator\Resolver;
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Entity\StdClassFactory;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\UniqueValuesPool
  */
 class UniqueValuesPoolTest extends TestCase
 {
-    public function testDoesNotHaveValueIfValueIsNotCached()
+    public function testDoesNotHaveValueIfValueIsNotCached(): void
     {
         $pool = new UniqueValuesPool();
-        $this->assertFalse($pool->has(new UniqueValue('', '')));
+        static::assertFalse($pool->has(new UniqueValue('', '')));
     }
 
     /**
      * @depends \Nelmio\Alice\Definition\Value\UniqueValueTest::testIsImmutable
      */
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 
     /**
      * @dataProvider provideHasValueSet
      */
-    public function testHasObjectValue(UniqueValuesPool $pool, UniqueValue $value, bool $expected)
+    public function testHasObjectValue(UniqueValuesPool $pool, UniqueValue $value, bool $expected): void
     {
-        $this->assertEquals($expected, $pool->has($value));
+        static::assertEquals($expected, $pool->has($value));
 
         $pool->add($value);
-        $this->assertTrue($pool->has($value));
+        static::assertTrue($pool->has($value));
     }
 
     public function provideHasValueSet()
@@ -129,13 +130,13 @@ class UniqueValuesPoolTest extends TestCase
 
         // Check objects
         yield 'with two equivalent objects' => [
-            $this->createPoolWithValue(new \stdClass()),
-            $baseValue->withValue(new \stdClass()),
+            $this->createPoolWithValue(new stdClass()),
+            $baseValue->withValue(new stdClass()),
             true,
         ];
 
         yield 'with two non-equivalent objects' => [
-            $this->createPoolWithValue(new \stdClass()),
+            $this->createPoolWithValue(new stdClass()),
             $baseValue->withValue(StdClassFactory::create(['foo' => 'bar'])),
             false,
         ];
@@ -169,7 +170,7 @@ class UniqueValuesPoolTest extends TestCase
             $baseValue->withValue(
                 StdClassFactory::create([
                     'relatedDummy' => StdClassFactory::create([
-                        'foo' => new \stdClass(),
+                        'foo' => new stdClass(),
                     ])
                 ])
             ),
@@ -191,8 +192,8 @@ class UniqueValuesPoolTest extends TestCase
         ];
 
         yield 'two equivalent arrays (2)' => [
-            $this->createPoolWithValue([10, 'foo' => new \stdClass(), 20]),
-            $baseValue->withValue([20, 10, 'foo' => new \stdClass()]),
+            $this->createPoolWithValue([10, 'foo' => new stdClass(), 20]),
+            $baseValue->withValue([20, 10, 'foo' => new stdClass()]),
             true,
         ];
 
@@ -210,7 +211,7 @@ class UniqueValuesPoolTest extends TestCase
 
         yield 'two non-equivalent arrays (4)' => [
             $this->createPoolWithValue([10, 'foo' => StdClassFactory::create(['foo' => 'bar']), 20]),
-            $baseValue->withValue([20, 10, 'foo' => new \stdClass()]),
+            $baseValue->withValue([20, 10, 'foo' => new stdClass()]),
             false,
         ];
     }

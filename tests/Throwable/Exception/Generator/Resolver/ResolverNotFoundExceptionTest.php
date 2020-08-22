@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
+use LogicException;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 use PHPUnit\Framework\TestCase;
 
@@ -21,19 +22,19 @@ use PHPUnit\Framework\TestCase;
  */
 class ResolverNotFoundExceptionTest extends TestCase
 {
-    public function testIsALogicException()
+    public function testIsALogicException(): void
     {
-        $this->assertTrue(is_a(ResolverNotFoundException::class, \LogicException::class, true));
+        static::assertTrue(is_a(ResolverNotFoundException::class, LogicException::class, true));
     }
 
-    public function testIsNotAResolutionThrowable()
+    public function testIsNotAResolutionThrowable(): void
     {
-        $this->assertFalse(is_a(ResolverNotFoundException::class, ResolutionThrowable::class, true));
+        static::assertFalse(is_a(ResolverNotFoundException::class, ResolutionThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildResolverNotFoundException();
-        $this->assertInstanceOf(ChildResolverNotFoundException::class, $exception);
+        static::assertInstanceOf(ChildResolverNotFoundException::class, $exception);
     }
 }

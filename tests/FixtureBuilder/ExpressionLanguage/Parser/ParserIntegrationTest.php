@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
+use const DIRECTORY_SEPARATOR;
 use InvalidArgumentException;
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
 use Nelmio\Alice\Definition\Value\ArrayValue;
@@ -31,6 +32,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 use PHPUnit\Framework\TestCase;
+use function str_repeat;
 
 /**
  * @group integration
@@ -51,13 +53,13 @@ class ParserIntegrationTest extends TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testParseValues(string $value, $expected)
+    public function testParseValues(string $value, $expected): void
     {
         try {
             $actual = $this->parser->parse($value);
 
             if (null === $expected) {
-                $this->fail(
+                static::fail(
                     sprintf(
                         'Expected exception to be thrown for "%s", got "%s" instead.',
                         $value,
@@ -79,7 +81,7 @@ class ParserIntegrationTest extends TestCase
             throw $exception;
         }
 
-        $this->assertEquals($expected, $actual, var_export($actual, true));
+        static::assertEquals($expected, $actual, var_export($actual, true));
     }
 
     public function provideValues()
@@ -590,7 +592,7 @@ class ParserIntegrationTest extends TestCase
                 'function',
                 [
                     // On windows if true
-                    \DIRECTORY_SEPARATOR === '\\' ? 'foo\nbar' : 'foo'.PHP_EOL.'bar',
+                    DIRECTORY_SEPARATOR === '\\' ? 'foo\nbar' : 'foo'.PHP_EOL.'bar',
                 ]
             ),
         ];
@@ -601,12 +603,12 @@ class ParserIntegrationTest extends TestCase
                 'function',
                 [
                     // On windows if true
-                    \DIRECTORY_SEPARATOR === '\\' ? 'foo'.PHP_EOL.'bar' : 'foo\r'.PHP_EOL.'bar',
+                    DIRECTORY_SEPARATOR === '\\' ? 'foo'.PHP_EOL.'bar' : 'foo\r'.PHP_EOL.'bar',
                 ]
             ),
         ];
 
-        $args = \str_repeat('a', 2000);
+        $args = str_repeat('a', 2000);
         yield '[Function] with long argument' => [
             '<function("'.$args.'")>',
             new FunctionCallValue(

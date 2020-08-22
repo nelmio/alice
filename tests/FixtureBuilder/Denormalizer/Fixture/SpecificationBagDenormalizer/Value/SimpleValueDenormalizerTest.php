@@ -33,17 +33,17 @@ class SimpleValueDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAValueDenormalizer()
+    public function testIsAValueDenormalizer(): void
     {
-        $this->assertTrue(is_a(SimpleValueDenormalizer::class, ValueDenormalizerInterface::class, true));
+        static::assertTrue(is_a(SimpleValueDenormalizer::class, ValueDenormalizerInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleValueDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleValueDenormalizer::class))->isCloneable());
     }
 
-    public function testReturnsParsedValueIfValueIsAString()
+    public function testReturnsParsedValueIfValueIsAString(): void
     {
         $value = 'foo';
 
@@ -55,12 +55,12 @@ class SimpleValueDenormalizerTest extends TestCase
         $denormalizer = new SimpleValueDenormalizer($parser);
         $actual = $denormalizer->denormalize(new FakeFixture(), new FlagBag(''), $value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $parserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testIfTheValueIsAnArrayThenAppliesItselfRecursivelyToArrays()
+    public function testIfTheValueIsAnArrayThenAppliesItselfRecursivelyToArrays(): void
     {
         $value = [
             'foo',
@@ -81,22 +81,22 @@ class SimpleValueDenormalizerTest extends TestCase
         $denormalizer = new SimpleValueDenormalizer($parser);
         $actual = $denormalizer->denormalize(new FakeFixture(), new FlagBag(''), $value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $parserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testReturnsUnchangedValueIfTheValueIsNotAStringOrAnArray()
+    public function testReturnsUnchangedValueIfTheValueIsNotAStringOrAnArray(): void
     {
         $value = $expected = 10;
 
         $denormalizer = new SimpleValueDenormalizer(new FakeParser());
         $actual = $denormalizer->denormalize(new FakeFixture(), new FlagBag(''), $value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testWhenParserThrowsExceptionDenormalizerAExceptionIsThrown()
+    public function testWhenParserThrowsExceptionDenormalizerAExceptionIsThrown(): void
     {
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy
@@ -111,14 +111,14 @@ class SimpleValueDenormalizerTest extends TestCase
         $denormalizer = new SimpleValueDenormalizer($parser);
         try {
             $denormalizer->denormalize(new FakeFixture(), null, 'foo');
-            $this->fail('Expected throwable to be thrown.');
+            static::fail('Expected throwable to be thrown.');
         } catch (DenormalizationThrowable $throwable) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not parse value "foo".',
                 $throwable->getMessage()
             );
-            $this->assertEquals(0, $throwable->getCode());
-            $this->assertEquals($thrownException, $throwable->getPrevious());
+            static::assertEquals(0, $throwable->getCode());
+            static::assertEquals($thrownException, $throwable->getPrevious());
         }
     }
 }

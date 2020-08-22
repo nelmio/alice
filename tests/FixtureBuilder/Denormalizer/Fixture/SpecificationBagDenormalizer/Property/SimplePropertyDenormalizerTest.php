@@ -29,12 +29,12 @@ class SimplePropertyDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimplePropertyDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimplePropertyDenormalizer::class))->isCloneable());
     }
 
-    public function testDenormalizesValueBeforeReturningProperty()
+    public function testDenormalizesValueBeforeReturningProperty(): void
     {
         $fixture = new FakeFixture();
         $name = 'groupId';
@@ -51,7 +51,7 @@ class SimplePropertyDenormalizerTest extends TestCase
         $denormalizer = new SimplePropertyDenormalizer($valueDenormalizer);
         $actual = $denormalizer->denormalize($fixture, $name, $value, $flags);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $valueDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

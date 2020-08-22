@@ -23,8 +23,6 @@ interface ParserInterface
      * @param string $file File path
      *
      * @throws ParseThrowable
-     *
-     * @return array
      */
     public function parse(string $file): array;
 }

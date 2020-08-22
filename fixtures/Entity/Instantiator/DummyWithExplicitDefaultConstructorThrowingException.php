@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Entity\Instantiator;
 
+use DomainException;
+
 class DummyWithExplicitDefaultConstructorThrowingException
 {
     public function __construct()
     {
-        throw new \DomainException('You should not try to instantiate me!');
+        throw new DomainException('You should not try to instantiate me!');
     }
 }

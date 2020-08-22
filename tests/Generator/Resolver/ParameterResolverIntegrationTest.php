@@ -19,6 +19,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @group integration
@@ -46,16 +47,16 @@ class ParameterResolverIntegrationTest extends TestCase
         ParameterBag $unresolvedParameters,
         ?ParameterBag $injectedParameters,
         ParameterBag $expected
-    ) {
+    ): void {
         $actual = $this->resolver->resolve($unresolvedParameters, $injectedParameters);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider provideCircularReferences
      */
-    public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null)
+    public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null): void
     {
         $this->expectException(CircularReferenceException::class);
         $this->expectExceptionMessageMatches('/^Circular reference detected for the parameter "[^\"]+" while resolving \[.+]\.$/');
@@ -63,7 +64,7 @@ class ParameterResolverIntegrationTest extends TestCase
         $this->resolver->resolve($unresolvedParameters, $injectedParameters);
     }
 
-    public function testThrowExceptionWhenResolvingNonExistentParameter()
+    public function testThrowExceptionWhenResolvingNonExistentParameter(): void
     {
         $this->expectException(ParameterNotFoundException::class);
 
@@ -115,8 +116,8 @@ class ParameterResolverIntegrationTest extends TestCase
             'bool_param' => true,
             'int_param' => 2000,
             'float_param' => -.89,
-            'object_param' => new \stdClass(),
-            'closure_param' => function () {
+            'object_param' => new stdClass(),
+            'closure_param' => function (): void {
             },
             'class_param' => 'App\Test\Dummy',
             'array_value' => [

@@ -33,7 +33,7 @@ class IncludeDataMergerTest extends TestCase
         $this->merger = new IncludeDataMerger();
     }
 
-    public function testMergesNonArrayData()
+    public function testMergesNonArrayData(): void
     {
         $data = [
             'parameters' => 'foo',
@@ -46,7 +46,7 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
 
         $data = [
@@ -64,7 +64,7 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
 
         $data = [
@@ -78,10 +78,10 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testMergesParametersAndReturnTheResult()
+    public function testMergesParametersAndReturnTheResult(): void
     {
         $data = [
             'parameters' => [
@@ -104,10 +104,10 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testCanMergeClassNames()
+    public function testCanMergeClassNames(): void
     {
         $data = [
             'Nelmio\Alice\Model\User' => [
@@ -160,10 +160,10 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testCanMergeCompleteDataSet()
+    public function testCanMergeCompleteDataSet(): void
     {
         $data = [
             'parameters' => [
@@ -229,6 +229,6 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 }

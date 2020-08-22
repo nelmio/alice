@@ -21,39 +21,39 @@ use PHPUnit\Framework\TestCase;
  */
 class ResolverNotFoundExceptionFactoryTest extends TestCase
 {
-    public function testCreateNewExceptionWithFactoryForParameter()
+    public function testCreateNewExceptionWithFactoryForParameter(): void
     {
         $exception = ResolverNotFoundExceptionFactory::createForParameter('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'No resolver found to resolve parameter "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateNewExceptionWithFactoryForValue()
+    public function testCreateNewExceptionWithFactoryForValue(): void
     {
         $exception = ResolverNotFoundExceptionFactory::createForValue(new DummyValue('dummy'));
 
-        $this->assertEquals(
+        static::assertEquals(
             'No resolver found to resolve value "dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateNewExceptionWithFactoryForUnexpectedCall()
+    public function testCreateNewExceptionWithFactoryForUnexpectedCall(): void
     {
         $exception = ResolverNotFoundExceptionFactory::createUnexpectedCall('fake');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Expected method "fake" to be called only if it has a resolver.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

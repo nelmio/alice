@@ -21,7 +21,6 @@ interface FixtureBagResolverInterface
     /**
      * Resolves a collection of fixtures.
      *
-     * @param FixtureBag $unresolvedFixtures
      *
      * @throws ResolutionThrowable
      *

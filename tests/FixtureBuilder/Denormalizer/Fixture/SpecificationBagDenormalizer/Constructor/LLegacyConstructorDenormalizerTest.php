@@ -29,12 +29,12 @@ class LLegacyConstructorDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(LegacyConstructorDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(LegacyConstructorDenormalizer::class))->isCloneable());
     }
 
-    public function testDenormalizesConstructorWithTheDecoratedFactoryDenormalizer()
+    public function testDenormalizesConstructorWithTheDecoratedFactoryDenormalizer(): void
     {
         $constructor = [];
         $fixture = new FakeFixture();
@@ -56,10 +56,10 @@ class LLegacyConstructorDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testDenormalizesConstructorWithTheDecoratedConstructorDenormalizerIfCannotDenormalizeWithTheFactoryDenormalizer()
+    public function testDenormalizesConstructorWithTheDecoratedConstructorDenormalizerIfCannotDenormalizeWithTheFactoryDenormalizer(): void
     {
         $constructor = [];
         $fixture = new FakeFixture();
@@ -85,6 +85,6 @@ class LLegacyConstructorDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Caller;
 
+use LogicException;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\ChildInstantiatorNotFoundException;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 use PHPUnit\Framework\TestCase;
@@ -22,19 +23,19 @@ use PHPUnit\Framework\TestCase;
  */
 class ProcessorNotFoundExceptionTest extends TestCase
 {
-    public function testIsALogicException()
+    public function testIsALogicException(): void
     {
-        $this->assertTrue(is_a(ProcessorNotFoundException::class, \LogicException::class, true));
+        static::assertTrue(is_a(ProcessorNotFoundException::class, LogicException::class, true));
     }
 
-    public function testIsNotAnInstantiationThrowable()
+    public function testIsNotAnInstantiationThrowable(): void
     {
-        $this->assertFalse(is_a(ProcessorNotFoundException::class, InstantiationThrowable::class, true));
+        static::assertFalse(is_a(ProcessorNotFoundException::class, InstantiationThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildInstantiatorNotFoundException();
-        $this->assertInstanceOf(ChildInstantiatorNotFoundException::class, $exception);
+        static::assertInstanceOf(ChildInstantiatorNotFoundException::class, $exception);
     }
 }

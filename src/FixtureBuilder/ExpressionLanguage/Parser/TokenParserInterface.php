@@ -25,8 +25,6 @@ use Nelmio\Alice\Throwable\ParseThrowable;
 interface TokenParserInterface
 {
     /**
-     * @param Token $token
-     *
      * @throws ParseThrowable
      *
      * @return ValueInterface|string|array

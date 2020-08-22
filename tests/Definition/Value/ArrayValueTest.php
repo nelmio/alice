@@ -15,34 +15,35 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ArrayValue
  */
 class ArrayValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(ArrayValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(ArrayValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnValues()
+    public function testReadAccessorsReturnValues(): void
     {
         $list = [];
         $value = new ArrayValue($list);
 
-        $this->assertEquals($list, $value->getValue());
+        static::assertEquals($list, $value->getValue());
 
-        $list = [new \stdClass()];
+        $list = [new stdClass()];
         $value = new ArrayValue($list);
 
-        $this->assertEquals($list, $value->getValue());
+        static::assertEquals($list, $value->getValue());
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $value = new ArrayValue([
-            $std = new \stdClass(),
+            $std = new stdClass(),
         ]);
 
         // Mutate input value
@@ -51,20 +52,20 @@ class ArrayValueTest extends TestCase
         // Mutate retrieved value
         $value->getValue()[0]->foo = 'baz';
 
-        $this->assertEquals(
+        static::assertEquals(
             [
-                new \stdClass(),
+                new stdClass(),
             ],
             $value->getValue()
         );
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new ArrayValue([]);
-        $this->assertEquals("array (\n)", (string) $value);
+        static::assertEquals("array (\n)", (string) $value);
 
         $value = new ArrayValue(['foo', 'bar']);
-        $this->assertEquals("array (\n  0 => 'foo',\n  1 => 'bar',\n)", (string) $value);
+        static::assertEquals("array (\n  0 => 'foo',\n  1 => 'bar',\n)", (string) $value);
     }
 }

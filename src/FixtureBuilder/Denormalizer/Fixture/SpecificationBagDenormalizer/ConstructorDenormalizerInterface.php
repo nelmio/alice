@@ -23,13 +23,8 @@ interface ConstructorDenormalizerInterface
     /**
      * Denormalizes a constructor.
      *
-     * @param FixtureInterface    $scope
-     * @param FlagParserInterface $parser
-     * @param array               $unparsedConstructor
      *
      * @throws DenormalizationThrowable
-     *
-     * @return MethodCallInterface
      *
      * @example
      *  example1:

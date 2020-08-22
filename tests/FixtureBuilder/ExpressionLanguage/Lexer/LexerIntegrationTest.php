@@ -20,6 +20,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
 use PHPUnit\Framework\TestCase;
+use function str_repeat;
 
 /**
  * @group integration
@@ -43,13 +44,13 @@ class LexerIntegrationTest extends TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testCanLexValues(string $value, $expected)
+    public function testCanLexValues(string $value, $expected): void
     {
         try {
             $actual = $this->lexer->lex($value);
 
             if (null === $expected) {
-                $this->fail(
+                static::fail(
                     sprintf(
                         'Expected exception to be thrown for "%s", got "%s" instead.',
                         $value,
@@ -71,8 +72,8 @@ class LexerIntegrationTest extends TestCase
             throw $exception;
         }
 
-        $this->assertEquals($expected, $actual, var_export($actual, true));
-        $this->assertSameSize($expected, $actual);
+        static::assertEquals($expected, $actual, var_export($actual, true));
+        static::assertSameSize($expected, $actual);
     }
 
     /**
@@ -588,7 +589,7 @@ class LexerIntegrationTest extends TestCase
             ]
         ];
 
-        $arg = \str_repeat('a', 2000);
+        $arg = str_repeat('a', 2000);
         yield '[Function] with long argument' => [
             '<function("'.$arg.'")>',
             [

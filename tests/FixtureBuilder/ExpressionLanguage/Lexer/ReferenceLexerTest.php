@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
+use InvalidArgumentException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
@@ -38,19 +39,19 @@ class ReferenceLexerTest extends TestCase
         $this->lexer = new ReferenceLexer();
     }
 
-    public function testIsALexer()
+    public function testIsALexer(): void
     {
-        $this->assertInstanceOf(LexerInterface::class, $this->lexer);
+        static::assertInstanceOf(LexerInterface::class, $this->lexer);
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ReferenceLexer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ReferenceLexer::class))->isCloneable());
     }
 
-    public function testThrowsAnExceptionWhenAnInvalidValueIsGiven()
+    public function testThrowsAnExceptionWhenAnInvalidValueIsGiven(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid token "@u->" found.');
 
         $this->lexer->lex('@u->');
@@ -59,24 +60,24 @@ class ReferenceLexerTest extends TestCase
     /**
      * @dataProvider provideValues
      */
-    public function testReturnsMatchingToken(string $value, array $expected)
+    public function testReturnsMatchingToken(string $value, array $expected): void
     {
         $actual = $this->lexer->lex($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testUsesTheRegexCachedGroupForTheTokenValue()
+    public function testUsesTheRegexCachedGroupForTheTokenValue(): void
     {
         $value = '@user foo';
         $expected = [new Token('@user', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE))];
 
         $actual = $this->lexer->lex($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfNoMatchingPatternFound()
+    public function testThrowsAnExceptionIfNoMatchingPatternFound(): void
     {
         $this->expectException(LexException::class);
         $this->expectExceptionMessage('Could not lex the value "foo".');

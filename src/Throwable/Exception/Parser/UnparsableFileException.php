@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Parser;
 
+use Exception;
 use Nelmio\Alice\Throwable\ParseThrowable;
 
-class UnparsableFileException extends \Exception implements ParseThrowable
+class UnparsableFileException extends Exception implements ParseThrowable
 {
 }

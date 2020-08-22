@@ -20,6 +20,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use TypeError;
 
 /**
  * @internal
@@ -50,7 +51,7 @@ final class ParameterTokenParser implements ChainableTokenParserInterface
             $paramKey = substr($value, 2, strlen($value) - 4);
 
             return new ParameterValue($paramKey);
-        } catch (\TypeError $error) {
+        } catch (TypeError $error) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $error);
         }
     }

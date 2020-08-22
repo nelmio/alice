@@ -25,12 +25,12 @@ use ReflectionClass;
  */
 class OptionalFlagHandlerTest extends TestCase
 {
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(OptionalFlagHandler::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(OptionalFlagHandler::class))->isCloneable());
     }
 
-    public function testCreatesAnOptionalCallIfFlagIsAnOptionalFlagIs()
+    public function testCreatesAnOptionalCallIfFlagIsAnOptionalFlagIs(): void
     {
         $call = new FakeMethodCall();
 
@@ -42,10 +42,10 @@ class OptionalFlagHandlerTest extends TestCase
 
         $actual = $handler->handleMethodFlags($call, $flag);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testLeavesTheFunctionUnchangedIfFlagIsNotAnOptionalFlag()
+    public function testLeavesTheFunctionUnchangedIfFlagIsNotAnOptionalFlag(): void
     {
         $call = new FakeMethodCall();
 
@@ -57,6 +57,6 @@ class OptionalFlagHandlerTest extends TestCase
 
         $actual = $handler->handleMethodFlags($call, $flag);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 }

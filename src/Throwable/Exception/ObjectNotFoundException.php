@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
-class ObjectNotFoundException extends \UnexpectedValueException
+use UnexpectedValueException;
+
+class ObjectNotFoundException extends UnexpectedValueException
 {
 }

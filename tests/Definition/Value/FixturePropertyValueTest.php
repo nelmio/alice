@@ -21,38 +21,38 @@ use PHPUnit\Framework\TestCase;
  */
 class FixturePropertyValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(FixturePropertyValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(FixturePropertyValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = new FakeValue();
         $property = 'username';
 
         $value = new FixturePropertyValue($reference, $property);
 
-        $this->assertEquals($reference, $value->getReference());
-        $this->assertEquals($property, $value->getProperty());
-        $this->assertEquals([$reference, $property], $value->getValue());
+        static::assertEquals($reference, $value->getReference());
+        static::assertEquals($property, $value->getProperty());
+        static::assertEquals([$reference, $property], $value->getValue());
     }
 
     /**
      * @depends \Nelmio\Alice\Definition\Value\FixtureReferenceValueTest::testIsImmutable
      */
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new FixturePropertyValue(
             new FixtureReferenceValue('dummy'),
             'foo'
         );
 
-        $this->assertEquals('@dummy->foo', (string) $value);
+        static::assertEquals('@dummy->foo', (string) $value);
     }
 }

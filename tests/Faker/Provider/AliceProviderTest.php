@@ -23,37 +23,37 @@ use PHPUnit\Framework\TestCase;
  */
 class AliceProviderTest extends TestCase
 {
-    public function testIdentityReturnsTheValueUnchanged()
+    public function testIdentityReturnsTheValueUnchanged(): void
     {
         $value = $expected ='foo';
         $actual = AliceProvider::identity($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testCurrentReturnsFixtureCurrentValue()
+    public function testCurrentReturnsFixtureCurrentValue(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create(), $expected = 'foo');
         $expected = 'foo';
 
         $actual = AliceProvider::current($fixture);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testCurrentThrowsAnExceptionIfFixtureHasNoCurrentValue()
+    public function testCurrentThrowsAnExceptionIfFixtureHasNoCurrentValue(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
         try {
             AliceProvider::current($fixture);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (NoValueForCurrentException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'No value for \'<current()>\' found for the fixture "dummy".',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNull($exception->getPrevious());
         }
     }
 }

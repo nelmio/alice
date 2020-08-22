@@ -35,30 +35,30 @@ class SimpleParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAParser()
+    public function testIsAParser(): void
     {
-        $this->assertTrue(is_a(SimpleParser::class, ParserInterface::class, true));
+        static::assertTrue(is_a(SimpleParser::class, ParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleParser::class))->isCloneable());
     }
 
-    public function testCanBeInstantiatedWithALexerAndAParser()
+    public function testCanBeInstantiatedWithALexerAndAParser(): void
     {
         new SimpleParser(new FakeLexer(), new FakeTokenParser());
     }
 
-    public function testIfParserIsParserAwareThenItInjectsItselfToIt()
+    public function testIfParserIsParserAwareThenItInjectsItselfToIt(): void
     {
         $decoratedParser = new DummyChainableTokenParserAware();
         $parser = new SimpleParser(new FakeLexer(), $decoratedParser);
 
-        $this->assertSame($parser, $decoratedParser->parser);
+        static::assertSame($parser, $decoratedParser->parser);
     }
 
-    public function testLexValueAndParsesEachTokenToReturnAValue()
+    public function testLexValueAndParsesEachTokenToReturnAValue(): void
     {
         $value = 'foo';
 
@@ -83,7 +83,7 @@ class SimpleParserTest extends TestCase
         $tokenParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testIfTheLexProcessReturnsMultipleTokensThenTheValueReturnedWillBeAListValue()
+    public function testIfTheLexProcessReturnsMultipleTokensThenTheValueReturnedWillBeAListValue(): void
     {
         $value = 'foo';
 
@@ -104,7 +104,7 @@ class SimpleParserTest extends TestCase
         $parser = new SimpleParser($lexer, $tokenParser);
         $parsedValue = $parser->parse($value);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ListValue([
                 new ParameterValue('parsed_foo'),
                 'parsed_bar',
@@ -113,7 +113,7 @@ class SimpleParserTest extends TestCase
         );
     }
 
-    public function testIfOnlyOneTokensFoundThenReturnsASimpleValue()
+    public function testIfOnlyOneTokensFoundThenReturnsASimpleValue(): void
     {
         $value = 'foo';
 
@@ -132,13 +132,13 @@ class SimpleParserTest extends TestCase
         $parser = new SimpleParser($lexer, $tokenParser);
         $parsedValue = $parser->parse($value);
 
-        $this->assertEquals(
+        static::assertEquals(
             'parsed_foo',
             $parsedValue
         );
     }
 
-    public function testIfATokenIsParsedIntoANestedValueThenItsValuesAreMerged()
+    public function testIfATokenIsParsedIntoANestedValueThenItsValuesAreMerged(): void
     {
         $value = 'foo';
 
@@ -176,7 +176,7 @@ class SimpleParserTest extends TestCase
         $parser = new SimpleParser($lexer, $tokenParser);
         $actual = $parser->parse($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $lexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
         $tokenParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(3);

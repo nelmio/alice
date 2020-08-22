@@ -20,15 +20,15 @@ use PHPUnit\Framework\TestCase;
  */
 class FixtureNotFoundExceptionFactoryTest extends TestCase
 {
-    public function testCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory(): void
     {
         $exception = FixtureNotFoundExceptionFactory::create('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find the fixture "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

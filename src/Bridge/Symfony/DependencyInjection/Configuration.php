@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
+use Closure;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -105,7 +106,7 @@ final class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    private function createStringValidatorClosure(): \Closure
+    private function createStringValidatorClosure(): Closure
     {
         return function ($value) {
             if (is_string($value)) {
@@ -116,7 +117,7 @@ final class Configuration implements ConfigurationInterface
         };
     }
 
-    private function createPositiveIntegerValidatorClosure(): \Closure
+    private function createPositiveIntegerValidatorClosure(): Closure
     {
         return function ($value) {
             if (is_int($value) && 0 < $value) {

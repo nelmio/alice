@@ -29,22 +29,22 @@ class TemplatingTest extends TestCase
     /**
      * @depends \Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
      */
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 
     /**
      * @dataProvider provideFlags
      */
-    public function testDetectTemplateFlags(SimpleFixtureWithFlags $fixture, bool $isATemplate, bool $extendsFixtures, array $extendedFixtures)
+    public function testDetectTemplateFlags(SimpleFixtureWithFlags $fixture, bool $isATemplate, bool $extendsFixtures, array $extendedFixtures): void
     {
         $templating = new Templating($fixture);
 
-        $this->assertEquals($isATemplate, $templating->isATemplate());
-        $this->assertEquals($extendsFixtures, $templating->extendsFixtures());
-        $this->assertEquals($extendedFixtures, $templating->getExtendedFixtures());
-        $this->assertCount(count($extendedFixtures), $templating->getExtendedFixtures());
+        static::assertEquals($isATemplate, $templating->isATemplate());
+        static::assertEquals($extendsFixtures, $templating->extendsFixtures());
+        static::assertEquals($extendedFixtures, $templating->getExtendedFixtures());
+        static::assertCount(count($extendedFixtures), $templating->getExtendedFixtures());
     }
 
     /**
@@ -52,7 +52,7 @@ class TemplatingTest extends TestCase
      * properties of the extended fixtures, the specs should be merged with the last extended fixture to the first one.
      * For this purpose, the list of extended fixtures is given in the right order right away.
      */
-    public function testExtendedFixturesOrderIsInversed()
+    public function testExtendedFixturesOrderIsInversed(): void
     {
         $templating = new Templating(
             $this->createFixtureWithFlags(
@@ -68,9 +68,9 @@ class TemplatingTest extends TestCase
         ];
         $actual = $templating->getExtendedFixtures();
 
-        $this->assertCount(count($expected), $actual);
+        static::assertCount(count($expected), $actual);
         foreach ($expected as $index => $expectedReference) {
-            $this->assertEquals($expectedReference, $actual[$index]);
+            static::assertEquals($expectedReference, $actual[$index]);
         }
     }
 

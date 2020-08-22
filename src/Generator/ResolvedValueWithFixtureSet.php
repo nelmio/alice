@@ -18,9 +18,6 @@ namespace Nelmio\Alice\Generator;
  */
 final class ResolvedValueWithFixtureSet
 {
-    /**
-     * @var mixed
-     */
     private $value;
     
     /**
@@ -28,18 +25,14 @@ final class ResolvedValueWithFixtureSet
      */
     private $set;
 
-    /**
-     * @param mixed              $resolvedValue
-     */
+    
     public function __construct($resolvedValue, ResolvedFixtureSet $set)
     {
         $this->value = $resolvedValue;
         $this->set = $set;
     }
 
-    /**
-     * @return mixed
-     */
+    
     public function getValue()
     {
         return $this->value;

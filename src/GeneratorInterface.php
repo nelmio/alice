@@ -20,7 +20,6 @@ interface GeneratorInterface
     /**
      * Generates a list of parameters and objects from the given set of data.
      *
-     * @param FixtureSet $fixtureSet
      *
      * @throws GenerationThrowable
      *

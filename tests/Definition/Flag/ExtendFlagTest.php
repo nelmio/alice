@@ -22,17 +22,17 @@ use PHPUnit\Framework\TestCase;
  */
 class ExtendFlagTest extends TestCase
 {
-    public function testIsAFlag()
+    public function testIsAFlag(): void
     {
-        $this->assertTrue(is_a(ExtendFlag::class, FlagInterface::class, true));
+        static::assertTrue(is_a(ExtendFlag::class, FlagInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = new FixtureReference('Nelmio\Alice\EntityUser#user_base');
         $flag = new ExtendFlag($reference);
 
-        $this->assertEquals($reference, $flag->getExtendedFixture());
-        $this->assertEquals('extends Nelmio\Alice\EntityUser#user_base', $flag->__toString());
+        static::assertEquals($reference, $flag->getExtendedFixture());
+        static::assertEquals('extends Nelmio\Alice\EntityUser#user_base', $flag->__toString());
     }
 }

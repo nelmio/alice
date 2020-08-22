@@ -21,8 +21,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ResolutionThrowableTest extends TestCase
 {
-    public function testIsABuildThrowable()
+    public function testIsABuildThrowable(): void
     {
-        $this->assertTrue(is_a(RootResolutionException::class, GenerationThrowable::class, true));
+        static::assertTrue(is_a(RootResolutionException::class, GenerationThrowable::class, true));
     }
 }

@@ -16,8 +16,6 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer;
 interface FlagParserAwareInterface
 {
     /**
-     * @param FlagParserInterface $parser
-     *
      * @return static
      */
     public function withFlagParser(FlagParserInterface $parser);

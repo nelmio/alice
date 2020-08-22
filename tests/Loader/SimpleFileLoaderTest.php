@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Loader\SimpleFileLoader
@@ -29,17 +30,17 @@ class SimpleFileLoaderTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsALoader()
+    public function testIsALoader(): void
     {
-        $this->assertTrue(is_a(SimpleFileLoader::class, FileLoaderInterface::class, true));
+        static::assertTrue(is_a(SimpleFileLoader::class, FileLoaderInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleFileLoader::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleFileLoader::class))->isCloneable());
     }
 
-    public function testLoadAFileAndReturnsAnObjectSet()
+    public function testLoadAFileAndReturnsAnObjectSet(): void
     {
         $file = 'dummy.yml';
         $data = [
@@ -51,7 +52,7 @@ class SimpleFileLoaderTest extends TestCase
             'foo' => 'bar',
         ];
         $objects = [
-            'dummy0' => new \stdClass(),
+            'dummy0' => new stdClass(),
         ];
         $objectSet = ObjectSetFactory::create();
 
@@ -68,7 +69,7 @@ class SimpleFileLoaderTest extends TestCase
         $loader = new SimpleFileLoader($parser, $dataLoader);
         $result = $loader->loadFile($file, $parameters, $objects);
 
-        $this->assertSame($objectSet, $result);
+        static::assertSame($objectSet, $result);
 
         $parserProphecy->parse(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $dataLoaderProphecy->loadData(Argument::cetera())->shouldHaveBeenCalledTimes(1);

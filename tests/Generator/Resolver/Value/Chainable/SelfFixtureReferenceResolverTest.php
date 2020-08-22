@@ -32,6 +32,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\SelfFixtureReferenceResolver
@@ -40,27 +41,27 @@ class SelfFixtureReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(SelfFixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(SelfFixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsObjectGeneratorAware()
+    public function testIsObjectGeneratorAware(): void
     {
-        $this->assertTrue(is_a(SelfFixtureReferenceResolver::class, ObjectGeneratorAwareInterface::class, true));
+        static::assertTrue(is_a(SelfFixtureReferenceResolver::class, ObjectGeneratorAwareInterface::class, true));
     }
 
-    public function testIsValueResolverAware()
+    public function testIsValueResolverAware(): void
     {
-        $this->assertTrue(is_a(SelfFixtureReferenceResolver::class, ValueResolverAwareInterface::class, true));
+        static::assertTrue(is_a(SelfFixtureReferenceResolver::class, ValueResolverAwareInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SelfFixtureReferenceResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SelfFixtureReferenceResolver::class))->isCloneable());
     }
 
-    public function testCanResolveTheValueResolvableByItsDecoratedResolver()
+    public function testCanResolveTheValueResolvableByItsDecoratedResolver(): void
     {
         $value = new FakeValue();
 
@@ -71,20 +72,20 @@ class SelfFixtureReferenceResolverTest extends TestCase
 
         $resolver = new SelfFixtureReferenceResolver($decoratedResolver);
 
-        $this->assertTrue($resolver->canResolve($value));
+        static::assertTrue($resolver->canResolve($value));
 
         $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testPassesTheObjectGeneratorAwarenessPropertyToItsDecoratedResolver()
+    public function testPassesTheObjectGeneratorAwarenessPropertyToItsDecoratedResolver(): void
     {
         $generator = new FakeObjectGenerator();
 
         $resolver = new SelfFixtureReferenceResolver(new FakeChainableValueResolver());
         $newResolver = $resolver->withObjectGenerator($generator);
 
-        $this->assertEquals($newResolver, $resolver);
-        $this->assertNotSame($newResolver, $resolver);
+        static::assertEquals($newResolver, $resolver);
+        static::assertNotSame($newResolver, $resolver);
 
 
         $decoratedResolverProphecy = $this->prophesize(ChainableValueResolverInterface::class);
@@ -99,21 +100,21 @@ class SelfFixtureReferenceResolverTest extends TestCase
         $resolver = new SelfFixtureReferenceResolver($decoratedResolver);
         $newResolver = $resolver->withObjectGenerator($generator);
 
-        $this->assertEquals(new SelfFixtureReferenceResolver($decoratedResolver), $resolver);
-        $this->assertEquals(new SelfFixtureReferenceResolver($newDecoratedResolver), $newResolver);
+        static::assertEquals(new SelfFixtureReferenceResolver($decoratedResolver), $resolver);
+        static::assertEquals(new SelfFixtureReferenceResolver($newDecoratedResolver), $newResolver);
 
         $decoratedResolverProphecy->withObjectGenerator(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testPassesTheValeResolverAwarenessPropertyToItsDecoratedResolver()
+    public function testPassesTheValeResolverAwarenessPropertyToItsDecoratedResolver(): void
     {
         $valueResolver = new FakeValueResolver();
 
         $resolver = new SelfFixtureReferenceResolver(new FakeChainableValueResolver());
         $newResolver = $resolver->withValueResolver($valueResolver);
 
-        $this->assertEquals($newResolver, $resolver);
-        $this->assertNotSame($newResolver, $resolver);
+        static::assertEquals($newResolver, $resolver);
+        static::assertNotSame($newResolver, $resolver);
 
 
         $decoratedResolverProphecy = $this->prophesize(ChainableValueResolverInterface::class);
@@ -128,13 +129,13 @@ class SelfFixtureReferenceResolverTest extends TestCase
         $resolver = new SelfFixtureReferenceResolver($decoratedResolver);
         $newResolver = $resolver->withValueResolver($valueResolver);
 
-        $this->assertEquals(new SelfFixtureReferenceResolver($decoratedResolver), $resolver);
-        $this->assertEquals(new SelfFixtureReferenceResolver($newDecoratedResolver), $newResolver);
+        static::assertEquals(new SelfFixtureReferenceResolver($decoratedResolver), $resolver);
+        static::assertEquals(new SelfFixtureReferenceResolver($newDecoratedResolver), $newResolver);
 
         $decoratedResolverProphecy->withValueResolver(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testCanResolveValuesOfItsDecoratedResolver()
+    public function testCanResolveValuesOfItsDecoratedResolver(): void
     {
         $value = new FakeValue();
 
@@ -145,18 +146,18 @@ class SelfFixtureReferenceResolverTest extends TestCase
 
         $resolver = new SelfFixtureReferenceResolver($decoratedResolver);
 
-        $this->assertTrue($resolver->canResolve($value));
+        static::assertTrue($resolver->canResolve($value));
         $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testReturnsTheFixtureBeingResolvedAsTheResolvedValueIfTheReferenceMatchesSelf()
+    public function testReturnsTheFixtureBeingResolvedAsTheResolvedValueIfTheReferenceMatchesSelf(): void
     {
         $valueProphecy = $this->prophesize(ValueInterface::class);
         $valueProphecy->getValue()->willReturn('self');
         /** @var ValueInterface $value */
         $value = $valueProphecy->reveal();
 
-        $expectedObject = new \stdClass();
+        $expectedObject = new stdClass();
         $expectedObject->foo = 'bar';
 
         $set = ResolvedFixtureSetFactory::create(
@@ -178,19 +179,19 @@ class SelfFixtureReferenceResolverTest extends TestCase
         $actual = $resolver->resolve($value, $dummyFixture, $set, $scope, $context);
 
         $expected = new ResolvedValueWithFixtureSet($expectedObject, $set);
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $valueProphecy->getValue()->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testReturnsResultOfTheDecoratedResolverIfReferenceDoesNotMatchSelf()
+    public function testReturnsResultOfTheDecoratedResolverIfReferenceDoesNotMatchSelf(): void
     {
         $valueProphecy = $this->prophesize(ValueInterface::class);
         $valueProphecy->getValue()->willReturn('a_random_fixture_id');
         /** @var ValueInterface $value */
         $value = $valueProphecy->reveal();
 
-        $expectedObject = new \stdClass();
+        $expectedObject = new stdClass();
         $expectedObject->foo = 'bar';
 
         $set = ResolvedFixtureSetFactory::create(
@@ -224,7 +225,7 @@ class SelfFixtureReferenceResolverTest extends TestCase
         $resolver = new SelfFixtureReferenceResolver($decoratedResolver);
         $actual = $resolver->resolve($value, $dummyFixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $valueProphecy->getValue()->shouldHaveBeenCalledTimes(1);
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);

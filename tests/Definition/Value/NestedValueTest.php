@@ -15,41 +15,42 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\NestedValue
  */
 class NestedValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(NestedValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(NestedValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $list = [];
         $value = new NestedValue($list);
 
-        $this->assertEquals($list, $value->getValue());
+        static::assertEquals($list, $value->getValue());
 
-        $list = [new \stdClass()];
+        $list = [new stdClass()];
         $value = new NestedValue($list);
 
-        $this->assertEquals($list, $value->getValue());
+        static::assertEquals($list, $value->getValue());
     }
 
-    public function testIsNotImmutable()
+    public function testIsNotImmutable(): void
     {
         $value = new NestedValue([
-            $arg0 = new \stdClass(),
+            $arg0 = new stdClass(),
         ]);
 
-        $this->assertSame($arg0, $value->getValue()[0]);
+        static::assertSame($arg0, $value->getValue()[0]);
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
-        $this->assertEquals("(nested) array (\n)", (string) (new NestedValue([])));
+        static::assertEquals("(nested) array (\n)", (string) (new NestedValue([])));
     }
 }

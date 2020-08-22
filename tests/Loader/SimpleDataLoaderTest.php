@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Loader\SimpleDataLoader
@@ -30,24 +31,24 @@ class SimpleDataLoaderTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsADataLoader()
+    public function testIsADataLoader(): void
     {
-        $this->assertTrue(is_a(SimpleDataLoader::class, DataLoaderInterface::class, true));
+        static::assertTrue(is_a(SimpleDataLoader::class, DataLoaderInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleDataLoader::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleDataLoader::class))->isCloneable());
     }
 
-    public function testLoadAFileAndReturnsAnObjectSet()
+    public function testLoadAFileAndReturnsAnObjectSet(): void
     {
-        $data = [new \stdClass()];
+        $data = [new stdClass()];
         $parameters = [
             'foo' => 'bar',
         ];
         $objects = [
-            'dummy0' => new \stdClass(),
+            'dummy0' => new stdClass(),
         ];
 
         $fixtureSet = FixtureSetFactory::create();
@@ -66,7 +67,7 @@ class SimpleDataLoaderTest extends TestCase
         $loader = new SimpleDataLoader($fixtureBuilder, $generator);
         $result = $loader->loadData($data, $parameters, $objects);
 
-        $this->assertSame($objectSet, $result);
+        static::assertSame($objectSet, $result);
 
         $fixtureBuilderProphecy->build(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $generatorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
