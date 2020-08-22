@@ -21,23 +21,23 @@ use PHPUnit\Framework\TestCase;
  */
 class VariableValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(VariableValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(VariableValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $variable = 'username';
         $value = new VariableValue($variable);
 
-        $this->assertEquals($variable, $value->getValue());
+        static::assertEquals($variable, $value->getValue());
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new VariableValue('username');
 
-        $this->assertEquals('$username', $value);
+        static::assertEquals('$username', $value);
     }
 }

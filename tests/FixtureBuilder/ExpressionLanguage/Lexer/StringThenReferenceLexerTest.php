@@ -28,17 +28,17 @@ class StringThenReferenceLexerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsALexer()
+    public function testIsALexer(): void
     {
-        $this->assertTrue(is_a(StringThenReferenceLexer::class, LexerInterface::class, true));
+        static::assertTrue(is_a(StringThenReferenceLexer::class, LexerInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(StringThenReferenceLexer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(StringThenReferenceLexer::class))->isCloneable());
     }
 
-    public function testMergesNonEmptyStringFollowedByAReference()
+    public function testMergesNonEmptyStringFollowedByAReference(): void
     {
         $value = 'foo55@example.com';
         $expected = [
@@ -65,8 +65,8 @@ class StringThenReferenceLexerTest extends TestCase
         $lexer = new StringThenReferenceLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        $this->assertCount(count($expected), $actual);
-        $this->assertEquals($expected, $actual);
+        static::assertCount(count($expected), $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

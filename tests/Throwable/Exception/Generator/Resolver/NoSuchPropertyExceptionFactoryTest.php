@@ -25,19 +25,19 @@ use PHPUnit\Framework\TestCase;
  */
 class NoSuchPropertyExceptionFactoryTest extends TestCase
 {
-    public function testCreateForFixture()
+    public function testCreateForFixture(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
         $property = new FixturePropertyValue(new FakeValue(), 'foo');
 
         $exception = NoSuchPropertyExceptionFactory::createForFixture($fixture, $property);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find the property "foo" of the object "dummy" (class: Dummy).',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
 
 
         $code = 500;
@@ -45,11 +45,11 @@ class NoSuchPropertyExceptionFactoryTest extends TestCase
 
         $exception = NoSuchPropertyExceptionFactory::createForFixture($fixture, $property, $code, $previous);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find the property "foo" of the object "dummy" (class: Dummy).',
             $exception->getMessage()
         );
-        $this->assertEquals($code, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals($code, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 }

@@ -15,25 +15,26 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
  */
 class UniqueValueGenerationLimitReachedExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(UniqueValueGenerationLimitReachedException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(UniqueValueGenerationLimitReachedException::class, RuntimeException::class, true));
     }
 
-    public function testIsAResolutionThrowable()
+    public function testIsAResolutionThrowable(): void
     {
-        $this->assertTrue(is_a(UniqueValueGenerationLimitReachedException::class, ResolutionThrowable::class, true));
+        static::assertTrue(is_a(UniqueValueGenerationLimitReachedException::class, ResolutionThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildUniqueValueGenerationLimitReachedException();
-        $this->assertInstanceOf(ChildUniqueValueGenerationLimitReachedException::class, $exception);
+        static::assertInstanceOf(ChildUniqueValueGenerationLimitReachedException::class, $exception);
     }
 }

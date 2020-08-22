@@ -27,21 +27,21 @@ class RemoveConflictingParametersParameterBagResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAParameterBagResolver()
+    public function testIsAParameterBagResolver(): void
     {
-        $this->assertTrue(is_a(
+        static::assertTrue(is_a(
             RemoveConflictingParametersParameterBagResolver::class,
             ParameterBagResolverInterface::class,
             true
         ));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(RemoveConflictingParametersParameterBagResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(RemoveConflictingParametersParameterBagResolver::class))->isCloneable());
     }
 
-    public function testRemovesAllConflictingKeysFromInjectedParametersBagBeforeResolvingIt()
+    public function testRemovesAllConflictingKeysFromInjectedParametersBagBeforeResolvingIt(): void
     {
         $unresolvedParameters = new ParameterBag([
             'foo' => '(unresolved) bar',
@@ -72,12 +72,12 @@ class RemoveConflictingParametersParameterBagResolverTest extends TestCase
         $resolver = new RemoveConflictingParametersParameterBagResolver($decoratedResolver);
         $actual = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testCanHandleTheCaseWhereNoParameterIsInjected()
+    public function testCanHandleTheCaseWhereNoParameterIsInjected(): void
     {
         $unresolvedParameters = new ParameterBag([
             'foo' => '(unresolved) bar',
@@ -105,7 +105,7 @@ class RemoveConflictingParametersParameterBagResolverTest extends TestCase
         $resolver = new RemoveConflictingParametersParameterBagResolver($decoratedResolver);
         $actual = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

@@ -20,15 +20,15 @@ use PHPUnit\Framework\TestCase;
  */
 class ObjectNotFoundExceptionFactoryTest extends TestCase
 {
-    public function testCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory(): void
     {
         $exception = ObjectNotFoundExceptionFactory::create('foo', 'Dummy');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find the object "foo" of the class "Dummy".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

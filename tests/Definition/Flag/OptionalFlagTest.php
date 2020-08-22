@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Flag;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\FlagInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -21,35 +22,35 @@ use PHPUnit\Framework\TestCase;
  */
 class OptionalFlagTest extends TestCase
 {
-    public function testIsAFlag()
+    public function testIsAFlag(): void
     {
-        $this->assertTrue(is_a(OptionalFlag::class, FlagInterface::class, true));
+        static::assertTrue(is_a(OptionalFlag::class, FlagInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $flag = new OptionalFlag(50);
 
-        $this->assertEquals(50, $flag->getPercentage());
-        $this->assertEquals('%?', $flag->__toString());
+        static::assertEquals(50, $flag->getPercentage());
+        static::assertEquals('%?', $flag->__toString());
     }
 
     /**
      * @dataProvider providePercentageValues
      */
-    public function testThrowsExceptionIfPercentageValueIsInvalid(int $percentage, string $expectedMessage = null)
+    public function testThrowsExceptionIfPercentageValueIsInvalid(int $percentage, string $expectedMessage = null): void
     {
         try {
             new OptionalFlag($percentage);
             if (null !== $expectedMessage) {
-                $this->fail('Expected exception to be thrown.');
+                static::fail('Expected exception to be thrown.');
             }
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             if (null === $expectedMessage) {
-                $this->fail('Was not expecting exception to be thrown.');
+                static::fail('Was not expecting exception to be thrown.');
             }
 
-            $this->assertEquals($expectedMessage, $exception->getMessage());
+            static::assertEquals($expectedMessage, $exception->getMessage());
         }
     }
 

@@ -14,20 +14,21 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\ObjectNotFoundException
  */
 class ObjectNotFoundExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(ObjectNotFoundException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(ObjectNotFoundException::class, RuntimeException::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildObjectNotFoundException();
-        $this->assertInstanceOf(ChildObjectNotFoundException::class, $exception);
+        static::assertInstanceOf(ChildObjectNotFoundException::class, $exception);
     }
 }

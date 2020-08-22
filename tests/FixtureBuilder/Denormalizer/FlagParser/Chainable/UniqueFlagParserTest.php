@@ -30,15 +30,15 @@ class UniqueFlagParserTest extends FlagParserTestCase
         $this->parser = new UniqueFlagParser();
     }
 
-    public function testIsAChainableFlagParser()
+    public function testIsAChainableFlagParser(): void
     {
-        $this->assertTrue(is_a(UniqueFlagParser::class, ChainableFlagParserInterface::class, true));
+        static::assertTrue(is_a(UniqueFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
     /**
      * @dataProvider provideUniques
      */
-    public function testCanParseUniques(string $element, FlagBag $expected = null)
+    public function testCanParseUniques(string $element, FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);
     }

@@ -35,7 +35,7 @@ class MutableValue implements ValueInterface
         return $this->value;
     }
 
-    public function setValue($value)
+    public function setValue($value): void
     {
         $this->value = $value;
     }

@@ -31,6 +31,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\ObjectGenerator\CompleteObjectGenerator
@@ -39,33 +40,33 @@ class CompleteObjectGeneratorTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAnObjectGenerator()
+    public function testIsAnObjectGenerator(): void
     {
-        $this->assertTrue(is_a(CompleteObjectGenerator::class, ObjectGeneratorInterface::class, true));
+        static::assertTrue(is_a(CompleteObjectGenerator::class, ObjectGeneratorInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(CompleteObjectGenerator::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(CompleteObjectGenerator::class))->isCloneable());
     }
 
-    public function testReturnsFixtureSetObjectsIfObjectIsAlreadyCompletelyGenerated()
+    public function testReturnsFixtureSetObjectsIfObjectIsAlreadyCompletelyGenerated(): void
     {
         $fixture = new DummyFixture('dummy');
         $set = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())->with($fixture),
-            $expected = new ObjectBag(['dummy' => new \stdClass()])
+            $expected = new ObjectBag(['dummy' => new stdClass()])
         );
         $context = new GenerationContext();
 
         $generator = new CompleteObjectGenerator(new FakeObjectGenerator());
         $actual = $generator->generate($fixture, $set, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testUsesDecoratedGeneratorToGenerateTheObjectAndReturnsTheResultIfDoesNotRequireACompleteObject()
+    public function testUsesDecoratedGeneratorToGenerateTheObjectAndReturnsTheResultIfDoesNotRequireACompleteObject(): void
     {
         $fixture = new SimpleFixture(
             'dummy',
@@ -85,7 +86,7 @@ class CompleteObjectGeneratorTest extends TestCase
         $decoratedGeneratorProphecy
             ->generate($fixture, $set, $context)
             ->willReturn(
-                $expected = (new ObjectBag())->with(new SimpleObject('dummy', new \stdClass()))
+                $expected = (new ObjectBag())->with(new SimpleObject('dummy', new stdClass()))
             )
         ;
         /** @var ObjectGeneratorInterface $decoratedGenerator */
@@ -94,7 +95,7 @@ class CompleteObjectGeneratorTest extends TestCase
         $generator = new CompleteObjectGenerator($decoratedGenerator);
         $actual = $generator->generate($fixture, $set, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -107,7 +108,7 @@ class CompleteObjectGeneratorTest extends TestCase
         GenerationContext $context,
         ObjectGeneratorInterface $decoratedGenerator,
         ObjectBag $expected
-    ) {
+    ): void {
         $set = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())->with($fixture)
@@ -116,7 +117,7 @@ class CompleteObjectGeneratorTest extends TestCase
         $generator = new CompleteObjectGenerator($decoratedGenerator);
         $actual = $generator->generate($fixture, $set, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     public function provideSets()
@@ -139,7 +140,7 @@ class CompleteObjectGeneratorTest extends TestCase
                     ->willReturn(
                         (new ObjectBag())->with(
                             new CompleteObject(
-                                new SimpleObject('dummy', new \stdClass())
+                                new SimpleObject('dummy', new stdClass())
                             )
                         )
                     )
@@ -150,7 +151,7 @@ class CompleteObjectGeneratorTest extends TestCase
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
                     new CompleteObject(
-                        new SimpleObject('dummy', new \stdClass())
+                        new SimpleObject('dummy', new stdClass())
                     )
                 )
             );
@@ -181,7 +182,7 @@ class CompleteObjectGeneratorTest extends TestCase
                     ->generate(Argument::cetera())
                     ->willReturn(
                         (new ObjectBag())->with(
-                            new SimpleObject('dummy', new \stdClass())
+                            new SimpleObject('dummy', new stdClass())
                         )
                     )
                 ;
@@ -190,7 +191,7 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
-                    new SimpleObject('dummy', new \stdClass())
+                    new SimpleObject('dummy', new stdClass())
                 )
             );
 
@@ -220,7 +221,7 @@ class CompleteObjectGeneratorTest extends TestCase
                     ->generate(Argument::cetera())
                     ->willReturn(
                         (new ObjectBag())->with(
-                            new SimpleObject('dummy', new \stdClass())
+                            new SimpleObject('dummy', new stdClass())
                         )
                     )
                 ;
@@ -229,7 +230,7 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
-                    new SimpleObject('dummy', new \stdClass())
+                    new SimpleObject('dummy', new stdClass())
                 )
             );
 
@@ -255,7 +256,7 @@ class CompleteObjectGeneratorTest extends TestCase
                     ->generate(Argument::cetera())
                     ->willReturn(
                         (new ObjectBag())->with(
-                            new SimpleObject('dummy', new \stdClass())
+                            new SimpleObject('dummy', new stdClass())
                         )
                     )
                 ;
@@ -264,7 +265,7 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
-                    new SimpleObject('dummy', new \stdClass())
+                    new SimpleObject('dummy', new stdClass())
                 )
             );
 
@@ -293,7 +294,7 @@ class CompleteObjectGeneratorTest extends TestCase
                     ->generate(Argument::cetera())
                     ->willReturn(
                         $expected = (new ObjectBag())->with(
-                            new SimpleObject('dummy', new \stdClass())
+                            new SimpleObject('dummy', new stdClass())
                         )
                     )
                 ;

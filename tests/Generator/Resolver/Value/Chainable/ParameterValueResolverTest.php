@@ -30,25 +30,25 @@ use ReflectionClass;
  */
 class ParameterValueResolverTest extends TestCase
 {
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(ParameterValueResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(ParameterValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ParameterValueResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ParameterValueResolver::class))->isCloneable());
     }
 
-    public function testCanResolveVariableValues()
+    public function testCanResolveVariableValues(): void
     {
         $resolver = new ParameterValueResolver();
 
-        $this->assertTrue($resolver->canResolve(new ParameterValue('')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new ParameterValue('')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testReturnsParameterFromTheFixtureSet()
+    public function testReturnsParameterFromTheFixtureSet(): void
     {
         $value = new ParameterValue('foo');
         $set = ResolvedFixtureSetFactory::create(
@@ -60,10 +60,10 @@ class ParameterValueResolverTest extends TestCase
         $resolver = new ParameterValueResolver();
         $actual = $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope()
+    public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope(): void
     {
         $value = new ParameterValue('foo');
         $set = ResolvedFixtureSetFactory::create();

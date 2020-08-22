@@ -25,28 +25,28 @@ use ReflectionClass;
  */
 class EscapedValueTokenParserTest extends TestCase
 {
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(EscapedValueTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(EscapedValueTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(EscapedValueTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(EscapedValueTokenParser::class))->isCloneable());
     }
 
     /**
      * @dataProvider provideTokens
      */
-    public function testCanParseEscapedTokens(Token $token, bool $expected)
+    public function testCanParseEscapedTokens(Token $token, bool $expected): void
     {
         $parser = new EscapedValueTokenParser();
         $actual = $parser->canParse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfAMalformedTokenIsGiven()
+    public function testThrowsAnExceptionIfAMalformedTokenIsGiven(): void
     {
         $token = new Token('', new TokenType(TokenType::ESCAPED_VALUE_TYPE));
 
@@ -58,7 +58,7 @@ class EscapedValueTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testReturnsEscapedValue()
+    public function testReturnsEscapedValue(): void
     {
         $token = new Token('\<', new TokenType(TokenType::ESCAPED_VALUE_TYPE));
         $expected = '<';
@@ -66,10 +66,10 @@ class EscapedValueTokenParserTest extends TestCase
         $parser = new EscapedValueTokenParser();
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testTheEscapedValueIsDetokenizedBeforeBeingReturned()
+    public function testTheEscapedValueIsDetokenizedBeforeBeingReturned(): void
     {
         $token = new Token('\<aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::ESCAPED_VALUE_TYPE));
         $expected = '<foo()>';
@@ -77,7 +77,7 @@ class EscapedValueTokenParserTest extends TestCase
         $parser = new EscapedValueTokenParser();
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     public function provideTokens()

@@ -17,13 +17,14 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\ResolvedFixtureSet
  */
 class ResolvedFixtureSetTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $parameters = new ParameterBag();
         $fixtures = new FixtureBag();
@@ -31,12 +32,12 @@ class ResolvedFixtureSetTest extends TestCase
 
         $set = new ResolvedFixtureSet($parameters, $fixtures, $objects);
 
-        $this->assertEquals($parameters, $set->getParameters());
-        $this->assertEquals($fixtures, $set->getFixtures());
-        $this->assertEquals($objects, $set->getObjects());
+        static::assertEquals($parameters, $set->getParameters());
+        static::assertEquals($fixtures, $set->getFixtures());
+        static::assertEquals($objects, $set->getObjects());
     }
 
-    public function testWithersReturnANewModifiedInstance()
+    public function testWithersReturnANewModifiedInstance(): void
     {
         $parameters = new ParameterBag();
         $fixtures = new FixtureBag();
@@ -47,11 +48,11 @@ class ResolvedFixtureSetTest extends TestCase
         $newParameters = new ParameterBag(['foo' => 'bar']);
         $newSet = $set->withParameters($newParameters);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ResolvedFixtureSet($parameters, $fixtures, $objects),
             $set
         );
-        $this->assertEquals(
+        static::assertEquals(
             new ResolvedFixtureSet($newParameters, $fixtures, $objects),
             $newSet
         );
@@ -59,23 +60,23 @@ class ResolvedFixtureSetTest extends TestCase
         $newFixtures = new FixtureBag();
         $newSet = $set->withFixtures($newFixtures);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ResolvedFixtureSet($parameters, $fixtures, $objects),
             $set
         );
-        $this->assertEquals(
+        static::assertEquals(
             new ResolvedFixtureSet($parameters, $newFixtures, $objects),
             $newSet
         );
 
-        $newObjects = new ObjectBag(['foo' => new \stdClass()]);
+        $newObjects = new ObjectBag(['foo' => new stdClass()]);
         $newSet = $set->withObjects($newObjects);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ResolvedFixtureSet($parameters, $fixtures, $objects),
             $set
         );
-        $this->assertEquals(
+        static::assertEquals(
             new ResolvedFixtureSet($parameters, $fixtures, $newObjects),
             $newSet
         );

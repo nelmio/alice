@@ -23,7 +23,7 @@ final class Address
         return $this->country;
     }
 
-    public function setCountry(string $country)
+    public function setCountry(string $country): void
     {
         $this->country = $country;
     }
@@ -33,7 +33,7 @@ final class Address
         return $this->city;
     }
 
-    public function setCity(string $city)
+    public function setCity(string $city): void
     {
         $this->city = $city;
     }

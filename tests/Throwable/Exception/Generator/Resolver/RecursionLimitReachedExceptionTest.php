@@ -15,25 +15,26 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException
  */
 class RecursionLimitReachedExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(RecursionLimitReachedException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(RecursionLimitReachedException::class, RuntimeException::class, true));
     }
 
-    public function testIsAResolutionThrowable()
+    public function testIsAResolutionThrowable(): void
     {
-        $this->assertTrue(is_a(RecursionLimitReachedException::class, ResolutionThrowable::class, true));
+        static::assertTrue(is_a(RecursionLimitReachedException::class, ResolutionThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildRecursionLimitReachedException();
-        $this->assertInstanceOf(ChildRecursionLimitReachedException::class, $exception);
+        static::assertInstanceOf(ChildRecursionLimitReachedException::class, $exception);
     }
 }

@@ -34,27 +34,27 @@ class PropertyReferenceTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(PropertyReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(PropertyReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(PropertyReferenceTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(PropertyReferenceTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseDynamicArrayTokens()
+    public function testCanParseDynamicArrayTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new PropertyReferenceTokenParser();
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
+    public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
     {
         $token = new Token('', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE));
         $parser = new PropertyReferenceTokenParser();
@@ -65,7 +65,7 @@ class PropertyReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfCouldNotParseToken()
+    public function testThrowsAnExceptionIfCouldNotParseToken(): void
     {
         $token = new Token('', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE));
         $parser = new PropertyReferenceTokenParser(new FakeParser());
@@ -76,7 +76,7 @@ class PropertyReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfParsingReferenceReturnsUnexpectedResult()
+    public function testThrowsAnExceptionIfParsingReferenceReturnsUnexpectedResult(): void
     {
         $token = new Token('@@malformed_user->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE));
 
@@ -93,7 +93,7 @@ class PropertyReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testReturnsAPropertyReferenceIfCanParseToken()
+    public function testReturnsAPropertyReferenceIfCanParseToken(): void
     {
         $token = new Token('@user->username', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE));
 
@@ -107,7 +107,7 @@ class PropertyReferenceTokenParserTest extends TestCase
         $parser = new PropertyReferenceTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
+use Throwable;
 
 /**
  * @private
@@ -41,7 +42,7 @@ final class ExpressionLanguageExceptionFactory
         );
     }
 
-    public static function createForUnparsableToken(Token $token, int $code = 0, \Throwable $previous = null): ParseException
+    public static function createForUnparsableToken(Token $token, int $code = 0, Throwable $previous = null): ParseException
     {
         return new ParseException(
             sprintf(

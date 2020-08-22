@@ -36,34 +36,34 @@ class ListValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(ListValueResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(ListValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ListValueResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ListValueResolver::class))->isCloneable());
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $resolver = new ListValueResolver();
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        $this->assertEquals(new ListValueResolver(), $resolver);
-        $this->assertEquals(new ListValueResolver(new FakeValueResolver()), $newResolver);
+        static::assertEquals(new ListValueResolver(), $resolver);
+        static::assertEquals(new ListValueResolver(new FakeValueResolver()), $newResolver);
     }
 
-    public function testCanResolveOptionalValues()
+    public function testCanResolveOptionalValues(): void
     {
         $resolver = new ListValueResolver();
 
-        $this->assertTrue($resolver->canResolve(new ListValue([])));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new ListValue([])));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testCannotResolveValueIfHasNoResolver()
+    public function testCannotResolveValueIfHasNoResolver(): void
     {
         $value = new ListValue([]);
         $resolver = new ListValueResolver();
@@ -74,7 +74,7 @@ class ListValueResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    public function testImplodesTheGivenArrayOfValues()
+    public function testImplodesTheGivenArrayOfValues(): void
     {
         $value = new ListValue(['a', 'b', 'c']);
         $expected = new ResolvedValueWithFixtureSet('abc', ResolvedFixtureSetFactory::create());
@@ -82,10 +82,10 @@ class ListValueResolverTest extends TestCase
         $resolver = new ListValueResolver(new FakeValueResolver());
         $actual = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testResolvesAllTheValuesInArrayBeforeImplodingIt()
+    public function testResolvesAllTheValuesInArrayBeforeImplodingIt(): void
     {
         $value = new ListValue(['a', new FakeValue(), 'c', new FakeValue()]);
         $fixture = new FakeFixture();
@@ -121,7 +121,7 @@ class ListValueResolverTest extends TestCase
         $resolver = new ListValueResolver($valueResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $valueResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }

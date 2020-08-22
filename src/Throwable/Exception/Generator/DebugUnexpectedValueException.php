@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator;
 
 use Nelmio\Alice\Throwable\GenerationThrowable;
+use UnexpectedValueException;
 
-final class DebugUnexpectedValueException extends \UnexpectedValueException implements GenerationThrowable
+final class DebugUnexpectedValueException extends UnexpectedValueException implements GenerationThrowable
 {
 }

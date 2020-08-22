@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Entity;
 
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
+
 class DummyWithDate
 {
     /**
@@ -25,17 +29,17 @@ class DummyWithDate
         $this->data = $data;
     }
 
-    public function setImmutableDateTime(\DateTimeImmutable $dateTime)
+    public function setImmutableDateTime(DateTimeImmutable $dateTime): void
     {
         $this->data['immutable'] = $dateTime;
     }
 
-    public function setMutableDateTime(\DateTime $datedateTime)
+    public function setMutableDateTime(DateTime $datedateTime): void
     {
         $this->data['mutable'] = $datedateTime;
     }
 
-    public function setDateTimeInterface(\DateTimeInterface $dateTime)
+    public function setDateTimeInterface(DateTimeInterface $dateTime): void
     {
         $this->data['interface'] = $dateTime;
     }

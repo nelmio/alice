@@ -27,27 +27,27 @@ use ReflectionClass;
  */
 class FixtureRangeReferenceTokenParserTest extends TestCase
 {
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(FixtureRangeReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(FixtureRangeReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FixtureRangeReferenceTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FixtureRangeReferenceTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseRangedReferencesTokens()
+    public function testCanParseRangedReferencesTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new FixtureRangeReferenceTokenParser();
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testThrowsAnExceptionIfPassedTokenIsMalformed()
+    public function testThrowsAnExceptionIfPassedTokenIsMalformed(): void
     {
         $token = new Token('', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
         $parser = new FixtureRangeReferenceTokenParser();
@@ -59,7 +59,7 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfPassedTokenIsInvalid()
+    public function testThrowsAnExceptionIfPassedTokenIsInvalid(): void
     {
         $token = new Token('@user{1..10', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
         $parser = new FixtureRangeReferenceTokenParser();
@@ -70,7 +70,7 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfAMalformedTokenIsGiven()
+    public function testThrowsAnExceptionIfAMalformedTokenIsGiven(): void
     {
         $token = new Token('', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
 
@@ -82,7 +82,7 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testReturnsAChoiceListIfCanParseToken()
+    public function testReturnsAChoiceListIfCanParseToken(): void
     {
         $token = new Token('@user{10..8}', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
         $expected = new ArrayValue([
@@ -94,10 +94,10 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
         $parser = new FixtureRangeReferenceTokenParser();
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testReturnsAChoiceListWithStepsIfCanParseToken()
+    public function testReturnsAChoiceListWithStepsIfCanParseToken(): void
     {
         $token = new Token('@user{1..5, 2}', new TokenType(TokenType::RANGE_REFERENCE_TYPE));
         $expected = new ArrayValue([
@@ -109,6 +109,6 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
         $parser = new FixtureRangeReferenceTokenParser();
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

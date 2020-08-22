@@ -34,27 +34,27 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(FixtureMethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(FixtureMethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FixtureMethodReferenceTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FixtureMethodReferenceTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseMethodReferenceTokens()
+    public function testCanParseMethodReferenceTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new FixtureMethodReferenceTokenParser();
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
+    public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
     {
         $token = new Token('', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
         $parser = new FixtureMethodReferenceTokenParser();
@@ -65,7 +65,7 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnExceptionIfCouldNotParseToken()
+    public function testThrowsAnExceptionIfCouldNotParseToken(): void
     {
         $token = new Token('', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
         $parser = new FixtureMethodReferenceTokenParser(new FakeParser());
@@ -77,7 +77,7 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testReturnsFunctionValue()
+    public function testReturnsFunctionValue(): void
     {
         $token = new Token('@user->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
@@ -92,10 +92,10 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
         $parser = new FixtureMethodReferenceTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfMethodReferenceIsMalformed()
+    public function testThrowsAnExceptionIfMethodReferenceIsMalformed(): void
     {
         $token = new Token('@user->getName()->anotherName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
@@ -110,21 +110,21 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
     /**
      * @dataProvider provideParser
      */
-    public function testThrowsAnExceptionIfParsingReturnsAnUnexpectedResult(ParserInterface $decoratedParser)
+    public function testThrowsAnExceptionIfParsingReturnsAnUnexpectedResult(ParserInterface $decoratedParser): void
     {
         try {
             $token = new Token('@user->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
             $parser = new FixtureMethodReferenceTokenParser($decoratedParser);
             $parser->parse($token);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (ParseException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not parse the token "@user->getName()" (type: METHOD_REFERENCE_TYPE).',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNotNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
         }
     }
 

@@ -51,17 +51,17 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         );
     }
 
-    public function testIsAChainableDenormalizer()
+    public function testIsAChainableDenormalizer(): void
     {
-        $this->assertTrue(is_a(SimpleDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
+        static::assertTrue(is_a(SimpleDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleDenormalizer::class))->isCloneable());
     }
 
-    public function testCannotDenormalizeFixtureIfHasNoFlagParser()
+    public function testCannotDenormalizeFixtureIfHasNoFlagParser(): void
     {
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $this->prophesize(SpecificationsDenormalizerInterface::class)->reveal();
@@ -74,7 +74,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
         $denormalizer->denormalize(new FixtureBag(), 'Nelmio\Alice\Entity\User', 'user0', [], new FlagBag(''));
     }
 
-    public function testDenormalizesValuesToCreateANewFixtureObjectAndAddItToTheListOfFixturesReturned()
+    public function testDenormalizesValuesToCreateANewFixtureObjectAndAddItToTheListOfFixturesReturned(): void
     {
         $fixtures = new FixtureBag();
         $className = 'Nelmio\Alice\Entity\User';
@@ -117,13 +117,13 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
             )
         );
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testDenormalizationRemovesFlagsInIds()
+    public function testDenormalizationRemovesFlagsInIds(): void
     {
         $fixtures = new FixtureBag();
         $className = 'Nelmio\Alice\Entity\User';
@@ -170,7 +170,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
             )
         );
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
@@ -179,7 +179,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideSimpleFixtures
      */
-    public function testCanBuildSimpleFixtures($name)
+    public function testCanBuildSimpleFixtures($name): void
     {
         $this->assertCanBuild($name);
     }
@@ -187,7 +187,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideListFixtures
      */
-    public function testCanBuildListFixtures($name)
+    public function testCanBuildListFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
@@ -195,7 +195,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideMalformedListFixtures
      */
-    public function testCanBuildMalformedListFixtures($name)
+    public function testCanBuildMalformedListFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
@@ -203,7 +203,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideSegmentFixtures
      */
-    public function testCanBuildSegmentFixtures($name)
+    public function testCanBuildSegmentFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
@@ -211,7 +211,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideMalformedSegmentFixtures
      */
-    public function testCanBuildMalformedSegmentFixtures($name)
+    public function testCanBuildMalformedSegmentFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
@@ -219,7 +219,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideSimpleFixtures
      */
-    public function testBuildSimpleFixtures($name, $expected)
+    public function testBuildSimpleFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
@@ -227,7 +227,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideListFixtures
      */
-    public function testBuildListFixtures($name, $expected)
+    public function testBuildListFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
@@ -235,7 +235,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideMalformedListFixtures
      */
-    public function testBuildMalformedListFixtures($name, $expected)
+    public function testBuildMalformedListFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
@@ -243,7 +243,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideSegmentFixtures
      */
-    public function testBuildSegmentFixtures($name, $expected)
+    public function testBuildSegmentFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
@@ -251,7 +251,7 @@ class SimpleDenormalizerTest extends ChainableDenormalizerTest
     /**
      * @dataProvider provideMalformedSegmentFixtures
      */
-    public function testBuildMalformedSegmentFixtures($name, $expected)
+    public function testBuildMalformedSegmentFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }

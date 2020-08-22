@@ -54,7 +54,7 @@ final class ResolvingContext
         return array_key_exists($key, $this->resolving);
     }
 
-    public function add(string $key)
+    public function add(string $key): void
     {
         $this->resolving[$key] = array_key_exists($key, $this->resolving)
             ? $this->resolving[$key] + 1
@@ -65,7 +65,7 @@ final class ResolvingContext
     /**
      * @throws CircularReferenceException
      */
-    public function checkForCircularReference(string $key)
+    public function checkForCircularReference(string $key): void
     {
         if (true === $this->has($key) && 1 < $this->resolving[$key]) {
             throw CircularReferenceExceptionFactory::createForParameter($key, $this->resolving);

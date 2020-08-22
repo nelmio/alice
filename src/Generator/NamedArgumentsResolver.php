@@ -13,13 +13,17 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
+use ReflectionException;
+use ReflectionMethod;
+use RuntimeException;
+
 class NamedArgumentsResolver
 {
     public function resolveArguments(array $arguments, string $className, string $methodName): array
     {
         try {
-            $method = new \ReflectionMethod($className, $methodName);
-        } catch (\ReflectionException $exception) {
+            $method = new ReflectionMethod($className, $methodName);
+        } catch (ReflectionException $exception) {
             return $arguments;
         }
 
@@ -56,7 +60,7 @@ class NamedArgumentsResolver
             }
 
             if (!$parameter->isDefaultValueAvailable()) {
-                throw new \RuntimeException(sprintf(
+                throw new RuntimeException(sprintf(
                     'Argument $%s of %s::%s() is not passed a value and does not define a default one.',
                     $name,
                     $className,
@@ -72,7 +76,7 @@ class NamedArgumentsResolver
         });
 
         if ([] !== $unknownNamedParameters) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Unknown arguments for %s::%s(): $%s.',
                 $className,
                 $methodName,

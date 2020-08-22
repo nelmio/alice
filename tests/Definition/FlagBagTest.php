@@ -31,37 +31,37 @@ use stdClass;
  */
 class FlagBagTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $bag = new FlagBag('user0');
 
-        $this->assertEquals('user0', $bag->getKey());
+        static::assertEquals('user0', $bag->getKey());
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $bag = (new FlagBag(''))->withFlag($flag = new MutableFlag('foo', new stdClass()));
         $flag->getObject()->foo = 'bar';
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag(''))->withFlag($flag = new MutableFlag('foo', new stdClass())),
             $bag
         );
 
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 
-    public function testAddingAFlagCreatesANewModifiedInstance()
+    public function testAddingAFlagCreatesANewModifiedInstance(): void
     {
         $flag = new MutableFlag('flag0', new stdClass());
         $bag1 = new FlagBag('user0');
         $bag2 = $bag1->withFlag($flag);
 
-        $this->assertInstanceOf(FlagBag::class, $bag1);
-        $this->assertNotSame($bag1, $bag2);
+        static::assertInstanceOf(FlagBag::class, $bag1);
+        static::assertNotSame($bag1, $bag2);
 
-        $this->assertCount(0, $bag1);
-        $this->assertCount(1, $bag2);
+        static::assertCount(0, $bag1);
+        static::assertCount(1, $bag2);
 
 
         // Mutate injected value
@@ -75,13 +75,13 @@ class FlagBagTest extends TestCase
             $flag->getObject()->foo = 'bar';
         }
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('user0'))->withFlag(new MutableFlag('flag0', new stdClass())),
             $bag2
         );
     }
 
-    public function testCanCreateANewFlagBagWithADifferentKey()
+    public function testCanCreateANewFlagBagWithADifferentKey(): void
     {
         $bag1 = (new FlagBag('user0'))
             ->withFlag(
@@ -93,39 +93,39 @@ class FlagBagTest extends TestCase
         ;
         $bag2 = $bag1->withKey('user2');
 
-        $this->assertInstanceOf(FlagBag::class, $bag1);
-        $this->assertNotSame($bag1, $bag2);
+        static::assertInstanceOf(FlagBag::class, $bag1);
+        static::assertNotSame($bag1, $bag2);
 
-        $this->assertCount(1, $bag1);
-        $this->assertCount(1, $bag2);
+        static::assertCount(1, $bag1);
+        static::assertCount(1, $bag2);
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('user0'))->withFlag(new MutableFlag('flag0', new stdClass())),
             $bag1
         );
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('user2'))->withFlag(new MutableFlag('flag0', new stdClass())),
             $bag2
         );
     }
 
-    public function testMergingTwoBagsCreatesANewModifiedInstance()
+    public function testMergingTwoBagsCreatesANewModifiedInstance(): void
     {
         $bag1 = (new FlagBag('bag1'))->withFlag($flag1 = new MutableFlag('flag1', new stdClass()));
         $bag2 = (new FlagBag('bag2'))->withFlag($flag2 = new MutableFlag('flag2', new stdClass()));
         $mergedBag = $bag1->mergeWith($bag2);
 
-        $this->assertInstanceOf(FlagBag::class, $mergedBag);
+        static::assertInstanceOf(FlagBag::class, $mergedBag);
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('bag1'))->withFlag($flag1),
             $bag1
         );
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('bag2'))->withFlag(new MutableFlag('flag2', new stdClass())),
             $bag2
         );
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('bag1'))
                 ->withFlag(new MutableFlag('flag1', new stdClass()))
                 ->withFlag(new MutableFlag('flag2', new stdClass())),
@@ -133,7 +133,7 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testCanMergeTwoBagsWithoutOverridingExistingValues()
+    public function testCanMergeTwoBagsWithoutOverridingExistingValues(): void
     {
         $firstBag = (new FlagBag('first'))
             ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
@@ -149,27 +149,27 @@ class FlagBagTest extends TestCase
         $mergeSecondWithFirstWithOverriding = $secondBag->mergeWith($firstBag);
         $mergeSecondWithFirstWithoutOverriding = $secondBag->mergeWith($firstBag, false);
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('first'))
                 ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
                 ->withFlag(new ElementFlag('foz')),
             $firstBag
         );
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('second'))
                 ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
                 ->withFlag(new ElementFlag('baz')),
             $secondBag
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('first'))
                 ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
                 ->withFlag(new ElementFlag('foz'))
                 ->withFlag(new ElementFlag('baz')),
             $mergeFirstWithSecondWithOverriding
         );
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('first'))
                 ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
                 ->withFlag(new ElementFlag('foz'))
@@ -177,14 +177,14 @@ class FlagBagTest extends TestCase
             $mergeFirstWithSecondWithoutOverriding
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('second'))
                 ->withFlag(new ElementFlag('baz'))
                 ->withFlag(new ElementWithToStringFlag('first_foo', 'foo'))
                 ->withFlag(new ElementFlag('foz')),
             $mergeSecondWithFirstWithOverriding
         );
-        $this->assertEquals(
+        static::assertEquals(
             (new FlagBag('second'))
                 ->withFlag(new ElementFlag('baz'))
                 ->withFlag(new ElementWithToStringFlag('second_foo', 'foo'))
@@ -193,16 +193,16 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testIsCountable()
+    public function testIsCountable(): void
     {
         $flags = new FlagBag('user0');
-        $this->assertCount(0, $flags);
+        static::assertCount(0, $flags);
 
         $flags = $flags->withFlag(new DummyFlag());
-        $this->assertCount(1, $flags);
+        static::assertCount(1, $flags);
     }
 
-    public function testDoesNotDuplicateFlags()
+    public function testDoesNotDuplicateFlags(): void
     {
         $flags = (new FlagBag('user0'))
             ->withFlag(new DummyFlag())
@@ -211,10 +211,10 @@ class FlagBagTest extends TestCase
             ->withFlag(new AnotherDummyFlag())
         ;
 
-        $this->assertCount(2, $flags);
+        static::assertCount(2, $flags);
     }
 
-    public function testIsIterable()
+    public function testIsIterable(): void
     {
         $flag1 = new DummyFlag();
         $flag2 = new AnotherDummyFlag();
@@ -233,7 +233,7 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testCanAccumulateExtendFlags()
+    public function testCanAccumulateExtendFlags(): void
     {
         $extendFlag1 = new ExtendFlag(new FixtureReference('user_base'));
         $extendFlag2 = new ExtendFlag(new FixtureReference('user_with_owner'));
@@ -252,7 +252,7 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testCannotAccumulateOptionalFlags()
+    public function testCannotAccumulateOptionalFlags(): void
     {
         $optionalFlag1 = new OptionalFlag(20);
         $optionalFlag2 = new OptionalFlag(60);
@@ -270,7 +270,7 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testCannotAccumulateTemplateFlags()
+    public function testCannotAccumulateTemplateFlags(): void
     {
         $templateFlag1 = new TemplateFlag();
         $templateFlag2 = new TemplateFlag();
@@ -288,7 +288,7 @@ class FlagBagTest extends TestCase
         );
     }
 
-    public function testCannotAccumulateUniqueFlags()
+    public function testCannotAccumulateUniqueFlags(): void
     {
         $uniqueFlag1 = new UniqueFlag();
         $uniqueFlag2 = new UniqueFlag();
@@ -306,13 +306,13 @@ class FlagBagTest extends TestCase
         );
     }
 
-    private function assertSameFlags(array $expected, FlagBag $actual)
+    private function assertSameFlags(array $expected, FlagBag $actual): void
     {
         $flags = [];
         foreach ($actual as $key => $value) {
             $flags[$key] = $value;
         }
 
-        $this->assertEquals($expected, $flags);
+        static::assertEquals($expected, $flags);
     }
 }

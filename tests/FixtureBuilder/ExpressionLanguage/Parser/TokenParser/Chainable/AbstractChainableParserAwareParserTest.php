@@ -25,36 +25,36 @@ use ReflectionClass;
  */
 class AbstractChainableParserAwareParserTest extends TestCase
 {
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(ImpartialChainableParserAwareParser::class, AbstractChainableParserAwareParser::class, true));
+        static::assertTrue(is_a(ImpartialChainableParserAwareParser::class, AbstractChainableParserAwareParser::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ImpartialChainableParserAwareParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ImpartialChainableParserAwareParser::class))->isCloneable());
     }
 
-    public function testCanBeInstantiatedWithoutAParser()
+    public function testCanBeInstantiatedWithoutAParser(): void
     {
         new ImpartialChainableParserAwareParser();
     }
 
-    public function testCanBeInstantiatedWithAParser()
+    public function testCanBeInstantiatedWithAParser(): void
     {
         new ImpartialChainableParserAwareParser(new FakeParser());
     }
 
-    public function testWithersReturnNewAModifiedInstance()
+    public function testWithersReturnNewAModifiedInstance(): void
     {
         $parser = new ImpartialChainableParserAwareParser();
         $newParser = $parser->withParser(new FakeParser());
 
-        $this->assertEquals(new ImpartialChainableParserAwareParser(), $parser);
-        $this->assertEquals(new ImpartialChainableParserAwareParser(new FakeParser()), $newParser);
+        static::assertEquals(new ImpartialChainableParserAwareParser(), $parser);
+        static::assertEquals(new ImpartialChainableParserAwareParser(new FakeParser()), $newParser);
     }
 
-    public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
+    public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
     {
         $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $parser = new ImpartialChainableParserAwareParser();
@@ -65,11 +65,11 @@ class AbstractChainableParserAwareParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testDoNothingIfTriesToParseATokenAndDecoratedParserIsFound()
+    public function testDoNothingIfTriesToParseATokenAndDecoratedParserIsFound(): void
     {
         $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $parser = new ImpartialChainableParserAwareParser(new FakeParser());
 
-        $this->assertNull($parser->parse($token));
+        static::assertNull($parser->parse($token));
     }
 }

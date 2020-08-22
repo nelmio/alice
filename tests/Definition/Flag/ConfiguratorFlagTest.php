@@ -21,15 +21,15 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfiguratorFlagTest extends TestCase
 {
-    public function testIsAFlag()
+    public function testIsAFlag(): void
     {
-        $this->assertTrue(is_a(ConfiguratorFlag::class, FlagInterface::class, true));
+        static::assertTrue(is_a(ConfiguratorFlag::class, FlagInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $flag = new ConfiguratorFlag();
 
-        $this->assertEquals('configurator', $flag->__toString());
+        static::assertEquals('configurator', $flag->__toString());
     }
 }

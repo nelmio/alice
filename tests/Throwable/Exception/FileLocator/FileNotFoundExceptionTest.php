@@ -21,38 +21,38 @@ use UnexpectedValueException;
  */
 class FileNotFoundExceptionTest extends TestCase
 {
-    public function testIsAnUnexpectedValueException()
+    public function testIsAnUnexpectedValueException(): void
     {
-        $this->assertTrue(is_a(FileNotFoundException::class, UnexpectedValueException::class, true));
+        static::assertTrue(is_a(FileNotFoundException::class, UnexpectedValueException::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildFileNotFoundException();
-        $this->assertInstanceOf(ChildFileNotFoundException::class, $exception);
+        static::assertInstanceOf(ChildFileNotFoundException::class, $exception);
     }
 
-    public function testCreateForEmptyFile()
+    public function testCreateForEmptyFile(): void
     {
         $exception = FileNotFoundException::createForEmptyFile();
 
-        $this->assertEquals(
+        static::assertEquals(
             'An empty file name is not valid to be located.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForNonExistentFile()
+    public function testCreateForNonExistentFile(): void
     {
         $exception = FileNotFoundException::createForNonExistentFile('foo.yml');
 
-        $this->assertEquals(
+        static::assertEquals(
             'The file "foo.yml" does not exist.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

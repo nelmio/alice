@@ -15,30 +15,31 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException
  */
 class UnresolvableValueDuringGenerationExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(UnresolvableValueDuringGenerationException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(UnresolvableValueDuringGenerationException::class, RuntimeException::class, true));
     }
 
-    public function testIsAnUnresolvableValueException()
+    public function testIsAnUnresolvableValueException(): void
     {
-        $this->assertTrue(is_a(UnresolvableValueDuringGenerationException::class, UnresolvableValueException::class, true));
+        static::assertTrue(is_a(UnresolvableValueDuringGenerationException::class, UnresolvableValueException::class, true));
     }
 
-    public function testIsAResolutionThrowable()
+    public function testIsAResolutionThrowable(): void
     {
-        $this->assertTrue(is_a(UnresolvableValueDuringGenerationException::class, ResolutionThrowable::class, true));
+        static::assertTrue(is_a(UnresolvableValueDuringGenerationException::class, ResolutionThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildUnresolvableValueDuringGenerationException();
-        $this->assertInstanceOf(ChildUnresolvableValueDuringGenerationException::class, $exception);
+        static::assertInstanceOf(ChildUnresolvableValueDuringGenerationException::class, $exception);
     }
 }

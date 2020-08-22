@@ -20,15 +20,15 @@ use PHPUnit\Framework\TestCase;
  */
 class CircularReferenceExceptionFactoryTest extends TestCase
 {
-    public function testCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory(): void
     {
         $exception = CircularReferenceExceptionFactory::createForParameter('foo', ['bar' => 1, 'baz' => 0]);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Circular reference detected for the parameter "foo" while resolving ["bar", "baz"].',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

@@ -48,7 +48,7 @@ abstract class AbstractChainableParserAwareParser implements ChainableTokenParse
     /**
      * @inheritdoc
      */
-    public function parse(Token $token)
+    public function parse(Token $token): void
     {
         if (null === $this->parser) {
             throw ExpressionLanguageExceptionFactory::createForExpectedMethodCallOnlyIfHasAParser(__METHOD__);

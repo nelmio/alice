@@ -21,14 +21,14 @@ use PHPUnit\Framework\TestCase;
  */
 class TemplateFlagTest extends TestCase
 {
-    public function testIsAFlag()
+    public function testIsAFlag(): void
     {
-        $this->assertTrue(is_a(TemplateFlag::class, FlagInterface::class, true));
+        static::assertTrue(is_a(TemplateFlag::class, FlagInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $flag = new TemplateFlag();
-        $this->assertEquals('template', $flag->__toString());
+        static::assertEquals('template', $flag->__toString());
     }
 }

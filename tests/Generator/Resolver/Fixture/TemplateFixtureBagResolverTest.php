@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags;
 use Nelmio\Alice\Definition\Fixture\TemplatingFixture;
@@ -28,6 +29,7 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver
@@ -41,7 +43,7 @@ class TemplateFixtureBagResolverTest extends TestCase
     private $resolver;
 
     /**
-     * @var \ReflectionProperty
+     * @var ReflectionProperty
      */
     private $propRefl;
 
@@ -56,12 +58,12 @@ class TemplateFixtureBagResolverTest extends TestCase
         $this->resolver = new TemplateFixtureBagResolver();
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(TemplateFixtureBagResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(TemplateFixtureBagResolver::class))->isCloneable());
     }
 
-    public function testResolvesTemplatesFixturesAndReturnsResultingFixtureBag()
+    public function testResolvesTemplatesFixturesAndReturnsResultingFixtureBag(): void
     {
         $unresolvedFixtures = (new FixtureBag())
             ->with(
@@ -197,10 +199,10 @@ class TemplateFixtureBagResolverTest extends TestCase
         ;
 
         $actual = $this->resolver->resolve($unresolvedFixtures);
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testTheResolutionIsInvarientToTheOrderInWhichFixturesAreGiven()
+    public function testTheResolutionIsInvarientToTheOrderInWhichFixturesAreGiven(): void
     {
         $unresolvedFixtures = (new FixtureBag())
             ->with(
@@ -304,10 +306,10 @@ class TemplateFixtureBagResolverTest extends TestCase
         ;
 
         $actual = $this->resolver->resolve($unresolvedFixtures);
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfFixtureExtendsANonExistingFixture()
+    public function testThrowsAnExceptionIfFixtureExtendsANonExistingFixture(): void
     {
         $unresolvedFixtures = (new FixtureBag())
             ->with(
@@ -335,7 +337,7 @@ class TemplateFixtureBagResolverTest extends TestCase
         $this->resolver->resolve($unresolvedFixtures);
     }
 
-    public function testThrowsAnExceptionIfAFixtureExtendANonTemplateFixture()
+    public function testThrowsAnExceptionIfAFixtureExtendANonTemplateFixture(): void
     {
         $unresolvedFixtures = (new FixtureBag())
             ->with(
@@ -364,7 +366,7 @@ class TemplateFixtureBagResolverTest extends TestCase
             )
         ;
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Fixture "user0" extends "user_base" but "user_base" is not a template.');
 
         $this->resolver->resolve($unresolvedFixtures);

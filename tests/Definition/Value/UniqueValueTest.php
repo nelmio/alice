@@ -13,47 +13,50 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\ValueInterface;
+use const PHP_VERSION_ID;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\UniqueValue
  */
 class UniqueValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
     }
 
     /**
      * @dataProvider provideValues
      */
-    public function testReadAccessorsReturnPropertiesValues($value)
+    public function testReadAccessorsReturnPropertiesValues($value): void
     {
         $id = 'Nelmio\Entity\User#user0#username';
 
         $definition = new UniqueValue($id, $value);
 
-        $this->assertEquals($id, $definition->getId());
-        $this->assertEquals($value, $definition->getValue());
+        static::assertEquals($id, $definition->getId());
+        static::assertEquals($value, $definition->getValue());
     }
 
-    public function testCannotCreateUniqueOfUniqueValue()
+    public function testCannotCreateUniqueOfUniqueValue(): void
     {
-        $definition = new UniqueValue('', new \stdClass());
+        $definition = new UniqueValue('', new stdClass());
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot create a unique value of a unique value for value "".');
 
         new UniqueValue('', $definition);
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $id = 'Nelmio\Entity\User#user0#username';
         $value = [
-            $arg0 = new \stdClass()
+            $arg0 = new stdClass()
         ];
         $definition = new UniqueValue($id, $value);
 
@@ -63,48 +66,48 @@ class UniqueValueTest extends TestCase
         // Mutate returned value
         $definition->getValue()[0]->foo = 'baz';
 
-        $this->assertEquals([new \stdClass()], $definition->getValue());
+        static::assertEquals([new stdClass()], $definition->getValue());
     }
 
-    public function testImmutableFactories()
+    public function testImmutableFactories(): void
     {
         $id = 'Nelmio\Entity\User#user0#username';
-        $value = new \stdClass();
-        $newValue = new \stdClass();
+        $value = new stdClass();
+        $newValue = new stdClass();
         $newValue->foo = 'bar';
 
         $original = new UniqueValue($id, $value);
         $clone = $original->withValue($newValue);
 
-        $this->assertInstanceOf(UniqueValue::class, $clone);
-        $this->assertEquals($id, $original->getId());
-        $this->assertEquals($id, $clone->getId());
-        $this->assertEquals($value, $original->getValue());
-        $this->assertEquals($newValue, $clone->getValue());
+        static::assertInstanceOf(UniqueValue::class, $clone);
+        static::assertEquals($id, $original->getId());
+        static::assertEquals($id, $clone->getId());
+        static::assertEquals($value, $original->getValue());
+        static::assertEquals($newValue, $clone->getValue());
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new UniqueValue('', 'foo');
-        $this->assertEquals('(unique) \'foo\'', (string) $value);
+        static::assertEquals('(unique) \'foo\'', (string) $value);
 
-        $value = new UniqueValue('', new \stdClass());
+        $value = new UniqueValue('', new stdClass());
 
-        if (\PHP_VERSION_ID >= 70300) {
+        if (PHP_VERSION_ID >= 70300) {
             $expectedStdClass = "(unique) (object) array(\n)";
         } else {
             $expectedStdClass = "(unique) stdClass::__set_state(array(\n))";
         }
-        $this->assertEquals($expectedStdClass, (string) $value);
+        static::assertEquals($expectedStdClass, (string) $value);
 
         $value = new UniqueValue('', new DummyValue('foo'));
-        $this->assertEquals('(unique) foo', (string) $value);
+        static::assertEquals('(unique) foo', (string) $value);
     }
 
     public function provideValues()
     {
         yield 'null value' => [null];
         yield 'string value' => ['azerty'];
-        yield 'object value' => [new \stdClass()];
+        yield 'object value' => [new stdClass()];
     }
 }

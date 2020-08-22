@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LexerParserSynchronizationTest extends TestCase
 {
-    public function testProvidesAreSynchronized()
+    public function testProvidesAreSynchronized(): void
     {
         $lexerTestCase = new LexerIntegrationTest();
         $lexerProviderKeys = [];
@@ -37,9 +37,9 @@ class LexerParserSynchronizationTest extends TestCase
         }
 
         foreach ($lexerProviderKeys as $index => $lexerProviderKey) {
-            $this->assertEquals($lexerProviderKey, $parserProviderKeys[$index]);
+            static::assertEquals($lexerProviderKey, $parserProviderKeys[$index]);
         }
 
-        $this->assertCount(count($lexerProviderKeys), $parserProviderKeys);
+        static::assertCount(count($lexerProviderKeys), $parserProviderKeys);
     }
 }

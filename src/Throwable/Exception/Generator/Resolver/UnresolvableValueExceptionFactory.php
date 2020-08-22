@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Throwable;
 
 /**
  * @private
  */
 final class UnresolvableValueExceptionFactory
 {
-    public static function create(ValueInterface $value, int $code = 0, \Throwable $previous = null): UnresolvableValueException
+    public static function create(ValueInterface $value, int $code = 0, Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
             null === $previous || '' === trim($previous->getMessage())
@@ -38,7 +39,7 @@ final class UnresolvableValueExceptionFactory
         );
     }
 
-    public static function createForInvalidReferenceId(ValueInterface $value, $result, int $code = 0, \Throwable $previous = null): UnresolvableValueException
+    public static function createForInvalidReferenceId(ValueInterface $value, $result, int $code = 0, Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
             sprintf(
@@ -53,7 +54,7 @@ final class UnresolvableValueExceptionFactory
         );
     }
 
-    public static function createForCouldNotEvaluateExpression(ValueInterface $value, int $code = 0, \Throwable $previous = null): UnresolvableValueException
+    public static function createForCouldNotEvaluateExpression(ValueInterface $value, int $code = 0, Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
             null === $previous || '' === trim($previous->getMessage())
@@ -71,7 +72,7 @@ final class UnresolvableValueExceptionFactory
         );
     }
 
-    public static function createForCouldNotFindVariable(ValueInterface $value, int $code = 0, \Throwable $previous = null): UnresolvableValueException
+    public static function createForCouldNotFindVariable(ValueInterface $value, int $code = 0, Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
             sprintf(

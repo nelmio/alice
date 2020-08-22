@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\scenario3;
 
+use DateTimeInterface;
+
 class ImmutableUser implements UserInterface
 {
     /**
@@ -26,7 +28,7 @@ class ImmutableUser implements UserInterface
     private $fullname;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $birthDate;
 
@@ -43,7 +45,7 @@ class ImmutableUser implements UserInterface
     public function __construct(
         string $username,
         string $fullname,
-        \DateTimeInterface $birthDate,
+        DateTimeInterface $birthDate,
         string $email,
         int $favoriteNumber
     ) {
@@ -64,7 +66,7 @@ class ImmutableUser implements UserInterface
         return $this->fullname;
     }
 
-    public function getBirthDate(): \DateTimeInterface
+    public function getBirthDate(): DateTimeInterface
     {
         return $this->birthDate;
     }

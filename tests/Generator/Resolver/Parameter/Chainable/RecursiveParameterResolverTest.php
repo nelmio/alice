@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Parameter\Chainable;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\FakeParameterResolver;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverAwareInterface;
@@ -32,50 +33,50 @@ class RecursiveParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableParameterResolver()
+    public function testIsAChainableParameterResolver(): void
     {
-        $this->assertTrue(is_a(RecursiveParameterResolver::class, ChainableParameterResolverInterface::class, true));
+        static::assertTrue(is_a(RecursiveParameterResolver::class, ChainableParameterResolverInterface::class, true));
     }
 
-    public function testIsAParameterResolverAwareResolver()
+    public function testIsAParameterResolverAwareResolver(): void
     {
-        $this->assertTrue(is_a(RecursiveParameterResolver::class, ParameterResolverAwareInterface::class, true));
+        static::assertTrue(is_a(RecursiveParameterResolver::class, ParameterResolverAwareInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(RecursiveParameterResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(RecursiveParameterResolver::class))->isCloneable());
     }
 
-    public function testThrowsExceptionIfInvalidRecursionLimitGiven()
+    public function testThrowsExceptionIfInvalidRecursionLimitGiven(): void
     {
         try {
             new RecursiveParameterResolver(new FakeChainableParameterResolver(), 1);
-            $this->fail('Expected exception to be thrown.');
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
+            static::fail('Expected exception to be thrown.');
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
                 'Expected limit for recursive calls to be of at least 2. Got "1" instead.',
                 $exception->getMessage()
             );
         }
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $resolver = new RecursiveParameterResolver(new DummyChainableParameterResolverAwareResolver());
         $newResolver = $resolver->withResolver(new FakeParameterResolver());
 
-        $this->assertEquals(
+        static::assertEquals(
             new RecursiveParameterResolver(new DummyChainableParameterResolverAwareResolver()),
             $resolver
         );
-        $this->assertEquals(
+        static::assertEquals(
             new RecursiveParameterResolver(new DummyChainableParameterResolverAwareResolver(new FakeParameterResolver())),
             $newResolver
         );
     }
 
-    public function testUseDecoratedResolverToKnowWhichParameterItCanResolve()
+    public function testUseDecoratedResolverToKnowWhichParameterItCanResolve(): void
     {
         $parameter1 = new Parameter('foo', null);
         $parameter2 = new Parameter('bar', null);
@@ -88,8 +89,8 @@ class RecursiveParameterResolverTest extends TestCase
 
         $resolver = new RecursiveParameterResolver($decoratedResolver);
 
-        $this->assertFalse($resolver->canResolve($parameter1));
-        $this->assertTrue($resolver->canResolve($parameter2));
+        static::assertFalse($resolver->canResolve($parameter1));
+        static::assertTrue($resolver->canResolve($parameter2));
 
         $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
@@ -97,7 +98,7 @@ class RecursiveParameterResolverTest extends TestCase
     /**
      * @testdox Resolves the given parameter two times with the decorated resolver. If the two results are identical, return this result
      */
-    public function testResolveWithNoChange()
+    public function testResolveWithNoChange(): void
     {
         $parameter = new Parameter('foo', null);
         $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
@@ -130,11 +131,11 @@ class RecursiveParameterResolverTest extends TestCase
         $resolver = new RecursiveParameterResolver($decoratedResolver);
         $actual = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testIfMultipleParametersAreResolvedInTheProcessThenTheyWillBeIncludedInTheReturnedResult()
+    public function testIfMultipleParametersAreResolvedInTheProcessThenTheyWillBeIncludedInTheReturnedResult(): void
     {
         $parameter = new Parameter('foo', null);
         $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
@@ -190,7 +191,7 @@ class RecursiveParameterResolverTest extends TestCase
         $resolver = new RecursiveParameterResolver($decoratedResolver);
         $actual = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        $this->assertEquals(
+        static::assertEquals(
             new ParameterBag([
                 'foo' => 'second result',
                 'another_param1' => 'val1',
@@ -204,7 +205,7 @@ class RecursiveParameterResolverTest extends TestCase
     /**
      * @dataProvider provideContexts
      */
-    public function testTheSameContextIsPassedBetweenEachResolution(ResolvingContext $context = null)
+    public function testTheSameContextIsPassedBetweenEachResolution(ResolvingContext $context = null): void
     {
         $parameter = new Parameter('foo', null);
 
@@ -223,7 +224,7 @@ class RecursiveParameterResolverTest extends TestCase
     /**
      * @testdox Resolves the given parameter two times with the decorated resolver. As the results differ, re-iterate the operation until two successive resolutions leads to the same result.
      */
-    public function testResolveWithChange()
+    public function testResolveWithChange(): void
     {
         $parameter = new Parameter('foo', null);
         $unresolvedParameters = new ParameterBag(['name' => 'Alice']);
@@ -281,11 +282,11 @@ class RecursiveParameterResolverTest extends TestCase
         $resolver = new RecursiveParameterResolver($decoratedResolver);
         $actual = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(4);
     }
 
-    public function testThrowsAnExceptionWhenRecursionLimitIsReached()
+    public function testThrowsAnExceptionWhenRecursionLimitIsReached(): void
     {
         $parameter = new Parameter('foo', null);
         $unresolvedParameters = new ParameterBag();
@@ -309,9 +310,9 @@ class RecursiveParameterResolverTest extends TestCase
         $resolver = new RecursiveParameterResolver($decoratedResolver);
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (RecursionLimitReachedException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Recursion limit (5 tries) reached while resolving the parameter "foo"',
                 $exception->getMessage()
             );
@@ -321,9 +322,9 @@ class RecursiveParameterResolverTest extends TestCase
         $resolver = new RecursiveParameterResolver($decoratedResolver, 10);
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (RecursionLimitReachedException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Recursion limit (10 tries) reached while resolving the parameter "foo"',
                 $exception->getMessage()
             );

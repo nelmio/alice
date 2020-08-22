@@ -16,6 +16,8 @@ namespace Nelmio\Alice\Definition;
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCallBag
@@ -23,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 class MethodCallBagTest extends TestCase
 {
     /**
-     * @var \ReflectionProperty
+     * @var ReflectionProperty
      */
     private $propRefl;
 
@@ -32,14 +34,14 @@ class MethodCallBagTest extends TestCase
      */
     protected function setUp(): void
     {
-        $refl = new \ReflectionClass(MethodCallBag::class);
+        $refl = new ReflectionClass(MethodCallBag::class);
         $propRefl = $refl->getProperty('methodCalls');
         $propRefl->setAccessible(true);
 
         $this->propRefl = $propRefl;
     }
 
-    public function testAddingACallCreatesANewBagWithTheAddedInstance()
+    public function testAddingACallCreatesANewBagWithTheAddedInstance(): void
     {
         $methodCall1 = new DummyMethodCall('mc1');
         $methodCall2 = new DummyMethodCall('mc2');
@@ -48,20 +50,20 @@ class MethodCallBagTest extends TestCase
         $bag1 = $bag->with($methodCall1);
         $bag2 = $bag1->with($methodCall2);
 
-        $this->assertInstanceOf(MethodCallBag::class, $bag1);
-        $this->assertNotSame($bag, $bag1);
+        static::assertInstanceOf(MethodCallBag::class, $bag1);
+        static::assertNotSame($bag, $bag1);
 
-        $this->assertSame(
+        static::assertSame(
             [],
             $this->propRefl->getValue($bag)
         );
-        $this->assertSame(
+        static::assertSame(
             [
                 $methodCall1,
             ],
             $this->propRefl->getValue($bag1)
         );
-        $this->assertSame(
+        static::assertSame(
             [
                 $methodCall1,
                 $methodCall2,
@@ -73,7 +75,7 @@ class MethodCallBagTest extends TestCase
     /**
      * @testdox When calls overlaps, they are stacked
      */
-    public function testStackCalls()
+    public function testStackCalls(): void
     {
         $methodCall1 = new DummyMethodCall('mc1');
         $methodCall2 = new DummyMethodCall('mc1');
@@ -81,13 +83,13 @@ class MethodCallBagTest extends TestCase
         $bag1 = (new MethodCallBag())->with($methodCall1);
         $bag2 = $bag1->with($methodCall2);
 
-        $this->assertSame(
+        static::assertSame(
             [
                 $methodCall1,
             ],
             $this->propRefl->getValue($bag1)
         );
-        $this->assertSame(
+        static::assertSame(
             [
                 $methodCall1,
                 $methodCall2,
@@ -99,7 +101,7 @@ class MethodCallBagTest extends TestCase
     /**
      * @testdox Can merge two bags. When calls overlaps, they are stacked.
      */
-    public function testMergeTwoBags()
+    public function testMergeTwoBags(): void
     {
         $callA1 = new SimpleMethodCall('setUsername', []);
         $callA2 = new SimpleMethodCall('setOwner', []);
@@ -118,22 +120,22 @@ class MethodCallBagTest extends TestCase
 
         $bag = $bagA->mergeWith($bagB);
 
-        $this->assertInstanceOf(MethodCallBag::class, $bag);
-        $this->assertSame(
+        static::assertInstanceOf(MethodCallBag::class, $bag);
+        static::assertSame(
             [
                 $callA1,
                 $callA2,
             ],
             $this->propRefl->getValue($bagA)
         );
-        $this->assertSame(
+        static::assertSame(
             [
                 $callB1,
                 $callB2,
             ],
             $this->propRefl->getValue($bagB)
         );
-        $this->assertSame(
+        static::assertSame(
             [
                 $callB1,
                 $callB2,
@@ -144,12 +146,12 @@ class MethodCallBagTest extends TestCase
         );
     }
 
-    public function testIsEmpty()
+    public function testIsEmpty(): void
     {
         $bag = new MethodCallBag();
-        $this->assertTrue($bag->isEmpty());
+        static::assertTrue($bag->isEmpty());
 
         $bag = $bag->with(new FakeMethodCall());
-        $this->assertFalse($bag->isEmpty());
+        static::assertFalse($bag->isEmpty());
     }
 }

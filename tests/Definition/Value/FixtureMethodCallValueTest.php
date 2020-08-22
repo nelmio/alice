@@ -21,44 +21,44 @@ use PHPUnit\Framework\TestCase;
  */
 class FixtureMethodCallValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(FixtureMethodCallValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(FixtureMethodCallValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = new FakeValue();
         $function = new FunctionCallValue('getName');
 
         $value = new FixtureMethodCallValue($reference, $function);
 
-        $this->assertEquals($reference, $value->getReference());
-        $this->assertEquals($function, $value->getFunctionCall());
-        $this->assertEquals([$reference, $function], $value->getValue());
+        static::assertEquals($reference, $value->getReference());
+        static::assertEquals($function, $value->getFunctionCall());
+        static::assertEquals([$reference, $function], $value->getValue());
     }
 
     /**
      * @depends \Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
      * @depends \Nelmio\Alice\Definition\Value\FunctionCallValueTest::testIsImmutable
      */
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new FixtureMethodCallValue(
             new FixtureReferenceValue('dummy'),
             new FunctionCallValue('foo')
         );
-        $this->assertEquals('@dummy->foo()', (string) $value);
+        static::assertEquals('@dummy->foo()', (string) $value);
 
         $value = new FixtureMethodCallValue(
             new FixtureReferenceValue('dummy'),
             new FunctionCallValue('foo', ['bar'])
         );
-        $this->assertEquals("@dummy->foo(array (\n  0 => 'bar',\n))", (string) $value);
+        static::assertEquals("@dummy->foo(array (\n  0 => 'bar',\n))", (string) $value);
     }
 }

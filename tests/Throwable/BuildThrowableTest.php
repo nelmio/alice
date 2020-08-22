@@ -21,8 +21,8 @@ use PHPUnit\Framework\TestCase;
  */
 class BuildThrowableTest extends TestCase
 {
-    public function testIsABuildThrowable()
+    public function testIsABuildThrowable(): void
     {
-        $this->assertTrue(is_a(RootBuildException::class, LoadingThrowable::class, true));
+        static::assertTrue(is_a(RootBuildException::class, LoadingThrowable::class, true));
     }
 }

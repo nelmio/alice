@@ -33,27 +33,27 @@ class StringArrayTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(StringArrayTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(StringArrayTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(StringArrayTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(StringArrayTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseDynamicArrayTokens()
+    public function testCanParseDynamicArrayTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::STRING_ARRAY_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new StringArrayTokenParser();
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testThrowsAnExceptionIfNoDecoratedParserIsFound()
+    public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
     {
         $token = new Token('', new TokenType(TokenType::STRING_ARRAY_TYPE));
         $parser = new StringArrayTokenParser();
@@ -64,25 +64,25 @@ class StringArrayTokenParserTest extends TestCase
         $parser->parse($token);
     }
 
-    public function testThrowsAnErrorIfCouldNotParseToken()
+    public function testThrowsAnErrorIfCouldNotParseToken(): void
     {
         try {
             $token = new Token('', new TokenType(TokenType::STRING_ARRAY_TYPE));
             $parser = new StringArrayTokenParser(new FakeParser());
 
             $parser->parse($token);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (ParseException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not parse the token "" (type: STRING_ARRAY_TYPE).',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNotNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
         }
     }
 
-    public function testParsesEachArrayElementAndReturnsTheConstructedArray()
+    public function testParsesEachArrayElementAndReturnsTheConstructedArray(): void
     {
         $token = new Token('[val1, val2]', new TokenType(TokenType::STRING_ARRAY_TYPE));
 
@@ -97,12 +97,12 @@ class StringArrayTokenParserTest extends TestCase
         $parser = new StringArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testIsAbleToParseEmptyArrays()
+    public function testIsAbleToParseEmptyArrays(): void
     {
         $token = new Token('[]', new TokenType(TokenType::STRING_ARRAY_TYPE));
 
@@ -116,10 +116,10 @@ class StringArrayTokenParserTest extends TestCase
         $parser = new StringArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testTrimsEachArgumentValueBeforePassingThemToTheDecoratedParser()
+    public function testTrimsEachArgumentValueBeforePassingThemToTheDecoratedParser(): void
     {
         $token = new Token('[ val1 , val2 ]', new TokenType(TokenType::STRING_ARRAY_TYPE));
 
@@ -134,6 +134,6 @@ class StringArrayTokenParserTest extends TestCase
         $parser = new StringArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

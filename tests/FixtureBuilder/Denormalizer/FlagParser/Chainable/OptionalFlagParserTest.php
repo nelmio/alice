@@ -30,15 +30,15 @@ class OptionalFlagParserTest extends FlagParserTestCase
         $this->parser = new OptionalFlagParser();
     }
 
-    public function testIsAChainableFlagParser()
+    public function testIsAChainableFlagParser(): void
     {
-        $this->assertTrue(is_a(OptionalFlagParser::class, ChainableFlagParserInterface::class, true));
+        static::assertTrue(is_a(OptionalFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
     /**
      * @dataProvider provideOptionals
      */
-    public function testCanParseOptionals(string $element, FlagBag $expected = null)
+    public function testCanParseOptionals(string $element, FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);
     }

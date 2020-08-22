@@ -15,7 +15,7 @@ namespace Nelmio\Alice\Entity\Instantiator;
 
 class DummyWithNamedPrivateConstructor
 {
-    private static function namedConstruct()
+    private static function namedConstruct(): void
     {
     }
 }

@@ -27,6 +27,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\DoublePassGenerator
@@ -35,17 +36,17 @@ class DoublePassGeneratorTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAGenerator()
+    public function testIsAGenerator(): void
     {
-        $this->assertTrue(is_a(DoublePassGenerator::class, GeneratorInterface::class, true));
+        static::assertTrue(is_a(DoublePassGenerator::class, GeneratorInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(DoublePassGenerator::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(DoublePassGenerator::class))->isCloneable());
     }
 
-    public function testGenerateObjects()
+    public function testGenerateObjects(): void
     {
         $loadedParameters = new ParameterBag(['loaded' => true]);
         $injectedParameters = new ParameterBag(['injected' => true]);
@@ -54,7 +55,7 @@ class DoublePassGeneratorTest extends TestCase
         $fixtures = (new FixtureBag())->with($fixture);
 
         $objects = new ObjectBag([
-            'std' => new \stdClass(),
+            'std' => new stdClass(),
         ]);
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $objects);
@@ -114,7 +115,7 @@ class DoublePassGeneratorTest extends TestCase
         $generator = new DoublePassGenerator($resolver, $objectGenerator);
         $actual = $generator->generate($set);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $resolverProphecy->resolve(Argument::any())->shouldHaveBeenCalledTimes(1);
         $objectGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(2);

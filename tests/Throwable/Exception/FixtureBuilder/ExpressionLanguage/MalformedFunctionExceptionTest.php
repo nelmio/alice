@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 use PHPUnit\Framework\TestCase;
 
@@ -21,19 +22,19 @@ use PHPUnit\Framework\TestCase;
  */
 class MalformedFunctionExceptionTest extends TestCase
 {
-    public function testIsAnInvalidArgumentException()
+    public function testIsAnInvalidArgumentException(): void
     {
-        $this->assertTrue(is_a(MalformedFunctionException::class, \InvalidArgumentException::class, true));
+        static::assertTrue(is_a(MalformedFunctionException::class, InvalidArgumentException::class, true));
     }
 
-    public function testIsNotAParseThrowable()
+    public function testIsNotAParseThrowable(): void
     {
-        $this->assertFalse(is_a(MalformedFunctionException::class, ExpressionLanguageParseThrowable::class, true));
+        static::assertFalse(is_a(MalformedFunctionException::class, ExpressionLanguageParseThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildMalformedFunctionException();
-        $this->assertInstanceOf(ChildMalformedFunctionException::class, $exception);
+        static::assertInstanceOf(ChildMalformedFunctionException::class, $exception);
     }
 }

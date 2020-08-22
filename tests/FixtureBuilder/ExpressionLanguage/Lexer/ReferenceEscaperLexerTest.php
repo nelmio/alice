@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer
@@ -26,34 +27,34 @@ class ReferenceEscaperLexerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsALexer()
+    public function testIsALexer(): void
     {
-        $this->assertTrue(is_a(ReferenceEscaperLexer::class, LexerInterface::class, true));
+        static::assertTrue(is_a(ReferenceEscaperLexer::class, LexerInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ReferenceEscaperLexer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ReferenceEscaperLexer::class))->isCloneable());
     }
 
     /**
      * @dataProvider provideValues
      */
-    public function testEscapesStringBeforeHandlingItOverToTheDecoratedLexer(string $value, string $expectedEscapedValue = null)
+    public function testEscapesStringBeforeHandlingItOverToTheDecoratedLexer(string $value, string $expectedEscapedValue = null): void
     {
         if (null === $expectedEscapedValue) {
             $expectedEscapedValue = $value;
         }
 
         $decoratedLexerProphecy = $this->prophesize(LexerInterface::class);
-        $decoratedLexerProphecy->lex($expectedEscapedValue)->willReturn($expected = [new \stdClass()]);
+        $decoratedLexerProphecy->lex($expectedEscapedValue)->willReturn($expected = [new stdClass()]);
         /** @var LexerInterface $decoratedLexer */
         $decoratedLexer = $decoratedLexerProphecy->reveal();
 
         $lexer = new ReferenceEscaperLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

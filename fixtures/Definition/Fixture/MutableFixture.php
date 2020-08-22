@@ -67,7 +67,7 @@ class MutableFixture implements FixtureInterface
         return $this->specs;
     }
 
-    public function setSpecs(SpecificationBag $specs)
+    public function setSpecs(SpecificationBag $specs): void
     {
         $this->specs = $specs;
     }
@@ -75,7 +75,7 @@ class MutableFixture implements FixtureInterface
     /**
      * @inheritdoc
      */
-    public function getValueForCurrent()
+    public function getValueForCurrent(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
@@ -83,7 +83,7 @@ class MutableFixture implements FixtureInterface
     /**
      * @inheritdoc
      */
-    public function withSpecs(SpecificationBag $specs)
+    public function withSpecs(SpecificationBag $specs): void
     {
         $this->__call(__METHOD__, func_get_args());
     }

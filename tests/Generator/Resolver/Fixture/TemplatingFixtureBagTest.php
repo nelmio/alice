@@ -32,7 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TemplatingFixtureBagTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $fixtureId = 'user0';
         $fixture = new DummyFixture($fixtureId);
@@ -50,20 +50,20 @@ class TemplatingFixtureBagTest extends TestCase
             ->with($template)
         ;
 
-        $this->assertTrue($bag->has($fixtureId));
-        $this->assertFalse($bag->hasTemplate($fixtureId));
-        $this->assertEquals($fixture, $bag->get($fixtureId));
+        static::assertTrue($bag->has($fixtureId));
+        static::assertFalse($bag->hasTemplate($fixtureId));
+        static::assertEquals($fixture, $bag->get($fixtureId));
 
-        $this->assertTrue($bag->has($templateId));
-        $this->assertTrue($bag->hasTemplate($templateId));
-        $this->assertEquals($template, $bag->get($templateId));
+        static::assertTrue($bag->has($templateId));
+        static::assertTrue($bag->hasTemplate($templateId));
+        static::assertEquals($template, $bag->get($templateId));
 
-        $this->assertFalse($bag->has('foo'));
+        static::assertFalse($bag->has('foo'));
         try {
             $bag->get('foo');
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (FixtureNotFoundException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not find the fixture "foo".',
                 $exception->getMessage()
             );
@@ -71,12 +71,12 @@ class TemplatingFixtureBagTest extends TestCase
 
         try {
             $bag->getTemplate($fixtureId);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (FixtureNotFoundException $exception) {
             // expected result
         }
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FixtureBag())->with($fixture),
             $bag->getFixtures()
         );
@@ -85,7 +85,7 @@ class TemplatingFixtureBagTest extends TestCase
     /**
      * @depends \Nelmio\Alice\FixtureBagTest::testIsImmutable
      */
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $fixture = new MutableFixture('user0', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
         $originalFixture = deep_clone($fixture);
@@ -98,10 +98,10 @@ class TemplatingFixtureBagTest extends TestCase
         // Mutate retrieved fixture
         $bag->getFixtures()->get('user0')->setSpecs(SpecificationBagFactory::create(new NoMethodCall()));
 
-        $this->assertEquals($originalFixture, $bag->getFixtures()->get('user0'));
+        static::assertEquals($originalFixture, $bag->getFixtures()->get('user0'));
     }
 
-    public function testAddTemplateFixtureToTemplates()
+    public function testAddTemplateFixtureToTemplates(): void
     {
         $fixture = new DummyFixture('user0');
         $template = new TemplatingFixture(
@@ -116,7 +116,7 @@ class TemplatingFixtureBagTest extends TestCase
             ->with($template)
         ;
 
-        $this->assertEquals(
+        static::assertEquals(
             (new FixtureBag())
                 ->with($fixture),
             $bag->getFixtures()

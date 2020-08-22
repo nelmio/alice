@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Entity\Instantiator;
 
+use DomainException;
+
 class DummyWithNamedConstructorAndThrowsException
 {
-    public static function namedConstruct()
+    public static function namedConstruct(): void
     {
-        throw new \DomainException();
+        throw new DomainException();
     }
 }

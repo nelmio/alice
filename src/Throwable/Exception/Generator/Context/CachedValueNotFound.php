@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Context;
 
 use Nelmio\Alice\Throwable\GenerationThrowable;
+use RuntimeException;
 
-final class CachedValueNotFound extends \RuntimeException implements GenerationThrowable
+final class CachedValueNotFound extends RuntimeException implements GenerationThrowable
 {
     public static function create(string $key): self
     {

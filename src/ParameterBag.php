@@ -13,13 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundExceptionFactory;
 
 /**
  * Value object containing a list of parameters.
  */
-final class ParameterBag implements \IteratorAggregate, \Countable
+final class ParameterBag implements IteratorAggregate, Countable
 {
     /**
      * @var mixed[]
@@ -82,7 +85,7 @@ final class ParameterBag implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->parameters);
+        return new ArrayIterator($this->parameters);
     }
 
     /**

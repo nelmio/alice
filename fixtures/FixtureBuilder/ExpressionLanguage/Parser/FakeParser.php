@@ -23,7 +23,7 @@ class FakeParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function parse(string $value)
+    public function parse(string $value): void
     {
         $this->__call(__METHOD__, func_get_args());
     }

@@ -20,15 +20,15 @@ use PHPUnit\Framework\TestCase;
  */
 class BadMethodCallExceptionFactoryTest extends TestCase
 {
-    public function testCreateForUnknownMethod()
+    public function testCreateForUnknownMethod(): void
     {
         $exception = BadMethodCallExceptionFactory::createForUnknownMethod('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Unknown method "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

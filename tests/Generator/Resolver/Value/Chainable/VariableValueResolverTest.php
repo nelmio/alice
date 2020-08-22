@@ -30,25 +30,25 @@ use ReflectionClass;
  */
 class VariableValueResolverTest extends TestCase
 {
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(VariableValueResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(VariableValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(VariableValueResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(VariableValueResolver::class))->isCloneable());
     }
 
-    public function testCanResolveVariableValues()
+    public function testCanResolveVariableValues(): void
     {
         $resolver = new VariableValueResolver();
 
-        $this->assertTrue($resolver->canResolve(new VariableValue('')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new VariableValue('')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testGetsTheVariableFromTheScope()
+    public function testGetsTheVariableFromTheScope(): void
     {
         $value = new VariableValue('ping');
         $set = ResolvedFixtureSetFactory::create(
@@ -61,10 +61,10 @@ class VariableValueResolverTest extends TestCase
         $resolver = new VariableValueResolver();
         $actual = $resolver->resolve($value, new FakeFixture(), $set, $scope, new GenerationContext());
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope()
+    public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope(): void
     {
         $value = new VariableValue('foo');
         $set = ResolvedFixtureSetFactory::create();

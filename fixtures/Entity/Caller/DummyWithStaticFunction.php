@@ -22,7 +22,7 @@ class DummyWithStaticFunction
         $this->title = $title;
     }
 
-    public static function setTitle(self $instance, string $title)
+    public static function setTitle(self $instance, string $title): void
     {
         $instance->title = $title;
     }

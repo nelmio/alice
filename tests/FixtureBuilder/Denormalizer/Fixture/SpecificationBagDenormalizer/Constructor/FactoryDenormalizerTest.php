@@ -31,12 +31,12 @@ class FactoryDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FactoryDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FactoryDenormalizer::class))->isCloneable());
     }
 
-    public function testCannotDenormalizeEmptyFactory()
+    public function testCannotDenormalizeEmptyFactory(): void
     {
         $factory = [];
         $fixture = new FakeFixture();
@@ -52,7 +52,7 @@ class FactoryDenormalizerTest extends TestCase
         $denormalizer->denormalize($fixture, $flagParser, $factory);
     }
 
-    public function testCannotDenormalizeFactoryWithMultipleNames()
+    public function testCannotDenormalizeFactoryWithMultipleNames(): void
     {
         $factory = [
             'foo' => [],
@@ -71,7 +71,7 @@ class FactoryDenormalizerTest extends TestCase
         $denormalizer->denormalize($fixture, $flagParser, $factory);
     }
 
-    public function testCannotDenormalizeFactoryWithNoFactoryName()
+    public function testCannotDenormalizeFactoryWithNoFactoryName(): void
     {
         $factory = [
             'foo' => 'bar',
@@ -89,7 +89,7 @@ class FactoryDenormalizerTest extends TestCase
         $denormalizer->denormalize($fixture, $flagParser, $factory);
     }
 
-    public function testCanDenormalizeASimpleFactory()
+    public function testCanDenormalizeASimpleFactory(): void
     {
         $factory = [
             'create' => $unparsedArguments = [
@@ -126,10 +126,10 @@ class FactoryDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $factory);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testCanDenormalizeAStaticFactory()
+    public function testCanDenormalizeAStaticFactory(): void
     {
         $constructor = [
             'Nelmio\Entity\UserFactory::create' => $arguments = [
@@ -160,10 +160,10 @@ class FactoryDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testCanDenormalizeANonStaticFactory()
+    public function testCanDenormalizeANonStaticFactory(): void
     {
         $constructor = [
             '@nelmio.entity.user_factory::create' => $arguments = [
@@ -194,6 +194,6 @@ class FactoryDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

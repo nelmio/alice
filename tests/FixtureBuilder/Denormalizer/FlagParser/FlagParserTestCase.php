@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 
+use LogicException;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use PHPUnit\Framework\TestCase;
@@ -25,15 +26,15 @@ abstract class FlagParserTestCase extends TestCase
      */
     protected $parser;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionObject($this->parser))->isCloneable());
+        static::assertFalse((new ReflectionObject($this->parser))->isCloneable());
     }
 
     /**
      * @dataProvider provideElements
      */
-    public function testCanParseElements(string $element, FlagBag $expected = null)
+    public function testCanParseElements(string $element, FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -41,7 +42,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideMalformedElements
      */
-    public function testCannotParseMalformedElements(string $element)
+    public function testCannotParseMalformedElements(string $element): void
     {
         $this->assertCannotParse($element);
     }
@@ -49,7 +50,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideExtends
      */
-    public function testCanParseExtends(string $element, FlagBag $expected = null)
+    public function testCanParseExtends(string $element, FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -57,7 +58,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideMalformedExtends
      */
-    public function testCannotParseMalformedExtends(string $element)
+    public function testCannotParseMalformedExtends(string $element): void
     {
         $this->assertCannotParse($element);
     }
@@ -65,7 +66,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideOptionals
      */
-    public function testCanParseOptionals(string $element, FlagBag $expected = null)
+    public function testCanParseOptionals(string $element, FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -73,7 +74,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideMalformedOptionals
      */
-    public function testCannotParseMalformedOptionals(string $element)
+    public function testCannotParseMalformedOptionals(string $element): void
     {
         $this->assertCannotParse($element);
     }
@@ -81,7 +82,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideTemplates
      */
-    public function testCanParseTemplates(string $element, FlagBag $expected = null)
+    public function testCanParseTemplates(string $element, FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -89,7 +90,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideUniques
      */
-    public function testCanParseUniques(string $element, FlagBag $expected = null)
+    public function testCanParseUniques(string $element, FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -97,41 +98,41 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideConfigurators
      */
-    public function testCanParseConfigurators(string $element, FlagBag $expected = null)
+    public function testCanParseConfigurators(string $element, FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    public function assertCanParse(string $element, FlagBag $expected)
+    public function assertCanParse(string $element, FlagBag $expected): void
     {
         if ($this->parser instanceof ChainableFlagParserInterface) {
-            $this->assertTrue($this->parser->canParse($element));
+            static::assertTrue($this->parser->canParse($element));
         }
 
         $actual = $this->parser->parse($element);
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function assertCannotParse(string $element)
+    public function assertCannotParse(string $element): void
     {
         if ($this->parser instanceof ChainableFlagParserInterface) {
             $actual = $this->parser->canParse($element);
-            $this->assertFalse($actual);
+            static::assertFalse($actual);
 
             return;
         }
 
         try {
             $this->parser->parse($element);
-            $this->fail('Expected exception to be thrown.');
-        } catch (\LogicException $exception) {
+            static::fail('Expected exception to be thrown.');
+        } catch (LogicException $exception) {
             // expected
         }
     }
     
-    public function markAsInvalidCase()
+    public function markAsInvalidCase(): void
     {
-        $this->markTestSkipped('Invalid scenario.');
+        static::markTestSkipped('Invalid scenario.');
     }
 
     public function provideElements()

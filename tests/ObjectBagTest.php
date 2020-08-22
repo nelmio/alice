@@ -13,12 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use Countable;
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Throwable\Exception\ObjectNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use ReflectionClass;
+use ReflectionProperty;
 use stdClass;
 
 /**
@@ -29,7 +33,7 @@ class ObjectBagTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var \ReflectionProperty
+     * @var ReflectionProperty
      */
     private $propRefl;
 
@@ -38,11 +42,11 @@ class ObjectBagTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->propRefl = (new \ReflectionClass(ObjectBag::class))->getProperty('objects');
+        $this->propRefl = (new ReflectionClass(ObjectBag::class))->getProperty('objects');
         $this->propRefl->setAccessible(true);
     }
 
-    public function testBagsCanBeInstantiatedWithRegularObjects()
+    public function testBagsCanBeInstantiatedWithRegularObjects(): void
     {
         $objects = [
             'user1' => $u1 = new stdClass(),
@@ -61,7 +65,7 @@ class ObjectBagTest extends TestCase
         );
     }
 
-    public function testBagsCanBeInstantiatedWithObjects()
+    public function testBagsCanBeInstantiatedWithObjects(): void
     {
         $u1 = new stdClass();
         $u1->name = 'bob';
@@ -82,9 +86,9 @@ class ObjectBagTest extends TestCase
         );
     }
 
-    public function testThrowsAnExceptionIfAReferenceMismatchIsFound()
+    public function testThrowsAnExceptionIfAReferenceMismatchIsFound(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Reference key mismatch, the keys "foo" and "bar" refers to the same fixture but the keys are different.');
 
         new ObjectBag([
@@ -92,7 +96,7 @@ class ObjectBagTest extends TestCase
         ]);
     }
 
-    public function testBagsCanBeInstantiatedWithoutAnyObject()
+    public function testBagsCanBeInstantiatedWithoutAnyObject(): void
     {
         $bag = new ObjectBag();
         $this->assertSameObjects(
@@ -101,7 +105,7 @@ class ObjectBagTest extends TestCase
         );
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $bag = new ObjectBag([
             'user1' => new stdClass(),
@@ -112,22 +116,22 @@ class ObjectBagTest extends TestCase
         $group1Fixture = $this->createFixture('group1', stdClass::class);
         $inexistingReference = $this->createFixture('unknown', 'Dummy');
 
-        $this->assertTrue($bag->has($user1Fixture));
-        $this->assertEquals(
+        static::assertTrue($bag->has($user1Fixture));
+        static::assertEquals(
             new CompleteObject(new SimpleObject('user1', new stdClass())),
             $bag->get($user1Fixture)
         );
 
-        $this->assertTrue($bag->has($group1Fixture));
-        $this->assertEquals(
+        static::assertTrue($bag->has($group1Fixture));
+        static::assertEquals(
             new CompleteObject(new SimpleObject('group1', new stdClass())),
             $bag->get($group1Fixture)
         );
 
-        $this->assertFalse($bag->has($inexistingReference));
+        static::assertFalse($bag->has($inexistingReference));
     }
 
-    public function testThrowsExceptionWhenTryingToGetInexistingObject()
+    public function testThrowsExceptionWhenTryingToGetInexistingObject(): void
     {
         $this->expectException(ObjectNotFoundException::class);
         $this->expectExceptionMessage('Could not find the object "foo" of the class "Dummy".');
@@ -136,7 +140,7 @@ class ObjectBagTest extends TestCase
         $bag->get($this->createFixture('foo', 'Dummy'));
     }
 
-    public function testNamedConstructorReturnNewModifiedInstanceWhenAddingAnObject()
+    public function testNamedConstructorReturnNewModifiedInstanceWhenAddingAnObject(): void
     {
         $bag = new ObjectBag(['foo' => new stdClass()]);
 
@@ -146,11 +150,11 @@ class ObjectBagTest extends TestCase
 
         $newBag = $bag->with(new CompleteObject(new SimpleObject('bar', $std)));
 
-        $this->assertEquals(
+        static::assertEquals(
             new ObjectBag(['foo' => new stdClass()]),
             $bag
         );
-        $this->assertEquals(
+        static::assertEquals(
             new ObjectBag([
                 'foo' => new stdClass(),
                 'bar' => new CompleteObject(new SimpleObject('bar', $std)),
@@ -159,7 +163,7 @@ class ObjectBagTest extends TestCase
         );
     }
 
-    public function testAddingAnObjectCanOverrideTheExistingOne()
+    public function testAddingAnObjectCanOverrideTheExistingOne(): void
     {
         $bag = new ObjectBag(['foo' => new stdClass()]);
 
@@ -169,7 +173,7 @@ class ObjectBagTest extends TestCase
 
         $newBag = $bag->with(new CompleteObject(new SimpleObject('foo', $std)));
 
-        $this->assertEquals(
+        static::assertEquals(
             new ObjectBag([
                 'foo' => new CompleteObject(
                     new SimpleObject(
@@ -184,7 +188,7 @@ class ObjectBagTest extends TestCase
         );
     }
 
-    public function testNamedConstructorReturnNewModifiedInstanceWhenRemovingAnObject()
+    public function testNamedConstructorReturnNewModifiedInstanceWhenRemovingAnObject(): void
     {
         $bag = new ObjectBag(['foo' => new stdClass()]);
 
@@ -192,17 +196,17 @@ class ObjectBagTest extends TestCase
             new SimpleObject('foo', new stdClass())
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             new ObjectBag(['foo' => new stdClass()]),
             $bag
         );
-        $this->assertEquals(
+        static::assertEquals(
             new ObjectBag([]),
             $newBag
         );
     }
 
-    public function testCanRemoveAnNonExistentObject()
+    public function testCanRemoveAnNonExistentObject(): void
     {
         $bag = new ObjectBag([]);
 
@@ -210,13 +214,13 @@ class ObjectBagTest extends TestCase
             new SimpleObject('foo', new stdClass())
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             new ObjectBag([]),
             $newBag
         );
     }
 
-    public function testImmutableMerge()
+    public function testImmutableMerge(): void
     {
         $std1 = new stdClass();
         $std1->id = 1;
@@ -238,7 +242,7 @@ class ObjectBagTest extends TestCase
         $bag2 = (new ObjectBag())->with($object3)->with($object4);
         $bag = $bag1->mergeWith($bag2);
 
-        $this->assertInstanceOf(ObjectBag::class, $bag);
+        static::assertInstanceOf(ObjectBag::class, $bag);
         $this->assertSameObjects(
             [
                 'foo' => $object1,
@@ -263,7 +267,7 @@ class ObjectBagTest extends TestCase
         );
     }
 
-    public function testIsTraversable()
+    public function testIsTraversable(): void
     {
         $object1 = new CompleteObject(new SimpleObject('foo', new stdClass()));
         $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
@@ -274,7 +278,7 @@ class ObjectBagTest extends TestCase
             $traversed[$reference] = $object;
         }
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'foo' => $object1,
                 'bar' => $object2,
@@ -283,53 +287,53 @@ class ObjectBagTest extends TestCase
         );
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $object1 = new CompleteObject(new SimpleObject('foo', new stdClass()));
         $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
 
-        $this->assertEquals(
+        static::assertEquals(
             [
                 'foo' => new stdClass(),
                 'bar' => new stdClass(),
             ],
             $bag->toArray()
         );
-        $this->assertCount(count($bag), $bag->toArray());
+        static::assertCount(count($bag), $bag->toArray());
     }
 
-    public function testCountable()
+    public function testCountable(): void
     {
-        $this->assertTrue(is_a(ObjectBag::class, \Countable::class, true));
+        static::assertTrue(is_a(ObjectBag::class, Countable::class, true));
 
         $bag = new ObjectBag();
-        $this->assertEquals(0, $bag->count());
+        static::assertEquals(0, $bag->count());
 
         $bag = new ObjectBag([
             'foo' => new stdClass(),
             'bar' => new stdClass(),
         ]);
-        $this->assertEquals(2, $bag->count());
+        static::assertEquals(2, $bag->count());
 
         $object1 = new CompleteObject(new SimpleObject('foo', new stdClass()));
         $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
-        $this->assertEquals(2, $bag->count());
+        static::assertEquals(2, $bag->count());
 
         $object3 = new CompleteObject(new SimpleObject('foz', new stdClass()));
         $object4 = new CompleteObject(new SimpleObject('baz', new stdClass()));
         $anotherBag = (new ObjectBag())->with($object3)->with($object4);
         $bag = $bag->mergeWith($anotherBag);
-        $this->assertEquals(4, $bag->count());
+        static::assertEquals(4, $bag->count());
     }
 
-    private function assertSameObjects(array $expected, ObjectBag $actual)
+    private function assertSameObjects(array $expected, ObjectBag $actual): void
     {
         $actualObjects = $this->propRefl->getValue($actual);
 
-        $this->assertEquals($expected, $actualObjects);
-        $this->assertCount(count($expected), $actualObjects);
+        static::assertEquals($expected, $actualObjects);
+        static::assertCount(count($expected), $actualObjects);
     }
 
     private function createFixture(string $reference, string $className): FixtureInterface

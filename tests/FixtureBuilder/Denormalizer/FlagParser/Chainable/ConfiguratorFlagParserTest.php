@@ -30,15 +30,15 @@ class ConfiguratorFlagParserTest extends FlagParserTestCase
         $this->parser = new ConfiguratorFlagParser();
     }
 
-    public function testIsAChainableFlagParser()
+    public function testIsAChainableFlagParser(): void
     {
-        $this->assertTrue(is_a(ConfiguratorFlagParser::class, ChainableFlagParserInterface::class, true));
+        static::assertTrue(is_a(ConfiguratorFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
     /**
      * @dataProvider provideConfigurators
      */
-    public function testCanParseConfigurators(string $element, FlagBag $expected = null)
+    public function testCanParseConfigurators(string $element, FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);
     }

@@ -21,23 +21,23 @@ use PHPUnit\Framework\TestCase;
  */
 class EvaluatedValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(EvaluatedValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(EvaluatedValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $expression = '"Hello"." "."world!"';
         $value = new EvaluatedValue($expression);
 
-        $this->assertEquals($expression, $value->getValue());
+        static::assertEquals($expression, $value->getValue());
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new EvaluatedValue('"Hello"." "."world!"');
 
-        $this->assertEquals('"Hello"." "."world!"', $value);
+        static::assertEquals('"Hello"." "."world!"', $value);
     }
 }

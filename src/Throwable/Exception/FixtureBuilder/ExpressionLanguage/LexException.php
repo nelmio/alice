@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
+use Exception;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 
-class LexException extends \Exception implements ExpressionLanguageParseThrowable
+class LexException extends Exception implements ExpressionLanguageParseThrowable
 {
 }

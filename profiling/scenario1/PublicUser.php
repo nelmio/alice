@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\scenario1;
 
+use DateTimeInterface;
+
 class PublicUser
 {
     /**
@@ -26,7 +28,7 @@ class PublicUser
     public $fullname;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     public $birthDate;
 

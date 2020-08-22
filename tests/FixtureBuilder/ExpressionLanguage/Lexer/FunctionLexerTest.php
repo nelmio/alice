@@ -41,17 +41,17 @@ class FunctionLexerTest extends TestCase
         $this->lexer = new FunctionLexer(new DummyLexer());
     }
 
-    public function testIsALexer()
+    public function testIsALexer(): void
     {
-        $this->assertTrue(is_a(FunctionLexer::class, LexerInterface::class, true));
+        static::assertTrue(is_a(FunctionLexer::class, LexerInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FunctionLexer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FunctionLexer::class))->isCloneable());
     }
 
-    public function testTokenizeValueBeforePassingItToTheDecoratedLexer()
+    public function testTokenizeValueBeforePassingItToTheDecoratedLexer(): void
     {
         $value = '<foo()>';
 
@@ -70,12 +70,12 @@ class FunctionLexerTest extends TestCase
         $lexer = new FunctionLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testIfTheValueHasAlreadyBeenTokenizedThenItWillNotBeTokenizedAgain()
+    public function testIfTheValueHasAlreadyBeenTokenizedThenItWillNotBeTokenizedAgain(): void
     {
         $value = '<aliceTokenizedFunction(something)>';
 
@@ -94,7 +94,7 @@ class FunctionLexerTest extends TestCase
         $lexer = new FunctionLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

@@ -15,25 +15,26 @@ namespace Nelmio\Alice\Definition;
 
 use Nelmio\Alice\Entity\StdClassFactory;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Property
  */
 class PropertyTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $property = 'username';
-        $value = new \stdClass();
+        $value = new stdClass();
         $definition = new Property($property, $value);
 
-        $this->assertEquals($property, $definition->getName());
-        $this->assertEquals($value, $definition->getValue());
+        static::assertEquals($property, $definition->getName());
+        static::assertEquals($value, $definition->getValue());
     }
 
-    public function testIsMutable()
+    public function testIsMutable(): void
     {
-        $value = new \stdClass();
+        $value = new stdClass();
         $definition = new Property('username', $value);
 
         // Mutate injected value
@@ -45,21 +46,21 @@ class PropertyTest extends TestCase
         $expected = StdClassFactory::create(['foo' => 'bar', 'ping' => 'pong']);
         $actual = $definition->getValue();
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $name = 'username';
         $definition = new Property($name, 'foo');
-        $newDefinition = $definition->withValue(new \stdClass());
+        $newDefinition = $definition->withValue(new stdClass());
 
-        $this->assertEquals(
+        static::assertEquals(
             new Property($name, 'foo'),
             $definition
         );
-        $this->assertEquals(
-            new Property($name, new \stdClass()),
+        static::assertEquals(
+            new Property($name, new stdClass()),
             $newDefinition
         );
     }

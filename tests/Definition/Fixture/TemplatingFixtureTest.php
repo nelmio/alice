@@ -30,12 +30,12 @@ class TemplatingFixtureTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAFixture()
+    public function testIsAFixture(): void
     {
-        $this->assertTrue(is_a(TemplatingFixture::class, FixtureInterface::class, true));
+        static::assertTrue(is_a(TemplatingFixture::class, FixtureInterface::class, true));
     }
     
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = 'user0';
         $className = 'Nelmio\Alice\Entity\User';
@@ -62,14 +62,14 @@ class TemplatingFixtureTest extends TestCase
         $fixtureWithFlags = new SimpleFixtureWithFlags($decoratedFixture, $flags);
         $fixture = new TemplatingFixture($fixtureWithFlags);
 
-        $this->assertEquals($reference, $fixture->getId());
-        $this->assertEquals($className, $fixture->getClassName());
-        $this->assertEquals($specs, $fixture->getSpecs());
-        $this->assertEquals($valueForCurrent, $fixture->getValueForCurrent());
-        $this->assertTrue($fixture->isATemplate());
-        $this->assertTrue($fixture->extendsFixtures());
-        $this->assertEquals([new FixtureReference('user_base')], $fixture->getExtendedFixturesReferences());
-        $this->assertEquals($flags, $fixture->getFlags());
+        static::assertEquals($reference, $fixture->getId());
+        static::assertEquals($className, $fixture->getClassName());
+        static::assertEquals($specs, $fixture->getSpecs());
+        static::assertEquals($valueForCurrent, $fixture->getValueForCurrent());
+        static::assertTrue($fixture->isATemplate());
+        static::assertTrue($fixture->extendsFixtures());
+        static::assertEquals([new FixtureReference('user_base')], $fixture->getExtendedFixturesReferences());
+        static::assertEquals($flags, $fixture->getFlags());
 
         $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(2);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
@@ -77,7 +77,7 @@ class TemplatingFixtureTest extends TestCase
         $decoratedFixtureProphecy->getValueForCurrent()->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $specs = SpecificationBagFactory::create();
         $newSpecs = SpecificationBagFactory::create(new FakeMethodCall());
@@ -101,10 +101,10 @@ class TemplatingFixtureTest extends TestCase
         $fixture = new TemplatingFixture($fixtureWithFlags);
         $newFixture = $fixture->withSpecs($newSpecs);
 
-        $this->assertInstanceOf(TemplatingFixture::class, $newFixture);
-        $this->assertNotSame($fixture, $newFixture);
+        static::assertInstanceOf(TemplatingFixture::class, $newFixture);
+        static::assertNotSame($fixture, $newFixture);
 
-        $this->assertEquals($specs, $fixture->getSpecs());
-        $this->assertEquals($newSpecs, $newFixture->getSpecs());
+        static::assertEquals($specs, $fixture->getSpecs());
+        static::assertEquals($newSpecs, $newFixture->getSpecs());
     }
 }

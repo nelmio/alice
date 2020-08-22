@@ -19,52 +19,53 @@ use Nelmio\Alice\Definition\ServiceReference\MutableReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Entity\StdClassFactory;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\MethodCallWithReference
  */
 class MethodCallWithReferenceTest extends TestCase
 {
-    public function testIsAMethodCall()
+    public function testIsAMethodCall(): void
     {
-        $this->assertTrue(is_a(MethodCallWithReference::class, MethodCallInterface::class, true));
+        static::assertTrue(is_a(MethodCallWithReference::class, MethodCallInterface::class, true));
     }
     
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $caller = new InstantiatedReference('user.factory');
         $method = 'setUsername';
-        $arguments = [new \stdClass()];
+        $arguments = [new stdClass()];
 
         $definition = new MethodCallWithReference($caller, $method, $arguments);
 
-        $this->assertEquals($caller, $definition->getCaller());
-        $this->assertEquals($method, $definition->getMethod());
-        $this->assertEquals($arguments, $definition->getArguments());
-        $this->assertEquals('user.factory->setUsername', $definition->__toString());
+        static::assertEquals($caller, $definition->getCaller());
+        static::assertEquals($method, $definition->getMethod());
+        static::assertEquals($arguments, $definition->getArguments());
+        static::assertEquals('user.factory->setUsername', $definition->__toString());
 
         $definition = new MethodCallWithReference($caller, $method, null);
 
-        $this->assertEquals($caller, $definition->getCaller());
-        $this->assertEquals($method, $definition->getMethod());
-        $this->assertNull($definition->getArguments());
-        $this->assertEquals('user.factory->setUsername', $definition->__toString());
+        static::assertEquals($caller, $definition->getCaller());
+        static::assertEquals($method, $definition->getMethod());
+        static::assertNull($definition->getArguments());
+        static::assertEquals('user.factory->setUsername', $definition->__toString());
 
         $caller = new StaticReference('Dummy');
         $definition = new MethodCallWithReference($caller, $method, null);
 
-        $this->assertEquals($caller, $definition->getCaller());
-        $this->assertEquals($method, $definition->getMethod());
-        $this->assertNull($definition->getArguments());
-        $this->assertEquals('Dummy::setUsername', $definition->__toString());
+        static::assertEquals($caller, $definition->getCaller());
+        static::assertEquals($method, $definition->getMethod());
+        static::assertNull($definition->getArguments());
+        static::assertEquals('Dummy::setUsername', $definition->__toString());
     }
 
-    public function testIsMutable()
+    public function testIsMutable(): void
     {
         $caller = new MutableReference();
         $method = 'setUsername';
         $arguments = [
-            $arg0 = new \stdClass(),
+            $arg0 = new stdClass(),
         ];
 
         $definition = new MethodCallWithReference($caller, $method, $arguments);
@@ -80,8 +81,8 @@ class MethodCallWithReferenceTest extends TestCase
         $arguments = $definition->getArguments();
         $arguments[0]->foz = 'baz';
 
-        $this->assertEquals(new MutableReference(), $definition->getCaller());
-        $this->assertEquals(
+        static::assertEquals(new MutableReference(), $definition->getCaller());
+        static::assertEquals(
             [
                 StdClassFactory::create([
                     'foo' => 'bar',
@@ -92,51 +93,51 @@ class MethodCallWithReferenceTest extends TestCase
         );
     }
 
-    public function testCanCreateANewInstanceWithNoArguments()
+    public function testCanCreateANewInstanceWithNoArguments(): void
     {
         $caller = new InstantiatedReference('user.factory');
         $method = 'setUsername';
-        $arguments = [new \stdClass()];
+        $arguments = [new stdClass()];
         $definition = new MethodCallWithReference($caller, $method, $arguments);
 
         $newArguments = null;
         $newDefinition = $definition->withArguments($newArguments);
 
-        $this->assertInstanceOf(MethodCallWithReference::class, $newDefinition);
+        static::assertInstanceOf(MethodCallWithReference::class, $newDefinition);
 
-        $this->assertEquals($caller, $definition->getCaller());
-        $this->assertEquals($method, $definition->getMethod());
-        $this->assertEquals($arguments, $definition->getArguments());
+        static::assertEquals($caller, $definition->getCaller());
+        static::assertEquals($method, $definition->getMethod());
+        static::assertEquals($arguments, $definition->getArguments());
 
-        $this->assertEquals($caller, $newDefinition->getCaller());
-        $this->assertEquals($method, $newDefinition->getMethod());
-        $this->assertEquals($newArguments, $newDefinition->getArguments());
+        static::assertEquals($caller, $newDefinition->getCaller());
+        static::assertEquals($method, $newDefinition->getMethod());
+        static::assertEquals($newArguments, $newDefinition->getArguments());
     }
 
-    public function testCanCreateANewInstanceWithArguments()
+    public function testCanCreateANewInstanceWithArguments(): void
     {
         $caller = new InstantiatedReference('user.factory');
         $method = 'setUsername';
-        $arguments = [new \stdClass()];
+        $arguments = [new stdClass()];
         $definition = new MethodCallWithReference($caller, $method, $arguments);
 
         $newArguments = [
-            $arg0 = new \stdClass(),
+            $arg0 = new stdClass(),
         ];
         $newDefinition = $definition->withArguments($newArguments);
 
         // Mutate argument before reading it
         $arg0->foo = 'bar';
 
-        $this->assertInstanceOf(MethodCallWithReference::class, $newDefinition);
+        static::assertInstanceOf(MethodCallWithReference::class, $newDefinition);
 
-        $this->assertEquals($caller, $definition->getCaller());
-        $this->assertEquals($method, $definition->getMethod());
-        $this->assertEquals($arguments, $definition->getArguments());
+        static::assertEquals($caller, $definition->getCaller());
+        static::assertEquals($method, $definition->getMethod());
+        static::assertEquals($arguments, $definition->getArguments());
 
-        $this->assertEquals($caller, $newDefinition->getCaller());
-        $this->assertEquals($method, $newDefinition->getMethod());
-        $this->assertEquals(
+        static::assertEquals($caller, $newDefinition->getCaller());
+        static::assertEquals($method, $newDefinition->getMethod());
+        static::assertEquals(
             [
                 StdClassFactory::create(['foo' => 'bar']),
             ],

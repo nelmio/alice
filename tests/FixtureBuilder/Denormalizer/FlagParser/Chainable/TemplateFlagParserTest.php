@@ -30,15 +30,15 @@ class TemplateFlagParserTest extends FlagParserTestCase
         $this->parser = new TemplateFlagParser();
     }
 
-    public function testIsAChainableFlagParser()
+    public function testIsAChainableFlagParser(): void
     {
-        $this->assertTrue(is_a(TemplateFlagParser::class, ChainableFlagParserInterface::class, true));
+        static::assertTrue(is_a(TemplateFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
     /**
      * @dataProvider provideTemplates
      */
-    public function testCanParseTemplates(string $element, FlagBag $expected = null)
+    public function testCanParseTemplates(string $element, FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);
     }

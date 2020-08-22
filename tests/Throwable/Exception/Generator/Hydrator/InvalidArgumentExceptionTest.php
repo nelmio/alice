@@ -17,28 +17,30 @@ use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Throwable\HydrationThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException
  */
 class InvalidArgumentExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(InvalidArgumentException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(InvalidArgumentException::class, RuntimeException::class, true));
     }
 
-    public function testIsAHydrationThrowable()
+    public function testIsAHydrationThrowable(): void
     {
-        $this->assertTrue(is_a(InvalidArgumentException::class, HydrationThrowable::class, true));
+        static::assertTrue(is_a(InvalidArgumentException::class, HydrationThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
-        $object = new SimpleObject('dummy', new \stdClass());
+        $object = new SimpleObject('dummy', new stdClass());
         $property = new Property('foo', 'bar');
 
         $exception = new ChildInvalidArgumentException();
-        $this->assertInstanceOf(ChildInvalidArgumentException::class, $exception);
+        static::assertInstanceOf(ChildInvalidArgumentException::class, $exception);
     }
 }

@@ -15,43 +15,45 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\DynamicArrayValue
  */
 class DynamicArrayValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
     }
 
     /**
      * @dataProvider provideInputTypes
      */
-    public function testThrowsErrorIfInvalidInputType($quantifier, $element, $errorMessage)
+    public function testThrowsErrorIfInvalidInputType($quantifier, $element, $errorMessage): void
     {
         try {
             new DynamicArrayValue($quantifier, $element);
-            $this->fail('Expected error to be thrown.');
-        } catch (\TypeError $error) {
-            $this->assertEquals($errorMessage, $error->getMessage());
+            static::fail('Expected error to be thrown.');
+        } catch (TypeError $error) {
+            static::assertEquals($errorMessage, $error->getMessage());
         }
     }
 
     /**
      * @dataProvider provideValues
      */
-    public function testReadAccessorsReturnPropertiesValues($quantifier, $element, $expectedQuantifier)
+    public function testReadAccessorsReturnPropertiesValues($quantifier, $element, $expectedQuantifier): void
     {
         $value = new DynamicArrayValue($quantifier, $element);
 
-        $this->assertEquals($expectedQuantifier, $value->getQuantifier());
-        $this->assertEquals($element, $value->getElement());
-        $this->assertEquals([$expectedQuantifier, $element], $value->getValue());
+        static::assertEquals($expectedQuantifier, $value->getQuantifier());
+        static::assertEquals($element, $value->getElement());
+        static::assertEquals([$expectedQuantifier, $element], $value->getValue());
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $quantifier = new MutableValue('q0');
         $elementValue = new MutableValue('e0');
@@ -65,9 +67,9 @@ class DynamicArrayValueTest extends TestCase
         $value->getQuantifier()->setValue('q2');
         $value->getElement()->setValue('e2');
 
-        $this->assertEquals(new MutableValue('q0'), $value->getQuantifier());
-        $this->assertEquals(new MutableValue('e0'), $value->getElement());
-        $this->assertEquals(
+        static::assertEquals(new MutableValue('q0'), $value->getQuantifier());
+        static::assertEquals(new MutableValue('e0'), $value->getElement());
+        static::assertEquals(
             [
                 new MutableValue('q0'),
                 new MutableValue('e0'),
@@ -76,13 +78,13 @@ class DynamicArrayValueTest extends TestCase
         );
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new DynamicArrayValue(10, 'foo');
-        $this->assertEquals('10x foo', (string) $value);
+        static::assertEquals('10x foo', (string) $value);
 
         $value = new DynamicArrayValue(new DummyValue('10'), new DummyValue('foo'));
-        $this->assertEquals('10x foo', (string) $value);
+        static::assertEquals('10x foo', (string) $value);
     }
 
     public function provideInputTypes()
@@ -123,14 +125,14 @@ class DynamicArrayValueTest extends TestCase
         ];
 
         yield 'object/array' => [
-            new \stdClass(),
+            new stdClass(),
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
             .'"stdClass" instead.'
         ];
 
         yield 'closure/array' => [
-            function () {
+            function (): void {
             },
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
@@ -167,7 +169,7 @@ class DynamicArrayValueTest extends TestCase
 
         yield 'int/closure' => [
             -1,
-            function () {
+            function (): void {
             },
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
             .'"Closure" instead.'
@@ -175,7 +177,7 @@ class DynamicArrayValueTest extends TestCase
 
         yield 'int/non value interface object' => [
             -1,
-            new \stdClass(),
+            new stdClass(),
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
             .'"stdClass" instead.'
         ];

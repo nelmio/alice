@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use Exception;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -97,7 +98,7 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
             $propertyValue = $this->propertyAccessor->getValue($instance, $value->getProperty());
         } catch (SymfonyNoSuchPropertyException $exception) {
             throw NoSuchPropertyExceptionFactory::createForFixture($fixture, $value, 0, $exception);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw UnresolvableValueExceptionFactory::create($value, 0, $exception);
         }
 

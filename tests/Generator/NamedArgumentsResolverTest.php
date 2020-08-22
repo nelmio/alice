@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Generator;
 use Nelmio\Alice\Entity\DummyWithMethods;
 use Nelmio\Alice\Entity\EmptyDummy;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Generator\NamedArgumentsResolver
@@ -25,11 +26,11 @@ class NamedArgumentsResolverTest extends TestCase
     /**
      * @dataProvider provideResolveArgumentsCases
      */
-    public function testResolveArguments(string $className, string $methodName, array $argument, array $expectedResult)
+    public function testResolveArguments(string $className, string $methodName, array $argument, array $expectedResult): void
     {
         $resolver = new NamedArgumentsResolver();
 
-        self::assertSame(
+        static::assertSame(
             $expectedResult,
             $resolver->resolveArguments($argument, $className, $methodName)
         );
@@ -303,11 +304,11 @@ class NamedArgumentsResolverTest extends TestCase
         ];
     }
 
-    public function testThrowsExceptionWhenResolvingUnknownArguments()
+    public function testThrowsExceptionWhenResolvingUnknownArguments(): void
     {
         $resolver = new NamedArgumentsResolver();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unknown arguments for Nelmio\Alice\Entity\DummyWithMethods::bar(): $unknown1, $unknown2.');
 
         $resolver->resolveArguments([
@@ -318,11 +319,11 @@ class NamedArgumentsResolverTest extends TestCase
         ], DummyWithMethods::class, 'bar');
     }
 
-    public function testThrowsExceptionWhenMissingArgumentsDontHaveDefaultValues()
+    public function testThrowsExceptionWhenMissingArgumentsDontHaveDefaultValues(): void
     {
         $resolver = new NamedArgumentsResolver();
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Argument $bar1 of Nelmio\Alice\Entity\DummyWithMethods::bar() is not passed a value and does not define a default one.');
 
         $resolver->resolveArguments([], DummyWithMethods::class, 'bar');

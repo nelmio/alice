@@ -15,34 +15,35 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ListValue
  */
 class ListValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(ListValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(ListValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $list = [];
         $value = new ListValue($list);
 
-        $this->assertEquals($list, $value->getValue());
+        static::assertEquals($list, $value->getValue());
 
-        $list = [new \stdClass()];
+        $list = [new stdClass()];
         $value = new ListValue($list);
 
-        $this->assertEquals($list, $value->getValue());
+        static::assertEquals($list, $value->getValue());
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $value = new ListValue([
-            $arg0 = new \stdClass(),
+            $arg0 = new stdClass(),
         ]);
 
         // Mutate injected value
@@ -51,17 +52,17 @@ class ListValueTest extends TestCase
         // Mutate returned value
         $value->getValue()[0]->foo = 'baz';
 
-        $this->assertEquals(
+        static::assertEquals(
             [
-                new \stdClass(),
+                new stdClass(),
             ],
             $value->getValue()
         );
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new ListValue(['a', 'b', new DummyValue('c')]);
-        $this->assertEquals('abc', (string) $value);
+        static::assertEquals('abc', (string) $value);
     }
 }

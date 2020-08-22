@@ -26,6 +26,7 @@ use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
@@ -34,23 +35,23 @@ class SimpleFixtureSetResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAFixtureResolver()
+    public function testIsAFixtureResolver(): void
     {
-        $this->assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));
+        static::assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleFixtureSetResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleFixtureSetResolver::class))->isCloneable());
     }
 
-    public function testReturnsResolvedParametersAndFixtures()
+    public function testReturnsResolvedParametersAndFixtures(): void
     {
         $set = new FixtureSet(
             $injectedParameters = new ParameterBag(['injected' => true]),
             $loadedParameters = new ParameterBag(['loaded' => true]),
             $fixtures = (new FixtureBag())->with(new DummyFixture('dummy')),
-            $objects = (new ObjectBag())->with(new SimpleObject('injected_object', new \stdClass()))
+            $objects = (new ObjectBag())->with(new SimpleObject('injected_object', new stdClass()))
         );
 
         $parameterResolverProphecy = $this->prophesize(ParameterBagResolverInterface::class);
@@ -78,6 +79,6 @@ class SimpleFixtureSetResolverTest extends TestCase
         $resolver = new SimpleFixtureSetResolver($parameterResolver, $fixtureResolver);
         $actual = $resolver->resolve($set);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

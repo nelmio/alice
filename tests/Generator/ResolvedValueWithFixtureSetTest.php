@@ -14,20 +14,21 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\ResolvedValueWithFixtureSet
  */
 class ResolvedValueWithFixtureSetTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
-        $value = new \stdClass();
+        $value = new stdClass();
         $set = ResolvedFixtureSetFactory::create();
 
         $resolvedValueWithSet = new ResolvedValueWithFixtureSet($value, $set);
 
-        $this->assertEquals($value, $resolvedValueWithSet->getValue());
-        $this->assertEquals($set, $resolvedValueWithSet->getSet());
+        static::assertEquals($value, $resolvedValueWithSet->getValue());
+        static::assertEquals($set, $resolvedValueWithSet->getSet());
     }
 }

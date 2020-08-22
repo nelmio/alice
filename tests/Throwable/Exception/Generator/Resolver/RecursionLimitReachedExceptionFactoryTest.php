@@ -20,15 +20,15 @@ use PHPUnit\Framework\TestCase;
  */
 class RecursionLimitReachedExceptionFactoryTest extends TestCase
 {
-    public function testCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory(): void
     {
         $exception = RecursionLimitReachedExceptionFactory::create(10, 'foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Recursion limit (10 tries) reached while resolving the parameter "foo"',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

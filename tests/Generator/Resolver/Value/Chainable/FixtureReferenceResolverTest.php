@@ -36,6 +36,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver
@@ -44,36 +45,36 @@ class FixtureReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(FixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(FixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FixtureReferenceResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FixtureReferenceResolver::class))->isCloneable());
     }
 
-    public function testIsGeneratorAware()
+    public function testIsGeneratorAware(): void
     {
         $generator = new FakeObjectGenerator();
 
         $resolver = new FixtureReferenceResolver();
         $newResolver = $resolver->withObjectGenerator($generator);
 
-        $this->assertEquals(new FixtureReferenceResolver(), $resolver);
-        $this->assertEquals(new FixtureReferenceResolver($generator), $newResolver);
+        static::assertEquals(new FixtureReferenceResolver(), $resolver);
+        static::assertEquals(new FixtureReferenceResolver($generator), $newResolver);
     }
 
-    public function testCanResolveFixtureReferenceValues()
+    public function testCanResolveFixtureReferenceValues(): void
     {
         $resolver = new FixtureReferenceResolver();
 
-        $this->assertTrue($resolver->canResolve(new FixtureReferenceValue('')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new FixtureReferenceValue('')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testCannotResolveValueIfHasNoGenerator()
+    public function testCannotResolveValueIfHasNoGenerator(): void
     {
         $resolver = new FixtureReferenceResolver();
 
@@ -89,7 +90,7 @@ class FixtureReferenceResolverTest extends TestCase
         );
     }
 
-    public function testCannotResolveReferenceIsTheReferenceIsAValue()
+    public function testCannotResolveReferenceIsTheReferenceIsAValue(): void
     {
         $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
 
@@ -105,14 +106,14 @@ class FixtureReferenceResolverTest extends TestCase
         );
     }
 
-    public function testIfTheReferenceRefersToACompletelyGeneratedFixtureThenReturnsTheInstance()
+    public function testIfTheReferenceRefersToACompletelyGeneratedFixtureThenReturnsTheInstance(): void
     {
         $value = new FixtureReferenceValue('dummy');
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(
             null,
             null,
-            new ObjectBag(['dummy' => $expectedInstance = new \stdClass()])
+            new ObjectBag(['dummy' => $expectedInstance = new stdClass()])
         );
         $scope = [];
         $context = new GenerationContext();
@@ -122,10 +123,10 @@ class FixtureReferenceResolverTest extends TestCase
         $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testIfTheReferenceRefersToAnInstantiatedFixtureAndRequiresToBeCompleteThenGenerateIt()
+    public function testIfTheReferenceRefersToAnInstantiatedFixtureAndRequiresToBeCompleteThenGenerateIt(): void
     {
         $value = new FixtureReferenceValue('dummy');
         $fixture = new FakeFixture();
@@ -137,7 +138,7 @@ class FixtureReferenceResolverTest extends TestCase
             (new ObjectBag())->with(
                 new SimpleObject(
                     'dummy',
-                    $expectedInstance = new \stdClass()
+                    $expectedInstance = new stdClass()
                 )
             )
         );
@@ -175,13 +176,13 @@ class FixtureReferenceResolverTest extends TestCase
         $resolver = new FixtureReferenceResolver($generator);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
-        $this->assertEquals($context, $generatorContext);
+        static::assertEquals($expected, $actual);
+        static::assertEquals($context, $generatorContext);
 
         $generatorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testIfTheReferenceRefersToANonInstantiatedFixtureThenGenerateItBeforeReturningTheInstance()
+    public function testIfTheReferenceRefersToANonInstantiatedFixtureThenGenerateItBeforeReturningTheInstance(): void
     {
         $value = new FixtureReferenceValue('dummy');
         $fixture = new FakeFixture();
@@ -203,7 +204,7 @@ class FixtureReferenceResolverTest extends TestCase
         $generatorProphecy
             ->generate($referredFixture, $set, $generatorContext)
             ->willReturn(
-                $objects = new ObjectBag(['dummy' => $expectedInstance = new \stdClass()])
+                $objects = new ObjectBag(['dummy' => $expectedInstance = new stdClass()])
             )
         ;
         /** @var ObjectGeneratorInterface $generator */
@@ -223,13 +224,13 @@ class FixtureReferenceResolverTest extends TestCase
 
         $generatorContext->unmarkAsNeedsCompleteGeneration();
 
-        $this->assertEquals($expected, $actual);
-        $this->assertEquals($generatorContext, $context);
+        static::assertEquals($expected, $actual);
+        static::assertEquals($generatorContext, $context);
 
         $generatorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testIfTheReferenceRefersToANonExistentFixtureAndNoInstanceIsAvailableThenThrowsAnException()
+    public function testIfTheReferenceRefersToANonExistentFixtureAndNoInstanceIsAvailableThenThrowsAnException(): void
     {
         $value = new FixtureReferenceValue('dummy');
         $fixture = new FakeFixture();

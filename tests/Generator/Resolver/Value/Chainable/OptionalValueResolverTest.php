@@ -32,34 +32,34 @@ use ReflectionClass;
  */
 class OptionalValueResolverTest extends TestCase
 {
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(OptionalValueResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(OptionalValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(OptionalValueResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(OptionalValueResolver::class))->isCloneable());
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $resolver = new OptionalValueResolver();
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        $this->assertEquals(new OptionalValueResolver(), $resolver);
-        $this->assertEquals(new OptionalValueResolver(new FakeValueResolver()), $newResolver);
+        static::assertEquals(new OptionalValueResolver(), $resolver);
+        static::assertEquals(new OptionalValueResolver(new FakeValueResolver()), $newResolver);
     }
 
-    public function testCanResolveOptionalValues()
+    public function testCanResolveOptionalValues(): void
     {
         $resolver = new OptionalValueResolver();
 
-        $this->assertTrue($resolver->canResolve(new OptionalValue('', '')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new OptionalValue('', '')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testCannotResolveValueIfHasNoResolver()
+    public function testCannotResolveValueIfHasNoResolver(): void
     {
         $value = new FixturePropertyValue(new FakeValue(), '');
         $resolver = new OptionalValueResolver();
@@ -70,7 +70,7 @@ class OptionalValueResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    public function testCanHandleExtremaQuantifiersCorrectly()
+    public function testCanHandleExtremaQuantifiersCorrectly(): void
     {
         $resolver = new OptionalValueResolver(new FakeValueResolver());
 
@@ -105,12 +105,12 @@ class OptionalValueResolverTest extends TestCase
 
         $mock->disable();
 
-        $this->assertEquals('second_0', $resolvedValueFor0->getValue());
-        $this->assertEquals('first_100', $resolvedValueFor100->getValue());
-        $this->assertEquals('first_50', $resolvedValueFor50->getValue());
+        static::assertEquals('second_0', $resolvedValueFor0->getValue());
+        static::assertEquals('first_100', $resolvedValueFor100->getValue());
+        static::assertEquals('first_50', $resolvedValueFor50->getValue());
     }
 
-    public function testReturnsSetWithResolvedValue()
+    public function testReturnsSetWithResolvedValue(): void
     {
         //TODO
     }

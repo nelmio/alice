@@ -15,31 +15,33 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\OptionalValue
  */
 class OptionalValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(OptionalValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(OptionalValue::class, ValueInterface::class, true));
     }
 
     /**
      * @dataProvider provideInputValues
      */
-    public function testThrowsErrorIfInvalidTypeGiven($quantifier, $firstMember, $secondMember, $errorMessage)
+    public function testThrowsErrorIfInvalidTypeGiven($quantifier, $firstMember, $secondMember, $errorMessage): void
     {
         try {
             new OptionalValue($quantifier, $firstMember, $secondMember);
-            $this->fail('Expected error to be thrown.');
-        } catch (\TypeError $error) {
-            $this->assertEquals($errorMessage, $error->getMessage());
+            static::fail('Expected error to be thrown.');
+        } catch (TypeError $error) {
+            static::assertEquals($errorMessage, $error->getMessage());
         }
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $quantifier = 50;
         $firstMember = 'first';
@@ -47,10 +49,10 @@ class OptionalValueTest extends TestCase
 
         $value = new OptionalValue($quantifier, $firstMember, $secondMember);
 
-        $this->assertEquals($quantifier, $value->getQuantifier());
-        $this->assertEquals($firstMember, $value->getFirstMember());
-        $this->assertEquals($secondMember, $value->getSecondMember());
-        $this->assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
+        static::assertEquals($quantifier, $value->getQuantifier());
+        static::assertEquals($firstMember, $value->getFirstMember());
+        static::assertEquals($secondMember, $value->getSecondMember());
+        static::assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
 
         $quantifier = new FakeValue();
         $firstMember = new FakeValue();
@@ -58,10 +60,10 @@ class OptionalValueTest extends TestCase
 
         $value = new OptionalValue($quantifier, $firstMember, $secondMember);
 
-        $this->assertEquals($quantifier, $value->getQuantifier());
-        $this->assertEquals($firstMember, $value->getFirstMember());
-        $this->assertEquals($secondMember, $value->getSecondMember());
-        $this->assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
+        static::assertEquals($quantifier, $value->getQuantifier());
+        static::assertEquals($firstMember, $value->getFirstMember());
+        static::assertEquals($secondMember, $value->getSecondMember());
+        static::assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
 
         $quantifier = '100';
         $firstMember = new FakeValue();
@@ -69,13 +71,13 @@ class OptionalValueTest extends TestCase
 
         $value = new OptionalValue($quantifier, $firstMember, $secondMember);
 
-        $this->assertEquals(100, $value->getQuantifier());
-        $this->assertEquals($firstMember, $value->getFirstMember());
-        $this->assertEquals($secondMember, $value->getSecondMember());
-        $this->assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
+        static::assertEquals(100, $value->getQuantifier());
+        static::assertEquals($firstMember, $value->getFirstMember());
+        static::assertEquals($secondMember, $value->getSecondMember());
+        static::assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $quantifier = new MutableValue('q0');
         $firstMember = new MutableValue('f0');
@@ -92,10 +94,10 @@ class OptionalValueTest extends TestCase
         $value->getFirstMember()->setValue('f2');
         $value->getSecondMember()->setValue('s2');
 
-        $this->assertNotSame(new MutableValue('q0'), $value->getQuantifier());
-        $this->assertNotSame(new MutableValue('f0'), $value->getFirstMember());
-        $this->assertNotSame(new MutableValue('s0'), $value->getSecondMember());
-        $this->assertNotSame(
+        static::assertNotSame(new MutableValue('q0'), $value->getQuantifier());
+        static::assertNotSame(new MutableValue('f0'), $value->getFirstMember());
+        static::assertNotSame(new MutableValue('s0'), $value->getSecondMember());
+        static::assertNotSame(
             [
                 new MutableValue('q0'),
                 new MutableValue('f0'),
@@ -105,16 +107,16 @@ class OptionalValueTest extends TestCase
         );
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new OptionalValue(10, 'foo');
-        $this->assertEquals('10%? foo : null', (string) $value);
+        static::assertEquals('10%? foo : null', (string) $value);
 
         $value = new OptionalValue(10, 'foo', 'bar');
-        $this->assertEquals('10%? foo : bar', (string) $value);
+        static::assertEquals('10%? foo : bar', (string) $value);
 
         $value = new OptionalValue(new DummyValue('10'), new DummyValue('foo'));
-        $this->assertEquals('10%? foo : null', (string) $value);
+        static::assertEquals('10%? foo : null', (string) $value);
     }
 
     public function provideInputValues()
@@ -136,7 +138,7 @@ class OptionalValueTest extends TestCase
         ];
 
         yield 'stdClass/string/string' => [
-            new \stdClass(),
+            new stdClass(),
             'first_member',
             'second_member',
             'Expected quantifier to be either a scalar value or an instance of "Nelmio\Alice\Definition\ValueInterface". '
@@ -161,7 +163,7 @@ class OptionalValueTest extends TestCase
 
         yield 'string/stdClass/string' => [
             'quantifier',
-            new \stdClass(),
+            new stdClass(),
             'second_member',
             'Expected first member to be either a string or an instance of "Nelmio\Alice\Definition\ValueInterface". '
             .'Got "stdClass" instead.',
@@ -178,7 +180,7 @@ class OptionalValueTest extends TestCase
         yield 'string/string/stdClass' => [
             'quantifier',
             'first_member',
-            new \stdClass(),
+            new stdClass(),
             'Expected second member to be either null, a string or an instance of "Nelmio\Alice\Definition\ValueInterface". '
             .'Got "stdClass" instead.',
         ];

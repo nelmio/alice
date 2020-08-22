@@ -15,44 +15,46 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
+use stdClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ParameterValue
  */
 class ParameterValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(ParameterValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(ParameterValue::class, ValueInterface::class, true));
     }
 
     /**
      * @dataProvider provideInputValues
      */
-    public function testThrowsErrorIfInvalidTypeGiven($value, $errorMessage)
+    public function testThrowsErrorIfInvalidTypeGiven($value, $errorMessage): void
     {
         try {
             new ParameterValue($value);
-            $this->fail('Expected error to be thrown.');
-        } catch (\TypeError $error) {
-            $this->assertEquals($errorMessage, $error->getMessage());
+            static::fail('Expected error to be thrown.');
+        } catch (TypeError $error) {
+            static::assertEquals($errorMessage, $error->getMessage());
         }
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $parameterKey = 'dummy_param';
         $value = new ParameterValue($parameterKey);
 
-        $this->assertEquals($parameterKey, $value->getValue());
+        static::assertEquals($parameterKey, $value->getValue());
 
         $parameterKey = new FakeValue();
         $value = new ParameterValue($parameterKey);
 
-        $this->assertEquals($parameterKey, $value->getValue());
+        static::assertEquals($parameterKey, $value->getValue());
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
         $injectedValue = new MutableValue('v0');
         $value = new ParameterValue($injectedValue);
@@ -63,18 +65,18 @@ class ParameterValueTest extends TestCase
         // Mutate returned value
         $value->getValue()->setValue('v2');
 
-        $this->assertNotSame(new MutableValue('v0'), $value->getValue());
+        static::assertNotSame(new MutableValue('v0'), $value->getValue());
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new ParameterValue('foo');
-        $this->assertEquals('<{foo}>', $value);
+        static::assertEquals('<{foo}>', $value);
 
         $value = new ParameterValue(
             new DummyValue('foo')
         );
-        $this->assertEquals('<{foo}>', $value);
+        static::assertEquals('<{foo}>', $value);
     }
 
     public function provideInputValues()
@@ -92,7 +94,7 @@ class ParameterValueTest extends TestCase
         ];
 
         yield 'stdClass' => [
-            new \stdClass(),
+            new stdClass(),
             'Expected parameter key to be either a string or an instance of "Nelmio\Alice\Definition\ValueInterface". '
             .'Got "stdClass" instead.',
         ];

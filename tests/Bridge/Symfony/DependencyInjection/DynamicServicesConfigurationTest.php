@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
+use Exception;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Bridge\Symfony\Application\AppKernel;
 use Nelmio\Alice\Faker\Provider\AliceProvider;
@@ -20,6 +21,7 @@ use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolv
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Symfony\KernelFactory;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @coversNothing
@@ -52,41 +54,41 @@ class DynamicServicesConfigurationTest extends TestCase
         }
     }
 
-    public function testResolverUsesTheLimitIsDefinedInTheConfiguration()
+    public function testResolverUsesTheLimitIsDefinedInTheConfiguration(): void
     {
         /** @var RecursiveParameterResolver $resolver */
         $resolver = $this->kernel->getContainer()->get('nelmio_alice.generator.resolver.parameter.chainable.recursive_parameter_resolver');
 
-        $this->assertInstanceOf(RecursiveParameterResolver::class, $resolver);
-        $limitRefl = (new \ReflectionClass(RecursiveParameterResolver::class))->getProperty('limit');
+        static::assertInstanceOf(RecursiveParameterResolver::class, $resolver);
+        $limitRefl = (new ReflectionClass(RecursiveParameterResolver::class))->getProperty('limit');
         $limitRefl->setAccessible(true);
 
-        $this->assertEquals(50, $limitRefl->getValue($resolver));
+        static::assertEquals(50, $limitRefl->getValue($resolver));
     }
 
-    public function testUniqueValueResolverUsesTheLimitIsDefinedInTheConfiguration()
+    public function testUniqueValueResolverUsesTheLimitIsDefinedInTheConfiguration(): void
     {
         /** @var UniqueValueResolver $resolver */
         $resolver = $this->kernel->getContainer()->get('nelmio_alice.generator.resolver.value.chainable.unique_value_resolver');
 
-        $this->assertInstanceOf(UniqueValueResolver::class, $resolver);
-        $limitRefl = (new \ReflectionClass(UniqueValueResolver::class))->getProperty('limit');
+        static::assertInstanceOf(UniqueValueResolver::class, $resolver);
+        $limitRefl = (new ReflectionClass(UniqueValueResolver::class))->getProperty('limit');
         $limitRefl->setAccessible(true);
 
-        $this->assertEquals(15, $limitRefl->getValue($resolver));
+        static::assertEquals(15, $limitRefl->getValue($resolver));
     }
 
-    public function testUniqueValueResolverUsesTheSeedAndLocaleIsDefinedInTheConfiguration()
+    public function testUniqueValueResolverUsesTheSeedAndLocaleIsDefinedInTheConfiguration(): void
     {
         /** @var FakerGenerator $generator */
         $generator = $this->kernel->getContainer()->get('nelmio_alice.faker.generator');
 
-        $this->assertInstanceOf(FakerGenerator::class, $generator);
+        static::assertInstanceOf(FakerGenerator::class, $generator);
         $this->assertGeneratorLocaleIs('fr_FR', $generator);
         $this->assertHasAliceProvider($generator);
     }
 
-    private function assertGeneratorLocaleIs(string $locale, FakerGenerator $generator)
+    private function assertGeneratorLocaleIs(string $locale, FakerGenerator $generator): void
     {
         $providers = $generator->getProviders();
         $regex = sprintf('/^Faker\\\Provider\\\%s\\\.*/', $locale);
@@ -96,10 +98,10 @@ class DynamicServicesConfigurationTest extends TestCase
             }
         }
 
-        throw new \Exception(sprintf('Generator has not been initialised with the locale "%s".', $locale));
+        throw new Exception(sprintf('Generator has not been initialised with the locale "%s".', $locale));
     }
 
-    private function assertHasAliceProvider(FakerGenerator $generator)
+    private function assertHasAliceProvider(FakerGenerator $generator): void
     {
         $providers = $generator->getProviders();
         foreach ($providers as $provider) {
@@ -108,6 +110,6 @@ class DynamicServicesConfigurationTest extends TestCase
             }
         }
 
-        throw new \Exception(sprintf('Generator does not have the provider "%s".', AliceProvider::class));
+        throw new Exception(sprintf('Generator does not have the provider "%s".', AliceProvider::class));
     }
 }

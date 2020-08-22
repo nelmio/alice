@@ -15,25 +15,26 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\ResolutionThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundException
  */
 class FixtureNotFoundExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(FixtureNotFoundException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(FixtureNotFoundException::class, RuntimeException::class, true));
     }
 
-    public function testIsAResolutionThrowable()
+    public function testIsAResolutionThrowable(): void
     {
-        $this->assertTrue(is_a(FixtureNotFoundException::class, ResolutionThrowable::class, true));
+        static::assertTrue(is_a(FixtureNotFoundException::class, ResolutionThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildFixtureNotFoundException();
-        $this->assertInstanceOf(ChildFixtureNotFoundException::class, $exception);
+        static::assertInstanceOf(ChildFixtureNotFoundException::class, $exception);
     }
 }

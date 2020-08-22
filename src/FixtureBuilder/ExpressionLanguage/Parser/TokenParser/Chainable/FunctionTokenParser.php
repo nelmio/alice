@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use const DIRECTORY_SEPARATOR;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
@@ -118,7 +119,7 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
             function (array $matches) use ($argumentEscaper): string {
                 $string = end($matches);
                 if (preg_match('/"(.*?)"/', reset($matches))) {
-                    $lineBreak = \DIRECTORY_SEPARATOR === '\\' ? '\r\n' : '\n';
+                    $lineBreak = DIRECTORY_SEPARATOR === '\\' ? '\r\n' : '\n';
                     $string = str_replace($lineBreak, PHP_EOL, $string);
                 }
 

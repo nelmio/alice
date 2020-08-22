@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Fixture;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
 use Nelmio\Alice\Definition\FlagBag;
@@ -28,12 +29,12 @@ class SimpleFixtureWithFlagsTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAFixtureWithFlags()
+    public function testIsAFixtureWithFlags(): void
     {
-        $this->assertTrue(is_a(SimpleFixtureWithFlags::class, FixtureWithFlagsInterface::class, true));
+        static::assertTrue(is_a(SimpleFixtureWithFlags::class, FixtureWithFlagsInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = 'user0';
         $className = 'Nelmio\Alice\Entity\User';
@@ -52,11 +53,11 @@ class SimpleFixtureWithFlagsTest extends TestCase
 
         $fixture = new SimpleFixtureWithFlags($decoratedFixture, $flags);
 
-        $this->assertEquals($reference, $fixture->getId());
-        $this->assertEquals($className, $fixture->getClassName());
-        $this->assertEquals($specs, $fixture->getSpecs());
-        $this->assertEquals($valueForCurrent, $fixture->getValueForCurrent());
-        $this->assertEquals($flags, $fixture->getFlags());
+        static::assertEquals($reference, $fixture->getId());
+        static::assertEquals($className, $fixture->getClassName());
+        static::assertEquals($specs, $fixture->getSpecs());
+        static::assertEquals($valueForCurrent, $fixture->getValueForCurrent());
+        static::assertEquals($flags, $fixture->getFlags());
 
         $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(2);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
@@ -64,7 +65,7 @@ class SimpleFixtureWithFlagsTest extends TestCase
         $decoratedFixtureProphecy->getValueForCurrent()->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $reference = 'user0';
         $specs = SpecificationBagFactory::create();
@@ -87,21 +88,21 @@ class SimpleFixtureWithFlagsTest extends TestCase
         $fixture = new SimpleFixtureWithFlags($decoratedFixture, $flags);
         $newFixture = $fixture->withSpecs($newSpecs);
 
-        $this->assertInstanceOf(SimpleFixtureWithFlags::class, $newFixture);
-        $this->assertNotSame($fixture, $newFixture);
+        static::assertInstanceOf(SimpleFixtureWithFlags::class, $newFixture);
+        static::assertNotSame($fixture, $newFixture);
 
-        $this->assertEquals($specs, $fixture->getSpecs());
-        $this->assertEquals($flags, $fixture->getFlags());
-        $this->assertEquals($newSpecs, $newFixture->getSpecs());
-        $this->assertEquals($flags, $newFixture->getFlags());
+        static::assertEquals($specs, $fixture->getSpecs());
+        static::assertEquals($flags, $fixture->getFlags());
+        static::assertEquals($newSpecs, $newFixture->getSpecs());
+        static::assertEquals($flags, $newFixture->getFlags());
     }
 
-    public function testThrowsAnExceptionIfFixtureIdAndFlagKeyMistmatch()
+    public function testThrowsAnExceptionIfFixtureIdAndFlagKeyMistmatch(): void
     {
         $fixture = new DummyFixture('foo');
         $flags = new FlagBag('bar');
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected the fixture ID and the flags key to be the same. Got "foo" and "bar" instead.');
 
         new SimpleFixtureWithFlags($fixture, $flags);

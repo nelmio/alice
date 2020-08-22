@@ -15,41 +15,42 @@ namespace Nelmio\Alice\Throwable\Exception;
 
 use Nelmio\Alice\Parameter;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\ParameterNotFoundExceptionFactory
  */
 class ParameterNotFoundExceptionFactoryTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(ParameterNotFoundException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(ParameterNotFoundException::class, RuntimeException::class, true));
     }
 
-    public function testCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory(): void
     {
         $exception = ParameterNotFoundExceptionFactory::create('foo');
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find the parameter "foo".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 
-    public function testCreateForWhenResolvingParameter()
+    public function testCreateForWhenResolvingParameter(): void
     {
         $exception = ParameterNotFoundExceptionFactory::createForWhenResolvingParameter(
             'foo',
             new Parameter('bar', 'baz')
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not find the parameter "foo" when resolving "bar".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

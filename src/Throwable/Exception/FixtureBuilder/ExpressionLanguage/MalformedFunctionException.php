@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
-class MalformedFunctionException extends \InvalidArgumentException
+use InvalidArgumentException;
+
+class MalformedFunctionException extends InvalidArgumentException
 {
 }

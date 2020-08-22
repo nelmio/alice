@@ -26,45 +26,45 @@ use ReflectionClass;
  */
 class SimpleReferenceTokenParserTest extends TestCase
 {
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(SimpleReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(SimpleReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleReferenceTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleReferenceTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseDynamicArrayTokens()
+    public function testCanParseDynamicArrayTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new SimpleReferenceTokenParser();
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testThrowsAnErrorIfAMalformedTokenIsGiven()
+    public function testThrowsAnErrorIfAMalformedTokenIsGiven(): void
     {
         try {
             $token = new Token('', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE));
 
             $parser = new SimpleReferenceTokenParser();
             $parser->parse($token);
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (ParseException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not parse the token "" (type: SIMPLE_REFERENCE_TYPE).',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNotNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
         }
     }
 
-    public function testReturnsAFixtureReferenceValueIfCanParseToken()
+    public function testReturnsAFixtureReferenceValueIfCanParseToken(): void
     {
         $token = new Token('@user', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE));
         $expected = new FixtureReferenceValue('user');
@@ -72,6 +72,6 @@ class SimpleReferenceTokenParserTest extends TestCase
         $parser = new SimpleReferenceTokenParser();
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

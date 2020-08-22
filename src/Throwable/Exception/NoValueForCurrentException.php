@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
-class NoValueForCurrentException extends \RuntimeException
+use RuntimeException;
+
+class NoValueForCurrentException extends RuntimeException
 {
 }

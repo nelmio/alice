@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser;
 
+use InvalidArgumentException;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
 use Nelmio\Alice\Parser\IncludeProcessor\FakeIncludeProcessor;
@@ -41,17 +42,17 @@ class RuntimeCacheParserTest extends TestCase
         self::$dir = __DIR__.'/../../fixtures/Parser/files/cache';
     }
 
-    public function testIsAParser()
+    public function testIsAParser(): void
     {
-        $this->assertTrue(is_a(RuntimeCacheParser::class, ParserInterface::class, true));
+        static::assertTrue(is_a(RuntimeCacheParser::class, ParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(RuntimeCacheParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(RuntimeCacheParser::class))->isCloneable());
     }
 
-    public function testCanParseFile()
+    public function testCanParseFile(): void
     {
         $file = 'foo.php';
         $expected = [new stdClass()];
@@ -71,15 +72,15 @@ class RuntimeCacheParserTest extends TestCase
         $parser = new RuntimeCacheParser($decoratedParser, $fileLocator, $includeProcessor);
         $actual = $parser->parse($file);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         // As the parser cache the results, parsing each file does not re-trigger a parse call
         $actual = $parser->parse($file);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testParsesTheResultAndCacheIt()
+    public function testParsesTheResultAndCacheIt(): void
     {
         $file1 = 'foo.php';
         $file2 = '/another/path/to/foo.php';
@@ -123,15 +124,15 @@ class RuntimeCacheParserTest extends TestCase
         $actual2 = $parser->parse($file2);
         $actual3 = $parser->parse($file3);
 
-        $this->assertSame($file1Result, $actual1);
-        $this->assertSame($file1Result, $actual2);
-        $this->assertSame($file3Result, $actual3);
+        static::assertSame($file1Result, $actual1);
+        static::assertSame($file1Result, $actual2);
+        static::assertSame($file3Result, $actual3);
 
         $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(3);
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testThrowsAnExceptionIfFileCouldNotBeFound()
+    public function testThrowsAnExceptionIfFileCouldNotBeFound(): void
     {
         $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
         $fileLocatorProphecy->locate(Argument::any())->willThrow(FileNotFoundException::class);
@@ -142,18 +143,18 @@ class RuntimeCacheParserTest extends TestCase
         try {
             $parser->parse('/nowhere');
 
-            $this->fail('Expected exception to be thrown.');
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
+            static::fail('Expected exception to be thrown.');
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
                 'The file "/nowhere" could not be found.',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNotNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
         }
     }
 
-    public function testProcessesIncludesAndCacheTheResultOfEachIncludedFile()
+    public function testProcessesIncludesAndCacheTheResultOfEachIncludedFile(): void
     {
         $mainFile = '/path/to/main.yml';
         $parsedMainFileContent = [
@@ -220,7 +221,7 @@ class RuntimeCacheParserTest extends TestCase
         $parser = new RuntimeCacheParser($decoratedParser, $fileLocator, new DefaultIncludeProcessor($fileLocator));
         $actual = $parser->parse($mainFile);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(4);
         $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(4 + 2); // nbr of files + includes
@@ -236,10 +237,10 @@ class RuntimeCacheParserTest extends TestCase
         $actualFile2 = $parser->parse('file2.yml');
         $actualFile3 = $parser->parse('file3.yml');
 
-        $this->assertSame($expected, $actual);
-        $this->assertSame($parsedFile1Content, $actualFile1);
-        $this->assertSame($expectedFile2, $actualFile2);
-        $this->assertSame($parsedFile3Content, $actualFile3);
+        static::assertSame($expected, $actual);
+        static::assertSame($parsedFile1Content, $actualFile1);
+        static::assertSame($expectedFile2, $actualFile2);
+        static::assertSame($parsedFile3Content, $actualFile3);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(4);
         $fileLocatorProphecy->locate(Argument::any())->shouldHaveBeenCalledTimes(4 + 4 + 2);

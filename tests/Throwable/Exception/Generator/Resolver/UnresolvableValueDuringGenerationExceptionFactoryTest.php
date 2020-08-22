@@ -21,17 +21,17 @@ use PHPUnit\Framework\TestCase;
  */
 class UnresolvableValueDuringGenerationExceptionFactoryTest extends TestCase
 {
-    public function testCreateFromResolutionThrowable()
+    public function testCreateFromResolutionThrowable(): void
     {
         $previous = new RootResolutionException();
 
         $exception = UnresolvableValueDuringGenerationExceptionFactory::createFromResolutionThrowable($previous);
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not resolve value during the generation process.',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertSame($previous, $exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertSame($previous, $exception->getPrevious());
     }
 }

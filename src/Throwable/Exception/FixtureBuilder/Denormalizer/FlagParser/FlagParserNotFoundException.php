@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser;
 
-class FlagParserNotFoundException extends \LogicException
+use LogicException;
+
+class FlagParserNotFoundException extends LogicException
 {
 }

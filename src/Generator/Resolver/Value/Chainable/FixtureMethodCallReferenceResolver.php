@@ -28,6 +28,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
+use Throwable;
 
 final class FixtureMethodCallReferenceResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
@@ -98,7 +99,7 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
 
         try {
             $resolvedValue = $instance->{$functionCall->getName()}(...$arguments);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             if (false === method_exists($instance, $functionCall->getName())) {
                 throw NoSuchMethodExceptionFactory::createForFixture($fixture, $value);
             }

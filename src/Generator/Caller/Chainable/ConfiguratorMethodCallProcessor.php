@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller\Chainable;
 
+use LogicException;
 use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Generator\Caller\CallProcessorAwareInterface;
@@ -63,7 +64,7 @@ final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInt
         MethodCallInterface $methodCall
     ): ResolvedFixtureSet {
         if (null === $this->processor) {
-            throw new \LogicException('TODO');
+            throw new LogicException('TODO');
         }
 
         $context->markRetrieveCallResult();

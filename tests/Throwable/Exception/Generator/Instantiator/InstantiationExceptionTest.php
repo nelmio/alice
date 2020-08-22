@@ -15,25 +15,26 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
 use Nelmio\Alice\Throwable\InstantiationThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
  */
 class InstantiationExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(InstantiationException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(InstantiationException::class, RuntimeException::class, true));
     }
 
-    public function testIsAnInstantiationThrowable()
+    public function testIsAnInstantiationThrowable(): void
     {
-        $this->assertTrue(is_a(InstantiationException::class, InstantiationThrowable::class, true));
+        static::assertTrue(is_a(InstantiationException::class, InstantiationThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildInstantiationException();
-        $this->assertInstanceOf(ChildInstantiationException::class, $exception);
+        static::assertInstanceOf(ChildInstantiationException::class, $exception);
     }
 }

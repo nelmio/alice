@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
+use Throwable;
+
 /**
  * @private
  */
@@ -28,7 +30,7 @@ final class DenormalizerExceptionFactory
         return new UnexpectedValueException('Could not denormalize the given factory.');
     }
 
-    public static function createForUnparsableValue(string $value, int $code = 0, \Throwable $previous): UnexpectedValueException
+    public static function createForUnparsableValue(string $value, int $code = 0, Throwable $previous): UnexpectedValueException
     {
         return new UnexpectedValueException(
             sprintf(
@@ -50,7 +52,7 @@ final class DenormalizerExceptionFactory
         );
     }
 
-    public static function createDenormalizerNotFoundUnexpectedCall(string $method, int $code = 0, \Throwable $previous = null): DenormalizerNotFoundException
+    public static function createDenormalizerNotFoundUnexpectedCall(string $method, int $code = 0, Throwable $previous = null): DenormalizerNotFoundException
     {
         return new DenormalizerNotFoundException(
             sprintf(

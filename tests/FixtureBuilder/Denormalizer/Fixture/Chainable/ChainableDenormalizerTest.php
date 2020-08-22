@@ -33,9 +33,9 @@ abstract class ChainableDenormalizerTest extends TestCase
      */
     protected $denormalizer;
 
-    public function testIsABuilderMethod()
+    public function testIsABuilderMethod(): void
     {
-        $this->assertInstanceOf(ChainableFixtureDenormalizerInterface::class, $this->denormalizer);
+        static::assertInstanceOf(ChainableFixtureDenormalizerInterface::class, $this->denormalizer);
     }
 
     abstract public function testCanBuildSimpleFixtures($name);
@@ -58,26 +58,26 @@ abstract class ChainableDenormalizerTest extends TestCase
 
     abstract public function testBuildMalformedSegmentFixtures($name, $expected);
 
-    public function assertCanBuild(string $fixtureId)
+    public function assertCanBuild(string $fixtureId): void
     {
         $actual = $this->denormalizer->canDenormalize($fixtureId);
 
-        $this->assertTrue($actual);
+        static::assertTrue($actual);
     }
 
-    public function assertCannotBuild(string $fixtureId)
+    public function assertCannotBuild(string $fixtureId): void
     {
         $actual = $this->denormalizer->canDenormalize($fixtureId);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
     /**
      * @param array|null $expected
      */
-    public function assertBuiltResultIsTheSame(string $fixtureId, array $expected)
+    public function assertBuiltResultIsTheSame(string $fixtureId, array $expected): void
     {
-        $this->assertTrue($this->denormalizer->canDenormalize($fixtureId));
+        static::assertTrue($this->denormalizer->canDenormalize($fixtureId));
         $actual = $this->denormalizer->denormalize(
             new FixtureBag(),
             'Dummy',
@@ -91,12 +91,12 @@ abstract class ChainableDenormalizerTest extends TestCase
             $expectedFixtures = $expectedFixtures->with($item);
         }
 
-        $this->assertEquals($expectedFixtures, $actual);
+        static::assertEquals($expectedFixtures, $actual);
     }
 
-    public function markAsInvalidCase()
+    public function markAsInvalidCase(): void
     {
-        $this->assertTrue(true, 'Invalid scenario');
+        static::assertTrue(true, 'Invalid scenario');
     }
 
     public function createDummyDenormalizer(): FixtureDenormalizerInterface

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller\Chainable;
 
+use LogicException;
 use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
@@ -53,7 +54,7 @@ final class MethodCallWithReferenceProcessor implements ChainableCallProcessorIn
         $reference = $methodCall->getCaller();
 
         if (false === ($reference instanceof StaticReference)) {
-            throw new \LogicException('TODO');
+            throw new LogicException('TODO');
         }
 
         $result = $reference->getId()::{$methodCall->getMethod()}(...$methodCall->getArguments());

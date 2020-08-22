@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\Chainable;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
@@ -61,70 +62,70 @@ class JsonParserTest extends TestCase
         $this->parser = new JsonParser();
     }
 
-    public function testIsAChainableParser()
+    public function testIsAChainableParser(): void
     {
-        $this->assertTrue(is_a(JsonParser::class, ChainableParserInterface::class, true));
+        static::assertTrue(is_a(JsonParser::class, ChainableParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(JsonParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(JsonParser::class))->isCloneable());
     }
 
     /**
      * @dataProvider provideJsonList
      */
-    public function testCanParseJsonFiles(string $file, array $expectedParsers)
+    public function testCanParseJsonFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
         $expected = (in_array(get_class($this->parser), $expectedParsers));
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider providePhpList
      */
-    public function testCanNotParsePhpFiles(string $file)
+    public function testCanNotParsePhpFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
     /**
      * @dataProvider provideYamlList
      */
-    public function testCannotParseYamlFiles(string $file)
+    public function testCannotParseYamlFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
     /**
      * @dataProvider provideUnsupportedList
      */
-    public function testCannotParseUnsupportedFiles(string $file)
+    public function testCannotParseUnsupportedFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
 
-        $this->assertFalse($actual);
+        static::assertFalse($actual);
     }
 
-    public function testThrowsAnExceptionIfFileDoesNotExist()
+    public function testThrowsAnExceptionIfFileDoesNotExist(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The file "/nowhere.json" could not be found.');
 
         $this->parser->parse('/nowhere.json');
     }
 
-    public function testReturnsParsedFileContent()
+    public function testReturnsParsedFileContent(): void
     {
         $actual = $this->parser->parse(self::$dir.'/basic.json');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'Nelmio\Alice\support\models\User' => [
                     'user0' => [
@@ -136,18 +137,18 @@ class JsonParserTest extends TestCase
         );
     }
 
-    public function testParsingEmptyFileResultsInEmptySet()
+    public function testParsingEmptyFileResultsInEmptySet(): void
     {
         $actual = $this->parser->parse(self::$dir.'/empty.json');
 
-        $this->assertSame([], $actual);
+        static::assertSame([], $actual);
     }
 
-    public function testParseReturnsNamedParameters()
+    public function testParseReturnsNamedParameters(): void
     {
         $actual = $this->parser->parse(self::$dir.'/named_parameters.json');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'Nelmio\Alice\DummyWithMethods' => [
                     'dummy_with_methods' => [
@@ -170,7 +171,7 @@ class JsonParserTest extends TestCase
         );
     }
 
-    public function testThrowsAnExceptionIfInvalidJson()
+    public function testThrowsAnExceptionIfInvalidJson(): void
     {
         $this->expectException(UnparsableFileException::class);
         $this->expectExceptionMessageMatches('/^The file ".+\/invalid\.json" does not contain valid JSON\.$/');

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Faker;
 
+use Exception;
 use Faker\Factory as FakerFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Faker\Provider\DummyProvider;
@@ -24,14 +25,14 @@ use PHPUnit\Framework\TestCase;
  */
 class GeneratorFactoryTest extends TestCase
 {
-    public function testAssertGeneratorLocaleMethod()
+    public function testAssertGeneratorLocaleMethod(): void
     {
         $this->assertGeneratorLocaleIs('en_US', FakerFactory::create());
         try {
             $this->assertGeneratorLocaleIs('fr_FR', FakerFactory::create());
-            $this->fail('Expected exception to be thrown.');
-        } catch (\Exception $exception) {
-            $this->assertEquals(
+            static::fail('Expected exception to be thrown.');
+        } catch (Exception $exception) {
+            static::assertEquals(
                 'Generator has not been initialised with the locale "fr_FR".',
                 $exception->getMessage()
             );
@@ -40,7 +41,7 @@ class GeneratorFactoryTest extends TestCase
         $this->assertGeneratorLocaleIs('fr_FR', FakerFactory::create('fr_FR'));
     }
 
-    public function testIfALocaleIsGivenThenCreatesANewGeneratorWithThisLocaleAndTheDecoratedGeneratorProviders()
+    public function testIfALocaleIsGivenThenCreatesANewGeneratorWithThisLocaleAndTheDecoratedGeneratorProviders(): void
     {
         $generator = FakerFactory::create();
         $generator->addProvider(new DummyProvider());
@@ -51,13 +52,13 @@ class GeneratorFactoryTest extends TestCase
         $expected = FakerFactory::create('fr_FR');
         $expected->addProvider(new DummyProvider());
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     /**
      * @testdox When a locale is given, only the non-default providers of the decorated generator are added to the created generator.
      */
-    public function testFakerDefaultProvidersAreNotAdded()
+    public function testFakerDefaultProvidersAreNotAdded(): void
     {
         $generator = FakerFactory::create();
         $generator->addProvider(new DummyProvider());
@@ -68,35 +69,35 @@ class GeneratorFactoryTest extends TestCase
         $this->assertGeneratorLocaleIsNot('en_US', $instance);
     }
 
-    public function testEachGeneratorCreatedIsCached()
+    public function testEachGeneratorCreatedIsCached(): void
     {
         $factory = new GeneratorFactory(FakerFactory::create());
 
-        $this->assertSame(
+        static::assertSame(
             $factory->createOrReturnExistingInstance('fr_FR'),
             $factory->createOrReturnExistingInstance('fr_FR')
         );
     }
 
-    public function testCreatingGeneratorWithInvalidLocaleFallsbackOnFakerDefaultLocale()
+    public function testCreatingGeneratorWithInvalidLocaleFallsbackOnFakerDefaultLocale(): void
     {
         $factory = new GeneratorFactory(FakerFactory::create());
 
-        $this->assertEquals(
+        static::assertEquals(
             $factory->createOrReturnExistingInstance('unknown'),
             $factory->createOrReturnExistingInstance('en_US')
         );
     }
 
-    public function testCanReturnDecoratedGenerator()
+    public function testCanReturnDecoratedGenerator(): void
     {
         $generator = FakerFactory::create();
         $factory = new GeneratorFactory($generator);
 
-        $this->assertSame($generator, $factory->getSeedGenerator());
+        static::assertSame($generator, $factory->getSeedGenerator());
     }
 
-    private function assertGeneratorLocaleIs(string $locale, FakerGenerator $generator)
+    private function assertGeneratorLocaleIs(string $locale, FakerGenerator $generator): void
     {
         $providers = $generator->getProviders();
         $regex = sprintf('/^Faker\\\Provider\\\%s\\\.*/', $locale);
@@ -106,16 +107,16 @@ class GeneratorFactoryTest extends TestCase
             }
         }
 
-        throw new \Exception(sprintf('Generator has not been initialised with the locale "%s".', $locale));
+        throw new Exception(sprintf('Generator has not been initialised with the locale "%s".', $locale));
     }
 
-    private function assertGeneratorLocaleIsNot(string $locale, FakerGenerator $generator)
+    private function assertGeneratorLocaleIsNot(string $locale, FakerGenerator $generator): void
     {
         try {
             $this->assertGeneratorLocaleIs($locale, $generator);
 
             return;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             if ($exception->getMessage() === sprintf('Generator has not been initialised with the locale "%s".', $locale)) {
                 return;
             }
@@ -123,6 +124,6 @@ class GeneratorFactoryTest extends TestCase
             throw $exception;
         }
 
-        throw new \Exception(sprintf('Generator has been initialised with the locale "%s".', $locale));
+        throw new Exception(sprintf('Generator has been initialised with the locale "%s".', $locale));
     }
 }

@@ -19,7 +19,7 @@ class MutableReference implements ServiceReferenceInterface
 {
     private $id = 'default';
 
-    public function setId(string $id)
+    public function setId(string $id): void
     {
         $this->id = $id;
     }

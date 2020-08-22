@@ -36,23 +36,23 @@ class FunctionTokenizerTest extends TestCase
         $this->tokenizer = new FunctionTokenizer();
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FunctionTokenizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FunctionTokenizer::class))->isCloneable());
     }
 
     /**
      * @dataProvider provideValues
      */
-    public function testTokenizeValues($value, $expected)
+    public function testTokenizeValues($value, $expected): void
     {
         try {
             $actual = $this->tokenizer->tokenize($value);
             if (null === $expected) {
-                $this->fail('Expected exception to be thrown.');
+                static::fail('Expected exception to be thrown.');
             }
 
-            $this->assertEquals($expected, $actual);
+            static::assertEquals($expected, $actual);
         } catch (MalformedFunctionException $exception) {
             if (null !== $expected) {
                 throw $exception;

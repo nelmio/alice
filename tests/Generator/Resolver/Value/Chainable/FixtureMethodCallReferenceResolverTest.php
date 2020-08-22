@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use Error;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
@@ -35,6 +36,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureMethodCallReferenceResolver
@@ -43,34 +45,34 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(FixtureMethodCallReferenceResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(FixtureMethodCallReferenceResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FixtureMethodCallReferenceResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FixtureMethodCallReferenceResolver::class))->isCloneable());
     }
 
-    public function testWithersReturnNewModifiedInstance()
+    public function testWithersReturnNewModifiedInstance(): void
     {
         $resolver = new FixtureMethodCallReferenceResolver();
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        $this->assertEquals(new FixtureMethodCallReferenceResolver(), $resolver);
-        $this->assertEquals(new FixtureMethodCallReferenceResolver(new FakeValueResolver()), $newResolver);
+        static::assertEquals(new FixtureMethodCallReferenceResolver(), $resolver);
+        static::assertEquals(new FixtureMethodCallReferenceResolver(new FakeValueResolver()), $newResolver);
     }
 
-    public function testCanResolveMethodCallReferenceValues()
+    public function testCanResolveMethodCallReferenceValues(): void
     {
         $resolver = new FixtureMethodCallReferenceResolver();
 
-        $this->assertTrue($resolver->canResolve(new FixtureMethodCallValue(new FakeValue(), new FunctionCallValue('method'))));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new FixtureMethodCallValue(new FakeValue(), new FunctionCallValue('method'))));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testCannotResolveValueIfHasNoResolver()
+    public function testCannotResolveValueIfHasNoResolver(): void
     {
         $value = new FixtureMethodCallValue(new FakeValue(), new FunctionCallValue('method'));
         $resolver = new FixtureMethodCallReferenceResolver();
@@ -81,7 +83,7 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    public function testReturnsSetWithResolvedValue()
+    public function testReturnsSetWithResolvedValue(): void
     {
         $value = new FixtureMethodCallValue(
             $reference = new FakeValue(),
@@ -132,13 +134,13 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
         $resolver = new FixtureMethodCallReferenceResolver($valueResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $valueResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
         $dummyProphecy->getFoo(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testThrowsAResolverExceptionOnError()
+    public function testThrowsAResolverExceptionOnError(): void
     {
         try {
             $value = new FixtureMethodCallValue(
@@ -147,9 +149,9 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
             );
             $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
 
-            $error = new \Error();
+            $error = new Error();
             $dummyProphecy = $this->prophesize(DummyWithGetter::class);
-            $dummyProphecy->getFoo()->will(function () use ($error) {
+            $dummyProphecy->getFoo()->will(function () use ($error): void {
                 throw $error;
             });
 
@@ -169,18 +171,18 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
             $resolver = new FixtureMethodCallReferenceResolver($valueResolver);
             $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
 
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not resolve value "mutable->getFoo()".',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertSame($error, $exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertSame($error, $exception->getPrevious());
         }
     }
 
-    public function testThrowsAnExceptionIfResolvedReferenceHasNoSuchMethod()
+    public function testThrowsAnExceptionIfResolvedReferenceHasNoSuchMethod(): void
     {
         try {
             $instance = new DummyWithGetter();
@@ -195,7 +197,7 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
             $valueResolverProphecy
                 ->resolve(Argument::cetera())
                 ->willReturn(
-                    new ResolvedValueWithFixtureSet(new \stdClass(), $set)
+                    new ResolvedValueWithFixtureSet(new stdClass(), $set)
                 )
             ;
             /** @var ValueResolverInterface $valueResolver */
@@ -210,14 +212,14 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
                 new GenerationContext()
             );
 
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (NoSuchMethodException $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Could not find the method "getNonExistent" of the object "dummy" (class: Dummy).',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNull($exception->getPrevious());
         }
     }
 }

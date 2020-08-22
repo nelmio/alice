@@ -22,23 +22,23 @@ use Throwable;
  */
 class IsAServiceTraitTest extends TestCase
 {
-    public function testThrowsAnExceptionWhenTryingToCloneInstance()
+    public function testThrowsAnExceptionWhenTryingToCloneInstance(): void
     {
         try {
             clone new NotClonableDummy();
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (Throwable $exception) {
-            $this->assertEquals(
+            static::assertEquals(
                 'Call to private Nelmio\Alice\NotClonableDummy::__clone() from context '
                 .'\'Nelmio\Alice\IsAServiceTraitTest\'',
                 $exception->getMessage()
             );
-            $this->assertEquals(0, $exception->getCode());
-            $this->assertNull($exception->getPrevious());
+            static::assertEquals(0, $exception->getCode());
+            static::assertNull($exception->getPrevious());
         }
 
         $dummyRefl = new ReflectionClass(NotClonableDummy::class);
 
-        $this->assertFalse($dummyRefl->isCloneable());
+        static::assertFalse($dummyRefl->isCloneable());
     }
 }

@@ -98,7 +98,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
         return new ResolvedValueWithFixtureSet($array, $fixtureSet);
     }
 
-    private function checkResolver(string $checkedMethod)
+    private function checkResolver(string $checkedMethod): void
     {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall($checkedMethod);

@@ -19,6 +19,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use TypeError;
 
 /**
  * @internal
@@ -56,7 +57,7 @@ final class FixtureMethodReferenceTokenParser extends AbstractChainableParserAwa
 
         try {
             return new FixtureMethodCallValue($fixture, $method);
-        } catch (\TypeError $exception) {
+        } catch (TypeError $exception) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $exception);
         }
     }

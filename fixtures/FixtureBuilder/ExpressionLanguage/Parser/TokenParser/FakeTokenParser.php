@@ -24,7 +24,7 @@ class FakeTokenParser implements TokenParserInterface
     /**
      * @inheritdoc
      */
-    public function parse(Token $token)
+    public function parse(Token $token): void
     {
         $this->__call(__METHOD__, func_get_args());
     }

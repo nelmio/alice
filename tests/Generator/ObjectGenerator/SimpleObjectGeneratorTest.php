@@ -28,6 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator
@@ -36,27 +37,27 @@ class SimpleObjectGeneratorTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAnObjectGenerator()
+    public function testIsAnObjectGenerator(): void
     {
-        $this->assertTrue(is_a(SimpleObjectGenerator::class, ObjectGeneratorInterface::class, true));
+        static::assertTrue(is_a(SimpleObjectGenerator::class, ObjectGeneratorInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleObjectGenerator::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleObjectGenerator::class))->isCloneable());
     }
 
     /**
      * @testdox Do a instantiate-hydrate-calls cycle to generate the object described by the fixture.
      */
-    public function testGenerate()
+    public function testGenerate(): void
     {
-        $this->markTestIncomplete('TODO');
-        $fixture = new SimpleFixture('dummy', \stdClass::class, SpecificationBagFactory::create());
+        static::markTestIncomplete('TODO');
+        $fixture = new SimpleFixture('dummy', stdClass::class, SpecificationBagFactory::create());
         $set = ResolvedFixtureSetFactory::create();
         $context = new GenerationContext();
         $context->markIsResolvingFixture('foo');
-        $instance = new \stdClass();
+        $instance = new stdClass();
         $instantiatedObject = new SimpleObject($fixture->getId(), $instance);
 
         $instantiatorProphecy = $this->prophesize(InstantiatorInterface::class);
@@ -114,7 +115,7 @@ class SimpleObjectGeneratorTest extends TestCase
         $generator = new SimpleObjectGenerator(new FakeValueResolver(), $instantiator, $hydrator, $caller);
         $objects = $generator->generate($fixture, $set, $context);
 
-        $this->assertEquals($setWithObjectAfterCalls->getObjects(), $objects);
+        static::assertEquals($setWithObjectAfterCalls->getObjects(), $objects);
 
         $instantiatorProphecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $hydratorProphecy->hydrate(Argument::cetera())->shouldHaveBeenCalledTimes(1);

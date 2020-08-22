@@ -39,7 +39,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
     /**
      * {@inheritdoc}
      */
-    public function setValue(&$objectOrArray, $propertyPath, $value)
+    public function setValue(&$objectOrArray, $propertyPath, $value): void
     {
         try {
             $this->decoratedPropertyAccessor->setValue($objectOrArray, $propertyPath, $value);
@@ -58,7 +58,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
             }
 
             $setPropertyClosure = Closure::bind(
-                function ($object) use ($propertyPath, $value) {
+                function ($object) use ($propertyPath, $value): void {
                     $object->{$propertyPath} = $value;
                 },
                 $objectOrArray,

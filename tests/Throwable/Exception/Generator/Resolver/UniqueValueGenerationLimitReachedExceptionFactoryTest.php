@@ -15,24 +15,25 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedExceptionFactory
  */
 class UniqueValueGenerationLimitReachedExceptionFactoryTest extends TestCase
 {
-    public function testCreateNewExceptionWithFactory()
+    public function testCreateNewExceptionWithFactory(): void
     {
         $exception = UniqueValueGenerationLimitReachedExceptionFactory::create(
-            new UniqueValue('unique_id', new \stdClass()),
+            new UniqueValue('unique_id', new stdClass()),
             10
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             'Could not generate a unique value after 10 attempts for "unique_id".',
             $exception->getMessage()
         );
-        $this->assertEquals(0, $exception->getCode());
-        $this->assertNull($exception->getPrevious());
+        static::assertEquals(0, $exception->getCode());
+        static::assertNull($exception->getPrevious());
     }
 }

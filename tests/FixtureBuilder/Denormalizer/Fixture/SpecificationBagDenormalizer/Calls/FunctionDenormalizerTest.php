@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls;
 
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\MethodCall\MethodCallWithReference;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
@@ -25,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\FunctionDenormalizer
@@ -33,12 +35,12 @@ class FunctionDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FunctionDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FunctionDenormalizer::class))->isCloneable());
     }
 
-    public function testDenormalizesASimpleMethodCall()
+    public function testDenormalizesASimpleMethodCall(): void
     {
         $fixture = new FakeFixture();
 
@@ -53,7 +55,7 @@ class FunctionDenormalizerTest extends TestCase
         $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
         $argumentsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $unparsedArguments)
-            ->willReturn($parsedArguments = [new \stdClass()])
+            ->willReturn($parsedArguments = [new stdClass()])
         ;
         /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
         $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
@@ -63,14 +65,14 @@ class FunctionDenormalizerTest extends TestCase
         $denormalizer = new FunctionDenormalizer($argumentsDenormalizer);
         $actual = $denormalizer->denormalize($fixture, $flagParser, $method, $unparsedArguments);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
 
 
         $argumentsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testCanDenormalizeStaticFactoriesConstructor()
+    public function testCanDenormalizeStaticFactoriesConstructor(): void
     {
         $method = 'Nelmio\Entity\UserFactory::create';
         $unparsedArguments = [
@@ -84,7 +86,7 @@ class FunctionDenormalizerTest extends TestCase
         $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
         $argumentsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $unparsedArguments)
-            ->willReturn($parsedArguments = [new \stdClass()])
+            ->willReturn($parsedArguments = [new stdClass()])
         ;
         /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
         $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
@@ -99,10 +101,10 @@ class FunctionDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $method, $unparsedArguments);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testCanDenormalizeNonStaticFactoryConstructor()
+    public function testCanDenormalizeNonStaticFactoryConstructor(): void
     {
         $method = '@nelmio.entity.user_factory::create';
         $unparsedArguments = [
@@ -116,7 +118,7 @@ class FunctionDenormalizerTest extends TestCase
         $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
         $argumentsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $unparsedArguments)
-            ->willReturn($parsedArguments = [new \stdClass()])
+            ->willReturn($parsedArguments = [new stdClass()])
         ;
         /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
         $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
@@ -131,10 +133,10 @@ class FunctionDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $method, $unparsedArguments);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testThrowsExceptionIfInvalidConstructor()
+    public function testThrowsExceptionIfInvalidConstructor(): void
     {
         $method = 'Invalid::method::reference';
         $unparsedArguments = [];
@@ -144,7 +146,7 @@ class FunctionDenormalizerTest extends TestCase
 
         $denormalizer = new FunctionDenormalizer($argumentsDenormalizer);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid constructor method "Invalid::method::reference".');
 
         $denormalizer->denormalize($fixture, $flagParser, $method, $unparsedArguments);

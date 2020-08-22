@@ -24,27 +24,27 @@ use ReflectionClass;
  */
 class StringTokenParserTest extends TestCase
 {
-    public function testIsAChainableTokenParser()
+    public function testIsAChainableTokenParser(): void
     {
-        $this->assertTrue(is_a(StringTokenParser::class, ChainableTokenParserInterface::class, true));
+        static::assertTrue(is_a(StringTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(StringTokenParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(StringTokenParser::class))->isCloneable());
     }
 
-    public function testCanParseDynamicArrayTokens()
+    public function testCanParseDynamicArrayTokens(): void
     {
         $token = new Token('', new TokenType(TokenType::STRING_TYPE));
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new StringTokenParser(new ArgumentEscaper());
 
-        $this->assertTrue($parser->canParse($token));
-        $this->assertFalse($parser->canParse($anotherToken));
+        static::assertTrue($parser->canParse($token));
+        static::assertFalse($parser->canParse($anotherToken));
     }
 
-    public function testReturnsTheTokenValue()
+    public function testReturnsTheTokenValue(): void
     {
         $token = new Token(' foo ', new TokenType(TokenType::STRING_TYPE));
         $expected = ' foo ';
@@ -52,6 +52,6 @@ class StringTokenParserTest extends TestCase
         $parser = new StringTokenParser(new ArgumentEscaper());
         $actual = $parser->parse($token);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 }

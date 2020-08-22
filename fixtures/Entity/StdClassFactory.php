@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Entity;
 
+use stdClass;
+
 class StdClassFactory
 {
     /**
@@ -28,11 +30,11 @@ class StdClassFactory
      *
      * @param array $attributes
      *
-     * @return \stdClass
+     * @return stdClass
      */
-    public static function create(array $attributes = []): \stdClass
+    public static function create(array $attributes = []): stdClass
     {
-        $instance = new \stdClass();
+        $instance = new stdClass();
         foreach ($attributes as $attribute => $value) {
             $instance->$attribute = $value;
         }

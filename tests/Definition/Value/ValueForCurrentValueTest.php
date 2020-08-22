@@ -21,20 +21,20 @@ use PHPUnit\Framework\TestCase;
  */
 class ValueForCurrentValueTest extends TestCase
 {
-    public function testIsAValue()
+    public function testIsAValue(): void
     {
-        $this->assertTrue(is_a(ValueForCurrentValue::class, ValueInterface::class, true));
+        static::assertTrue(is_a(ValueForCurrentValue::class, ValueInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $value = new ValueForCurrentValue();
-        $this->assertEquals('current', $value->getValue());
+        static::assertEquals('current', $value->getValue());
     }
 
-    public function testCanBeCastedIntoAString()
+    public function testCanBeCastedIntoAString(): void
     {
         $value = new ValueForCurrentValue();
-        $this->assertEquals('current', $value);
+        static::assertEquals('current', $value);
     }
 }

@@ -58,7 +58,7 @@ class DummyFixture implements FixtureInterface
     /**
      * @inheritdoc
      */
-    public function getValueForCurrent()
+    public function getValueForCurrent(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
@@ -66,7 +66,7 @@ class DummyFixture implements FixtureInterface
     /**
      * @inheritdoc
      */
-    public function withSpecs(SpecificationBag $specs)
+    public function withSpecs(SpecificationBag $specs): void
     {
         $this->__call(__METHOD__, func_get_args());
     }

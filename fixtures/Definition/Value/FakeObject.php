@@ -31,7 +31,7 @@ class FakeObject implements ObjectInterface
     /**
      * @inheritdoc
      */
-    public function getInstance()
+    public function getInstance(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
@@ -39,7 +39,7 @@ class FakeObject implements ObjectInterface
     /**
      * @inheritdoc
      */
-    public function withInstance($newInstance)
+    public function withInstance($newInstance): void
     {
         $this->__call(__METHOD__, func_get_args());
     }

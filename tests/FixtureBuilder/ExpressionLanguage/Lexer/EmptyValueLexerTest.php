@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer
@@ -28,17 +29,17 @@ class EmptyValueLexerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsALexer()
+    public function testIsALexer(): void
     {
-        $this->assertTrue(is_a(EmptyValueLexer::class, LexerInterface::class, true));
+        static::assertTrue(is_a(EmptyValueLexer::class, LexerInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(EmptyValueLexer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(EmptyValueLexer::class))->isCloneable());
     }
 
-    public function testLexEmptyStringIntoAnEmptyStringToken()
+    public function testLexEmptyStringIntoAnEmptyStringToken(): void
     {
         $value = '';
         $expected = [
@@ -48,24 +49,24 @@ class EmptyValueLexerTest extends TestCase
         $lexer = new EmptyValueLexer(new FakeLexer());
         $actual = $lexer->lex('');
 
-        $this->assertCount(count($expected), $actual);
-        $this->assertEquals($expected, $actual);
+        static::assertCount(count($expected), $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testHandOverTheLexificationToItsDecoratedLexerIfStringIsNotEmpty()
+    public function testHandOverTheLexificationToItsDecoratedLexerIfStringIsNotEmpty(): void
     {
         $value = 'bob';
 
         $decoratedLexerProphecy = $this->prophesize(LexerInterface::class);
-        $decoratedLexerProphecy->lex($value)->willReturn($expected = [new \stdClass()]);
+        $decoratedLexerProphecy->lex($value)->willReturn($expected = [new stdClass()]);
         /** @var LexerInterface $decoratedLexer */
         $decoratedLexer = $decoratedLexerProphecy->reveal();
 
         $lexer = new EmptyValueLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        $this->assertCount(count($expected), $actual);
-        $this->assertEquals($expected, $actual);
+        static::assertCount(count($expected), $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

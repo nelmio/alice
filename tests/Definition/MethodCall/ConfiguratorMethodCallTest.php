@@ -19,6 +19,7 @@ use Nelmio\Alice\Definition\ServiceReference\MutableReference;
 use Nelmio\Alice\Entity\StdClassFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall
@@ -27,16 +28,16 @@ class ConfiguratorMethodCallTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAMethodCall()
+    public function testIsAMethodCall(): void
     {
-        $this->assertTrue(is_a(ConfiguratorMethodCall::class, MethodCallInterface::class, true));
+        static::assertTrue(is_a(ConfiguratorMethodCall::class, MethodCallInterface::class, true));
     }
     
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $caller = new InstantiatedReference('user.factory');
         $method = 'setUsername';
-        $arguments = [new \stdClass()];
+        $arguments = [new stdClass()];
         $percentage = 30;
         $stringValue = 'user.factory->setUsername';
 
@@ -50,24 +51,24 @@ class ConfiguratorMethodCallTest extends TestCase
 
         $definition = new ConfiguratorMethodCall($methodCall);
 
-        $this->assertEquals($caller, $definition->getCaller());
-        $this->assertEquals($method, $definition->getMethod());
-        $this->assertEquals($arguments, $definition->getArguments());
-        $this->assertEquals($stringValue, $definition->__toString());
-        $this->assertSame($methodCall, $definition->getOriginalMethodCall());
+        static::assertEquals($caller, $definition->getCaller());
+        static::assertEquals($method, $definition->getMethod());
+        static::assertEquals($arguments, $definition->getArguments());
+        static::assertEquals($stringValue, $definition->__toString());
+        static::assertSame($methodCall, $definition->getOriginalMethodCall());
 
         $methodCallProphecy->getCaller()->shouldHaveBeenCalledTimes(1);
         $methodCallProphecy->getMethod()->shouldHaveBeenCalledTimes(1);
         $methodCallProphecy->getArguments()->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testIsMutable()
+    public function testIsMutable(): void
     {
         $caller = new MutableMethodCall(
             new MutableReference(),
             'mutate',
             [
-                $arg0 = new \stdClass(),
+                $arg0 = new stdClass(),
             ]
         );
 
@@ -81,9 +82,9 @@ class ConfiguratorMethodCallTest extends TestCase
         $definition->getCaller()->setId('mutated');
         $definition->getArguments()[0]->foz = 'baz';
 
-        $this->assertEquals('mutated', $definition->getCaller()->getId());
-        $this->assertEquals('dummy', $definition->getMethod());
-        $this->assertEquals(
+        static::assertEquals('mutated', $definition->getCaller()->getId());
+        static::assertEquals('dummy', $definition->getMethod());
+        static::assertEquals(
             [
                 StdClassFactory::create([
                     'foo' => 'bar',
@@ -94,23 +95,23 @@ class ConfiguratorMethodCallTest extends TestCase
         );
     }
 
-    public function testCanCreateANewInstanceWithArguments()
+    public function testCanCreateANewInstanceWithArguments(): void
     {
-        $arguments = [new \stdClass()];
+        $arguments = [new stdClass()];
         $methodCall = new SimpleMethodCall('getUsername', $arguments);
         $definition = new ConfiguratorMethodCall($methodCall);
 
         $newArguments = [
-            new \stdClass(),
+            new stdClass(),
         ];
         $newDefinition = $definition->withArguments($newArguments);
 
-        $this->assertInstanceOf(ConfiguratorMethodCall::class, $newDefinition);
+        static::assertInstanceOf(ConfiguratorMethodCall::class, $newDefinition);
 
-        $this->assertEquals(
+        static::assertEquals(
             new SimpleMethodCall('getUsername', $newArguments),
             $definition->getOriginalMethodCall()
         );
-        $this->assertSame($newArguments, $newDefinition->getArguments());
+        static::assertSame($newArguments, $newDefinition->getArguments());
     }
 }

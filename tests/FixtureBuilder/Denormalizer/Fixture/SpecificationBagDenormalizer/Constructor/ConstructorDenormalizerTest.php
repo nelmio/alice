@@ -29,12 +29,12 @@ class ConstructorDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ConstructorDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ConstructorDenormalizer::class))->isCloneable());
     }
 
-    public function testDenormalizesInputAsAConstructorMethod()
+    public function testDenormalizesInputAsAConstructorMethod(): void
     {
         $arguments = ['foo', 'bar'];
         $fixture = new FakeFixture();
@@ -57,7 +57,7 @@ class ConstructorDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $arguments);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $argumentsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

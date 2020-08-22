@@ -15,25 +15,26 @@ namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException
  */
 class InvalidScopeExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(InvalidScopeException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(InvalidScopeException::class, RuntimeException::class, true));
     }
 
-    public function testIsADenormalizationThrowable()
+    public function testIsADenormalizationThrowable(): void
     {
-        $this->assertTrue(is_a(InvalidScopeException::class, DenormalizationThrowable::class, true));
+        static::assertTrue(is_a(InvalidScopeException::class, DenormalizationThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildInvalidScopeException();
-        $this->assertInstanceOf(ChildInvalidScopeException::class, $exception);
+        static::assertInstanceOf(ChildInvalidScopeException::class, $exception);
     }
 }

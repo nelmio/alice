@@ -46,7 +46,7 @@ final class RegisterTagServicesPass implements CompilerPassInterface
     /**
      * @inheritdoc
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $registry = $container->findDefinition($this->registry);
         $taggedServices = $this->taggedDefinitionsLocator->findReferences($container, $this->tagName);

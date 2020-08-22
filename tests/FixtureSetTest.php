@@ -14,26 +14,27 @@ declare(strict_types=1);
 namespace Nelmio\Alice;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureSet
  */
 class FixtureSetTest extends TestCase
 {
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $loadedParameters = new ParameterBag(['foo' => 'bar']);
         $injectedParameters = new ParameterBag(['foo' => 'baz']);
         $fixtures = new FixtureBag();
         $injectedObjects = new ObjectBag([
-            'dummy' => new \stdClass(),
+            'dummy' => new stdClass(),
         ]);
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $injectedObjects);
 
-        $this->assertEquals($loadedParameters, $set->getLoadedParameters());
-        $this->assertEquals($injectedParameters, $set->getInjectedParameters());
-        $this->assertEquals($fixtures, $set->getFixtures());
-        $this->assertEquals($injectedObjects, $set->getObjects());
+        static::assertEquals($loadedParameters, $set->getLoadedParameters());
+        static::assertEquals($injectedParameters, $set->getInjectedParameters());
+        static::assertEquals($fixtures, $set->getFixtures());
+        static::assertEquals($injectedObjects, $set->getObjects());
     }
 }

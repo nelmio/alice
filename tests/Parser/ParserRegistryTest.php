@@ -20,6 +20,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use stdClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Parser\ParserRegistry
@@ -28,12 +29,12 @@ class ParserRegistryTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAParser()
+    public function testIsAParser(): void
     {
-        $this->assertTrue(is_a(ParserRegistry::class, ParserInterface::class, true));
+        static::assertTrue(is_a(ParserRegistry::class, ParserInterface::class, true));
     }
 
-    public function testAcceptChainableParsers()
+    public function testAcceptChainableParsers(): void
     {
         $parserProphecy = $this->prophesize(ChainableParserInterface::class);
         $parserProphecy->canParse(Argument::any())->shouldNotBeCalled();
@@ -43,19 +44,19 @@ class ParserRegistryTest extends TestCase
         new ParserRegistry([$parser]);
     }
 
-    public function testThrowsAnExceptionIfInvalidParserIsPassed()
+    public function testThrowsAnExceptionIfInvalidParserIsPassed(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         new ParserRegistry([new stdClass()]);
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ParserRegistry::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ParserRegistry::class))->isCloneable());
     }
 
-    public function testIteratesOverEveryParsersAndUseTheFirstValidOne()
+    public function testIteratesOverEveryParsersAndUseTheFirstValidOne(): void
     {
         $file = 'dummy.php';
         $expected = [new stdClass()];
@@ -83,14 +84,14 @@ class ParserRegistryTest extends TestCase
         ]);
         $actual = $registry->parse($file);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $parser1Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $parser2Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $parser2Prophecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testThrowsAnExceptionIfNoSuitableParserIsFound()
+    public function testThrowsAnExceptionIfNoSuitableParserIsFound(): void
     {
         $registry = new ParserRegistry([]);
 

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\scenario1;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+
 class ImmutableUser
 {
     /**
@@ -26,7 +29,7 @@ class ImmutableUser
     private $fullname;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $birthDate;
 
@@ -49,7 +52,7 @@ class ImmutableUser
     ) {
         $this->username = $username;
         $this->fullname = $fullname;
-        $this->birthDate = new \DateTimeImmutable($birthDate);
+        $this->birthDate = new DateTimeImmutable($birthDate);
         $this->email = $email;
         $this->favoriteNumber = $favoriteNumber;
     }
@@ -64,7 +67,7 @@ class ImmutableUser
         return $this->fullname;
     }
 
-    public function getBirthDate(): \DateTimeInterface
+    public function getBirthDate(): DateTimeInterface
     {
         return $this->birthDate;
     }

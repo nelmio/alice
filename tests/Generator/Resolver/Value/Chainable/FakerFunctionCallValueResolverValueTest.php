@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Faker\Factory as FakerGeneratorFactory;
 use Faker\Generator as FakerGenerator;
+use InvalidArgumentException;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue;
@@ -35,25 +36,25 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAChainableResolver()
+    public function testIsAChainableResolver(): void
     {
-        $this->assertTrue(is_a(FakerFunctionCallValueResolver::class, ChainableValueResolverInterface::class, true));
+        static::assertTrue(is_a(FakerFunctionCallValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(FakerFunctionCallValueResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(FakerFunctionCallValueResolver::class))->isCloneable());
     }
 
-    public function testCanResolvePropertyReferenceValues()
+    public function testCanResolvePropertyReferenceValues(): void
     {
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
 
-        $this->assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
-        $this->assertFalse($resolver->canResolve(new FakeValue()));
+        static::assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
+        static::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
-    public function testReturnsSetWithResolvedValue()
+    public function testReturnsSetWithResolvedValue(): void
     {
         $value = new ResolvedFunctionCallValue('foo');
         $fixture = new FakeFixture();
@@ -72,10 +73,10 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $resolver = new FakerFunctionCallValueResolver($fakerGenerator);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
-    public function testCallAProviderFunction()
+    public function testCallAProviderFunction(): void
     {
         $value = new ResolvedFunctionCallValue('lexify', ['Hello ???']);
         $fixture = new FakeFixture();
@@ -84,11 +85,11 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver());
         $result = $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
-        $this->assertEquals(9, strlen($result->getValue()));
-        $this->assertEquals('Hello ', substr($result->getValue(), 0, 6));
+        static::assertEquals(9, strlen($result->getValue()));
+        static::assertEquals('Hello ', substr($result->getValue(), 0, 6));
     }
 
-    public function testThrowsAnExceptionIfTriesToCallAnUndefinedProviderFunction()
+    public function testThrowsAnExceptionIfTriesToCallAnUndefinedProviderFunction(): void
     {
         $value = new ResolvedFunctionCallValue('unknown');
         $fixture = new FakeFixture();
@@ -96,7 +97,7 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
 
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver());
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown formatter "unknown"');
 
         $resolver->resolve($value, $fixture, $set, [], new GenerationContext());

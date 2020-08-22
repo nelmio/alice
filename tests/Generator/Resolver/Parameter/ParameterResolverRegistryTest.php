@@ -24,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry
@@ -32,12 +34,12 @@ class ParameterResolverRegistryTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAParameterResolver()
+    public function testIsAParameterResolver(): void
     {
-        $this->assertTrue(is_a(ParameterResolverRegistry::class, ParameterResolverInterface::class, true));
+        static::assertTrue(is_a(ParameterResolverRegistry::class, ParameterResolverInterface::class, true));
     }
 
-    public function testAcceptsChainableParameterResolvers()
+    public function testAcceptsChainableParameterResolvers(): void
     {
         $resolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $resolverProphecy->canResolve(Argument::any())->shouldNotBeCalled();
@@ -47,7 +49,7 @@ class ParameterResolverRegistryTest extends TestCase
         new ParameterResolverRegistry([$resolver]);
     }
 
-    public function testInjectsItselfToParameterResolverAwareResolvers()
+    public function testInjectsItselfToParameterResolverAwareResolvers(): void
     {
         $propRefl = (new ReflectionClass(ParameterResolverRegistry::class))->getProperty('resolvers');
         $propRefl->setAccessible(true);
@@ -57,23 +59,23 @@ class ParameterResolverRegistryTest extends TestCase
 
         $registry = new ParameterResolverRegistry([$oneResolver, $secondResolver]);
 
-        $this->assertSame($registry, $propRefl->getValue($registry)[1]->resolver);
+        static::assertSame($registry, $propRefl->getValue($registry)[1]->resolver);
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ParameterResolverRegistry::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ParameterResolverRegistry::class))->isCloneable());
     }
 
-    public function testThrowsAnExceptionIfInvalidResolverIsPassed()
+    public function testThrowsAnExceptionIfInvalidResolverIsPassed(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessage('Expected resolvers to be "Nelmio\Alice\Generator\Resolver\ParameterResolverInterface" objects. Got "stdClass" instead.');
 
-        new ParameterResolverRegistry([new \stdClass()]);
+        new ParameterResolverRegistry([new stdClass()]);
     }
 
-    public function testIteratesOverEveryResolverAndUsesTheFirstValidOne()
+    public function testIteratesOverEveryResolverAndUsesTheFirstValidOne(): void
     {
         $parameter = new Parameter('foo', null);
         $expected = new ParameterBag(['foo' => 'bar']);
@@ -101,14 +103,14 @@ class ParameterResolverRegistryTest extends TestCase
         ]);
         $actual = $registry->resolve($parameter, new ParameterBag(), new ParameterBag());
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $resolver1Prophecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
         $resolver2Prophecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
         $resolver2Prophecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testThrowsAnExceptionIfNoSuitableParserIsFound()
+    public function testThrowsAnExceptionIfNoSuitableParserIsFound(): void
     {
         $registry = new ParameterResolverRegistry([]);
 

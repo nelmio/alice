@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
+use Throwable;
 
 /**
  * @private
@@ -151,7 +152,7 @@ final class InvalidArgumentExceptionFactory
         );
     }
 
-    public static function createForFileCouldNotBeFound(string $file, int $code = 0, \Throwable $previous = null): InvalidArgumentException
+    public static function createForFileCouldNotBeFound(string $file, int $code = 0, Throwable $previous = null): InvalidArgumentException
     {
         return new InvalidArgumentException(
             sprintf(

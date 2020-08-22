@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator
@@ -32,22 +33,22 @@ class ExistingInstanceInstantiatorTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAnInstantiator()
+    public function testIsAnInstantiator(): void
     {
-        $this->assertTrue(is_a(ExistingInstanceInstantiator::class, InstantiatorInterface::class, true));
+        static::assertTrue(is_a(ExistingInstanceInstantiator::class, InstantiatorInterface::class, true));
     }
 
-    public function testIsValueResolverAware()
+    public function testIsValueResolverAware(): void
     {
-        $this->assertTrue(is_a(ExistingInstanceInstantiator::class, ValueResolverAwareInterface::class, true));
+        static::assertTrue(is_a(ExistingInstanceInstantiator::class, ValueResolverAwareInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ExistingInstanceInstantiator::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ExistingInstanceInstantiator::class))->isCloneable());
     }
 
-    public function testReturnsUnchangedSetIfFixtureHasAlreadyBeenInstantiated()
+    public function testReturnsUnchangedSetIfFixtureHasAlreadyBeenInstantiated(): void
     {
         $fixture = new DummyFixture('dummy');
         $set = $expected = ResolvedFixtureSetFactory::create(
@@ -56,7 +57,7 @@ class ExistingInstanceInstantiatorTest extends TestCase
             (new ObjectBag())->with(
                 new SimpleObject(
                     'dummy',
-                    new \stdClass()
+                    new stdClass()
                 )
             )
         );
@@ -64,10 +65,10 @@ class ExistingInstanceInstantiatorTest extends TestCase
         $instantiator = new ExistingInstanceInstantiator(new FakeInstantiator());
         $actual = $instantiator->instantiate($fixture, $set, new GenerationContext());
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testReturnsTheResultOfTheDecoratedInstantiatorIfTheFixtureHasNotBeenInstantiated()
+    public function testReturnsTheResultOfTheDecoratedInstantiatorIfTheFixtureHasNotBeenInstantiated(): void
     {
         $fixture = new DummyFixture('dummy');
         $set = ResolvedFixtureSetFactory::create();
@@ -82,7 +83,7 @@ class ExistingInstanceInstantiatorTest extends TestCase
                     (new ObjectBag())->with(
                         new SimpleObject(
                             'dummy',
-                            new \stdClass()
+                            new stdClass()
                         )
                     )
                 )
@@ -94,7 +95,7 @@ class ExistingInstanceInstantiatorTest extends TestCase
         $instantiator = new ExistingInstanceInstantiator($decoratedInstantiator);
         $actual = $instantiator->instantiate($fixture, $set, $context);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $decoratedInstantiatorProphecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

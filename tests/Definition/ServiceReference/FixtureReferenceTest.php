@@ -21,21 +21,21 @@ use PHPUnit\Framework\TestCase;
  */
 class FixtureReferenceTest extends TestCase
 {
-    public function testIsAReference()
+    public function testIsAReference(): void
     {
-        $this->assertTrue(is_a(FixtureReference::class, ServiceReferenceInterface::class, true));
+        static::assertTrue(is_a(FixtureReference::class, ServiceReferenceInterface::class, true));
     }
 
-    public function testReadAccessorsReturnPropertiesValues()
+    public function testReadAccessorsReturnPropertiesValues(): void
     {
         $id = 'user_base';
         $definition = new FixtureReference($id);
 
-        $this->assertEquals($id, $definition->getId());
+        static::assertEquals($id, $definition->getId());
     }
 
-    public function testIsImmutable()
+    public function testIsImmutable(): void
     {
-        $this->assertTrue(true, 'Nothing to do.');
+        static::assertTrue(true, 'Nothing to do.');
     }
 }

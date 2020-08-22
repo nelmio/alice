@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\scenario3;
 
+use DateTimeInterface;
+use stdClass;
+
 class MutableUser implements UserInterface
 {
     /**
@@ -26,12 +29,12 @@ class MutableUser implements UserInterface
     private $fullname;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $createdAt;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $updatedAt;
 
@@ -54,7 +57,7 @@ class MutableUser implements UserInterface
         return $this->username;
     }
 
-    public function setUsername(string $username)
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }
@@ -64,37 +67,37 @@ class MutableUser implements UserInterface
         return $this->fullname;
     }
 
-    public function setFullname(string $fullname)
+    public function setFullname(string $fullname): void
     {
         $this->fullname = $fullname;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt)
+    public function setCreatedAt(DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): \DateTimeInterface
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt)
+    public function setUpdatedAt(DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function getOwner(): \stdClass
+    public function getOwner(): stdClass
     {
         return $this->owner;
     }
 
-    public function setOwner(ImmutableUser $owner)
+    public function setOwner(ImmutableUser $owner): void
     {
         $this->owner = $owner;
     }
@@ -104,12 +107,12 @@ class MutableUser implements UserInterface
         return $this->members;
     }
 
-    public function addMember(ImmutableUser $member)
+    public function addMember(ImmutableUser $member): void
     {
         $this->members[] = $member;
     }
 
-    public function setMembers(array $members)
+    public function setMembers(array $members): void
     {
         $this->members = $members;
     }
@@ -119,7 +122,7 @@ class MutableUser implements UserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
@@ -129,7 +132,7 @@ class MutableUser implements UserInterface
         return $this->favoriteNumber;
     }
 
-    public function setFavoriteNumber(int $favoriteNumber)
+    public function setFavoriteNumber(int $favoriteNumber): void
     {
         $this->favoriteNumber = $favoriteNumber;
     }

@@ -30,17 +30,17 @@ class ReflectionPropertyAccessorTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAPropertyAccessor()
+    public function testIsAPropertyAccessor(): void
     {
-        $this->assertTrue(is_a(ReflectionPropertyAccessor::class, PropertyAccessorInterface::class, true));
+        static::assertTrue(is_a(ReflectionPropertyAccessor::class, PropertyAccessorInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(ReflectionPropertyAccessor::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(ReflectionPropertyAccessor::class))->isCloneable());
     }
 
-    public function testSetValueOnNoSuchPropertyException()
+    public function testSetValueOnNoSuchPropertyException(): void
     {
         $object = new DummyWithPrivateProperty();
         $property = 'val';
@@ -57,10 +57,10 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
         $accessor->setValue($object, $property, $value);
 
-        $this->assertSame($value, $object->test_get_val());
+        static::assertSame($value, $object->test_get_val());
     }
 
-    public function testSetParentValueOnNoSuchPropertyException()
+    public function testSetParentValueOnNoSuchPropertyException(): void
     {
         $object = new DummyWithPrivatePropertyChild();
         $property = 'val';
@@ -79,10 +79,10 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
         $accessor->setValue($object, $property, $value);
 
-        $this->assertSame($value, $object->test_get_val());
+        static::assertSame($value, $object->test_get_val());
     }
 
-    public function testThrowsAnOriginalExceptionIfSetValueForANonExistentProperty()
+    public function testThrowsAnOriginalExceptionIfSetValueForANonExistentProperty(): void
     {
         $property = 'unknown';
         $object = new DummyWithPrivateProperty();
@@ -105,7 +105,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor->setValue($object, $property, $value);
     }
 
-    public function testThrowsAnOriginalExceptionIfSetValueForANonExistentPropertyOnNonObject()
+    public function testThrowsAnOriginalExceptionIfSetValueForANonExistentPropertyOnNonObject(): void
     {
         $property = 'unknown';
         $object = [];
@@ -128,7 +128,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor->setValue($object, $property, $value);
     }
 
-    public function testThrowsAnOriginalExceptionIfSetValueForANonExistentPropertyIsStatic()
+    public function testThrowsAnOriginalExceptionIfSetValueForANonExistentPropertyIsStatic(): void
     {
         $property = 'staticVal';
         $object = new DummyWithPrivateProperty();
@@ -151,7 +151,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor->setValue($object, $property, $value);
     }
 
-    public function testSetValueWithTheDecoratedAccessorWhenPossible()
+    public function testSetValueWithTheDecoratedAccessorWhenPossible(): void
     {
         $object = new DummyWithPublicProperty();
         $property = 'val';
@@ -164,7 +164,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy
             ->setValue($object, $property, $value)
             ->will(
-                function ($args) {
+                function ($args): void {
                     $args[0]->{$args[1]} = $args[2];
                 }
             )
@@ -175,12 +175,12 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
         $accessor->setValue($object, $property, $value);
 
-        $this->assertEquals($expected, $object);
+        static::assertEquals($expected, $object);
 
         $decoratedAccessorProphecy->setValue(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testGetPrivateValueOnNoSuchPropertyException()
+    public function testGetPrivateValueOnNoSuchPropertyException(): void
     {
         $property = 'val';
         $value = 'foo';
@@ -198,10 +198,10 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
         $actual = $accessor->getValue($object, $property);
 
-        $this->assertEquals($value, $actual);
+        static::assertEquals($value, $actual);
     }
 
-    public function testThrowsAnOriginalExceptionIfPropertyDoesNotExist()
+    public function testThrowsAnOriginalExceptionIfPropertyDoesNotExist(): void
     {
         $property = 'foo';
         $object = new DummyWithPrivateProperty();
@@ -223,7 +223,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor->getValue($object, $property);
     }
 
-    public function testThrowsAnOriginalExceptionIfPropertyDoesNotExistOnNonObject()
+    public function testThrowsAnOriginalExceptionIfPropertyDoesNotExistOnNonObject(): void
     {
         $property = 'foo';
         $object = [];
@@ -245,7 +245,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor->getValue($object, $property);
     }
 
-    public function testThrowsAnOriginalExceptionIfPropertyIsStatic()
+    public function testThrowsAnOriginalExceptionIfPropertyIsStatic(): void
     {
         $property = 'staticVal';
         $object = new DummyWithPrivateProperty();
@@ -267,7 +267,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor->getValue($object, $property);
     }
 
-    public function testGetValueWithTheDecoratedAccessorWhenPossible()
+    public function testGetValueWithTheDecoratedAccessorWhenPossible(): void
     {
         $property = 'val';
         $value = $expected = 'bar';
@@ -284,12 +284,12 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
         $actual = $accessor->getValue($object, $property);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedAccessorProphecy->getValue(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testExistingClassPropertiesAreAlwaysWritable()
+    public function testExistingClassPropertiesAreAlwaysWritable(): void
     {
         $object = new DummyWithPrivateProperty();
         $objectWithInheritance = new DummyWithPrivatePropertyChild();
@@ -308,17 +308,17 @@ class ReflectionPropertyAccessorTest extends TestCase
 
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
 
-        $this->assertTrue($accessor->isWritable($object, 'val'), 'writable if the property exists');
-        $this->assertFalse($accessor->isWritable($object, 'foo'), 'non writable if the property does not exist');
-        $this->assertFalse($accessor->isWritable($object, 'staticVal'), 'non writable if the property is static');
+        static::assertTrue($accessor->isWritable($object, 'val'), 'writable if the property exists');
+        static::assertFalse($accessor->isWritable($object, 'foo'), 'non writable if the property does not exist');
+        static::assertFalse($accessor->isWritable($object, 'staticVal'), 'non writable if the property is static');
 
-        $this->assertTrue($accessor->isWritable($objectWithInheritance, 'val'), 'writable if the property exists');
-        $this->assertTrue($accessor->isWritable($objectWithInheritance, 'val2'), 'writable if the property exists');
-        $this->assertFalse($accessor->isWritable($objectWithInheritance, 'foo'), 'non writable if the property does not exist');
-        $this->assertFalse($accessor->isWritable($objectWithInheritance, 'staticVal'), 'non writable if the property is static');
+        static::assertTrue($accessor->isWritable($objectWithInheritance, 'val'), 'writable if the property exists');
+        static::assertTrue($accessor->isWritable($objectWithInheritance, 'val2'), 'writable if the property exists');
+        static::assertFalse($accessor->isWritable($objectWithInheritance, 'foo'), 'non writable if the property does not exist');
+        static::assertFalse($accessor->isWritable($objectWithInheritance, 'staticVal'), 'non writable if the property is static');
     }
 
-    public function testUsesDecoratedAccessorToDetermineIfPropertyIsWritable()
+    public function testUsesDecoratedAccessorToDetermineIfPropertyIsWritable(): void
     {
         $object = new DummyWithPublicProperty();
         $property = 'val';
@@ -334,12 +334,12 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
         $actual = $accessor->isWritable($object, $property);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedAccessorProphecy->isWritable(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testPrivateClassPropertiesAreReadableOnlyIfTheyExists()
+    public function testPrivateClassPropertiesAreReadableOnlyIfTheyExists(): void
     {
         $object = new DummyWithPrivateProperty();
         $objectWithInheritance = new DummyWithPrivatePropertyChild();
@@ -358,17 +358,17 @@ class ReflectionPropertyAccessorTest extends TestCase
 
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
 
-        $this->assertTrue($accessor->isReadable($object, 'val'), 'readable if the property exists');
-        $this->assertFalse($accessor->isReadable($object, 'foo'), 'non readable if the property does not exist');
-        $this->assertFalse($accessor->isReadable($object, 'staticVal'), 'non readable if the property is static');
+        static::assertTrue($accessor->isReadable($object, 'val'), 'readable if the property exists');
+        static::assertFalse($accessor->isReadable($object, 'foo'), 'non readable if the property does not exist');
+        static::assertFalse($accessor->isReadable($object, 'staticVal'), 'non readable if the property is static');
 
-        $this->assertTrue($accessor->isReadable($objectWithInheritance, 'val'), 'readable if the property exists');
-        $this->assertTrue($accessor->isReadable($objectWithInheritance, 'val2'), 'readable if the property exists');
-        $this->assertFalse($accessor->isReadable($objectWithInheritance, 'foo'), 'non readable if the property does not exist');
-        $this->assertFalse($accessor->isReadable($objectWithInheritance, 'staticVal'), 'non readable if the property is static');
+        static::assertTrue($accessor->isReadable($objectWithInheritance, 'val'), 'readable if the property exists');
+        static::assertTrue($accessor->isReadable($objectWithInheritance, 'val2'), 'readable if the property exists');
+        static::assertFalse($accessor->isReadable($objectWithInheritance, 'foo'), 'non readable if the property does not exist');
+        static::assertFalse($accessor->isReadable($objectWithInheritance, 'staticVal'), 'non readable if the property is static');
     }
 
-    public function testUsesDecoratedAccessorToDetermineIfPropertyIsReadable()
+    public function testUsesDecoratedAccessorToDetermineIfPropertyIsReadable(): void
     {
         $object = new DummyWithPublicProperty();
         $property = 'val';
@@ -384,7 +384,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $accessor = new ReflectionPropertyAccessor($decoratedAccessor);
         $actual = $accessor->isReadable($object, $property);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedAccessorProphecy->isReadable(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

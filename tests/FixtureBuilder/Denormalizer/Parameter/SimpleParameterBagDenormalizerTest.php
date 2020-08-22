@@ -17,6 +17,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
+use stdClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer
@@ -36,36 +38,36 @@ class SimpleParameterBagDenormalizerTest extends TestCase
         $this->denormalizer = new SimpleParameterBagDenormalizer();
     }
 
-    public function testIsAParameterBagDenormalizer()
+    public function testIsAParameterBagDenormalizer(): void
     {
-        $this->assertInstanceOf(ParameterBagDenormalizerInterface::class, $this->denormalizer);
+        static::assertInstanceOf(ParameterBagDenormalizerInterface::class, $this->denormalizer);
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionObject($this->denormalizer))->isCloneable());
+        static::assertFalse((new ReflectionObject($this->denormalizer))->isCloneable());
     }
 
     /**
      * @dataProvider provideDataWithNoParameters
      */
-    public function testReturnsEmptyBagIfNoParametersHaveBeenDeclared(array $data)
+    public function testReturnsEmptyBagIfNoParametersHaveBeenDeclared(array $data): void
     {
         $actual = $this->denormalizer->denormalize($data);
 
-        $this->assertEquals(new ParameterBag(), $actual);
+        static::assertEquals(new ParameterBag(), $actual);
     }
 
     /**
      * @dataProvider provideDataWithInvalidParameterKeys
      */
-    public function testThrowsExceptionIfParametersKeyIsNotAnArray(array $data, string $expectedExceptionMessage)
+    public function testThrowsExceptionIfParametersKeyIsNotAnArray(array $data, string $expectedExceptionMessage): void
     {
         try {
             $this->denormalizer->denormalize($data);
-            $this->fail('Expected exception to be thrown.');
-        } catch (\TypeError $exception) {
-            $this->assertEquals($expectedExceptionMessage, $exception->getMessage());
+            static::fail('Expected exception to be thrown.');
+        } catch (TypeError $exception) {
+            static::assertEquals($expectedExceptionMessage, $exception->getMessage());
         }
     }
 
@@ -99,7 +101,7 @@ class SimpleParameterBagDenormalizerTest extends TestCase
 
         yield 'object value' => [
             [
-                'parameters' => new \stdClass(),
+                'parameters' => new stdClass(),
             ],
             'Expected parameters to be an array. Got "stdClass" instead.',
         ];

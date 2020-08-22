@@ -15,25 +15,26 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
 use Nelmio\Alice\Throwable\HydrationThrowable;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException
  */
 class NoSuchPropertyExceptionTest extends TestCase
 {
-    public function testIsARuntimeException()
+    public function testIsARuntimeException(): void
     {
-        $this->assertTrue(is_a(NoSuchPropertyException::class, \RuntimeException::class, true));
+        static::assertTrue(is_a(NoSuchPropertyException::class, RuntimeException::class, true));
     }
 
-    public function testIsAHydrationThrowable()
+    public function testIsAHydrationThrowable(): void
     {
-        $this->assertTrue(is_a(NoSuchPropertyException::class, HydrationThrowable::class, true));
+        static::assertTrue(is_a(NoSuchPropertyException::class, HydrationThrowable::class, true));
     }
 
-    public function testIsExtensible()
+    public function testIsExtensible(): void
     {
         $exception = new ChildNoSuchPropertyException();
-        $this->assertInstanceOf(ChildNoSuchPropertyException::class, $exception);
+        static::assertInstanceOf(ChildNoSuchPropertyException::class, $exception);
     }
 }

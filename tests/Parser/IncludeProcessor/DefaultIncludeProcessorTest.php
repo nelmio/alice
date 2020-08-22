@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
+use InvalidArgumentException;
 use Nelmio\Alice\FileLocator\DefaultFileLocator;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
@@ -39,17 +41,17 @@ class DefaultIncludeProcessorTest extends TestCase
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/cache';
     }
 
-    public function testIsAnIncludeProcessor()
+    public function testIsAnIncludeProcessor(): void
     {
-        $this->assertTrue(is_a(DefaultIncludeProcessor::class, IncludeProcessorInterface::class, true));
+        static::assertTrue(is_a(DefaultIncludeProcessor::class, IncludeProcessorInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(DefaultIncludeProcessor::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(DefaultIncludeProcessor::class))->isCloneable());
     }
 
-    public function testThrowsAnExceptionIfNoIncludeStatementFound()
+    public function testThrowsAnExceptionIfNoIncludeStatementFound(): void
     {
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
@@ -63,13 +65,13 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $processor = new DefaultIncludeProcessor($fileLocator);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not find any include statement in the file "dummy.php".');
 
         $processor->process($parser, 'dummy.php', []);
     }
 
-    public function testIncludeStatementCanBeNull()
+    public function testIncludeStatementCanBeNull(): void
     {
         $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
         $parsedMainFileContent = [
@@ -98,10 +100,10 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $actual = $processor->process($parser, $mainFile, $parsedMainFileContent);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testIfNotNullIncludeStatementMustBeAnArray()
+    public function testIfNotNullIncludeStatementMustBeAnArray(): void
     {
         $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
         $parsedMainFileContent = [
@@ -118,13 +120,13 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessageMatches('/^Expected include statement to be either null or an array of files to include\. Got "string" instead in file ".+\/main\.yml"\.$/');
 
         $processor->process($parser, $mainFile, $parsedMainFileContent);
     }
 
-    public function testIncludedFilesMustBeStrings()
+    public function testIncludedFilesMustBeStrings(): void
     {
         $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
         $parsedMainFileContent = [
@@ -143,13 +145,13 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->expectExceptionMessageMatches('/^Expected elements of include statement to be file names\. Got "boolean" instead in file ".+\/main\.yml"\.$/');
 
         $processor->process($parser, $mainFile, $parsedMainFileContent);
     }
 
-    public function testIncludedFilesMustBeNonEmptyStrings()
+    public function testIncludedFilesMustBeNonEmptyStrings(): void
     {
         $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
         $parsedMainFileContent = [
@@ -168,13 +170,13 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageMatches('/^Expected elements of include statement to be file names\. Got empty string instead in file ".+\/main\.yml"\.$/');
 
         $processor->process($parser, $mainFile, $parsedMainFileContent);
     }
 
-    public function testProcessesIncludeFiles()
+    public function testProcessesIncludeFiles(): void
     {
         $mainFile = self::$dir.'/main.yml';   // needs to be a real file to be cached
         $parsedMainFileContent = [
@@ -234,6 +236,6 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $actual = $processor->process($parser, $mainFile, $parsedMainFileContent);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 }

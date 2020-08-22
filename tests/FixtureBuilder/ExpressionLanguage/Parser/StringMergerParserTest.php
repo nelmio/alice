@@ -28,22 +28,22 @@ class StringMergerParserTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAParser()
+    public function testIsAParser(): void
     {
-        $this->assertTrue(is_a(StringMergerParser::class, ParserInterface::class, true));
+        static::assertTrue(is_a(StringMergerParser::class, ParserInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(StringMergerParser::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(StringMergerParser::class))->isCloneable());
     }
 
-    public function testIsInstantiatedWithAParser()
+    public function testIsInstantiatedWithAParser(): void
     {
         new StringMergerParser(new FakeParser());
     }
 
-    public function testUsesTheDecoratedParserToParseTheGivenValueAndReturnsItsResultIfResultIsNotAListValue()
+    public function testUsesTheDecoratedParserToParseTheGivenValueAndReturnsItsResultIfResultIsNotAListValue(): void
     {
         $value = 'foo';
         $expected = new FakeValue();
@@ -56,12 +56,12 @@ class StringMergerParserTest extends TestCase
         $parser = new StringMergerParser($decoratedParser);
         $actual = $parser->parse($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testIfTheValueReturnedIsAListValueThenIteratesOverEachValuesToMergeStrings()
+    public function testIfTheValueReturnedIsAListValueThenIteratesOverEachValuesToMergeStrings(): void
     {
         $value = 'foo';
 
@@ -97,12 +97,12 @@ class StringMergerParserTest extends TestCase
         $parser = new StringMergerParser($decoratedParser);
         $actual = $parser->parse($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testIfNotFunctionFixtureReferenceIsFoundThenTheResultWillRemainUnchanged()
+    public function testIfNotFunctionFixtureReferenceIsFoundThenTheResultWillRemainUnchanged(): void
     {
         $value = 'foo';
 
@@ -135,7 +135,7 @@ class StringMergerParserTest extends TestCase
         $parser = new StringMergerParser($decoratedParser);
         $actual = $parser->parse($value);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -143,7 +143,7 @@ class StringMergerParserTest extends TestCase
     /**
      * @dataProvider provideOneElementValues
      */
-    public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($parsedValue, $expected)
+    public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($parsedValue, $expected): void
     {
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
         $decoratedParserProphecy->parse(Argument::any())->willReturn($parsedValue);
@@ -153,7 +153,7 @@ class StringMergerParserTest extends TestCase
         $parser = new StringMergerParser($decoratedParser);
         $actual = $parser->parse('');
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
     }
 
     public function provideOneElementValues()

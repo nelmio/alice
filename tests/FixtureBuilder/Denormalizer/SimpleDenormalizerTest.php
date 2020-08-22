@@ -30,17 +30,17 @@ class SimpleDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsADenormalizer()
+    public function testIsADenormalizer(): void
     {
-        $this->assertTrue(is_a(SimpleDenormalizer::class, DenormalizerInterface::class, true));
+        static::assertTrue(is_a(SimpleDenormalizer::class, DenormalizerInterface::class, true));
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(SimpleDenormalizer::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(SimpleDenormalizer::class))->isCloneable());
     }
 
-    public function testReturnsADenormalizedSet()
+    public function testReturnsADenormalizedSet(): void
     {
         $data = [
             'parameters' => [
@@ -87,7 +87,7 @@ class SimpleDenormalizerTest extends TestCase
         $denormalizer = new SimpleDenormalizer($parameterDenormalizer, $fixturesDenormalizer);
         $actual = $denormalizer->denormalize($data);
 
-        $this->assertEquals($expected, $actual);
+        static::assertEquals($expected, $actual);
 
         $parameterDenormalizerProphecy->denormalize(Argument::any())->shouldHaveBeenCalledTimes(1);
         $fixturesDenormalizerProphecy->denormalize(Argument::any())->shouldHaveBeenCalledTimes(1);

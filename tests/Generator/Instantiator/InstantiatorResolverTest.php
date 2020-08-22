@@ -34,6 +34,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorResolver
@@ -42,25 +43,25 @@ class InstantiatorResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function testIsAnInstantiator()
+    public function testIsAnInstantiator(): void
     {
-        $this->assertTrue(is_a(InstantiatorResolver::class, InstantiatorInterface::class, true));
+        static::assertTrue(is_a(InstantiatorResolver::class, InstantiatorInterface::class, true));
     }
 
-    public function testIsResolverAware()
+    public function testIsResolverAware(): void
     {
-        $this->assertEquals(
+        static::assertEquals(
             new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver()),
             (new InstantiatorResolver(new FakeInstantiator()))->withValueResolver(new FakeValueResolver())
         );
     }
 
-    public function testIsNotClonable()
+    public function testIsNotClonable(): void
     {
-        $this->assertFalse((new ReflectionClass(InstantiatorResolver::class))->isCloneable());
+        static::assertFalse((new ReflectionClass(InstantiatorResolver::class))->isCloneable());
     }
 
-    public function testResolvesAllArguments()
+    public function testResolvesAllArguments(): void
     {
         $specs = SpecificationBagFactory::create(
             new SimpleMethodCall(
@@ -92,7 +93,7 @@ class InstantiatorResolverTest extends TestCase
         $expected = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())->with($fixture->withSpecs($resolvedSpecs)),
-            new ObjectBag(['dummy' => new \stdClass()])
+            new ObjectBag(['dummy' => new stdClass()])
         );
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
@@ -139,13 +140,13 @@ class InstantiatorResolverTest extends TestCase
         $instantiator = new InstantiatorResolver($decoratedInstantiator, $resolver);
         $actual = $instantiator->instantiate($fixture, $set, $context);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
 
         $resolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
         $decoratedInstantiatorProphecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function testThrowsAGenerationThrowableIfResolutionFails()
+    public function testThrowsAGenerationThrowableIfResolutionFails(): void
     {
         $specs = SpecificationBagFactory::create(
             new SimpleMethodCall(
@@ -170,13 +171,13 @@ class InstantiatorResolverTest extends TestCase
         $instantiator = new InstantiatorResolver(new FakeInstantiator(), $resolver);
         try {
             $instantiator->instantiate($fixture, $set, new GenerationContext());
-            $this->fail('Expected exception to be thrown.');
+            static::fail('Expected exception to be thrown.');
         } catch (GenerationThrowable $throwable) {
             // Expected result.
         }
     }
 
-    public function testDoesNotResolveArgumentsIfNoConstructorGiven()
+    public function testDoesNotResolveArgumentsIfNoConstructorGiven(): void
     {
         $specs = SpecificationBagFactory::create();
         $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
@@ -187,7 +188,7 @@ class InstantiatorResolverTest extends TestCase
         $expected = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())->with($fixture),
-            new ObjectBag(['dummy' => new \stdClass()])
+            new ObjectBag(['dummy' => new stdClass()])
         );
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
@@ -203,10 +204,10 @@ class InstantiatorResolverTest extends TestCase
         $instantiator = new InstantiatorResolver($decoratedInstantiator, $resolver);
         $actual = $instantiator->instantiate($fixture, $set, $context);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 
-    public function testDoesNotResolveArgumentsIfSpecifiedNoConstructor()
+    public function testDoesNotResolveArgumentsIfSpecifiedNoConstructor(): void
     {
         $specs = SpecificationBagFactory::create();
         $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
@@ -217,7 +218,7 @@ class InstantiatorResolverTest extends TestCase
         $expected = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())->with($fixture),
-            new ObjectBag(['dummy' => new \stdClass()])
+            new ObjectBag(['dummy' => new stdClass()])
         );
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
@@ -233,6 +234,6 @@ class InstantiatorResolverTest extends TestCase
         $instantiator = new InstantiatorResolver($decoratedInstantiator, $resolver);
         $actual = $instantiator->instantiate($fixture, $set, $context);
 
-        $this->assertSame($expected, $actual);
+        static::assertSame($expected, $actual);
     }
 }
