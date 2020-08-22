@@ -23,12 +23,12 @@ test: tu ts
 
 tu:             ## Run the tests for the core library
 tu: vendor/phpunit vendor-bin/covers-validator/vendor
-	$(COVERS_VALIDATOR)
+	#$(COVERS_VALIDATOR)
 	$(PHPUNIT)
 
 ts:             ## Run the tests for the Symfony Bridge
 ts: vendor-bin/symfony/vendor vendor-bin/covers-validator/vendor
-	$(COVERS_VALIDATOR) -c phpunit_symfony.xml.dist
+	#$(COVERS_VALIDATOR) -c phpunit_symfony.xml.dist
 	$(PHPUNIT_SYMFONY) -c phpunit_symfony.xml.dist
 
 tc:             ## Run the tests with coverage

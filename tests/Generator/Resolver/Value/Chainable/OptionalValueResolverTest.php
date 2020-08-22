@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use Faker\Generator;
+use function in_array;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
@@ -22,9 +24,8 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
-use phpmock\functions\FixedValueFunction;
-use phpmock\MockBuilder;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
@@ -32,6 +33,8 @@ use ReflectionClass;
  */
 class OptionalValueResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testIsAChainableResolver(): void
     {
         static::assertTrue(is_a(OptionalValueResolver::class, ChainableValueResolverInterface::class, true));
@@ -70,48 +73,54 @@ class OptionalValueResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    public function testCanHandleExtremaQuantifiersCorrectly(): void
+    /**
+     * @dataProvider optionalValueProvider
+     */
+    public function testCanHandleExtremaQuantifiersCorrectly(
+        OptionalValue $value,
+        int $randomValue,
+        string $expectedValue
+    ): void {
+        $generatorProphecy = $this->prophesize(Generator::class);
+        $generatorProphecy->numberBetween(0, 99)->willReturn($randomValue);
+        $generator = $generatorProphecy->reveal();
+
+        $resolver = new OptionalValueResolver(new FakeValueResolver(), $generator);
+
+        $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
+
+        static::assertSame($expectedValue, $resolvedValue->getValue());
+    }
+
+    public function testCanHandleExtremaQuantifiersCorrectlyWithoutGenerator(): void
     {
         $resolver = new OptionalValueResolver(new FakeValueResolver());
 
-        $builder = new MockBuilder();
-        $builder->setNamespace(__NAMESPACE__)
-            ->setName('mt_rand');
-
-        $builder->setFunctionProvider(new FixedValueFunction(0));
-        $mock = $builder->build();
-        $mock->enable();
-
         $value = new OptionalValue(0, 'first_0', 'second_0');
-        $resolvedValueFor0 = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
-        $mock->disable();
+        $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
-        $builder->setFunctionProvider(new FixedValueFunction(99));
-        $mock = $builder->build();
-        $mock->enable();
-
-        $value = new OptionalValue(100, 'first_100', 'second_100');
-        $resolvedValueFor100 = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
-
-        $mock->disable();
-
-        $builder->setFunctionProvider(new FixedValueFunction(49));
-        $mock = $builder->build();
-        $mock->enable();
-
-        $value = new OptionalValue(50, 'first_50', 'second_50');
-        $resolvedValueFor50 = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
-
-        $mock->disable();
-
-        static::assertEquals('second_0', $resolvedValueFor0->getValue());
-        static::assertEquals('first_100', $resolvedValueFor100->getValue());
-        static::assertEquals('first_50', $resolvedValueFor50->getValue());
+        static::assertTrue(in_array($resolvedValue->getValue(), ['first_0', 'second_0'], true));
     }
 
-    public function testReturnsSetWithResolvedValue(): void
+    public static function optionalValueProvider(): iterable
     {
-        //TODO
+        yield 'min' => [
+            new OptionalValue(0, 'first_0', 'second_0'),
+            0,
+            'second_0',
+        ];
+
+        yield 'max' => [
+            new OptionalValue(100, 'first_100', 'second_100'),
+            99,
+            'first_100',
+        ];
+
+        yield 'mid' => [
+            new OptionalValue(50, 'first_50', 'second_50'),
+            49,
+            'first_50',
+        ];
     }
 }

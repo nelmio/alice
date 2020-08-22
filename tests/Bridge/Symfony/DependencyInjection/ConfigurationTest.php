@@ -117,7 +117,7 @@ class ConfigurationTest extends TestCase
         $processor = new Processor();
 
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatches('/^Invalid type for path "nelmio_alice.functions_blacklist"\. Expected array, but got string/');
+        $this->expectExceptionMessageMatches('/^Invalid type for path "nelmio_alice.functions_blacklist"\. Expected "?array"?, but got "?string"?/');
 
         $processor->processConfiguration(
             $configuration,
@@ -171,7 +171,7 @@ class ConfigurationTest extends TestCase
         $processor = new Processor();
 
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatches('/^Invalid type for path "nelmio_alice.loading_limit"\. Expected int, but got boolean\./');
+        $this->expectExceptionMessageMatches('/^Invalid type for path "nelmio_alice.loading_limit"\. Expected "?int"?, but got "?bool(ean)?"?\./');
 
         $processor->processConfiguration(
             $configuration,
@@ -207,7 +207,7 @@ class ConfigurationTest extends TestCase
         $processor = new Processor();
 
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatches('/^Invalid type for path "nelmio_alice.max_unique_values_retry"\. Expected int, but got boolean\./');
+        $this->expectExceptionMessageMatches('/^Invalid type for path "nelmio_alice.max_unique_values_retry"\. Expected "?int"?, but got "?bool(ean)?"?\./');
 
         $processor->processConfiguration(
             $configuration,

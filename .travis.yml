@@ -54,7 +54,7 @@ install:
         composer bin symfony require --no-update symfony/symfony "symfony/symfony:${SYMFONY_VERSION}"
     fi
   - composer bin all update $COMPOSER_FLAGS
-  - vendor-bin/covers-validator/bin/covers-validator -c $PHPUNIT_CONFIG
+  #- vendor-bin/covers-validator/bin/covers-validator -c $PHPUNIT_CONFIG
 
 script: $PHPUNIT_BIN -c $PHPUNIT_CONFIG $PHPUNIT_FLAGS
 

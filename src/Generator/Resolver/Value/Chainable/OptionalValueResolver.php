@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use Faker\Generator as FakerGenerator;
+use function mt_rand;
 use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -36,9 +38,15 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
      */
     private $resolver;
 
-    public function __construct(ValueResolverInterface $resolver = null)
+    /**
+     * @var FakerGenerator
+     */
+    private $faker;
+
+    public function __construct(ValueResolverInterface $resolver = null, FakerGenerator $faker = null)
     {
         $this->resolver = $resolver;
+        $this->faker = $faker;
     }
 
     /**
@@ -46,7 +54,7 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
      */
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
-        return new self($resolver);
+        return new self($resolver, $this->faker);
     }
 
     /**
@@ -78,21 +86,33 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
         $quantifier = $value->getQuantifier();
         if ($quantifier instanceof ValueInterface) {
             $resolvedSet = $this->resolver->resolve($quantifier, $fixture, $fixtureSet, $scope, $context);
-            list($quantifier, $fixtureSet) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
+            [$quantifier, $fixtureSet] = [$resolvedSet->getValue(), $resolvedSet->getSet()];
 
             if (false === is_int($quantifier) && false === is_string($quantifier)) {
                 throw UnresolvableValueExceptionFactory::createForInvalidResolvedQuantifierTypeForOptionalValue($value, $quantifier);
             }
         }
 
-        $realValue = (mt_rand(0, 99) < $quantifier)
-            ? $value->getFirstMember()
-            : $value->getSecondMember()
-        ;
+        $realValue = $this->resolveRealValue($value, (int) $quantifier);
         if ($realValue instanceof ValueInterface) {
             return $this->resolver->resolve($realValue, $fixture, $fixtureSet, $scope, $context);
         }
 
         return new ResolvedValueWithFixtureSet($realValue, $fixtureSet);
+    }
+
+    /**
+     * @return ValueInterface|mixed
+     */
+    private function resolveRealValue(ValueInterface $value, int $quantifier)
+    {
+        // TODO: keeping mt_rand for BC purposes. The generator should be made
+        //   non-nullable in 4.x and mt_rand usage removed
+        $random = null !== $this->faker ? $this->faker->numberBetween(0, 99) : mt_rand(0, 99);
+
+        return ($random < $quantifier)
+            ? $value->getFirstMember()
+            : $value->getSecondMember()
+        ;
     }
 }

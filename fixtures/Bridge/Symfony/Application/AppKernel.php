@@ -52,7 +52,11 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $config = (null === $this->config) ? __DIR__.'/config.yml' : $this->config;
+        if (3 === self::MAJOR_VERSION) {
+            $config = (null === $this->config) ? __DIR__.'/config_34.yml' : $this->config;
+        } else {
+            $config = (null === $this->config) ? __DIR__.'/config.yml' : $this->config;
+        }
 
         $loader->load($config);
     }

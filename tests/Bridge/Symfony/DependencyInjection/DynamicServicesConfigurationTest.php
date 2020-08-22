@@ -40,7 +40,13 @@ class DynamicServicesConfigurationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->kernel = KernelFactory::createKernel(__DIR__.'/../../../../fixtures/Bridge/Symfony/Application/config_custom.yml');
+        if (3 === AppKernel::MAJOR_VERSION) {
+            $config = __DIR__.'/../../../../fixtures/Bridge/Symfony/Application/config_custom_34.yml';
+        } else {
+            $config = __DIR__.'/../../../../fixtures/Bridge/Symfony/Application/config_custom.yml';
+        }
+
+        $this->kernel = KernelFactory::createKernel($config);
         $this->kernel->boot();
     }
 
