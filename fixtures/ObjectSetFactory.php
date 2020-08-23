@@ -18,8 +18,8 @@ class ObjectSetFactory
     public static function create(ParameterBag $parameters = null, ObjectBag $objects = null): ObjectSet
     {
         return new ObjectSet(
-            null === $parameters ? new ParameterBag() : $parameters,
-            null === $objects ? new ObjectBag() : $objects
+            $parameters ?? new ParameterBag(),
+            $objects ?? new ObjectBag()
         );
     }
 }

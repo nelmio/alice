@@ -35,17 +35,19 @@ final class CompleteObjectGenerator implements ObjectGeneratorInterface
     {
         $this->objectGenerator = $objectGenerator;
     }
-
     
     public function generate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context
     ): ObjectBag {
-        if ($fixtureSet->getObjects()->has($fixture)
-            && $fixtureSet->getObjects()->get($fixture) instanceof CompleteObject
+        $objects = $fixtureSet->getObjects();
+
+        if (
+            $objects->has($fixture)
+            && $objects->get($fixture) instanceof CompleteObject
         ) {
-            return $fixtureSet->getObjects();
+            return $objects;
         }
 
         $objects = $this->objectGenerator->generate($fixture, $fixtureSet, $context);

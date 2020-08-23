@@ -40,13 +40,11 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
     {
         $this->resolver = $resolver;
     }
-
     
     public function withResolver(ParameterResolverInterface $resolver)
     {
         return new self($resolver);
     }
-
     
     public function canResolve(Parameter $parameter): bool
     {
@@ -67,7 +65,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         $self = $this;
         $value = preg_replace_callback(
             self::PATTERN,
-            function ($match) use ($self, $context, $unresolvedParameters, &$resolvedParameters, $parameter) {
+            static function ($match) use ($self, $context, $unresolvedParameters, &$resolvedParameters, $parameter) {
                 $key = $match['parameter'];
                 $resolvedParameters = $self->resolveStringKey(
                     $self->resolver,

@@ -64,8 +64,9 @@ class ParameterTest extends TestCase
             'string' => ['foo'],
             'null' => [null],
             'object' => [new stdClass()],
-            'closure' => [function (): void {
-            }],
+            'closure' => [
+                static function (): void {
+                }],
             'array' => [[new stdClass()]],
         ];
     }

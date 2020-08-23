@@ -83,8 +83,10 @@ class ArrayParameterResolverTest extends TestCase
         static::assertFalse($resolver->canResolve($parameter->withValue(.75)));
         static::assertFalse($resolver->canResolve($parameter->withValue('string')));
         static::assertFalse($resolver->canResolve($parameter->withValue(new stdClass())));
-        static::assertFalse($resolver->canResolve($parameter->withValue(function (): void {
-        })));
+        static::assertFalse($resolver->canResolve($parameter->withValue(
+            static function (): void {
+            }
+        )));
     }
 
     public function testRequiresInjectedResolverToResolverAParameter(): void
@@ -271,7 +273,7 @@ class ArrayParameterResolverTest extends TestCase
             ],
             'context that does not contain the parameter being resolved' => [
                 new ResolvingContext('unrelated'),
-                (function () {
+                (static function () {
                     $context = new ResolvingContext('unrelated');
                     $context->add('array_param');
 
@@ -279,13 +281,13 @@ class ArrayParameterResolverTest extends TestCase
                 })(),
             ],
             'context that contains the parameter being resolved' => [
-                (function () {
+                (static function () {
                     $context = new ResolvingContext('unrelated');
                     $context->add('array_param');
 
                     return $context;
                 })(),
-                (function () {
+                (static function () {
                     $context = new ResolvingContext('unrelated');
                     $context->add('array_param');
 

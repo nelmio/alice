@@ -22,8 +22,8 @@ class SpecificationBagFactory
     ): SpecificationBag {
         return new SpecificationBag(
             $constructor,
-            (null === $properties) ? new PropertyBag() : $properties,
-            (null === $calls) ? new MethodCallBag() : $calls
+            $properties ?? new PropertyBag(),
+            $calls ?? new MethodCallBag()
         );
     }
 }

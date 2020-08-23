@@ -132,7 +132,7 @@ class DynamicArrayValueTest extends TestCase
         ];
 
         yield 'closure/array' => [
-            function (): void {
+            static function (): void {
             },
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
@@ -169,7 +169,7 @@ class DynamicArrayValueTest extends TestCase
 
         yield 'int/closure' => [
             -1,
-            function (): void {
+            static function (): void {
             },
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
             .'"Closure" instead.'

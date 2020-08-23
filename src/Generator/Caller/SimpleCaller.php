@@ -57,13 +57,11 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
         $this->resolver = $resolver;
         $this->namedArgumentsResolver = $namedArgumentsResolver;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->callProcessor, $resolver, $this->namedArgumentsResolver);
     }
-
     
     public function doCallsOn(
         ObjectInterface $object,
@@ -82,7 +80,13 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
                 '_instances' => $fixtureSet->getObjects()->toArray(),
             ];
 
-            list($methodCall, $fixtureSet) = $this->processArguments($methodCall, $fixture, $fixtureSet, $scope, $context);
+            [$methodCall, $fixtureSet] = $this->processArguments(
+                $methodCall,
+                $fixture,
+                $fixtureSet,
+                $scope,
+                $context
+            );
 
             $fixtureSet = $this->callProcessor->process($object, $fixtureSet, $context, $methodCall);
         }
@@ -111,9 +115,10 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
                     throw UnresolvableValueDuringGenerationExceptionFactory::createFromResolutionThrowable($throwable);
                 }
 
-                list($value, $fixtureSet) = [$result->getValue(), $result->getSet()];
+                [$value, $fixtureSet] = [$result->getValue(), $result->getSet()];
             }
         }
+        unset($value);
 
         if (null !== $this->namedArgumentsResolver) {
             $arguments = $this->namedArgumentsResolver->resolveArguments($arguments, $fixture->getClassName(), $methodCall->getMethod());

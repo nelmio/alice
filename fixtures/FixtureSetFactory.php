@@ -22,10 +22,10 @@ class FixtureSetFactory
         ObjectBag $objects = null
     ): FixtureSet {
         return new FixtureSet(
-            null === $loadedParameters ? new ParameterBag() : $loadedParameters,
-            null === $injectedParameters ? new ParameterBag() : $injectedParameters,
-            null === $fixtures ? new FixtureBag() : $fixtures,
-            null === $objects ? new ObjectBag() : $objects
+            $loadedParameters ?? new ParameterBag(),
+            $injectedParameters ?? new ParameterBag(),
+            $fixtures ?? new FixtureBag(),
+            $objects ?? new ObjectBag()
         );
     }
 }

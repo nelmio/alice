@@ -29,7 +29,6 @@ use Throwable;
 final class EvaluatedValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
-
     
     public function canResolve(ValueInterface $value): bool
     {
@@ -66,7 +65,7 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         // Closure in which the expression is evaluated; This is done in a closure to avoid the expression to have
         // access to this method variables (which should remain unknown) and we injected only the variables of the
         // closure.
-        $evaluateExpression = function ($_expression) use ($_scope) {
+        $evaluateExpression = static function ($_expression) use ($_scope) {
             foreach ($_scope as $_scopeVariableName => $_scopeVariableValue) {
                 $$_scopeVariableName = $_scopeVariableValue;
             }
@@ -89,6 +88,6 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
      */
     private function replacePlaceholders(string $expression): string
     {
-        return preg_replace('/(@(?<id>[^\ @\-]+))/', '\$_instances[\'$2\']', $expression);
+        return preg_replace('/(@(?<id>[^ @\-]+))/', '\$_instances[\'$2\']', $expression);
     }
 }

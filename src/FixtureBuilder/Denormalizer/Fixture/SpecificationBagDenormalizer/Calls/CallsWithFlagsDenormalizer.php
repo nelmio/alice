@@ -40,11 +40,10 @@ final class CallsWithFlagsDenormalizer implements CallsDenormalizerInterface
     public function __construct(CallsDenormalizerInterface $callsDenormalizer, array $methodFlagHandlers)
     {
         $this->callsDenormalizer = $callsDenormalizer;
-        $this->methodFlagHandlers = (function (MethodFlagHandler ...$handlers) {
+        $this->methodFlagHandlers = (static function (MethodFlagHandler ...$handlers) {
             return $handlers;
         })(...$methodFlagHandlers);
     }
-
     
     public function denormalize(
         FixtureInterface $scope,

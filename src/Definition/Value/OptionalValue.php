@@ -99,7 +99,6 @@ final class OptionalValue implements ValueInterface
             $this->getSecondMember(),
         ];
     }
-
     
     public function __toString(): string
     {
@@ -107,7 +106,7 @@ final class OptionalValue implements ValueInterface
             '%s%%? %s : %s',
             $this->quantifier,
             $this->firstMember,
-            null === $this->secondMember? 'null' : $this->secondMember
+            $this->secondMember ?? 'null'
         );
     }
 }

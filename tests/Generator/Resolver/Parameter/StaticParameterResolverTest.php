@@ -45,8 +45,10 @@ class StaticParameterResolverTest extends TestCase
         static::assertTrue($resolver->canResolve($parameter->withValue(10)));
         static::assertTrue($resolver->canResolve($parameter->withValue(.75)));
         static::assertTrue($resolver->canResolve($parameter->withValue(new stdClass())));
-        static::assertTrue($resolver->canResolve($parameter->withValue(function (): void {
-        })));
+        static::assertTrue($resolver->canResolve($parameter->withValue(
+            static function (): void {
+            }
+        )));
 
         static::assertFalse($resolver->canResolve($parameter->withValue('string')));
     }

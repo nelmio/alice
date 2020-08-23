@@ -342,7 +342,7 @@ class RecursiveParameterResolverTest extends TestCase
                 new ResolvingContext(),
             ],
             'context with random value' => [
-                (function () {
+                (static function () {
                     $context = new ResolvingContext();
                     $context->add('name');
 

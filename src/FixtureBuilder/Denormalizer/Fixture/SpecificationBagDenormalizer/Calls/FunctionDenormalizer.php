@@ -38,7 +38,6 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
     {
         $this->argumentsDenormalizer = $argumentsDenormalizer;
     }
-
     
     public function denormalize(
         FixtureInterface $scope,
@@ -46,7 +45,7 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
         string $unparsedMethod,
         array $unparsedArguments
     ): MethodCallInterface {
-        list($caller, $method) = $this->getCallerReference($scope, $unparsedMethod);
+        [$caller, $method] = $this->getCallerReference($scope, $unparsedMethod);
         $arguments = $this->argumentsDenormalizer->denormalize($scope, $parser, $unparsedArguments);
 
         if (null === $caller) {
@@ -70,7 +69,7 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
             throw InvalidArgumentExceptionFactory::createForInvalidConstructorMethod($method);
         }
 
-        list($caller, $method) = $explodedMethod;
+        [$caller, $method] = $explodedMethod;
 
         if (0 === strpos($caller, '@')) {
             return [new InstantiatedReference(substr($caller, 1)), $method];

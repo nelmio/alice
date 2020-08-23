@@ -51,13 +51,11 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
         $this->propertyAccessor = $propertyAccessor;
         $this->resolver = $resolver;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->propertyAccessor, $resolver);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {
@@ -86,7 +84,10 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
         $context->unmarkAsNeedsCompleteGeneration();
 
         /** @var ResolvedFixtureSet $fixtureSet */
-        list($instance, $fixtureSet) = [$fixtureReferenceResult->getValue(), $fixtureReferenceResult->getSet()];
+        [$instance, $fixtureSet] = [
+            $fixtureReferenceResult->getValue(),
+            $fixtureReferenceResult->getSet()
+        ];
 
         try {
             $propertyValue = $this->propertyAccessor->getValue($instance, $value->getProperty());

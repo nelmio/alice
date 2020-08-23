@@ -39,13 +39,11 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
     {
         $this->resolver = $resolver;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {
@@ -67,7 +65,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
         $quantifier = $value->getQuantifier();
         if ($quantifier instanceof ValueInterface) {
             $result = $this->resolver->resolve($quantifier, $fixture, $fixtureSet, $scope, $context);
-            list($quantifier, $fixtureSet) = [$result->getValue(), $result->getSet()];
+            [$quantifier, $fixtureSet] = [$result->getValue(), $result->getSet()];
         }
 
         if ($quantifier < 0) {

@@ -27,7 +27,6 @@ use TypeError;
 final class FixtureMethodReferenceTokenParser extends AbstractChainableParserAwareParser
 {
     use IsAServiceTrait;
-
     
     public function canParse(Token $token): bool
     {
@@ -45,7 +44,7 @@ final class FixtureMethodReferenceTokenParser extends AbstractChainableParserAwa
     {
         parent::parse($token);
 
-        $values = preg_split('/->/', $token->getValue());
+        $values = explode('->', $token->getValue());
         if (2 !== count($values)) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }

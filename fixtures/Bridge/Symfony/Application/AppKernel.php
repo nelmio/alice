@@ -27,13 +27,11 @@ class AppKernel extends Kernel
      * @var string|null
      */
     private $config;
-
     
     public function __construct($environment, $debug)
     {
         parent::__construct($environment, $debug);
     }
-
     
     public function registerBundles()
     {
@@ -42,19 +40,17 @@ class AppKernel extends Kernel
             new NelmioAliceBundle(),
         ];
     }
-
     
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         if (3 === self::MAJOR_VERSION) {
-            $config = (null === $this->config) ? __DIR__.'/config_34.yml' : $this->config;
+            $config = $this->config ?? (__DIR__.'/config_34.yml');
         } else {
-            $config = (null === $this->config) ? __DIR__.'/config.yml' : $this->config;
+            $config = $this->config ?? (__DIR__.'/config.yml');
         }
 
         $loader->load($config);
     }
-
     
     public function build(ContainerBuilder $container): void
     {

@@ -39,7 +39,7 @@ final class ResolvingContext
      */
     public static function createFrom(self $resolving = null, string $key): self
     {
-        $instance = null === $resolving ? new self() : $resolving;
+        $instance = $resolving ?? new self();
         if (false === $instance->has($key)) {
             $instance->add($key);
         }

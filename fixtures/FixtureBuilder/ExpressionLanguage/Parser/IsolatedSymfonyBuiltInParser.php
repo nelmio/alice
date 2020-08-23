@@ -22,7 +22,7 @@ class IsolatedSymfonyBuiltInParser implements ParserInterface
     {
         return KernelIsolatedServiceCall::call(
             'nelmio_alice.fixture_builder.expression_language.parser',
-            function (ParserInterface $parser) use ($value) {
+            static function (ParserInterface $parser) use ($value) {
                 return $parser->parse($value);
             }
         );

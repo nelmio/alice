@@ -94,8 +94,10 @@ class FixtureReferenceValueTest extends TestCase
         }
 
         try {
-            new FixtureReferenceValue(function (): void {
-            });
+            new FixtureReferenceValue(
+                static function (): void {
+                }
+            );
         } catch (InvalidArgumentException $exception) {
             static::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'

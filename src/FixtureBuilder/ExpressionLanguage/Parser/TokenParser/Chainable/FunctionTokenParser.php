@@ -51,13 +51,11 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         $this->argumentEscaper = $argumentEscaper;
         $this->parser = $parser;
     }
-
     
     public function withParser(ParserInterface $parser)
     {
         return new static($this->argumentEscaper, $parser);
     }
-
     
     public function canParse(Token $token): bool
     {
@@ -87,7 +85,7 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         if ('identity' === $function) {
             $value = preg_replace_callback(
                 '/__ARG_TOKEN__[\da-z]{32}/',
-                function (array $matches) use ($argumentEscaper): string {
+                static function (array $matches) use ($argumentEscaper): string {
                     return '\''.$argumentEscaper->unescape($matches[0]).'\'';
                 },
                 $matches['arguments']
@@ -112,7 +110,7 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         $argumentEscaper = $this->argumentEscaper;
         $escapedString = preg_replace_callback(
             '/\'(.*?)\'|"(.*?)"/',
-            function (array $matches) use ($argumentEscaper): string {
+            static function (array $matches) use ($argumentEscaper): string {
                 $string = end($matches);
                 if (preg_match('/"(.*?)"/', reset($matches))) {
                     $lineBreak = DIRECTORY_SEPARATOR === '\\' ? '\r\n' : '\n';

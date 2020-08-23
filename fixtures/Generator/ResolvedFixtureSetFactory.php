@@ -22,9 +22,9 @@ class ResolvedFixtureSetFactory
     public static function create(ParameterBag $parameters = null, FixtureBag $fixtures = null, ObjectBag $objects = null): ResolvedFixtureSet
     {
         return new ResolvedFixtureSet(
-            (null === $parameters) ? new ParameterBag() : $parameters,
-            (null === $fixtures) ? new FixtureBag() : $fixtures,
-            (null === $objects) ? new ObjectBag() : $objects
+            $parameters ?? new ParameterBag(),
+            $fixtures ?? new FixtureBag(),
+            $objects ?? new ObjectBag()
         );
     }
 }

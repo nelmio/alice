@@ -42,7 +42,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
 
         $value = $token->getValue();
         try {
-            $elements = substr($value, 1, strlen($value) - 2);
+            $elements = substr($value, 1, -1);
 
             return new ArrayValue($this->parseElements($this->parser, $elements));
         } catch (TypeError $error) {

@@ -31,7 +31,7 @@ final class ParserRegistry implements ParserInterface
      */
     public function __construct(array $parsers)
     {
-        $this->parsers = (function (ChainableParserInterface ...$parsers) {
+        $this->parsers = (static function (ChainableParserInterface ...$parsers) {
             return $parsers;
         })(...$parsers);
     }
