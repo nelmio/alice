@@ -54,9 +54,11 @@ class SimpleArgumentsDenormalizerTest extends TestCase
         $flagParser = $flagParserProphecy->reveal();
 
         $valueDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
-        $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(function ($args) {
-            return $args[2];
-        });
+        $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(
+            function ($args) {
+                return $args[2];
+            }
+        );
         /** @var ValueDenormalizerInterface $valueDenormalizer */
         $valueDenormalizer = $valueDenormalizerProphecy->reveal();
 
@@ -92,9 +94,11 @@ class SimpleArgumentsDenormalizerTest extends TestCase
         $flagParser = $flagParserProphecy->reveal();
 
         $valueDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
-        $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(function ($args) {
-            return $args[2];
-        });
+        $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(
+            function ($args) {
+                return $args[2];
+            }
+        );
         /** @var ValueDenormalizerInterface $valueDenormalizer */
         $valueDenormalizer = $valueDenormalizerProphecy->reveal();
 

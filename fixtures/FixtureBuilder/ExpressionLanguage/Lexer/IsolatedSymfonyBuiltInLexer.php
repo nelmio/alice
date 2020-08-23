@@ -22,7 +22,7 @@ class IsolatedSymfonyBuiltInLexer implements LexerInterface
     {
         return KernelIsolatedServiceCall::call(
             'nelmio_alice.fixture_builder.expression_language.lexer',
-            function (LexerInterface $lexer) use ($value) {
+            static function (LexerInterface $lexer) use ($value) {
                 return $lexer->lex($value);
             }
         );

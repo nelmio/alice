@@ -26,7 +26,7 @@ class RangeNameTest extends TestCase
     public function testReadAccessorsReturnPropertiesValues(array $input, array $expected): void
     {
         $name = 'user';
-        list($from, $to) = $input;
+        [$from, $to] = $input;
         
         $range = new RangeName($name, $from, $to);
         

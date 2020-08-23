@@ -87,7 +87,7 @@ class DeepCloneTest extends TestCase
         $foo = new stdClass();
         $bar = new stdClass();
 
-        $c1 = function () use ($foo) {
+        $c1 = static function () use ($foo) {
             return $foo;
         };
 

@@ -24,7 +24,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/.+\{(?<range>(?<from>[0-9]+)(?:\.{2})(?<to>[0-9]+)((,\s?(?<step>[0-9]+))?))\}/';
+    public const REGEX = '/.+\{(?<range>(?<from>\d+)(?:\.{2})(?<to>\d+)((,\s?(?<step>\d+))?))\}/';
 
     /**
      * @var string Unique token
@@ -35,13 +35,11 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
     {
         $this->token = uniqid(__CLASS__, true);
     }
-
     
     public function canDenormalize(string $name, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $name, $matches);
     }
-
     
     public function denormalize(
         FixtureBag $builtFixtures,

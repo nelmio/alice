@@ -58,13 +58,11 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
 
         $this->limit = $limit;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->pool, $resolver);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {
@@ -91,7 +89,13 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
          * @var UniqueValue        $generatedValue
          * @var ResolvedFixtureSet $fixtureSet
          */
-        list($generatedValue, $fixtureSet) = $this->generateValue($value, $fixture, $fixtureSet, $scope, $context);
+        [$generatedValue, $fixtureSet] = $this->generateValue(
+            $value,
+            $fixture,
+            $fixtureSet,
+            $scope,
+            $context
+        );
 
         if ($this->pool->has($generatedValue)) {
             return $this->resolve($value, $fixture, $fixtureSet, $scope, $context, $tryCounter);

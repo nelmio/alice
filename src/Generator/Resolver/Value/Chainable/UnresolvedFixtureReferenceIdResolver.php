@@ -52,7 +52,6 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
         $this->decoratedResolver = $decoratedResolver;
         $this->resolver = $resolver;
     }
-
     
     public function withObjectGenerator(ObjectGeneratorInterface $generator): self
     {
@@ -63,7 +62,6 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
 
         return new self($decoratedResolver, $this->resolver);
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
@@ -74,7 +72,6 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
 
         return new self($decoratedResolver, $resolver);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {
@@ -97,7 +94,7 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
-        list($referredFixtureId, $fixtureSet) = $this->getReferredFixtureId(
+        [$referredFixtureId, $fixtureSet] = $this->getReferredFixtureId(
             $this->resolver,
             $value,
             $fixture,
@@ -130,7 +127,7 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
         if ($referredFixtureId instanceof ValueInterface) {
             $resolvedSet = $resolver->resolve($referredFixtureId, $fixture, $set, $scope, $context);
 
-            list($referredFixtureId, $set) = [$resolvedSet->getValue(), $resolvedSet->getSet()];
+            [$referredFixtureId, $set] = [$resolvedSet->getValue(), $resolvedSet->getSet()];
             if (false === is_string($referredFixtureId)) {
                 throw UnresolvableValueExceptionFactory::createForInvalidReferenceId($value, $referredFixtureId);
             }

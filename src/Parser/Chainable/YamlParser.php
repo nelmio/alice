@@ -39,7 +39,6 @@ final class YamlParser implements ChainableParserInterface
     {
         $this->yamlParser = $yamlParser;
     }
-
     
     public function canParse(string $file): bool
     {
@@ -57,7 +56,7 @@ final class YamlParser implements ChainableParserInterface
      */
     public function parse(string $file): array
     {
-        if (false === file_exists($file)) {
+        if (false === is_file($file)) {
             throw InvalidArgumentExceptionFactory::createForFileCouldNotBeFound($file);
         }
 
@@ -67,7 +66,7 @@ final class YamlParser implements ChainableParserInterface
                 : $this->yamlParser->parse(file_get_contents($file));
 
             // $data is null only if the YAML file was empty; otherwise an exception is thrown
-            return (null === $data) ? [] : $data;
+            return $data ?? [];
         } catch (Exception $exception) {
             if ($exception instanceof SymfonyParseException) {
                 throw ParseExceptionFactory::createForInvalidYaml($file, 0, $exception);

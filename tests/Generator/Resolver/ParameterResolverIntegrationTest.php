@@ -31,7 +31,6 @@ class ParameterResolverIntegrationTest extends TestCase
      * @var SimpleParameterBagResolver
      */
     protected $resolver;
-
     
     protected function setUp(): void
     {
@@ -115,7 +114,7 @@ class ParameterResolverIntegrationTest extends TestCase
             'int_param' => 2000,
             'float_param' => -.89,
             'object_param' => new stdClass(),
-            'closure_param' => function (): void {
+            'closure_param' => static function (): void {
             },
             'class_param' => 'App\Test\Dummy',
             'array_value' => [

@@ -23,7 +23,7 @@ class IsolatedSymfonyParameterBagResolver implements ParameterBagResolverInterfa
     {
         return KernelIsolatedServiceCall::call(
             'nelmio_alice.generator.resolver.parameter_bag',
-            function (ParameterBagResolverInterface $resolver) use ($unresolvedParameters, $injectedParameters) {
+            static function (ParameterBagResolverInterface $resolver) use ($unresolvedParameters, $injectedParameters) {
                 return $resolver->resolve($unresolvedParameters, $injectedParameters);
             }
         );

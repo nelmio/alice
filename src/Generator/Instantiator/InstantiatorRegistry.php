@@ -37,12 +37,11 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
     public function __construct(array $instantiators)
     {
         $this->instantiators = (
-            function (ChainableInstantiatorInterface ...$instantiators) {
+            static function (ChainableInstantiatorInterface ...$instantiators) {
                 return $instantiators;
             }
         )(...$instantiators);
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
@@ -56,7 +55,6 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
 
         return new self($instantiators, $resolver);
     }
-
     
     public function instantiate(
         FixtureInterface $fixture,

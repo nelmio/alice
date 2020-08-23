@@ -27,7 +27,6 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseExce
 final class WildcardReferenceTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
-
     
     public function canParse(Token $token): bool
     {
@@ -44,7 +43,7 @@ final class WildcardReferenceTokenParser implements ChainableTokenParserInterfac
     public function parse(Token $token)
     {
         $value = $token->getValue();
-        $fixtureId = substr($value, 1, strlen($value) - 2);
+        $fixtureId = substr($value, 1, -1);
         if (false === $fixtureId) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }

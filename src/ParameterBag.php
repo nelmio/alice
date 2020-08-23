@@ -27,7 +27,7 @@ final class ParameterBag implements IteratorAggregate, Countable
     /**
      * @var mixed[]
      */
-    private $parameters = [];
+    private $parameters;
 
     /**
      * @param mixed[] $parameters Keys/values pair of parameters
@@ -77,13 +77,11 @@ final class ParameterBag implements IteratorAggregate, Countable
 
         throw ParameterNotFoundExceptionFactory::create($key);
     }
-
     
     public function getIterator()
     {
         return new ArrayIterator($this->parameters);
     }
-
     
     public function count()
     {

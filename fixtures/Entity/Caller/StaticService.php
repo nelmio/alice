@@ -20,7 +20,7 @@ class StaticService
     public static function setTitle(DummyWithStaticFunction $instance, string $title): void
     {
         Closure::bind(
-            function (DummyWithStaticFunction $dummy) use ($title): void {
+            static function (DummyWithStaticFunction $dummy) use ($title): void {
                 $dummy->title = $title;
             },
             null,

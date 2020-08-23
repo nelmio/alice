@@ -43,13 +43,11 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
     {
         $this->argumentResolver = $resolver;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {
@@ -89,7 +87,10 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
         $context->unmarkAsNeedsCompleteGeneration();
 
         /** @var ResolvedFixtureSet $fixtureSet */
-        list($instance, $fixtureSet) = [$fixtureReferenceResult->getValue(), $fixtureReferenceResult->getSet()];
+        [$instance, $fixtureSet] = [
+            $fixtureReferenceResult->getValue(),
+            $fixtureReferenceResult->getSet()
+        ];
 
         try {
             $resolvedValue = $instance->{$functionCall->getName()}(...$arguments);

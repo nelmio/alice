@@ -57,13 +57,13 @@ class FunctionCallArgumentResolverTest extends TestCase
 
     public function testIsResolverAware(): void
     {
-        $decoratedResolverConstructor = function () {
+        $decoratedResolverConstructor = static function () {
             $resolver = new FakeValueResolver();
             $resolver->decorated = true;
 
             return $resolver;
         };
-        $argumentResolverConstructor = function () {
+        $argumentResolverConstructor = static function () {
             $resolver = new FakeValueResolver();
             $resolver->argument = true;
 

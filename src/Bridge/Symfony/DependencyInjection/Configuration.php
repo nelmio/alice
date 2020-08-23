@@ -48,7 +48,7 @@ final class Configuration implements ConfigurationInterface
                     ->info('Value used make sure Faker generates data consistently across runs, set to null to disable.')
                     ->validate()
                         ->always(
-                            function ($seed) {
+                            static function ($seed) {
                                 if (null === $seed || (is_int($seed) && $seed > 0)) {
                                     return $seed;
                                 }
@@ -68,7 +68,7 @@ final class Configuration implements ConfigurationInterface
                     )
                     ->validate()
                         ->always(
-                            function (array $value) {
+                            static function (array $value) {
                                 foreach ($value as $item) {
                                     if (false === is_string($item)) {
                                         throw InvalidArgumentExceptionFactory::createForExpectedConfigurationArrayOfStringValue($item);
@@ -105,7 +105,7 @@ final class Configuration implements ConfigurationInterface
 
     private function createStringValidatorClosure(): Closure
     {
-        return function ($value) {
+        return static function ($value) {
             if (is_string($value)) {
                 return $value;
             }
@@ -116,7 +116,7 @@ final class Configuration implements ConfigurationInterface
 
     private function createPositiveIntegerValidatorClosure(): Closure
     {
-        return function ($value) {
+        return static function ($value) {
             if (is_int($value) && 0 < $value) {
                 return $value;
             }

@@ -81,8 +81,10 @@ class StringParameterResolverTest extends TestCase
         static::assertFalse($resolver->canResolve($parameter->withValue(.75)));
         static::assertFalse($resolver->canResolve($parameter->withValue([])));
         static::assertFalse($resolver->canResolve($parameter->withValue(new stdClass())));
-        static::assertFalse($resolver->canResolve($parameter->withValue(function (): void {
-        })));
+        static::assertFalse($resolver->canResolve($parameter->withValue(
+            static function (): void {
+            }
+        )));
     }
 
     public function testCanResolveStaticStringsWithoutDecoratedResolver(): void
@@ -199,7 +201,7 @@ class StringParameterResolverTest extends TestCase
                 new Parameter('bar', 'unresolved(bar)'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                (function () {
+                (static function () {
                     $context = new ResolvingContext('foo');
                     $context->add('bar');
 

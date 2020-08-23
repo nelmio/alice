@@ -54,7 +54,6 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         $this->instantiator = $instantiator;
         $this->valueResolver = $valueResolver;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
@@ -73,7 +72,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context
     ): ResolvedFixtureSet {
-        list($fixture, $fixtureSet) = $this->resolveFixtureConstructor($fixture, $fixtureSet, $context);
+        [$fixture, $fixtureSet] = $this->resolveFixtureConstructor($fixture, $fixtureSet, $context);
 
         return $this->instantiator->instantiate($fixture, $fixtureSet, $context);
     }
@@ -97,7 +96,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
         }
 
-        list($resolvedArguments, $set) = $this->resolveArguments(
+        [$resolvedArguments, $set] = $this->resolveArguments(
             $constructor->getArguments(),
             $this->valueResolver,
             $fixture,
@@ -139,7 +138,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
                     throw UnresolvableValueDuringGenerationExceptionFactory::createFromResolutionThrowable($throwable);
                 }
 
-                list($fixtureSet, $value) = [$result->getSet(), $result->getValue()];
+                [$fixtureSet, $value] = [$result->getSet(), $result->getValue()];
 
                 $arguments[$index] = $value;
 

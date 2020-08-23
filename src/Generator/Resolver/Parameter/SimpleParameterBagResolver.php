@@ -36,13 +36,12 @@ final class SimpleParameterBagResolver implements ParameterBagResolverInterface
     {
         $this->resolver = $decoratedResolver;
     }
-
     
     public function resolve(
         ParameterBag $unresolvedParameters,
         ParameterBag $injectedParameters = null
     ): ParameterBag {
-        $resolvedParameters = (null === $injectedParameters) ? new ParameterBag() : $injectedParameters;
+        $resolvedParameters = $injectedParameters ?? new ParameterBag();
         foreach ($unresolvedParameters as $key => $value) {
             if ($resolvedParameters->has($key)) {
                 continue;

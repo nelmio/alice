@@ -31,7 +31,7 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
     /**
      * @var ChainableTokenParserInterface[]
      */
-    private $parsers = [];
+    private $parsers;
 
     /**
      * @param ChainableTokenParserInterface[] $parsers
@@ -39,12 +39,11 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
     public function __construct(array $parsers)
     {
         $this->parsers = (
-            function (ChainableTokenParserInterface ...$parsers) {
+            static function (ChainableTokenParserInterface ...$parsers) {
                 return $parsers;
             }
         )(...$parsers);
     }
-
     
     public function withParser(ParserInterface $parser): self
     {
@@ -58,7 +57,6 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
 
         return new self($parsers);
     }
-
     
     public function parse(Token $token)
     {

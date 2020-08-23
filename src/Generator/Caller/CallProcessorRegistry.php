@@ -32,7 +32,7 @@ final class CallProcessorRegistry implements CallProcessorInterface
 
     public function __construct(array $processors)
     {
-        $processors = (function (ChainableCallProcessorInterface ...$processors) {
+        $processors = (static function (ChainableCallProcessorInterface ...$processors) {
             return $processors;
         })(...$processors);
 

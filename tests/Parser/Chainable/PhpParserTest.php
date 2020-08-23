@@ -33,7 +33,6 @@ class PhpParserTest extends TestCase
      * @var PhpParser
      */
     private $parser;
-
     
     public static function setUpBeforeClass(): void
     {
@@ -41,7 +40,6 @@ class PhpParserTest extends TestCase
 
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/php';
     }
-
     
     public static function tearDownAfterClass(): void
     {
@@ -49,7 +47,6 @@ class PhpParserTest extends TestCase
 
         parent::tearDownAfterClass();
     }
-
     
     protected function setUp(): void
     {
@@ -72,7 +69,7 @@ class PhpParserTest extends TestCase
     public function testCanParsePhpFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
-        $expected = (in_array(get_class($this->parser), $expectedParsers));
+        $expected = (in_array(get_class($this->parser), $expectedParsers, true));
 
         static::assertEquals($expected, $actual);
     }

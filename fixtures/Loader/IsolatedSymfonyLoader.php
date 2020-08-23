@@ -28,18 +28,17 @@ class IsolatedSymfonyLoader implements FileLoaderInterface, DataLoaderInterface
     {
         return KernelIsolatedServiceCall::call(
             'nelmio_alice.data_loader',
-            function (DataLoaderInterface $loader) use ($data, $parameters, $objects) {
+            static function (DataLoaderInterface $loader) use ($data, $parameters, $objects) {
                 return $loader->loadData($data, $parameters, $objects);
             }
         );
     }
-
     
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
         return KernelIsolatedServiceCall::call(
             'nelmio_alice.file_loader',
-            function (FileLoaderInterface $loader) use ($file, $parameters, $objects) {
+            static function (FileLoaderInterface $loader) use ($file, $parameters, $objects) {
                 return $loader->loadFile($file, $parameters, $objects);
             }
         );

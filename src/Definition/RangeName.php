@@ -38,7 +38,7 @@ final class RangeName
     public function __construct(string $name, int $from, int $to, int $step = 1)
     {
         if ($from > $to) {
-            list($to, $from) = [$from, $to];
+            [$to, $from] = [$from, $to];
         }
 
         $this->name = $name;

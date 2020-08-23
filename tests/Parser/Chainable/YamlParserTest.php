@@ -41,7 +41,6 @@ class YamlParserTest extends TestCase
      * @var YamlParser
      */
     private $parser;
-
     
     public static function setUpBeforeClass(): void
     {
@@ -49,7 +48,6 @@ class YamlParserTest extends TestCase
 
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/yaml';
     }
-
     
     public static function tearDownAfterClass(): void
     {
@@ -57,7 +55,6 @@ class YamlParserTest extends TestCase
 
         parent::tearDownAfterClass();
     }
-
     
     protected function setUp(): void
     {
@@ -95,7 +92,7 @@ class YamlParserTest extends TestCase
     public function testCanParseYamlFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
-        $expected = (in_array(get_class($this->parser), $expectedParsers));
+        $expected = (in_array(get_class($this->parser), $expectedParsers, true));
 
         static::assertEquals($expected, $actual);
     }
@@ -264,7 +261,7 @@ EOF;
 
             static::fail('Expected exception to be thrown.');
         } catch (UnparsableFileException $exception) {
-            $this->assertMatchesRegularExpression('/^The file ".+\/basic\.yml" does not contain valid YAML\.$/', $exception->getMessage());
+            static::assertMatchesRegularExpression('/^The file ".+\/basic\.yml" does not contain valid YAML\.$/', $exception->getMessage());
             static::assertEquals(0, $exception->getCode());
             static::assertNotNull($exception->getPrevious());
         }
@@ -285,7 +282,7 @@ EOF;
 
             static::fail('Expected exception to be thrown.');
         } catch (UnparsableFileException $exception) {
-            $this->assertMatchesRegularExpression('/^Could not parse the file ".+\/basic\.yml"\.$/', $exception->getMessage());
+            static::assertMatchesRegularExpression('/^Could not parse the file ".+\/basic\.yml"\.$/', $exception->getMessage());
             static::assertEquals(0, $exception->getCode());
             static::assertNotNull($exception->getPrevious());
         }

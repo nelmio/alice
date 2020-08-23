@@ -18,6 +18,7 @@ use InvalidArgumentException;
 use LogicException;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity as FixtureEntity;
+use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\FilesLoaderInterface;
@@ -57,7 +58,6 @@ class LoaderIntegrationTest extends TestCase
      * @var FilesLoaderInterface|FileLoaderInterface|DataLoaderInterface
      */
     protected $nonIsolatedLoader;
-
     
     protected function setUp(): void
     {
@@ -522,7 +522,7 @@ class LoaderIntegrationTest extends TestCase
 
         $user = $objects['user'];
         static::assertInstanceOf(stdClass::class, $user);
-        $this->assertMatchesRegularExpression('/^[\w\']+ [\w\']+$/i', $user->username);
+        static::assertMatchesRegularExpression('/^[\w\']+ [\w\']+$/i', $user->username);
     }
 
     public function testLoadFakerFunctionWithData(): void
@@ -566,7 +566,7 @@ class LoaderIntegrationTest extends TestCase
 
         $user = $objects['user'];
         static::assertInstanceOf(stdClass::class, $user);
-        $this->assertMatchesRegularExpression('/^\d{3} \d{3} \d{3}$/', $user->siren);
+        static::assertMatchesRegularExpression('/^\d{3} \d{3} \d{3}$/', $user->siren);
     }
 
     public function testLoadFakerFunctionWithPhpArguments(): void
@@ -827,13 +827,13 @@ class LoaderIntegrationTest extends TestCase
         $expected = new ObjectSet(
             new ParameterBag(),
             new ObjectBag([
-                'dummy' => new \Nelmio\Alice\Entity\DummyWithConstructorAndCallable(null),
+                'dummy' => new DummyWithConstructorAndCallable(null),
                 'foo-0' => new FixtureEntity\DummyWithConstructorParam(null)
             ])
         );
 
         $actual = $this->loader->loadData([
-            \Nelmio\Alice\Entity\DummyWithConstructorAndCallable::class => [
+            DummyWithConstructorAndCallable::class => [
                 'dummy_template (template)' => [
                     '__calls' => [
                         [
@@ -1027,7 +1027,7 @@ class LoaderIntegrationTest extends TestCase
             $previous = $previous->getPrevious();
 
             static::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
-            $this->assertMatchesRegularExpression(
+            static::assertMatchesRegularExpression(
                 '/^Could not generate a unique value after 150 attempts for ".*"\.$/',
                 $previous->getMessage()
             );
@@ -1507,7 +1507,7 @@ class LoaderIntegrationTest extends TestCase
         ]);
 
         static::assertCount(2, $set->getObjects());
-        list('dummy1' => $dummy1, 'dummy2' => $dummy2) = $set->getObjects();
+        ['dummy1' => $dummy1, 'dummy2' => $dummy2] = $set->getObjects();
 
         static::assertNotSame($dummy1, $dummy2);
         static::assertSame($dummy2, $dummy1->sibling);
@@ -2139,7 +2139,7 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             [
-                'dummy' => (function (FixtureEntity\Hydrator\CamelCaseDummy $dummy) {
+                'dummy' => (static function (FixtureEntity\Hydrator\CamelCaseDummy $dummy) {
                     $dummy->publicProperty = 'bob';
 
                     return $dummy;
@@ -2156,7 +2156,7 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             [
-                'dummy' => (function (FixtureEntity\Hydrator\SnakeCaseDummy $dummy) {
+                'dummy' => (static function (FixtureEntity\Hydrator\SnakeCaseDummy $dummy) {
                     $dummy->public_property = 'bob';
 
                     return $dummy;
@@ -2173,7 +2173,7 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             [
-                'dummy' => (function (FixtureEntity\Hydrator\PascalCaseDummy $dummy) {
+                'dummy' => (static function (FixtureEntity\Hydrator\PascalCaseDummy $dummy) {
                     $dummy->PublicProperty = 'bob';
 
                     return $dummy;
@@ -2190,7 +2190,7 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             [
-                'dummy' => (function (FixtureEntity\Hydrator\CamelCaseDummy $dummy) {
+                'dummy' => (static function (FixtureEntity\Hydrator\CamelCaseDummy $dummy) {
                     $dummy->setSetterProperty('bob');
 
                     return $dummy;
@@ -2219,7 +2219,7 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             [
-                'dummy' => (function (FixtureEntity\Hydrator\MagicCallDummy $dummy) {
+                'dummy' => (static function (FixtureEntity\Hydrator\MagicCallDummy $dummy) {
                     $dummy->setMagicProperty('bob');
 
                     return $dummy;
@@ -2236,7 +2236,7 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             [
-                'dummy' => (function (FixtureEntity\Hydrator\MagicCallDummy $dummy) {
+                'dummy' => (static function (FixtureEntity\Hydrator\MagicCallDummy $dummy) {
                     $dummy->setMagicProperty('bob');
 
                     return $dummy;
@@ -2253,7 +2253,7 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             [
-                'dummy' => (function (FixtureEntity\Hydrator\MagicCallDummy $dummy) {
+                'dummy' => (static function (FixtureEntity\Hydrator\MagicCallDummy $dummy) {
                     $dummy->setMagicProperty('bob');
 
                     return $dummy;
@@ -2285,7 +2285,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'another_dummy' => $yetAnotherDummy1 = (function (FixtureEntity\OnceTimerDummy $anotherDummy1) {
+                    'another_dummy' => $yetAnotherDummy1 = (static function (FixtureEntity\OnceTimerDummy $anotherDummy1) {
                         $anotherDummy1->call(true);
                         $anotherDummy1->setHydrate(true);
 
@@ -2927,7 +2927,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function () {
+                    'dummy' => (static function () {
                         $dummy = new stdClass();
                         $dummy->itself = $dummy;
 
@@ -2948,7 +2948,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function () {
+                    'dummy' => (static function () {
                         $dummy = new stdClass();
                         $dummy->itself = $dummy;
 
@@ -2970,7 +2970,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function () {
+                    'dummy' => (static function () {
                         $dummy = new stdClass();
                         $dummy->foo = 'bar';
                         $dummy->itself = $dummy;
@@ -3025,13 +3025,13 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy' => (function (FixtureEntity\DummyWithGetter $dummy) {
+                    'dummy' => (static function (FixtureEntity\DummyWithGetter $dummy) {
                         $dummy->setFoo('bar');
                         $dummy->fooVal = 'bar';
 
                         return $dummy;
                     })(new FixtureEntity\DummyWithGetter()),
-                    'another_dummy' => (function (FixtureEntity\DummyWithGetter $dummy) {
+                    'another_dummy' => (static function (FixtureEntity\DummyWithGetter $dummy) {
                         $dummy->setFoo('bar');
                         $dummy->fooVal = 'rab';
 
@@ -3858,7 +3858,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 stdClass::class => [
                     'dummy' => [
-                        'foo' => (function () {
+                        'foo' => (static function () {
                             return StdClassFactory::create(['ping' => 'pong']);
                         })(),
                     ],
@@ -3916,7 +3916,7 @@ class LoaderIntegrationTest extends TestCase
         ];
 
         // https://github.com/nelmio/alice/issues/752
-        yield 'calls and factory order' => (function () {
+        yield 'calls and factory order' => (static function () {
             return [
                 [
                     FixtureEntity\InitializationOrder\Address::class => [
@@ -3938,7 +3938,7 @@ class LoaderIntegrationTest extends TestCase
                 [
                     'parameters' => [],
                     'objects' => [
-                        'address' => $address = (function () {
+                        'address' => $address = (static function () {
                             $address = new FixtureEntity\InitializationOrder\Address();
 
                             $address->setCountry('France');
@@ -3953,7 +3953,7 @@ class LoaderIntegrationTest extends TestCase
         })();
 
         // https://github.com/nelmio/alice/issues/851
-        yield 'construct with multiple references to objects with throwable setter' => (function () {
+        yield 'construct with multiple references to objects with throwable setter' => (static function () {
             return [
                 [
                     FixtureEntity\OnceTimerDummy::class => [
@@ -3982,20 +3982,20 @@ class LoaderIntegrationTest extends TestCase
                 [
                     'parameters' => [],
                     'objects' => [
-                        'yetAnotherDummy' => $yetAnotherDummy = (function (FixtureEntity\OnceTimerDummy $dummy) {
+                        'yetAnotherDummy' => $yetAnotherDummy = (static function (FixtureEntity\OnceTimerDummy $dummy) {
                             $dummy->setHydrate(true);
                             $dummy->call(true);
 
                             return $dummy;
                         })(new FixtureEntity\OnceTimerDummy()),
-                        'anotherDummy' => $anotherDummy = (function (FixtureEntity\OnceTimerDummy $dummy, $relatedDummy) {
+                        'anotherDummy' => $anotherDummy = (static function (FixtureEntity\OnceTimerDummy $dummy, $relatedDummy) {
                             $dummy->setRelatedDummy($relatedDummy);
                             $dummy->setHydrate(true);
                             $dummy->call(true);
 
                             return $dummy;
                         })(new FixtureEntity\OnceTimerDummy(), $yetAnotherDummy),
-                        'dummy' => $dummy = (function (FixtureEntity\OnceTimerDummy $dummy, $relatedDummy) {
+                        'dummy' => $dummy = (static function (FixtureEntity\OnceTimerDummy $dummy, $relatedDummy) {
                             $dummy->setRelatedDummy($relatedDummy);
                             $dummy->setHydrate(true);
                             $dummy->call(true);
@@ -4008,7 +4008,7 @@ class LoaderIntegrationTest extends TestCase
         })();
 
         // https://github.com/nelmio/alice/issues/770
-        yield 'typed parameters' => (function () {
+        yield 'typed parameters' => (static function () {
             return [
                 [
                     'parameters' => [
@@ -4038,7 +4038,7 @@ class LoaderIntegrationTest extends TestCase
         })();
 
         // https://github.com/nelmio/alice/issues/894
-        yield 'complex circular reference case' => (function () {
+        yield 'complex circular reference case' => (static function () {
             for ($i = 1; $i < 13; $i++) {
                 $var = 's'.$i;
                 $$var = new stdClass();

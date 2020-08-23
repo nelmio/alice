@@ -33,7 +33,6 @@ class JsonParserTest extends TestCase
      * @var JsonParser
      */
     private $parser;
-
     
     public static function setUpBeforeClass(): void
     {
@@ -41,7 +40,6 @@ class JsonParserTest extends TestCase
 
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/json';
     }
-
     
     public static function tearDownAfterClass(): void
     {
@@ -49,7 +47,6 @@ class JsonParserTest extends TestCase
 
         parent::tearDownAfterClass();
     }
-
     
     protected function setUp(): void
     {
@@ -72,7 +69,7 @@ class JsonParserTest extends TestCase
     public function testCanParseJsonFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
-        $expected = (in_array(get_class($this->parser), $expectedParsers));
+        $expected = (in_array(get_class($this->parser), $expectedParsers, true));
 
         static::assertEquals($expected, $actual);
     }

@@ -243,24 +243,21 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
     public function __construct(FakerGenerator $fakerGenerator = null)
     {
-        $this->fakerGenerator = (null === $fakerGenerator) ? $this->getFakerGenerator() : $fakerGenerator;
+        $this->fakerGenerator = $fakerGenerator ?? $this->getFakerGenerator();
         $this->dataLoader = $this->getDataLoader();
         $this->fileLoader = $this->getFileLoader();
         $this->filesLoader = $this->getFilesLoader();
     }
-
     
     public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->filesLoader->loadFiles($files, $parameters, $objects);
     }
-
     
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->fileLoader->loadFile($file, $parameters, $objects);
     }
-
     
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
@@ -659,7 +656,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             return $this->cache[$method];
         }
 
-        if (false === preg_match('/^get.*/', $method)) {
+        if (0 !== strpos($method, 'get')) {
             throw BadMethodCallExceptionFactory::createForUnknownMethod($method);
         }
 

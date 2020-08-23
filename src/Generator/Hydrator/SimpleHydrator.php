@@ -45,13 +45,11 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
         $this->hydrator = $hydrator;
         $this->resolver = $resolver;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->hydrator, $resolver);
     }
-
     
     public function hydrate(
         ObjectInterface $object,
@@ -78,7 +76,7 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
                     throw UnresolvableValueDuringGenerationExceptionFactory::createFromResolutionThrowable($throwable);
                 }
 
-                list($propertyValue, $fixtureSet) = [$result->getValue(), $result->getSet()];
+                [$propertyValue, $fixtureSet] = [$result->getValue(), $result->getSet()];
                 $property = $property->withValue($propertyValue);
             }
 

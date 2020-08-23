@@ -25,7 +25,6 @@ final class JsonParser implements ChainableParserInterface
     use IsAServiceTrait;
 
     private const REGEX = '/.{1,}\.json$/i';
-
     
     public function canParse(string $file): bool
     {
@@ -43,7 +42,7 @@ final class JsonParser implements ChainableParserInterface
      */
     public function parse(string $file): array
     {
-        if (false === file_exists($file)) {
+        if (false === is_file($file)) {
             throw InvalidArgumentExceptionFactory::createForFileCouldNotBeFound($file);
         }
 
