@@ -197,7 +197,7 @@ For more information, refer to [the documentation](#table-of-contents).
 
 ## Contribute
 
-Check the [contribution guide](CONTRIBUTING.md).
+84
 
 
 ## Backward Compatibility Promise (BCP)
