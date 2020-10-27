@@ -27,6 +27,10 @@ class NamedArgumentsResolver
             return $arguments;
         }
 
+        if (0 === count($method->getParameters())) {
+            return $arguments;
+        }
+
         $sortedArguments = [];
         $buffer = [];
 
