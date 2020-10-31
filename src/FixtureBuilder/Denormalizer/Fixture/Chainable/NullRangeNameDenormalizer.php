@@ -35,12 +35,12 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
     {
         $this->token = uniqid(__CLASS__, true);
     }
-    
+
     public function canDenormalize(string $name, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $name, $matches);
     }
-    
+
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,
@@ -77,7 +77,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
             $ids[
                 str_replace(
                     $this->token,
-                    $currentIndex,
+                    (string) $currentIndex,
                     $range->getName()
                 )
             ] = $currentIndex;
