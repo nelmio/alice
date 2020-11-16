@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](LICENSE)
 
 
-Relying on [fzaninotto/Faker](https://github.com/fzaninotto/Faker), Alice
+Relying on [FakerPHP/Faker](https://github.com/FakerPHP/Faker), Alice
 allows you to create a ton of fixtures/fake data for use while developing
 or testing your project. It gives you a few essential tools to make it
 very easy to generate complex data with constraints in a readable and easy
