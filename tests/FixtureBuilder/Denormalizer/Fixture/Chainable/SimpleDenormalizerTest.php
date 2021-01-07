@@ -39,7 +39,6 @@ use ReflectionClass;
 class SimpleDenormalizerTest extends ChainableDenormalizerTest
 {
     use ProphecyTrait;
-
     
     protected function setUp(): void
     {

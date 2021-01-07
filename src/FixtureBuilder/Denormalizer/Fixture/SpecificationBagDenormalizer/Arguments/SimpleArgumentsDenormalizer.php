@@ -32,7 +32,6 @@ final class SimpleArgumentsDenormalizer implements ArgumentsDenormalizerInterfac
     {
         $this->valueDenormalizer = $valueDenormalizer;
     }
-
     
     public function denormalize(
         FixtureInterface $scope,

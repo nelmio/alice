@@ -49,7 +49,6 @@ class UniqueValueResolverTest extends TestCase
      * @var ReflectionProperty
      */
     private $poolRefl;
-
     
     protected function setUp(): void
     {

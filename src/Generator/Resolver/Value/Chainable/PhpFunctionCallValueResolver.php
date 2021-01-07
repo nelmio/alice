@@ -46,7 +46,6 @@ final class PhpFunctionCallValueResolver implements ChainableValueResolverInterf
         $this->functionBlacklist = array_flip($functionBlacklist);
         $this->resolver = $decoratedResolver;
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {

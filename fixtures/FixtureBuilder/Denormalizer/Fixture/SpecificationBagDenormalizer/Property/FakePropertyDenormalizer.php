@@ -22,7 +22,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakePropertyDenormalizer implements PropertyDenormalizerInterface
 {
     use NotCallableTrait;
-
     
     public function denormalize(FixtureInterface $scope, string $name, $value, FlagBag $flags): Property
     {

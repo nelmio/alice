@@ -48,13 +48,11 @@ final class IdentityTokenParser implements ChainableTokenParserInterface, Parser
         $this->decoratedTokenParser = $decoratedTokenParser;
         $this->tokenizer = new FunctionTokenizer();
     }
-
     
     public function withParser(ParserInterface $parser): self
     {
         return new static($this->decoratedTokenParser, $parser);
     }
-
     
     public function canParse(Token $token): bool
     {

@@ -22,7 +22,6 @@ use Nelmio\Alice\ObjectInterface;
 class FakeHydrator implements HydratorInterface
 {
     use NotCallableTrait;
-
     
     public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
     {

@@ -45,13 +45,11 @@ final class FixtureMatchReferenceValue implements ValueInterface
     {
         return 1 === preg_match($this->pattern, $value);
     }
-
     
     public function getValue(): string
     {
         return $this->pattern;
     }
-
     
     public function __toString(): string
     {

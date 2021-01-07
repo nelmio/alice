@@ -49,7 +49,6 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
      * @var PropertyAccessorInterface
      */
     private $propertyAccessor;
-
     
     protected function setUp(): void
     {

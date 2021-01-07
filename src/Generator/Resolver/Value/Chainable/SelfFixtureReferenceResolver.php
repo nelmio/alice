@@ -40,7 +40,6 @@ final class SelfFixtureReferenceResolver implements ChainableValueResolverInterf
     {
         $this->decoratedResolver = $decoratedResolver;
     }
-
     
     public function withObjectGenerator(ObjectGeneratorInterface $generator): self
     {
@@ -51,7 +50,6 @@ final class SelfFixtureReferenceResolver implements ChainableValueResolverInterf
 
         return new self($decoratedResolver);
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
@@ -62,7 +60,6 @@ final class SelfFixtureReferenceResolver implements ChainableValueResolverInterf
 
         return new self($decoratedResolver);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {

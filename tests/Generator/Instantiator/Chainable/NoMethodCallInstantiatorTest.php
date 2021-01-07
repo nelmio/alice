@@ -37,7 +37,6 @@ class NoMethodCallInstantiatorTest extends TestCase
      * @var NoMethodCallInstantiator
      */
     private $instantiator;
-
     
     protected function setUp(): void
     {

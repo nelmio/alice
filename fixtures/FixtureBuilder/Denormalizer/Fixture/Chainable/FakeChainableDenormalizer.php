@@ -21,13 +21,11 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeChainableDenormalizer implements ChainableFixtureDenormalizerInterface
 {
     use NotCallableTrait;
-
     
     public function canDenormalize(string $reference): bool
     {
         $this->__call(__FUNCTION__, func_get_args());
     }
-
     
     public function denormalize(
         FixtureBag $builtFixtures,

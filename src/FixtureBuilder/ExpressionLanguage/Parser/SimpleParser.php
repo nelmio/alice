@@ -49,7 +49,6 @@ final class SimpleParser implements ParserInterface
             : $tokenParser
         ;
     }
-
     
     public function parse(string $value)
     {

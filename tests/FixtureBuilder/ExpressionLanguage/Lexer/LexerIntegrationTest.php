@@ -32,7 +32,6 @@ class LexerIntegrationTest extends TestCase
      * @var LexerInterface
      */
     protected $lexer;
-
     
     protected function setUp(): void
     {

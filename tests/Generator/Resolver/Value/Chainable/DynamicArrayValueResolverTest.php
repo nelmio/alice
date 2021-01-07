@@ -42,7 +42,6 @@ class DynamicArrayValueResolverTest extends TestCase
      * @var ReflectionProperty
      */
     private $resolverRefl;
-
     
     protected function setUp(): void
     {

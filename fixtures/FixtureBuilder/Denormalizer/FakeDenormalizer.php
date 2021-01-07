@@ -20,7 +20,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeDenormalizer implements DenormalizerInterface
 {
     use NotCallableTrait;
-
     
     public function denormalize(array $data): BareFixtureSet
     {

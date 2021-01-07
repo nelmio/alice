@@ -27,7 +27,6 @@ class DefaultFileLocatorTest extends TestCase
      * @var DefaultFileLocator
      */
     private $locator;
-
     
     protected function setUp(): void
     {

@@ -41,7 +41,6 @@ class TokenParserRegistryTest extends TestCase
      * @var ReflectionProperty
      */
     private $parsersRefl;
-
     
     protected function setUp(): void
     {

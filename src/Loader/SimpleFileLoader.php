@@ -38,7 +38,6 @@ final class SimpleFileLoader implements FileLoaderInterface
         $this->parser = $parser;
         $this->dataLoader = $dataLoader;
     }
-
     
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {

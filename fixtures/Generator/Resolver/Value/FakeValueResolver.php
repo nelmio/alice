@@ -24,7 +24,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeValueResolver implements ValueResolverInterface
 {
     use NotCallableTrait;
-
     
     public function resolve(
         ValueInterface $value,

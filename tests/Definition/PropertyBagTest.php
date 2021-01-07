@@ -26,7 +26,6 @@ class PropertyBagTest extends TestCase
      * @var ReflectionProperty
      */
     private $propRefl;
-
     
     protected function setUp(): void
     {

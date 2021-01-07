@@ -38,31 +38,26 @@ final class TemplatingFixture implements FixtureWithFlagsInterface
         $this->fixture = clone $fixture;
         $this->templating = new Templating($fixture);
     }
-
     
     public function getId(): string
     {
         return $this->fixture->getId();
     }
-
     
     public function getClassName(): string
     {
         return $this->fixture->getClassName();
     }
-
     
     public function getSpecs(): SpecificationBag
     {
         return $this->fixture->getSpecs();
     }
-
     
     public function getValueForCurrent()
     {
         return $this->fixture->getValueForCurrent();
     }
-
     
     public function withSpecs(SpecificationBag $specs): self
     {
@@ -89,7 +84,6 @@ final class TemplatingFixture implements FixtureWithFlagsInterface
     {
         return $this->templating->getExtendedFixtures();
     }
-
     
     public function getFlags(): FlagBag
     {

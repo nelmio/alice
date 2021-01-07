@@ -21,13 +21,11 @@ use Nelmio\Alice\IsAServiceTrait;
 final class TemplateFlagParser implements ChainableFlagParserInterface
 {
     use IsAServiceTrait;
-
     
     public function canParse(string $element): bool
     {
         return 'template' === $element;
     }
-
     
     public function parse(string $element): FlagBag
     {

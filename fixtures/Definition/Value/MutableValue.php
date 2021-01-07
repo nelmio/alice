@@ -23,7 +23,6 @@ class MutableValue implements ValueInterface
     {
         $this->value = $value;
     }
-
     
     public function getValue()
     {
@@ -34,7 +33,6 @@ class MutableValue implements ValueInterface
     {
         $this->value = $value;
     }
-
     
     public function __toString(): string
     {

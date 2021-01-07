@@ -52,25 +52,21 @@ final class SimpleFixture implements FixtureInterface
         $this->specs = $specs;
         $this->valueForCurrent = $valueForCurrent;
     }
-
     
     public function getId(): string
     {
         return $this->id;
     }
-
     
     public function getClassName(): string
     {
         return $this->className;
     }
-
     
     public function getSpecs(): SpecificationBag
     {
         return $this->specs;
     }
-
     
     public function getValueForCurrent()
     {
@@ -80,7 +76,6 @@ final class SimpleFixture implements FixtureInterface
 
         return $this->valueForCurrent;
     }
-
     
     public function withSpecs(SpecificationBag $specs): self
     {

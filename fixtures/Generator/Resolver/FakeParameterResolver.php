@@ -20,7 +20,6 @@ use Nelmio\Alice\ParameterBag;
 class FakeParameterResolver implements ParameterResolverInterface
 {
     use NotCallableTrait;
-
     
     public function resolve(
         Parameter $parameter,

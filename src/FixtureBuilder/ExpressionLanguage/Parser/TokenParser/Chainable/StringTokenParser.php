@@ -34,13 +34,11 @@ final class StringTokenParser implements ChainableTokenParserInterface
     {
         $this->argumentEscaper = $argumentEscaper;
     }
-
     
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::STRING_TYPE;
     }
-
     
     public function parse(Token $token)
     {

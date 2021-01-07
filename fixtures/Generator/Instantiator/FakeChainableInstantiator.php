@@ -21,13 +21,11 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeChainableInstantiator implements ChainableInstantiatorInterface
 {
     use NotCallableTrait;
-
     
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         $this->__call(__METHOD__, func_get_args());
     }
-
     
     public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
     {

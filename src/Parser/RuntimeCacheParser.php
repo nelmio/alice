@@ -55,7 +55,6 @@ final class RuntimeCacheParser implements ParserInterface
         $this->fileLocator = $fileLocator;
         $this->includeProcessor = $includeProcessor;
     }
-
     
     public function parse(string $file): array
     {

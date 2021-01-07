@@ -25,7 +25,6 @@ use RuntimeException;
 class ElementFlagParserTest extends FlagParserTestCase
 {
     use ProphecyTrait;
-
     
     protected function setUp(): void
     {

@@ -33,7 +33,6 @@ final class RemoveConflictingParametersParameterBagResolver implements Parameter
     {
         $this->resolver = $decoratedResolver;
     }
-
     
     public function resolve(
         ParameterBag $unresolvedParameters,

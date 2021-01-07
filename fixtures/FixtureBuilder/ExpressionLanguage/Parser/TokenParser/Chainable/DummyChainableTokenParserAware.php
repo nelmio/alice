@@ -24,13 +24,11 @@ class DummyChainableTokenParserAware implements ChainableTokenParserInterface, P
      * @var ParserInterface|null
      */
     public $parser;
-
     
     public function canParse(Token $token): bool
     {
         return false;
     }
-
     
     public function withParser(ParserInterface $parser)
     {
@@ -38,7 +36,6 @@ class DummyChainableTokenParserAware implements ChainableTokenParserInterface, P
 
         return $this;
     }
-
     
     public function parse(Token $token)
     {

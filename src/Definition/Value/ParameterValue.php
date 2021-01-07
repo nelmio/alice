@@ -38,13 +38,11 @@ final class ParameterValue implements ValueInterface
 
         $this->parameterKey = $parameterKey;
     }
-
     
     public function getValue()
     {
         return deep_clone($this->parameterKey);
     }
-
     
     public function __toString(): string
     {

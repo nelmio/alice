@@ -20,7 +20,6 @@ use Nelmio\Alice\ParameterBag;
 class FakeParameterBagDenormalizer implements ParameterBagDenormalizerInterface
 {
     use NotCallableTrait;
-
     
     public function denormalize(array $data): ParameterBag
     {

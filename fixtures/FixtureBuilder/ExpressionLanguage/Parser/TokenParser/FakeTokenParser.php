@@ -20,7 +20,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeTokenParser implements TokenParserInterface
 {
     use NotCallableTrait;
-
     
     public function parse(Token $token): void
     {

@@ -37,7 +37,6 @@ final class NestedValue implements ValueInterface
     {
         return $this->values;
     }
-
     
     public function __toString(): string
     {

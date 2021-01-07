@@ -32,7 +32,6 @@ class FunctionLexerTest extends TestCase
      * @var FunctionLexer
      */
     private $lexer;
-
     
     protected function setUp(): void
     {

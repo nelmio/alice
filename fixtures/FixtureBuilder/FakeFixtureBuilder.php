@@ -20,7 +20,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeFixtureBuilder implements FixtureBuilderInterface
 {
     use NotCallableTrait;
-
     
     public function build(array $data, array $parameters = [], array $objects = []): FixtureSet
     {

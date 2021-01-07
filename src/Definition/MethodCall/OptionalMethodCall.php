@@ -36,7 +36,6 @@ final class OptionalMethodCall implements MethodCallInterface
         $this->methodCall = $methodCall;
         $this->flag = $flag;
     }
-
     
     public function withArguments(array $arguments = null): self
     {
@@ -45,19 +44,16 @@ final class OptionalMethodCall implements MethodCallInterface
 
         return $clone;
     }
-
     
     public function getCaller()
     {
         return $this->methodCall->getCaller();
     }
-
     
     public function getMethod(): string
     {
         return $this->methodCall->getMethod();
     }
-
     
     public function getArguments()
     {
@@ -76,7 +72,6 @@ final class OptionalMethodCall implements MethodCallInterface
     {
         return $this->methodCall;
     }
-
     
     public function __toString(): string
     {

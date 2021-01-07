@@ -27,7 +27,6 @@ use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 final class ValueForCurrentValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
-
     
     public function canResolve(ValueInterface $value): bool
     {
