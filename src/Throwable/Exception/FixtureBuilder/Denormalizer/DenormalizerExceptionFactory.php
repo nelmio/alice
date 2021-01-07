@@ -30,7 +30,7 @@ final class DenormalizerExceptionFactory
         return new UnexpectedValueException('Could not denormalize the given factory.');
     }
 
-    public static function createForUnparsableValue(string $value, int $code = 0, Throwable $previous): UnexpectedValueException
+    public static function createForUnparsableValue(string $value, int $code = 0, Throwable $previous = null): UnexpectedValueException
     {
         return new UnexpectedValueException(
             sprintf(
