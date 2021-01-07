@@ -1,9 +1,10 @@
 name: CI
 
 on:
-  pull_request:
-  push:
-      branches: [ master, 2.x, 1.x ]
+    pull_request:
+        branches: [ master ]
+    push:
+        branches: [ master ]
 
 jobs:
     run:
@@ -50,3 +51,6 @@ jobs:
 
             - name: Install dependencies
               run: composer install
+
+            - name: Run PHPUnit tests
+              run: bin/phpunit
