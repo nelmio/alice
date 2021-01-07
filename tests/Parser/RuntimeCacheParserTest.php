@@ -34,7 +34,7 @@ class RuntimeCacheParserTest extends TestCase
 
     private static $dir;
 
-    
+
     protected function setUp(): void
     {
         self::$dir = __DIR__.'/../../fixtures/Parser/files/cache';
@@ -184,16 +184,16 @@ class RuntimeCacheParserTest extends TestCase
         ];
         $expected = [
             'Nelmio\Alice\Model\User' => [
-                'user_file1' => [],
-                'user_file3' => [],
-                'user_file2' => [],
                 'user_main' => [],
+                'user_file2' => [],
+                'user_file3' => [],
+                'user_file1' => [],
             ],
         ];
         $expectedFile2 = [
             'Nelmio\Alice\Model\User' => [
-                'user_file3' => [],
                 'user_file2' => [],
+                'user_file3' => [],
             ],
         ];
 

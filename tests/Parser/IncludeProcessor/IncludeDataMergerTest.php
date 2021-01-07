@@ -25,56 +25,79 @@ class IncludeDataMergerTest extends TestCase
      */
     private $merger;
 
-    
+
     protected function setUp(): void
     {
         $this->merger = new IncludeDataMerger();
     }
 
-    public function testMergesNonArrayData(): void
+    /**
+     * @return \Generator
+     */
+    public function provideDataForTestMergesNonArrayData(): \Generator
     {
         $data = [
-            'parameters' => 'foo',
+            'parameters' => 'foo1',
         ];
         $include = [
-            'parameters' => 'bar',
+            'parameters' => 'bar1',
         ];
         $expected = [
-            'parameters' => 'foo',
+            'parameters' => 'foo1',
         ];
 
-        $actual = $this->merger->mergeInclude($data, $include);
-        static::assertSame($expected, $actual);
-
+        yield [
+            $data,
+            $include,
+            $expected
+        ];
 
         $data = [
             'parameters' => [
-                'foo',
+                'foo2',
             ],
         ];
         $include = [
-            'parameters' => 'bar',
+            'parameters' => 'bar2',
         ];
         $expected = [
             'parameters' => [
-                'foo',
+                'foo2',
             ],
         ];
 
-        $actual = $this->merger->mergeInclude($data, $include);
-        static::assertSame($expected, $actual);
-
+        yield [
+            $data,
+            $include,
+            $expected
+        ];
 
         $data = [
-            'parameters' => 'foo',
+            'parameters' => 'foo3',
         ];
         $include = [
-            'parameters' => ['bar'],
+            'parameters' => ['bar3'],
         ];
         $expected = [
-            'parameters' => 'foo',
+            'parameters' => 'foo3',
         ];
 
+        yield [
+            $data,
+            $include,
+            $expected
+        ];
+    }
+
+    /**
+     * @dataProvider provideDataForTestMergesNonArrayData
+     *
+     * @param array $data
+     * @param array $include
+     * @param array $expected
+     */
+    public function testMergesNonArrayData(array $data, array $include, array $expected): void
+    {
         $actual = $this->merger->mergeInclude($data, $include);
         static::assertSame($expected, $actual);
     }
@@ -96,8 +119,8 @@ class IncludeDataMergerTest extends TestCase
         $expected = [
             'parameters' => [
                 'foo' => 'oof',
-                'white' => 'rabbit',
                 'bar' => 'rab',
+                'white' => 'rabbit',
             ],
         ];
 
@@ -138,11 +161,11 @@ class IncludeDataMergerTest extends TestCase
         ];
         $expected = [
             'Nelmio\Alice\Model\User' => [
-                'user0' => [
-                    'fullname' => 'Bob',
-                ],
                 'user1' => [
                     'fullname' => 'Alice',
+                ],
+                'user0' => [
+                    'fullname' => 'Bob',
                 ],
             ],
             'Nelmio\Alice\Model\Group' => [
@@ -203,15 +226,15 @@ class IncludeDataMergerTest extends TestCase
         $expected = [
             'parameters' => [
                 'foo' => 'oof',
-                'white' => 'rabbit',
                 'bar' => 'rab',
+                'white' => 'rabbit',
             ],
             'Nelmio\Alice\Model\User' => [
-                'user0' => [
-                    'fullname' => 'Bob',
-                ],
                 'user1' => [
                     'fullname' => 'Alice',
+                ],
+                'user0' => [
+                    'fullname' => 'Bob',
                 ],
             ],
             'Nelmio\Alice\Model\Group' => [

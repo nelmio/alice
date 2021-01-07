@@ -28,18 +28,21 @@ final class IncludeDataMerger
      */
     public function mergeInclude(array $data, array $includeData): array
     {
-        foreach ($data as $class => $fixtures) {
+        foreach ($includeData as $class => $fixtures) {
             // $class is either a FQCN or 'parameters'
-            $includeData[$class] = (
-                array_key_exists($class, $includeData)
-                    && is_array($includeData[$class])
-                    && is_array($fixtures)
-            )
-                ? array_merge($includeData[$class], $fixtures)
-                : $fixtures
-            ;
+            if (array_key_exists($class, $data)) {
+                if (is_array($data[$class]) && is_array($fixtures)) {
+                    foreach ($fixtures as $key => $fixture) {
+                        if (!array_key_exists($key, $data[$class])) {
+                            $data[$class][$key] = $fixture;
+                        }
+                    }
+                }
+            } else {
+                $data[$class] = $fixtures;
+            }
         }
 
-        return $includeData;
+        return $data;
     }
 }
