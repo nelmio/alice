@@ -1,0 +1,45 @@
+name: Code style and static analysis
+
+on:
+    pull_request:
+    push:
+        branches: [ master, 2.x, 1.x ]
+
+jobs:
+    php-cs-fixer:
+        name: PHP-CS-Fixer
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '7.4'
+
+            - name: Install dependencies
+              run: composer install --no-progress --no-interaction --prefer-dist
+
+# run phpcs
+#            - name: Run script
+#              run: vendor/bin/phpcs
+
+    phpstan:
+        name: PHPStan
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '7.4'
+
+            - name: Install dependencies
+              run: composer install --no-progress --no-interaction --prefer-dist
+
+## run PHPStan
+#            - name: Run script
+#              run: vendor/bin/phpstan analyse
