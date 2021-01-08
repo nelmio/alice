@@ -1,0 +1,56 @@
+name: CI
+
+on:
+    pull_request:
+        branches: [ master ]
+    push:
+        branches: [ master ]
+
+jobs:
+    run:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php:
+                    - '7.3'
+                    - '7.4'
+                symfony-versions: [false]
+                include:
+                    -   description: 'Symfony 3.4'
+                        php: '7.4'
+                        symfony-versions: 3.4.*
+                    -   description: 'Symfony 4.4'
+                        php: '7.4'
+                        symfony-versions: 4.4.*
+                    -   description: 'Symfony 5.0'
+                        php: '7.4'
+                        symfony-versions: 5.0.*
+                    -   description: 'Symfony 5.2'
+                        php: '7.4'
+                        symfony-versions: 5.2.*
+
+        name: PHP ${{ matrix.php }} ${{ matrix.description }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - uses: actions/cache@v2
+              with:
+                  path: ~/.composer/cache/files
+                  key: ${{ matrix.php }}-${{ matrix.symfony-versions }}
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+
+            - name: Install dependencies
+              run: composer require "symfony/symfony:${{ matrix.symfony-versions }}" --no-update
+              if: matrix.symfony-versions
+
+            - name: Install dependencies
+              run: composer install
+
+            - name: Run PHPUnit tests
+              run: bin/phpunit
