@@ -50,13 +50,11 @@ final class MethodCallBag implements IteratorAggregate, Countable
     {
         return [] === $this->methodCalls;
     }
-
     
     public function getIterator()
     {
         return new ArrayIterator(array_values($this->methodCalls));
     }
-
     
     public function count(): int
     {

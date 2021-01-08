@@ -25,7 +25,6 @@ final class NoMethodCallInstantiator extends AbstractChainableInstantiator
     {
         return $fixture->getSpecs()->getConstructor() instanceof NoMethodCall;
     }
-
     
     protected function createInstance(FixtureInterface $fixture)
     {

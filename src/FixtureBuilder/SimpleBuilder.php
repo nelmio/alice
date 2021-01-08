@@ -32,7 +32,6 @@ final class SimpleBuilder implements FixtureBuilderInterface
     {
         $this->denormalizer = $denormalizer;
     }
-
     
     public function build(array $data, array $parameters = [], array $objects = []): FixtureSet
     {

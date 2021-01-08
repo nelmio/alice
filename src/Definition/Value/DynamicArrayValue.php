@@ -78,7 +78,6 @@ final class DynamicArrayValue implements ValueInterface
             $this->getElement(),
         ];
     }
-
     
     public function __toString(): string
     {

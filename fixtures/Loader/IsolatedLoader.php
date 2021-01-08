@@ -28,13 +28,11 @@ class IsolatedLoader implements FilesLoaderInterface, FileLoaderInterface, DataL
     {
         return (new NativeLoader())->loadData($data, $parameters, $objects);
     }
-
     
     public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
     {
         return (new NativeLoader())->loadFiles($files, $parameters, $objects);
     }
-
     
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {

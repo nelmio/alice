@@ -49,7 +49,6 @@ final class FunctionCallValue implements ValueInterface
     {
         return deep_clone($this->arguments);
     }
-
     
     public function getValue()
     {
@@ -58,7 +57,6 @@ final class FunctionCallValue implements ValueInterface
             $this->getArguments(),
         ];
     }
-
     
     public function __toString(): string
     {

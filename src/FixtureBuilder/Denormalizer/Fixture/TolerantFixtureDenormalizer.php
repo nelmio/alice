@@ -35,7 +35,6 @@ final class TolerantFixtureDenormalizer implements FixtureDenormalizerInterface
     {
         $this->denormalizer = $denormalizer;
     }
-
     
     public function denormalize(FixtureBag $builtFixtures, string $className, string $fixtureId, array $specs, FlagBag $flags): FixtureBag
     {

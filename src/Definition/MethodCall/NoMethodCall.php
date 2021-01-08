@@ -27,25 +27,21 @@ final class NoMethodCall implements MethodCallInterface
     {
         $this->throwException(__METHOD__);
     }
-
     
     public function getCaller(): void
     {
         $this->throwException(__METHOD__);
     }
-
     
     public function getMethod(): string
     {
         $this->throwException(__METHOD__);
     }
-
     
     public function getArguments(): void
     {
         $this->throwException(__METHOD__);
     }
-
     
     public function __toString(): string
     {

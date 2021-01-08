@@ -21,9 +21,11 @@ jobs:
             - name: Install dependencies
               run: composer install --no-progress --no-interaction --prefer-dist
 
-# run phpcs
-#            - name: Run script
-#              run: vendor/bin/phpcs
+            - name: Install dependencies
+              run: composer bin php-cs-fixer update
+
+            - name: Run script
+              run: vendor-bin/php-cs-fixer/bin/php-cs-fixer fix --verbose --diff --dry-run
 
     phpstan:
         name: PHPStan

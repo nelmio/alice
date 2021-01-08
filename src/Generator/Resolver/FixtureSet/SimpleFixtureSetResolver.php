@@ -39,7 +39,6 @@ final class SimpleFixtureSetResolver implements FixtureSetResolverInterface
         $this->parameterResolver = $parameterResolver;
         $this->fixtureResolver = $fixtureResolver;
     }
-
     
     public function resolve(FixtureSet $fixtureSet): ResolvedFixtureSet
     {

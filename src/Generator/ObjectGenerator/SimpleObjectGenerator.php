@@ -77,7 +77,6 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
         $this->hydrator = $hydrator;
         $this->caller = $caller;
     }
-
     
     public function generate(
         FixtureInterface $fixture,

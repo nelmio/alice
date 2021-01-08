@@ -36,7 +36,6 @@ class ObjectBagTest extends TestCase
      * @var ReflectionProperty
      */
     private $propRefl;
-
     
     protected function setUp(): void
     {

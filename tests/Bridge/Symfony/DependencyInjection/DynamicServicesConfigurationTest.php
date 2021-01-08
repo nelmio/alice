@@ -34,7 +34,6 @@ class DynamicServicesConfigurationTest extends TestCase
      * @var AppKernel
      */
     private $kernel;
-
     
     protected function setUp(): void
     {
@@ -47,7 +46,6 @@ class DynamicServicesConfigurationTest extends TestCase
         $this->kernel = KernelFactory::createKernel($config);
         $this->kernel->boot();
     }
-
     
     protected function tearDown(): void
     {

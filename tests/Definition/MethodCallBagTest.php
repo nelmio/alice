@@ -28,7 +28,6 @@ class MethodCallBagTest extends TestCase
      * @var ReflectionProperty
      */
     private $propRefl;
-
     
     protected function setUp(): void
     {

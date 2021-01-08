@@ -19,13 +19,11 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeValue implements ValueInterface
 {
     use NotCallableTrait;
-
     
     public function getValue(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
-
     
     public function __toString(): string
     {

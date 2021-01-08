@@ -24,13 +24,11 @@ use Nelmio\Alice\ObjectInterface;
 final class SimpleMethodCallProcessor implements ChainableCallProcessorInterface
 {
     use IsAServiceTrait;
-
     
     public function canProcess(MethodCallInterface $methodCall): bool
     {
         return $methodCall instanceof SimpleMethodCall;
     }
-
     
     public function process(
         ObjectInterface $object,

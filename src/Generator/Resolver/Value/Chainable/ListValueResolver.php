@@ -39,13 +39,11 @@ final class ListValueResolver implements ChainableValueResolverInterface, ValueR
     {
         $this->resolver = $resolver;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {

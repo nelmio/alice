@@ -19,7 +19,6 @@ use Nelmio\Alice\NotCallableTrait;
 class ImpartialChainableParserAwareParser extends AbstractChainableParserAwareParser
 {
     use NotCallableTrait;
-
     
     public function canParse(Token $token): bool
     {

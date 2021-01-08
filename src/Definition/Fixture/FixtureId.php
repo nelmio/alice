@@ -26,7 +26,6 @@ final class FixtureId implements FixtureIdInterface
     {
         $this->id = $id;
     }
-
     
     public function getId(): string
     {

@@ -45,7 +45,6 @@ final class SimpleFilesLoader implements FilesLoaderInterface
         $this->dataMerger = new IncludeDataMerger();
         $this->dataLoader = $dataLoader;
     }
-
     
     public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
     {

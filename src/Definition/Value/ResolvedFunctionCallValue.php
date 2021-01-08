@@ -48,7 +48,6 @@ final class ResolvedFunctionCallValue implements ValueInterface
     {
         return $this->arguments;
     }
-
     
     public function getValue()
     {
@@ -57,7 +56,6 @@ final class ResolvedFunctionCallValue implements ValueInterface
             $this->getArguments(),
         ];
     }
-
     
     public function __toString(): string
     {

@@ -24,7 +24,6 @@ class IncludeDataMergerTest extends TestCase
      * @var IncludeDataMerger
      */
     private $merger;
-
     
     protected function setUp(): void
     {

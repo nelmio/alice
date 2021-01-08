@@ -19,7 +19,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeFileLocator implements FileLocatorInterface
 {
     use NotCallableTrait;
-
     
     public function locate(string $name, string $currentPath = null): string
     {

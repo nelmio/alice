@@ -19,7 +19,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeReference implements ServiceReferenceInterface
 {
     use NotCallableTrait;
-
     
     public function getId(): string
     {

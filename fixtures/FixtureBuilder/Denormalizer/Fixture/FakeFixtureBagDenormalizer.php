@@ -20,7 +20,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeFixtureBagDenormalizer implements FixtureBagDenormalizerInterface
 {
     use NotCallableTrait;
-
     
     public function denormalize(array $data): FixtureBag
     {

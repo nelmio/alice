@@ -25,9 +25,6 @@ class DummyWithNoArgumentConstructor
         $this->args = func_get_args();
     }
 
-    /**
-     * @return array
-     */
     public function getArgs(): array
     {
         return $this->args;

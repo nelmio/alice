@@ -24,7 +24,6 @@ final class ValueForCurrentValue implements ValueInterface
     {
         return 'current';
     }
-
     
     public function __toString(): string
     {

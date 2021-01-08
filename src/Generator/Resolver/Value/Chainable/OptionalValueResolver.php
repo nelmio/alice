@@ -48,13 +48,11 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
         $this->resolver = $resolver;
         $this->faker = $faker;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver, $this->faker);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {

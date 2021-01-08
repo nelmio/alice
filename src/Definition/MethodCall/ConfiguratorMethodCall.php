@@ -29,25 +29,21 @@ final class ConfiguratorMethodCall implements MethodCallInterface
     {
         $this->methodCall = $methodCall;
     }
-
     
     public function withArguments(array $arguments = null): self
     {
         return new self($this->methodCall->withArguments($arguments));
     }
-
     
     public function getCaller()
     {
         return $this->methodCall->getCaller();
     }
-
     
     public function getMethod(): string
     {
         return $this->methodCall->getMethod();
     }
-
     
     public function getArguments()
     {
@@ -58,7 +54,6 @@ final class ConfiguratorMethodCall implements MethodCallInterface
     {
         return $this->methodCall;
     }
-
     
     public function __toString(): string
     {

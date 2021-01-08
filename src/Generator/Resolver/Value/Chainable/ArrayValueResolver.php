@@ -38,13 +38,11 @@ final class ArrayValueResolver implements ChainableValueResolverInterface, Value
     {
         $this->resolver = $resolver;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {

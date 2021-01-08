@@ -26,7 +26,6 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
 {
     /** @private */
     const REGEX = '/^(?<quantifier>\d+|<.*>)x (?<elements>.*)/';
-
     
     public function canParse(Token $token): bool
     {

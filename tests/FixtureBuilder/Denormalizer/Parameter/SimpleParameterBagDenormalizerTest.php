@@ -29,7 +29,6 @@ class SimpleParameterBagDenormalizerTest extends TestCase
      * @var SimpleParameterBagDenormalizer
      */
     private $denormalizer;
-
     
     protected function setUp(): void
     {

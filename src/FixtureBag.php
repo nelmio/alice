@@ -84,7 +84,6 @@ final class FixtureBag implements IteratorAggregate
 
         throw FixtureNotFoundExceptionFactory::create($id);
     }
-
     
     public function getIterator()
     {

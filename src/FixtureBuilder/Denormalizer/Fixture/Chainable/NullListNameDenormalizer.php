@@ -24,7 +24,6 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
 
     /** @private */
     const REGEX = '/\{(?<list>[\p{L}\d\._\/]+(?:,\s[^,\s]+)*)\}/u';
-
     
     public function canDenormalize(string $reference, array &$matches = []): bool
     {
@@ -34,7 +33,6 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
 
         return false;
     }
-
     
     public function denormalize(
         FixtureBag $builtFixtures,

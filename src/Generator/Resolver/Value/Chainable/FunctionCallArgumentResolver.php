@@ -48,13 +48,11 @@ final class FunctionCallArgumentResolver implements ChainableValueResolverInterf
         $this->resolver = $decoratedResolver;
         $this->argumentResolver = $argumentResolver;
     }
-
     
     public function withValueResolver(ValueResolverInterface $argumentsResolver): self
     {
         return new self($this->resolver, $argumentsResolver);
     }
-
     
     public function canResolve(ValueInterface $value): bool
     {

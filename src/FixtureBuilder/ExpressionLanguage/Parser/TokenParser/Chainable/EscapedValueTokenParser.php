@@ -36,7 +36,6 @@ final class EscapedValueTokenParser implements ChainableTokenParserInterface
     {
         $this->tokenizer = new FunctionTokenizer();
     }
-
     
     public function canParse(Token $token): bool
     {

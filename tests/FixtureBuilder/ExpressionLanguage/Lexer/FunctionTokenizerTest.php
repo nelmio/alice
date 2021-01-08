@@ -27,7 +27,6 @@ class FunctionTokenizerTest extends TestCase
      * @var FunctionTokenizer
      */
     private $tokenizer;
-
     
     protected function setUp(): void
     {

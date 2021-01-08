@@ -27,7 +27,6 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExcepti
 final class VariableValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
-
     
     public function canResolve(ValueInterface $value): bool
     {

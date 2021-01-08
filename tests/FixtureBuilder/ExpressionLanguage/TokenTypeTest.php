@@ -27,7 +27,6 @@ class TokenTypeTest extends TestCase
      */
     private $constants;
 
-
     protected function setUp(): void
     {
         $reflClass = new ReflectionClass(TokenType::class);

@@ -42,7 +42,6 @@ final class RegisterTagServicesPass implements CompilerPassInterface
         $this->tagName = $tagName;
         $this->taggedDefinitionsLocator = new TaggedDefinitionsLocator();
     }
-
     
     public function process(ContainerBuilder $container): void
     {

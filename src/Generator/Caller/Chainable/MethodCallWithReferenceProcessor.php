@@ -26,7 +26,6 @@ use Nelmio\Alice\ObjectInterface;
 final class MethodCallWithReferenceProcessor implements ChainableCallProcessorInterface
 {
     use IsAServiceTrait;
-
     
     public function canProcess(MethodCallInterface $methodCall): bool
     {

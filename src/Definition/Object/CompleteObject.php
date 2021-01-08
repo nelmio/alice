@@ -30,19 +30,16 @@ final class CompleteObject implements ObjectInterface
     {
         $this->object = $object;
     }
-
     
     public function getId(): string
     {
         return $this->object->getId();
     }
-
     
     public function getInstance()
     {
         return $this->object->getInstance();
     }
-
     
     public function withInstance(object $newInstance): void
     {

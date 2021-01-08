@@ -27,7 +27,6 @@ final class ElementFlag implements FlagInterface
         $this->element = $element;
     }
     
-    
     public function __toString(): string
     {
         return $this->element;

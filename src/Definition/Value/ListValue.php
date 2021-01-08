@@ -42,7 +42,6 @@ final class ListValue implements ValueInterface
     {
         return deep_clone($this->values);
     }
-
     
     public function __toString(): string
     {

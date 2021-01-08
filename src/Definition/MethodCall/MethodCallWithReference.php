@@ -58,7 +58,6 @@ final class MethodCallWithReference implements MethodCallInterface
             $this->stringValue = $caller->getId().'->'.$method;
         }
     }
-
     
     public function withArguments(array $arguments = null): self
     {
@@ -67,25 +66,21 @@ final class MethodCallWithReference implements MethodCallInterface
 
         return $clone;
     }
-
     
     public function getCaller()
     {
         return clone $this->caller;
     }
-
     
     public function getMethod(): string
     {
         return $this->method;
     }
-
     
     public function getArguments()
     {
         return $this->arguments;
     }
-
     
     public function __toString(): string
     {

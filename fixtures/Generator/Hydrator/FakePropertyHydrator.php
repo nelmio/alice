@@ -21,7 +21,6 @@ use Nelmio\Alice\ObjectInterface;
 class FakePropertyHydrator implements PropertyHydratorInterface
 {
     use NotCallableTrait;
-
     
     public function hydrate(ObjectInterface $object, Property $property, GenerationContext $context): ObjectInterface
     {

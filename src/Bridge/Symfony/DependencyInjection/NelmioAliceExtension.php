@@ -27,7 +27,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 final class NelmioAliceExtension extends Extension
 {
     const SERVICES_DIR = __DIR__.'/../Resources/config';
-
     
     public function load(array $configs, ContainerBuilder $container): void
     {
