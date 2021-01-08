@@ -28,7 +28,7 @@ use TypeError;
 final class ParameterTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
-    
+
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::PARAMETER_TYPE;
