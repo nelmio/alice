@@ -30,6 +30,15 @@ jobs:
                     -   description: 'Symfony 5.2'
                         php: '7.4'
                         symfony-versions: 5.2.*
+                    -   description: 'Symfony 4.4'
+                        php: '8.0'
+                        symfony-versions: 4.4.*
+                    -   description: 'Symfony 5.0'
+                        php: '8.0'
+                        symfony-versions: 5.0.*
+                    -   description: 'Symfony 5.2'
+                        php: '8.0'
+                        symfony-versions: 5.2.*
 
         name: PHP ${{ matrix.php }} ${{ matrix.description }}
         steps:
