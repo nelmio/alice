@@ -51,7 +51,6 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
 
         $this->limit = $limit;
     }
-
     
     public function withResolver(ParameterResolverInterface $resolver)
     {
@@ -62,7 +61,6 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
 
         return new self($decoratedResolver);
     }
-
     
     public function canResolve(Parameter $parameter): bool
     {

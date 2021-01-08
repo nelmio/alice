@@ -32,7 +32,6 @@ class MutableFlag implements FlagInterface
         $this->stringValue = $stringValue;
         $this->object = $object;
     }
-
     
     public function __toString(): string
     {

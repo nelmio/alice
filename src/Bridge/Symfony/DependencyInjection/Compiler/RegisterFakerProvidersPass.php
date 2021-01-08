@@ -30,7 +30,6 @@ final class RegisterFakerProvidersPass implements CompilerPassInterface
     {
         $this->taggedDefinitionsLocator = new TaggedDefinitionsLocator();
     }
-
     
     public function process(ContainerBuilder $container): void
     {

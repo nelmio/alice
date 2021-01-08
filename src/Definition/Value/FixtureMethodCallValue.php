@@ -45,7 +45,6 @@ final class FixtureMethodCallValue implements ValueInterface
     {
         return $this->function;
     }
-
     
     public function getValue(): array
     {
@@ -54,7 +53,6 @@ final class FixtureMethodCallValue implements ValueInterface
             $this->function,
         ];
     }
-
     
     public function __toString(): string
     {

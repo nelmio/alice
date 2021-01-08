@@ -36,19 +36,16 @@ class ImmutableObject implements ObjectInterface
         $this->id = $id;
         $this->instance = deep_clone($instance);
     }
-
     
     public function getId(): string
     {
         return $this->id;
     }
-
     
     public function getInstance()
     {
         return deep_clone($this->instance);
     }
-
     
     public function withInstance($newInstance)
     {

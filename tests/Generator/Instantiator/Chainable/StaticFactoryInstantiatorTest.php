@@ -40,7 +40,6 @@ class StaticFactoryInstantiatorTest extends TestCase
      * @var StaticFactoryInstantiator
      */
     private $instantiator;
-
     
     protected function setUp(): void
     {

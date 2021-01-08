@@ -37,13 +37,11 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
     {
         $this->processor = $processor;
     }
-
     
     public function withProcessor(CallProcessorInterface $processor): self
     {
         return new self($processor);
     }
-
     
     public function canProcess(MethodCallInterface $methodCall): bool
     {

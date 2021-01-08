@@ -45,7 +45,6 @@ final class FixturePropertyValue implements ValueInterface
     {
         return $this->property;
     }
-
     
     public function getValue(): array
     {
@@ -54,7 +53,6 @@ final class FixturePropertyValue implements ValueInterface
             $this->property,
         ];
     }
-
     
     public function __toString(): string
     {

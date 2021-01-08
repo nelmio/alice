@@ -31,7 +31,6 @@ final class EmptyValueLexer implements LexerInterface
     {
         $this->lexer = $decoratedLexer;
     }
-
     
     public function lex(string $value): array
     {

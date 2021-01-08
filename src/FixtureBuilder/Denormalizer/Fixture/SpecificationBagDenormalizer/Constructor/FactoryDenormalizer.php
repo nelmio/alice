@@ -34,7 +34,6 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
     {
         $this->callsDenormalizer = $callsDenormalizer;
     }
-
     
     public function denormalize(
         FixtureInterface $scope,

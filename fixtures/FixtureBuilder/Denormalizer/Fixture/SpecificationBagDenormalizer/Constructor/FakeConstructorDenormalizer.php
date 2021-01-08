@@ -22,7 +22,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeConstructorDenormalizer implements ConstructorDenormalizerInterface
 {
     use NotCallableTrait;
-
     
     public function denormalize(
         FixtureInterface $scope,

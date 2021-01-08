@@ -52,7 +52,6 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         $this->propertyDenormalizer = $propertyDenormalizer;
         $this->callsDenormalizer = $callsDenormalizer;
     }
-
     
     public function denormalize(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedSpecs): SpecificationBag
     {

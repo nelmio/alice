@@ -20,7 +20,6 @@ use Nelmio\Alice\NotCallableTrait;
 class DummyFlagParser implements FlagParserInterface
 {
     use NotCallableTrait;
-
     
     public function parse(string $element): FlagBag
     {

@@ -26,7 +26,6 @@ class TokenTypeTest extends TestCase
      * @var string[]
      */
     private $constants;
-
     
     protected function setUp(): void
     {

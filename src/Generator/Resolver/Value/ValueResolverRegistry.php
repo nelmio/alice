@@ -57,7 +57,6 @@ final class ValueResolverRegistry implements ValueResolverInterface, ObjectGener
             }
         )($generator, ...$resolvers);
     }
-
     
     public function withObjectGenerator(ObjectGeneratorInterface $generator)
     {

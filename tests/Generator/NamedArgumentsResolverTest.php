@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator;
 
-use Nelmio\Alice\Entity\DummyWithNoArgumentConstructor;
 use Nelmio\Alice\Entity\DummyWithMethods;
+use Nelmio\Alice\Entity\DummyWithNoArgumentConstructor;
 use Nelmio\Alice\Entity\EmptyDummy;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;

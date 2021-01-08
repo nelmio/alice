@@ -30,7 +30,6 @@ use TypeError;
 final class VariableTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
-
     
     public function canParse(Token $token): bool
     {

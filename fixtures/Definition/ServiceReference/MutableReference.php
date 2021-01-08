@@ -23,7 +23,6 @@ class MutableReference implements ServiceReferenceInterface
     {
         $this->id = $id;
     }
-
     
     public function getId(): string
     {

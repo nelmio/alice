@@ -37,7 +37,6 @@ class NullConstructorInstantiatorTest extends TestCase
      * @var NullConstructorInstantiator
      */
     private $instantiator;
-
     
     protected function setUp(): void
     {

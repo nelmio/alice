@@ -42,13 +42,11 @@ final class ExistingInstanceInstantiator implements InstantiatorInterface, Value
 
         $this->instantiator = $decoratedInstantiator;
     }
-
     
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->instantiator, $resolver);
     }
-
     
     public function instantiate(
         FixtureInterface $fixture,

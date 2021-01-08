@@ -28,7 +28,6 @@ class LoaderIntegrationTest extends CoreLoaderIntegrationTest
      * @var KernelInterface
      */
     private static $kernel;
-
     
     public static function setUpBeforeClass(): void
     {
@@ -36,7 +35,6 @@ class LoaderIntegrationTest extends CoreLoaderIntegrationTest
 
         static::$kernel = KernelFactory::createKernel();
     }
-
     
     protected function setUp(): void
     {
@@ -44,13 +42,11 @@ class LoaderIntegrationTest extends CoreLoaderIntegrationTest
 
         $this->nonIsolatedLoader = $this->loader = new NonIsolatedSymfonyLoader(static::$kernel->getContainer());
     }
-
     
     protected function tearDown(): void
     {
         static::$kernel->shutdown();
     }
-
     
     public static function tearDownAfterClass(): void
     {

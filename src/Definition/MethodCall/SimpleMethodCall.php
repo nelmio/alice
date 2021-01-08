@@ -39,7 +39,6 @@ final class SimpleMethodCall implements MethodCallInterface
         $this->method = $method;
         $this->arguments = $arguments;
     }
-
     
     public function withArguments(array $arguments = null): self
     {
@@ -48,25 +47,21 @@ final class SimpleMethodCall implements MethodCallInterface
 
         return $clone;
     }
-
     
     public function getCaller()
     {
         return null;
     }
-
     
     public function getMethod(): string
     {
         return $this->method;
     }
-
     
     public function getArguments()
     {
         return $this->arguments;
     }
-
     
     public function __toString(): string
     {

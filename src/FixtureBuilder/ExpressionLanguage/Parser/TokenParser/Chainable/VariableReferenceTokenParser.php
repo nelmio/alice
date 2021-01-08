@@ -31,7 +31,6 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\Expressio
 final class VariableReferenceTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
-
     
     public function canParse(Token $token): bool
     {

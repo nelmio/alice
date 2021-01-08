@@ -42,7 +42,6 @@ class AbstractChainableInstantiatorTest extends TestCase
      * @var AbstractChainableInstantiator
      */
     private $instantiator;
-
     
     protected function setUp(): void
     {

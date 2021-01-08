@@ -50,13 +50,11 @@ final class UniqueValue implements ValueInterface
     {
         return $this->id;
     }
-
     
     public function getValue()
     {
         return deep_clone($this->value);
     }
-
     
     public function __toString(): string
     {

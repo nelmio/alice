@@ -21,7 +21,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeArgumentsDenormalizer implements ArgumentsDenormalizerInterface
 {
     use NotCallableTrait;
-
     
     public function denormalize(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedArguments): array
     {

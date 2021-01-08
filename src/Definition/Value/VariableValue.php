@@ -32,13 +32,11 @@ final class VariableValue implements ValueInterface
     {
         $this->variable = $variable;
     }
-
     
     public function getValue(): string
     {
         return $this->variable;
     }
-
     
     public function __toString(): string
     {

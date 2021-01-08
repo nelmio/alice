@@ -19,7 +19,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeLexer implements LexerInterface
 {
     use NotCallableTrait;
-
     
     public function lex(string $value): array
     {

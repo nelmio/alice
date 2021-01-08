@@ -34,7 +34,6 @@ final class StringThenReferenceLexer implements LexerInterface
     {
         $this->decoratedLexer = $decoratedLexer;
     }
-
     
     public function lex(string $value): array
     {

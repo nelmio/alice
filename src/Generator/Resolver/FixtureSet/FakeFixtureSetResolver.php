@@ -21,7 +21,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeFixtureSetResolver implements FixtureSetResolverInterface
 {
     use NotCallableTrait;
-
     
     public function resolve(FixtureSet $fixtureSet): ResolvedFixtureSet
     {

@@ -19,7 +19,6 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeParser implements ParserInterface
 {
     use NotCallableTrait;
-
     
     public function parse(string $value): void
     {

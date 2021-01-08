@@ -36,7 +36,6 @@ final class ElementFlagParser implements FlagParserInterface
     {
         $this->parser = $parser;
     }
-
     
     public function parse(string $element): FlagBag
     {

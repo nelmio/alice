@@ -39,7 +39,6 @@ use ReflectionClass;
 class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 {
     use ProphecyTrait;
-
     
     protected function setUp(): void
     {

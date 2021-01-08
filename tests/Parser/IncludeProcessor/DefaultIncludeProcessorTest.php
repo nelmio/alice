@@ -32,7 +32,6 @@ class DefaultIncludeProcessorTest extends TestCase
     use ProphecyTrait;
 
     private static $dir;
-
     
     protected function setUp(): void
     {

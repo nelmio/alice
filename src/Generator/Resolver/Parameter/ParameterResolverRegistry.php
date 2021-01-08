@@ -49,7 +49,6 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
 
         $this->resolvers = $resolvers;
     }
-
     
     public function resolve(
         Parameter $parameter,

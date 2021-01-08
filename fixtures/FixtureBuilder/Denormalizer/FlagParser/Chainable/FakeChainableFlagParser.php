@@ -20,13 +20,11 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeChainableFlagParser implements ChainableFlagParserInterface
 {
     use NotCallableTrait;
-
     
     public function canParse(string $element): bool
     {
         $this->__call(__FUNCTION__, func_get_args());
     }
-
     
     public function parse(string $element): FlagBag
     {

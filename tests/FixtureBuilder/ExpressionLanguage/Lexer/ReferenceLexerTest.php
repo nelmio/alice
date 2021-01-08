@@ -30,7 +30,6 @@ class ReferenceLexerTest extends TestCase
      * @var ReferenceLexer
      */
     private $lexer;
-
     
     protected function setUp(): void
     {

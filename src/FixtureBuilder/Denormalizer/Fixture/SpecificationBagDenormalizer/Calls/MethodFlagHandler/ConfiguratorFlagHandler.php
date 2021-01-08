@@ -23,7 +23,6 @@ use Nelmio\Alice\IsAServiceTrait;
 final class ConfiguratorFlagHandler implements MethodFlagHandler
 {
     use IsAServiceTrait;
-
     
     public function handleMethodFlags(MethodCallInterface $methodCall, FlagInterface $flag): MethodCallInterface
     {

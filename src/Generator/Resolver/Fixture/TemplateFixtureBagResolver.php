@@ -36,7 +36,6 @@ final class TemplateFixtureBagResolver implements FixtureBagResolverInterface
     {
         $this->resolver = new TemplateFixtureResolver();
     }
-
     
     public function resolve(FixtureBag $unresolvedFixtures): FixtureBag
     {

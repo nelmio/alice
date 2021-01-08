@@ -38,7 +38,6 @@ abstract class AbstractChainableParserAwareParser implements ChainableTokenParse
     {
         $this->parser = $parser;
     }
-
     
     public function withParser(ParserInterface $parser)
     {

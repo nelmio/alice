@@ -19,19 +19,16 @@ use Nelmio\Alice\ObjectInterface;
 class FakeObject implements ObjectInterface
 {
     use NotCallableTrait;
-
     
     public function getId(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }
-
     
     public function getInstance(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
-
     
     public function withInstance($newInstance): void
     {

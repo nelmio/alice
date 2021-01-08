@@ -42,19 +42,16 @@ class MutableFixture implements FixtureInterface
         $this->className = $className;
         $this->specs = $specs;
     }
-
     
     public function getId(): string
     {
         return $this->id;
     }
-
     
     public function getClassName(): string
     {
         return $this->className;
     }
-
     
     public function getSpecs(): SpecificationBag
     {
@@ -65,13 +62,11 @@ class MutableFixture implements FixtureInterface
     {
         $this->specs = $specs;
     }
-
     
     public function getValueForCurrent(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
-
     
     public function withSpecs(SpecificationBag $specs): void
     {

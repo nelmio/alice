@@ -118,13 +118,11 @@ final class ObjectBag implements IteratorAggregate, Countable
             $fixture instanceof FixtureInterface ? $fixture->getClassName() : 'no class given'
         );
     }
-
     
     public function count()
     {
         return count($this->objects);
     }
-
     
     public function getIterator()
     {

@@ -23,13 +23,11 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeChainableValueResolver implements ChainableValueResolverInterface
 {
     use NotCallableTrait;
-
     
     public function canResolve(ValueInterface $value): bool
     {
         $this->__call(__METHOD__, func_get_args());
     }
-
     
     public function resolve(
         ValueInterface $value,
