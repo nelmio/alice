@@ -15,6 +15,7 @@ jobs:
                 php:
                     - '7.3'
                     - '7.4'
+                    - '8.0'
                 symfony-versions: [false]
                 include:
                     -   description: 'Symfony 3.4'
