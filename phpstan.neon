@@ -3,6 +3,7 @@ parameters:
         - %rootDir%/../../../../../fixtures/Bridge
         - %rootDir%/../../../../../src/Bridge
         - %rootDir%/../../../../../tests/Bridge
+    level: max
     ignoreErrors:
         # Prophecy
         - '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::[a-zA-Z0-9_]+\(\)#'
