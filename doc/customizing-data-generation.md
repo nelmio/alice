@@ -14,7 +14,7 @@
 
 Alice integrates with the [Faker][1] library. Using `<foo()>` you can call Faker
 data providers to generate random data. Check the
-[list of Faker providers](https://github.com/fzaninotto/Faker#formatters).
+[list of Faker providers](https://fakerphp.github.io/formatters).
 
 Let's turn our static bob user into a randomized entry:
 
@@ -100,7 +100,7 @@ stdClass:
 ## Custom Faker Data Providers
 
 Sometimes you need more than what Faker and Alice provide you natively. For
-that, you can register a custom [Faker Provider](https://github.com/fzaninotto/Faker/tree/master/src/Faker/Provider) class:
+that, you can register a custom [Faker Provider](https://github.com/FakerPHP/Faker/tree/main/src/Faker/Provider) class:
 
 ```php
 <?php
@@ -226,5 +226,5 @@ services:
 « [Keep Your Fixtures Dry](fixtures-refactoring.md) • [Table of Contents](../README.md#table-of-contents) »
 
 
-[1]: https://github.com/fzaninotto/Faker
-[2]: https://github.com/fzaninotto/Faker#seeding-the-generator
+[1]: https://github.com/FakerPHP/Faker
+[2]: https://fakerphp.github.io/#seeding-the-generator
