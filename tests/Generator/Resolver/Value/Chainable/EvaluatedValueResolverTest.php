@@ -77,12 +77,22 @@ class EvaluatedValueResolverTest extends TestCase
 
             static::fail('Expected exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
-            static::assertEquals(
-                'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file, expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN)',
-                $exception->getMessage()
-            );
             static::assertEquals(0, $exception->getCode());
             static::assertNotNull($exception->getPrevious());
+
+            if (PHP_VERSION_ID < 80000) {
+                static::assertEquals(
+                    'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
+                        . ' expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN)',
+                    $exception->getMessage()
+                );
+            } else {
+                static::assertEquals(
+                    'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
+                     . ' expecting variable or "${" or "{$"',
+                    $exception->getMessage()
+                );
+            }
         }
     }
 
@@ -152,10 +162,17 @@ class EvaluatedValueResolverTest extends TestCase
             $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
             static::fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
-            static::assertEquals(
-                'Could not evaluate the expression "$scope": Undefined variable: scope',
-                $exception->getMessage()
-            );
+            if (PHP_VERSION_ID < 80000) {
+                static::assertEquals(
+                    'Could not evaluate the expression "$scope": Undefined variable: scope',
+                    $exception->getMessage()
+                );
+            } else {
+                static::assertEquals(
+                    'Could not evaluate the expression "$scope": Undefined variable $scope',
+                    $exception->getMessage()
+                );
+            }
         }
     }
 
@@ -190,10 +207,17 @@ class EvaluatedValueResolverTest extends TestCase
             $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
             static::fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
-            static::assertEquals(
-                'Could not evaluate the expression "$scope": Undefined variable: scope',
-                $exception->getMessage()
-            );
+            if (PHP_VERSION_ID < 80000) {
+                static::assertEquals(
+                    'Could not evaluate the expression "$scope": Undefined variable: scope',
+                    $exception->getMessage()
+                );
+            } else {
+                static::assertEquals(
+                    'Could not evaluate the expression "$scope": Undefined variable $scope',
+                    $exception->getMessage()
+                );
+            }
         }
     }
 }

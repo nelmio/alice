@@ -41,7 +41,7 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
         $value = $token->getValue();
 
         try {
-            $elements = empty($value) ? false :substr($value, 1);
+            $elements = empty($value) ? false : substr($value, 1);
 
             return new FixtureReferenceValue($elements);
         } catch (InvalidArgumentException $exception) {

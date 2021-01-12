@@ -28,13 +28,22 @@ class IsAServiceTraitTest extends TestCase
             clone new NotClonableDummy();
             static::fail('Expected exception to be thrown.');
         } catch (Throwable $exception) {
-            static::assertEquals(
-                'Call to private Nelmio\Alice\NotClonableDummy::__clone() from context '
-                .'\'Nelmio\Alice\IsAServiceTraitTest\'',
-                $exception->getMessage()
-            );
             static::assertEquals(0, $exception->getCode());
             static::assertNull($exception->getPrevious());
+
+            if (PHP_VERSION_ID < 80000) {
+                static::assertEquals(
+                    'Call to private Nelmio\Alice\NotClonableDummy::__clone() from context '
+                    . '\'Nelmio\Alice\IsAServiceTraitTest\'',
+                    $exception->getMessage()
+                );
+            } else {
+                static::assertEquals(
+                    'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
+                    . 'Nelmio\Alice\IsAServiceTraitTest',
+                    $exception->getMessage()
+                );
+            }
         }
 
         $dummyRefl = new ReflectionClass(NotClonableDummy::class);
