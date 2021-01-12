@@ -45,7 +45,7 @@ final class ParameterTokenParser implements ChainableTokenParserInterface
     {
         $value = $token->getValue();
         try {
-            $paramKey = substr($value, 2, -2);
+            $paramKey = strlen($value) > 3 ? substr($value, 2, -2) : false;
 
             return new ParameterValue($paramKey);
         } catch (TypeError $error) {
