@@ -41,9 +41,11 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
         $value = $token->getValue();
 
         try {
-            $elements = empty($value) ? false : substr($value, 1);
+            if (!is_string($value) || '' === $value) {
+                throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
+            }
 
-            return new FixtureReferenceValue($elements);
+            return new FixtureReferenceValue(substr($value, 1));
         } catch (InvalidArgumentException $exception) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $exception);
         }

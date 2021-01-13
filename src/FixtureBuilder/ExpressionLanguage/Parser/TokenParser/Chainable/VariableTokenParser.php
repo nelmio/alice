@@ -45,7 +45,7 @@ final class VariableTokenParser implements ChainableTokenParserInterface
      */
     public function parse(Token $token)
     {
-        $variable = empty($token->getValue())
+        $variable = !is_string($token->getValue()) || $token->getValue() === ''
             ? false
             : substr($token->getValue(), 1);
 
