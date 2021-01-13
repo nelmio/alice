@@ -27,7 +27,7 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\Expressio
 final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
-    
+
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::SIMPLE_REFERENCE_TYPE;
@@ -41,6 +41,10 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
         $value = $token->getValue();
 
         try {
+            if (!is_string($value) || '' === $value) {
+                throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
+            }
+
             return new FixtureReferenceValue(substr($value, 1));
         } catch (InvalidArgumentException $exception) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $exception);

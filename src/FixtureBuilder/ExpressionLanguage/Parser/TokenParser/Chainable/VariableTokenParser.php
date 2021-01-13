@@ -30,7 +30,7 @@ use TypeError;
 final class VariableTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
-    
+
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::VARIABLE_TYPE;
@@ -45,7 +45,9 @@ final class VariableTokenParser implements ChainableTokenParserInterface
      */
     public function parse(Token $token)
     {
-        $variable = substr($token->getValue(), 1);
+        $variable = !is_string($token->getValue()) || $token->getValue() === ''
+            ? false
+            : substr($token->getValue(), 1);
 
         if ('current' === $variable) {
             return new FunctionCallValue(

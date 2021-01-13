@@ -60,7 +60,7 @@ class SimpleReferenceTokenParserTest extends TestCase
                 $exception->getMessage()
             );
             static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            static::assertNull($exception->getPrevious());
         }
     }
 

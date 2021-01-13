@@ -26,7 +26,7 @@ class TokenTypeTest extends TestCase
      * @var string[]
      */
     private $constants;
-    
+
     protected function setUp(): void
     {
         $reflClass = new ReflectionClass(TokenType::class);
@@ -44,10 +44,9 @@ class TokenTypeTest extends TestCase
     public function testStaticValues(): void
     {
         $reflClass = new ReflectionClass(TokenType::class);
-
         $reflProp = $reflClass->getProperty('values');
         $reflProp->setAccessible(true);
-        $values = $reflProp->getValue(TokenType::class);
+        $values = $reflProp->getValue($reflClass);
 
         static::assertCount(count($this->constants), $values);
         foreach ($this->constants as $constant) {

@@ -28,7 +28,7 @@ use TypeError;
 final class ParameterTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
-    
+
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::PARAMETER_TYPE;
@@ -45,7 +45,7 @@ final class ParameterTokenParser implements ChainableTokenParserInterface
     {
         $value = $token->getValue();
         try {
-            $paramKey = substr($value, 2, -2);
+            $paramKey = strlen($value) > 3 ? substr($value, 2, -2) : false;
 
             return new ParameterValue($paramKey);
         } catch (TypeError $error) {

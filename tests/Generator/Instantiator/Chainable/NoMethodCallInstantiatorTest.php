@@ -37,7 +37,7 @@ class NoMethodCallInstantiatorTest extends TestCase
      * @var NoMethodCallInstantiator
      */
     private $instantiator;
-    
+
     protected function setUp(): void
     {
         $this->instantiator = new NoMethodCallInstantiator();
@@ -83,10 +83,18 @@ class NoMethodCallInstantiatorTest extends TestCase
             (new ReflectionObject($instance))->getProperty('requiredParam');
             static::fail('Expected exception to be thrown.');
         } catch (ReflectionException $exception) {
-            static::assertEquals(
-                'Property requiredParam does not exist',
-                $exception->getMessage()
-            );
+            if (PHP_VERSION_ID < 80000) {
+                static::assertEquals(
+                    'Property requiredParam does not exist',
+                    $exception->getMessage()
+                );
+            } else {
+                static::assertEquals(
+                    'Property Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor::$requiredParam'
+                    . ' does not exist',
+                    $exception->getMessage()
+                );
+            }
         }
     }
 

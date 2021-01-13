@@ -43,7 +43,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
     {
         $this->token = uniqid(__CLASS__);
     }
-    
+
     public function canParse(Token $token): bool
     {
         return $token->getType() === TokenType::RANGE_REFERENCE_TYPE;
@@ -64,7 +64,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
         $to = $range->getTo();
         $step = $range->getStep();
         for ($currentIndex = $from; $currentIndex <= $to; $currentIndex += $step) {
-            $fixtureId = str_replace($this->token, $currentIndex, $range->getName());
+            $fixtureId = str_replace($this->token, (string) $currentIndex, $range->getName());
             $references[] = new FixtureReferenceValue($fixtureId);
         }
 
