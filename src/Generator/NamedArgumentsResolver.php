@@ -64,6 +64,9 @@ class NamedArgumentsResolver
             }
 
             if (!$parameter->isDefaultValueAvailable()) {
+                if ($parameter->isVariadic()) {
+                    continue;
+                }
                 throw new RuntimeException(sprintf(
                     'Argument $%s of %s::%s() is not passed a value and does not define a default one.',
                     $name,
