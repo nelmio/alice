@@ -354,11 +354,11 @@ class NamedArgumentsResolverTest extends TestCase
 
         $resolvedFirst = $resolver->resolveArguments(
             $onlyFirstParam,
-             DummyWithVariadicConstructorParamAndParam::class,
-              '__construct'
+            DummyWithVariadicConstructorParamAndParam::class,
+            '__construct'
         );
 
-        self::assertEquals($onlyFirstParam, $resolvedFirst);
+        static::assertEquals($onlyFirstParam, $resolvedFirst);
 
         $allParams = [
             'foo',
@@ -369,11 +369,11 @@ class NamedArgumentsResolverTest extends TestCase
         ];
 
         $resolvedAll = $resolver->resolveArguments(
-            $allParams, 
-            DummyWithVariadicConstructorParamAndParam::class, 
+            $allParams,
+            DummyWithVariadicConstructorParamAndParam::class,
             '__construct'
         );
-        
-        self::assertEquals($allParams, $resolvedAll);
+
+        static::assertEquals($allParams, $resolvedAll);
     }
 }
