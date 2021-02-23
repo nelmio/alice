@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Generator;
 
 use Nelmio\Alice\Entity\DummyWithMethods;
 use Nelmio\Alice\Entity\DummyWithNoArgumentConstructor;
+use Nelmio\Alice\Entity\DummyWithVariadicConstructorParamAndParam;
 use Nelmio\Alice\Entity\EmptyDummy;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -341,5 +342,38 @@ class NamedArgumentsResolverTest extends TestCase
         $this->expectExceptionMessage('Argument $bar1 of Nelmio\Alice\Entity\DummyWithMethods::bar() is not passed a value and does not define a default one.');
 
         $resolver->resolveArguments([], DummyWithMethods::class, 'bar');
+    }
+
+    public function testResolveVariadicConstructorParam(): void
+    {
+        $resolver = new NamedArgumentsResolver();
+
+        $onlyFirstParam = [
+            'foo'
+        ];
+
+        $resolvedFirst = $resolver->resolveArguments(
+            $onlyFirstParam,
+            DummyWithVariadicConstructorParamAndParam::class,
+            '__construct'
+        );
+
+        static::assertEquals($onlyFirstParam, $resolvedFirst);
+
+        $allParams = [
+            'foo',
+            [
+                'bar',
+                'baz'
+            ]
+        ];
+
+        $resolvedAll = $resolver->resolveArguments(
+            $allParams,
+            DummyWithVariadicConstructorParamAndParam::class,
+            '__construct'
+        );
+
+        static::assertEquals($allParams, $resolvedAll);
     }
 }
