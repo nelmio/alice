@@ -5,7 +5,7 @@
 <h1 align=center>Alice - Expressive fixtures generator</h1>
 
 [![Package version](https://img.shields.io/packagist/v/nelmio/alice.svg?style=flat-square)](https://packagist.org/packages/nelmio/alice)
-[![Build Status](https://img.shields.io/travis/nelmio/alice.svg?branch=master&style=flat-square)](https://travis-ci.org/nelmio/alice?branch=master)
+[![Build Status](https://github.com/nelmio/alice/workflows/CI/badge.svg?branch=master)](https://github.com/nelmio/alice/actions)
 [![Slack](https://img.shields.io/badge/slack-%23alice--fixtures-red.svg?style=flat-square)](https://symfony.com/slack-invite)
 [![License](https://img.shields.io/badge/license-MIT-red.svg?style=flat-square)](LICENSE)
 
