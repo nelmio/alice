@@ -60,6 +60,6 @@ class FixtureMatchReferenceValueTest extends TestCase
     public function testReferenceIsRegexEscaped(): void
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('du/m*m+y.ref[ere]n(c)e');
-        static::assertEquals('@(regex: /^du\\/m\\*m\\+y\\.ref\\[ere\\]n\\(c\\)e.*/)', (string) $value);
+        static::assertEquals('/^du\\/m\\*m\\+y\\.ref\\[ere\\]n\\(c\\)e.*/', $value->getValue());
     }
 }
