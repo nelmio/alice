@@ -38,19 +38,19 @@ final class FixtureMatchReferenceValue implements ValueInterface
      */
     public static function createWildcardReference(string $reference): self
     {
-        return new self(sprintf('/^%s.*/', $reference));
+        return new self(sprintf('/^%s.*/', preg_quote($reference, '/')));
     }
 
     public function match(string $value): bool
     {
         return 1 === preg_match($this->pattern, $value);
     }
-    
+
     public function getValue(): string
     {
         return $this->pattern;
     }
-    
+
     public function __toString(): string
     {
         return sprintf('@(regex: %s)', $this->pattern);
