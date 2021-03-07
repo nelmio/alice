@@ -25,6 +25,10 @@
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
     </listeners>
 
+    <logging>
+        <log type="coverage-clover" target="clover.xml"/>
+    </logging>
+
     <coverage>
         <include>
             <directory>src</directory>
