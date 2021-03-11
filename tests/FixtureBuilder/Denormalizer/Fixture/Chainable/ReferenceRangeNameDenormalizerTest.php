@@ -29,6 +29,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerI
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\DummyFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
@@ -217,6 +219,38 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
+    }
+
+    public function testWildcardWithNoMatchesThrowsUnexpectedValueException(): void
+    {
+        $fixtures = (new FixtureBag());
+        $className = 'Nelmio\Alice\Entity\User';
+        $reference = 'user_{@userDetails*} (extends timestamp)';
+        $specs = [];
+        $flags = new FlagBag('');
+        $parsedFlags = (new FlagBag('user_{@userDetails}'))->withFlag(new ExtendFlag(new FixtureReference('timestamp')));
+
+        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
+        $flagParserProphecy
+            ->parse($reference)
+            ->willReturn($parsedFlags)
+        ;
+        /** @var FlagParserInterface $flagParser */
+        $flagParser = $flagParserProphecy->reveal();
+
+        $specsDenormalizerProphecy = $this->prophesize(SpecificationsDenormalizerInterface::class);
+        /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
+        $specsDenormalizer = $specsDenormalizerProphecy->reveal();
+
+        $denormalizer = (new ReferenceRangeNameDenormalizer($specsDenormalizer))->withFlagParser($flagParser);
+
+        $this->expectException(FixtureNotFoundException::class);
+        $this->expectExceptionMessage('Could not find fixtures matching wildcard "userDetails*".');
+
+        $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
+
+        $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
+        $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(0);
     }
 
     /**
