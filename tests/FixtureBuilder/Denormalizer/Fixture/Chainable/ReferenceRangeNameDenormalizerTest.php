@@ -29,7 +29,6 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerI
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\DummyFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
-use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -221,7 +220,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
-    public function testWildcardWithNoMatchesThrowsUnexpectedValueException(): void
+    public function testWildcardWithNoMatchesThrowsFixtureNotFoundException(): void
     {
         $fixtures = (new FixtureBag());
         $className = 'Nelmio\Alice\Entity\User';
