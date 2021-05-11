@@ -130,7 +130,7 @@ Nelmio\Entity\User:
         username: '<current()>'
         fullname: '<current()>'
         birthDate: 1980-10-10
-        email: '<current()>@example.org'
+        email: '<current()>\@example.org'
         favoriteNumber: 42
 ```
 
@@ -145,6 +145,9 @@ Nelmio\Entity\User:
 >`user1`, `2` for `user2` etc.
 
 >Using this function outside of this case will cause an exception.
+
+>Finally, note that `\@example` is escaped, otherwise it would have been
+>[evaluated as a reference](relations-handling.md#references).
 
 To go further we the example above, we can just randomize data.
 
