@@ -78,12 +78,12 @@ final class ParameterBag implements IteratorAggregate, Countable
         throw ParameterNotFoundExceptionFactory::create($key);
     }
     
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->parameters);
     }
     
-    public function count()
+    public function count(): int
     {
         return count($this->parameters);
     }

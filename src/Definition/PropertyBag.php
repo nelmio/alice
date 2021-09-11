@@ -55,7 +55,7 @@ final class PropertyBag implements IteratorAggregate, Countable
         return [] === $this->properties;
     }
     
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator(array_values($this->properties));
     }

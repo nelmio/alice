@@ -82,7 +82,7 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
 
-        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver());
+        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
         $result = $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
         static::assertEquals(9, strlen($result->getValue()));
@@ -95,10 +95,10 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
 
-        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver());
+        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unknown formatter "unknown"');
+        $this->expectExceptionMessage('Unknown format "unknown"');
 
         $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
     }
