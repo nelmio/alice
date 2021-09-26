@@ -25,8 +25,8 @@ $finder = Finder::create()
         __DIR__.'/.php_cs.dist',
     ])
     ->exclude([
-        __DIR__.'/fixtures/Parser/files/php',
-        __DIR__.'/Bridge/Symfony/Application/var',
+        'fixtures/Parser/files/php',
+        'Bridge/Symfony/Application/var',
     ])
 ;
 

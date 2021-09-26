@@ -23,7 +23,6 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
-use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -82,7 +81,7 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
 
-        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver());
+        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
         $result = $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
         static::assertEquals(9, strlen($result->getValue()));
@@ -95,10 +94,10 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create();
 
-        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create(), new FakeValueResolver());
+        $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unknown formatter "unknown"');
+        $this->expectExceptionMessage('Unknown format "unknown"');
 
         $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
     }
