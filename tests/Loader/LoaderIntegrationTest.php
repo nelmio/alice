@@ -58,7 +58,7 @@ class LoaderIntegrationTest extends TestCase
      * @var FilesLoaderInterface|FileLoaderInterface|DataLoaderInterface
      */
     protected $nonIsolatedLoader;
-    
+
     protected function setUp(): void
     {
         $this->loader = new IsolatedLoader();
@@ -761,6 +761,43 @@ class LoaderIntegrationTest extends TestCase
         static::assertSame($objects['foo.user.1'], $objects['foo.user_detail.foo.user.1']->getUser());
         static::assertSame($objects['foo.user.2'], $objects['foo.user_detail.foo.user.2']->getUser());
         static::assertSame($objects['foo.user.3'], $objects['foo.user_detail.foo.user.3']->getUser());
+    }
+
+    public function testLoadReferenceRangeOutOfOrder(): void
+    {
+        $data = [
+            UserDetail::class => [
+                'userdetail_{@user*}' => [
+                    'email' => '<email()>',
+                    'user'  => '<current()>',
+                ],
+            ],
+            User::class => [
+                'usertemplate (template)' => [
+                    'id' => '<uuid()>',
+                ],
+                'user0 (extends usertemplate)' => [
+                    'name' => '<username()>',
+                ],
+                'user1' => [
+                    'name' => '<username()>',
+                ],
+            ],
+        ];
+
+        $set = $this->loader->loadData($data);
+
+        $objects = $set->getObjects();
+        static::assertCount(4, $objects);
+
+        static::assertArrayHasKey('userdetail_user0', $objects);
+        static::assertArrayHasKey('userdetail_user1', $objects);
+
+        static::assertInstanceOf(User::class, $objects['userdetail_user0']->getUser());
+        static::assertInstanceOf(User::class, $objects['userdetail_user1']->getUser());
+
+        static::assertSame($objects['user0'], $objects['userdetail_user0']->getUser());
+        static::assertSame($objects['user1'], $objects['userdetail_user1']->getUser());
     }
 
     public function testTemplatesAreKeptBetweenFiles(): void
