@@ -28,6 +28,16 @@ final class FixtureNotFoundExceptionFactory
         );
     }
 
+    public static function createWildcard(string $wildcard): FixtureNotFoundException
+    {
+        return new FixtureNotFoundException(
+            sprintf(
+                'Could not find fixtures matching wildcard "%s*".',
+                $wildcard
+            )
+        );
+    }
+
     private function __construct()
     {
     }

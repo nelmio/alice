@@ -29,6 +29,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationsDenormalizerI
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\DummyFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
+use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
@@ -39,7 +40,7 @@ use ReflectionClass;
 class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 {
     use ProphecyTrait;
-    
+
     protected function setUp(): void
     {
         $this->denormalizer = new ReferenceRangeNameDenormalizer(
@@ -130,6 +131,125 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
+    }
+
+    public function testWildcardIsProperlyParsed(): void
+    {
+        $userDetails1 = new TemplatingFixture(
+            new SimpleFixtureWithFlags(
+                new SimpleFixture(
+                    'userDetails1',
+                    'Nelmio\Alice\Entity\UserDetails',
+                    new SpecificationBag(null, new PropertyBag(), new MethodCallBag())
+                ),
+                new FlagBag('userDetails1')
+            )
+        );
+
+        $userDetails2 = new TemplatingFixture(
+            new SimpleFixtureWithFlags(
+                new SimpleFixture(
+                    'userDetails2',
+                    'Nelmio\Alice\Entity\UserDetails',
+                    new SpecificationBag(null, new PropertyBag(), new MethodCallBag())
+                ),
+                new FlagBag('userDetails2')
+            )
+        );
+
+        $fixtures = (new FixtureBag())->with($userDetails1)->with($userDetails2);
+        $className = 'Nelmio\Alice\Entity\User';
+        $reference = 'user_{@userDetails*} (extends timestamp)';
+        $fixtureName1 = 'user_userDetails1';
+        $fixtureName2 = 'user_userDetails2';
+        $specs = [];
+        $flags = new FlagBag('');
+        $parsedFlags = (new FlagBag('user_{@userDetails}'))->withFlag(new ExtendFlag(new FixtureReference('timestamp')));
+        $fixtureFlags1 = (new FlagBag('user_userDetails1'))->withFlag(new ExtendFlag(new FixtureReference('timestamp')));
+        $fixtureFlags2 = (new FlagBag('user_userDetails2'))->withFlag(new ExtendFlag(new FixtureReference('timestamp')));
+
+        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
+        $flagParserProphecy
+            ->parse($reference)
+            ->willReturn($parsedFlags)
+        ;
+        /** @var FlagParserInterface $flagParser */
+        $flagParser = $flagParserProphecy->reveal();
+
+        $specsDenormalizerProphecy = $this->prophesize(SpecificationsDenormalizerInterface::class);
+        $expectedSpecs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
+        $specsDenormalizerProphecy
+            ->denormalize(Argument::type(SimpleFixture::class), $flagParser, $specs)
+            ->willReturn($expectedSpecs)
+        ;
+        /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
+        $specsDenormalizer = $specsDenormalizerProphecy->reveal();
+
+        $denormalizer = (new ReferenceRangeNameDenormalizer($specsDenormalizer))->withFlagParser($flagParser);
+        $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
+
+        $expected = $fixtures->with(
+            new TemplatingFixture(
+                new SimpleFixtureWithFlags(
+                    new SimpleFixture(
+                        $fixtureName1,
+                        $className,
+                        $expectedSpecs,
+                        $userDetails1
+                    ),
+                    $fixtureFlags1
+                )
+            )
+        )->with(
+            new TemplatingFixture(
+                new SimpleFixtureWithFlags(
+                    new SimpleFixture(
+                        $fixtureName2,
+                        $className,
+                        $expectedSpecs,
+                        $userDetails2
+                    ),
+                    $fixtureFlags2
+                )
+            )
+        );
+
+        static::assertEquals($expected, $actual);
+
+        $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
+        $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
+    }
+
+    public function testWildcardWithNoMatchesThrowsFixtureNotFoundException(): void
+    {
+        $fixtures = (new FixtureBag());
+        $className = 'Nelmio\Alice\Entity\User';
+        $reference = 'user_{@userDetails*} (extends timestamp)';
+        $specs = [];
+        $flags = new FlagBag('');
+        $parsedFlags = (new FlagBag('user_{@userDetails}'))->withFlag(new ExtendFlag(new FixtureReference('timestamp')));
+
+        $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
+        $flagParserProphecy
+            ->parse($reference)
+            ->willReturn($parsedFlags)
+        ;
+        /** @var FlagParserInterface $flagParser */
+        $flagParser = $flagParserProphecy->reveal();
+
+        $specsDenormalizerProphecy = $this->prophesize(SpecificationsDenormalizerInterface::class);
+        /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
+        $specsDenormalizer = $specsDenormalizerProphecy->reveal();
+
+        $denormalizer = (new ReferenceRangeNameDenormalizer($specsDenormalizer))->withFlagParser($flagParser);
+
+        $this->expectException(FixtureNotFoundException::class);
+        $this->expectExceptionMessage('Could not find fixtures matching wildcard "userDetails*".');
+
+        $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
+
+        $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
+        $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(0);
     }
 
     /**
