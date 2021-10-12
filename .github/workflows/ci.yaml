@@ -45,12 +45,12 @@ jobs:
               with:
                   php-version: ${{ matrix.php }}
 
+            - name: Install dependencies
+              run: composer install
+
             - name: Setup Symfony version
               run: composer bin symfony require "symfony/symfony:${{ matrix.symfony-versions }}" --no-update
               if: matrix.symfony-versions
-
-            - name: Install dependencies
-              run: composer install
 
             - name: Install bin dependencies
               run: composer bin symfony install
