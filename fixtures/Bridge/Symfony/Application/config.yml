@@ -8,6 +8,8 @@
 #
 
 framework:
+    annotations:
+        enabled: false
     secret:                  NelmioAliceBundleSecret
     serializer:
         enabled: true
@@ -17,6 +19,6 @@ framework:
         utf8: true
     test:                    ~
     session:
-        storage_id:          session.storage.mock_file
+        enabled: false
     property_access:
         magic_call:          true

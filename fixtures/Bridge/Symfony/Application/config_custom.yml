@@ -8,6 +8,8 @@
 #
 
 framework:
+    annotations:
+        enabled: false
     secret:                  NelmioAliceBundleSecret
     serializer:
         enabled: true
@@ -17,7 +19,7 @@ framework:
         utf8: true
     test:                    ~
     session:
-        storage_id:          session.storage.mock_file
+        enabled: false
 
 nelmio_alice:
     locale: 'fr_FR'
