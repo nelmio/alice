@@ -19,12 +19,6 @@ class AppKernelWithCustomParameters extends AppKernel
 {
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        if (3 === self::MAJOR_VERSION) {
-            $config = __DIR__.'/config_custom_34.yml';
-        } else {
-            $config = __DIR__.'/config_custom.yml';
-        }
-
-        $loader->load($config);
+        $loader->load(__DIR__.'/config_custom.yml');
     }
 }

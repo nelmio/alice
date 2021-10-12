@@ -43,13 +43,7 @@ class AppKernel extends Kernel
     
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        if (3 === self::MAJOR_VERSION) {
-            $config = $this->config ?? (__DIR__.'/config_34.yml');
-        } else {
-            $config = $this->config ?? (__DIR__.'/config.yml');
-        }
-
-        $loader->load($config);
+        $loader->load($this->config ?? __DIR__.'/config.yml');
     }
     
     public function build(ContainerBuilder $container): void
