@@ -1,6 +1,6 @@
 {
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.3"
+        "friendsofphp/php-cs-fixer": "^3.0"
     },
     "config": {
         "bin-dir": "bin",

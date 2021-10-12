@@ -308,6 +308,7 @@ class RecursiveParameterResolverTest extends TestCase
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new RecursiveParameterResolver($decoratedResolver);
+
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
             static::fail('Expected exception to be thrown.');
@@ -320,6 +321,7 @@ class RecursiveParameterResolverTest extends TestCase
         }
 
         $resolver = new RecursiveParameterResolver($decoratedResolver, 10);
+
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
             static::fail('Expected exception to be thrown.');

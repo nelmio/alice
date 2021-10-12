@@ -158,6 +158,7 @@ class EvaluatedValueResolverTest extends TestCase
         static::assertSame(['foo' => 'bar'], $scope);
 
         $value = new EvaluatedValue('$scope');
+
         try {
             $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
             static::fail('Expected an exception to be thrown.');
@@ -203,6 +204,7 @@ class EvaluatedValueResolverTest extends TestCase
         static::assertEquals($expected, $actual);
 
         $value = new EvaluatedValue('$scope');
+
         try {
             $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
             static::fail('Expected an exception to be thrown.');

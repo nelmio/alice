@@ -153,6 +153,7 @@ class StringParameterResolverTest extends TestCase
         $resolvedParameters = new ParameterBag();
 
         $resolver = new StringParameterResolver();
+
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
             static::fail('Expected exception to be thrown');
@@ -169,6 +170,7 @@ class StringParameterResolverTest extends TestCase
         $injectedResolver = $injectedResolverProphecy->reveal();
 
         $resolver = (new StringParameterResolver())->withResolver($injectedResolver);
+
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters);
             static::fail('Expected exception to be thrown');

@@ -41,6 +41,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
         parent::parse($token);
 
         $value = $token->getValue();
+
         try {
             $elements = substr($value, 1, -1);
 

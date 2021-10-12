@@ -169,6 +169,7 @@ class InstantiatorResolverTest extends TestCase
         $resolver = $resolverProphecy->reveal();
 
         $instantiator = new InstantiatorResolver(new FakeInstantiator(), $resolver);
+
         try {
             $instantiator->instantiate($fixture, $set, new GenerationContext());
             static::fail('Expected exception to be thrown.');

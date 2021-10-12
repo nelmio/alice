@@ -257,6 +257,7 @@ class UniqueValueResolverTest extends TestCase
 
 
         $resolver = new UniqueValueResolver($pool, $decoratedResolver);
+
         try {
             $resolver->resolve($value, $fixture, $set, $scope, $context);
             static::fail('Expected exception to be thrown.');

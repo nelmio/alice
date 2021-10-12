@@ -73,6 +73,7 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
                     )
                 );
             }
+
             try {
                 foreach ($rawFixtureSet as $reference => $specs) {
                     if (null === $specs) {
