@@ -69,3 +69,4 @@ jobs:
               with:
                   file: './coverage.xml'
                   fail_ci_if_error: true
+              if: false == matrix.symfony-versions
