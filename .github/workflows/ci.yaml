@@ -58,7 +58,7 @@ jobs:
 
             - name: Run PHPUnit tests
               run: XDEBUG_MODE=coverage bin/phpunit --coverage-clover=coverage.xml
-              if: !matrix.symfony-versions
+              if: false == matrix.symfony-versions
 
             - name: Run Symfony tests
               run: bin/phpunit --configuration phpunit_symfony.xml.dist
