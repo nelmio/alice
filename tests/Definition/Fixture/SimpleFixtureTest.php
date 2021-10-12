@@ -46,6 +46,7 @@ class SimpleFixtureTest extends TestCase
         static::assertEquals($reference, $fixture->getId());
         static::assertEquals($className, $fixture->getClassName());
         static::assertEquals($specs, $fixture->getSpecs());
+
         try {
             $fixture->getValueForCurrent();
             static::fail('Expected exception to be thrown.');

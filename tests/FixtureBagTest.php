@@ -50,6 +50,7 @@ class FixtureBagTest extends TestCase
         static::assertFalse($bag->has('bar'));
 
         static::assertEquals($fixture, $bag->get('foo'));
+
         try {
             $bag->get('bar');
             static::fail('Expected exception to be thrown.');

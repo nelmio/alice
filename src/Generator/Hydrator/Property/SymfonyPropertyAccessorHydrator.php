@@ -54,6 +54,7 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
     public function hydrate(ObjectInterface $object, Property $property, GenerationContext $context): ObjectInterface
     {
         $instance = $object->getInstance();
+
         try {
             $this->propertyAccessor->setValue($instance, $property->getName(), $property->getValue());
         } catch (SymfonyNoSuchPropertyException $exception) {

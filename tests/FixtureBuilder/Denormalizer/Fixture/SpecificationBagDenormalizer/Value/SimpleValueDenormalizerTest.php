@@ -109,6 +109,7 @@ class SimpleValueDenormalizerTest extends TestCase
         $parser = $parserProphecy->reveal();
 
         $denormalizer = new SimpleValueDenormalizer($parser);
+
         try {
             $denormalizer->denormalize(new FakeFixture(), null, 'foo');
             static::fail('Expected throwable to be thrown.');

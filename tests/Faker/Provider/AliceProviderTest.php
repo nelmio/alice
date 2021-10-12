@@ -44,6 +44,7 @@ class AliceProviderTest extends TestCase
     public function testCurrentThrowsAnExceptionIfFixtureHasNoCurrentValue(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
+
         try {
             AliceProvider::current($fixture);
             static::fail('Expected exception to be thrown.');

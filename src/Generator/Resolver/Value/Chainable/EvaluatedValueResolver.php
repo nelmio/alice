@@ -51,6 +51,7 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         // We make use of the underscore prefix (`_`) here to limit the possible conflicts with the variables injected
         // in the scope.
         $_scope = $scope;
+
         try {
             $_scope['current'] = $fixture->getValueForCurrent();
 

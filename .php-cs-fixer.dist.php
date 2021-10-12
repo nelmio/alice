@@ -22,7 +22,7 @@ $finder = Finder::create()
         __DIR__.'/tests',
     ])
     ->append([
-        __DIR__.'/.php_cs.dist',
+        __DIR__.'/.php-cs-fixer.dist.php',
     ])
     ->exclude([
         'fixtures/Parser/files/php',
@@ -30,12 +30,12 @@ $finder = Finder::create()
     ])
 ;
 
-return Config::create()
+return (new Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2' => true,
         'blank_line_after_opening_tag' => true,
-        'blank_line_before_return' => true,
+        'blank_line_before_statement' => true,
         'cast_spaces' => true,
         'combine_consecutive_unsets' => true,
         'declare_equal_normalize' => true,
@@ -45,13 +45,13 @@ return Config::create()
         'header_comment' => [
             'location' => 'after_open',
             'header' => <<<'LICENSE'
-This file is part of the Alice package.
-
-(c) Nelmio <hello@nelm.io>
-
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
-LICENSE
+                This file is part of the Alice package.
+                
+                (c) Nelmio <hello@nelm.io>
+                
+                For the full copyright and license information, please view the LICENSE
+                file that was distributed with this source code.
+                LICENSE,
         ],
         'lowercase_cast' => true,
         'general_phpdoc_annotation_remove' => true,
@@ -60,7 +60,6 @@ LICENSE
             'import_constants' => true,
             'import_functions' => true,
         ],
-        'method_separation' => true,
         'modernize_types_casting' => true,
         'native_function_casing' => true,
         'new_with_braces' => true,
@@ -81,6 +80,7 @@ LICENSE
         'ordered_imports' => true,
         'phpdoc_no_empty_return' => true,
         'phpdoc_order' => true,
+        'phpdoc_order_by_value' => true,
         'phpdoc_scalar' => true,
         'phpdoc_separation' => true,
         'phpdoc_trim' => true,
@@ -92,7 +92,6 @@ LICENSE
         'php_unit_namespaced' => true,
         'php_unit_test_case_static_method_calls' => true,
         'php_unit_test_class_requires_covers' => true,
-        'php_unit_ordered_covers' => true,
         'single_quote' => true,
         'space_after_semicolon' => true,
         'standardize_not_equals' => true,

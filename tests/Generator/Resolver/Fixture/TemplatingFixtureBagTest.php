@@ -59,6 +59,7 @@ class TemplatingFixtureBagTest extends TestCase
         static::assertEquals($template, $bag->get($templateId));
 
         static::assertFalse($bag->has('foo'));
+
         try {
             $bag->get('foo');
             static::fail('Expected exception to be thrown.');

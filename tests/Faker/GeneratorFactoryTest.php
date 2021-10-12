@@ -28,6 +28,7 @@ class GeneratorFactoryTest extends TestCase
     public function testAssertGeneratorLocaleMethod(): void
     {
         $this->assertGeneratorLocaleIs('en_US', FakerFactory::create());
+
         try {
             $this->assertGeneratorLocaleIs('fr_FR', FakerFactory::create());
             static::fail('Expected exception to be thrown.');

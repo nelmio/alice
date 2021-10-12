@@ -137,6 +137,7 @@ class RuntimeCacheParserTest extends TestCase
         $fileLocator = $fileLocatorProphecy->reveal();
 
         $parser = new RuntimeCacheParser(new FakeParser(), $fileLocator, new FakeIncludeProcessor());
+
         try {
             $parser->parse('/nowhere');
 

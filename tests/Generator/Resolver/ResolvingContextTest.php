@@ -62,6 +62,7 @@ class ResolvingContextTest extends TestCase
         $context->checkForCircularReference('foo');
 
         $context->add('foo');
+
         try {
             $context->checkForCircularReference('foo');
             static::fail('Expected exception to be thrown.');
@@ -79,6 +80,7 @@ class ResolvingContextTest extends TestCase
         $context->checkForCircularReference('foo');
 
         $context->add('foo');
+
         try {
             $context->checkForCircularReference('foo');
             static::fail('Expected exception to be thrown.');
@@ -93,6 +95,7 @@ class ResolvingContextTest extends TestCase
         $context->checkForCircularReference('foo');
 
         $context->add('foo');
+
         try {
             $context->checkForCircularReference('foo');
             static::fail('Expected exception to be thrown.');
