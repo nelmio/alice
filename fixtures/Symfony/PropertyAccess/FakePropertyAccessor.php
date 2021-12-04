@@ -25,17 +25,17 @@ class FakePropertyAccessor implements PropertyAccessorInterface
         $this->__call(__METHOD__, func_get_args());
     }
     
-    public function getValue($objectOrArray, $propertyPath): void
+    public function getValue($objectOrArray, $propertyPath): mixed
     {
         $this->__call(__METHOD__, func_get_args());
     }
     
-    public function isWritable($objectOrArray, $propertyPath): void
+    public function isWritable($objectOrArray, $propertyPath): bool
     {
         $this->__call(__METHOD__, func_get_args());
     }
     
-    public function isReadable($objectOrArray, $propertyPath): void
+    public function isReadable($objectOrArray, $propertyPath): bool
     {
         $this->__call(__METHOD__, func_get_args());
     }

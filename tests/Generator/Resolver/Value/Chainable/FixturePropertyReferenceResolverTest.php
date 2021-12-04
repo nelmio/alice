@@ -36,9 +36,11 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use ReflectionMethod;
 use stdClass;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver
@@ -225,8 +227,14 @@ class FixturePropertyReferenceResolverTest extends TestCase
 
         $resolver = new FixturePropertyReferenceResolver(PropertyAccess::createPropertyAccessor(), $valueResolver);
 
-        $this->expectException(UnresolvableValueException::class);
-        $this->expectExceptionMessage('Could not resolve value "dummy->publicProperty": PropertyAccessor requires a graph of objects or arrays to operate on, but it found type "string" while trying to traverse path "publicProperty" at property "publicProperty".');
+        if ((new ReflectionMethod(PropertyAccessorInterface::class, 'getValue'))->getParameters()[0]->getType() !== null) {
+            // Since symfony/property-access 6.0
+            $this->expectException(TypeError::class);
+            $this->expectExceptionMessageMatches(sprintf('/^%s/', preg_quote('Symfony\Component\PropertyAccess\PropertyAccessor::getValue(): Argument #1 ($objectOrArray) must be of type object|array, string given', '/')));
+        } else {
+            $this->expectException(UnresolvableValueException::class);
+            $this->expectExceptionMessage('Could not resolve value "dummy->publicProperty": PropertyAccessor requires a graph of objects or arrays to operate on, but it found type "string" while trying to traverse path "publicProperty" at property "publicProperty".');
+        }
 
         $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
     }

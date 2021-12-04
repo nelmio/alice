@@ -43,7 +43,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
         $this->decoratedPropertyAccessor->setValue($objectOrArray, $propertyPath, $value);
     }
     
-    public function getValue($objectOrArray, $propertyPath)
+    public function getValue($objectOrArray, $propertyPath): mixed
     {
         if (false === $objectOrArray instanceof stdClass) {
             return $this->decoratedPropertyAccessor->getValue($objectOrArray, $propertyPath);
@@ -56,7 +56,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
         return $objectOrArray->$propertyPath;
     }
     
-    public function isWritable($objectOrArray, $propertyPath)
+    public function isWritable($objectOrArray, $propertyPath): bool
     {
         return ($objectOrArray instanceof stdClass)
             ? true
@@ -64,7 +64,7 @@ final class StdPropertyAccessor implements PropertyAccessorInterface
         ;
     }
     
-    public function isReadable($objectOrArray, $propertyPath)
+    public function isReadable($objectOrArray, $propertyPath): bool
     {
         return ($objectOrArray instanceof stdClass)
             ? isset($objectOrArray->$propertyPath)
