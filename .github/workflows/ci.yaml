@@ -12,23 +12,25 @@ jobs:
             fail-fast: false
             matrix:
                 php:
-                    - '7.4'
                     - '8.0'
                     - '8.1'
                 symfony-versions: [false]
                 include:
                     -   description: 'Symfony 4.4'
-                        php: '7.4'
-                        symfony-versions: 4.4.*
-                    -   description: 'Symfony 5.3'
-                        php: '7.4'
-                        symfony-versions: 5.3.*
-                    -   description: 'Symfony 4.4'
                         php: '8.0'
                         symfony-versions: 4.4.*
-                    -   description: 'Symfony 5.3'
+                    -   description: 'Symfony 5.4'
                         php: '8.0'
-                        symfony-versions: 5.3.*
+                        symfony-versions: 5.4.*
+                    -   description: 'Symfony 6.0'
+                        php: '8.0'
+                        symfony-versions: 6.0.*
+                    -   description: 'Symfony 5.4'
+                        php: '8.1'
+                        symfony-versions: 5.4.*
+                    -   description: 'Symfony 6.0'
+                        php: '8.1'
+                        symfony-versions: 6.0.*
 
         name: PHP ${{ matrix.php }} ${{ matrix.description }}
         steps:

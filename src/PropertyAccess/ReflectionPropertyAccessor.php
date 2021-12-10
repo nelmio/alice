@@ -66,7 +66,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
         }
     }
     
-    public function getValue($objectOrArray, $propertyPath)
+    public function getValue($objectOrArray, $propertyPath): mixed
     {
         try {
             return $this->decoratedPropertyAccessor->getValue($objectOrArray, $propertyPath);
@@ -94,12 +94,12 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
         }
     }
     
-    public function isWritable($objectOrArray, $propertyPath)
+    public function isWritable($objectOrArray, $propertyPath): bool
     {
         return $this->decoratedPropertyAccessor->isWritable($objectOrArray, $propertyPath) || $this->propertyExists($objectOrArray, $propertyPath);
     }
     
-    public function isReadable($objectOrArray, $propertyPath)
+    public function isReadable($objectOrArray, $propertyPath): bool
     {
         return $this->decoratedPropertyAccessor->isReadable($objectOrArray, $propertyPath) || $this->propertyExists($objectOrArray, $propertyPath);
     }

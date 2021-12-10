@@ -33,7 +33,7 @@ class AppKernel extends Kernel
         parent::__construct($environment, $debug);
     }
     
-    public function registerBundles()
+    public function registerBundles(): array
     {
         return [
             new FrameworkBundle(),
@@ -52,11 +52,15 @@ class AppKernel extends Kernel
             public function process(ContainerBuilder $container): void
             {
                 foreach ($container->getDefinitions() as $id => $definition) {
-                    $definition->setPublic(true);
+                    if (str_starts_with($id, 'nelmio_alice.')) {
+                        $definition->setPublic(true);
+                    }
                 }
 
                 foreach ($container->getAliases() as $id => $definition) {
-                    $definition->setPublic(true);
+                    if (str_starts_with($id, 'nelmio_alice.')) {
+                        $definition->setPublic(true);
+                    }
                 }
             }
         }, PassConfig::TYPE_OPTIMIZE);
@@ -67,7 +71,7 @@ class AppKernel extends Kernel
         $this->config = $resource;
     }
 
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         return __DIR__;
     }
