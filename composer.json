@@ -73,6 +73,9 @@
         }
     },
     "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        },
         "bin-dir": "bin",
         "sort-packages": true
     }
