@@ -69,7 +69,7 @@ final class IdentityTokenParser implements ChainableTokenParserInterface, Parser
     public function parse(Token $token)
     {
         $value = $this->tokenizer->detokenize($token->getValue());
-        $realValue = preg_replace('/^<\((.*)\)>$/', '<identity($1)>', $value);
+        $realValue = preg_replace('/^<\((.*)\)>$/s', '<identity($1)>', $value);
 
         return $this->decoratedTokenParser->parse(
             new Token($realValue, new TokenType(TokenType::FUNCTION_TYPE))

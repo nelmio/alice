@@ -1,0 +1,78 @@
+stdClass:
+    dummy:
+        newlinesReplacedWithSpaces: >
+
+            <(
+                new DateTime(
+                    '2022'
+
+                    .'-01'
+
+                    .'-01',
+                )
+            )>
+
+
+        newlinesReplacedWithSpacesNoNewlineAtEnd: >-
+
+            <(
+                new DateTime(
+                    '2022'
+
+                    .'-01'
+
+                    .'-02',
+                )
+            )>
+
+
+        newlinesReplacedWithSpacesAllNewlinesFromEnd: >+
+
+            <(
+                new DateTime(
+                    '2022'
+
+                    .'-01'
+
+                    .'-03',
+                )
+            )>
+
+
+        newlinesKept: |
+
+            <(
+                new DateTime(
+                    '2022'
+
+                    .'-01'
+
+                    .'-04',
+                )
+            )>
+
+
+        newlinesKeptNoNewlineAtEnd: |-
+
+            <(
+                new DateTime(
+                    '2022'
+
+                    .'-01'
+
+                    .'-05',
+                )
+            )>
+
+
+        newlinesKeptAllNewlinesFromEnd: |+
+
+            <(
+                new DateTime(
+                    '2022'
+
+                    .'-01'
+
+                    .'-06',
+                )
+            )>

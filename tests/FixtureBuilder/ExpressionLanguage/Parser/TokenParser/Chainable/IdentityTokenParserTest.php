@@ -69,4 +69,26 @@ class IdentityTokenParserTest extends TestCase
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
+
+    public function testSupportNewlines(): void
+    {
+        $token = new Token("<(new DateTime(\n    '2021-12-29',\n))>", new TokenType(TokenType::IDENTITY_TYPE));
+
+        $decoratedParserProphecy = $this->prophesize(ChainableTokenParserInterface::class);
+        $decoratedParserProphecy
+            ->parse(
+                new Token("<identity(new DateTime(\n    '2021-12-29',\n))>", new TokenType(TokenType::FUNCTION_TYPE))
+            )
+            ->willReturn($expected = 'foo')
+        ;
+        /** @var ChainableTokenParserInterface $decoratedParser */
+        $decoratedParser = $decoratedParserProphecy->reveal();
+
+        $parser = new IdentityTokenParser($decoratedParser);
+        $actual = $parser->parse($token);
+
+        static::assertEquals($expected, $actual);
+
+        $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
+    }
 }
