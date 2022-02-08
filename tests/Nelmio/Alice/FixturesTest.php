@@ -48,7 +48,7 @@ class FixturesTest extends TestCase
 
     public function testThatNewLoaderIsCreatedForDifferingOptions()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMock('Doctrine\Persistence\ObjectManager');
         $om->expects($this->any())
             ->method('find')->will($this->returnValue(new User()));
 
@@ -192,7 +192,7 @@ class FixturesTest extends TestCase
 
     public function testThatExceptionIsThrownForInvalidProvider()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMock('Doctrine\Persistence\ObjectManager');
         $om->expects($this->any())
             ->method('find')->will($this->returnValue(new User()));
 
@@ -276,7 +276,7 @@ class FixturesTest extends TestCase
      */
     public function testLoadWithLogger()
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMock('Doctrine\Persistence\ObjectManager');
 
         $objects = Fixtures::load(__DIR__.'/fixtures/basic.php', $om, array(
             'logger' => 'not callable'
@@ -317,7 +317,7 @@ class FixturesTest extends TestCase
 
     protected function getDoctrineManagerMock($objects = null)
     {
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->getMock('Doctrine\Persistence\ObjectManager');
 
         $om->expects($objects ? $this->exactly($objects) : $this->any())
             ->method('persist');
