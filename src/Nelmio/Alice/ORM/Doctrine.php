@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Nelmio\Alice\ORMInterface;
 
 /**

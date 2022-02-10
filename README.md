@@ -47,10 +47,10 @@ objects in the container you give it.
 Examples:
 
 ```php
-// load a yaml file into a Doctrine\Common\Persistence\ObjectManager object
+// load a yaml file into a Doctrine\Persistence\ObjectManager object
 $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.yml', $objectManager);
 
-// load a php file into a Doctrine\Common\Persistence\ObjectManager object
+// load a php file into a Doctrine\Persistence\ObjectManager object
 $objects = \Nelmio\Alice\Fixtures::load(__DIR__.'/fixtures.php', $objectManager);
 ```
 
@@ -643,7 +643,7 @@ there are two ways to solve the problem:
 
    namespace Acme\DemoBundle\DataFixtures\ORM;
 
-   use Doctrine\Common\Persistence\ObjectManager;
+   use Doctrine\Persistence\ObjectManager;
    use Doctrine\Common\DataFixtures\FixtureInterface;
    use Nelmio\Alice\Fixtures;
 

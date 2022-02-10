@@ -11,7 +11,7 @@
 
 namespace Nelmio\Alice;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Psr\Log\LoggerInterface;
 
 class Fixtures
