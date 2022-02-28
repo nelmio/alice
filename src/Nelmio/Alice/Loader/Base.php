@@ -348,7 +348,8 @@ class Base implements LoaderInterface
                  */
                 if (is_array($args)) {
                     $constructor = '__construct';
-                    list($index, $values) = each($args);
+                    $index = key($args);
+                    $values = $args[$index];
                     if ($index !== 0) {
                         if (!is_array($values)) {
                             throw new \UnexpectedValueException("The static '$index' call in object '$name' must be given an array");
