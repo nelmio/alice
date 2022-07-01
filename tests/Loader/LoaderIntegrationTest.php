@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Loader;
 
+use DateTime;
 use DateTimeInterface;
 use InvalidArgumentException;
 use LogicException;
@@ -1548,6 +1549,26 @@ class LoaderIntegrationTest extends TestCase
 
         static::assertNotSame($dummy1, $dummy2);
         static::assertSame($dummy2, $dummy1->sibling);
+    }
+
+    public function testNewlinesInIdentity(): void
+    {
+        $objects = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/identity_newlines.yml')->getObjects();
+
+        $expected = new stdClass();
+        $expected->newlinesReplacedWithSpaces = new DateTime('2022-01-01');
+        $expected->newlinesReplacedWithSpacesNoNewlineAtEnd = new DateTime('2022-01-02');
+        $expected->newlinesReplacedWithSpacesAllNewlinesFromEnd = new DateTime('2022-01-03');
+        $expected->newlinesKept = new DateTime('2022-01-04');
+        $expected->newlinesKeptNoNewlineAtEnd = new DateTime('2022-01-05');
+        $expected->newlinesKeptAllNewlinesFromEnd = new DateTime('2022-01-06');
+
+        static::assertEquals(
+            [
+                'dummy' => $expected,
+            ],
+            $objects
+        );
     }
 
     public function provideFixturesToInstantiate()

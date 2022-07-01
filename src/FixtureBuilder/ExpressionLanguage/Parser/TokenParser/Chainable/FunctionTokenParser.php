@@ -34,7 +34,7 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/^<(?<function>(.|\r?\n)+?)\((?<arguments>.*)\)>$/';
+    const REGEX = '/^\s*<(?<function>(.|\r?\n)+?)\((?<arguments>.*)\)>\s*$/s';
 
     /**
      * @var ArgumentEscaper

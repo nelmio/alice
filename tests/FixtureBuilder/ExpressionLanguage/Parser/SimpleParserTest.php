@@ -83,6 +83,35 @@ class SimpleParserTest extends TestCase
         $tokenParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
+    public function testIfTheLexProcessReturnsATokensSurroundedWithSpacesTheTrimsTheSpaces(): void
+    {
+        $value = 'foo';
+
+        $lexerProphecy = $this->prophesize(LexerInterface::class);
+        $lexerProphecy->lex($value)->willReturn([
+            $token1 = new Token("\n", new TokenType(TokenType::STRING_TYPE)),
+            $token2 = new Token('foo', new TokenType(TokenType::VARIABLE_TYPE)),
+            $token3 = new Token("\n", new TokenType(TokenType::STRING_TYPE)),
+        ]);
+        /** @var LexerInterface $lexer */
+        $lexer = $lexerProphecy->reveal();
+
+        $tokenParserProphecy = $this->prophesize(TokenParserInterface::class);
+        $tokenParserProphecy->parse($token1)->willReturn("\n");
+        $tokenParserProphecy->parse($token2)->willReturn('parsed_foo');
+        $tokenParserProphecy->parse($token3)->willReturn("\n");
+        /** @var TokenParserInterface $tokenParser */
+        $tokenParser = $tokenParserProphecy->reveal();
+
+        $parser = new SimpleParser($lexer, $tokenParser);
+        $parsedValue = $parser->parse($value);
+
+        static::assertEquals(
+            'parsed_foo',
+            $parsedValue
+        );
+    }
+
     public function testIfTheLexProcessReturnsMultipleTokensThenTheValueReturnedWillBeAListValue(): void
     {
         $value = 'foo';
