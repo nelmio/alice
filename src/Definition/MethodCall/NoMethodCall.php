@@ -23,22 +23,22 @@ use Nelmio\Alice\Throwable\Exception\LogicExceptionFactory;
  */
 final class NoMethodCall implements MethodCallInterface
 {
-    public function withArguments(array $arguments = null): self
+    public function withArguments(array $arguments = null): never
     {
         $this->throwException(__METHOD__);
     }
     
-    public function getCaller(): void
+    public function getCaller(): never
     {
         $this->throwException(__METHOD__);
     }
     
-    public function getMethod(): string
+    public function getMethod(): never
     {
         $this->throwException(__METHOD__);
     }
     
-    public function getArguments(): void
+    public function getArguments(): never
     {
         $this->throwException(__METHOD__);
     }
@@ -48,7 +48,7 @@ final class NoMethodCall implements MethodCallInterface
         return 'none';
     }
 
-    private function throwException(string $method): void
+    private function throwException(string $method): never
     {
         throw LogicExceptionFactory::createForUncallableMethod($method);
     }

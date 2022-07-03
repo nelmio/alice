@@ -271,7 +271,7 @@ class ReflectionPropertyAccessorTest extends TestCase
     {
         $property = 'val';
         $value = $expected = 'bar';
-        $object = new DummyWithPublicProperty($value);
+        $object = new DummyWithPublicProperty();
 
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
