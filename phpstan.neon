@@ -1,5 +1,5 @@
 parameters:
-    excludes_analyse:
+    excludePaths:
         - %rootDir%/../../../../../fixtures/Bridge
         - %rootDir%/../../../../../src/Bridge
         - %rootDir%/../../../../../tests/Bridge
