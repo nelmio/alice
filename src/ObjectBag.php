@@ -123,7 +123,8 @@ final class ObjectBag implements IteratorAggregate, Countable
     {
         return count($this->objects);
     }
-    
+
+    #[\ReturnTypeWillChange]
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->objects);
