@@ -17,6 +17,8 @@ use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Dummy as NelmioDummy;
 use Nelmio\Alice\Entity\DummyWithDate;
+use Nelmio\Alice\Entity\DummyWithEnum;
+use Nelmio\Alice\Entity\Enum\DummyEnum;
 use Nelmio\Alice\Entity\Hydrator\Dummy;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Hydrator\PropertyHydratorInterface;
@@ -49,7 +51,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
      * @var PropertyAccessorInterface
      */
     private $propertyAccessor;
-    
+
     protected function setUp(): void
     {
         $this->propertyAccessor = new PropertyAccessor();
@@ -141,6 +143,35 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
         } catch (InvalidArgumentException $exception) {
             static::assertEquals(
                 'Invalid value given for the property "immutableDateTime" of the object "dummy" (class: Nelmio\Alice\Entity\DummyWithDate).',
+                $exception->getMessage()
+            );
+            static::assertEquals(0, $exception->getCode());
+            static::assertNotNull($exception->getPrevious());
+        }
+    }
+
+    public function testReturnsHydratedObjectWithEnum(): void
+    {
+        $object = new SimpleObject('dummy', new DummyWithEnum());
+        $property = new Property('dummyEnum', 'case1');
+
+        $result = $this->hydrator->hydrate($object, $property, new GenerationContext());
+
+        static::assertEquals(DummyEnum::Case1, $result->getInstance()->getDummyEnum());
+    }
+
+    public function testThrowsInvalidArgumentExceptionIfEnumCaseIsNotFound(): void
+    {
+        try {
+            $object = new SimpleObject('dummy', new DummyWithEnum());
+            $property = new Property('dummyEnum', 'case3');
+
+            $this->hydrator->hydrate($object, $property, new GenerationContext());
+
+            static::fail('Expected exception to be thrown.');
+        } catch (InvalidArgumentException $exception) {
+            static::assertEquals(
+                'Invalid value given for the property "dummyEnum" of the object "dummy" (class: Nelmio\Alice\Entity\DummyWithEnum).',
                 $exception->getMessage()
             );
             static::assertEquals(0, $exception->getCode());
