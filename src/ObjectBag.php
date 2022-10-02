@@ -21,6 +21,7 @@ use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\ObjectNotFoundException;
 use Nelmio\Alice\Throwable\Exception\ObjectNotFoundExceptionFactory;
+use Traversable;
 
 /**
  * Value object containing a list of objects.
@@ -121,8 +122,8 @@ final class ObjectBag implements IteratorAggregate, Countable
     {
         return count($this->objects);
     }
-    
-    public function getIterator(): ArrayIterator
+
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->objects);
     }

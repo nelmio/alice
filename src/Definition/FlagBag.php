@@ -17,6 +17,7 @@ use ArrayIterator;
 use Countable;
 use IteratorAggregate;
 use function Nelmio\Alice\deep_clone;
+use Traversable;
 
 /**
  * Collection of flags.
@@ -94,7 +95,7 @@ final class FlagBag implements IteratorAggregate, Countable
         return $this->key;
     }
     
-    public function getIterator(): ArrayIterator
+    public function getIterator(): Traversable
     {
         return new ArrayIterator(array_values($this->flags));
     }

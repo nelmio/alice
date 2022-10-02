@@ -17,6 +17,7 @@ use ArrayIterator;
 use IteratorAggregate;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory;
+use Traversable;
 
 /**
  * Value object containing a list of fixtures.
@@ -85,7 +86,7 @@ final class FixtureBag implements IteratorAggregate
         throw FixtureNotFoundExceptionFactory::create($id);
     }
     
-    public function getIterator(): ArrayIterator
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->fixtures);
     }
