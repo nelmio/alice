@@ -23,6 +23,7 @@ use stdClass;
 
 /**
  * @group integration
+ *
  * @coversNothing
  */
 class ParameterResolverIntegrationTest extends TestCase

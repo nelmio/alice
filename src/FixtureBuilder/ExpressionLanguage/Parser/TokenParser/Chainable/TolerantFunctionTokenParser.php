@@ -67,6 +67,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
      * {@inheritdoc}
      *
      * @throws LexException
+     *
      * @TODO: handle redundant ListValue tokens
      *
      * @return FunctionCallValue|ListValue

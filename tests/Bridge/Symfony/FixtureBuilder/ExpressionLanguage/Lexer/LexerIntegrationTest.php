@@ -18,6 +18,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerIntegrationTest as
 
 /**
  * @group integration
+ *
  * @coversNothing
  */
 class LexerIntegrationTest extends CoreLexerIntegrationTest

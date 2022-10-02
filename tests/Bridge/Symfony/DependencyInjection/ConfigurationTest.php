@@ -20,6 +20,7 @@ use Symfony\Component\Config\Definition\Processor;
 
 /**
  * @covers \Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
+ *
  * @group integration
  */
 class ConfigurationTest extends TestCase
