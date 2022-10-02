@@ -71,6 +71,7 @@ class FixtureBagTest extends TestCase
         $fixture->setSpecs(SpecificationBagFactory::create(new FakeMethodCall()));
 
         // Mutate retrieved fixture
+        // @phpstan-ignore-next-line
         $bag->get('foo')->setSpecs(SpecificationBagFactory::create(new NoMethodCall()));
 
         static::assertEquals(

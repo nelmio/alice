@@ -107,7 +107,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
     }
 
     /**
-     * @return TemplatingFixture[]
+     * @return array<string, TemplatingFixture>
      */
     private function buildReferencedValues(
         FixtureBag $builtFixtures,
@@ -115,15 +115,17 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
         bool $allFlag
     ): array {
         if (false === $allFlag) {
+            /** @var TemplatingFixture $fixture */
             $fixture = $builtFixtures->get($referencedName);
 
             return [$referencedName => $fixture];
         }
 
+        /** @var array<string, TemplatingFixture> $matchedFixtures */
         $matchedFixtures = array_filter(
             $builtFixtures->toArray(),
             static function (string $referenceName) use ($referencedName) {
-                return strpos($referenceName, $referencedName) === 0;
+                return str_starts_with($referenceName, $referencedName);
             },
             ARRAY_FILTER_USE_KEY
         );

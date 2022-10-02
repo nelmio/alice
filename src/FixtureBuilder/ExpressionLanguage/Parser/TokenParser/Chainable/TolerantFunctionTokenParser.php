@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\Definition\Value\NestedValue;
+use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
@@ -69,10 +70,8 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
      * @throws LexException
      *
      * @TODO: handle redundant ListValue tokens
-     *
-     * @return FunctionCallValue|ListValue
      */
-    public function parse(Token $token)
+    public function parse(Token $token): FunctionCallValue|ListValue|ValueInterface|string
     {
         parent::parse($token);
 

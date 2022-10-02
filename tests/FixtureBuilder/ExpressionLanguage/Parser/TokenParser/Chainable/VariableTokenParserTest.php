@@ -15,7 +15,6 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chai
 
 use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserInterface;
-use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
@@ -51,7 +50,7 @@ class VariableTokenParserTest extends TestCase
     {
         try {
             $token = new Token('', new TokenType(TokenType::VARIABLE_TYPE));
-            $parser = new VariableTokenParser(new FakeParser());
+            $parser = new VariableTokenParser();
 
             $parser->parse($token);
             static::fail('Expected exception to be thrown.');

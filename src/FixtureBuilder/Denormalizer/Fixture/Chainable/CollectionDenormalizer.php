@@ -18,7 +18,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalize
 interface CollectionDenormalizer extends ChainableFixtureDenormalizerInterface
 {
     /**
-     * @return string[]
+     * @return array<string, string|int>
      *
      * @example
      *  'user_{alice, bob}' => [

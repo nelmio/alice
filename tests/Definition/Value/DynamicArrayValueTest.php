@@ -64,7 +64,9 @@ class DynamicArrayValueTest extends TestCase
         $elementValue->setValue('e1');
 
         // Mutate returned values
+        // @phpstan-ignore-next-line
         $value->getQuantifier()->setValue('q2');
+        // @phpstan-ignore-next-line
         $value->getElement()->setValue('e2');
 
         static::assertEquals(new MutableValue('q0'), $value->getQuantifier());

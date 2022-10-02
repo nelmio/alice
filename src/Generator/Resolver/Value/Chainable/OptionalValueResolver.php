@@ -103,8 +103,8 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
         $random = null !== $this->faker ? $this->faker->numberBetween(0, 99) : mt_rand(0, 99);
 
         return ($random < $quantifier)
-            ? $value->getFirstMember()
-            : $value->getSecondMember()
+            ? $value->getFirstMember()  // @phpstan-ignore-line
+            : $value->getSecondMember() // @phpstan-ignore-line
         ;
     }
 }

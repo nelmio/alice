@@ -97,6 +97,7 @@ class TemplatingFixtureBagTest extends TestCase
         $fixture->setSpecs(SpecificationBagFactory::create(new FakeMethodCall()));
 
         // Mutate retrieved fixture
+        // @phpstan-ignore-next-line
         $bag->getFixtures()->get('user0')->setSpecs(SpecificationBagFactory::create(new NoMethodCall()));
 
         static::assertEquals($originalFixture, $bag->getFixtures()->get('user0'));

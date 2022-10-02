@@ -30,19 +30,19 @@ final class TemplateFixtureResolver
     /**
      * Resolves a given fixture. The resolution of a fixture may result in the resolution of several fixtures.
      *
-     * @param TemplatingFixture|FixtureInterface $fixture Fixture to resolve
-     *
      * @throws FixtureNotFoundException
      */
     public function resolve(
-        TemplatingFixture $fixture,
+        TemplatingFixture|FixtureInterface $fixture,
         FixtureBag $unresolvedFixtures,
         TemplatingFixtureBag $resolvedFixtures,
         ResolvingContext $context
-    ): TemplatingFixtureBag {
+    ): FixtureInterface|TemplatingFixtureBag {
         $context->checkForCircularReference($fixture->getId());
 
-        if (false === $fixture->extendsFixtures()) {
+        if ($fixture instanceof TemplatingFixture
+            && false === $fixture->extendsFixtures()
+        ) {
             return $resolvedFixtures->with($fixture);
         }
 
@@ -52,7 +52,9 @@ final class TemplateFixtureResolver
          */
         [$extendedFixtures, $resolvedFixtures] = $this->resolveExtendedFixtures(
             $fixture,
-            $fixture->getExtendedFixturesReferences(),
+            $fixture instanceof TemplatingFixture
+                ? $fixture->getExtendedFixturesReferences()
+                : [],
             $unresolvedFixtures,
             $resolvedFixtures,
             $context

@@ -59,12 +59,14 @@ class FunctionCallArgumentResolverTest extends TestCase
     {
         $decoratedResolverConstructor = static function () {
             $resolver = new FakeValueResolver();
+            // @phpstan-ignore-next-line
             $resolver->decorated = true;
 
             return $resolver;
         };
         $argumentResolverConstructor = static function () {
             $resolver = new FakeValueResolver();
+            // @phpstan-ignore-next-line
             $resolver->argument = true;
 
             return $resolver;

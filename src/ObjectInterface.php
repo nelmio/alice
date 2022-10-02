@@ -24,13 +24,7 @@ interface ObjectInterface
      */
     public function getId(): string;
 
-    /**
-     * @return object
-     */
-    public function getInstance();
+    public function getInstance(): object;
 
-    /**
-     * @return static
-     */
-    public function withInstance(object $newInstance);
+    public function withInstance(object $newInstance): static;
 }

@@ -32,9 +32,6 @@ final class StaticParameterResolver implements ChainableParameterResolverInterfa
         return null === $value || is_bool($value) || is_numeric($value) || is_object($value);
     }
 
-    /**
-     * @param bool|int|float $parameter
-     */
     public function resolve(Parameter $parameter, ParameterBag $unresolvedParameters, ParameterBag $resolvedParameters): ParameterBag
     {
         return $resolvedParameters->with($parameter);
