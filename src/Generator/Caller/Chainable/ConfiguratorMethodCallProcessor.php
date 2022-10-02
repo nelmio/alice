@@ -23,6 +23,7 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectInterface;
+use function method_exists;
 
 final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInterface, CallProcessorAwareInterface
 {
@@ -54,7 +55,9 @@ final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInt
         GenerationContext $context,
         MethodCallInterface $methodCall
     ): ResolvedFixtureSet {
-        if (null === $this->processor) {
+        if (null === $this->processor
+            || !method_exists($methodCall, 'getOriginalMethodCall')
+        ) {
             throw new LogicException('TODO');
         }
 

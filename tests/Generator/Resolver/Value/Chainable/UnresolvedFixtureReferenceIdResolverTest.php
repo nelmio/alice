@@ -147,6 +147,7 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
     {
         $valueResolver = new FakeValueResolver();
         $injectedValueResolver = new FakeValueResolver();
+        // @phpstan-ignore-next-line
         $injectedValueResolver->foo = 'bar';
 
         $resolver = new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver());

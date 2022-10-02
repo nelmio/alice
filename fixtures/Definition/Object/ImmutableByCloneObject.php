@@ -38,12 +38,12 @@ class ImmutableByCloneObject implements ObjectInterface
         return $this->id;
     }
     
-    public function getInstance()
+    public function getInstance(): object
     {
         return $this->instance;
     }
     
-    public function withInstance(object $newInstance)
+    public function withInstance(object $newInstance): static
     {
         return new self($this->id, $newInstance);
     }

@@ -53,7 +53,7 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
             ;
         }
 
-        return new self($instantiators, $resolver);
+        return new self($instantiators);
     }
     
     public function instantiate(

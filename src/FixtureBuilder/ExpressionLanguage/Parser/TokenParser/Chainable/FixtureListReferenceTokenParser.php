@@ -40,7 +40,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
 
     public function __construct()
     {
-        $this->token = uniqid(__CLASS__);
+        $this->token = uniqid(__CLASS__, true);
     }
     
     public function canParse(Token $token): bool
@@ -65,7 +65,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
     /**
      * @throws ParseException
      *
-     * @return string[]
+     * @return list<FixtureReferenceValue>
      *
      * @example
      *  "@user_{alice, bob}" => ['user_alice', 'user_bob']

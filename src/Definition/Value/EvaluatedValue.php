@@ -17,10 +17,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 
 final class EvaluatedValue implements ValueInterface
 {
-    /**
-     * @var
-     */
-    private $expression;
+    private string $expression;
 
     public function __construct(string $expression)
     {
@@ -28,7 +25,7 @@ final class EvaluatedValue implements ValueInterface
     }
 
     /**
-     * @return array The first element is the quantifier and the second the elements.
+     * @return string The first element is the quantifier and the second the elements.
      */
     public function getValue(): string
     {

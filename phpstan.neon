@@ -6,9 +6,40 @@ parameters:
         - fixtures/Bridge
         - src/Bridge
         - tests/Bridge
+        - src/Generator/Resolver/FixtureSet/FakeFixtureSetResolver.php
     level: 3
     ignoreErrors:
         # Prophecy
         - '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::[a-zA-Z0-9_]+\(\)#'
 
+
+        # To fix at some point
+        - path: src/Throwable/Exception/FileLocator/FileNotFoundException.php
+          message: '#Unsafe usage of new static#'
+
+        - path: src/Generator/Resolver/Parameter/Chainable/ArrayParameterResolver.php
+          message: '#ParameterResolverInterface::resolve\(\) invoked with 4 parameters, 3 required#'
+
+        - path: src/Generator/Resolver/Parameter/Chainable/RecursiveParameterResolver.php
+          message: '#ParameterResolverInterface::resolve\(\) invoked with 4 parameters, 3 required#'
+
+        - path: src/Generator/Resolver/Parameter/Chainable/StringParameterResolver.php
+          message: '#ParameterResolverInterface::resolve\(\) invoked with 4 parameters, 3 required#'
+
+        - path: src/Generator/Resolver/Parameter/ParameterResolverRegistry.php
+          message: '#ParameterResolverInterface::resolve\(\) invoked with 4 parameters, 3 required#'
+
+        - path: src/Generator/Resolver/Parameter/SimpleParameterBagResolver.php
+          message: '#ParameterResolverInterface::resolve\(\) invoked with 4 parameters, 3 required#'
+
+        - path: src/FixtureBuilder/ExpressionLanguage/Parser/TokenParser/Chainable/AbstractChainableParserAwareParser.php
+          message: '#Unsafe usage of new static#'
+        - path: src/FixtureBuilder/ExpressionLanguage/Parser/TokenParser/Chainable/AbstractChainableParserAwareParser.php
+          message: '#::parse\(\)#'
+
+
         # False positives
+        - path: tests/Loader/LoaderIntegrationTest.php
+          message: '#MagicCallDummy::setMagicProperty#'
+        - path: tests/Loader/LoaderIntegrationTest.php
+          message: '#Undefined variable: \$s\d+#'

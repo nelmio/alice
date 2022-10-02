@@ -72,9 +72,6 @@ abstract class ChainableDenormalizerTest extends TestCase
         static::assertFalse($actual);
     }
 
-    /**
-     * @param array|null $expected
-     */
     public function assertBuiltResultIsTheSame(string $fixtureId, array $expected): void
     {
         static::assertTrue($this->denormalizer->canDenormalize($fixtureId));

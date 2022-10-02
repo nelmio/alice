@@ -51,7 +51,7 @@ class VariableTokenParserTest extends TestCase
     {
         try {
             $token = new Token('', new TokenType(TokenType::VARIABLE_TYPE));
-            $parser = new VariableTokenParser(new FakeParser());
+            $parser = new VariableTokenParser();
 
             $parser->parse($token);
             static::fail('Expected exception to be thrown.');

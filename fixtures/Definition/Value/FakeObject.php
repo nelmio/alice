@@ -25,12 +25,12 @@ class FakeObject implements ObjectInterface
         $this->__call(__METHOD__, func_get_args());
     }
     
-    public function getInstance(): void
+    public function getInstance(): object
     {
         $this->__call(__METHOD__, func_get_args());
     }
     
-    public function withInstance($newInstance): void
+    public function withInstance($newInstance): static
     {
         $this->__call(__METHOD__, func_get_args());
     }

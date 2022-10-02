@@ -28,10 +28,7 @@ use stdClass;
  */
 class ParameterResolverIntegrationTest extends TestCase
 {
-    /**
-     * @var SimpleParameterBagResolver
-     */
-    protected $resolver;
+    protected ParameterBagResolverInterface $resolver;
     
     protected function setUp(): void
     {

@@ -28,6 +28,7 @@ class NativeLoaderTest extends TestCase
         $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Unknown method "foo".');
 
+        // @phpstan-ignore-next-line
         $loader->foo();
     }
 
@@ -38,6 +39,7 @@ class NativeLoaderTest extends TestCase
         $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Unknown method "createFoo".');
 
+        // @phpstan-ignore-next-line
         $loader->getFoo();
     }
 

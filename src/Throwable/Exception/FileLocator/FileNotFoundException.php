@@ -17,12 +17,12 @@ use UnexpectedValueException;
 
 class FileNotFoundException extends UnexpectedValueException
 {
-    public static function createForEmptyFile(): self
+    public static function createForEmptyFile(): static
     {
         return new static('An empty file name is not valid to be located.');
     }
 
-    public static function createForNonExistentFile(string $file): self
+    public static function createForNonExistentFile(string $file): static
     {
         return new static(
             sprintf(

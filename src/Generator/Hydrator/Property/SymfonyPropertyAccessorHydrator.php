@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Hydrator\Property;
 
+use ReflectionNamedType;
 use function enum_exists;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
@@ -99,7 +100,9 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
             return null;
         }
 
-        if (!enum_exists($enumType->getName())) {
+        if ($enumType instanceof ReflectionNamedType
+            && !enum_exists($enumType->getName())
+        ) {
             // might not be an enum
             return null;
         }
@@ -109,8 +112,16 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
 
     private static function castValueToEnum(ReflectionType $enumType, Property $property): ?Property
     {
-        foreach ((new ReflectionEnum($enumType->getName()))->getCases() as $reflectionCase) {
-            if ($property->getValue() === $reflectionCase->getValue()->value ?? $reflectionCase->getValue()->name) {
+        if (!$enumType instanceof ReflectionNamedType) {
+            return null;
+        }
+
+        $reflectionEnumBackedCases = (new ReflectionEnum($enumType->getName()))->getCases();
+
+        foreach ($reflectionEnumBackedCases as $reflectionCase) {
+            $caseValue = $reflectionCase->getValue()->value ?? $reflectionCase->getValue()->name;
+
+            if ($property->getValue() === ($caseValue)) {
                 return $property->withValue($reflectionCase->getValue());
             }
         }

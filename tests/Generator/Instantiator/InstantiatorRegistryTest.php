@@ -82,6 +82,7 @@ class InstantiatorRegistryTest extends TestCase
 
 
         $nonAwareInstantiator = new FakeChainableInstantiator();
+        // @phpstan-ignore-next-line
         $nonAwareInstantiator->foo = 'bar';
 
         $instantiatorProphecy = $this->prophesize(ChainableInstantiatorInterface::class);

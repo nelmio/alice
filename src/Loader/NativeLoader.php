@@ -393,7 +393,6 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             new FactoryDenormalizer(
                 $this->getCallsDenormalizer()
             ),
-            $this->getArgumentsDenormalizer()
         );
     }
 

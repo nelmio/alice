@@ -90,9 +90,9 @@ class OptionalValueTest extends TestCase
         $secondMember->setValue('s1');
 
         // Mutate returned values
-        $value->getQuantifier()->setValue('q2');
-        $value->getFirstMember()->setValue('f2');
-        $value->getSecondMember()->setValue('s2');
+        $value->getQuantifier()->setValue('q2');    // @phpstan-ignore-line
+        $value->getFirstMember()->setValue('f2');   // @phpstan-ignore-line
+        $value->getSecondMember()->setValue('s2');  // @phpstan-ignore-line
 
         static::assertNotSame(new MutableValue('q0'), $value->getQuantifier());
         static::assertNotSame(new MutableValue('f0'), $value->getFirstMember());
