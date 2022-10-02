@@ -20,6 +20,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @group integration
+ *
  * @coversNothing
  */
 class LoaderIntegrationTest extends CoreLoaderIntegrationTest

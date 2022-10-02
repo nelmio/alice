@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Faker\GeneratorFactory
+ *
  * @group integration
  */
 class GeneratorFactoryTest extends TestCase

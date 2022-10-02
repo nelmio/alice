@@ -144,7 +144,7 @@ class CompleteObjectGeneratorTest extends TestCase
                             )
                         )
                     )
-                ;
+            ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
@@ -185,7 +185,7 @@ class CompleteObjectGeneratorTest extends TestCase
                             new SimpleObject('dummy', new stdClass())
                         )
                     )
-                ;
+            ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
@@ -224,7 +224,7 @@ class CompleteObjectGeneratorTest extends TestCase
                             new SimpleObject('dummy', new stdClass())
                         )
                     )
-                ;
+            ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
@@ -259,7 +259,7 @@ class CompleteObjectGeneratorTest extends TestCase
                             new SimpleObject('dummy', new stdClass())
                         )
                     )
-                ;
+            ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 
@@ -297,7 +297,7 @@ class CompleteObjectGeneratorTest extends TestCase
                             new SimpleObject('dummy', new stdClass())
                         )
                     )
-                ;
+            ;
             /** @var ObjectGeneratorInterface $decoratedGenerator */
             $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
 

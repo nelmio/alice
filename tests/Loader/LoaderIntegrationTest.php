@@ -43,6 +43,7 @@ use TypeError;
 
 /**
  * @group integration
+ *
  * @coversNothing
  */
 class LoaderIntegrationTest extends TestCase
@@ -217,6 +218,7 @@ class LoaderIntegrationTest extends TestCase
 
     /**
      * @group legacy
+     *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      *
      * @dataProvider provideLegacyFixturesToInstantiate
@@ -299,6 +301,7 @@ class LoaderIntegrationTest extends TestCase
      * @dataProvider provideFixtureToInstantiateWithDeprecatedConstructor
      *
      * @group legacy
+     *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      */
     public function testUsingConstructorAsAFactoryIsDeprecated(array $data, $expected): void
@@ -430,6 +433,7 @@ class LoaderIntegrationTest extends TestCase
 
     /**
      * @group legacy
+     *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      */
     public function testIfAFixtureAndAnInjectedObjectHaveTheSameIdThenTheInjectedObjectIsOverridden(): void

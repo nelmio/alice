@@ -35,10 +35,6 @@ final class PropertyBag implements IteratorAggregate, Countable
     /**
      * Creates a new instance to which the given properties have been merged. In case of conflicts, the existing values
      * are kept.
-     *
-     * @param PropertyBag $propertyBag
-     *
-     * @return PropertyBag
      */
     public function mergeWith(self $propertyBag): self
     {
