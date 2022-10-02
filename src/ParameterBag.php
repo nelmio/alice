@@ -18,6 +18,7 @@ use Countable;
 use IteratorAggregate;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundExceptionFactory;
+use Traversable;
 
 /**
  * Value object containing a list of parameters.
@@ -78,7 +79,7 @@ final class ParameterBag implements IteratorAggregate, Countable
         throw ParameterNotFoundExceptionFactory::create($key);
     }
     
-    public function getIterator(): ArrayIterator
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->parameters);
     }

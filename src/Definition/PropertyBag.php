@@ -16,6 +16,7 @@ namespace Nelmio\Alice\Definition;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use Traversable;
 
 final class PropertyBag implements IteratorAggregate, Countable
 {
@@ -51,7 +52,7 @@ final class PropertyBag implements IteratorAggregate, Countable
         return [] === $this->properties;
     }
     
-    public function getIterator(): ArrayIterator
+    public function getIterator(): Traversable
     {
         return new ArrayIterator(array_values($this->properties));
     }
