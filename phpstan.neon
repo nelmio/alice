@@ -1,9 +1,12 @@
 parameters:
+    paths:
+        - src
+        - tests
     excludePaths:
-        - %rootDir%/../../../../../fixtures/Bridge
-        - %rootDir%/../../../../../src/Bridge
-        - %rootDir%/../../../../../tests/Bridge
-    level: max
+        - fixtures/Bridge
+        - src/Bridge
+        - tests/Bridge
+    level: 3
     ignoreErrors:
         # Prophecy
         - '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::[a-zA-Z0-9_]+\(\)#'

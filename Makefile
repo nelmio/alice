@@ -65,7 +65,7 @@ gitignore_sort:
 .PHONY: phpstan
 phpstan: 	  ## Runs PHPStan
 phpstan: $(PHPSTAN_BIN)
-	$(PHPSTAN) analyze -c phpstan.neon -l4 src tests
+	$(PHPSTAN) analyze
 
 
 #
