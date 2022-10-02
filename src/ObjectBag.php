@@ -85,8 +85,6 @@ final class ObjectBag implements IteratorAggregate, Countable
     /**
      * Creates a new instance with the new objects. If objects with the same reference already exists, they will be
      * overridden by the new ones.
-     *
-     * @param ObjectBag $objects
      */
     public function mergeWith(self $objects): self
     {

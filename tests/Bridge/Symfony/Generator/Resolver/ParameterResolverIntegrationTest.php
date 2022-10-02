@@ -17,6 +17,7 @@ use Nelmio\Alice\Generator\Resolver\Parameter\IsolatedSymfonyParameterBagResolve
 
 /**
  * @group integration
+ *
  * @coversNothing
  */
 class ParameterResolverIntegrationTest extends \Nelmio\Alice\Generator\Resolver\ParameterResolverIntegrationTest

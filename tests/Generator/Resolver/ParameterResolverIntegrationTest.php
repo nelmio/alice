@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver;
 
-use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
@@ -23,14 +22,12 @@ use stdClass;
 
 /**
  * @group integration
+ *
  * @coversNothing
  */
 class ParameterResolverIntegrationTest extends TestCase
 {
-    /**
-     * @var SimpleParameterBagResolver
-     */
-    protected $resolver;
+    protected ParameterBagResolverInterface $resolver;
     
     protected function setUp(): void
     {

@@ -24,6 +24,7 @@ use function str_repeat;
 
 /**
  * @group integration
+ *
  * @coversNothing
  */
 class LexerIntegrationTest extends TestCase

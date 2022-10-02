@@ -52,8 +52,6 @@ final class FlagBag implements IteratorAggregate, Countable
     /**
      * Creates a new instance of the bag with the given flag. If a flag with the same identifier already exists, the
      * existing value will be replaced.
-     *
-     * @return FlagBag
      */
     public function withFlag(FlagInterface $flag): self
     {

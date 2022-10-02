@@ -36,6 +36,7 @@ use function str_repeat;
 
 /**
  * @group integration
+ *
  * @coversNothing
  */
 class ParserIntegrationTest extends TestCase

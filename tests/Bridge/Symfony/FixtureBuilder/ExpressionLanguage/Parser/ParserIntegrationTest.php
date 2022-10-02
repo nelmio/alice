@@ -18,6 +18,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest 
 
 /**
  * @group integration
+ *
  * @coversNothing
  */
 class ParserIntegrationTest extends CoreParserIntegrationTest

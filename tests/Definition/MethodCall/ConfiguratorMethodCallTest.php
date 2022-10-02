@@ -79,7 +79,9 @@ class ConfiguratorMethodCallTest extends TestCase
         $arg0->foo = 'bar';
 
         // Mutate retrieved values
+        // @phpstan-ignore-next-line
         $definition->getCaller()->setId('mutated');
+        // @phpstan-ignore-next-line
         $definition->getArguments()[0]->foz = 'baz';
 
         static::assertEquals('mutated', $definition->getCaller()->getId());

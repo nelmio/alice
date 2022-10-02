@@ -36,12 +36,12 @@ final class CompleteObject implements ObjectInterface
         return $this->object->getId();
     }
     
-    public function getInstance()
+    public function getInstance(): object
     {
         return $this->object->getInstance();
     }
     
-    public function withInstance(object $newInstance): void
+    public function withInstance(object $newInstance): static
     {
         throw new LogicException('Cannot create a new object from a complete object.');
     }

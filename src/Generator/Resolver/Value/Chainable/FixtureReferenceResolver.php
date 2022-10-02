@@ -147,8 +147,8 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
                 $fixtureSet
             );
         } catch (CircularReferenceException $exception) {
-            if (!isset($needsCompleteGeneration)
-                || (false === $needsCompleteGeneration && null !== $passIncompleteObject)
+            if (false === $needsCompleteGeneration
+                && null !== $passIncompleteObject
             ) {
                 throw $exception;
             }

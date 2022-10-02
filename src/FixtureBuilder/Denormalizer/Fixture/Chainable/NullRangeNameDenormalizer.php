@@ -52,7 +52,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
     }
 
     /**
-     * @return string[]
+     * @return array<string, int>
      *
      * @example
      *  'user_{1..2}' => [

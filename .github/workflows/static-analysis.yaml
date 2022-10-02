@@ -39,7 +39,7 @@ jobs:
               run: composer install --no-progress --no-interaction --prefer-dist
 
             - name: Install dependencies
-              run: composer bin phpstan update
+              run: composer bin phpstan install
 
             - name: Run script
-              run: vendor-bin/phpstan/bin/phpstan analyse phpstan.neon
+              run: make phpstan

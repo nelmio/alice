@@ -50,6 +50,7 @@ class ListValueTest extends TestCase
         $arg0->foo = 'bar';
 
         // Mutate returned value
+        // @phpstan-ignore-next-line
         $value->getValue()[0]->foo = 'baz';
 
         static::assertEquals(

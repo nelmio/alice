@@ -79,6 +79,7 @@ class MethodCallWithReferenceTest extends TestCase
         $caller = $definition->getCaller();
         $caller->setId('user.factory');
         $arguments = $definition->getArguments();
+        // @phpstan-ignore-next-line
         $arguments[0]->foz = 'baz';
 
         static::assertEquals(new MutableReference(), $definition->getCaller());
