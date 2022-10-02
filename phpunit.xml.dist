@@ -25,10 +25,6 @@
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
     </listeners>
 
-    <logging>
-        <log type="coverage-clover" target="clover.xml"/>
-    </logging>
-
     <coverage>
         <include>
             <directory>src</directory>
@@ -37,6 +33,10 @@
             <directory>src/Bridge</directory>
             <file>src/deep_clone.php</file>
         </exclude>
+
+        <report>
+            <clover outputFile="dist/clover.xml"/>
+        </report>
     </coverage>
 
     <testsuites>
