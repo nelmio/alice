@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Caller\Chainable;
 
 use LogicException;
+use function method_exists;
 use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Generator\Caller\CallProcessorAwareInterface;
@@ -23,7 +24,6 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectInterface;
-use function method_exists;
 
 final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInterface, CallProcessorAwareInterface
 {

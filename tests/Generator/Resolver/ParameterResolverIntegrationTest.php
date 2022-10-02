@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver;
 
-use Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;

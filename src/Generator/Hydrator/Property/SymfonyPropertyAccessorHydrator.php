@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Hydrator\Property;
 
-use ReflectionNamedType;
 use function enum_exists;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
@@ -28,6 +27,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException
 use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException;
 use ReflectionEnum;
 use ReflectionException;
+use ReflectionNamedType;
 use ReflectionProperty;
 use ReflectionType;
 use Symfony\Component\PropertyAccess\Exception\AccessException as SymfonyAccessException;
