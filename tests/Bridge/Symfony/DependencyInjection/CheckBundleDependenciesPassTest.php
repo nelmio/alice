@@ -22,7 +22,7 @@ use RuntimeException;
  *
  * @group integration
  */
-class ConfigureDependencyPassTest extends TestCase
+class CheckBundleDependenciesPassTest extends TestCase
 {
     public function testPropertyAccessDisabled(): void
     {

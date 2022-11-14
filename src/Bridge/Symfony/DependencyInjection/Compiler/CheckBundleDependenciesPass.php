@@ -17,7 +17,7 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ConfigureDependencyPass implements CompilerPassInterface
+class CheckBundleDependenciesPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
