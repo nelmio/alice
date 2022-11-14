@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection\Compiler;
 
-use RuntimeException;
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -22,7 +22,7 @@ class CheckBundleDependenciesPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         if (!$container->has('property_accessor')) {
-            throw new RuntimeException('NelmioAliceBundle requires framework_bundle.property_access to be enabled.');
+            throw new LogicException('NelmioAliceBundle requires framework_bundle.property_access to be enabled.');
         }
     }
 }

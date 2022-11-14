@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
+use LogicException;
 use Nelmio\Alice\Symfony\KernelFactory;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 /**
  * @coversNothing
@@ -26,7 +26,7 @@ class CheckBundleDependenciesPassTest extends TestCase
 {
     public function testPropertyAccessDisabled(): void
     {
-        static::expectException(RuntimeException::class);
+        static::expectException(LogicException::class);
         static::expectExceptionMessage('NelmioAliceBundle requires framework_bundle.property_access to be enabled.');
 
         $kernel = KernelFactory::createKernel(
