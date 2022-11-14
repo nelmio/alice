@@ -116,7 +116,6 @@ class UniqueValueDenormalizerTest extends TestCase
         /** @var DynamicArrayValue $result */
         static::assertEquals(10, $result->getQuantifier());
         static::assertInstanceOf(UniqueValue::class, $result->getElement());
-        // @phpstan-ignore-next-line
         static::assertStringStartsWith('Dummy#', $result->getElement()->getId());
         static::assertEquals('parsed_value', $result->getElement()->getValue());
     }
