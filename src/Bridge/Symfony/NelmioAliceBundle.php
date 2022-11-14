@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Bridge\Symfony;
 
+use Nelmio\Alice\Bridge\Symfony\DependencyInjection\Compiler\CheckBundleDependenciesPass;
 use Nelmio\Alice\Bridge\Symfony\DependencyInjection\Compiler\RegisterFakerProvidersPass;
 use Nelmio\Alice\Bridge\Symfony\DependencyInjection\Compiler\RegisterTagServicesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,6 +25,7 @@ final class NelmioAliceBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new CheckBundleDependenciesPass());
         $container->addCompilerPass(new RegisterFakerProvidersPass());
         $container->addCompilerPass(
             new RegisterTagServicesPass(
