@@ -136,6 +136,23 @@ Nelmio\Entity\Group:
 As you can see, we make sure that the update date is between the creation
 date and the current time, which ensure the data will look real enough.
 
+If you need to access a property from another object that is a property of your current object, you can do as following:
+
+```yaml
+Nelmio\Entity\User:
+    user1:
+        # ...
+        created: '<dateTimeBetween("-200 days", "now")>'
+
+Nelmio\Entity\Group:
+    group1:
+        # ...
+        created_by: '@user1'
+        created: '<dateTimeBetween(@self->created_by.created, "now")>'
+        updated: '<dateTimeBetween($created, "now")>'
+```
+
+You can also multi depth with more `.` like `@self->created_by.info.created`.
 
 ## Parameters
 
