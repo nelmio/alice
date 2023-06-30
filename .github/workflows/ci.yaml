@@ -18,8 +18,8 @@ jobs:
                 include:
                     -   description: 'Symfony 5.4'
                         symfony-versions: 5.4.*
-                    -   description: 'Symfony 6.0'
-                        symfony-versions: 6.0.*
+                    -   description: 'Symfony 6.3'
+                        symfony-versions: 6.3.*
 
         name: PHP ${{ matrix.php }} ${{ matrix.description }}
         steps:
