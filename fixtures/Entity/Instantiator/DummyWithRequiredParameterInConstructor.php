@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Entity\Instantiator;
 
+use AllowDynamicProperties;
+
+#[AllowDynamicProperties]
 class DummyWithRequiredParameterInConstructor
 {
     public function __construct(int $requiredParam)
