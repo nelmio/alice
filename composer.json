@@ -28,7 +28,7 @@
         "symfony/yaml": "^5.4 || ^6.0"
     },
     "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.4.1",
+        "bamarni/composer-bin-plugin": "^1.8.1",
         "phpspec/prophecy": "^1.6",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.3",
@@ -66,7 +66,8 @@
 
     "extra": {
         "bamarni-bin": {
-            "bin-links": false
+            "bin-links": false,
+            "forward-command": false
         },
         "branch-alias": {
             "dev-master": "3.x-dev"
