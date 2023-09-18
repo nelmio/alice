@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value;
 
+use AllowDynamicProperties;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -21,10 +22,11 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\NotCallableTrait;
 
+#[AllowDynamicProperties]
 class FakeValueResolver implements ValueResolverInterface
 {
     use NotCallableTrait;
-    
+
     public function resolve(
         ValueInterface $value,
         FixtureInterface $fixture,

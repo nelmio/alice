@@ -13,20 +13,22 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Instantiator;
 
+use AllowDynamicProperties;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\NotCallableTrait;
 
+#[AllowDynamicProperties]
 class FakeChainableInstantiator implements ChainableInstantiatorInterface
 {
     use NotCallableTrait;
-    
+
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
     {
         $this->__call(__METHOD__, func_get_args());
