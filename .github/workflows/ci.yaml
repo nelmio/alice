@@ -42,7 +42,9 @@ jobs:
               run: composer install
 
             - name: Setup Symfony version
-              run: composer bin symfony require "symfony/symfony:${{ matrix.symfony-versions }}" --no-update
+              run: |
+                composer bin symfony require "symfony/framework-bundle:${{ matrix.symfony-versions }}" --no-update
+                composer bin symfony require "symfony/serializer:${{ matrix.symfony-versions }}" --no-update
               if: matrix.symfony-versions
 
             - name: Install bin dependencies
