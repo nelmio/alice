@@ -11,6 +11,7 @@ framework:
     annotations:
         enabled: false
     secret:                  NelmioAliceBundleSecret
+    http_method_override: false
     serializer:
         enabled: true
     router:
