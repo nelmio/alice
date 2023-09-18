@@ -13,14 +13,13 @@ jobs:
             matrix:
                 php:
                     - '8.1'
+                    - '8.2'
                 symfony-versions: [false]
                 include:
                     -   description: 'Symfony 5.4'
-                        php: '8.1'
                         symfony-versions: 5.4.*
-                    -   description: 'Symfony 6.0'
-                        php: '8.1'
-                        symfony-versions: 6.0.*
+                    -   description: 'Symfony 6.3'
+                        symfony-versions: 6.3.*
 
         name: PHP ${{ matrix.php }} ${{ matrix.description }}
         steps:
