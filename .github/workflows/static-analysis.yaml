@@ -1,9 +1,9 @@
-name: Code style and static analysis
+name: CS & SA
 
 on:
     pull_request:
     push:
-        branches: [ master, 2.x, 1.x ]
+        branches: [ master, main ]
 
 jobs:
     php-cs-fixer:
