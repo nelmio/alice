@@ -43,3 +43,5 @@ parameters:
           message: '#MagicCallDummy::setMagicProperty#'
         - path: tests/Loader/LoaderIntegrationTest.php
           message: '#Undefined variable: \$s\d+#'
+        - path: tests/*Test.php
+          message: '#Call to an undefined method Prophecy\\Prophecy#'
