@@ -5,7 +5,7 @@ on:
     push:
         branches: [ master, main ]
     schedule:
-        - cron: '0 0 1 * *'
+        - cron: '45 4 1 * *'
 
 jobs:
     php-cs-fixer:
