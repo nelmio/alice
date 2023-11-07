@@ -22,6 +22,8 @@ jobs:
                         symfony-versions: 5.4.*
                     -   description: 'Symfony 6.3'
                         symfony-versions: 6.3.*
+                    -   description: 'Symfony 7.0'
+                        symfony-versions: 7.0.*
 
         name: PHP ${{ matrix.php }} ${{ matrix.description }}
         steps:
