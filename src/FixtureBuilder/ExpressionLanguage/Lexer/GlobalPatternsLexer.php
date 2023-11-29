@@ -27,7 +27,7 @@ final class GlobalPatternsLexer implements LexerInterface
 {
     use IsAServiceTrait;
 
-    const PATTERNS = [
+    public const PATTERNS = [
         '/^(?:\d+|<.*>)x .*/' => TokenType::DYNAMIC_ARRAY_TYPE,
         '/^.*(?:\d+|<.*>)x .*/' => null,
         '/^[^<>\[\%\$@\\\]+$/' => TokenType::STRING_TYPE,

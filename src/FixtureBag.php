@@ -37,7 +37,7 @@ final class FixtureBag implements IteratorAggregate
     {
         $clone = clone $this;
         $clone->fixtures[$fixture->getId()] = clone $fixture;
-        
+
         return $clone;
     }
 
@@ -85,7 +85,7 @@ final class FixtureBag implements IteratorAggregate
 
         throw FixtureNotFoundExceptionFactory::create($id);
     }
-    
+
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->fixtures);

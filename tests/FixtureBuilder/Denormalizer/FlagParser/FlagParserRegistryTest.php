@@ -26,6 +26,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry
+ * @internal
  */
 class FlagParserRegistryTest extends TestCase
 {
@@ -33,12 +34,12 @@ class FlagParserRegistryTest extends TestCase
 
     public function testIsAFlagParser(): void
     {
-        static::assertTrue(is_a(FlagParserRegistry::class, FlagParserInterface::class, true));
+        self::assertTrue(is_a(FlagParserRegistry::class, FlagParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FlagParserRegistry::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FlagParserRegistry::class))->isCloneable());
     }
 
     public function testThrowsAnExceptionIfAnInvalidParserInjected(): void
@@ -77,7 +78,7 @@ class FlagParserRegistryTest extends TestCase
         $parser = new FlagParserRegistry([$parser1, $parser2, $parser3]);
         $actual = $parser->parse($element);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
         $parser1Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $parser2Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $parser2Prophecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);

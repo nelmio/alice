@@ -72,23 +72,21 @@ class NamedArgumentsResolver
                     'Argument $%s of %s::%s() is not passed a value and does not define a default one.',
                     $name,
                     $className,
-                    $methodName
+                    $methodName,
                 ));
             }
 
             $buffer[] = $parameter->getDefaultValue();
         }
 
-        $unknownNamedParameters = array_filter(array_keys($arguments), static function ($key) {
-            return is_string($key);
-        });
+        $unknownNamedParameters = array_filter(array_keys($arguments), static fn ($key) => is_string($key));
 
         if ([] !== $unknownNamedParameters) {
             throw new RuntimeException(sprintf(
                 'Unknown arguments for %s::%s(): $%s.',
                 $className,
                 $methodName,
-                implode(', $', $unknownNamedParameters)
+                implode(', $', $unknownNamedParameters),
             ));
         }
 

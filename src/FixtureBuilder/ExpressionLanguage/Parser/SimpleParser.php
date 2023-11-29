@@ -46,10 +46,9 @@ final class SimpleParser implements ParserInterface
         $this->lexer = $lexer;
         $this->tokenParser = ($tokenParser instanceof ParserAwareInterface)
             ? $tokenParser->withParser($this)
-            : $tokenParser
-        ;
+            : $tokenParser;
     }
-    
+
     public function parse(string $value)
     {
         $tokens = $this->lexer->lex($value);
@@ -60,20 +59,19 @@ final class SimpleParser implements ParserInterface
 
         if (count($parsedTokens) > 1) {
             $first = reset($parsedTokens);
-            if (is_string($first) && trim($first) === '') {
+            if (is_string($first) && '' === trim($first)) {
                 array_shift($parsedTokens);
             }
 
             $last = end($parsedTokens);
-            if (is_string($last) && trim($last) === '') {
+            if (is_string($last) && '' === trim($last)) {
                 array_pop($parsedTokens);
             }
         }
 
         return (1 === count($parsedTokens))
             ? $parsedTokens[0]
-            : new ListValue($parsedTokens)
-        ;
+            : new ListValue($parsedTokens);
     }
 
     /**
@@ -97,7 +95,7 @@ final class SimpleParser implements ParserInterface
                     new ListValue([
                         $lastParsedToken->getValue(),
                         $parsedToken,
-                    ])
+                    ]),
                 );
 
                 return $parsedTokens;
@@ -106,8 +104,7 @@ final class SimpleParser implements ParserInterface
 
         $parsedToken = ($parsedToken instanceof NestedValue)
             ? $parsedToken->getValue()
-            : [$parsedToken]
-        ;
+            : [$parsedToken];
 
         foreach ($parsedToken as $value) {
             $parsedTokens[] = $value;

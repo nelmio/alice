@@ -23,6 +23,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer
+ * @internal
  */
 class FunctionLexerTest extends TestCase
 {
@@ -32,7 +33,7 @@ class FunctionLexerTest extends TestCase
      * @var FunctionLexer
      */
     private $lexer;
-    
+
     protected function setUp(): void
     {
         $this->lexer = new FunctionLexer(new DummyLexer());
@@ -40,12 +41,12 @@ class FunctionLexerTest extends TestCase
 
     public function testIsALexer(): void
     {
-        static::assertTrue(is_a(FunctionLexer::class, LexerInterface::class, true));
+        self::assertTrue(is_a(FunctionLexer::class, LexerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FunctionLexer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FunctionLexer::class))->isCloneable());
     }
 
     public function testTokenizeValueBeforePassingItToTheDecoratedLexer(): void
@@ -57,17 +58,16 @@ class FunctionLexerTest extends TestCase
             ->lex('<aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)>')
             ->willReturn(
                 $expected = [
-                    new Token('something', new TokenType(TokenType::FUNCTION_TYPE))
-                ]
-            )
-        ;
+                    new Token('something', new TokenType(TokenType::FUNCTION_TYPE)),
+                ],
+            );
         /** @var LexerInterface $decoratedLexer */
         $decoratedLexer = $decoratedLexerProphecy->reveal();
 
         $lexer = new FunctionLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -81,17 +81,16 @@ class FunctionLexerTest extends TestCase
             ->lex($value)
             ->willReturn(
                 $expected = [
-                    new Token('something', new TokenType(TokenType::FUNCTION_TYPE))
-                ]
-            )
-        ;
+                    new Token('something', new TokenType(TokenType::FUNCTION_TYPE)),
+                ],
+            );
         /** @var LexerInterface $decoratedLexer */
         $decoratedLexer = $decoratedLexerProphecy->reveal();
 
         $lexer = new FunctionLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

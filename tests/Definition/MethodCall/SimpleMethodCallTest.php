@@ -20,14 +20,15 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\SimpleMethodCall
+ * @internal
  */
 class SimpleMethodCallTest extends TestCase
 {
     public function testIsAMethodCall(): void
     {
-        static::assertTrue(is_a(SimpleMethodCall::class, MethodCallInterface::class, true));
+        self::assertTrue(is_a(SimpleMethodCall::class, MethodCallInterface::class, true));
     }
-    
+
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $method = 'setUsername';
@@ -35,17 +36,17 @@ class SimpleMethodCallTest extends TestCase
 
         $definition = new SimpleMethodCall($method, $arguments);
 
-        static::assertNull($definition->getCaller());
-        static::assertEquals($method, $definition->getMethod());
-        static::assertEquals($arguments, $definition->getArguments());
-        static::assertEquals($method, $definition->__toString());
+        self::assertNull($definition->getCaller());
+        self::assertEquals($method, $definition->getMethod());
+        self::assertEquals($arguments, $definition->getArguments());
+        self::assertEquals($method, $definition->__toString());
 
         $definition = new SimpleMethodCall($method, null);
 
-        static::assertNull($definition->getCaller());
-        static::assertEquals($method, $definition->getMethod());
-        static::assertNull($definition->getArguments());
-        static::assertEquals($method, $definition->__toString());
+        self::assertNull($definition->getCaller());
+        self::assertEquals($method, $definition->getMethod());
+        self::assertNull($definition->getArguments());
+        self::assertEquals($method, $definition->__toString());
     }
 
     public function testIsMutable(): void
@@ -62,14 +63,14 @@ class SimpleMethodCallTest extends TestCase
         // @phpstan-ignore-next-line
         $definition->getArguments()[0]->foz = 'baz';
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 StdClassFactory::create([
                     'foo' => 'bar',
                     'foz' => 'baz',
                 ]),
             ],
-            $definition->getArguments()
+            $definition->getArguments(),
         );
     }
 
@@ -82,17 +83,17 @@ class SimpleMethodCallTest extends TestCase
         $newArguments = [new stdClass()];
         $newDefinition = $definition->withArguments($newArguments);
 
-        static::assertInstanceOf(SimpleMethodCall::class, $newDefinition);
+        self::assertInstanceOf(SimpleMethodCall::class, $newDefinition);
 
-        static::assertNull($definition->getCaller());
-        static::assertEquals($method, $definition->getMethod());
-        static::assertEquals($arguments, $definition->getArguments());
-        static::assertEquals($method, $definition->__toString());
+        self::assertNull($definition->getCaller());
+        self::assertEquals($method, $definition->getMethod());
+        self::assertEquals($arguments, $definition->getArguments());
+        self::assertEquals($method, $definition->__toString());
 
-        static::assertNull($newDefinition->getCaller());
-        static::assertEquals($method, $newDefinition->getMethod());
-        static::assertEquals($newArguments, $newDefinition->getArguments());
-        static::assertEquals($method, $newDefinition->__toString());
+        self::assertNull($newDefinition->getCaller());
+        self::assertEquals($method, $newDefinition->getMethod());
+        self::assertEquals($newArguments, $newDefinition->getArguments());
+        self::assertEquals($method, $newDefinition->__toString());
     }
 
     public function testCanCreateANewInstanceWithArguments(): void
@@ -109,23 +110,23 @@ class SimpleMethodCallTest extends TestCase
         // Mutate before reading values
         $arg0->foo = 'bar';
 
-        static::assertInstanceOf(SimpleMethodCall::class, $newDefinition);
+        self::assertInstanceOf(SimpleMethodCall::class, $newDefinition);
 
-        static::assertNull($definition->getCaller());
-        static::assertEquals($method, $definition->getMethod());
-        static::assertEquals($arguments, $definition->getArguments());
-        static::assertEquals($method, $definition->__toString());
+        self::assertNull($definition->getCaller());
+        self::assertEquals($method, $definition->getMethod());
+        self::assertEquals($arguments, $definition->getArguments());
+        self::assertEquals($method, $definition->__toString());
 
-        static::assertNull($newDefinition->getCaller());
-        static::assertEquals($method, $newDefinition->getMethod());
-        static::assertEquals(
+        self::assertNull($newDefinition->getCaller());
+        self::assertEquals($method, $newDefinition->getMethod());
+        self::assertEquals(
             [
                 StdClassFactory::create([
                     'foo' => 'bar',
                 ]),
             ],
-            $newDefinition->getArguments()
+            $newDefinition->getArguments(),
         );
-        static::assertEquals($method, $newDefinition->__toString());
+        self::assertEquals($method, $newDefinition->__toString());
     }
 }

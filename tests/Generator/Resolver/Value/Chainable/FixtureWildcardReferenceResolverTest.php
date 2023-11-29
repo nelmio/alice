@@ -38,6 +38,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver
+ * @internal
  */
 class FixtureWildcardReferenceResolverTest extends TestCase
 {
@@ -45,12 +46,12 @@ class FixtureWildcardReferenceResolverTest extends TestCase
 
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(FixtureWildcardReferenceResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(FixtureWildcardReferenceResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FixtureWildcardReferenceResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FixtureWildcardReferenceResolver::class))->isCloneable());
     }
 
     public function testWithersReturnNewModifiedInstance(): void
@@ -58,16 +59,16 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $resolver = new FixtureWildcardReferenceResolver();
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        static::assertEquals(new FixtureWildcardReferenceResolver(), $resolver);
-        static::assertEquals(new FixtureWildcardReferenceResolver(new FakeValueResolver()), $newResolver);
+        self::assertEquals(new FixtureWildcardReferenceResolver(), $resolver);
+        self::assertEquals(new FixtureWildcardReferenceResolver(new FakeValueResolver()), $newResolver);
     }
 
     public function testCanResolveFixtureMatchReferenceValues(): void
     {
         $resolver = new FixtureWildcardReferenceResolver();
 
-        static::assertTrue($resolver->canResolve(new FixtureMatchReferenceValue('')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new FixtureMatchReferenceValue('')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testCannotResolveValueIfHasNoResolver(): void
@@ -86,7 +87,7 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $set = ResolvedFixtureSetFactory::create(
             $parameters = new ParameterBag(['foo' => 'bar']),
             $fixtures = (new FixtureBag())
-                ->with($fixture = new DummyFixture('dummy'))
+                ->with($fixture = new DummyFixture('dummy')),
         );
         $scope = ['val' => 'scopie'];
         $context = new GenerationContext();
@@ -100,18 +101,17 @@ class FixtureWildcardReferenceResolverTest extends TestCase
                     'dummy',
                     $newSet = ResolvedFixtureSetFactory::create(
                         $parameters = new ParameterBag(['ping' => 'pong']),
-                        $fixtures = (new FixtureBag())->with($fixture)
-                    )
-                )
-            )
-        ;
+                        $fixtures = (new FixtureBag())->with($fixture),
+                    ),
+                ),
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixtureWildcardReferenceResolver($valueResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
 
         $valueResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -123,7 +123,7 @@ class FixtureWildcardReferenceResolverTest extends TestCase
         $set = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())
-                ->with(new DummyFixture('dummy'))
+                ->with(new DummyFixture('dummy')),
         );
         $scope = ['foo' => 'bar'];
         $context = new GenerationContext();
@@ -137,18 +137,17 @@ class FixtureWildcardReferenceResolverTest extends TestCase
                     'dummy',
                     $newSet = ResolvedFixtureSetFactory::create(
                         new ParameterBag(['ping' => 'pong']),
-                        (new FixtureBag())->with($fixture)
-                    )
-                )
-            )
-        ;
+                        (new FixtureBag())->with($fixture),
+                    ),
+                ),
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixtureWildcardReferenceResolver($valueResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testTheMatchingFixtureCanBeFromObjects(): void
@@ -159,7 +158,7 @@ class FixtureWildcardReferenceResolverTest extends TestCase
             null,
             null,
             (new ObjectBag())
-                ->with(new SimpleObject('dummy', new stdClass()))
+                ->with(new SimpleObject('dummy', new stdClass())),
         );
         $scope = [];
         $context = new GenerationContext();
@@ -172,18 +171,17 @@ class FixtureWildcardReferenceResolverTest extends TestCase
                     'dummy',
                     $newSet = ResolvedFixtureSetFactory::create(
                         new ParameterBag(['ping' => 'pong']),
-                        (new FixtureBag())->with($fixture)
-                    )
-                )
-            )
-        ;
+                        (new FixtureBag())->with($fixture),
+                    ),
+                ),
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixtureWildcardReferenceResolver($valueResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfNotMathcingIdFound(): void

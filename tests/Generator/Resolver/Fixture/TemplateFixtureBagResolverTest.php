@@ -34,6 +34,7 @@ use ReflectionProperty;
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
+ * @internal
  */
 class TemplateFixtureBagResolverTest extends TestCase
 {
@@ -46,7 +47,7 @@ class TemplateFixtureBagResolverTest extends TestCase
      * @var ReflectionProperty
      */
     private $propRefl;
-    
+
     protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(TemplatingFixture::class))->getProperty('fixture');
@@ -57,7 +58,7 @@ class TemplateFixtureBagResolverTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(TemplateFixtureBagResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(TemplateFixtureBagResolver::class))->isCloneable());
     }
 
     public function testResolvesTemplatesFixturesAndReturnsResultingFixtureBag(): void
@@ -67,19 +68,19 @@ class TemplateFixtureBagResolverTest extends TestCase
                 $group1 = new SimpleFixture(
                     'group1',
                     'Nelmio\Entity\Group',
-                    SpecificationBagFactory::create()
-                )
+                    SpecificationBagFactory::create(),
+                ),
             )
             ->with(
                 $group2 = new SimpleFixtureWithFlags(
                     new SimpleFixture(
                         'group2',
                         'Nelmio\Entity\Group',
-                        SpecificationBagFactory::create()
+                        SpecificationBagFactory::create(),
                     ),
                     (new FlagBag('group2'))
-                        ->withFlag(new ElementFlag('dummy_flag'))
-                )
+                        ->withFlag(new ElementFlag('dummy_flag')),
+                ),
             )
             ->with(
                 $user1 = new TemplatingFixture(
@@ -90,15 +91,15 @@ class TemplateFixtureBagResolverTest extends TestCase
                             SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
-                                    ->with(new Property('p1', 'v11'))
-                            )
+                                    ->with(new Property('p1', 'v11')),
+                            ),
                         ),
                         (new FlagBag('user1'))
                             ->withFlag(new ExtendFlag(new FixtureReference('user3')))
                             ->withFlag(new ExtendFlag(new FixtureReference('user2')))
-                            ->withFlag(new ElementFlag('dummy_flag'))
-                    )
-                )
+                            ->withFlag(new ElementFlag('dummy_flag')),
+                    ),
+                ),
             )
             ->with(
                 $user2 = new TemplatingFixture(
@@ -110,13 +111,13 @@ class TemplateFixtureBagResolverTest extends TestCase
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v21'))
-                                    ->with(new Property('p2', 'v22'))
-                            )
+                                    ->with(new Property('p2', 'v22')),
+                            ),
                         ),
                         (new FlagBag('user2'))
-                            ->withFlag(new TemplateFlag())
-                    )
-                )
+                            ->withFlag(new TemplateFlag()),
+                    ),
+                ),
             )
             ->with(
                 $user3 = new TemplatingFixture(
@@ -129,14 +130,14 @@ class TemplateFixtureBagResolverTest extends TestCase
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v31'))
                                     ->with(new Property('p2', 'v32'))
-                                    ->with(new Property('p3', 'v33'))
-                            )
+                                    ->with(new Property('p3', 'v33')),
+                            ),
                         ),
                         (new FlagBag('user3'))
                             ->withFlag(new ExtendFlag(new FixtureReference('user4')))
-                            ->withFlag(new TemplateFlag())
-                    )
-                )
+                            ->withFlag(new TemplateFlag()),
+                    ),
+                ),
             )
             ->with(
                 $user4 = new TemplatingFixture(
@@ -150,26 +151,25 @@ class TemplateFixtureBagResolverTest extends TestCase
                                     ->with(new Property('p1', 'v41'))
                                     ->with(new Property('p2', 'v42'))
                                     ->with(new Property('p3', 'v43'))
-                                    ->with(new Property('p4', 'v44'))
-                            )
+                                    ->with(new Property('p4', 'v44')),
+                            ),
                         ),
                         (new FlagBag('user4'))
-                            ->withFlag(new TemplateFlag())
-                    )
-                )
+                            ->withFlag(new TemplateFlag()),
+                    ),
+                ),
             )
             ->with(
                 $user5 = new SimpleFixtureWithFlags(// has a template flag but is not a templating fixture!
                     new SimpleFixture(
                         'user5',
                         'Nelmio\Alice\Entity\User',
-                        SpecificationBagFactory::create()
+                        SpecificationBagFactory::create(),
                     ),
                     (new FlagBag('user5'))
-                        ->withFlag(new TemplateFlag())
-                )
-            )
-        ;
+                        ->withFlag(new TemplateFlag()),
+                ),
+            );
         $expected = (new FixtureBag())
             ->with($group1)
             ->with($group2)
@@ -185,18 +185,17 @@ class TemplateFixtureBagResolverTest extends TestCase
                                     ->with(new Property('p1', 'v11'))
                                     ->with(new Property('p2', 'v22'))
                                     ->with(new Property('p3', 'v33'))
-                                    ->with(new Property('p4', 'v44'))
-                            )
+                                    ->with(new Property('p4', 'v44')),
+                            ),
                         ),
-                        $this->getDecoratedFixturesFlag($user1)
-                    )
-                )
+                        $this->getDecoratedFixturesFlag($user1),
+                    ),
+                ),
             )
-            ->with($user5)
-        ;
+            ->with($user5);
 
         $actual = $this->resolver->resolve($unresolvedFixtures);
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testTheResolutionIsInvarientToTheOrderInWhichFixturesAreGiven(): void
@@ -214,13 +213,13 @@ class TemplateFixtureBagResolverTest extends TestCase
                                     ->with(new Property('p1', 'v41'))
                                     ->with(new Property('p2', 'v42'))
                                     ->with(new Property('p3', 'v43'))
-                                    ->with(new Property('p4', 'v44'))
-                            )
+                                    ->with(new Property('p4', 'v44')),
+                            ),
                         ),
                         (new FlagBag('user4'))
-                            ->withFlag(new TemplateFlag())
-                    )
-                )
+                            ->withFlag(new TemplateFlag()),
+                    ),
+                ),
             )
             ->with(
                 $user3 = new TemplatingFixture(
@@ -233,14 +232,14 @@ class TemplateFixtureBagResolverTest extends TestCase
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v31'))
                                     ->with(new Property('p2', 'v32'))
-                                    ->with(new Property('p3', 'v33'))
-                            )
+                                    ->with(new Property('p3', 'v33')),
+                            ),
                         ),
                         (new FlagBag('user3'))
                             ->withFlag(new ExtendFlag(new FixtureReference('user4')))
-                            ->withFlag(new TemplateFlag())
-                    )
-                )
+                            ->withFlag(new TemplateFlag()),
+                    ),
+                ),
             )
             ->with(
                 $user2 = new TemplatingFixture(
@@ -252,13 +251,13 @@ class TemplateFixtureBagResolverTest extends TestCase
                                 null,
                                 (new PropertyBag())
                                     ->with(new Property('p1', 'v21'))
-                                    ->with(new Property('p2', 'v22'))
-                            )
+                                    ->with(new Property('p2', 'v22')),
+                            ),
                         ),
                         (new FlagBag('user2'))
-                            ->withFlag(new TemplateFlag())
-                    )
-                )
+                            ->withFlag(new TemplateFlag()),
+                    ),
+                ),
             )
             ->with(
                 $user1 = new TemplatingFixture(
@@ -269,17 +268,16 @@ class TemplateFixtureBagResolverTest extends TestCase
                             SpecificationBagFactory::create(
                                 null,
                                 (new PropertyBag())
-                                    ->with(new Property('p1', 'v11'))
-                            )
+                                    ->with(new Property('p1', 'v11')),
+                            ),
                         ),
                         (new FlagBag('user1'))
                             ->withFlag(new ExtendFlag(new FixtureReference('user3')))
                             ->withFlag(new ExtendFlag(new FixtureReference('user2')))
-                            ->withFlag(new ElementFlag('dummy_flag'))
-                    )
-                )
-            )
-        ;
+                            ->withFlag(new ElementFlag('dummy_flag')),
+                    ),
+                ),
+            );
         $expected = (new FixtureBag())
             ->with(
                 new TemplatingFixture(
@@ -293,17 +291,16 @@ class TemplateFixtureBagResolverTest extends TestCase
                                     ->with(new Property('p1', 'v11'))
                                     ->with(new Property('p2', 'v22'))
                                     ->with(new Property('p3', 'v33'))
-                                    ->with(new Property('p4', 'v44'))
-                            )
+                                    ->with(new Property('p4', 'v44')),
+                            ),
                         ),
-                        $this->getDecoratedFixturesFlag($user1)
-                    )
-                )
-            )
-        ;
+                        $this->getDecoratedFixturesFlag($user1),
+                    ),
+                ),
+            );
 
         $actual = $this->resolver->resolve($unresolvedFixtures);
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfFixtureExtendsANonExistingFixture(): void
@@ -315,18 +312,17 @@ class TemplateFixtureBagResolverTest extends TestCase
                         new SimpleFixture(
                             'user0',
                             'Nelmio\Alice\Entity\User',
-                            SpecificationBagFactory::create()
+                            SpecificationBagFactory::create(),
                         ),
                         (new FlagBag('user0'))
                             ->withFlag(
                                 new ExtendFlag(
-                                    new FixtureReference('user_base')
-                                )
-                            )
-                    )
-                )
-            )
-        ;
+                                    new FixtureReference('user_base'),
+                                ),
+                            ),
+                    ),
+                ),
+            );
 
         $this->expectException(FixtureNotFoundException::class);
         $this->expectExceptionMessage('Could not find the fixture "user_base".');
@@ -343,25 +339,24 @@ class TemplateFixtureBagResolverTest extends TestCase
                         new SimpleFixture(
                             'user0',
                             'Nelmio\Alice\Entity\User',
-                            SpecificationBagFactory::create()
+                            SpecificationBagFactory::create(),
                         ),
                         (new FlagBag('user0'))
                             ->withFlag(
                                 new ExtendFlag(
-                                    new FixtureReference('user_base')
-                                )
-                            )
-                    )
-                )
+                                    new FixtureReference('user_base'),
+                                ),
+                            ),
+                    ),
+                ),
             )
             ->with(
                 new SimpleFixture(
                     'user_base',
                     'Nelmio\Alice\Entity\User',
-                    SpecificationBagFactory::create()
-                )
-            )
-        ;
+                    SpecificationBagFactory::create(),
+                ),
+            );
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Fixture "user0" extends "user_base" but "user_base" is not a template.');

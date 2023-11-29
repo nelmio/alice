@@ -25,6 +25,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer
+ * @internal
  */
 class GlobalPatternsLexerTest extends TestCase
 {
@@ -32,12 +33,12 @@ class GlobalPatternsLexerTest extends TestCase
 
     public function testIsALexer(): void
     {
-        static::assertTrue(is_a(GlobalPatternsLexer::class, LexerInterface::class, true));
+        self::assertTrue(is_a(GlobalPatternsLexer::class, LexerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(GlobalPatternsLexer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(GlobalPatternsLexer::class))->isCloneable());
     }
 
     public function testLexValueToReturnAToken(): void
@@ -49,8 +50,8 @@ class GlobalPatternsLexerTest extends TestCase
         $lexer = new GlobalPatternsLexer(new FakeLexer());
         $actual = $lexer->lex('10x @users');
 
-        static::assertCount(count($expected), $actual);
-        static::assertEquals($expected, $actual);
+        self::assertCount(count($expected), $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testHandOverTheLexificationToTheDecoratedLexerIfNoPatternsMatch(): void
@@ -65,8 +66,8 @@ class GlobalPatternsLexerTest extends TestCase
         $lexer = new GlobalPatternsLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        static::assertCount(count($expected), $actual);
-        static::assertEquals($expected, $actual);
+        self::assertCount(count($expected), $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

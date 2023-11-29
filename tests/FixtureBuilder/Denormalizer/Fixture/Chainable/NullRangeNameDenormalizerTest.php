@@ -24,6 +24,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer
+ * @internal
  */
 class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 {
@@ -34,12 +35,12 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     public function testIsAChainableDenormalizer(): void
     {
-        static::assertTrue(is_a(NullRangeNameDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
+        self::assertTrue(is_a(NullRangeNameDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(NullRangeNameDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(NullRangeNameDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesListToBuildFixtures(): void
@@ -53,11 +54,11 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
                             'user1',
                             $className,
                             SpecificationBagFactory::create(),
-                            'alice'
+                            'alice',
                         ),
-                        new FlagBag('user1')
-                    )
-                )
+                        new FlagBag('user1'),
+                    ),
+                ),
             )
             ->with(
                 new TemplatingFixture(
@@ -66,13 +67,12 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
                             'user2',
                             $className,
                             SpecificationBagFactory::create(),
-                            'bob'
+                            'bob',
                         ),
-                        new FlagBag('user2')
-                    )
-                )
-            )
-        ;
+                        new FlagBag('user2'),
+                    ),
+                ),
+            );
         $reference = 'user{1..2}';
         $specs = [
             'username' => '<name()>',
@@ -82,7 +82,7 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $denormalizer = new NullListNameDenormalizer();
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testDenormalizesListWithStepToBuildFixtures(): void
@@ -96,13 +96,12 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
                             'user1',
                             $className,
                             SpecificationBagFactory::create(),
-                            'alice'
+                            'alice',
                         ),
-                        new FlagBag('user1')
-                    )
-                )
-            )
-        ;
+                        new FlagBag('user1'),
+                    ),
+                ),
+            );
         $reference = 'user{1..2, 2}';
         $specs = [
             'username' => '<name()>',
@@ -112,11 +111,12 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $denormalizer = new NullListNameDenormalizer();
         $actual = $denormalizer->denormalize($fixtures, $className, $reference, $specs, $flags);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
      * @dataProvider provideSimpleFixtures
+     * @param mixed $name
      */
     public function testCanBuildSimpleFixtures($name): void
     {
@@ -125,6 +125,7 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideListFixtures
+     * @param mixed $name
      */
     public function testCanBuildListFixtures($name): void
     {
@@ -133,6 +134,7 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideMalformedListFixtures
+     * @param mixed $name
      */
     public function testCanBuildMalformedListFixtures($name): void
     {
@@ -141,6 +143,7 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideSegmentFixtures
+     * @param mixed $name
      */
     public function testCanBuildSegmentFixtures($name): void
     {
@@ -149,6 +152,7 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideMalformedSegmentFixtures
+     * @param mixed $name
      */
     public function testCanBuildMalformedSegmentFixtures($name): void
     {
@@ -157,6 +161,8 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideSimpleFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildSimpleFixtures($name, $expected): void
     {
@@ -165,6 +171,8 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideListFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildListFixtures($name, $expected): void
     {
@@ -173,6 +181,8 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideMalformedListFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildMalformedListFixtures($name, $expected): void
     {
@@ -181,6 +191,8 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideSegmentFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildSegmentFixtures($name, $expected): void
     {
@@ -189,6 +201,8 @@ class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideMalformedSegmentFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildMalformedSegmentFixtures($name, $expected): void
     {

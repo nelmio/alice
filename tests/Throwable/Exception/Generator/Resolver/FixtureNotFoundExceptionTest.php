@@ -19,22 +19,23 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundException
+ * @internal
  */
 class FixtureNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(FixtureNotFoundException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(FixtureNotFoundException::class, RuntimeException::class, true));
     }
 
     public function testIsAResolutionThrowable(): void
     {
-        static::assertTrue(is_a(FixtureNotFoundException::class, ResolutionThrowable::class, true));
+        self::assertTrue(is_a(FixtureNotFoundException::class, ResolutionThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildFixtureNotFoundException();
-        static::assertInstanceOf(ChildFixtureNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildFixtureNotFoundException::class, $exception);
     }
 }

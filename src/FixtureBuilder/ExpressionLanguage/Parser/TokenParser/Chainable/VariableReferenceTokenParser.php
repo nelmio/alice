@@ -31,10 +31,10 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\Expressio
 final class VariableReferenceTokenParser implements ChainableTokenParserInterface
 {
     use IsAServiceTrait;
-    
+
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::VARIABLE_REFERENCE_TYPE;
+        return TokenType::VARIABLE_REFERENCE_TYPE === $token->getType();
     }
 
     /**
@@ -49,14 +49,14 @@ final class VariableReferenceTokenParser implements ChainableTokenParserInterfac
         try {
             return new FixtureReferenceValue(
                 new ListValue([
-                    substr($parts[0], 1),
+                    mb_substr($parts[0], 1),
                     'current' === $variable
                         ? new FunctionCallValue(
                             'current',
-                            [new ValueForCurrentValue()]
+                            [new ValueForCurrentValue()],
                         )
-                        : new VariableValue($variable)
-                ])
+                        : new VariableValue($variable),
+                ]),
             );
         } catch (InvalidArgumentException $exception) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $exception);

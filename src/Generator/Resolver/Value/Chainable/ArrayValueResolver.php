@@ -34,16 +34,16 @@ final class ArrayValueResolver implements ChainableValueResolverInterface, Value
      */
     private $resolver;
 
-    public function __construct(ValueResolverInterface $resolver = null)
+    public function __construct(?ValueResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ArrayValue;

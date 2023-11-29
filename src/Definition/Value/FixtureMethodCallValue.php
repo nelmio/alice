@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Definition\Value;
 use Nelmio\Alice\Definition\ValueInterface;
 
 /**
- * Value object representing "@user0->getUserName()"
+ * Value object representing "@user0->getUserName()".
  */
 final class FixtureMethodCallValue implements ValueInterface
 {
@@ -45,7 +45,7 @@ final class FixtureMethodCallValue implements ValueInterface
     {
         return $this->function;
     }
-    
+
     public function getValue(): array
     {
         return [
@@ -53,14 +53,14 @@ final class FixtureMethodCallValue implements ValueInterface
             $this->function,
         ];
     }
-    
+
     public function __toString(): string
     {
         return sprintf(
             '%s->%s(%s)',
             $this->reference,
             $this->function->getName(),
-            [] === $this->function->getArguments() ? '' : var_export($this->function->getArguments(), true)
+            [] === $this->function->getArguments() ? '' : var_export($this->function->getArguments(), true),
         );
     }
 }

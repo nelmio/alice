@@ -18,18 +18,20 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Parameter
+ * @internal
  */
 class ParameterTest extends TestCase
 {
     /**
      * @dataProvider provideValues
+     * @param mixed $value
      */
     public function testAccessors($value): void
     {
         $parameter = new Parameter('foo', $value);
 
-        static::assertEquals('foo', $parameter->getKey());
-        static::assertEquals($value, $parameter->getValue());
+        self::assertEquals('foo', $parameter->getKey());
+        self::assertEquals($value, $parameter->getValue());
     }
 
     public function testIsImmutable(): void
@@ -42,7 +44,7 @@ class ParameterTest extends TestCase
         // Mutate retrieved object
         $parameter->getValue()[0]->foo = 'baz';
 
-        static::assertEquals(new Parameter('foo', [new stdClass()]), $parameter);
+        self::assertEquals(new Parameter('foo', [new stdClass()]), $parameter);
     }
 
     public function testWithersReturnNewModifiedInstance(): void
@@ -50,12 +52,12 @@ class ParameterTest extends TestCase
         $parameter = new Parameter('foo', 'bar');
         $newParam = $parameter->withValue('rab');
 
-        static::assertNotSame($newParam, $parameter);
-        static::assertEquals('bar', $parameter->getValue());
-        static::assertEquals('rab', $newParam->getValue());
+        self::assertNotSame($newParam, $parameter);
+        self::assertEquals('bar', $parameter->getValue());
+        self::assertEquals('rab', $newParam->getValue());
     }
 
-    public function provideValues()
+    public function provideValues(): iterable
     {
         return [
             'boolean' => [true],

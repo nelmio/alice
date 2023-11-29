@@ -27,8 +27,8 @@ class FileNotFoundException extends UnexpectedValueException
         return new static(
             sprintf(
                 'The file "%s" does not exist.',
-                $file
-            )
+                $file,
+            ),
         );
     }
 }

@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\PropertyAccess\NoSuchPropertyExceptionFactory
+ * @internal
  */
 class NoSuchPropertyExceptionFactoryTest extends TestCase
 {
@@ -24,11 +25,11 @@ class NoSuchPropertyExceptionFactoryTest extends TestCase
     {
         $exception = NoSuchPropertyExceptionFactory::createForUnreadablePropertyFromStdClass('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'Cannot read property "foo" from stdClass.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

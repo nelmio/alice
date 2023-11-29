@@ -30,6 +30,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser
+ * @internal
  */
 class SimpleParserTest extends TestCase
 {
@@ -37,12 +38,12 @@ class SimpleParserTest extends TestCase
 
     public function testIsAParser(): void
     {
-        static::assertTrue(is_a(SimpleParser::class, ParserInterface::class, true));
+        self::assertTrue(is_a(SimpleParser::class, ParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleParser::class))->isCloneable());
     }
 
     public function testCanBeInstantiatedWithALexerAndAParser(): void
@@ -55,7 +56,7 @@ class SimpleParserTest extends TestCase
         $decoratedParser = new DummyChainableTokenParserAware();
         $parser = new SimpleParser(new FakeLexer(), $decoratedParser);
 
-        static::assertSame($parser, $decoratedParser->parser);
+        self::assertSame($parser, $decoratedParser->parser);
     }
 
     public function testLexValueAndParsesEachTokenToReturnAValue(): void
@@ -106,9 +107,9 @@ class SimpleParserTest extends TestCase
         $parser = new SimpleParser($lexer, $tokenParser);
         $parsedValue = $parser->parse($value);
 
-        static::assertEquals(
+        self::assertEquals(
             'parsed_foo',
-            $parsedValue
+            $parsedValue,
         );
     }
 
@@ -133,12 +134,12 @@ class SimpleParserTest extends TestCase
         $parser = new SimpleParser($lexer, $tokenParser);
         $parsedValue = $parser->parse($value);
 
-        static::assertEquals(
+        self::assertEquals(
             new ListValue([
                 new ParameterValue('parsed_foo'),
                 'parsed_bar',
             ]),
-            $parsedValue
+            $parsedValue,
         );
     }
 
@@ -161,9 +162,9 @@ class SimpleParserTest extends TestCase
         $parser = new SimpleParser($lexer, $tokenParser);
         $parsedValue = $parser->parse($value);
 
-        static::assertEquals(
+        self::assertEquals(
             'parsed_foo',
-            $parsedValue
+            $parsedValue,
         );
     }
 
@@ -188,9 +189,8 @@ class SimpleParserTest extends TestCase
                 new NestedValue([
                     'first',
                     'second',
-                ])
-            )
-        ;
+                ]),
+            );
         $tokenParserProphecy->parse($token3)->willReturn('parsed_baz');
         /** @var TokenParserInterface $tokenParser */
         $tokenParser = $tokenParserProphecy->reveal();
@@ -205,7 +205,7 @@ class SimpleParserTest extends TestCase
         $parser = new SimpleParser($lexer, $tokenParser);
         $actual = $parser->parse($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $lexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
         $tokenParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(3);

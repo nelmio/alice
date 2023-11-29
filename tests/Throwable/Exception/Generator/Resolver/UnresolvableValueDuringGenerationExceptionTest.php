@@ -19,27 +19,28 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException
+ * @internal
  */
 class UnresolvableValueDuringGenerationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(UnresolvableValueDuringGenerationException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(UnresolvableValueDuringGenerationException::class, RuntimeException::class, true));
     }
 
     public function testIsAnUnresolvableValueException(): void
     {
-        static::assertTrue(is_a(UnresolvableValueDuringGenerationException::class, UnresolvableValueException::class, true));
+        self::assertTrue(is_a(UnresolvableValueDuringGenerationException::class, UnresolvableValueException::class, true));
     }
 
     public function testIsAResolutionThrowable(): void
     {
-        static::assertTrue(is_a(UnresolvableValueDuringGenerationException::class, ResolutionThrowable::class, true));
+        self::assertTrue(is_a(UnresolvableValueDuringGenerationException::class, ResolutionThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildUnresolvableValueDuringGenerationException();
-        static::assertInstanceOf(ChildUnresolvableValueDuringGenerationException::class, $exception);
+        self::assertInstanceOf(ChildUnresolvableValueDuringGenerationException::class, $exception);
     }
 }

@@ -27,16 +27,14 @@ use TypeError;
 final class FixtureMethodReferenceTokenParser extends AbstractChainableParserAwareParser
 {
     use IsAServiceTrait;
-    
+
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::METHOD_REFERENCE_TYPE;
+        return TokenType::METHOD_REFERENCE_TYPE === $token->getType();
     }
 
     /**
      * Parses expressions such as "@username->getName()".
-     *
-     *
      *
      * @throws ParseException
      */

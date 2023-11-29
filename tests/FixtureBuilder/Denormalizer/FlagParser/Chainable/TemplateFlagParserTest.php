@@ -19,6 +19,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserTestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\TemplateFlagParser
+ * @internal
  */
 class TemplateFlagParserTest extends FlagParserTestCase
 {
@@ -29,13 +30,13 @@ class TemplateFlagParserTest extends FlagParserTestCase
 
     public function testIsAChainableFlagParser(): void
     {
-        static::assertTrue(is_a(TemplateFlagParser::class, ChainableFlagParserInterface::class, true));
+        self::assertTrue(is_a(TemplateFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
     /**
      * @dataProvider provideTemplates
      */
-    public function testCanParseTemplates(string $element, FlagBag $expected = null): void
+    public function testCanParseTemplates(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);
     }

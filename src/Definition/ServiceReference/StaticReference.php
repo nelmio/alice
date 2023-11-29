@@ -16,7 +16,7 @@ namespace Nelmio\Alice\Definition\ServiceReference;
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 
 /**
- * Value object to point to refer to a static service, e.g. 'Nelmio\User\UserFactory'
+ * Value object to point to refer to a static service, e.g. 'Nelmio\User\UserFactory'.
  */
 final class StaticReference implements ServiceReferenceInterface
 {

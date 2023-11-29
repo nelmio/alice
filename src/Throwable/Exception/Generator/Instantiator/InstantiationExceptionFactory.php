@@ -26,10 +26,10 @@ final class InstantiationExceptionFactory
         return new InstantiationException(
             sprintf(
                 'Could not instantiate fixture "%s".',
-                $fixture->getId()
+                $fixture->getId(),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
@@ -39,8 +39,8 @@ final class InstantiationExceptionFactory
             sprintf(
                 'Could not instantiate "%s", the constructor of "%s" is not public.',
                 $fixture->getId(),
-                $fixture->getClassName()
-            )
+                $fixture->getClassName(),
+            ),
         );
     }
 
@@ -49,23 +49,23 @@ final class InstantiationExceptionFactory
         return new InstantiationException(
             sprintf(
                 'Could not instantiate "%s", the constructor has mandatory parameters but no parameters have been given.',
-                $fixture->getId()
-            )
+                $fixture->getId(),
+            ),
         );
     }
 
     public static function createForCouldNotGetConstructorData(
         FixtureInterface $fixture,
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ): InstantiationException {
         return new InstantiationException(
             sprintf(
                 'Could not get the necessary data on the constructor to instantiate "%s".',
-                $fixture->getId()
+                $fixture->getId(),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
@@ -75,8 +75,8 @@ final class InstantiationExceptionFactory
             sprintf(
                 'Instantiated fixture was expected to be an instance of "%s". Got "%s" instead.',
                 $fixture->getClassName(),
-                $instance ? get_class($instance) : 'null'
-            )
+                $instance ? $instance::class : 'null',
+            ),
         );
     }
 
@@ -85,8 +85,8 @@ final class InstantiationExceptionFactory
         return new InstantiatorNotFoundException(
             sprintf(
                 'No suitable instantiator found for the fixture "%s".',
-                $fixture->getId()
-            )
+                $fixture->getId(),
+            ),
         );
     }
 

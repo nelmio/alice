@@ -34,7 +34,7 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
     {
         $this->callsDenormalizer = $callsDenormalizer;
     }
-    
+
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
@@ -56,11 +56,11 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
             throw DenormalizerExceptionFactory::createForUndenormalizableFactory();
         }
 
-        if (false === strpos($method, '::')) {
+        if (false === mb_strpos($method, '::')) {
             $method = sprintf(
                 '%s::%s',
                 $scope->getClassName(),
-                $method
+                $method,
             );
         }
 
@@ -68,7 +68,7 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
             $scope,
             $parser,
             $method,
-            $arguments
+            $arguments,
         );
     }
 }

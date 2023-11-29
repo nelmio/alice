@@ -20,7 +20,7 @@ use Nelmio\Alice\ObjectSet;
 class FakeDataLoader implements DataLoaderInterface
 {
     use NotCallableTrait;
-    
+
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
         $this->__call(__METHOD__, func_get_args());

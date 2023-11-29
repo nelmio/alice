@@ -21,6 +21,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\ResolvedFixtureSet
+ * @internal
  */
 class ResolvedFixtureSetTest extends TestCase
 {
@@ -32,9 +33,9 @@ class ResolvedFixtureSetTest extends TestCase
 
         $set = new ResolvedFixtureSet($parameters, $fixtures, $objects);
 
-        static::assertEquals($parameters, $set->getParameters());
-        static::assertEquals($fixtures, $set->getFixtures());
-        static::assertEquals($objects, $set->getObjects());
+        self::assertEquals($parameters, $set->getParameters());
+        self::assertEquals($fixtures, $set->getFixtures());
+        self::assertEquals($objects, $set->getObjects());
     }
 
     public function testWithersReturnANewModifiedInstance(): void
@@ -48,37 +49,37 @@ class ResolvedFixtureSetTest extends TestCase
         $newParameters = new ParameterBag(['foo' => 'bar']);
         $newSet = $set->withParameters($newParameters);
 
-        static::assertEquals(
+        self::assertEquals(
             new ResolvedFixtureSet($parameters, $fixtures, $objects),
-            $set
+            $set,
         );
-        static::assertEquals(
+        self::assertEquals(
             new ResolvedFixtureSet($newParameters, $fixtures, $objects),
-            $newSet
+            $newSet,
         );
 
         $newFixtures = new FixtureBag();
         $newSet = $set->withFixtures($newFixtures);
 
-        static::assertEquals(
+        self::assertEquals(
             new ResolvedFixtureSet($parameters, $fixtures, $objects),
-            $set
+            $set,
         );
-        static::assertEquals(
+        self::assertEquals(
             new ResolvedFixtureSet($parameters, $newFixtures, $objects),
-            $newSet
+            $newSet,
         );
 
         $newObjects = new ObjectBag(['foo' => new stdClass()]);
         $newSet = $set->withObjects($newObjects);
 
-        static::assertEquals(
+        self::assertEquals(
             new ResolvedFixtureSet($parameters, $fixtures, $objects),
-            $set
+            $set,
         );
-        static::assertEquals(
+        self::assertEquals(
             new ResolvedFixtureSet($parameters, $fixtures, $newObjects),
-            $newSet
+            $newSet,
         );
     }
 }

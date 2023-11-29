@@ -28,7 +28,7 @@ final class ReferenceLexer implements LexerInterface
 {
     use IsAServiceTrait;
 
-    const PATTERNS = [
+    public const PATTERNS = [
         '/^@.*->\S+\(.*\)/' => TokenType::METHOD_REFERENCE_TYPE,
         '/^@.*->[^\(\)\ \{]+/' => TokenType::PROPERTY_REFERENCE_TYPE,
         '/^@[^\ @\-]+\{\d+\.\.\d+\}/' => TokenType::RANGE_REFERENCE_TYPE,
@@ -41,9 +41,7 @@ final class ReferenceLexer implements LexerInterface
     ];
 
     /**
-     * Lex a value with the mask "@X" where X is a valid possible reference
-     *
-     *
+     * Lex a value with the mask "@X" where X is a valid possible reference.
      *
      * @throws LexException
      */

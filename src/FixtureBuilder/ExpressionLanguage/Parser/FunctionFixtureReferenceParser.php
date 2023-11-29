@@ -53,15 +53,14 @@ final class FunctionFixtureReferenceParser implements ParserInterface
         $mergedValues = array_reduce(
             $parsedValue->getValue(),
             [$this, 'mergeFunctionFixtureReferences'],
-            []
+            [],
         );
 
         return (1 === count($mergedValues))
             ? $mergedValues[0]
-            : new ListValue($mergedValues)
-        ;
+            : new ListValue($mergedValues);
     }
-    
+
     private function mergeFunctionFixtureReferences(array $values, $value): array
     {
         $lastElement = end($values);
@@ -75,7 +74,7 @@ final class FunctionFixtureReferenceParser implements ParserInterface
             new ListValue([
                 $lastElement->getValue(),
                 $value,
-            ])
+            ]),
         );
 
         return $values;

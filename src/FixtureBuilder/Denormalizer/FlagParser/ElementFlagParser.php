@@ -25,7 +25,7 @@ final class ElementFlagParser implements FlagParserInterface
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/\s*(?<reference>.+?)\s\((?<stringFlags>.+).*\)$/';
+    public const REGEX = '/\s*(?<reference>.+?)\s\((?<stringFlags>.+).*\)$/';
 
     /**
      * @var FlagParserInterface
@@ -36,7 +36,7 @@ final class ElementFlagParser implements FlagParserInterface
     {
         $this->parser = $parser;
     }
-    
+
     public function parse(string $element): FlagBag
     {
         if (1 !== preg_match(self::REGEX, $element, $matches)) {
@@ -47,7 +47,7 @@ final class ElementFlagParser implements FlagParserInterface
         $stringFlags = preg_split('/\s*,\s*/', $matches['stringFlags']);
         foreach ($stringFlags as $stringFlag) {
             $flags = $flags->mergeWith(
-                $this->parser->parse(trim($stringFlag))
+                $this->parser->parse(trim($stringFlag)),
             );
         }
 

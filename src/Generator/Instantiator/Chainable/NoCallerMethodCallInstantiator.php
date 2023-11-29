@@ -25,23 +25,23 @@ final class NoCallerMethodCallInstantiator extends AbstractChainableInstantiator
     private $namedArgumentsResolver;
 
     // TODO: make $namedArgumentsResolver non-nullable in 4.0. It is currently nullable only for BC purposes
-    public function __construct(NamedArgumentsResolver $namedArgumentsResolver = null)
+    public function __construct(?NamedArgumentsResolver $namedArgumentsResolver = null)
     {
         $this->namedArgumentsResolver = $namedArgumentsResolver;
     }
-    
+
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         $constructor = $fixture->getSpecs()->getConstructor();
 
         return null !== $constructor && false === $constructor instanceof NoMethodCall && null === $constructor->getCaller();
     }
-    
+
     protected function createInstance(FixtureInterface $fixture)
     {
         [$class, $arguments] = [
             $fixture->getClassName(),
-            $fixture->getSpecs()->getConstructor()->getArguments()
+            $fixture->getSpecs()->getConstructor()->getArguments(),
         ];
 
         if (null !== $this->namedArgumentsResolver) {

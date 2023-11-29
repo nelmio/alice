@@ -50,15 +50,14 @@ final class StringMergerParser implements ParserInterface
         $mergedValues = array_reduce(
             $parsedValue->getValue(),
             [$this, 'mergeStrings'],
-            $initial = []
+            $initial = [],
         );
 
         return (1 === count($mergedValues))
             ? $mergedValues[0]
-            : new ListValue($mergedValues)
-        ;
+            : new ListValue($mergedValues);
     }
-    
+
     private function mergeStrings(array $values, $value): array
     {
         if (false === is_string($value)) {

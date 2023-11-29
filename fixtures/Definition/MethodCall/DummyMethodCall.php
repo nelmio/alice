@@ -35,27 +35,27 @@ final class DummyMethodCall implements MethodCallInterface
         $this->token = uniqid();
         $this->toString = $toString;
     }
-    
-    public function withArguments(array $arguments = null): self
+
+    public function withArguments(?array $arguments = null): self
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getCaller(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getMethod(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getArguments(): array
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function __toString(): string
     {
         return $this->toString;

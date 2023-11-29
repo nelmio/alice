@@ -32,7 +32,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = NullRangeNameDenormalizer::REGEX;
+    public const REGEX = NullRangeNameDenormalizer::REGEX;
 
     /**
      * @var string Unique token
@@ -46,7 +46,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
 
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::RANGE_REFERENCE_TYPE;
+        return TokenType::RANGE_REFERENCE_TYPE === $token->getType();
     }
 
     /**
@@ -80,7 +80,7 @@ final class FixtureRangeReferenceTokenParser implements ChainableTokenParserInte
     private function buildRange(Token $token): RangeName
     {
         $matches = [];
-        $name = substr($token->getValue(), 1);
+        $name = mb_substr($token->getValue(), 1);
 
         if (1 !== preg_match(self::REGEX, (string) $name, $matches)) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);

@@ -25,7 +25,7 @@ use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
  */
 final class DefaultFileLocator implements FileLocatorInterface
 {
-    public function locate(string $name, string $currentPath = null): string
+    public function locate(string $name, ?string $currentPath = null): string
     {
         if ('' === $name) {
             throw FileNotFoundException::createForEmptyFile();
@@ -45,15 +45,14 @@ final class DefaultFileLocator implements FileLocatorInterface
 
     private function isAbsolutePath(string $file): bool
     {
-        return ($file[0] === '/'
-            || $file[0] === '\\'
+        return '/' === $file[0]
+            || '\\' === $file[0]
             || (
-                strlen($file) > 3
+                mb_strlen($file) > 3
                 && ctype_alpha($file[0])
-                && $file[1] === ':'
-                && ($file[2] === '\\' || $file[2] === '/')
+                && ':' === $file[1]
+                && ('\\' === $file[2] || '/' === $file[2])
             )
-            || null !== parse_url($file, PHP_URL_SCHEME)
-        );
+            || null !== parse_url($file, PHP_URL_SCHEME);
     }
 }

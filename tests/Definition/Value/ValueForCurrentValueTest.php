@@ -18,23 +18,24 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ValueForCurrentValue
+ * @internal
  */
 class ValueForCurrentValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(ValueForCurrentValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(ValueForCurrentValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $value = new ValueForCurrentValue();
-        static::assertEquals('current', $value->getValue());
+        self::assertEquals('current', $value->getValue());
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new ValueForCurrentValue();
-        static::assertEquals('current', $value);
+        self::assertEquals('current', $value);
     }
 }

@@ -24,12 +24,12 @@ use Nelmio\Alice\ObjectInterface;
 final class SimpleMethodCallProcessor implements ChainableCallProcessorInterface
 {
     use IsAServiceTrait;
-    
+
     public function canProcess(MethodCallInterface $methodCall): bool
     {
         return $methodCall instanceof SimpleMethodCall;
     }
-    
+
     public function process(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
@@ -43,7 +43,7 @@ final class SimpleMethodCallProcessor implements ChainableCallProcessorInterface
         }
 
         return $fixtureSet->withObjects(
-            $fixtureSet->getObjects()->with($object)
+            $fixtureSet->getObjects()->with($object),
         );
     }
 }

@@ -41,7 +41,7 @@ final class Reference
                     'user100.or_something/else',
                     [
                         FixtureFactory::create('user100.or_something/else', null),
-                    ]
+                    ],
                 ],
                 'simple with flag' => [
                     'user (dummy_flag)',
@@ -258,7 +258,7 @@ class FixtureFactory
             $id,
             'Dummy',
             SpecificationBagFactory::create(),
-            $valueForCurrent
+            $valueForCurrent,
         );
     }
 
@@ -270,10 +270,10 @@ class FixtureFactory
                     $id,
                     'Dummy',
                     SpecificationBagFactory::create(),
-                    $valueForCurrent
+                    $valueForCurrent,
                 ),
-                new FlagBag($id)
-            )
+                new FlagBag($id),
+            ),
         );
     }
 }

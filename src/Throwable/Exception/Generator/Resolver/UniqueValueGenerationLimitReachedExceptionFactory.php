@@ -26,8 +26,8 @@ final class UniqueValueGenerationLimitReachedExceptionFactory
             sprintf(
                 'Could not generate a unique value after %d attempts for "%s".',
                 $limit,
-                $value->getId()
-            )
+                $value->getId(),
+            ),
         );
     }
 

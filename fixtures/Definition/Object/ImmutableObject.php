@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Object;
 
-use function Nelmio\Alice\deep_clone;
 use Nelmio\Alice\ObjectInterface;
+use function Nelmio\Alice\deep_clone;
 
 class ImmutableObject implements ObjectInterface
 {
@@ -36,17 +36,17 @@ class ImmutableObject implements ObjectInterface
         $this->id = $id;
         $this->instance = deep_clone($instance);
     }
-    
+
     public function getId(): string
     {
         return $this->id;
     }
-    
+
     public function getInstance(): object
     {
         return deep_clone($this->instance);
     }
-    
+
     public function withInstance($newInstance): static
     {
         return new self($this->id, $newInstance);

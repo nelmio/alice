@@ -24,6 +24,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Parser\ParserRegistry
+ * @internal
  */
 class ParserRegistryTest extends TestCase
 {
@@ -31,14 +32,14 @@ class ParserRegistryTest extends TestCase
 
     public function testIsAParser(): void
     {
-        static::assertTrue(is_a(ParserRegistry::class, ParserInterface::class, true));
+        self::assertTrue(is_a(ParserRegistry::class, ParserInterface::class, true));
     }
 
     public function testAcceptChainableParsers(): void
     {
         $parserProphecy = $this->prophesize(ChainableParserInterface::class);
         $parserProphecy->canParse(Argument::any())->shouldNotBeCalled();
-        /* @var ChainableParserInterface $parser */
+        /** @var ChainableParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
         new ParserRegistry([$parser]);
@@ -53,7 +54,7 @@ class ParserRegistryTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ParserRegistry::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ParserRegistry::class))->isCloneable());
     }
 
     public function testIteratesOverEveryParsersAndUseTheFirstValidOne(): void
@@ -63,18 +64,18 @@ class ParserRegistryTest extends TestCase
 
         $parser1Prophecy = $this->prophesize(ChainableParserInterface::class);
         $parser1Prophecy->canParse($file)->willReturn(false);
-        /* @var ChainableParserInterface $parser1 */
+        /** @var ChainableParserInterface $parser1 */
         $parser1 = $parser1Prophecy->reveal();
 
         $parser2Prophecy = $this->prophesize(ChainableParserInterface::class);
         $parser2Prophecy->canParse($file)->willReturn(true);
         $parser2Prophecy->parse($file)->willReturn($expected);
-        /* @var ChainableParserInterface $parser2 */
+        /** @var ChainableParserInterface $parser2 */
         $parser2 = $parser2Prophecy->reveal();
 
         $parser3Prophecy = $this->prophesize(ChainableParserInterface::class);
         $parser3Prophecy->canParse(Argument::any())->shouldNotBeCalled();
-        /* @var ChainableParserInterface $parser3 */
+        /** @var ChainableParserInterface $parser3 */
         $parser3 = $parser3Prophecy->reveal();
 
         $registry = new ParserRegistry([
@@ -84,7 +85,7 @@ class ParserRegistryTest extends TestCase
         ]);
         $actual = $registry->parse($file);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
 
         $parser1Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $parser2Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);

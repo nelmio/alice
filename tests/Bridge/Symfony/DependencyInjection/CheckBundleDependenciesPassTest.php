@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @coversNothing
  *
  * @group integration
+ * @internal
  */
 class CheckBundleDependenciesPassTest extends TestCase
 {

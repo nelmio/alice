@@ -25,6 +25,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\SimpleArgumentsDenormalizer
+ * @internal
  */
 class SimpleArgumentsDenormalizerTest extends TestCase
 {
@@ -32,7 +33,7 @@ class SimpleArgumentsDenormalizerTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleArgumentsDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleArgumentsDenormalizer::class))->isCloneable());
     }
 
     public function testParsesStringKeys(): void
@@ -47,17 +48,14 @@ class SimpleArgumentsDenormalizerTest extends TestCase
         $flagParserProphecy
             ->parse('2 (dummy_flag)')
             ->willReturn(
-                $arg2Flags = (new FlagBag('2'))->withFlag(new ElementFlag('dummy_flag'))
-            )
-        ;
+                $arg2Flags = (new FlagBag('2'))->withFlag(new ElementFlag('dummy_flag')),
+            );
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
         $valueDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(
-            function ($args) {
-                return $args[2];
-            }
+            static fn ($args) => $args[2],
         );
         /** @var ValueDenormalizerInterface $valueDenormalizer */
         $valueDenormalizer = $valueDenormalizerProphecy->reveal();
@@ -83,21 +81,18 @@ class SimpleArgumentsDenormalizerTest extends TestCase
         $flagParserProphecy
             ->parse(Argument::any())
             ->will(
-                function ($args) {
+                static function ($args) {
                     preg_match('/(?<val>.+?)\s\(.+\)/', $args[0], $matches);
 
                     return new FlagBag($matches['val']);
-                }
-            )
-        ;
+                },
+            );
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
         $valueDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $valueDenormalizerProphecy->denormalize(Argument::cetera())->will(
-            function ($args) {
-                return $args[2];
-            }
+            static fn ($args) => $args[2],
         );
         /** @var ValueDenormalizerInterface $valueDenormalizer */
         $valueDenormalizer = $valueDenormalizerProphecy->reveal();
@@ -105,7 +100,7 @@ class SimpleArgumentsDenormalizerTest extends TestCase
         $denormalizer = new SimpleArgumentsDenormalizer($valueDenormalizer);
         $result = $denormalizer->denormalize($fixture, $flagParser, $arguments);
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 0 => '<latitude()>',
                 'foo' => '<longitude()>',
@@ -113,7 +108,7 @@ class SimpleArgumentsDenormalizerTest extends TestCase
                 3 => 1000,
                 4 => 500,
             ],
-            $result
+            $result,
         );
 
         $valueDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(5);

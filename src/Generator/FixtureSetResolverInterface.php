@@ -21,7 +21,6 @@ interface FixtureSetResolverInterface
     /**
      * Resolves the loaded parameters and merge the injected ones with them and also resolves the fixture flags.
      *
-     *
      * @throws ResolutionThrowable
      */
     public function resolve(FixtureSet $fixtureSet): ResolvedFixtureSet;

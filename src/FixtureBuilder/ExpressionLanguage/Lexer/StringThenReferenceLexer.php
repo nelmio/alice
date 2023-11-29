@@ -34,7 +34,7 @@ final class StringThenReferenceLexer implements LexerInterface
     {
         $this->decoratedLexer = $decoratedLexer;
     }
-    
+
     public function lex(string $value): array
     {
         $tokens = $this->decoratedLexer->lex($value);
@@ -48,21 +48,21 @@ final class StringThenReferenceLexer implements LexerInterface
                 continue;
             }
 
-            if ($token->getType() === TokenType::STRING_TYPE &&
-                $nextToken->getType() === TokenType::SIMPLE_REFERENCE_TYPE &&
-                trim($token->getValue()) !== '' &&
-                !in_array(substr($token->getValue(), -1), [' ', '\''], true)
+            if (TokenType::STRING_TYPE === $token->getType()
+                && TokenType::SIMPLE_REFERENCE_TYPE === $nextToken->getType()
+                && '' !== trim($token->getValue())
+                && !in_array(mb_substr($token->getValue(), -1), [' ', '\''], true)
             ) {
                 array_splice($tokens, $idx, 2, [
                     new Token(
                         $token->getValue().$nextToken->getValue(),
-                        new TokenType(TokenType::STRING_TYPE)
-                    )
+                        new TokenType(TokenType::STRING_TYPE),
+                    ),
                 ]);
             }
 
             ++$idx;
-        } while ($token !== false && $nextToken !== false);
+        } while (false !== $token && false !== $nextToken);
 
         return $tokens;
     }

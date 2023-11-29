@@ -26,7 +26,7 @@ final class BareFixtureSet
      * @var ParameterBag
      */
     private $parameters;
-    
+
     /**
      * @var FixtureBag
      */
@@ -37,12 +37,12 @@ final class BareFixtureSet
         $this->parameters = $parameters;
         $this->fixtures = $fixtures;
     }
-    
+
     public function getParameters(): ParameterBag
     {
         return $this->parameters;
     }
-    
+
     public function getFixtures(): FixtureBag
     {
         return $this->fixtures;

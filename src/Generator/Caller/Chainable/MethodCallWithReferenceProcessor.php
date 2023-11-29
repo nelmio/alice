@@ -26,14 +26,13 @@ use Nelmio\Alice\ObjectInterface;
 final class MethodCallWithReferenceProcessor implements ChainableCallProcessorInterface
 {
     use IsAServiceTrait;
-    
+
     public function canProcess(MethodCallInterface $methodCall): bool
     {
-        return (
+        return
             $methodCall instanceof MethodCallWithReference
             && null !== $methodCall->getCaller()
-            && $methodCall->getCaller() instanceof StaticReference
-        );
+            && $methodCall->getCaller() instanceof StaticReference;
     }
 
     /**
@@ -59,7 +58,7 @@ final class MethodCallWithReferenceProcessor implements ChainableCallProcessorIn
         }
 
         return $fixtureSet->withObjects(
-            $fixtureSet->getObjects()->with($object)
+            $fixtureSet->getObjects()->with($object),
         );
     }
 }

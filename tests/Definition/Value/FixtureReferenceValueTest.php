@@ -20,12 +20,13 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\FixtureReferenceValue
+ * @internal
  */
 class FixtureReferenceValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(FixtureReferenceValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(FixtureReferenceValue::class, ValueInterface::class, true));
     }
 
     public function testCanBeInstantiatedWithOnlyAStringOrAValue(): void
@@ -36,73 +37,73 @@ class FixtureReferenceValueTest extends TestCase
         try {
             new FixtureReferenceValue(null);
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "null" instead.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 
         try {
             new FixtureReferenceValue(true);
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "boolean" instead.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 
         try {
             new FixtureReferenceValue(10);
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "integer" instead.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 
         try {
             new FixtureReferenceValue(.5);
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "double" instead.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 
         try {
             new FixtureReferenceValue([]);
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "array" instead.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 
         try {
             new FixtureReferenceValue(new stdClass());
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "stdClass" instead.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 
         try {
             new FixtureReferenceValue(
                 static function (): void {
-                }
+                },
             );
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected reference to be either a string or a "Nelmio\Alice\Definition\ValueInterface" instance, got'
                 .' "Closure" instead.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
     }
@@ -111,20 +112,20 @@ class FixtureReferenceValueTest extends TestCase
     {
         $value = new FixtureReferenceValue('user0');
 
-        static::assertEquals('user0', $value->getValue());
+        self::assertEquals('user0', $value->getValue());
     }
 
     public function testIsImmutable(): void
     {
-        static::assertTrue(true, 'Nothing to do.');
+        self::assertTrue(true, 'Nothing to do.');
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new FixtureReferenceValue('');
-        static::assertEquals('@', (string) $value);
+        self::assertEquals('@', (string) $value);
 
         $value = new FixtureReferenceValue('user0');
-        static::assertEquals('@user0', (string) $value);
+        self::assertEquals('@user0', (string) $value);
     }
 }

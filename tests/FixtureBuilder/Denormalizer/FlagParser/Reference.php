@@ -54,8 +54,7 @@ final class Reference
                     'user (dummy_flag, another_dummy_flag)',
                     (new FlagBag('user'))
                         ->withFlag(new ElementFlag('dummy_flag'))
-                        ->withFlag(new ElementFlag('another_dummy_flag'))
-                    ,
+                        ->withFlag(new ElementFlag('another_dummy_flag')),
                 ],
                 'with an index' => [
                     '0 (dummy_flag)',
@@ -142,8 +141,7 @@ final class Reference
                 'with 1 extend' => [
                     'extends user_base',
                     (new FlagBag(''))
-                        ->withFlag(new ExtendFlag(new FixtureReference('user_base')))
-                    ,
+                        ->withFlag(new ExtendFlag(new FixtureReference('user_base'))),
                 ],
             ],
             'malformed-extend' => [

@@ -33,6 +33,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator
+ * @internal
  */
 class StaticFactoryInstantiatorTest extends TestCase
 {
@@ -40,7 +41,7 @@ class StaticFactoryInstantiatorTest extends TestCase
      * @var StaticFactoryInstantiator
      */
     private $instantiator;
-    
+
     protected function setUp(): void
     {
         $this->instantiator = new StaticFactoryInstantiator();
@@ -48,26 +49,26 @@ class StaticFactoryInstantiatorTest extends TestCase
 
     public function testIsAChainableInstantiator(): void
     {
-        static::assertTrue(is_a(StaticFactoryInstantiator::class, ChainableInstantiatorInterface::class, true));
+        self::assertTrue(is_a(StaticFactoryInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(StaticFactoryInstantiator::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(StaticFactoryInstantiator::class))->isCloneable());
     }
 
     public function testCannotInstantiateFixtureWithDefaultConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
 
-        static::assertFalse($this->instantiator->canInstantiate($fixture));
+        self::assertFalse($this->instantiator->canInstantiate($fixture));
     }
 
     public function testCannotInstantiateFixtureWithNoMethodCallConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create(new NoMethodCall()));
 
-        static::assertFalse($this->instantiator->canInstantiate($fixture));
+        self::assertFalse($this->instantiator->canInstantiate($fixture));
     }
 
     public function testCannotInstantiateFixtureWithIfConstructorIsANonStaticFactory(): void
@@ -75,10 +76,10 @@ class StaticFactoryInstantiatorTest extends TestCase
         $fixture = new SimpleFixture(
             'dummy',
             'Dummy',
-            SpecificationBagFactory::create(new MethodCallWithReference(new DummyReference(), 'fake'))
+            SpecificationBagFactory::create(new MethodCallWithReference(new DummyReference(), 'fake')),
         );
 
-        static::assertFalse($this->instantiator->canInstantiate($fixture));
+        self::assertFalse($this->instantiator->canInstantiate($fixture));
     }
 
     public function testCanInstantiateFixtureWithIfConstructorIsAStaticFactory(): void
@@ -86,10 +87,10 @@ class StaticFactoryInstantiatorTest extends TestCase
         $fixture = new SimpleFixture(
             'dummy',
             'Dummy',
-            SpecificationBagFactory::create(new MethodCallWithReference(new StaticReference('static_reference'), 'fake'))
+            SpecificationBagFactory::create(new MethodCallWithReference(new StaticReference('static_reference'), 'fake')),
         );
 
-        static::assertTrue($this->instantiator->canInstantiate($fixture));
+        self::assertTrue($this->instantiator->canInstantiate($fixture));
     }
 
     public function testInstantiatesObjectWithFactory(): void
@@ -100,16 +101,16 @@ class StaticFactoryInstantiatorTest extends TestCase
             SpecificationBagFactory::create(
                 new MethodCallWithReference(
                     new StaticReference(DummyWithNamedConstructor::class),
-                    'namedConstruct'
-                )
-            )
+                    'namedConstruct',
+                ),
+            ),
         );
         $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $expected = DummyWithNamedConstructor::namedConstruct();
         $actual = $set->getObjects()->get($fixture)->getInstance();
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testInstantiatesObjectWithFactoryAndArguments(): void
@@ -121,16 +122,16 @@ class StaticFactoryInstantiatorTest extends TestCase
                 new MethodCallWithReference(
                     new StaticReference(DummyWithNamedConstructorAndOptionalParameters::class),
                     'namedConstruct',
-                    [10]
-                )
-            )
+                    [10],
+                ),
+            ),
         );
         $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $expected = DummyWithNamedConstructorAndOptionalParameters::namedConstruct(10);
         $actual = $set->getObjects()->get($fixture)->getInstance();
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testInstantiatesObjectWithFactoryAndNamedArguments(): void
@@ -142,16 +143,16 @@ class StaticFactoryInstantiatorTest extends TestCase
                 new MethodCallWithReference(
                     new StaticReference(DummyWithNamedConstructorAndOptionalParameters::class),
                     'namedConstruct',
-                    ['param' => 10]
-                )
-            )
+                    ['param' => 10],
+                ),
+            ),
         );
         $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $expected = DummyWithNamedConstructorAndOptionalParameters::namedConstruct(10);
         $actual = $set->getObjects()->get($fixture)->getInstance();
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfCouldNotInstantiateObject(): void
@@ -162,9 +163,9 @@ class StaticFactoryInstantiatorTest extends TestCase
             SpecificationBagFactory::create(
                 new MethodCallWithReference(
                     new StaticReference(DummyWithExplicitDefaultConstructorThrowingException::class),
-                    'namedConstruct'
-                )
-            )
+                    'namedConstruct',
+                ),
+            ),
         );
 
         $this->expectException(InstantiationException::class);
@@ -181,9 +182,9 @@ class StaticFactoryInstantiatorTest extends TestCase
             SpecificationBagFactory::create(
                 new MethodCallWithReference(
                     new StaticReference(DummyWithExplicitDefaultConstructorThrowingException::class),
-                    'unknownMethod'
-                )
-            )
+                    'unknownMethod',
+                ),
+            ),
         );
 
         $this->expectException(InstantiationException::class);
@@ -200,9 +201,9 @@ class StaticFactoryInstantiatorTest extends TestCase
             SpecificationBagFactory::create(
                 new MethodCallWithReference(
                     new StaticReference('Unknown'),
-                    'namedConstruct'
-                )
-            )
+                    'namedConstruct',
+                ),
+            ),
         );
 
         $this->expectException(InstantiationException::class);
@@ -220,9 +221,9 @@ class StaticFactoryInstantiatorTest extends TestCase
                 new MethodCallWithReference(
                     new StaticReference(AbstractDummyWithRequiredParameterInConstructor::class),
                     'namedConstruct',
-                    [10]
-                )
-            )
+                    [10],
+                ),
+            ),
         );
 
         $this->expectException(InstantiationException::class);
@@ -240,9 +241,9 @@ class StaticFactoryInstantiatorTest extends TestCase
                 new MethodCallWithReference(
                     new StaticReference(DummyWithNamedConstructorAndOptionalParameters::class),
                     'namedConstruct',
-                    [10]
-                )
-            )
+                    [10],
+                ),
+            ),
         );
 
         $this->expectException(InstantiationException::class);
@@ -259,9 +260,9 @@ class StaticFactoryInstantiatorTest extends TestCase
             SpecificationBagFactory::create(
                 new MethodCallWithReference(
                     new StaticReference(DummyWithFakeNamedConstructor::class),
-                    'namedConstruct'
-                )
-            )
+                    'namedConstruct',
+                ),
+            ),
         );
 
         $this->expectException(InstantiationException::class);

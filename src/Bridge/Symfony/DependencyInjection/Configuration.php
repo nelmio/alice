@@ -30,69 +30,68 @@ final class Configuration implements ConfigurationInterface
         $treeBuilder
             ->getRootNode()
             ->children()
-                ->scalarNode('locale')
-                    ->defaultValue('en_US')
-                    ->info('Default locale for the Faker Generator')
-                    ->validate()
-                        ->always($this->createStringValidatorClosure())
-                    ->end()
-                ->end()
-                ->scalarNode('seed')
-                    ->defaultValue(1)
-                    ->info('Value used make sure Faker generates data consistently across runs, set to null to disable.')
-                    ->validate()
-                        ->always(
-                            static function ($seed) {
-                                if (null === $seed || (is_int($seed) && $seed > 0)) {
-                                    return $seed;
-                                }
-
-                                throw InvalidArgumentExceptionFactory::createForInvalidSeedConfigurationValue($seed);
-                            }
-                        )
-                    ->end()
-                ->end()
-                ->arrayNode('functions_blacklist')
-                    ->scalarPrototype()->end()
-                    ->defaultValue(['current'])
-                    ->info(
-                        'Some PHP native functions may conflict with Faker formatters. By default, PHP native '
-                        .'functions are used over Faker formatters. If you want to change that, simply blacklist the '
-                        .'PHP function.'
-                    )
-                    ->validate()
-                        ->always(
-                            static function (array $value) {
-                                foreach ($value as $item) {
-                                    if (false === is_string($item)) {
-                                        throw InvalidArgumentExceptionFactory::createForExpectedConfigurationArrayOfStringValue($item);
-                                    }
-                                }
-
-                                return $value;
-                            }
-                        )
-                    ->end()
-                ->end()
-                ->integerNode('loading_limit')
-                    ->defaultValue(5)
-                    ->info(
-                        'Alice may do some recursion to resolve certain values. This parameter defines a limit which '
-                        .'will stop the resolution once reached.'
-                    )
-                    ->validate()
-                        ->always($this->createPositiveIntegerValidatorClosure())
-                    ->end()
-                ->end()
-                ->integerNode('max_unique_values_retry')
-                    ->defaultValue(150)
-                    ->info('Maximum number of time Alice can try to generate a unique value before stopping and failing.')
-                    ->validate()
-                        ->always($this->createPositiveIntegerValidatorClosure())
-                    ->end()
-                ->end()
+            ->scalarNode('locale')
+            ->defaultValue('en_US')
+            ->info('Default locale for the Faker Generator')
+            ->validate()
+            ->always($this->createStringValidatorClosure())
             ->end()
-        ;
+            ->end()
+            ->scalarNode('seed')
+            ->defaultValue(1)
+            ->info('Value used make sure Faker generates data consistently across runs, set to null to disable.')
+            ->validate()
+            ->always(
+                static function ($seed) {
+                    if (null === $seed || (is_int($seed) && $seed > 0)) {
+                        return $seed;
+                    }
+
+                    throw InvalidArgumentExceptionFactory::createForInvalidSeedConfigurationValue($seed);
+                },
+            )
+            ->end()
+            ->end()
+            ->arrayNode('functions_blacklist')
+            ->scalarPrototype()->end()
+            ->defaultValue(['current'])
+            ->info(
+                'Some PHP native functions may conflict with Faker formatters. By default, PHP native '
+                .'functions are used over Faker formatters. If you want to change that, simply blacklist the '
+                .'PHP function.',
+            )
+            ->validate()
+            ->always(
+                static function (array $value) {
+                    foreach ($value as $item) {
+                        if (false === is_string($item)) {
+                            throw InvalidArgumentExceptionFactory::createForExpectedConfigurationArrayOfStringValue($item);
+                        }
+                    }
+
+                    return $value;
+                },
+            )
+            ->end()
+            ->end()
+            ->integerNode('loading_limit')
+            ->defaultValue(5)
+            ->info(
+                'Alice may do some recursion to resolve certain values. This parameter defines a limit which '
+                .'will stop the resolution once reached.',
+            )
+            ->validate()
+            ->always($this->createPositiveIntegerValidatorClosure())
+            ->end()
+            ->end()
+            ->integerNode('max_unique_values_retry')
+            ->defaultValue(150)
+            ->info('Maximum number of time Alice can try to generate a unique value before stopping and failing.')
+            ->validate()
+            ->always($this->createPositiveIntegerValidatorClosure())
+            ->end()
+            ->end()
+            ->end();
 
         return $treeBuilder;
     }

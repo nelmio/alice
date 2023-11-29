@@ -26,7 +26,7 @@ class Dummy
 
     public function addFoo(): void
     {
-        $this->counter++;
+        ++$this->counter;
     }
 
     public function setRelatedDummy(self $related): void
@@ -34,7 +34,7 @@ class Dummy
         $this->related = $related;
     }
 
-    public static function create($title, $counter, self $related = null): self
+    public static function create($title, $counter, ?self $related = null): self
     {
         $obj = new self();
         $obj->title = $title;

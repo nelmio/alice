@@ -50,7 +50,7 @@ final class ObjectBag implements IteratorAggregate, Countable
             }
 
             $this->objects[$id] = new CompleteObject(
-                new SimpleObject($id, $object)
+                new SimpleObject($id, $object),
             );
             $this->array[$id] = $object;
         }
@@ -78,7 +78,6 @@ final class ObjectBag implements IteratorAggregate, Countable
     {
         $clone = clone $this;
         unset($clone->objects[$objectOrFixture->getId()], $clone->array[$objectOrFixture->getId()]);
-        
 
         return $clone;
     }
@@ -94,10 +93,10 @@ final class ObjectBag implements IteratorAggregate, Countable
             $clone->objects[$reference] = $object;
             $clone->array[$reference] = $object->getInstance();
         }
-        
+
         return $clone;
     }
-    
+
     public function has(FixtureIdInterface $fixture): bool
     {
         return isset($this->objects[$fixture->getId()]);
@@ -111,13 +110,13 @@ final class ObjectBag implements IteratorAggregate, Countable
         if ($this->has($fixture)) {
             return $this->objects[$fixture->getId()];
         }
-        
+
         throw ObjectNotFoundExceptionFactory::create(
             $fixture->getId(),
-            $fixture instanceof FixtureInterface ? $fixture->getClassName() : 'no class given'
+            $fixture instanceof FixtureInterface ? $fixture->getClassName() : 'no class given',
         );
     }
-    
+
     public function count(): int
     {
         return count($this->objects);

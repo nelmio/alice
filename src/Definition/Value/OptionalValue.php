@@ -17,7 +17,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
 
 /**
- * Value object representing "80%? 'value': 'empty'"
+ * Value object representing "80%? 'value': 'empty'".
  */
 final class OptionalValue implements ValueInterface
 {
@@ -37,7 +37,7 @@ final class OptionalValue implements ValueInterface
     private $secondMember;
 
     /**
-     * @param int|string|ValueInterface         $quantifier
+     * @param int|string|ValueInterface  $quantifier
      * @param string|ValueInterface      $firstMember
      * @param string|ValueInterface|null $secondMember
      */
@@ -99,14 +99,14 @@ final class OptionalValue implements ValueInterface
             $this->getSecondMember(),
         ];
     }
-    
+
     public function __toString(): string
     {
         return sprintf(
             '%s%%? %s : %s',
             $this->quantifier,
             $this->firstMember,
-            $this->secondMember ?? 'null'
+            $this->secondMember ?? 'null',
         );
     }
 }

@@ -53,12 +53,12 @@ final class ParameterBag implements IteratorAggregate, Countable
 
         return $clone;
     }
-    
+
     public function without(string $key): self
     {
         $clone = clone $this;
         unset($clone->parameters[$key]);
-        
+
         return $clone;
     }
 
@@ -78,12 +78,12 @@ final class ParameterBag implements IteratorAggregate, Countable
 
         throw ParameterNotFoundExceptionFactory::create($key);
     }
-    
+
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->parameters);
     }
-    
+
     public function count(): int
     {
         return count($this->parameters);

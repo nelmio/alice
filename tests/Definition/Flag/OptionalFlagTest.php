@@ -19,42 +19,43 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Flag\OptionalFlag
+ * @internal
  */
 class OptionalFlagTest extends TestCase
 {
     public function testIsAFlag(): void
     {
-        static::assertTrue(is_a(OptionalFlag::class, FlagInterface::class, true));
+        self::assertTrue(is_a(OptionalFlag::class, FlagInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $flag = new OptionalFlag(50);
 
-        static::assertEquals(50, $flag->getPercentage());
-        static::assertEquals('%?', $flag->__toString());
+        self::assertEquals(50, $flag->getPercentage());
+        self::assertEquals('%?', $flag->__toString());
     }
 
     /**
      * @dataProvider providePercentageValues
      */
-    public function testThrowsExceptionIfPercentageValueIsInvalid(int $percentage, string $expectedMessage = null): void
+    public function testThrowsExceptionIfPercentageValueIsInvalid(int $percentage, ?string $expectedMessage = null): void
     {
         try {
             new OptionalFlag($percentage);
             if (null !== $expectedMessage) {
-                static::fail('Expected exception to be thrown.');
+                self::fail('Expected exception to be thrown.');
             }
         } catch (InvalidArgumentException $exception) {
             if (null === $expectedMessage) {
-                static::fail('Was not expecting exception to be thrown.');
+                self::fail('Was not expecting exception to be thrown.');
             }
 
-            static::assertEquals($expectedMessage, $exception->getMessage());
+            self::assertEquals($expectedMessage, $exception->getMessage());
         }
     }
 
-    public function providePercentageValues()
+    public function providePercentageValues(): iterable
     {
         yield 'negative value' => [
             -1,

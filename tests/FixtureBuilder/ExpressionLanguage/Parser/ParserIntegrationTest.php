@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 
-use const DIRECTORY_SEPARATOR;
 use InvalidArgumentException;
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
 use Nelmio\Alice\Definition\Value\ArrayValue;
@@ -33,11 +32,13 @@ use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 use PHPUnit\Framework\TestCase;
 use function str_repeat;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @group integration
  *
  * @coversNothing
+ * @internal
  */
 class ParserIntegrationTest extends TestCase
 {
@@ -53,6 +54,7 @@ class ParserIntegrationTest extends TestCase
 
     /**
      * @dataProvider provideValues
+     * @param mixed $expected
      */
     public function testParseValues(string $value, $expected): void
     {
@@ -60,12 +62,12 @@ class ParserIntegrationTest extends TestCase
             $actual = $this->parser->parse($value);
 
             if (null === $expected) {
-                static::fail(
+                self::fail(
                     sprintf(
                         'Expected exception to be thrown for "%s", got "%s" instead.',
                         $value,
-                        var_export($actual, true)
-                    )
+                        var_export($actual, true),
+                    ),
                 );
             }
         } catch (InvalidArgumentException $exception) {
@@ -82,10 +84,10 @@ class ParserIntegrationTest extends TestCase
             throw $exception;
         }
 
-        static::assertEquals($expected, $actual, var_export($actual, true));
+        self::assertEquals($expected, $actual, var_export($actual, true));
     }
 
-    public function provideValues()
+    public function provideValues(): iterable
     {
         // Simple values
         yield 'empty string' => [
@@ -150,7 +152,7 @@ class ParserIntegrationTest extends TestCase
             new ListValue([
                 '@',
                 new FunctionCallValue('foo'),
-            ])
+            ]),
         ];
         yield '[Escape character] double escape with reference' => [
             '\\\\@',
@@ -336,7 +338,7 @@ class ParserIntegrationTest extends TestCase
                 'f',
                 [
                     new FunctionCallValue('g'),
-                ]
+                ],
             ),
         ];
         yield '[Function] nominal surrounded' => [
@@ -376,7 +378,7 @@ class ParserIntegrationTest extends TestCase
                 [
                     new VariableValue('foo'),
                     new VariableValue('arg'),
-                ]
+                ],
             ),
         ];
         yield '[Function] nominal with string arguments which contains quotes' => [
@@ -398,7 +400,7 @@ class ParserIntegrationTest extends TestCase
                     '012',
                     '+012',
                     '-012',
-                ]
+                ],
             ),
         ];
         yield '[Function] nominal with boolean arguments' => [
@@ -408,14 +410,14 @@ class ParserIntegrationTest extends TestCase
                 [
                     true,
                     false,
-                ]
+                ],
             ),
         ];
         yield '[Function] nominal with null arguments' => [
             '<function(null)>',
             new FunctionCallValue(
                 'function',
-                [null]
+                [null],
             ),
         ];
         yield '[Function] nominal with numeric arguments' => [
@@ -432,7 +434,7 @@ class ParserIntegrationTest extends TestCase
                     10,
                     10,
                     -10,
-                ]
+                ],
             ),
         ];
         yield '[Function] nominal with array argument which contains string elements in quotes' => [
@@ -441,7 +443,7 @@ class ParserIntegrationTest extends TestCase
                 'function',
                 [
                     new ArrayValue(['foo', 'bar']),
-                ]
+                ],
             ),
         ];
         yield '[Function] unbalanced with arguments (1)' => [
@@ -478,14 +480,14 @@ class ParserIntegrationTest extends TestCase
                     [
                         new VariableValue('foo'),
                         new VariableValue('arg'),
-                    ]
+                    ],
                 ),
                 new FunctionCallValue(
                     'g',
                     [
                         new VariableValue('baz'),
                         new VariableValue('faz'),
-                    ]
+                    ],
                 ),
             ]),
         ];
@@ -497,7 +499,7 @@ class ParserIntegrationTest extends TestCase
                     [
                         new VariableValue('foo'),
                         new VariableValue('arg'),
-                    ]
+                    ],
                 ),
                 ' ',
                 new FunctionCallValue(
@@ -505,7 +507,7 @@ class ParserIntegrationTest extends TestCase
                     [
                         new VariableValue('baz'),
                         new VariableValue('faz'),
-                    ]
+                    ],
                 ),
             ]),
         ];
@@ -518,16 +520,16 @@ class ParserIntegrationTest extends TestCase
                         'g',
                         [
                             new VariableValue('baz'),
-                        ]
+                        ],
                     ),
                     new VariableValue('arg'),
-                ]
+                ],
             ),
         ];
         yield '[Function] nested functions with multiple arguments' => [
             '<f(<g($baz, $faz)>, $arg)>',
             null, // Will fail because cannot guess that the first comma is for the nested function and not for the
-                  // parent function.
+            // parent function.
         ];
         yield '[Function] nominal surrounded with arguments' => [
             'foo <function($foo, $arg)> bar',
@@ -538,7 +540,7 @@ class ParserIntegrationTest extends TestCase
                     [
                         new VariableValue('foo'),
                         new VariableValue('arg'),
-                    ]
+                    ],
                 ),
                 ' bar',
             ]),
@@ -563,7 +565,7 @@ class ParserIntegrationTest extends TestCase
                     '-12 months',
                     '',
                     ',',
-                ]
+                ],
             ),
         ];
 
@@ -573,7 +575,7 @@ class ParserIntegrationTest extends TestCase
                 'function',
                 [
                     'foo\nbar',
-                ]
+                ],
             ),
         ];
 
@@ -583,7 +585,7 @@ class ParserIntegrationTest extends TestCase
                 'function',
                 [
                     'foo\\r\\nbar',
-                ]
+                ],
             ),
         ];
 
@@ -594,7 +596,7 @@ class ParserIntegrationTest extends TestCase
                 [
                     // On windows if true
                     DIRECTORY_SEPARATOR === '\\' ? 'foo\nbar' : 'foo'.PHP_EOL.'bar',
-                ]
+                ],
             ),
         ];
 
@@ -605,7 +607,7 @@ class ParserIntegrationTest extends TestCase
                 [
                     // On windows if true
                     DIRECTORY_SEPARATOR === '\\' ? 'foo'.PHP_EOL.'bar' : 'foo\r'.PHP_EOL.'bar',
-                ]
+                ],
             ),
         ];
 
@@ -617,7 +619,7 @@ class ParserIntegrationTest extends TestCase
                 [
                     // On windows if true
                     $args,
-                ]
+                ],
             ),
         ];
 
@@ -626,7 +628,7 @@ class ParserIntegrationTest extends TestCase
             '10x @user',
             new DynamicArrayValue(
                 10,
-                new FixtureReferenceValue('user')
+                new FixtureReferenceValue('user'),
             ),
         ];
         yield '[Array] string array with negative number' => [
@@ -644,7 +646,7 @@ class ParserIntegrationTest extends TestCase
                 new ListValue([
                     new FixtureReferenceValue('user'),
                     ' bar',
-                ])
+                ]),
             ),
         ];
         yield '[Array] string array with P1' => [
@@ -658,13 +660,13 @@ class ParserIntegrationTest extends TestCase
                 new ArrayValue([
                     new FixturePropertyValue(
                         new FixtureReferenceValue('user'),
-                        'name'
+                        'name',
                     ),
                     new FixtureMethodCallValue(
                         new FixtureReferenceValue('group'),
-                        new FunctionCallValue('getName')
+                        new FunctionCallValue('getName'),
                     ),
-                ])
+                ]),
             ),
         ];
         yield '[Array] escaped array' => [
@@ -696,11 +698,11 @@ class ParserIntegrationTest extends TestCase
             new ArrayValue([
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user'),
-                    'name'
+                    'name',
                 ),
                 new FixtureMethodCallValue(
                     new FixtureReferenceValue('group'),
-                    new FunctionCallValue('getName')
+                    new FunctionCallValue('getName'),
                 ),
             ]),
         ];
@@ -710,7 +712,7 @@ class ParserIntegrationTest extends TestCase
             '80%? Y',
             new OptionalValue(
                 '80',
-                'Y'
+                'Y',
             ),
         ];
         yield '[Optional] with negative number' => [
@@ -719,22 +721,22 @@ class ParserIntegrationTest extends TestCase
                 '-',
                 new OptionalValue(
                     '50',
-                    'Y'
-                )
+                    'Y',
+                ),
             ]),
         ];
         yield '[Optional] with float' => [
             '0.5%? Y',
             new OptionalValue(
                 '0.5',
-                'Y'
+                'Y',
             ),
         ];
         yield '[Optional] with <X>' => [
             '<{dummy}>%? Y',
             new OptionalValue(
                 new ParameterValue('dummy'),
-                'Y'
+                'Y',
             ),
         ];
         yield '[Optional] complete' => [
@@ -742,7 +744,7 @@ class ParserIntegrationTest extends TestCase
             new OptionalValue(
                 '80',
                 'Y',
-                'Z'
+                'Z',
             ),
         ];
         yield '[Optional] complete with superfluous space' => [
@@ -750,7 +752,7 @@ class ParserIntegrationTest extends TestCase
             new OptionalValue(
                 '80',
                 'Y',
-                'Z'
+                'Z',
             ),
         ];
         yield '[Optional] complete with negative number' => [
@@ -760,7 +762,7 @@ class ParserIntegrationTest extends TestCase
                 new OptionalValue(
                     '50',
                     'Y',
-                    'Z'
+                    'Z',
                 ),
             ]),
         ];
@@ -769,15 +771,15 @@ class ParserIntegrationTest extends TestCase
             new OptionalValue(
                 '0.5',
                 'Y',
-                'Z'
-            )
+                'Z',
+            ),
         ];
         yield '[Optional] complete with <X>' => [
             '<{dummy}>%? Y: Z',
             new OptionalValue(
                 new ParameterValue('dummy'),
                 'Y',
-                'Z'
+                'Z',
             ),
         ];
         yield '[Optional] nominal with left member' => [
@@ -786,8 +788,8 @@ class ParserIntegrationTest extends TestCase
                 'foo ',
                 new OptionalValue(
                     '80',
-                    'Y'
-                )
+                    'Y',
+                ),
             ]),
         ];
         yield '[Optional] with negative number and left member' => [
@@ -796,8 +798,8 @@ class ParserIntegrationTest extends TestCase
                 'foo -',
                 new OptionalValue(
                     '50',
-                    'Y'
-                )
+                    'Y',
+                ),
             ]),
         ];
         yield '[Optional] with float and left member' => [
@@ -806,8 +808,8 @@ class ParserIntegrationTest extends TestCase
                 'foo ',
                 new OptionalValue(
                     '0.5',
-                    'Y'
-                )
+                    'Y',
+                ),
             ]),
         ];
         yield '[Optional] with <X> and left member' => [
@@ -816,8 +818,8 @@ class ParserIntegrationTest extends TestCase
                 'foo ',
                 new OptionalValue(
                     new ParameterValue('dummy'),
-                    'Y'
-                )
+                    'Y',
+                ),
             ]),
         ];
         yield '[Optional] complete with left member' => [
@@ -827,8 +829,8 @@ class ParserIntegrationTest extends TestCase
                 new OptionalValue(
                     '80',
                     'Y',
-                    'Z'
-                )
+                    'Z',
+                ),
             ]),
         ];
         yield '[Optional] complete with negative number and left member' => [
@@ -838,8 +840,8 @@ class ParserIntegrationTest extends TestCase
                 new OptionalValue(
                     '50',
                     'Y',
-                    'Z'
-                )
+                    'Z',
+                ),
             ]),
         ];
         yield '[Optional] complete with float and left member' => [
@@ -849,8 +851,8 @@ class ParserIntegrationTest extends TestCase
                 new OptionalValue(
                     '0.5',
                     'Y',
-                    'Z'
-                )
+                    'Z',
+                ),
             ]),
         ];
         yield '[Optional] complete with <X> and left member' => [
@@ -860,8 +862,8 @@ class ParserIntegrationTest extends TestCase
                 new OptionalValue(
                     new ParameterValue('dummy'),
                     'Y',
-                    'Z'
-                )
+                    'Z',
+                ),
             ]),
         ];
         yield '[Optional] without members' => [
@@ -880,7 +882,7 @@ class ParserIntegrationTest extends TestCase
             '80%? foo bar',
             new OptionalValue(
                 '80',
-                'foo bar'
+                'foo bar',
             ),
         ];
         yield '[Optional] with first member containing a space and second member' => [
@@ -888,7 +890,7 @@ class ParserIntegrationTest extends TestCase
             new OptionalValue(
                 '80',
                 'foo bar',
-                'baz'
+                'baz',
             ),
         ];
         yield '[Optional] with first member containing a space and second member too' => [
@@ -897,7 +899,7 @@ class ParserIntegrationTest extends TestCase
                 new OptionalValue(
                     '80',
                     'foo bar',
-                    'baz'
+                    'baz',
                 ),
                 ' faz',
             ]),
@@ -908,7 +910,7 @@ class ParserIntegrationTest extends TestCase
                 new OptionalValue(
                     '80',
                     'foo',
-                    'bar'
+                    'bar',
                 ),
                 ' baz',
             ]),
@@ -932,7 +934,7 @@ class ParserIntegrationTest extends TestCase
                 new OptionalValue(
                     '80',
                     new ParameterValue('dummy'),
-                    new FunctionCallValue('another')
+                    new FunctionCallValue('another'),
                 ),
                 ' baz',
             ]),
@@ -944,19 +946,19 @@ class ParserIntegrationTest extends TestCase
                     new ListValue([
                         new FunctionCallValue(
                             'foo',
-                            []
+                            [],
                         ),
                         ' -',
                         new OptionalValue(
                             '80',
                             new ParameterValue('dum10'),
-                            null
+                            null,
                         ),
                     ]),
                     'y',
-                    'z'
+                    'z',
                 ),
-                ' my>: \<another\> <aliceTokenizedFunction(FUNCTION_START__baz__IDENTITY_OR_FUNCTION_END)>'
+                ' my>: \<another\> <aliceTokenizedFunction(FUNCTION_START__baz__IDENTITY_OR_FUNCTION_END)>',
             ]),
         ];
 
@@ -988,9 +990,9 @@ class ParserIntegrationTest extends TestCase
                     'user0_',
                     new FunctionCallValue(
                         'current',
-                        [new ValueForCurrentValue()]
-                    )
-                ])
+                        [new ValueForCurrentValue()],
+                    ),
+                ]),
             ),
         ];
         yield '[Reference] escaped alone with strings' => [
@@ -1015,14 +1017,14 @@ class ParserIntegrationTest extends TestCase
             '@user0->username',
             new FixturePropertyValue(
                 new FixtureReferenceValue('user0'),
-                'username'
+                'username',
             ),
         ];
         yield '[Reference] wildcard with prop' => [
             '@user*->username',
             new FixturePropertyValue(
                 FixtureMatchReferenceValue::createWildcardReference('user'),
-                'username'
+                'username',
             ),
         ];
         yield '[Reference] list with prop' => [
@@ -1032,7 +1034,7 @@ class ParserIntegrationTest extends TestCase
                     new FixtureReferenceValue('useralice'),
                     new FixtureReferenceValue('userbob'),
                 ]),
-                'username'
+                'username',
             ),
         ];
         yield '[Reference] range with prop' => [
@@ -1042,7 +1044,7 @@ class ParserIntegrationTest extends TestCase
                     new FixtureReferenceValue('user1'),
                     new FixtureReferenceValue('user2'),
                 ]),
-                'username'
+                'username',
             ),
         ];
         yield '[Reference] variable with prop' => [
@@ -1052,9 +1054,9 @@ class ParserIntegrationTest extends TestCase
                     new ListValue([
                         'user',
                         new VariableValue('foo'),
-                    ])
+                    ]),
                 ),
-                'username'
+                'username',
             ),
         ];
         yield '[Reference] left with prop' => [
@@ -1063,16 +1065,16 @@ class ParserIntegrationTest extends TestCase
                 'foo ',
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user0'),
-                    'username'
+                    'username',
                 ),
-            ])
+            ]),
         ];
         yield '[Reference] right with prop' => [
             '@user0->username bar',
             new ListValue([
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user0'),
-                    'username'
+                    'username',
                 ),
                 ' bar',
             ]),
@@ -1099,7 +1101,6 @@ class ParserIntegrationTest extends TestCase
                 new FixtureReferenceValue('user0'),
                 new FixtureReferenceValue('user1'),
                 ' bar',
-
             ]),
         ];
         yield '[Reference] nominal range' => [
@@ -1138,9 +1139,9 @@ class ParserIntegrationTest extends TestCase
             new ListValue([
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user'),
-                    'username'
+                    'username',
                 ),
-                '{1..2}'
+                '{1..2}',
             ]),
         ];
         yield '[Reference] range-method' => [
@@ -1148,9 +1149,9 @@ class ParserIntegrationTest extends TestCase
             new ListValue([
                 new FixtureMethodCallValue(
                     new FixtureReferenceValue('user'),
-                    new FunctionCallValue('getUserName')
+                    new FunctionCallValue('getUserName'),
                 ),
-                '{1..2}'
+                '{1..2}',
             ]),
         ];
         yield '[Reference] with nested with prop' => [
@@ -1167,12 +1168,12 @@ class ParserIntegrationTest extends TestCase
                 'foo ',
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user0'),
-                    'username'
+                    'username',
                 ),
                 ' ',
                 new FixturePropertyValue(
                     new FixtureReferenceValue('user1'),
-                    'name'
+                    'name',
                 ),
                 ' bar',
             ]),
@@ -1181,14 +1182,14 @@ class ParserIntegrationTest extends TestCase
             '@user0->getUserName()',
             new FixtureMethodCallValue(
                 new FixtureReferenceValue('user0'),
-                new FunctionCallValue('getUserName')
+                new FunctionCallValue('getUserName'),
             ),
         ];
         yield '[Reference] wildcard alone with function' => [
             '@user*->getUserName()',
             new FixtureMethodCallValue(
                 FixtureMatchReferenceValue::createWildcardReference('user'),
-                new FunctionCallValue('getUserName')
+                new FunctionCallValue('getUserName'),
             ),
         ];
         yield '[Reference] function surrounded' => [
@@ -1197,7 +1198,7 @@ class ParserIntegrationTest extends TestCase
                 'foo ',
                 new FixtureMethodCallValue(
                     new FixtureReferenceValue('user0'),
-                    new FunctionCallValue('getUserName')
+                    new FunctionCallValue('getUserName'),
                 ),
                 ' bar',
             ]),
@@ -1210,8 +1211,8 @@ class ParserIntegrationTest extends TestCase
                     'getUserName',
                     [
                         new VariableValue('username'),
-                    ]
-                )
+                    ],
+                ),
             ),
         ];
         yield '[Reference] alone with function with arguments containing nested reference' => [
@@ -1252,7 +1253,7 @@ class ParserIntegrationTest extends TestCase
                     new FixtureReferenceValue('useralice'),
                     new FixtureReferenceValue('userbob'),
                 ]),
-                new FunctionCallValue('getUserName', [])
+                new FunctionCallValue('getUserName', []),
             ),
         ];
         yield '[Reference] surrounded list' => [
@@ -1271,8 +1272,8 @@ class ParserIntegrationTest extends TestCase
             new FixtureReferenceValue(
                 new ListValue([
                     'user0',
-                    new VariableValue('foo')
-                ])
+                    new VariableValue('foo'),
+                ]),
             ),
         ];
         yield '[Reference] reference function' => [
@@ -1280,8 +1281,8 @@ class ParserIntegrationTest extends TestCase
             new FixtureReferenceValue(
                 new ListValue([
                     'user0',
-                    new FunctionCallValue('foo')
-                ])
+                    new FunctionCallValue('foo'),
+                ]),
             ),
         ];
         yield '[Reference] reference which is entirely a function' => [
@@ -1290,7 +1291,7 @@ class ParserIntegrationTest extends TestCase
                 new ListValue([
                     '',
                     new FunctionCallValue('foo'),
-                ])
+                ]),
             ),
         ];
         yield '[Reference] surrounded reference function' => [
@@ -1300,8 +1301,8 @@ class ParserIntegrationTest extends TestCase
                 new FixtureReferenceValue(
                     new ListValue([
                         'user0',
-                        new FunctionCallValue('foo')
-                    ])
+                        new FunctionCallValue('foo'),
+                    ]),
                 ),
                 ' bar',
             ]),
@@ -1316,9 +1317,9 @@ class ParserIntegrationTest extends TestCase
                         [
                             new VariableValue('foo'),
                             new VariableValue('bar'),
-                        ]
-                    )
-                ])
+                        ],
+                    ),
+                ]),
             ),
         ];
         yield '[Reference] surrounded reference function with args' => [
@@ -1333,9 +1334,9 @@ class ParserIntegrationTest extends TestCase
                             [
                                 new VariableValue('foo'),
                                 new VariableValue('bar'),
-                            ]
-                        )
-                    ])
+                            ],
+                        ),
+                    ]),
                 ),
                 ' bar',
             ]),
@@ -1363,8 +1364,8 @@ class ParserIntegrationTest extends TestCase
                 new FixtureReferenceValue(
                     new ListValue([
                         'user0',
-                        new FunctionCallValue('current', [new ValueForCurrentValue()])
-                    ])
+                        new FunctionCallValue('current', [new ValueForCurrentValue()]),
+                    ]),
                 ),
                 ' bar',
             ]),
@@ -1378,10 +1379,10 @@ class ParserIntegrationTest extends TestCase
                     new FixtureReferenceValue(
                         new ListValue([
                             'user0',
-                            new FunctionCallValue('current', [new ValueForCurrentValue()])
-                        ])
+                            new FunctionCallValue('current', [new ValueForCurrentValue()]),
+                        ]),
                     ),
-                    'prop'
+                    'prop',
                 ),
                 ' bar',
             ]),

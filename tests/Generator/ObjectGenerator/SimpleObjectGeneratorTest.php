@@ -32,6 +32,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator
+ * @internal
  */
 class SimpleObjectGeneratorTest extends TestCase
 {
@@ -39,12 +40,12 @@ class SimpleObjectGeneratorTest extends TestCase
 
     public function testIsAnObjectGenerator(): void
     {
-        static::assertTrue(is_a(SimpleObjectGenerator::class, ObjectGeneratorInterface::class, true));
+        self::assertTrue(is_a(SimpleObjectGenerator::class, ObjectGeneratorInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleObjectGenerator::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleObjectGenerator::class))->isCloneable());
     }
 
     /**
@@ -52,7 +53,7 @@ class SimpleObjectGeneratorTest extends TestCase
      */
     public function testGenerate(): void
     {
-        static::markTestIncomplete('TODO');
+        self::markTestIncomplete('TODO');
         $fixture = new SimpleFixture('dummy', stdClass::class, SpecificationBagFactory::create());
         $set = ResolvedFixtureSetFactory::create();
         $context = new GenerationContext();
@@ -67,10 +68,9 @@ class SimpleObjectGeneratorTest extends TestCase
                 $setWithInstantiatedObject = ResolvedFixtureSetFactory::create(
                     null,
                     null,
-                    (new ObjectBag())->with($instantiatedObject)
-                )
-            )
-        ;
+                    (new ObjectBag())->with($instantiatedObject),
+                ),
+            );
         /** @var InstantiatorInterface $instantiator */
         $instantiator = $instantiatorProphecy->reveal();
 
@@ -86,10 +86,9 @@ class SimpleObjectGeneratorTest extends TestCase
                 $setWithHydratedObject = ResolvedFixtureSetFactory::create(
                     null,
                     null,
-                    (new ObjectBag())->with($hydratedObject)
-                )
-            )
-        ;
+                    (new ObjectBag())->with($hydratedObject),
+                ),
+            );
         /** @var HydratorInterface $hydrator */
         $hydrator = $hydratorProphecy->reveal();
 
@@ -105,17 +104,16 @@ class SimpleObjectGeneratorTest extends TestCase
                 $setWithObjectAfterCalls = ResolvedFixtureSetFactory::create(
                     null,
                     null,
-                    (new ObjectBag())->with($objectAfterCalls)
-                )
-            )
-        ;
+                    (new ObjectBag())->with($objectAfterCalls),
+                ),
+            );
         /** @var CallerInterface $caller */
         $caller = $callerProphecy->reveal();
 
         $generator = new SimpleObjectGenerator(new FakeValueResolver(), $instantiator, $hydrator, $caller);
         $objects = $generator->generate($fixture, $set, $context);
 
-        static::assertEquals($setWithObjectAfterCalls->getObjects(), $objects);
+        self::assertEquals($setWithObjectAfterCalls->getObjects(), $objects);
 
         $instantiatorProphecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $hydratorProphecy->hydrate(Argument::cetera())->shouldHaveBeenCalledTimes(1);

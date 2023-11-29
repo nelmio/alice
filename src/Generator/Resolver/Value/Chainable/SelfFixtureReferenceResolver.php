@@ -40,27 +40,25 @@ final class SelfFixtureReferenceResolver implements ChainableValueResolverInterf
     {
         $this->decoratedResolver = $decoratedResolver;
     }
-    
+
     public function withObjectGenerator(ObjectGeneratorInterface $generator): self
     {
         $decoratedResolver = ($this->decoratedResolver instanceof ObjectGeneratorAwareInterface)
             ? $this->decoratedResolver->withObjectGenerator($generator)
-            : $this->decoratedResolver
-        ;
+            : $this->decoratedResolver;
 
         return new self($decoratedResolver);
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         $decoratedResolver = ($this->decoratedResolver instanceof ValueResolverAwareInterface)
             ? $this->decoratedResolver->withValueResolver($resolver)
-            : $this->decoratedResolver
-        ;
+            : $this->decoratedResolver;
 
         return new self($decoratedResolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $this->decoratedResolver->canResolve($value);
@@ -81,7 +79,7 @@ final class SelfFixtureReferenceResolver implements ChainableValueResolverInterf
         if ('self' === $value->getValue()) {
             return new ResolvedValueWithFixtureSet(
                 $fixtureSet->getObjects()->get($fixture)->getInstance(),
-                $fixtureSet
+                $fixtureSet,
             );
         }
 

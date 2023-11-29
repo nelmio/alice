@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversNothing
+ * @internal
  */
 class LexerParserSynchronizationTest extends TestCase
 {
@@ -37,9 +38,9 @@ class LexerParserSynchronizationTest extends TestCase
         }
 
         foreach ($lexerProviderKeys as $index => $lexerProviderKey) {
-            static::assertEquals($lexerProviderKey, $parserProviderKeys[$index]);
+            self::assertEquals($lexerProviderKey, $parserProviderKeys[$index]);
         }
 
-        static::assertCount(count($lexerProviderKeys), $parserProviderKeys);
+        self::assertCount(count($lexerProviderKeys), $parserProviderKeys);
     }
 }

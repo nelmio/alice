@@ -40,17 +40,17 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
      */
     private $resolver;
 
-    public function __construct(PropertyHydratorInterface $hydrator, ValueResolverInterface $resolver = null)
+    public function __construct(PropertyHydratorInterface $hydrator, ?ValueResolverInterface $resolver = null)
     {
         $this->hydrator = $hydrator;
         $this->resolver = $resolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->hydrator, $resolver);
     }
-    
+
     public function hydrate(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
@@ -86,7 +86,7 @@ final class SimpleHydrator implements HydratorInterface, ValueResolverAwareInter
         }
 
         return $fixtureSet->withObjects(
-            $fixtureSet->getObjects()->with($object)
+            $fixtureSet->getObjects()->with($object),
         );
     }
 }

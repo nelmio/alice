@@ -18,12 +18,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\FixtureMethodCallValue
+ * @internal
  */
 class FixtureMethodCallValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(FixtureMethodCallValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(FixtureMethodCallValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -33,32 +34,32 @@ class FixtureMethodCallValueTest extends TestCase
 
         $value = new FixtureMethodCallValue($reference, $function);
 
-        static::assertEquals($reference, $value->getReference());
-        static::assertEquals($function, $value->getFunctionCall());
-        static::assertEquals([$reference, $function], $value->getValue());
+        self::assertEquals($reference, $value->getReference());
+        self::assertEquals($function, $value->getFunctionCall());
+        self::assertEquals([$reference, $function], $value->getValue());
     }
 
     /**
-     * @depends \Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
-     * @depends \Nelmio\Alice\Definition\Value\FunctionCallValueTest::testIsImmutable
+     * @depends test\Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
+     * @depends test\Nelmio\Alice\Definition\Value\FunctionCallValueTest::testIsImmutable
      */
     public function testIsImmutable(): void
     {
-        static::assertTrue(true, 'Nothing to do.');
+        self::assertTrue(true, 'Nothing to do.');
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new FixtureMethodCallValue(
             new FixtureReferenceValue('dummy'),
-            new FunctionCallValue('foo')
+            new FunctionCallValue('foo'),
         );
-        static::assertEquals('@dummy->foo()', (string) $value);
+        self::assertEquals('@dummy->foo()', (string) $value);
 
         $value = new FixtureMethodCallValue(
             new FixtureReferenceValue('dummy'),
-            new FunctionCallValue('foo', ['bar'])
+            new FunctionCallValue('foo', ['bar']),
         );
-        static::assertEquals("@dummy->foo(array (\n  0 => 'bar',\n))", (string) $value);
+        self::assertEquals("@dummy->foo(array (\n  0 => 'bar',\n))", (string) $value);
     }
 }

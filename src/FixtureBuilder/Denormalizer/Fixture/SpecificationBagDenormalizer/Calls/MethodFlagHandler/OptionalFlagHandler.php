@@ -23,12 +23,11 @@ use Nelmio\Alice\IsAServiceTrait;
 final class OptionalFlagHandler implements MethodFlagHandler
 {
     use IsAServiceTrait;
-    
+
     public function handleMethodFlags(MethodCallInterface $methodCall, FlagInterface $flag): MethodCallInterface
     {
         return $flag instanceof OptionalFlag
             ? new OptionalMethodCall($methodCall, $flag)
-            : $methodCall
-        ;
+            : $methodCall;
     }
 }

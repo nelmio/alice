@@ -21,11 +21,12 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser
+ * @internal
  */
 class ElementFlagParserTest extends FlagParserTestCase
 {
     use ProphecyTrait;
-    
+
     protected function setUp(): void
     {
         $this->parser = new ElementFlagParser(new ElementParser());
@@ -33,7 +34,7 @@ class ElementFlagParserTest extends FlagParserTestCase
 
     public function testIsAFlagParser(): void
     {
-        static::assertTrue(is_a(ElementFlagParser::class, FlagParserInterface::class, true));
+        self::assertTrue(is_a(ElementFlagParser::class, FlagParserInterface::class, true));
     }
 
     public function testIfNoFlagIsFoundThenReturnsEmptyFlagBag(): void
@@ -44,7 +45,7 @@ class ElementFlagParserTest extends FlagParserTestCase
         $parser = new ElementFlagParser(new FakeFlagParser());
         $actual = $parser->parse($element);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testIfAFlagIsFoundThenParsesItWithDecoratedParserBeforeReturningTheFlags(): void
@@ -55,38 +56,35 @@ class ElementFlagParserTest extends FlagParserTestCase
         $decoratedParserProphecy
             ->parse('flag1')
             ->willReturn(
-                (new FlagBag(''))->withFlag(new ElementFlag('flag1'))
-            )
-        ;
+                (new FlagBag(''))->withFlag(new ElementFlag('flag1')),
+            );
         $decoratedParserProphecy
             ->parse('flag2')
             ->willReturn(
-                (new FlagBag(''))->withFlag(new ElementFlag('flag2'))->withFlag(new ElementFlag('additional flag'))
-            )
-        ;
+                (new FlagBag(''))->withFlag(new ElementFlag('flag2'))->withFlag(new ElementFlag('additional flag')),
+            );
         /** @var FlagParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
         $expected = (new FlagBag('dummy'))
             ->withFlag(new ElementFlag('flag1'))
             ->withFlag(new ElementFlag('flag2'))
-            ->withFlag(new ElementFlag('additional flag'))
-        ;
+            ->withFlag(new ElementFlag('additional flag'));
 
         $parser = new ElementFlagParser($decoratedParser);
         $actual = $parser->parse($element);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider provideElements
      */
-    public function testCanParseElements(string $element, FlagBag $expected = null): void
+    public function testCanParseElements(string $element, ?FlagBag $expected = null): void
     {
         $actual = $this->parser->parse($element);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -96,7 +94,7 @@ class ElementFlagParserTest extends FlagParserTestCase
     {
         try {
             $this->parser->parse($element);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (RuntimeException $exception) {
             // expected
         }

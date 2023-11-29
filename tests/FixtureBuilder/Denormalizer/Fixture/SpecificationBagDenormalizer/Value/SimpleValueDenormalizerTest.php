@@ -28,6 +28,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer
+ * @internal
  */
 class SimpleValueDenormalizerTest extends TestCase
 {
@@ -35,12 +36,12 @@ class SimpleValueDenormalizerTest extends TestCase
 
     public function testIsAValueDenormalizer(): void
     {
-        static::assertTrue(is_a(SimpleValueDenormalizer::class, ValueDenormalizerInterface::class, true));
+        self::assertTrue(is_a(SimpleValueDenormalizer::class, ValueDenormalizerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleValueDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleValueDenormalizer::class))->isCloneable());
     }
 
     public function testReturnsParsedValueIfValueIsAString(): void
@@ -55,7 +56,7 @@ class SimpleValueDenormalizerTest extends TestCase
         $denormalizer = new SimpleValueDenormalizer($parser);
         $actual = $denormalizer->denormalize(new FakeFixture(), new FlagBag(''), $value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $parserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -81,7 +82,7 @@ class SimpleValueDenormalizerTest extends TestCase
         $denormalizer = new SimpleValueDenormalizer($parser);
         $actual = $denormalizer->denormalize(new FakeFixture(), new FlagBag(''), $value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $parserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
@@ -93,7 +94,7 @@ class SimpleValueDenormalizerTest extends TestCase
         $denormalizer = new SimpleValueDenormalizer(new FakeParser());
         $actual = $denormalizer->denormalize(new FakeFixture(), new FlagBag(''), $value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testWhenParserThrowsExceptionDenormalizerAExceptionIsThrown(): void
@@ -102,9 +103,8 @@ class SimpleValueDenormalizerTest extends TestCase
         $parserProphecy
             ->parse(Argument::any())
             ->willThrow(
-                $thrownException = new RootParseException('hello world', 10)
-            )
-        ;
+                $thrownException = new RootParseException('hello world', 10),
+            );
         /** @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
@@ -112,14 +112,14 @@ class SimpleValueDenormalizerTest extends TestCase
 
         try {
             $denormalizer->denormalize(new FakeFixture(), null, 'foo');
-            static::fail('Expected throwable to be thrown.');
+            self::fail('Expected throwable to be thrown.');
         } catch (DenormalizationThrowable $throwable) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not parse value "foo".',
-                $throwable->getMessage()
+                $throwable->getMessage(),
             );
-            static::assertEquals(0, $throwable->getCode());
-            static::assertEquals($thrownException, $throwable->getPrevious());
+            self::assertEquals(0, $throwable->getCode());
+            self::assertEquals($thrownException, $throwable->getPrevious());
         }
     }
 }

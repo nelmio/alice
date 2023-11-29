@@ -19,12 +19,12 @@ final class RangeName
      * @var string
      */
     private $name;
-    
+
     /**
      * @var int
      */
     private $from;
-    
+
     /**
      * @var int
      */

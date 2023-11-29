@@ -26,21 +26,21 @@ class DummyChainableParameterResolverAwareResolver implements ChainableParameter
 
     public $resolver;
 
-    public function __construct(ParameterResolverInterface $resolver = null)
+    public function __construct(?ParameterResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
     }
-    
+
     public function withResolver(ParameterResolverInterface $resolver)
     {
         return new self($resolver);
     }
-    
+
     public function canResolve(Parameter $parameter): bool
     {
         $this->__call(__FUNCTION__, func_get_args());
     }
-    
+
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,

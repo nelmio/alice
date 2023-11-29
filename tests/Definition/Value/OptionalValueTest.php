@@ -20,24 +20,29 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\OptionalValue
+ * @internal
  */
 class OptionalValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(OptionalValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(OptionalValue::class, ValueInterface::class, true));
     }
 
     /**
      * @dataProvider provideInputValues
+     * @param mixed $quantifier
+     * @param mixed $firstMember
+     * @param mixed $secondMember
+     * @param mixed $errorMessage
      */
     public function testThrowsErrorIfInvalidTypeGiven($quantifier, $firstMember, $secondMember, $errorMessage): void
     {
         try {
             new OptionalValue($quantifier, $firstMember, $secondMember);
-            static::fail('Expected error to be thrown.');
+            self::fail('Expected error to be thrown.');
         } catch (TypeError $error) {
-            static::assertEquals($errorMessage, $error->getMessage());
+            self::assertEquals($errorMessage, $error->getMessage());
         }
     }
 
@@ -49,10 +54,10 @@ class OptionalValueTest extends TestCase
 
         $value = new OptionalValue($quantifier, $firstMember, $secondMember);
 
-        static::assertEquals($quantifier, $value->getQuantifier());
-        static::assertEquals($firstMember, $value->getFirstMember());
-        static::assertEquals($secondMember, $value->getSecondMember());
-        static::assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
+        self::assertEquals($quantifier, $value->getQuantifier());
+        self::assertEquals($firstMember, $value->getFirstMember());
+        self::assertEquals($secondMember, $value->getSecondMember());
+        self::assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
 
         $quantifier = new FakeValue();
         $firstMember = new FakeValue();
@@ -60,10 +65,10 @@ class OptionalValueTest extends TestCase
 
         $value = new OptionalValue($quantifier, $firstMember, $secondMember);
 
-        static::assertEquals($quantifier, $value->getQuantifier());
-        static::assertEquals($firstMember, $value->getFirstMember());
-        static::assertEquals($secondMember, $value->getSecondMember());
-        static::assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
+        self::assertEquals($quantifier, $value->getQuantifier());
+        self::assertEquals($firstMember, $value->getFirstMember());
+        self::assertEquals($secondMember, $value->getSecondMember());
+        self::assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
 
         $quantifier = '100';
         $firstMember = new FakeValue();
@@ -71,10 +76,10 @@ class OptionalValueTest extends TestCase
 
         $value = new OptionalValue($quantifier, $firstMember, $secondMember);
 
-        static::assertEquals(100, $value->getQuantifier());
-        static::assertEquals($firstMember, $value->getFirstMember());
-        static::assertEquals($secondMember, $value->getSecondMember());
-        static::assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
+        self::assertEquals(100, $value->getQuantifier());
+        self::assertEquals($firstMember, $value->getFirstMember());
+        self::assertEquals($secondMember, $value->getSecondMember());
+        self::assertEquals([$quantifier, $firstMember, $secondMember], $value->getValue());
     }
 
     public function testIsImmutable(): void
@@ -94,32 +99,32 @@ class OptionalValueTest extends TestCase
         $value->getFirstMember()->setValue('f2');   // @phpstan-ignore-line
         $value->getSecondMember()->setValue('s2');  // @phpstan-ignore-line
 
-        static::assertNotSame(new MutableValue('q0'), $value->getQuantifier());
-        static::assertNotSame(new MutableValue('f0'), $value->getFirstMember());
-        static::assertNotSame(new MutableValue('s0'), $value->getSecondMember());
-        static::assertNotSame(
+        self::assertNotSame(new MutableValue('q0'), $value->getQuantifier());
+        self::assertNotSame(new MutableValue('f0'), $value->getFirstMember());
+        self::assertNotSame(new MutableValue('s0'), $value->getSecondMember());
+        self::assertNotSame(
             [
                 new MutableValue('q0'),
                 new MutableValue('f0'),
                 new MutableValue('s0'),
             ],
-            $value->getValue()
+            $value->getValue(),
         );
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new OptionalValue(10, 'foo');
-        static::assertEquals('10%? foo : null', (string) $value);
+        self::assertEquals('10%? foo : null', (string) $value);
 
         $value = new OptionalValue(10, 'foo', 'bar');
-        static::assertEquals('10%? foo : bar', (string) $value);
+        self::assertEquals('10%? foo : bar', (string) $value);
 
         $value = new OptionalValue(new DummyValue('10'), new DummyValue('foo'));
-        static::assertEquals('10%? foo : null', (string) $value);
+        self::assertEquals('10%? foo : null', (string) $value);
     }
 
-    public function provideInputValues()
+    public function provideInputValues(): iterable
     {
         yield 'null/string/string' => [
             null,

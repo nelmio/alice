@@ -19,22 +19,23 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException
+ * @internal
  */
 class CircularReferenceExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(CircularReferenceException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(CircularReferenceException::class, RuntimeException::class, true));
     }
 
     public function testIsAResolutionThrowable(): void
     {
-        static::assertTrue(is_a(CircularReferenceException::class, ResolutionThrowable::class, true));
+        self::assertTrue(is_a(CircularReferenceException::class, ResolutionThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildCircularReferenceException();
-        static::assertInstanceOf(ChildCircularReferenceException::class, $exception);
+        self::assertInstanceOf(ChildCircularReferenceException::class, $exception);
     }
 }

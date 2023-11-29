@@ -20,6 +20,7 @@ use ReflectionObject;
 
 /**
  * @covers \Nelmio\Alice\FileLocator\DefaultFileLocator
+ * @internal
  */
 class DefaultFileLocatorTest extends TestCase
 {
@@ -27,7 +28,7 @@ class DefaultFileLocatorTest extends TestCase
      * @var DefaultFileLocator
      */
     private $locator;
-    
+
     protected function setUp(): void
     {
         $this->locator = new DefaultFileLocator();
@@ -35,11 +36,12 @@ class DefaultFileLocatorTest extends TestCase
 
     public function testIsAFileLocator(): void
     {
-        static::assertTrue(is_a(DefaultFileLocator::class, FileLocatorInterface::class, true));
+        self::assertTrue(is_a(DefaultFileLocator::class, FileLocatorInterface::class, true));
     }
 
     /**
      * @dataProvider provideAbsolutePaths
+     * @param mixed $path
      */
     public function testCanDetectAbsolutePaths($path): void
     {
@@ -47,22 +49,22 @@ class DefaultFileLocatorTest extends TestCase
         $methodReflection = $reflectionObject->getMethod('isAbsolutePath');
         $methodReflection->setAccessible(true);
 
-        static::assertTrue(
+        self::assertTrue(
             $methodReflection->invoke($this->locator, $path),
-            '->isAbsolutePath() returns true for an absolute path'
+            '->isAbsolutePath() returns true for an absolute path',
         );
     }
 
     public function testCanLocateFiles(): void
     {
-        static::assertEquals(
+        self::assertEquals(
             __FILE__,
-            $this->locator->locate('DefaultFileLocatorTest.php', __DIR__)
+            $this->locator->locate('DefaultFileLocatorTest.php', __DIR__),
         );
 
-        static::assertEquals(
+        self::assertEquals(
             __FILE__,
-            $this->locator->locate(__DIR__.DIRECTORY_SEPARATOR.'DefaultFileLocatorTest.php')
+            $this->locator->locate(__DIR__.DIRECTORY_SEPARATOR.'DefaultFileLocatorTest.php'),
         );
     }
 
@@ -90,7 +92,7 @@ class DefaultFileLocatorTest extends TestCase
         $this->locator->locate(__DIR__.'/Fixtures/foobar.xml');
     }
 
-    public function provideAbsolutePaths()
+    public function provideAbsolutePaths(): iterable
     {
         return [
             ['/foo.xml'],

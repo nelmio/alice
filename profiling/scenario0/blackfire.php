@@ -44,11 +44,11 @@ $output->writeln(
     sprintf(
         'Start profiling of <info>%s</info> with <info>%d samples.</info>',
         $config->getTitle(),
-        $config->getSamples()
-    )
+        $config->getSamples(),
+    ),
 );
 
-for ($i = 1; $i <= $config->getSamples(); $i++) {
+for ($i = 1; $i <= $config->getSamples(); ++$i) {
     $probe->enable();
 
     script($faker);
@@ -65,17 +65,17 @@ function script(Generator $faker)
 {
     $objects = [];
 
-    for ($i = 0; $i <= 1000; $i++) {
+    for ($i = 0; $i <= 1000; ++$i) {
         $objects['immutable_user_'.$i] = new ImmutableUser(
             $faker->userName,
             $faker->name,
             $faker->dateTime,
             $faker->email,
-            $faker->randomNumber
+            $faker->randomNumber,
         );
     }
 
-    for ($i = 0; $i <= 1000; $i++) {
+    for ($i = 0; $i <= 1000; ++$i) {
         $user = new MutableUser();
         $user->setUsername($faker->userName);
         $user->setFullname($faker->name);
@@ -86,7 +86,7 @@ function script(Generator $faker)
         $objects['mutable_user_'.$i] = $user;
     }
 
-    for ($i = 0; $i <= 1000; $i++) {
+    for ($i = 0; $i <= 1000; ++$i) {
         $user = new PublicUser();
         $user->username = $faker->userName;
         $user->fullname = $faker->name;
@@ -97,7 +97,7 @@ function script(Generator $faker)
         $objects['public_user_'.$i] = $user;
     }
 
-    for ($i = 0; $i <= 1000; $i++) {
+    for ($i = 0; $i <= 1000; ++$i) {
         $user = new stdClass();
         $user->username = $faker->userName;
         $user->fullname = $faker->name;

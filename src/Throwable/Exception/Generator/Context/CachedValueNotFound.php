@@ -23,8 +23,8 @@ final class CachedValueNotFound extends RuntimeException implements GenerationTh
         return new self(
             sprintf(
                 'No value with the key "%s" was found in the cache.',
-                $key
-            )
+                $key,
+            ),
         );
     }
 }

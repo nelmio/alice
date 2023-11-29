@@ -22,7 +22,7 @@ final class Token
      * @var string
      */
     private $value;
-    
+
     /**
      * @var TokenType
      */
@@ -33,15 +33,15 @@ final class Token
         $this->value = $value;
         $this->type = $type;
     }
-    
+
     public function withValue(string $value): self
     {
         $clone = clone $this;
         $clone->value = $value;
-        
+
         return $clone;
     }
-    
+
     public function getValue(): string
     {
         return $this->value;

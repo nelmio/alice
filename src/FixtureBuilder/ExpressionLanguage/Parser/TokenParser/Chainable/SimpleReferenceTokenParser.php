@@ -30,7 +30,7 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
 
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::SIMPLE_REFERENCE_TYPE;
+        return TokenType::SIMPLE_REFERENCE_TYPE === $token->getType();
     }
 
     /**
@@ -45,7 +45,7 @@ final class SimpleReferenceTokenParser implements ChainableTokenParserInterface
                 throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
             }
 
-            return new FixtureReferenceValue(substr($value, 1));
+            return new FixtureReferenceValue(mb_substr($value, 1));
         } catch (InvalidArgumentException $exception) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token, 0, $exception);
         }

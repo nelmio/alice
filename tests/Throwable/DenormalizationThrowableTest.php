@@ -18,11 +18,12 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversNothing
+ * @internal
  */
 class DenormalizationThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void
     {
-        static::assertTrue(is_a(RootDenormalizationException::class, BuildThrowable::class, true));
+        self::assertTrue(is_a(RootDenormalizationException::class, BuildThrowable::class, true));
     }
 }

@@ -33,6 +33,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer
+ * @internal
  */
 class UniqueValueDenormalizerTest extends TestCase
 {
@@ -40,12 +41,12 @@ class UniqueValueDenormalizerTest extends TestCase
 
     public function testIsAValueDenormalizer(): void
     {
-        static::assertTrue(is_a(UniqueValueDenormalizer::class, ValueDenormalizerInterface::class, true));
+        self::assertTrue(is_a(UniqueValueDenormalizer::class, ValueDenormalizerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(UniqueValueDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(UniqueValueDenormalizer::class))->isCloneable());
     }
 
     public function testReturnsParsedValueIfNoUniqueFlagsHasBeenFound(): void
@@ -57,15 +58,14 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn($expected = 'denormalized_value')
-        ;
+            ->willReturn($expected = 'denormalized_value');
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
         $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
         $actual = $denormalizer->denormalize($fixture, $flags, $value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -79,17 +79,16 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn('denormalized_value')
-        ;
+            ->willReturn('denormalized_value');
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
         $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
         $result = $denormalizer->denormalize($fixture, $flags, $value);
 
-        static::assertInstanceOf(UniqueValue::class, $result);
-        static::assertStringStartsWith('Dummy#', $result->getId());
-        static::assertEquals('denormalized_value', $result->getValue());
+        self::assertInstanceOf(UniqueValue::class, $result);
+        self::assertStringStartsWith('Dummy#', $result->getId());
+        self::assertEquals('denormalized_value', $result->getValue());
 
         $decoratedDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -104,20 +103,19 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn($denormalizedValue)
-        ;
+            ->willReturn($denormalizedValue);
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
         $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
         $result = $denormalizer->denormalize($fixture, $flags, $value);
 
-        static::assertInstanceOf(DynamicArrayValue::class, $result);
+        self::assertInstanceOf(DynamicArrayValue::class, $result);
         /** @var DynamicArrayValue $result */
-        static::assertEquals(10, $result->getQuantifier());
-        static::assertInstanceOf(UniqueValue::class, $result->getElement());
-        static::assertStringStartsWith('Dummy#', $result->getElement()->getId());
-        static::assertEquals('parsed_value', $result->getElement()->getValue());
+        self::assertEquals(10, $result->getQuantifier());
+        self::assertInstanceOf(UniqueValue::class, $result->getElement());
+        self::assertStringStartsWith('Dummy#', $result->getElement()->getId());
+        self::assertEquals('parsed_value', $result->getElement()->getValue());
     }
 
     public function testThrowsAnExceptionIsATemporaryFixtureWithAUniqueValue(): void
@@ -130,8 +128,7 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn($denormalizedValue)
-        ;
+            ->willReturn($denormalizedValue);
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
@@ -153,23 +150,22 @@ class UniqueValueDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy = $this->prophesize(ValueDenormalizerInterface::class);
         $decoratedDenormalizerProphecy
             ->denormalize($fixture, $flags, $value)
-            ->willReturn($denormalizedValue)
-        ;
+            ->willReturn($denormalizedValue);
         /** @var ValueDenormalizerInterface $decoratedDenormalizer */
         $decoratedDenormalizer = $decoratedDenormalizerProphecy->reveal();
 
         $denormalizer = new UniqueValueDenormalizer($decoratedDenormalizer);
         $result = $denormalizer->denormalize($fixture, $flags, $value);
 
-        static::assertInstanceOf(ArrayValue::class, $result);
+        self::assertInstanceOf(ArrayValue::class, $result);
         /** @var ArrayValue $result */
-        static::assertInstanceOf(UniqueValue::class, $result->getValue()[0]);
-        static::assertStringStartsWith('Dummy#', $result->getValue()[0]->getId());
-        static::assertEquals('foo', $result->getValue()[0]->getValue());
+        self::assertInstanceOf(UniqueValue::class, $result->getValue()[0]);
+        self::assertStringStartsWith('Dummy#', $result->getValue()[0]->getId());
+        self::assertEquals('foo', $result->getValue()[0]->getValue());
 
-        static::assertInstanceOf(UniqueValue::class, $result->getValue()[1]);
-        static::assertStringStartsWith('Dummy#', $result->getValue()[1]->getId());
-        static::assertEquals('bar', $result->getValue()[1]->getValue());
+        self::assertInstanceOf(UniqueValue::class, $result->getValue()[1]);
+        self::assertStringStartsWith('Dummy#', $result->getValue()[1]->getId());
+        self::assertEquals('bar', $result->getValue()[1]->getValue());
     }
 
     public function provideValues()

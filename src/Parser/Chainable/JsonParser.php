@@ -25,7 +25,7 @@ final class JsonParser implements ChainableParserInterface
     use IsAServiceTrait;
 
     private const REGEX = '/.{1,}\.json$/i';
-    
+
     public function canParse(string $file): bool
     {
         if (false === stream_is_local($file)) {

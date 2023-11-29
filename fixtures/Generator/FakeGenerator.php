@@ -21,7 +21,7 @@ use Nelmio\Alice\ObjectSet;
 class FakeGenerator implements GeneratorInterface
 {
     use NotCallableTrait;
-    
+
     public function generate(FixtureSet $fixtureSet): ObjectSet
     {
         $this->__call(__METHOD__, func_get_args());

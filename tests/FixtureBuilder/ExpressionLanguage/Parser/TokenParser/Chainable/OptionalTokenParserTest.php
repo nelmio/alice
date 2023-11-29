@@ -28,6 +28,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\OptionalTokenParser
+ * @internal
  */
 class OptionalTokenParserTest extends TestCase
 {
@@ -35,12 +36,12 @@ class OptionalTokenParserTest extends TestCase
 
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(OptionalTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(OptionalTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(OptionalTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(OptionalTokenParser::class))->isCloneable());
     }
 
     public function testCanParseMethodTokens(): void
@@ -49,8 +50,8 @@ class OptionalTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new OptionalTokenParser();
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
@@ -96,8 +97,8 @@ class OptionalTokenParserTest extends TestCase
         $actual0 = $parser->parse($token);
         $actual1 = $parser->parse($anotherToken);
 
-        static::assertEquals($expected0, $actual0);
-        static::assertEquals($expected1, $actual1);
+        self::assertEquals($expected0, $actual0);
+        self::assertEquals($expected1, $actual1);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(5);
     }

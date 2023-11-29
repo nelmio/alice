@@ -36,12 +36,10 @@ final class FlagParserRegistry implements FlagParserInterface
     public function __construct(array $parsers)
     {
         $this->parsers = (
-            static function (ChainableFlagParserInterface ...$parsers) {
-                return $parsers;
-            }
+            static fn (ChainableFlagParserInterface ...$parsers) => $parsers
         )(...$parsers);
     }
-    
+
     public function parse(string $element): FlagBag
     {
         foreach ($this->parsers as $parser) {

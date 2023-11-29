@@ -18,12 +18,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\VariableValue
+ * @internal
  */
 class VariableValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(VariableValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(VariableValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -31,13 +32,13 @@ class VariableValueTest extends TestCase
         $variable = 'username';
         $value = new VariableValue($variable);
 
-        static::assertEquals($variable, $value->getValue());
+        self::assertEquals($variable, $value->getValue());
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new VariableValue('username');
 
-        static::assertEquals('$username', $value);
+        self::assertEquals('$username', $value);
     }
 }

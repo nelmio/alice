@@ -49,19 +49,19 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
 
         $this->resolvers = $resolvers;
     }
-    
+
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $injectedParameters,
-        ResolvingContext $context = null
+        ?ResolvingContext $context = null
     ): ParameterBag {
         foreach ($this->resolvers as $resolver) {
             if ($resolver->canResolve($parameter)) {
                 return $resolver->resolve($parameter, $unresolvedParameters, $injectedParameters, $context);
             }
         }
-        
+
         throw ResolverNotFoundExceptionFactory::createForParameter($parameter->getKey());
     }
 }

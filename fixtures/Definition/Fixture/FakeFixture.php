@@ -20,27 +20,27 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeFixture implements FixtureInterface
 {
     use NotCallableTrait;
-    
+
     public function getId(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getClassName(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getSpecs(): SpecificationBag
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getValueForCurrent(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function withSpecs(SpecificationBag $specs): void
     {
         $this->__call(__METHOD__, func_get_args());

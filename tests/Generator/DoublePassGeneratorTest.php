@@ -31,6 +31,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\DoublePassGenerator
+ * @internal
  */
 class DoublePassGeneratorTest extends TestCase
 {
@@ -38,12 +39,12 @@ class DoublePassGeneratorTest extends TestCase
 
     public function testIsAGenerator(): void
     {
-        static::assertTrue(is_a(DoublePassGenerator::class, GeneratorInterface::class, true));
+        self::assertTrue(is_a(DoublePassGenerator::class, GeneratorInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(DoublePassGenerator::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(DoublePassGenerator::class))->isCloneable());
     }
 
     public function testGenerateObjects(): void
@@ -76,10 +77,9 @@ class DoublePassGeneratorTest extends TestCase
             ->willReturn($objectsAfterFirstPass = $objects->with(
                 new SimpleObject(
                     'foo',
-                    StdClassFactory::create(['pass' => 'first'])
-                )
-            ))
-        ;
+                    StdClassFactory::create(['pass' => 'first']),
+                ),
+            ));
         $contextAfterFirstPass = clone $context;
         $contextAfterFirstPass->setToSecondPass();
         $objectGeneratorProphecy
@@ -88,17 +88,16 @@ class DoublePassGeneratorTest extends TestCase
                 new ResolvedFixtureSet(
                     $resolvedSet->getParameters(),
                     $resolvedSet->getFixtures(),
-                    $objectsAfterFirstPass
+                    $objectsAfterFirstPass,
                 ),
-                $contextAfterFirstPass
+                $contextAfterFirstPass,
             )
             ->willReturn($objectsAfterFirstPass = $objects->with(
                 new SimpleObject(
                     'foo',
-                    StdClassFactory::create(['pass' => 'second'])
-                )
-            ))
-        ;
+                    StdClassFactory::create(['pass' => 'second']),
+                ),
+            ));
         /** @var ObjectGeneratorInterface $objectGenerator */
         $objectGenerator = $objectGeneratorProphecy->reveal();
 
@@ -107,15 +106,15 @@ class DoublePassGeneratorTest extends TestCase
             $objects->with(
                 new SimpleObject(
                     'foo',
-                    StdClassFactory::create(['pass' => 'second'])
-                )
-            )
+                    StdClassFactory::create(['pass' => 'second']),
+                ),
+            ),
         );
 
         $generator = new DoublePassGenerator($resolver, $objectGenerator);
         $actual = $generator->generate($set);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $resolverProphecy->resolve(Argument::any())->shouldHaveBeenCalledTimes(1);
         $objectGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(2);

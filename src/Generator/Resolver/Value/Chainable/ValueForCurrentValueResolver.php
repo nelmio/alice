@@ -27,7 +27,7 @@ use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 final class ValueForCurrentValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ValueForCurrentValue;
@@ -52,7 +52,7 @@ final class ValueForCurrentValueResolver implements ChainableValueResolverInterf
                 $valueForCurrent->getId(),
                 $valueForCurrent->getClassName(),
                 $valueForCurrent->getSpecs(),
-                $fixtureSet->getObjects()->get($valueForCurrent)->getInstance()
+                $fixtureSet->getObjects()->get($valueForCurrent)->getInstance(),
             );
         } else {
             $valueForCurrent = $fixtureSet->getFixtures()->get($fixture->getId());
@@ -60,7 +60,7 @@ final class ValueForCurrentValueResolver implements ChainableValueResolverInterf
 
         return new ResolvedValueWithFixtureSet(
             $valueForCurrent,
-            $fixtureSet
+            $fixtureSet,
         );
     }
 }

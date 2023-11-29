@@ -23,19 +23,19 @@ final class OptionalFlagParser implements ChainableFlagParserInterface
     use IsAServiceTrait;
 
     /** @interval */
-    const REGEX = '/^(?<percentage>\d+)\%\?$/';
-    
+    public const REGEX = '/^(?<percentage>\d+)\%\?$/';
+
     public function canParse(string $element, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $element, $matches);
     }
-    
+
     public function parse(string $element): FlagBag
     {
         $matches = [];
         $this->canParse($element, $matches);
         $percentage = (int) $matches['percentage'];
-        
+
         return (new FlagBag(''))->withFlag(new OptionalFlag($percentage));
     }
 }

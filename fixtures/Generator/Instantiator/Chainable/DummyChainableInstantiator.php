@@ -22,7 +22,7 @@ class DummyChainableInstantiator extends AbstractChainableInstantiator
     {
         return new stdClass();
     }
-    
+
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         return true;

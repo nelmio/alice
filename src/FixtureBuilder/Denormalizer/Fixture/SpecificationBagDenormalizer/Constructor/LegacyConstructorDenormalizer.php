@@ -41,7 +41,7 @@ final class LegacyConstructorDenormalizer implements ConstructorDenormalizerInte
         $this->constructorDenormalizer = $constructorDenormalizer;
         $this->factoryDenormalizer = $factoryDenormalizer;
     }
-    
+
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,

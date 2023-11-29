@@ -25,8 +25,8 @@ final class NoSuchPropertyExceptionFactory
         return new NoSuchPropertyException(
             sprintf(
                 'Cannot read property "%s" from stdClass.',
-                $propertyPath
-            )
+                $propertyPath,
+            ),
         );
     }
 

@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory
+ * @internal
  */
 class FixtureNotFoundExceptionFactoryTest extends TestCase
 {
@@ -24,11 +25,11 @@ class FixtureNotFoundExceptionFactoryTest extends TestCase
     {
         $exception = FixtureNotFoundExceptionFactory::create('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not find the fixture "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

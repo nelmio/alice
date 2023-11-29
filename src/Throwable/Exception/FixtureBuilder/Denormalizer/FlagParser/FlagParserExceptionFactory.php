@@ -23,8 +23,8 @@ final class FlagParserExceptionFactory
         return new FlagParserNotFoundException(
             sprintf(
                 'No suitable flag parser found to handle the element "%s".',
-                $element
-            )
+                $element,
+            ),
         );
     }
 
@@ -33,8 +33,8 @@ final class FlagParserExceptionFactory
         return new FlagParserNotFoundException(
             sprintf(
                 'Expected method "%s" to be called only if it has a flag parser.',
-                $method
-            )
+                $method,
+            ),
         );
     }
 

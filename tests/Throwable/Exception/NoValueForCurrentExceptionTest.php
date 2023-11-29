@@ -18,17 +18,18 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\NoValueForCurrentException
+ * @internal
  */
 class NoValueForCurrentExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(NoValueForCurrentException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(NoValueForCurrentException::class, RuntimeException::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildNoValueForCurrentException();
-        static::assertInstanceOf(ChildNoValueForCurrentException::class, $exception);
+        self::assertInstanceOf(ChildNoValueForCurrentException::class, $exception);
     }
 }

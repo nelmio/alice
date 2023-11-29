@@ -28,6 +28,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringArrayTokenParser
+ * @internal
  */
 class StringArrayTokenParserTest extends TestCase
 {
@@ -35,12 +36,12 @@ class StringArrayTokenParserTest extends TestCase
 
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(StringArrayTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(StringArrayTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(StringArrayTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(StringArrayTokenParser::class))->isCloneable());
     }
 
     public function testCanParseDynamicArrayTokens(): void
@@ -49,8 +50,8 @@ class StringArrayTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new StringArrayTokenParser();
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
@@ -73,15 +74,15 @@ class StringArrayTokenParserTest extends TestCase
             $parser->parse($token);
 
             if (PHP_VERSION_ID < 80000) {
-                static::fail('Expected exception to be thrown.');
+                self::fail('Expected exception to be thrown.');
             }
         } catch (ParseException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not parse the token "" (type: STRING_ARRAY_TYPE).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
@@ -100,7 +101,7 @@ class StringArrayTokenParserTest extends TestCase
         $parser = new StringArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
@@ -119,7 +120,7 @@ class StringArrayTokenParserTest extends TestCase
         $parser = new StringArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testTrimsEachArgumentValueBeforePassingThemToTheDecoratedParser(): void
@@ -137,6 +138,6 @@ class StringArrayTokenParserTest extends TestCase
         $parser = new StringArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

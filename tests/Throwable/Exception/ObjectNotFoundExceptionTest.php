@@ -18,17 +18,18 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\ObjectNotFoundException
+ * @internal
  */
 class ObjectNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(ObjectNotFoundException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(ObjectNotFoundException::class, RuntimeException::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildObjectNotFoundException();
-        static::assertInstanceOf(ChildObjectNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildObjectNotFoundException::class, $exception);
     }
 }

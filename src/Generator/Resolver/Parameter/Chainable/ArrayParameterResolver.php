@@ -34,26 +34,26 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
      */
     private $resolver;
 
-    public function __construct(ParameterResolverInterface $resolver = null)
+    public function __construct(?ParameterResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
     }
-    
+
     public function withResolver(ParameterResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-    
+
     public function canResolve(Parameter $parameter): bool
     {
         return is_array($parameter->getValue());
     }
-    
+
     public function resolve(
         Parameter $unresolvedArrayParameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        ResolvingContext $context = null
+        ?ResolvingContext $context = null
     ): ParameterBag {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
@@ -62,7 +62,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
         $context = ResolvingContext::createFrom($context, $unresolvedArrayParameter->getKey());
 
         $resolvedArray = [];
-        /* @var array $unresolvedArray */
+        /** @var array $unresolvedArray */
         $unresolvedArray = $unresolvedArrayParameter->getValue();
         foreach ($unresolvedArray as $index => $unresolvedValue) {
             // Iterate over all the values of the array to resolve each of them
@@ -70,17 +70,15 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
                 new Parameter((string) $index, $unresolvedValue),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             );
 
             $resolvedArray[$index] = $resolvedParameters->get((string) $index);
             $resolvedParameters = $resolvedParameters->without((string) $index);
         }
 
-        $resolvedParameters = $resolvedParameters->with(
-            $unresolvedArrayParameter->withValue($resolvedArray)
+        return $resolvedParameters->with(
+            $unresolvedArrayParameter->withValue($resolvedArray),
         );
-
-        return $resolvedParameters;
     }
 }

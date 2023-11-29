@@ -23,6 +23,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Object\CompleteObject
+ * @internal
  */
 class CompleteObjectTest extends TestCase
 {
@@ -30,7 +31,7 @@ class CompleteObjectTest extends TestCase
 
     public function testIsAnObject(): void
     {
-        static::assertTrue(is_a(CompleteObject::class, ObjectInterface::class, true));
+        self::assertTrue(is_a(CompleteObject::class, ObjectInterface::class, true));
     }
 
     public function testDecoratesAnObject(): void
@@ -43,11 +44,11 @@ class CompleteObjectTest extends TestCase
 
         $object = new CompleteObject($decoratedObject);
 
-        static::assertEquals('dummy', $object->getId());
+        self::assertEquals('dummy', $object->getId());
         $decoratedObjectProphecy->getId()->shouldHaveBeenCalledTimes(1);
         $decoratedObjectProphecy->getInstance()->shouldHaveBeenCalledTimes(0);
 
-        static::assertEquals(new stdClass(), $object->getInstance());
+        self::assertEquals(new stdClass(), $object->getInstance());
         $decoratedObjectProphecy->getId()->shouldHaveBeenCalledTimes(1);
         $decoratedObjectProphecy->getInstance()->shouldHaveBeenCalledTimes(1);
     }
@@ -65,20 +66,19 @@ class CompleteObjectTest extends TestCase
         $instance->fao = 'bor';
         $clone->getInstance()->faz = 'boz';
 
-        static::assertEquals(
+        self::assertEquals(
             StdClassFactory::create([
                 'foo' => 'bar',
                 'foz' => 'baz',
                 'fao' => 'bor',
                 'faz' => 'boz',
             ]),
-            $object->getInstance()
-        );
-        static::assertEquals(
             $object->getInstance(),
-            $clone->getInstance()
         );
-
+        self::assertEquals(
+            $object->getInstance(),
+            $clone->getInstance(),
+        );
 
         // Case where the decorated object is partially immutable: cloning does create a new instance
         $decoratedObject = new ImmutableByCloneObject('dummy', $instance = new stdClass());
@@ -91,23 +91,22 @@ class CompleteObjectTest extends TestCase
         $instance->fao = 'bor';
         $clone->getInstance()->faz = 'boz';
 
-        static::assertEquals(
+        self::assertEquals(
             StdClassFactory::create([
                 'foo' => 'bar',
                 'foz' => 'baz',
                 'fao' => 'bor',
             ]),
-            $object->getInstance()
+            $object->getInstance(),
         );
-        static::assertEquals(
+        self::assertEquals(
             StdClassFactory::create([
                 'foo' => 'bar',
                 'foz' => 'baz',
                 'faz' => 'boz',
             ]),
-            $clone->getInstance()
+            $clone->getInstance(),
         );
-
 
         // Case where the decorated object is truly immutable
         $decoratedObject = new ImmutableObject('dummy', $instance = new stdClass());
@@ -120,8 +119,8 @@ class CompleteObjectTest extends TestCase
         $instance->fao = 'bor';
         $clone->getInstance()->faz = 'boz';
 
-        static::assertEquals(new stdClass(), $object->getInstance());
-        static::assertEquals(new stdClass(), $clone->getInstance());
+        self::assertEquals(new stdClass(), $object->getInstance());
+        self::assertEquals(new stdClass(), $clone->getInstance());
     }
 
     public function testCannotCreateANewInstance(): void

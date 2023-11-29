@@ -36,51 +36,51 @@ final class SimpleDenormalizer implements ChainableFixtureDenormalizerInterface,
      * @var FlagParserInterface|null
      */
     private $flagParser;
-    
+
     /**
      * @var SpecificationsDenormalizerInterface
      */
     private $specsDenormalizer;
 
-    public function __construct(SpecificationsDenormalizerInterface $specsDenormalizer, FlagParserInterface $parser = null)
+    public function __construct(SpecificationsDenormalizerInterface $specsDenormalizer, ?FlagParserInterface $parser = null)
     {
         $this->specsDenormalizer = $specsDenormalizer;
         $this->flagParser = $parser;
     }
-    
+
     public function withFlagParser(FlagParserInterface $parser): self
     {
         return new self($this->specsDenormalizer, $parser);
     }
-    
+
     public function canDenormalize(string $reference): bool
     {
-        return false === strpos($reference, '{');
+        return false === mb_strpos($reference, '{');
     }
-    
+
     public function denormalize(FixtureBag $builtFixtures, string $className, string $unparsedFixtureId, array $specs, FlagBag $flags): FixtureBag
     {
         if (null === $this->flagParser) {
             throw FlagParserExceptionFactory::createForExpectedMethodToBeCalledIfHasAParser(__METHOD__);
         }
-        
+
         $idFlags = $this->flagParser->parse($unparsedFixtureId);
         $fixture = new SimpleFixture(
             $idFlags->getKey(),
             $className,
-            new SpecificationBag(null, new PropertyBag(), new MethodCallBag())
+            new SpecificationBag(null, new PropertyBag(), new MethodCallBag()),
         );
         $fixture = $fixture->withSpecs(
-            $this->specsDenormalizer->denormalize($fixture, $this->flagParser, $specs)
+            $this->specsDenormalizer->denormalize($fixture, $this->flagParser, $specs),
         );
 
         return $builtFixtures->with(
             new TemplatingFixture(
                 new SimpleFixtureWithFlags(
                     $fixture,
-                    $idFlags->mergeWith($flags)
-                )
-            )
+                    $idFlags->mergeWith($flags),
+                ),
+            ),
         );
     }
 }

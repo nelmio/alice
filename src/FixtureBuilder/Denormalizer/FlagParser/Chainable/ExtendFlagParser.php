@@ -24,19 +24,19 @@ final class ExtendFlagParser implements ChainableFlagParserInterface
     use IsAServiceTrait;
 
     /** @interval */
-    const REGEX = '/^extends (?<reference>.+)$/';
-    
+    public const REGEX = '/^extends (?<reference>.+)$/';
+
     public function canParse(string $element, array &$matches = []): bool
     {
         return 1 === preg_match(self::REGEX, $element, $matches);
     }
-    
+
     public function parse(string $element): FlagBag
     {
         $matches = [];
         $this->canParse($element, $matches);
         $extended = new FixtureReference($matches['reference']);
-        
+
         return (new FlagBag(''))->withFlag(new ExtendFlag($extended));
     }
 }

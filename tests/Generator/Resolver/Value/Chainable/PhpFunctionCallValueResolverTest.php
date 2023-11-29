@@ -30,6 +30,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\PhpFunctionCallValueResolver
+ * @internal
  */
 class PhpFunctionCallValueResolverTest extends TestCase
 {
@@ -37,20 +38,20 @@ class PhpFunctionCallValueResolverTest extends TestCase
 
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(PhpFunctionCallValueResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(PhpFunctionCallValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(PhpFunctionCallValueResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(PhpFunctionCallValueResolver::class))->isCloneable());
     }
 
     public function testCanResolvePropertyReferenceValues(): void
     {
         $resolver = new PhpFunctionCallValueResolver([], new FakeValueResolver());
 
-        static::assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testReturnsSetWithEvaluatedValueIfFunctionIsAPhpNativeFunction(): void
@@ -67,7 +68,7 @@ class PhpFunctionCallValueResolverTest extends TestCase
         $resolver = new PhpFunctionCallValueResolver([], new FakeValueResolver());
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testReturnsResultOfTheDecoratedResolverIfFunctionIsNotAPhpNativeFunction(): void
@@ -86,22 +87,21 @@ class PhpFunctionCallValueResolverTest extends TestCase
                 $fixture,
                 $set,
                 $scope,
-                $context
+                $context,
             )
             ->willReturn(
                 $expected = new ResolvedValueWithFixtureSet(
                     'bar',
-                    ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar', 'ping' => 'pong']))
-                )
-            )
-        ;
+                    ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar', 'ping' => 'pong'])),
+                ),
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new PhpFunctionCallValueResolver([], $decoratedResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -122,22 +122,21 @@ class PhpFunctionCallValueResolverTest extends TestCase
                 $fixture,
                 $set,
                 $scope,
-                $context
+                $context,
             )
             ->willReturn(
                 $expected = new ResolvedValueWithFixtureSet(
                     'bar',
-                    ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar', 'ping' => 'pong']))
-                )
-            )
-        ;
+                    ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar', 'ping' => 'pong'])),
+                ),
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new PhpFunctionCallValueResolver(['strtolower'], $decoratedResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

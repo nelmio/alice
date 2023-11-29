@@ -140,7 +140,7 @@ final class FilesReference
             'unsupported' => [
                 'XML file' => ['dummy.xml'],
                 'CSV file' => ['dummy.csv'],
-            ]
+            ],
         ];
     }
 

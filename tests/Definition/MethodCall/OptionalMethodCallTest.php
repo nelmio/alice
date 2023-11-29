@@ -24,6 +24,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\OptionalMethodCall
+ * @internal
  */
 class OptionalMethodCallTest extends TestCase
 {
@@ -31,9 +32,9 @@ class OptionalMethodCallTest extends TestCase
 
     public function testIsAMethodCall(): void
     {
-        static::assertTrue(is_a(OptionalMethodCall::class, MethodCallInterface::class, true));
+        self::assertTrue(is_a(OptionalMethodCall::class, MethodCallInterface::class, true));
     }
-    
+
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $caller = new InstantiatedReference('user.factory');
@@ -54,12 +55,12 @@ class OptionalMethodCallTest extends TestCase
 
         $definition = new OptionalMethodCall($methodCall, $flag);
 
-        static::assertEquals($caller, $definition->getCaller());
-        static::assertEquals($method, $definition->getMethod());
-        static::assertEquals($arguments, $definition->getArguments());
-        static::assertEquals($percentage, $definition->getPercentage());
-        static::assertEquals($stringValue, $definition->__toString());
-        static::assertSame($methodCall, $definition->getOriginalMethodCall());
+        self::assertEquals($caller, $definition->getCaller());
+        self::assertEquals($method, $definition->getMethod());
+        self::assertEquals($arguments, $definition->getArguments());
+        self::assertEquals($percentage, $definition->getPercentage());
+        self::assertEquals($stringValue, $definition->__toString());
+        self::assertSame($methodCall, $definition->getOriginalMethodCall());
 
         $methodCallProphecy->getCaller()->shouldHaveBeenCalledTimes(1);
         $methodCallProphecy->getMethod()->shouldHaveBeenCalledTimes(1);
@@ -73,7 +74,7 @@ class OptionalMethodCallTest extends TestCase
             'mutate',
             [
                 $arg0 = new stdClass(),
-            ]
+            ],
         );
         $flag = new OptionalFlag(30);
 
@@ -89,16 +90,16 @@ class OptionalMethodCallTest extends TestCase
         // @phpstan-ignore-next-line
         $definition->getArguments()[0]->foz = 'baz';
 
-        static::assertEquals('mutated', $definition->getCaller()->getId());
-        static::assertEquals('dummy', $definition->getMethod());
-        static::assertEquals(
+        self::assertEquals('mutated', $definition->getCaller()->getId());
+        self::assertEquals('dummy', $definition->getMethod());
+        self::assertEquals(
             [
                 StdClassFactory::create([
                     'foo' => 'bar',
                     'foz' => 'baz',
                 ]),
             ],
-            $definition->getArguments()
+            $definition->getArguments(),
         );
     }
 
@@ -111,17 +112,17 @@ class OptionalMethodCallTest extends TestCase
         $newArguments = null;
         $newDefinition = $definition->withArguments($newArguments);
 
-        static::assertInstanceOf(OptionalMethodCall::class, $newDefinition);
+        self::assertInstanceOf(OptionalMethodCall::class, $newDefinition);
 
-        static::assertEquals($methodCall->getCaller(), $definition->getCaller());
-        static::assertEquals(30, $definition->getPercentage());
-        static::assertEquals($methodCall->getMethod(), $definition->getMethod());
-        static::assertEquals($methodCall->getArguments(), $definition->getArguments());
+        self::assertEquals($methodCall->getCaller(), $definition->getCaller());
+        self::assertEquals(30, $definition->getPercentage());
+        self::assertEquals($methodCall->getMethod(), $definition->getMethod());
+        self::assertEquals($methodCall->getArguments(), $definition->getArguments());
 
-        static::assertEquals($methodCall->getCaller(), $newDefinition->getCaller());
-        static::assertEquals(30, $newDefinition->getPercentage());
-        static::assertEquals($methodCall->getMethod(), $newDefinition->getMethod());
-        static::assertEquals($newArguments, $newDefinition->getArguments());
+        self::assertEquals($methodCall->getCaller(), $newDefinition->getCaller());
+        self::assertEquals(30, $newDefinition->getPercentage());
+        self::assertEquals($methodCall->getMethod(), $newDefinition->getMethod());
+        self::assertEquals($newArguments, $newDefinition->getArguments());
     }
 
     public function testCanCreateANewInstanceWithArguments(): void
@@ -137,21 +138,21 @@ class OptionalMethodCallTest extends TestCase
         // Mutate arguments before reading it
         $arg0->foo = 'bar';
 
-        static::assertInstanceOf(OptionalMethodCall::class, $newDefinition);
+        self::assertInstanceOf(OptionalMethodCall::class, $newDefinition);
 
-        static::assertEquals($methodCall->getCaller(), $definition->getCaller());
-        static::assertEquals(30, $definition->getPercentage());
-        static::assertEquals($methodCall->getMethod(), $definition->getMethod());
-        static::assertEquals($methodCall->getArguments(), $definition->getArguments());
+        self::assertEquals($methodCall->getCaller(), $definition->getCaller());
+        self::assertEquals(30, $definition->getPercentage());
+        self::assertEquals($methodCall->getMethod(), $definition->getMethod());
+        self::assertEquals($methodCall->getArguments(), $definition->getArguments());
 
-        static::assertEquals($methodCall->getCaller(), $newDefinition->getCaller());
-        static::assertEquals(30, $newDefinition->getPercentage());
-        static::assertEquals($methodCall->getMethod(), $newDefinition->getMethod());
-        static::assertEquals(
+        self::assertEquals($methodCall->getCaller(), $newDefinition->getCaller());
+        self::assertEquals(30, $newDefinition->getPercentage());
+        self::assertEquals($methodCall->getMethod(), $newDefinition->getMethod());
+        self::assertEquals(
             [
                 StdClassFactory::create(['foo' => 'bar']),
             ],
-            $newDefinition->getArguments()
+            $newDefinition->getArguments(),
         );
     }
 }

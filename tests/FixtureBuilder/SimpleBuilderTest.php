@@ -26,6 +26,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\SimpleBuilder
+ * @internal
  */
 class SimpleBuilderTest extends TestCase
 {
@@ -33,12 +34,12 @@ class SimpleBuilderTest extends TestCase
 
     public function testIsAFixtureBuilder(): void
     {
-        static::assertTrue(is_a(SimpleBuilder::class, FixtureBuilderInterface::class, true));
+        self::assertTrue(is_a(SimpleBuilder::class, FixtureBuilderInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleBuilder::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleBuilder::class))->isCloneable());
     }
 
     public function testBuildSet(): void
@@ -64,7 +65,7 @@ class SimpleBuilderTest extends TestCase
         $builder = new SimpleBuilder($denormalizer);
         $actual = $builder->build($data, $injectedParameters, $injectedObjects);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $denormalizerProphecy->denormalize(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -86,6 +87,6 @@ class SimpleBuilderTest extends TestCase
         $builder = new SimpleBuilder($denormalizer);
         $actual = $builder->build($data);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }
