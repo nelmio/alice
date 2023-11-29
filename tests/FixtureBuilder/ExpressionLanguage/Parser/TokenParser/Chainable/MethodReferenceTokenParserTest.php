@@ -30,6 +30,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\MethodReferenceTokenParser
+ * @internal
  */
 class MethodReferenceTokenParserTest extends TestCase
 {
@@ -37,12 +38,12 @@ class MethodReferenceTokenParserTest extends TestCase
 
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(MethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(MethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(MethodReferenceTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(MethodReferenceTokenParser::class))->isCloneable());
     }
 
     public function testCanParseMethodTokens(): void
@@ -51,8 +52,8 @@ class MethodReferenceTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new MethodReferenceTokenParser();
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
@@ -82,12 +83,10 @@ class MethodReferenceTokenParserTest extends TestCase
         $token = new Token('@@malformed_user->getUserName(arg1, arg2)', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse('@@malformed_user')->willReturn('string value')
-        ;
+        $decoratedParserProphecy->parse('@@malformed_user')->willReturn('string value');
         $decoratedParserProphecy
             ->parse('<getUserName(arg1, arg2)>')
-            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']))
-        ;
+            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']));
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -106,12 +105,10 @@ class MethodReferenceTokenParserTest extends TestCase
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
         $decoratedParserProphecy
             ->parse('@user')
-            ->willReturn($reference = new FixtureReferenceValue('user'))
-        ;
+            ->willReturn($reference = new FixtureReferenceValue('user'));
         $decoratedParserProphecy
             ->parse('<getUserName((arg1, arg2)>')
-            ->willReturn('string value')
-        ;
+            ->willReturn('string value');
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -130,12 +127,10 @@ class MethodReferenceTokenParserTest extends TestCase
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
         $decoratedParserProphecy
             ->parse('@user')
-            ->willReturn($reference = new FixtureReferenceValue('user'))
-        ;
+            ->willReturn($reference = new FixtureReferenceValue('user'));
         $decoratedParserProphecy
             ->parse('<getUserName(arg1, arg2)>')
-            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']))
-        ;
+            ->willReturn($call = new FunctionCallValue('getUserName', ['parsed_arg1', 'parsed_arg2']));
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -144,7 +139,7 @@ class MethodReferenceTokenParserTest extends TestCase
         $parser = new MethodReferenceTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }

@@ -19,12 +19,13 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\NestedValue
+ * @internal
  */
 class NestedValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(NestedValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(NestedValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -32,12 +33,12 @@ class NestedValueTest extends TestCase
         $list = [];
         $value = new NestedValue($list);
 
-        static::assertEquals($list, $value->getValue());
+        self::assertEquals($list, $value->getValue());
 
         $list = [new stdClass()];
         $value = new NestedValue($list);
 
-        static::assertEquals($list, $value->getValue());
+        self::assertEquals($list, $value->getValue());
     }
 
     public function testIsNotImmutable(): void
@@ -46,11 +47,11 @@ class NestedValueTest extends TestCase
             $arg0 = new stdClass(),
         ]);
 
-        static::assertSame($arg0, $value->getValue()[0]);
+        self::assertSame($arg0, $value->getValue()[0]);
     }
 
     public function testCanBeCastedIntoAString(): void
     {
-        static::assertEquals("(nested) array (\n)", (string) (new NestedValue([])));
+        self::assertEquals("(nested) array (\n)", (string) (new NestedValue([])));
     }
 }

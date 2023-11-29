@@ -22,7 +22,7 @@ interface HydratorInterface
      * Hydrates the given object. Has access to the current fixture set and returns the new fixture set containing the
      * hydrated object.
      *
-     * @param ObjectInterface    $object Object to hydrate
+     * @param ObjectInterface $object Object to hydrate
      *
      * @throws HydrationThrowable
      */

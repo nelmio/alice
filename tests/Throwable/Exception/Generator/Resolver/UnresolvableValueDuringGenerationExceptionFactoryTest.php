@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationExceptionFactory
+ * @internal
  */
 class UnresolvableValueDuringGenerationExceptionFactoryTest extends TestCase
 {
@@ -27,11 +28,11 @@ class UnresolvableValueDuringGenerationExceptionFactoryTest extends TestCase
 
         $exception = UnresolvableValueDuringGenerationExceptionFactory::createFromResolutionThrowable($previous);
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not resolve value during the generation process.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertSame($previous, $exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
     }
 }

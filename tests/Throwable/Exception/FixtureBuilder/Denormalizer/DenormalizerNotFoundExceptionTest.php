@@ -19,22 +19,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
+ * @internal
  */
 class DenormalizerNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {
-        static::assertTrue(is_a(DenormalizerNotFoundException::class, LogicException::class, true));
+        self::assertTrue(is_a(DenormalizerNotFoundException::class, LogicException::class, true));
     }
 
     public function testIsNotADenormalizationThrowable(): void
     {
-        static::assertFalse(is_a(DenormalizerNotFoundException::class, DenormalizationThrowable::class, true));
+        self::assertFalse(is_a(DenormalizerNotFoundException::class, DenormalizationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildDenormalizerNotFoundException();
-        static::assertInstanceOf(ChildDenormalizerNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildDenormalizerNotFoundException::class, $exception);
     }
 }

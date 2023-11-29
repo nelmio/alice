@@ -20,25 +20,25 @@ use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
  */
 final class TokenType
 {
-    const STRING_TYPE = 'STRING_TYPE';
-    const PARAMETER_TYPE = 'PARAMETER_TYPE';
-    const ESCAPED_VALUE_TYPE = 'ESCAPED_VALUE_TYPE';
-    const FUNCTION_TYPE = 'FUNCTION_TYPE';
-    const IDENTITY_TYPE = 'IDENTITY_TYPE';
-    const OPTIONAL_TYPE = 'OPTIONAL_TYPE';
+    public const STRING_TYPE = 'STRING_TYPE';
+    public const PARAMETER_TYPE = 'PARAMETER_TYPE';
+    public const ESCAPED_VALUE_TYPE = 'ESCAPED_VALUE_TYPE';
+    public const FUNCTION_TYPE = 'FUNCTION_TYPE';
+    public const IDENTITY_TYPE = 'IDENTITY_TYPE';
+    public const OPTIONAL_TYPE = 'OPTIONAL_TYPE';
 
-    const DYNAMIC_ARRAY_TYPE = 'DYNAMIC_ARRAY_TYPE';
-    const STRING_ARRAY_TYPE = 'STRING_ARRAY_TYPE';
+    public const DYNAMIC_ARRAY_TYPE = 'DYNAMIC_ARRAY_TYPE';
+    public const STRING_ARRAY_TYPE = 'STRING_ARRAY_TYPE';
 
-    const SIMPLE_REFERENCE_TYPE = 'SIMPLE_REFERENCE_TYPE';
-    const LIST_REFERENCE_TYPE = 'LIST_REFERENCE_TYPE';
-    const WILDCARD_REFERENCE_TYPE = 'WILDCARD_REFERENCE_TYPE';
-    const RANGE_REFERENCE_TYPE = 'RANGE_REFERENCE_TYPE';
-    const PROPERTY_REFERENCE_TYPE = 'PROPERTY_REFERENCE_TYPE';
-    const METHOD_REFERENCE_TYPE = 'METHOD_REFERENCE_TYPE';
-    const VARIABLE_REFERENCE_TYPE = 'VARIABLE_REFERENCE_TYPE';
+    public const SIMPLE_REFERENCE_TYPE = 'SIMPLE_REFERENCE_TYPE';
+    public const LIST_REFERENCE_TYPE = 'LIST_REFERENCE_TYPE';
+    public const WILDCARD_REFERENCE_TYPE = 'WILDCARD_REFERENCE_TYPE';
+    public const RANGE_REFERENCE_TYPE = 'RANGE_REFERENCE_TYPE';
+    public const PROPERTY_REFERENCE_TYPE = 'PROPERTY_REFERENCE_TYPE';
+    public const METHOD_REFERENCE_TYPE = 'METHOD_REFERENCE_TYPE';
+    public const VARIABLE_REFERENCE_TYPE = 'VARIABLE_REFERENCE_TYPE';
 
-    const VARIABLE_TYPE = 'VARIABLE_TYPE';
+    public const VARIABLE_TYPE = 'VARIABLE_TYPE';
 
     private static $values = [
         self::STRING_TYPE => true,
@@ -69,10 +69,10 @@ final class TokenType
         if (false === array_key_exists($type, self::$values)) {
             throw InvalidArgumentExceptionFactory::createForInvalidExpressionLanguageTokenType($type);
         }
-        
+
         $this->value = $type;
     }
-    
+
     public function getValue(): string
     {
         return $this->value;

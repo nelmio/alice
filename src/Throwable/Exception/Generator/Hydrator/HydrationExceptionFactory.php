@@ -33,10 +33,10 @@ final class HydrationExceptionFactory
                 'Could not hydrate the property "%s" of the object "%s" (class: %s).',
                 $property->getName(),
                 $object->getId(),
-                get_class($object->getInstance())
+                get_class($object->getInstance()),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
@@ -44,17 +44,17 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ): InaccessiblePropertyException {
         return new InaccessiblePropertyException(
             sprintf(
                 'Could not access to the property "%s" of the object "%s" (class: %s).',
                 $property->getName(),
                 $object->getId(),
-                get_class($object->getInstance())
+                get_class($object->getInstance()),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
@@ -62,17 +62,17 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ): InvalidArgumentException {
         return new InvalidArgumentException(
             sprintf(
                 'Invalid value given for the property "%s" of the object "%s" (class: %s).',
                 $property->getName(),
                 $object->getId(),
-                get_class($object->getInstance())
+                get_class($object->getInstance()),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
@@ -80,17 +80,17 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ): NoSuchPropertyException {
         return new NoSuchPropertyException(
             sprintf(
                 'Could not hydrate the property "%s" of the object "%s" (class: %s).',
                 $property->getName(),
                 $object->getId(),
-                get_class($object->getInstance())
+                get_class($object->getInstance()),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 

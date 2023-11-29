@@ -12,20 +12,20 @@
 declare(strict_types=1);
 
 return [
-    'Nelmio\Alice\DummyWithMethods' =>[
-        'dummy_with_methods' =>[
-            '__construct' =>[
-                '$foo1' =>'foo1',
-                '$foo2' =>'foo2'
+    'Nelmio\Alice\DummyWithMethods' => [
+        'dummy_with_methods' => [
+            '__construct' => [
+                '$foo1' => 'foo1',
+                '$foo2' => 'foo2',
             ],
-            '__calls' =>[
+            '__calls' => [
                 [
-                    'bar' =>[
-                        '$bar1' =>'bar1',
-                        '$bar2' =>'bar2'
-                    ]
-                ]
-            ]
-        ]
-    ]
+                    'bar' => [
+                        '$bar1' => 'bar1',
+                        '$bar2' => 'bar2',
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];

@@ -27,8 +27,8 @@ final class ExpressionLanguageExceptionFactory
             sprintf(
                 'No suitable token parser found to handle the token "%s" (type: %s).',
                 $token->getValue(),
-                $token->getType()
-            )
+                $token->getType(),
+            ),
         );
     }
 
@@ -37,21 +37,21 @@ final class ExpressionLanguageExceptionFactory
         return new ParserNotFoundException(
             sprintf(
                 'Expected method "%s" to be called only if it has a parser.',
-                $method
-            )
+                $method,
+            ),
         );
     }
 
-    public static function createForUnparsableToken(Token $token, int $code = 0, Throwable $previous = null): ParseException
+    public static function createForUnparsableToken(Token $token, int $code = 0, ?Throwable $previous = null): ParseException
     {
         return new ParseException(
             sprintf(
                 'Could not parse the token "%s" (type: %s).',
                 $token->getValue(),
-                $token->getType()
+                $token->getType(),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
@@ -60,8 +60,8 @@ final class ExpressionLanguageExceptionFactory
         return new MalformedFunctionException(
             sprintf(
                 'The value "%s" contains an unclosed function.',
-                $value
-            )
+                $value,
+            ),
         );
     }
 
@@ -70,8 +70,8 @@ final class ExpressionLanguageExceptionFactory
         return new LexException(
             sprintf(
                 'Could not lex the value "%s".',
-                $value
-            )
+                $value,
+            ),
         );
     }
 

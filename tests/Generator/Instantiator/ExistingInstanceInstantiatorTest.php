@@ -28,6 +28,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator
+ * @internal
  */
 class ExistingInstanceInstantiatorTest extends TestCase
 {
@@ -35,17 +36,17 @@ class ExistingInstanceInstantiatorTest extends TestCase
 
     public function testIsAnInstantiator(): void
     {
-        static::assertTrue(is_a(ExistingInstanceInstantiator::class, InstantiatorInterface::class, true));
+        self::assertTrue(is_a(ExistingInstanceInstantiator::class, InstantiatorInterface::class, true));
     }
 
     public function testIsValueResolverAware(): void
     {
-        static::assertTrue(is_a(ExistingInstanceInstantiator::class, ValueResolverAwareInterface::class, true));
+        self::assertTrue(is_a(ExistingInstanceInstantiator::class, ValueResolverAwareInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ExistingInstanceInstantiator::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ExistingInstanceInstantiator::class))->isCloneable());
     }
 
     public function testReturnsUnchangedSetIfFixtureHasAlreadyBeenInstantiated(): void
@@ -57,15 +58,15 @@ class ExistingInstanceInstantiatorTest extends TestCase
             (new ObjectBag())->with(
                 new SimpleObject(
                     'dummy',
-                    new stdClass()
-                )
-            )
+                    new stdClass(),
+                ),
+            ),
         );
 
         $instantiator = new ExistingInstanceInstantiator(new FakeInstantiator());
         $actual = $instantiator->instantiate($fixture, $set, new GenerationContext());
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testReturnsTheResultOfTheDecoratedInstantiatorIfTheFixtureHasNotBeenInstantiated(): void
@@ -83,19 +84,18 @@ class ExistingInstanceInstantiatorTest extends TestCase
                     (new ObjectBag())->with(
                         new SimpleObject(
                             'dummy',
-                            new stdClass()
-                        )
-                    )
-                )
-            )
-        ;
+                            new stdClass(),
+                        ),
+                    ),
+                ),
+            );
         /** @var InstantiatorInterface $decoratedInstantiator */
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
         $instantiator = new ExistingInstanceInstantiator($decoratedInstantiator);
         $actual = $instantiator->instantiate($fixture, $set, $context);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
 
         $decoratedInstantiatorProphecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

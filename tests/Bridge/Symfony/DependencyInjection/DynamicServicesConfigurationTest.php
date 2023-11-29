@@ -27,6 +27,7 @@ use ReflectionClass;
  * @coversNothing
  *
  * @group integration
+ * @internal
  */
 class DynamicServicesConfigurationTest extends TestCase
 {
@@ -34,7 +35,7 @@ class DynamicServicesConfigurationTest extends TestCase
      * @var AppKernel
      */
     private $kernel;
-    
+
     protected function setUp(): void
     {
         $this->kernel = KernelFactory::createKernel(
@@ -42,7 +43,7 @@ class DynamicServicesConfigurationTest extends TestCase
         );
         $this->kernel->boot();
     }
-    
+
     protected function tearDown(): void
     {
         if (null !== $this->kernel) {
@@ -55,11 +56,11 @@ class DynamicServicesConfigurationTest extends TestCase
         /** @var RecursiveParameterResolver $resolver */
         $resolver = $this->kernel->getContainer()->get('nelmio_alice.generator.resolver.parameter.chainable.recursive_parameter_resolver');
 
-        static::assertInstanceOf(RecursiveParameterResolver::class, $resolver);
+        self::assertInstanceOf(RecursiveParameterResolver::class, $resolver);
         $limitRefl = (new ReflectionClass(RecursiveParameterResolver::class))->getProperty('limit');
         $limitRefl->setAccessible(true);
 
-        static::assertEquals(50, $limitRefl->getValue($resolver));
+        self::assertEquals(50, $limitRefl->getValue($resolver));
     }
 
     public function testUniqueValueResolverUsesTheLimitIsDefinedInTheConfiguration(): void
@@ -67,11 +68,11 @@ class DynamicServicesConfigurationTest extends TestCase
         /** @var UniqueValueResolver $resolver */
         $resolver = $this->kernel->getContainer()->get('nelmio_alice.generator.resolver.value.chainable.unique_value_resolver');
 
-        static::assertInstanceOf(UniqueValueResolver::class, $resolver);
+        self::assertInstanceOf(UniqueValueResolver::class, $resolver);
         $limitRefl = (new ReflectionClass(UniqueValueResolver::class))->getProperty('limit');
         $limitRefl->setAccessible(true);
 
-        static::assertEquals(15, $limitRefl->getValue($resolver));
+        self::assertEquals(15, $limitRefl->getValue($resolver));
     }
 
     public function testUniqueValueResolverUsesTheSeedAndLocaleIsDefinedInTheConfiguration(): void
@@ -79,7 +80,7 @@ class DynamicServicesConfigurationTest extends TestCase
         /** @var FakerGenerator $generator */
         $generator = $this->kernel->getContainer()->get('nelmio_alice.faker.generator');
 
-        static::assertInstanceOf(FakerGenerator::class, $generator);
+        self::assertInstanceOf(FakerGenerator::class, $generator);
         $this->assertGeneratorLocaleIs('fr_FR', $generator);
         $this->assertHasAliceProvider($generator);
     }
@@ -89,7 +90,7 @@ class DynamicServicesConfigurationTest extends TestCase
         $providers = $generator->getProviders();
         $regex = sprintf('/^Faker\\\Provider\\\%s\\\.*/', $locale);
         foreach ($providers as $provider) {
-            if (preg_match($regex, get_class($provider))) {
+            if (preg_match($regex, $provider::class)) {
                 return;
             }
         }

@@ -22,6 +22,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer
+ * @internal
  */
 class SimpleParameterBagDenormalizerTest extends TestCase
 {
@@ -29,7 +30,7 @@ class SimpleParameterBagDenormalizerTest extends TestCase
      * @var SimpleParameterBagDenormalizer
      */
     private $denormalizer;
-    
+
     protected function setUp(): void
     {
         $this->denormalizer = new SimpleParameterBagDenormalizer();
@@ -37,12 +38,12 @@ class SimpleParameterBagDenormalizerTest extends TestCase
 
     public function testIsAParameterBagDenormalizer(): void
     {
-        static::assertInstanceOf(ParameterBagDenormalizerInterface::class, $this->denormalizer);
+        self::assertInstanceOf(ParameterBagDenormalizerInterface::class, $this->denormalizer);
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionObject($this->denormalizer))->isCloneable());
+        self::assertFalse((new ReflectionObject($this->denormalizer))->isCloneable());
     }
 
     /**
@@ -52,7 +53,7 @@ class SimpleParameterBagDenormalizerTest extends TestCase
     {
         $actual = $this->denormalizer->denormalize($data);
 
-        static::assertEquals(new ParameterBag(), $actual);
+        self::assertEquals(new ParameterBag(), $actual);
     }
 
     /**
@@ -62,13 +63,13 @@ class SimpleParameterBagDenormalizerTest extends TestCase
     {
         try {
             $this->denormalizer->denormalize($data);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (TypeError $exception) {
-            static::assertEquals($expectedExceptionMessage, $exception->getMessage());
+            self::assertEquals($expectedExceptionMessage, $exception->getMessage());
         }
     }
 
-    public function provideDataWithNoParameters()
+    public function provideDataWithNoParameters(): iterable
     {
         yield 'no parameters' => [
             [],
@@ -87,7 +88,7 @@ class SimpleParameterBagDenormalizerTest extends TestCase
         ];
     }
 
-    public function provideDataWithInvalidParameterKeys()
+    public function provideDataWithInvalidParameterKeys(): iterable
     {
         yield 'string value' => [
             [

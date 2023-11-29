@@ -29,6 +29,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureMethodReferenceTokenParser
+ * @internal
  */
 class FixtureMethodReferenceTokenParserTest extends TestCase
 {
@@ -36,12 +37,12 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
 
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(FixtureMethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(FixtureMethodReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FixtureMethodReferenceTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FixtureMethodReferenceTokenParser::class))->isCloneable());
     }
 
     public function testCanParseMethodReferenceTokens(): void
@@ -50,8 +51,8 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new FixtureMethodReferenceTokenParser();
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
@@ -73,7 +74,6 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
         $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Could not parse the token "" (type: METHOD_REFERENCE_TYPE).');
 
-
         $parser->parse($token);
     }
 
@@ -92,7 +92,7 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
         $parser = new FixtureMethodReferenceTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfMethodReferenceIsMalformed(): void
@@ -117,18 +117,18 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
 
             $parser = new FixtureMethodReferenceTokenParser($decoratedParser);
             $parser->parse($token);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (ParseException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not parse the token "@user->getName()" (type: METHOD_REFERENCE_TYPE).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
-    public function provideParser()
+    public function provideParser(): iterable
     {
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
         $decoratedParserProphecy->parse('@user')->willReturn('foo');

@@ -19,22 +19,23 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InaccessiblePropertyException
+ * @internal
  */
 class InaccessiblePropertyExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(InaccessiblePropertyException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(InaccessiblePropertyException::class, RuntimeException::class, true));
     }
 
     public function testIsAHydrationThrowable(): void
     {
-        static::assertTrue(is_a(InaccessiblePropertyException::class, HydrationThrowable::class, true));
+        self::assertTrue(is_a(InaccessiblePropertyException::class, HydrationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildInaccessiblePropertyException();
-        static::assertInstanceOf(ChildInaccessiblePropertyException::class, $exception);
+        self::assertInstanceOf(ChildInaccessiblePropertyException::class, $exception);
     }
 }

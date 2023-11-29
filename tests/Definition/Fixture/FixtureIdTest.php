@@ -18,17 +18,18 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\FixtureId
+ * @internal
  */
 class FixtureIdTest extends TestCase
 {
     public function testIsAFixtureId(): void
     {
-        static::assertTrue(is_a(FixtureId::class, FixtureIdInterface::class, true));
+        self::assertTrue(is_a(FixtureId::class, FixtureIdInterface::class, true));
     }
 
     public function testAccessor(): void
     {
         $id = new FixtureId('foo');
-        static::assertEquals('foo', $id->getId());
+        self::assertEquals('foo', $id->getId());
     }
 }

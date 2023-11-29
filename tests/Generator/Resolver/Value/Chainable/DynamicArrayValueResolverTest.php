@@ -33,6 +33,7 @@ use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver
+ * @internal
  */
 class DynamicArrayValueResolverTest extends TestCase
 {
@@ -42,7 +43,7 @@ class DynamicArrayValueResolverTest extends TestCase
      * @var ReflectionProperty
      */
     private $resolverRefl;
-    
+
     protected function setUp(): void
     {
         $reflClass = new ReflectionClass(DynamicArrayValueResolver::class);
@@ -53,12 +54,12 @@ class DynamicArrayValueResolverTest extends TestCase
 
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(DynamicArrayValueResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(DynamicArrayValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(DynamicArrayValueResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(DynamicArrayValueResolver::class))->isCloneable());
     }
 
     public function testWithersReturnNewModifiedInstance(): void
@@ -66,16 +67,16 @@ class DynamicArrayValueResolverTest extends TestCase
         $resolver = new DynamicArrayValueResolver();
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        static::assertEquals(new DynamicArrayValueResolver(), $resolver);
-        static::assertEquals(new DynamicArrayValueResolver(new FakeValueResolver()), $newResolver);
+        self::assertEquals(new DynamicArrayValueResolver(), $resolver);
+        self::assertEquals(new DynamicArrayValueResolver(new FakeValueResolver()), $newResolver);
     }
 
     public function testCanResolveDynamicArrayValues(): void
     {
         $resolver = new DynamicArrayValueResolver();
 
-        static::assertTrue($resolver->canResolve(new DynamicArrayValue(1, '')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new DynamicArrayValue(1, '')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testCannotResolveValueIfHasNoResolver(): void
@@ -103,9 +104,8 @@ class DynamicArrayValueResolverTest extends TestCase
         $decoratedResolverProphecy
             ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
-                new ResolvedValueWithFixtureSet(10, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
-            )
-        ;
+                new ResolvedValueWithFixtureSet(10, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']))),
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -127,9 +127,8 @@ class DynamicArrayValueResolverTest extends TestCase
         $decoratedResolverProphecy
             ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
-                new ResolvedValueWithFixtureSet(-1, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
-            )
-        ;
+                new ResolvedValueWithFixtureSet(-1, ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']))),
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -155,17 +154,16 @@ class DynamicArrayValueResolverTest extends TestCase
         $decoratedResolverProphecy
             ->resolve($quantifier, $fixture, $set, $scope, $context)
             ->willReturn(
-                new ResolvedValueWithFixtureSet(2, $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar'])))
-            )
-        ;
+                new ResolvedValueWithFixtureSet(2, $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']))),
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
         $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertSame(['static val', 'static val'], $result->getValue());
-        static::assertEquals($newSet, $result->getSet());
+        self::assertSame(['static val', 'static val'], $result->getValue());
+        self::assertEquals($newSet, $result->getSet());
     }
 
     public function testResolvesElementAsManyTimeAsNecessaryIfItIsAValue(): void
@@ -184,23 +182,21 @@ class DynamicArrayValueResolverTest extends TestCase
         $decoratedResolverProphecy
             ->resolve($element, $fixture, $set, $scope, $context)
             ->willReturn(
-                new ResolvedValueWithFixtureSet(10, $setAfterFirstResolution)
-            )
-        ;
+                new ResolvedValueWithFixtureSet(10, $setAfterFirstResolution),
+            );
         $setAfterSecondResolution = ResolvedFixtureSetFactory::create(new ParameterBag(['iteration' => 1]));
         $decoratedResolverProphecy
             ->resolve($element, $fixture, $setAfterFirstResolution, $scope, $context)
             ->willReturn(
-                new ResolvedValueWithFixtureSet(100, $setAfterSecondResolution)
-            )
-        ;
+                new ResolvedValueWithFixtureSet(100, $setAfterSecondResolution),
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new DynamicArrayValueResolver($decoratedResolver);
         $result = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertSame([10, 100], $result->getValue());
-        static::assertEquals($setAfterSecondResolution, $result->getSet());
+        self::assertSame([10, 100], $result->getValue());
+        self::assertEquals($setAfterSecondResolution, $result->getSet());
     }
 }

@@ -50,8 +50,8 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
         $objects = $fixtureSet->getObjects()->with(
             new SimpleObject(
                 $fixture->getId(),
-                $instance
-            )
+                $instance,
+            ),
         );
 
         return $fixtureSet->withObjects($objects);

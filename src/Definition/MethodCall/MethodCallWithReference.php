@@ -46,7 +46,7 @@ final class MethodCallWithReference implements MethodCallInterface
     /**
      * @param ValueInterface[]|array|null $arguments
      */
-    public function __construct(ServiceReferenceInterface $caller, string $method, array $arguments = null)
+    public function __construct(ServiceReferenceInterface $caller, string $method, ?array $arguments = null)
     {
         $this->caller = clone $caller;
         $this->method = $method;
@@ -58,30 +58,30 @@ final class MethodCallWithReference implements MethodCallInterface
             $this->stringValue = $caller->getId().'->'.$method;
         }
     }
-    
-    public function withArguments(array $arguments = null): self
+
+    public function withArguments(?array $arguments = null): self
     {
         $clone = clone $this;
         $clone->arguments = $arguments;
 
         return $clone;
     }
-    
+
     public function getCaller()
     {
         return clone $this->caller;
     }
-    
+
     public function getMethod(): string
     {
         return $this->method;
     }
-    
+
     public function getArguments()
     {
         return $this->arguments;
     }
-    
+
     public function __toString(): string
     {
         return $this->stringValue;

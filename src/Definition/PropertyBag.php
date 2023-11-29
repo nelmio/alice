@@ -29,7 +29,7 @@ final class PropertyBag implements IteratorAggregate, Countable
     {
         $clone = clone $this;
         $clone->properties[$property->getName()] = $property;
-        
+
         return $clone;
     }
 
@@ -43,7 +43,7 @@ final class PropertyBag implements IteratorAggregate, Countable
         foreach ($this->properties as $name => $property) {
             $clone->properties[$name] = $property;
         }
-        
+
         return $clone;
     }
 
@@ -51,12 +51,12 @@ final class PropertyBag implements IteratorAggregate, Countable
     {
         return [] === $this->properties;
     }
-    
+
     public function getIterator(): Traversable
     {
         return new ArrayIterator(array_values($this->properties));
     }
-    
+
     public function count(): int
     {
         return count($this->properties);

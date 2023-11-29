@@ -23,8 +23,8 @@ final class FixtureNotFoundExceptionFactory
         return new FixtureNotFoundException(
             sprintf(
                 'Could not find the fixture "%s".',
-                $id
-            )
+                $id,
+            ),
         );
     }
 

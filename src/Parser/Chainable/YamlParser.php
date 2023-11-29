@@ -28,7 +28,7 @@ final class YamlParser implements ChainableParserInterface
     use IsAServiceTrait;
 
     /** @interval */
-    const REGEX = '/.{1,}\.ya?ml$/i';
+    public const REGEX = '/.{1,}\.ya?ml$/i';
 
     /**
      * @var SymfonyYamlParser
@@ -39,7 +39,7 @@ final class YamlParser implements ChainableParserInterface
     {
         $this->yamlParser = $yamlParser;
     }
-    
+
     public function canParse(string $file): bool
     {
         if (false === stream_is_local($file)) {

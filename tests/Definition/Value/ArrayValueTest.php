@@ -19,12 +19,13 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ArrayValue
+ * @internal
  */
 class ArrayValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(ArrayValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(ArrayValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnValues(): void
@@ -32,12 +33,12 @@ class ArrayValueTest extends TestCase
         $list = [];
         $value = new ArrayValue($list);
 
-        static::assertEquals($list, $value->getValue());
+        self::assertEquals($list, $value->getValue());
 
         $list = [new stdClass()];
         $value = new ArrayValue($list);
 
-        static::assertEquals($list, $value->getValue());
+        self::assertEquals($list, $value->getValue());
     }
 
     public function testIsImmutable(): void
@@ -52,20 +53,20 @@ class ArrayValueTest extends TestCase
         // Mutate retrieved value
         $value->getValue()[0]->foo = 'baz';
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 new stdClass(),
             ],
-            $value->getValue()
+            $value->getValue(),
         );
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new ArrayValue([]);
-        static::assertEquals("array (\n)", (string) $value);
+        self::assertEquals("array (\n)", (string) $value);
 
         $value = new ArrayValue(['foo', 'bar']);
-        static::assertEquals("array (\n  0 => 'foo',\n  1 => 'bar',\n)", (string) $value);
+        self::assertEquals("array (\n  0 => 'foo',\n  1 => 'bar',\n)", (string) $value);
     }
 }

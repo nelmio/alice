@@ -38,15 +38,15 @@ final class PhpFunctionCallValueResolver implements ChainableValueResolverInterf
     private $functionBlacklist;
 
     /**
-     * @param string[]               $functionBlacklist List of PHP native function that will be skipped, i.e. will be
-     *                                                  considered as non existent
+     * @param string[] $functionBlacklist List of PHP native function that will be skipped, i.e. will be
+     *                                    considered as non existent
      */
     public function __construct(array $functionBlacklist, ValueResolverInterface $decoratedResolver)
     {
         $this->functionBlacklist = array_flip($functionBlacklist);
         $this->resolver = $decoratedResolver;
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ResolvedFunctionCallValue;
@@ -73,7 +73,7 @@ final class PhpFunctionCallValueResolver implements ChainableValueResolverInterf
 
         return new ResolvedValueWithFixtureSet(
             $functionName(...$arguments),
-            $fixtureSet
+            $fixtureSet,
         );
     }
 }

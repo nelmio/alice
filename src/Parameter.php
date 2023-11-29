@@ -23,9 +23,8 @@ final class Parameter
      */
     private $key;
 
-    
     private $value;
-    
+
     public function __construct(string $key, $value)
     {
         $this->key = $key;
@@ -36,15 +35,15 @@ final class Parameter
     {
         $clone = clone $this;
         $clone->value = deep_clone($value);
-        
+
         return $clone;
     }
-    
+
     public function getKey(): string
     {
         return $this->key;
     }
-    
+
     public function getValue()
     {
         return deep_clone($this->value);

@@ -30,8 +30,8 @@ final class InvalidArgumentExceptionFactory
             sprintf(
                 'Expected reference to be either a string or a "%s" instance, got "%s" instead.',
                 ValueInterface::class,
-                $reference
-            )
+                $reference,
+            ),
         );
     }
 
@@ -41,8 +41,8 @@ final class InvalidArgumentExceptionFactory
             sprintf(
                 'Reference key mismatch, the keys "%s" and "%s" refers to the same fixture but the keys are different.',
                 $id1,
-                $id2
-            )
+                $id2,
+            ),
         );
     }
 
@@ -52,8 +52,8 @@ final class InvalidArgumentExceptionFactory
             sprintf(
                 'Expected the fixture ID and the flags key to be the same. Got "%s" and "%s" instead.',
                 $fixture->getId(),
-                $flags->getKey()
-            )
+                $flags->getKey(),
+            ),
         );
     }
 
@@ -66,8 +66,8 @@ final class InvalidArgumentExceptionFactory
             sprintf(
                 'Expected value to be either null or a strictly positive integer but got "%s" '
                 .'instead.',
-                $seed
-            )
+                $seed,
+            ),
         );
     }
 
@@ -76,8 +76,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Expected a string value but got "%s" instead.',
-                gettype($value)
-            )
+                gettype($value),
+            ),
         );
     }
 
@@ -86,8 +86,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Expected a strictly positive integer but got "%s" instead.',
-                $value
-            )
+                $value,
+            ),
         );
     }
 
@@ -96,8 +96,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Expected an array of strings but got "%s" element in the array instead.',
-                gettype($value)
-            )
+                gettype($value),
+            ),
         );
     }
 
@@ -106,8 +106,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Cannot create a unique value of a unique value for value "%s".',
-                $id
-            )
+                $id,
+            ),
         );
     }
 
@@ -116,8 +116,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Expected type to be a known token type but got "%s".',
-                $type
-            )
+                $type,
+            ),
         );
     }
 
@@ -126,8 +126,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Invalid token "%s" found.',
-                $value
-            )
+                $value,
+            ),
         );
     }
 
@@ -136,8 +136,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Could not find any include statement in the file "%s".',
-                $file
-            )
+                $file,
+            ),
         );
     }
 
@@ -147,20 +147,20 @@ final class InvalidArgumentExceptionFactory
             sprintf(
                 'Expected elements of include statement to be file names. Got empty string instead in file '
                 .'"%s".',
-                $file
-            )
+                $file,
+            ),
         );
     }
 
-    public static function createForFileCouldNotBeFound(string $file, int $code = 0, Throwable $previous = null): InvalidArgumentException
+    public static function createForFileCouldNotBeFound(string $file, int $code = 0, ?Throwable $previous = null): InvalidArgumentException
     {
         return new InvalidArgumentException(
             sprintf(
                 'The file "%s" could not be found.',
-                $file
+                $file,
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
@@ -169,8 +169,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Expected limit value to be a strictly positive integer, got "%d" instead.',
-                $limit
-            )
+                $limit,
+            ),
         );
     }
 
@@ -179,8 +179,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Expected limit for recursive calls to be of at least 2. Got "%d" instead.',
-                $limit
-            )
+                $limit,
+            ),
         );
     }
 
@@ -189,8 +189,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Invalid faker formatter "%s" found.',
-                $formatter
-            )
+                $formatter,
+            ),
         );
     }
 
@@ -200,8 +200,8 @@ final class InvalidArgumentExceptionFactory
             sprintf(
                 'Fixture "%s" extends "%2$s" but "%2$s" is not a template.',
                 $fixture->getId(),
-                $fixtureId
-            )
+                $fixtureId,
+            ),
         );
     }
 
@@ -210,8 +210,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Unsupported type "%s": cannot determine if two values of this type are identical.',
-                gettype($value)
-            )
+                gettype($value),
+            ),
         );
     }
 
@@ -220,8 +220,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Invalid constructor method "%s".',
-                $method
-            )
+                $method,
+            ),
         );
     }
 
@@ -230,8 +230,8 @@ final class InvalidArgumentExceptionFactory
         return new InvalidArgumentException(
             sprintf(
                 'Expected optional flag to be an integer element of [0;100]. Got "%d" instead.',
-                $percentage
-            )
+                $percentage,
+            ),
         );
     }
 
@@ -242,8 +242,8 @@ final class InvalidArgumentExceptionFactory
                 'Expected quantifier to be a positive integer. Got "%d" for "%s", check you dynamic arrays '
                 .'declarations (e.g. "<numberBetween(1, 2)>x @user*").',
                 $quantifier,
-                $fixture->getId()
-            )
+                $fixture->getId(),
+            ),
         );
     }
 

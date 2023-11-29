@@ -24,7 +24,7 @@ final class NullConstructorInstantiator extends AbstractChainableInstantiator
     {
         return null === $fixture->getSpecs()->getConstructor();
     }
-    
+
     protected function createInstance(FixtureInterface $fixture)
     {
         $class = $fixture->getClassName();

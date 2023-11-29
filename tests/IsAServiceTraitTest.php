@@ -19,6 +19,7 @@ use Throwable;
 
 /**
  * @covers \Nelmio\Alice\IsAServiceTrait
+ * @internal
  */
 class IsAServiceTraitTest extends TestCase
 {
@@ -26,28 +27,28 @@ class IsAServiceTraitTest extends TestCase
     {
         try {
             clone new NotClonableDummy();
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (Throwable $exception) {
-            static::assertEquals(0, $exception->getCode());
-            static::assertNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNull($exception->getPrevious());
 
             if (PHP_VERSION_ID < 80000) {
-                static::assertEquals(
+                self::assertEquals(
                     'Call to private Nelmio\Alice\NotClonableDummy::__clone() from context '
-                    . '\'Nelmio\Alice\IsAServiceTraitTest\'',
-                    $exception->getMessage()
+                    .'\'Nelmio\Alice\IsAServiceTraitTest\'',
+                    $exception->getMessage(),
                 );
             } else {
-                static::assertEquals(
+                self::assertEquals(
                     'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
-                    . 'Nelmio\Alice\IsAServiceTraitTest',
-                    $exception->getMessage()
+                    .'Nelmio\Alice\IsAServiceTraitTest',
+                    $exception->getMessage(),
                 );
             }
         }
 
         $dummyRefl = new ReflectionClass(NotClonableDummy::class);
 
-        static::assertFalse($dummyRefl->isCloneable());
+        self::assertFalse($dummyRefl->isCloneable());
     }
 }

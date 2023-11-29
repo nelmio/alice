@@ -25,7 +25,7 @@ final class FunctionTokenizer
     use IsAServiceTrait;
 
     /** @internal */
-    const DELIMITER= '___##';
+    public const DELIMITER = '___##';
 
     private $tokenizer;
 
@@ -46,8 +46,7 @@ final class FunctionTokenizer
         foreach ($tree as $node) {
             $tokenizedValue .= ($this->tokenizer->isOpeningToken($node))
                 ? sprintf('<aliceTokenizedFunction(%s)>', $node)
-                : $node
-            ;
+                : $node;
         }
 
         return $tokenizedValue;
@@ -55,7 +54,7 @@ final class FunctionTokenizer
 
     public function isTokenized(string $value): bool
     {
-        return strpos($value, '<aliceTokenizedFunction(') !== false;
+        return false !== mb_strpos($value, '<aliceTokenizedFunction(');
     }
 
     public function detokenize(string $value): string
@@ -64,7 +63,7 @@ final class FunctionTokenizer
             return $value;
         }
 
-        $value = substr($value, 24, strlen($value) - 24 - 2);
+        $value = mb_substr($value, 24, mb_strlen($value) - 24 - 2);
 
         return $this->tokenizer->detokenize($value);
     }
@@ -122,7 +121,7 @@ final class FunctionTokenizer
     private function append(array &$tree, array $values, int $startKey, int $endKey): void
     {
         $value = '';
-        for ($i = $startKey; $i < $endKey; $i++) {
+        for ($i = $startKey; $i < $endKey; ++$i) {
             $value .= $values[$i];
         }
 

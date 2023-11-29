@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory
+ * @internal
  */
 class FlagParserExceptionFactoryTest extends TestCase
 {
@@ -24,23 +25,23 @@ class FlagParserExceptionFactoryTest extends TestCase
     {
         $exception = FlagParserExceptionFactory::createForNoParserFoundForElement('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'No suitable flag parser found to handle the element "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateNewExceptionForUnexpectedCall(): void
     {
         $exception = FlagParserExceptionFactory::createForExpectedMethodToBeCalledIfHasAParser('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'Expected method "foo" to be called only if it has a flag parser.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

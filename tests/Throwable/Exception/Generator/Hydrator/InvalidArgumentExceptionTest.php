@@ -22,17 +22,18 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException
+ * @internal
  */
 class InvalidArgumentExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(InvalidArgumentException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(InvalidArgumentException::class, RuntimeException::class, true));
     }
 
     public function testIsAHydrationThrowable(): void
     {
-        static::assertTrue(is_a(InvalidArgumentException::class, HydrationThrowable::class, true));
+        self::assertTrue(is_a(InvalidArgumentException::class, HydrationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
@@ -41,6 +42,6 @@ class InvalidArgumentExceptionTest extends TestCase
         $property = new Property('foo', 'bar');
 
         $exception = new ChildInvalidArgumentException();
-        static::assertInstanceOf(ChildInvalidArgumentException::class, $exception);
+        self::assertInstanceOf(ChildInvalidArgumentException::class, $exception);
     }
 }

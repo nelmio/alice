@@ -25,6 +25,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer
+ * @internal
  */
 class SimpleDenormalizerTest extends TestCase
 {
@@ -32,12 +33,12 @@ class SimpleDenormalizerTest extends TestCase
 
     public function testIsADenormalizer(): void
     {
-        static::assertTrue(is_a(SimpleDenormalizer::class, DenormalizerInterface::class, true));
+        self::assertTrue(is_a(SimpleDenormalizer::class, DenormalizerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleDenormalizer::class))->isCloneable());
     }
 
     public function testReturnsADenormalizedSet(): void
@@ -66,9 +67,8 @@ class SimpleDenormalizerTest extends TestCase
         $parameterDenormalizerProphecy
             ->denormalize($data)
             ->willReturn(
-                $parameters = new ParameterBag(['foo' => 'bar'])
-            )
-        ;
+                $parameters = new ParameterBag(['foo' => 'bar']),
+            );
         /** @var ParameterBagDenormalizerInterface $parameterDenormalizer */
         $parameterDenormalizer = $parameterDenormalizerProphecy->reveal();
 
@@ -76,9 +76,8 @@ class SimpleDenormalizerTest extends TestCase
         $fixturesDenormalizerProphecy
             ->denormalize($fixturesData)
             ->willReturn(
-                $fixtures = (new FixtureBag())->with(new DummyFixture('foo'))
-            )
-        ;
+                $fixtures = (new FixtureBag())->with(new DummyFixture('foo')),
+            );
         /** @var FixtureBagDenormalizerInterface $fixturesDenormalizer */
         $fixturesDenormalizer = $fixturesDenormalizerProphecy->reveal();
 
@@ -87,7 +86,7 @@ class SimpleDenormalizerTest extends TestCase
         $denormalizer = new SimpleDenormalizer($parameterDenormalizer, $fixturesDenormalizer);
         $actual = $denormalizer->denormalize($data);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $parameterDenormalizerProphecy->denormalize(Argument::any())->shouldHaveBeenCalledTimes(1);
         $fixturesDenormalizerProphecy->denormalize(Argument::any())->shouldHaveBeenCalledTimes(1);

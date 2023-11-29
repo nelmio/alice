@@ -38,10 +38,10 @@ final class ValueResolverRegistry implements ValueResolverInterface, ObjectGener
     /**
      * @param ChainableValueResolverInterface[] $resolvers
      */
-    public function __construct(array $resolvers, ObjectGeneratorInterface $generator = null)
+    public function __construct(array $resolvers, ?ObjectGeneratorInterface $generator = null)
     {
         $this->resolvers = (
-            function (ObjectGeneratorInterface $generator = null, ChainableValueResolverInterface ...$resolvers) {
+            function (?ObjectGeneratorInterface $generator = null, ChainableValueResolverInterface ...$resolvers) {
                 foreach ($resolvers as $index => $resolver) {
                     if ($resolver instanceof ValueResolverAwareInterface) {
                         $resolvers[$index] = $resolver = $resolver->withValueResolver($this);
@@ -57,7 +57,7 @@ final class ValueResolverRegistry implements ValueResolverInterface, ObjectGener
             }
         )($generator, ...$resolvers);
     }
-    
+
     public function withObjectGenerator(ObjectGeneratorInterface $generator)
     {
         return new self($this->resolvers, $generator);

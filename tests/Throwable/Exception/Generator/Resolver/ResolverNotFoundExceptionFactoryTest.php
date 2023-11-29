@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory
+ * @internal
  */
 class ResolverNotFoundExceptionFactoryTest extends TestCase
 {
@@ -25,35 +26,35 @@ class ResolverNotFoundExceptionFactoryTest extends TestCase
     {
         $exception = ResolverNotFoundExceptionFactory::createForParameter('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'No resolver found to resolve parameter "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateNewExceptionWithFactoryForValue(): void
     {
         $exception = ResolverNotFoundExceptionFactory::createForValue(new DummyValue('dummy'));
 
-        static::assertEquals(
+        self::assertEquals(
             'No resolver found to resolve value "dummy".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateNewExceptionWithFactoryForUnexpectedCall(): void
     {
         $exception = ResolverNotFoundExceptionFactory::createUnexpectedCall('fake');
 
-        static::assertEquals(
+        self::assertEquals(
             'Expected method "fake" to be called only if it has a resolver.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

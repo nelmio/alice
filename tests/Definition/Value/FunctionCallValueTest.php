@@ -19,12 +19,13 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\FunctionCallValue
+ * @internal
  */
 class FunctionCallValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(FunctionCallValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(FunctionCallValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -34,9 +35,9 @@ class FunctionCallValueTest extends TestCase
 
         $value = new FunctionCallValue($name, $arguments);
 
-        static::assertEquals($name, $value->getName());
-        static::assertEquals($arguments, $value->getArguments());
-        static::assertEquals([$name, $arguments], $value->getValue());
+        self::assertEquals($name, $value->getName());
+        self::assertEquals($arguments, $value->getArguments());
+        self::assertEquals([$name, $arguments], $value->getValue());
     }
 
     public function testIsImmutable(): void
@@ -52,27 +53,27 @@ class FunctionCallValueTest extends TestCase
         // Mutate returned value
         $value->getArguments()[0]->foo = 'baz';
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 new stdClass(),
             ],
-            $value->getArguments()
+            $value->getArguments(),
         );
-        static::assertEquals(
+        self::assertEquals(
             [
                 'setUsername',
                 [new stdClass()],
             ],
-            $value->getValue()
+            $value->getValue(),
         );
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new FunctionCallValue('foo');
-        static::assertEquals('<foo()>', (string) $value);
+        self::assertEquals('<foo()>', (string) $value);
 
         $value = new FunctionCallValue('foo', ['bar']);
-        static::assertEquals("<foo(array (\n  0 => 'bar',\n))>", (string) $value);
+        self::assertEquals("<foo(array (\n  0 => 'bar',\n))>", (string) $value);
     }
 }

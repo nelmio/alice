@@ -22,7 +22,7 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeSpecificationBagDenormalizer implements SpecificationsDenormalizerInterface
 {
     use NotCallableTrait;
-    
+
     public function denormalize(
         FixtureInterface $fixture,
         FlagParserInterface $parser,

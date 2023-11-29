@@ -50,7 +50,7 @@ final class GeneratorFactory
         $instance = FakerFactory::create($locale);
         $generatorProviders = $this->generator->getProviders();
         foreach ($generatorProviders as $provider) {
-            if (1 !== preg_match('/^Faker\\\Provider/u', get_class($provider))) {
+            if (1 !== preg_match('/^Faker\\\Provider/u', $provider::class)) {
                 $instance->addProvider($provider);
             }
         }

@@ -21,12 +21,12 @@ use Nelmio\Alice\ParameterBag;
 class FakeChainableParameterResolver implements ChainableParameterResolverInterface
 {
     use NotCallableTrait;
-    
+
     public function canResolve(Parameter $parameter): bool
     {
         $this->__call(__FUNCTION__, func_get_args());
     }
-    
+
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,

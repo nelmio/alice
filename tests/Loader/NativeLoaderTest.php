@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Loader\NativeLoader
+ * @internal
  */
 class NativeLoaderTest extends TestCase
 {
@@ -49,6 +50,6 @@ class NativeLoaderTest extends TestCase
         $fileLoader1 = $loader->getFileLoader();
         $fileLoader2 = $loader->getFileLoader();
 
-        static::assertSame($fileLoader1, $fileLoader2);
+        self::assertSame($fileLoader1, $fileLoader2);
     }
 }

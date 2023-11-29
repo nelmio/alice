@@ -23,6 +23,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\StringMergerParser
+ * @internal
  */
 class StringMergerParserTest extends TestCase
 {
@@ -30,12 +31,12 @@ class StringMergerParserTest extends TestCase
 
     public function testIsAParser(): void
     {
-        static::assertTrue(is_a(StringMergerParser::class, ParserInterface::class, true));
+        self::assertTrue(is_a(StringMergerParser::class, ParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(StringMergerParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(StringMergerParser::class))->isCloneable());
     }
 
     public function testIsInstantiatedWithAParser(): void
@@ -56,7 +57,7 @@ class StringMergerParserTest extends TestCase
         $parser = new StringMergerParser($decoratedParser);
         $actual = $parser->parse($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -79,9 +80,8 @@ class StringMergerParserTest extends TestCase
                     new FakeValue(),
                     'er',
                     'ty',
-                ])
-            )
-        ;
+                ]),
+            );
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -97,7 +97,7 @@ class StringMergerParserTest extends TestCase
         $parser = new StringMergerParser($decoratedParser);
         $actual = $parser->parse($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -117,9 +117,8 @@ class StringMergerParserTest extends TestCase
                     'qw',
                     new FakeValue(),
                     'erty',
-                ])
-            )
-        ;
+                ]),
+            );
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -135,13 +134,15 @@ class StringMergerParserTest extends TestCase
         $parser = new StringMergerParser($decoratedParser);
         $actual = $parser->parse($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
     /**
      * @dataProvider provideOneElementValues
+     * @param mixed $parsedValue
+     * @param mixed $expected
      */
     public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($parsedValue, $expected): void
     {
@@ -153,10 +154,10 @@ class StringMergerParserTest extends TestCase
         $parser = new StringMergerParser($decoratedParser);
         $actual = $parser->parse('');
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
-    public function provideOneElementValues()
+    public function provideOneElementValues(): iterable
     {
         yield 'one value' => [
             new FakeValue(),

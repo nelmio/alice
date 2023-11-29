@@ -34,35 +34,35 @@ final class SimpleMethodCall implements MethodCallInterface
     /**
      * @param ValueInterface[]|array|null $arguments
      */
-    public function __construct(string $method, array $arguments = null)
+    public function __construct(string $method, ?array $arguments = null)
     {
         $this->method = $method;
         $this->arguments = $arguments;
     }
-    
-    public function withArguments(array $arguments = null): self
+
+    public function withArguments(?array $arguments = null): self
     {
         $clone = clone $this;
         $clone->arguments = $arguments;
 
         return $clone;
     }
-    
+
     public function getCaller()
     {
         return null;
     }
-    
+
     public function getMethod(): string
     {
         return $this->method;
     }
-    
+
     public function getArguments()
     {
         return $this->arguments;
     }
-    
+
     public function __toString(): string
     {
         return $this->method;

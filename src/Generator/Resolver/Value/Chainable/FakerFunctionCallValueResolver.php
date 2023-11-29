@@ -38,7 +38,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
     {
         $this->generatorFactory = new GeneratorFactory($fakerGenerator);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ResolvedFunctionCallValue;
@@ -62,7 +62,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
 
         return new ResolvedValueWithFixtureSet(
             $generator->format($formatter, $value->getArguments()),
-            $fixtureSet
+            $fixtureSet,
         );
     }
 
@@ -78,7 +78,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
         if (2 === $size) {
             return [
                 $factory->createOrReturnExistingInstance($explodedFormatter[0]),
-                $explodedFormatter[1]
+                $explodedFormatter[1],
             ];
         }
 

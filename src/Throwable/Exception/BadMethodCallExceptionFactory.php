@@ -25,8 +25,8 @@ final class BadMethodCallExceptionFactory
         return new BadMethodCallException(
             sprintf(
                 'Unknown method "%s".',
-                $method
-            )
+                $method,
+            ),
         );
     }
 

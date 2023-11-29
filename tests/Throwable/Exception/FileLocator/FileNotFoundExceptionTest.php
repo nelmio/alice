@@ -18,41 +18,42 @@ use UnexpectedValueException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException
+ * @internal
  */
 class FileNotFoundExceptionTest extends TestCase
 {
     public function testIsAnUnexpectedValueException(): void
     {
-        static::assertTrue(is_a(FileNotFoundException::class, UnexpectedValueException::class, true));
+        self::assertTrue(is_a(FileNotFoundException::class, UnexpectedValueException::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildFileNotFoundException();
-        static::assertInstanceOf(ChildFileNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildFileNotFoundException::class, $exception);
     }
 
     public function testCreateForEmptyFile(): void
     {
         $exception = FileNotFoundException::createForEmptyFile();
 
-        static::assertEquals(
+        self::assertEquals(
             'An empty file name is not valid to be located.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForNonExistentFile(): void
     {
         $exception = FileNotFoundException::createForNonExistentFile('foo.yml');
 
-        static::assertEquals(
+        self::assertEquals(
             'The file "foo.yml" does not exist.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

@@ -18,6 +18,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureSet
+ * @internal
  */
 class FixtureSetTest extends TestCase
 {
@@ -32,9 +33,9 @@ class FixtureSetTest extends TestCase
 
         $set = new FixtureSet($loadedParameters, $injectedParameters, $fixtures, $injectedObjects);
 
-        static::assertEquals($loadedParameters, $set->getLoadedParameters());
-        static::assertEquals($injectedParameters, $set->getInjectedParameters());
-        static::assertEquals($fixtures, $set->getFixtures());
-        static::assertEquals($injectedObjects, $set->getObjects());
+        self::assertEquals($loadedParameters, $set->getLoadedParameters());
+        self::assertEquals($injectedParameters, $set->getInjectedParameters());
+        self::assertEquals($fixtures, $set->getFixtures());
+        self::assertEquals($injectedObjects, $set->getObjects());
     }
 }

@@ -36,6 +36,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ReferenceRangeNameDenormalizer
+ * @internal
  */
 class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 {
@@ -45,18 +46,18 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
     {
         $this->denormalizer = new ReferenceRangeNameDenormalizer(
             new DummySpecificationBagDenormalizer(),
-            new DummyFlagParser()
+            new DummyFlagParser(),
         );
     }
 
     public function testIsAChainableDenormalizer(): void
     {
-        static::assertTrue(is_a(ReferenceRangeNameDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
+        self::assertTrue(is_a(ReferenceRangeNameDenormalizer::class, ChainableFixtureDenormalizerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ReferenceRangeNameDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ReferenceRangeNameDenormalizer::class))->isCloneable());
     }
 
     public function testCannotDenormalizeFixtureIfHasNoFlagParser(): void
@@ -79,10 +80,10 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
                 new SimpleFixture(
                     'userDetails',
                     'Nelmio\Alice\Entity\UserDetails',
-                    new SpecificationBag(null, new PropertyBag(), new MethodCallBag())
+                    new SpecificationBag(null, new PropertyBag(), new MethodCallBag()),
                 ),
-                new FlagBag('userDetails')
-            )
+                new FlagBag('userDetails'),
+            ),
         );
 
         $fixtures = (new FixtureBag())->with($valueForCurrent);
@@ -96,8 +97,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
         $flagParserProphecy
             ->parse($reference)
-            ->willReturn($parsedFlags)
-        ;
+            ->willReturn($parsedFlags);
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -105,8 +105,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $expectedSpecs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
         $specsDenormalizerProphecy
             ->denormalize(Argument::type(SimpleFixture::class), $flagParser, $specs)
-            ->willReturn($expectedSpecs)
-        ;
+            ->willReturn($expectedSpecs);
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $specsDenormalizerProphecy->reveal();
 
@@ -120,14 +119,14 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
                         $fixtureName,
                         $className,
                         $expectedSpecs,
-                        $valueForCurrent
+                        $valueForCurrent,
                     ),
-                    $parsedFlags
-                )
-            )
+                    $parsedFlags,
+                ),
+            ),
         );
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
@@ -140,10 +139,10 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
                 new SimpleFixture(
                     'userDetails1',
                     'Nelmio\Alice\Entity\UserDetails',
-                    new SpecificationBag(null, new PropertyBag(), new MethodCallBag())
+                    new SpecificationBag(null, new PropertyBag(), new MethodCallBag()),
                 ),
-                new FlagBag('userDetails1')
-            )
+                new FlagBag('userDetails1'),
+            ),
         );
 
         $userDetails2 = new TemplatingFixture(
@@ -151,10 +150,10 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
                 new SimpleFixture(
                     'userDetails2',
                     'Nelmio\Alice\Entity\UserDetails',
-                    new SpecificationBag(null, new PropertyBag(), new MethodCallBag())
+                    new SpecificationBag(null, new PropertyBag(), new MethodCallBag()),
                 ),
-                new FlagBag('userDetails2')
-            )
+                new FlagBag('userDetails2'),
+            ),
         );
 
         $fixtures = (new FixtureBag())->with($userDetails1)->with($userDetails2);
@@ -171,8 +170,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
         $flagParserProphecy
             ->parse($reference)
-            ->willReturn($parsedFlags)
-        ;
+            ->willReturn($parsedFlags);
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -180,8 +178,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $expectedSpecs = new SpecificationBag(null, new PropertyBag(), new MethodCallBag());
         $specsDenormalizerProphecy
             ->denormalize(Argument::type(SimpleFixture::class), $flagParser, $specs)
-            ->willReturn($expectedSpecs)
-        ;
+            ->willReturn($expectedSpecs);
         /** @var SpecificationsDenormalizerInterface $specsDenormalizer */
         $specsDenormalizer = $specsDenormalizerProphecy->reveal();
 
@@ -195,11 +192,11 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
                         $fixtureName1,
                         $className,
                         $expectedSpecs,
-                        $userDetails1
+                        $userDetails1,
                     ),
-                    $fixtureFlags1
-                )
-            )
+                    $fixtureFlags1,
+                ),
+            ),
         )->with(
             new TemplatingFixture(
                 new SimpleFixtureWithFlags(
@@ -207,14 +204,14 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
                         $fixtureName2,
                         $className,
                         $expectedSpecs,
-                        $userDetails2
+                        $userDetails2,
                     ),
-                    $fixtureFlags2
-                )
-            )
+                    $fixtureFlags2,
+                ),
+            ),
         );
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
@@ -232,8 +229,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $flagParserProphecy = $this->prophesize(FlagParserInterface::class);
         $flagParserProphecy
             ->parse($reference)
-            ->willReturn($parsedFlags)
-        ;
+            ->willReturn($parsedFlags);
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -254,6 +250,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideSimpleFixtures
+     * @param mixed $name
      */
     public function testCanBuildSimpleFixtures($name): void
     {
@@ -262,6 +259,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideListFixtures
+     * @param mixed $name
      */
     public function testCanBuildListFixtures($name): void
     {
@@ -270,6 +268,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideMalformedListFixtures
+     * @param mixed $name
      */
     public function testCanBuildMalformedListFixtures($name): void
     {
@@ -278,6 +277,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideSegmentFixtures
+     * @param mixed $name
      */
     public function testCanBuildSegmentFixtures($name): void
     {
@@ -286,6 +286,7 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideMalformedSegmentFixtures
+     * @param mixed $name
      */
     public function testCanBuildMalformedSegmentFixtures($name): void
     {
@@ -294,6 +295,8 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideSimpleFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildSimpleFixtures($name, $expected): void
     {
@@ -302,6 +305,8 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideListFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildListFixtures($name, $expected): void
     {
@@ -310,6 +315,8 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideMalformedListFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildMalformedListFixtures($name, $expected): void
     {
@@ -318,6 +325,8 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideSegmentFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildSegmentFixtures($name, $expected): void
     {
@@ -326,6 +335,8 @@ class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
 
     /**
      * @dataProvider provideMalformedSegmentFixtures
+     * @param mixed $name
+     * @param mixed $expected
      */
     public function testBuildMalformedSegmentFixtures($name, $expected): void
     {

@@ -24,7 +24,7 @@ use Nelmio\Alice\ParameterBag;
 final class StaticParameterResolver implements ChainableParameterResolverInterface
 {
     use IsAServiceTrait;
-    
+
     public function canResolve(Parameter $parameter): bool
     {
         $value = $parameter->getValue();

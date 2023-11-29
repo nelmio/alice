@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory
+ * @internal
  */
 class ExpressionLanguageExceptionFactoryTest extends TestCase
 {
@@ -28,24 +29,24 @@ class ExpressionLanguageExceptionFactoryTest extends TestCase
         $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $exception = ExpressionLanguageExceptionFactory::createForNoParserFoundForToken($token);
 
-        static::assertEquals(
+        self::assertEquals(
             'No suitable token parser found to handle the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForExpectedMethodCallOnlyIfHasAParser(): void
     {
         $exception = ExpressionLanguageExceptionFactory::createForExpectedMethodCallOnlyIfHasAParser('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'Expected method "foo" to be called only if it has a parser.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForUnparsableToken(): void
@@ -53,47 +54,46 @@ class ExpressionLanguageExceptionFactoryTest extends TestCase
         $token = new Token('foo', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $exception = ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not parse the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
-
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
 
         $code = 500;
         $previous = new Error();
 
         $exception = ExpressionLanguageExceptionFactory::createForUnparsableToken($token, $code, $previous);
-        static::assertEquals(
+        self::assertEquals(
             'Could not parse the token "foo" (type: DYNAMIC_ARRAY_TYPE).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals($code, $exception->getCode());
-        static::assertSame($previous, $exception->getPrevious());
+        self::assertEquals($code, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
     }
 
     public function testCreateForMalformedFunction(): void
     {
         $exception = ExpressionLanguageExceptionFactory::createForMalformedFunction('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'The value "foo" contains an unclosed function.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForCouldNotLexValue(): void
     {
         $exception = ExpressionLanguageExceptionFactory::createForCouldNotLexValue('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not lex the value "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

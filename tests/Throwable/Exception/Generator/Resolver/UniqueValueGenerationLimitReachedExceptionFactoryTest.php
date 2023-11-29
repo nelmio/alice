@@ -19,6 +19,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedExceptionFactory
+ * @internal
  */
 class UniqueValueGenerationLimitReachedExceptionFactoryTest extends TestCase
 {
@@ -26,14 +27,14 @@ class UniqueValueGenerationLimitReachedExceptionFactoryTest extends TestCase
     {
         $exception = UniqueValueGenerationLimitReachedExceptionFactory::create(
             new UniqueValue('unique_id', new stdClass()),
-            10
+            10,
         );
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not generate a unique value after 10 attempts for "unique_id".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

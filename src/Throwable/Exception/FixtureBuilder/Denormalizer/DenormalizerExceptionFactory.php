@@ -30,15 +30,15 @@ final class DenormalizerExceptionFactory
         return new UnexpectedValueException('Could not denormalize the given factory.');
     }
 
-    public static function createForUnparsableValue(string $value, int $code = 0, Throwable $previous = null): UnexpectedValueException
+    public static function createForUnparsableValue(string $value, int $code = 0, ?Throwable $previous = null): UnexpectedValueException
     {
         return new UnexpectedValueException(
             sprintf(
                 'Could not parse value "%s".',
-                $value
+                $value,
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
@@ -47,20 +47,20 @@ final class DenormalizerExceptionFactory
         return new DenormalizerNotFoundException(
             sprintf(
                 'No suitable fixture denormalizer found to handle the fixture with the reference "%s".',
-                $fixtureId
-            )
+                $fixtureId,
+            ),
         );
     }
 
-    public static function createDenormalizerNotFoundUnexpectedCall(string $method, int $code = 0, Throwable $previous = null): DenormalizerNotFoundException
+    public static function createDenormalizerNotFoundUnexpectedCall(string $method, int $code = 0, ?Throwable $previous = null): DenormalizerNotFoundException
     {
         return new DenormalizerNotFoundException(
             sprintf(
                 'Expected method "%s" to be called only if it has a denormalizer.',
-                $method
+                $method,
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 

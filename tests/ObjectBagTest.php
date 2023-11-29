@@ -27,6 +27,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\ObjectBag
+ * @internal
  */
 class ObjectBagTest extends TestCase
 {
@@ -36,7 +37,7 @@ class ObjectBagTest extends TestCase
      * @var ReflectionProperty
      */
     private $propRefl;
-    
+
     protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(ObjectBag::class))->getProperty('objects');
@@ -58,7 +59,7 @@ class ObjectBagTest extends TestCase
                 'user1' => new CompleteObject(new SimpleObject('user1', $u1)),
                 'user2' => new CompleteObject(new SimpleObject('user2', $u2)),
             ],
-            $bag
+            $bag,
         );
     }
 
@@ -79,7 +80,7 @@ class ObjectBagTest extends TestCase
                 'user1' => new CompleteObject(new SimpleObject('user1', $u1)),
                 'user2' => new CompleteObject(new SimpleObject('user2', $u2)),
             ],
-            $bag
+            $bag,
         );
     }
 
@@ -98,7 +99,7 @@ class ObjectBagTest extends TestCase
         $bag = new ObjectBag();
         $this->assertSameObjects(
             [],
-            $bag
+            $bag,
         );
     }
 
@@ -113,19 +114,19 @@ class ObjectBagTest extends TestCase
         $group1Fixture = $this->createFixture('group1', stdClass::class);
         $inexistingReference = $this->createFixture('unknown', 'Dummy');
 
-        static::assertTrue($bag->has($user1Fixture));
-        static::assertEquals(
+        self::assertTrue($bag->has($user1Fixture));
+        self::assertEquals(
             new CompleteObject(new SimpleObject('user1', new stdClass())),
-            $bag->get($user1Fixture)
+            $bag->get($user1Fixture),
         );
 
-        static::assertTrue($bag->has($group1Fixture));
-        static::assertEquals(
+        self::assertTrue($bag->has($group1Fixture));
+        self::assertEquals(
             new CompleteObject(new SimpleObject('group1', new stdClass())),
-            $bag->get($group1Fixture)
+            $bag->get($group1Fixture),
         );
 
-        static::assertFalse($bag->has($inexistingReference));
+        self::assertFalse($bag->has($inexistingReference));
     }
 
     public function testThrowsExceptionWhenTryingToGetInexistingObject(): void
@@ -147,16 +148,16 @@ class ObjectBagTest extends TestCase
 
         $newBag = $bag->with(new CompleteObject(new SimpleObject('bar', $std)));
 
-        static::assertEquals(
+        self::assertEquals(
             new ObjectBag(['foo' => new stdClass()]),
-            $bag
+            $bag,
         );
-        static::assertEquals(
+        self::assertEquals(
             new ObjectBag([
                 'foo' => new stdClass(),
                 'bar' => new CompleteObject(new SimpleObject('bar', $std)),
             ]),
-            $newBag
+            $newBag,
         );
     }
 
@@ -170,18 +171,18 @@ class ObjectBagTest extends TestCase
 
         $newBag = $bag->with(new CompleteObject(new SimpleObject('foo', $std)));
 
-        static::assertEquals(
+        self::assertEquals(
             new ObjectBag([
                 'foo' => new CompleteObject(
                     new SimpleObject(
                         'foo',
                         StdClassFactory::create([
                             'ping' => 'pong',
-                        ])
-                    )
+                        ]),
+                    ),
                 ),
             ]),
-            $newBag
+            $newBag,
         );
     }
 
@@ -190,16 +191,16 @@ class ObjectBagTest extends TestCase
         $bag = new ObjectBag(['foo' => new stdClass()]);
 
         $newBag = $bag->without(
-            new SimpleObject('foo', new stdClass())
+            new SimpleObject('foo', new stdClass()),
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new ObjectBag(['foo' => new stdClass()]),
-            $bag
+            $bag,
         );
-        static::assertEquals(
+        self::assertEquals(
             new ObjectBag([]),
-            $newBag
+            $newBag,
         );
     }
 
@@ -208,12 +209,12 @@ class ObjectBagTest extends TestCase
         $bag = new ObjectBag([]);
 
         $newBag = $bag->without(
-            new SimpleObject('foo', new stdClass())
+            new SimpleObject('foo', new stdClass()),
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new ObjectBag([]),
-            $newBag
+            $newBag,
         );
     }
 
@@ -239,20 +240,20 @@ class ObjectBagTest extends TestCase
         $bag2 = (new ObjectBag())->with($object3)->with($object4);
         $bag = $bag1->mergeWith($bag2);
 
-        static::assertInstanceOf(ObjectBag::class, $bag);
+        self::assertInstanceOf(ObjectBag::class, $bag);
         $this->assertSameObjects(
             [
                 'foo' => $object1,
                 'bar' => $object2,
             ],
-            $bag1
+            $bag1,
         );
         $this->assertSameObjects(
             [
                 'bar' => $object3,
                 'baz' => $object4,
             ],
-            $bag2
+            $bag2,
         );
         $this->assertSameObjects(
             [
@@ -260,7 +261,7 @@ class ObjectBagTest extends TestCase
                 'bar' => $object3,
                 'baz' => $object4,
             ],
-            $bag
+            $bag,
         );
     }
 
@@ -275,12 +276,12 @@ class ObjectBagTest extends TestCase
             $traversed[$reference] = $object;
         }
 
-        static::assertSame(
+        self::assertSame(
             [
                 'foo' => $object1,
                 'bar' => $object2,
             ],
-            $traversed
+            $traversed,
         );
     }
 
@@ -290,47 +291,47 @@ class ObjectBagTest extends TestCase
         $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'foo' => new stdClass(),
                 'bar' => new stdClass(),
             ],
-            $bag->toArray()
+            $bag->toArray(),
         );
-        static::assertCount(count($bag), $bag->toArray());
+        self::assertCount(count($bag), $bag->toArray());
     }
 
     public function testCountable(): void
     {
-        static::assertTrue(is_a(ObjectBag::class, Countable::class, true));
+        self::assertTrue(is_a(ObjectBag::class, Countable::class, true));
 
         $bag = new ObjectBag();
-        static::assertEquals(0, $bag->count());
+        self::assertEquals(0, $bag->count());
 
         $bag = new ObjectBag([
             'foo' => new stdClass(),
             'bar' => new stdClass(),
         ]);
-        static::assertEquals(2, $bag->count());
+        self::assertEquals(2, $bag->count());
 
         $object1 = new CompleteObject(new SimpleObject('foo', new stdClass()));
         $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
-        static::assertEquals(2, $bag->count());
+        self::assertEquals(2, $bag->count());
 
         $object3 = new CompleteObject(new SimpleObject('foz', new stdClass()));
         $object4 = new CompleteObject(new SimpleObject('baz', new stdClass()));
         $anotherBag = (new ObjectBag())->with($object3)->with($object4);
         $bag = $bag->mergeWith($anotherBag);
-        static::assertEquals(4, $bag->count());
+        self::assertEquals(4, $bag->count());
     }
 
     private function assertSameObjects(array $expected, ObjectBag $actual): void
     {
         $actualObjects = $this->propRefl->getValue($actual);
 
-        static::assertEquals($expected, $actualObjects);
-        static::assertCount(count($expected), $actualObjects);
+        self::assertEquals($expected, $actualObjects);
+        self::assertCount(count($expected), $actualObjects);
     }
 
     private function createFixture(string $reference, string $className): FixtureInterface

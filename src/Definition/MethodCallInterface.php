@@ -24,13 +24,13 @@ interface MethodCallInterface
      *
      * @return static
      */
-    public function withArguments(array $arguments = null);
+    public function withArguments(?array $arguments = null);
 
     /**
      * @return ServiceReferenceInterface|null No caller means that the caller is the instance of the object itself.
      */
     public function getCaller();
-    
+
     /**
      * @return string Method name
      */
@@ -40,6 +40,6 @@ interface MethodCallInterface
      * @return ValueInterface[]|array|null
      */
     public function getArguments();
-    
+
     public function __toString(): string;
 }

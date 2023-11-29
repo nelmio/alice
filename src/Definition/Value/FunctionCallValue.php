@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
-use function Nelmio\Alice\deep_clone;
 use Nelmio\Alice\Definition\ValueInterface;
+use function Nelmio\Alice\deep_clone;
 
 /**
  * Value object representing '<name()>'.
@@ -49,7 +49,7 @@ final class FunctionCallValue implements ValueInterface
     {
         return deep_clone($this->arguments);
     }
-    
+
     public function getValue()
     {
         return [
@@ -57,7 +57,7 @@ final class FunctionCallValue implements ValueInterface
             $this->getArguments(),
         ];
     }
-    
+
     public function __toString(): string
     {
         return sprintf('<%s(%s)>', $this->name, [] === $this->arguments ? '' : var_export($this->arguments, true));

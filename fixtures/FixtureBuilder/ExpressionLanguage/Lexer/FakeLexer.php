@@ -19,7 +19,7 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeLexer implements LexerInterface
 {
     use NotCallableTrait;
-    
+
     public function lex(string $value): array
     {
         $this->__call(__METHOD__, func_get_args());

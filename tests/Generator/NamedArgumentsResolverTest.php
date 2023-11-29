@@ -22,6 +22,7 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Generator\NamedArgumentsResolver
+ * @internal
  */
 class NamedArgumentsResolverTest extends TestCase
 {
@@ -32,13 +33,13 @@ class NamedArgumentsResolverTest extends TestCase
     {
         $resolver = new NamedArgumentsResolver();
 
-        static::assertSame(
+        self::assertSame(
             $expectedResult,
-            $resolver->resolveArguments($argument, $className, $methodName)
+            $resolver->resolveArguments($argument, $className, $methodName),
         );
     }
 
-    public function provideResolveArgumentsCases()
+    public function provideResolveArgumentsCases(): iterable
     {
         yield 'constructor: no named arguments' => [
             DummyWithMethods::class,
@@ -349,31 +350,31 @@ class NamedArgumentsResolverTest extends TestCase
         $resolver = new NamedArgumentsResolver();
 
         $onlyFirstParam = [
-            'foo'
+            'foo',
         ];
 
         $resolvedFirst = $resolver->resolveArguments(
             $onlyFirstParam,
             DummyWithVariadicConstructorParamAndParam::class,
-            '__construct'
+            '__construct',
         );
 
-        static::assertEquals($onlyFirstParam, $resolvedFirst);
+        self::assertEquals($onlyFirstParam, $resolvedFirst);
 
         $allParams = [
             'foo',
             [
                 'bar',
-                'baz'
-            ]
+                'baz',
+            ],
         ];
 
         $resolvedAll = $resolver->resolveArguments(
             $allParams,
             DummyWithVariadicConstructorParamAndParam::class,
-            '__construct'
+            '__construct',
         );
 
-        static::assertEquals($allParams, $resolvedAll);
+        self::assertEquals($allParams, $resolvedAll);
     }
 }

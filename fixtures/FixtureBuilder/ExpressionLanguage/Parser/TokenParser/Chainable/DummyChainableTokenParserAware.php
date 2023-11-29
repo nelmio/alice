@@ -24,19 +24,19 @@ class DummyChainableTokenParserAware implements ChainableTokenParserInterface, P
      * @var ParserInterface|null
      */
     public $parser;
-    
+
     public function canParse(Token $token): bool
     {
         return false;
     }
-    
+
     public function withParser(ParserInterface $parser)
     {
         $this->parser = $parser;
 
         return $this;
     }
-    
+
     public function parse(Token $token)
     {
         return '';

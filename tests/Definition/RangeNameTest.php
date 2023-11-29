@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\RangeName
+ * @internal
  */
 class RangeNameTest extends TestCase
 {
@@ -27,15 +28,15 @@ class RangeNameTest extends TestCase
     {
         $name = 'user';
         [$from, $to] = $input;
-        
+
         $range = new RangeName($name, $from, $to);
-        
-        static::assertEquals($name, $range->getName());
-        static::assertEquals($expected[0], $range->getFrom());
-        static::assertEquals($expected[1], $range->getTo());
+
+        self::assertEquals($name, $range->getName());
+        self::assertEquals($expected[0], $range->getFrom());
+        self::assertEquals($expected[1], $range->getTo());
     }
 
-    public function provideRanges()
+    public function provideRanges(): iterable
     {
         yield [
             [10, 11],

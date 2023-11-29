@@ -33,6 +33,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\AbstractChainableInstantiator
+ * @internal
  */
 class AbstractChainableInstantiatorTest extends TestCase
 {
@@ -42,7 +43,7 @@ class AbstractChainableInstantiatorTest extends TestCase
      * @var AbstractChainableInstantiator
      */
     private $instantiator;
-    
+
     protected function setUp(): void
     {
         $this->instantiator = new DummyChainableInstantiator();
@@ -50,12 +51,12 @@ class AbstractChainableInstantiatorTest extends TestCase
 
     public function testIsAChainableInstantiator(): void
     {
-        static::assertTrue(is_a(AbstractChainableInstantiator::class, ChainableInstantiatorInterface::class, true));
+        self::assertTrue(is_a(AbstractChainableInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(AbstractChainableInstantiator::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(AbstractChainableInstantiator::class))->isCloneable());
     }
 
     public function testThrowsExceptionIfCannotCreateInstance(): void
@@ -72,14 +73,14 @@ class AbstractChainableInstantiatorTest extends TestCase
             $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
             $instantiator->instantiate($fixture, $set, new GenerationContext());
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (InstantiationException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not instantiate fixture "dummy".',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
@@ -107,7 +108,7 @@ class AbstractChainableInstantiatorTest extends TestCase
         $set = new ResolvedFixtureSet(
             $parameters = new ParameterBag(['foo' => 'bar']),
             $fixtures = (new FixtureBag())->with(new DummyFixture('another_dummy')),
-            $objects = new ObjectBag(['ping' => new Dummy()])
+            $objects = new ObjectBag(['ping' => new Dummy()]),
         );
 
         $instantiatedObject = new stdClass();
@@ -121,13 +122,13 @@ class AbstractChainableInstantiatorTest extends TestCase
         $expected = new ResolvedFixtureSet(
             $parameters,
             $fixtures,
-            $objects->with(new SimpleObject('dummy', $instantiatedObject))
+            $objects->with(new SimpleObject('dummy', $instantiatedObject)),
         );
 
         $instantiator = new ProphecyChainableInstantiator($decoratedInstantiator);
         $actual = $instantiator->instantiate($fixture, $set, new GenerationContext());
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedInstantiatorProphecy->createInstance(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

@@ -22,8 +22,8 @@ trait NotCallableTrait
         throw new DomainException(
             sprintf(
                 'Did not expect "%s" to be called.',
-                $method
-            )
+                $method,
+            ),
         );
     }
 }

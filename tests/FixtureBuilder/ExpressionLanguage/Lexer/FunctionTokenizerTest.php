@@ -20,6 +20,7 @@ use ReflectionClass;
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTreeTokenizer
+ * @internal
  */
 class FunctionTokenizerTest extends TestCase
 {
@@ -27,7 +28,7 @@ class FunctionTokenizerTest extends TestCase
      * @var FunctionTokenizer
      */
     private $tokenizer;
-    
+
     protected function setUp(): void
     {
         $this->tokenizer = new FunctionTokenizer();
@@ -35,21 +36,23 @@ class FunctionTokenizerTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FunctionTokenizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FunctionTokenizer::class))->isCloneable());
     }
 
     /**
      * @dataProvider provideValues
+     * @param mixed $value
+     * @param mixed $expected
      */
     public function testTokenizeValues($value, $expected): void
     {
         try {
             $actual = $this->tokenizer->tokenize($value);
             if (null === $expected) {
-                static::fail('Expected exception to be thrown.');
+                self::fail('Expected exception to be thrown.');
             }
 
-            static::assertEquals($expected, $actual);
+            self::assertEquals($expected, $actual);
         } catch (MalformedFunctionException $exception) {
             if (null !== $expected) {
                 throw $exception;
@@ -57,7 +60,7 @@ class FunctionTokenizerTest extends TestCase
         }
     }
 
-    public function provideValues()
+    public function provideValues(): iterable
     {
         yield 'non function' => [
             'foo',

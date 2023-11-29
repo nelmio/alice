@@ -22,7 +22,7 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeInstantiator implements InstantiatorInterface
 {
     use NotCallableTrait;
-    
+
     public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
     {
         $this->__call(__METHOD__, func_get_args());

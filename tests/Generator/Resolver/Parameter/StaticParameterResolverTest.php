@@ -23,17 +23,18 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
+ * @internal
  */
 class StaticParameterResolverTest extends TestCase
 {
     public function testIsAChainableParameterResolver(): void
     {
-        static::assertTrue(is_a(StaticParameterResolver::class, ChainableParameterResolverInterface::class, true));
+        self::assertTrue(is_a(StaticParameterResolver::class, ChainableParameterResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(StaticParameterResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(StaticParameterResolver::class))->isCloneable());
     }
 
     public function testCanOnlyResolveSimpleValues(): void
@@ -41,16 +42,16 @@ class StaticParameterResolverTest extends TestCase
         $resolver = new StaticParameterResolver();
         $parameter = new Parameter('foo', null);
 
-        static::assertTrue($resolver->canResolve($parameter->withValue(null)));
-        static::assertTrue($resolver->canResolve($parameter->withValue(10)));
-        static::assertTrue($resolver->canResolve($parameter->withValue(.75)));
-        static::assertTrue($resolver->canResolve($parameter->withValue(new stdClass())));
-        static::assertTrue($resolver->canResolve($parameter->withValue(
+        self::assertTrue($resolver->canResolve($parameter->withValue(null)));
+        self::assertTrue($resolver->canResolve($parameter->withValue(10)));
+        self::assertTrue($resolver->canResolve($parameter->withValue(.75)));
+        self::assertTrue($resolver->canResolve($parameter->withValue(new stdClass())));
+        self::assertTrue($resolver->canResolve($parameter->withValue(
             static function (): void {
-            }
+            },
         )));
 
-        static::assertFalse($resolver->canResolve($parameter->withValue('string')));
+        self::assertFalse($resolver->canResolve($parameter->withValue('string')));
     }
 
     public function testReturnsResolvedParameter(): void
@@ -60,11 +61,11 @@ class StaticParameterResolverTest extends TestCase
 
         $result = $resolver->resolve($parameter, new ParameterBag(), new ParameterBag());
 
-        static::assertEquals(
+        self::assertEquals(
             new ParameterBag([
                 'foo' => null,
             ]),
-            $result
+            $result,
         );
     }
 }

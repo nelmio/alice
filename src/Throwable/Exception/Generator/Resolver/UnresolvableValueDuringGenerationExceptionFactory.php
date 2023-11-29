@@ -25,7 +25,7 @@ final class UnresolvableValueDuringGenerationExceptionFactory
         return new UnresolvableValueDuringGenerationException(
             'Could not resolve value during the generation process.',
             0,
-            $previous
+            $previous,
         );
     }
 

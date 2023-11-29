@@ -22,11 +22,12 @@ use ReflectionClass;
  * More tests in:
  *
  * @see \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolverTest
+ * @internal
  */
 class TemplateFixtureResolverTest extends TestCase
 {
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(TemplateFixtureResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(TemplateFixtureResolver::class))->isCloneable());
     }
 }

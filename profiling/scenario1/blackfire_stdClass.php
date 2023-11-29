@@ -37,12 +37,12 @@ $output->writeln(
     sprintf(
         'Start profiling of <info>%s</info> with <info>%d samples.</info>',
         $config->getTitle(),
-        $config->getSamples()
-    )
+        $config->getSamples(),
+    ),
 );
 
 $loader = new NativeLoader();
-for ($i = 1; $i <= $config->getSamples(); $i++) {
+for ($i = 1; $i <= $config->getSamples(); ++$i) {
     $probe->enable();
 
     $loader->loadFile(__DIR__.'/stdClass.yml');

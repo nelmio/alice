@@ -28,13 +28,11 @@ final class MethodReferenceTokenParser extends AbstractChainableParserAwareParse
 {
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::METHOD_REFERENCE_TYPE;
+        return TokenType::METHOD_REFERENCE_TYPE === $token->getType();
     }
 
     /**
      * Parses tokens values like "@user->getUserName()".
-     *
-     *
      *
      * @throws ParseException
      */
@@ -43,7 +41,7 @@ final class MethodReferenceTokenParser extends AbstractChainableParserAwareParse
         parent::parse($token);
 
         $explodedValue = explode('->', $token->getValue());
-        if (count($explodedValue) !== 2) {
+        if (2 !== count($explodedValue)) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
@@ -51,8 +49,8 @@ final class MethodReferenceTokenParser extends AbstractChainableParserAwareParse
         $method = $this->parser->parse(
             sprintf(
                 '<%s>',
-                $explodedValue[1]
-            )
+                $explodedValue[1],
+            ),
         );
 
         if ($reference instanceof FixtureReferenceValue && $method instanceof FunctionCallValue) {

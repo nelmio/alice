@@ -23,6 +23,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer
+ * @internal
  */
 class StringThenReferenceLexerTest extends TestCase
 {
@@ -30,12 +31,12 @@ class StringThenReferenceLexerTest extends TestCase
 
     public function testIsALexer(): void
     {
-        static::assertTrue(is_a(StringThenReferenceLexer::class, LexerInterface::class, true));
+        self::assertTrue(is_a(StringThenReferenceLexer::class, LexerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(StringThenReferenceLexer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(StringThenReferenceLexer::class))->isCloneable());
     }
 
     public function testMergesNonEmptyStringFollowedByAReference(): void
@@ -56,17 +57,16 @@ class StringThenReferenceLexerTest extends TestCase
                     new Token('55', new TokenType(TokenType::STRING_TYPE)),
                     new Token('@example.com', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
                     new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-                ]
-            )
-        ;
+                ],
+            );
         /** @var LexerInterface $decoratedLexer */
         $decoratedLexer = $decoratedLexerProphecy->reveal();
 
         $lexer = new StringThenReferenceLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        static::assertCount(count($expected), $actual);
-        static::assertEquals($expected, $actual);
+        self::assertCount(count($expected), $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

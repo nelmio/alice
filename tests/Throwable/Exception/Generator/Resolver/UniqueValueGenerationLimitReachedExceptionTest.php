@@ -19,22 +19,23 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
+ * @internal
  */
 class UniqueValueGenerationLimitReachedExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(UniqueValueGenerationLimitReachedException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(UniqueValueGenerationLimitReachedException::class, RuntimeException::class, true));
     }
 
     public function testIsAResolutionThrowable(): void
     {
-        static::assertTrue(is_a(UniqueValueGenerationLimitReachedException::class, ResolutionThrowable::class, true));
+        self::assertTrue(is_a(UniqueValueGenerationLimitReachedException::class, ResolutionThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildUniqueValueGenerationLimitReachedException();
-        static::assertInstanceOf(ChildUniqueValueGenerationLimitReachedException::class, $exception);
+        self::assertInstanceOf(ChildUniqueValueGenerationLimitReachedException::class, $exception);
     }
 }

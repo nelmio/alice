@@ -19,22 +19,23 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
+ * @internal
  */
 class UnexpectedValueExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(UnexpectedValueException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(UnexpectedValueException::class, RuntimeException::class, true));
     }
 
     public function testIsADenormalizationThrowable(): void
     {
-        static::assertTrue(is_a(UnexpectedValueException::class, DenormalizationThrowable::class, true));
+        self::assertTrue(is_a(UnexpectedValueException::class, DenormalizationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildUnexpectedValueException();
-        static::assertInstanceOf(ChildUnexpectedValueException::class, $exception);
+        self::assertInstanceOf(ChildUnexpectedValueException::class, $exception);
     }
 }

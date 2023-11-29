@@ -38,6 +38,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorResolver
+ * @internal
  */
 class InstantiatorResolverTest extends TestCase
 {
@@ -45,20 +46,20 @@ class InstantiatorResolverTest extends TestCase
 
     public function testIsAnInstantiator(): void
     {
-        static::assertTrue(is_a(InstantiatorResolver::class, InstantiatorInterface::class, true));
+        self::assertTrue(is_a(InstantiatorResolver::class, InstantiatorInterface::class, true));
     }
 
     public function testIsResolverAware(): void
     {
-        static::assertEquals(
+        self::assertEquals(
             new InstantiatorResolver(new FakeInstantiator(), new FakeValueResolver()),
-            (new InstantiatorResolver(new FakeInstantiator()))->withValueResolver(new FakeValueResolver())
+            (new InstantiatorResolver(new FakeInstantiator()))->withValueResolver(new FakeValueResolver()),
         );
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(InstantiatorResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(InstantiatorResolver::class))->isCloneable());
     }
 
     public function testResolvesAllArguments(): void
@@ -69,8 +70,8 @@ class InstantiatorResolverTest extends TestCase
                 [
                     $firstArg = new VariableValue('firstArg'),
                     $secondArg = new VariableValue('secondArg'),
-                ]
-            )
+                ],
+            ),
         );
         $resolvedSpecs = $specs->withConstructor(
             new SimpleMethodCall(
@@ -78,14 +79,14 @@ class InstantiatorResolverTest extends TestCase
                 [
                     'resolvedFirstArg',
                     'resolvedSecondArg',
-                ]
-            )
+                ],
+            ),
         );
         $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
         $set = ResolvedFixtureSetFactory::create(
             new ParameterBag([
                 'ping' => 'pong',
-            ])
+            ]),
         );
         $context = new GenerationContext();
         $context->markIsResolvingFixture('foo');
@@ -93,38 +94,36 @@ class InstantiatorResolverTest extends TestCase
         $expected = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())->with($fixture->withSpecs($resolvedSpecs)),
-            new ObjectBag(['dummy' => new stdClass()])
+            new ObjectBag(['dummy' => new stdClass()]),
         );
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $setAfterFirstArgResolution = new ResolvedFixtureSet(
             $set->getParameters(),
             (new FixtureBag())->with(new DummyFixture('dummy')),
-            $set->getObjects()
+            $set->getObjects(),
         );
         $resolverProphecy
             ->resolve($firstArg, $fixture, $set, ['ping' => 'pong'], $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     'resolvedFirstArg',
-                    $setAfterFirstArgResolution
-                )
-            )
-        ;
+                    $setAfterFirstArgResolution,
+                ),
+            );
         $setAfterSecondArgResolution = new ResolvedFixtureSet(
             $setAfterFirstArgResolution->getParameters(),
             (new FixtureBag())->with(new DummyFixture('another_dummy')),
-            $setAfterFirstArgResolution->getObjects()
+            $setAfterFirstArgResolution->getObjects(),
         );
         $resolverProphecy
             ->resolve($secondArg, $fixture, $setAfterFirstArgResolution, ['ping' => 'pong', 1 => 'resolvedFirstArg'], $context)
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     'resolvedSecondArg',
-                    $setAfterSecondArgResolution
-                )
-            )
-        ;
+                    $setAfterSecondArgResolution,
+                ),
+            );
         /** @var ValueResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
@@ -132,15 +131,14 @@ class InstantiatorResolverTest extends TestCase
         $decoratedInstantiatorProphecy = $this->prophesize(InstantiatorInterface::class);
         $decoratedInstantiatorProphecy
             ->instantiate($fixtureAfterResolution, $setAfterSecondArgResolution, $context)
-            ->willReturn($expected)
-        ;
+            ->willReturn($expected);
         /** @var InstantiatorInterface $decoratedInstantiator */
         $decoratedInstantiator = $decoratedInstantiatorProphecy->reveal();
 
         $instantiator = new InstantiatorResolver($decoratedInstantiator, $resolver);
         $actual = $instantiator->instantiate($fixture, $set, $context);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
 
         $resolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
         $decoratedInstantiatorProphecy->instantiate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
@@ -154,8 +152,8 @@ class InstantiatorResolverTest extends TestCase
                 [
                     $firstArg = new VariableValue('firstArg'),
                     $secondArg = new VariableValue('secondArg'),
-                ]
-            )
+                ],
+            ),
         );
         $fixture = new SimpleFixture('dummy', 'stdClass', $specs);
         $set = ResolvedFixtureSetFactory::create();
@@ -163,8 +161,7 @@ class InstantiatorResolverTest extends TestCase
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
         $resolverProphecy
             ->resolve(Argument::cetera())
-            ->willThrow(RootResolutionException::class)
-        ;
+            ->willThrow(RootResolutionException::class);
         /** @var ValueResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
@@ -172,7 +169,7 @@ class InstantiatorResolverTest extends TestCase
 
         try {
             $instantiator->instantiate($fixture, $set, new GenerationContext());
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (GenerationThrowable $throwable) {
             // Expected result.
         }
@@ -189,7 +186,7 @@ class InstantiatorResolverTest extends TestCase
         $expected = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())->with($fixture),
-            new ObjectBag(['dummy' => new stdClass()])
+            new ObjectBag(['dummy' => new stdClass()]),
         );
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
@@ -205,7 +202,7 @@ class InstantiatorResolverTest extends TestCase
         $instantiator = new InstantiatorResolver($decoratedInstantiator, $resolver);
         $actual = $instantiator->instantiate($fixture, $set, $context);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testDoesNotResolveArgumentsIfSpecifiedNoConstructor(): void
@@ -219,7 +216,7 @@ class InstantiatorResolverTest extends TestCase
         $expected = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())->with($fixture),
-            new ObjectBag(['dummy' => new stdClass()])
+            new ObjectBag(['dummy' => new stdClass()]),
         );
 
         $resolverProphecy = $this->prophesize(ValueResolverInterface::class);
@@ -235,6 +232,6 @@ class InstantiatorResolverTest extends TestCase
         $instantiator = new InstantiatorResolver($decoratedInstantiator, $resolver);
         $actual = $instantiator->instantiate($fixture, $set, $context);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

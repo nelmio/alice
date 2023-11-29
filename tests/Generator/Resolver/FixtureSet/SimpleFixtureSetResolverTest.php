@@ -30,6 +30,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
+ * @internal
  */
 class SimpleFixtureSetResolverTest extends TestCase
 {
@@ -37,12 +38,12 @@ class SimpleFixtureSetResolverTest extends TestCase
 
     public function testIsAFixtureResolver(): void
     {
-        static::assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));
+        self::assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleFixtureSetResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleFixtureSetResolver::class))->isCloneable());
     }
 
     public function testReturnsResolvedParametersAndFixtures(): void
@@ -51,16 +52,15 @@ class SimpleFixtureSetResolverTest extends TestCase
             $injectedParameters = new ParameterBag(['injected' => true]),
             $loadedParameters = new ParameterBag(['loaded' => true]),
             $fixtures = (new FixtureBag())->with(new DummyFixture('dummy')),
-            $objects = (new ObjectBag())->with(new SimpleObject('injected_object', new stdClass()))
+            $objects = (new ObjectBag())->with(new SimpleObject('injected_object', new stdClass())),
         );
 
         $parameterResolverProphecy = $this->prophesize(ParameterBagResolverInterface::class);
         $parameterResolverProphecy
             ->resolve($injectedParameters, $loadedParameters)
             ->willReturn(
-                $resolvedParameters = (new ParameterBag(['resolved' => true]))
-            )
-        ;
+                $resolvedParameters = (new ParameterBag(['resolved' => true])),
+            );
         /** @var ParameterBagResolverInterface $parameterResolver */
         $parameterResolver = $parameterResolverProphecy->reveal();
 
@@ -68,9 +68,8 @@ class SimpleFixtureSetResolverTest extends TestCase
         $fixtureResolverProphecy
             ->resolve($fixtures)
             ->willReturn(
-                $resolvedFixtures = (new FixtureBag())->with(new DummyFixture('another_dummy'))
-            )
-        ;
+                $resolvedFixtures = (new FixtureBag())->with(new DummyFixture('another_dummy')),
+            );
         /** @var FixtureBagResolverInterface $fixtureResolver */
         $fixtureResolver = $fixtureResolverProphecy->reveal();
 
@@ -79,6 +78,6 @@ class SimpleFixtureSetResolverTest extends TestCase
         $resolver = new SimpleFixtureSetResolver($parameterResolver, $fixtureResolver);
         $actual = $resolver->resolve($set);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

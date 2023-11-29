@@ -18,36 +18,37 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\ResolvingContext
+ * @internal
  */
 class ResolvingContextTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $context = new ResolvingContext();
-        static::assertFalse($context->has('foo'));
+        self::assertFalse($context->has('foo'));
 
         $context = new ResolvingContext('foo');
-        static::assertTrue($context->has('foo'));
+        self::assertTrue($context->has('foo'));
     }
 
     public function testMutator(): void
     {
         $context = new ResolvingContext();
 
-        static::assertFalse($context->has('foo'));
+        self::assertFalse($context->has('foo'));
         $context->add('foo');
-        static::assertTrue($context->has('foo'));
+        self::assertTrue($context->has('foo'));
     }
 
     public function testStaticFactoryMethodReturnsExistingInstance(): void
     {
         $context = ResolvingContext::createFrom(null, 'foo');
-        static::assertTrue($context->has('foo'));
+        self::assertTrue($context->has('foo'));
 
         $newContext = ResolvingContext::createFrom($context, 'ping');
-        static::assertSame($context, $newContext);
-        static::assertTrue($context->has('foo'));
-        static::assertTrue($context->has('ping'));
+        self::assertSame($context, $newContext);
+        self::assertTrue($context->has('foo'));
+        self::assertTrue($context->has('ping'));
     }
 
     public function testFactoryMethodCannotTriggerACircularReference(): void
@@ -65,7 +66,7 @@ class ResolvingContextTest extends TestCase
 
         try {
             $context->checkForCircularReference('foo');
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (CircularReferenceException $exception) {
             // Expected result
         }
@@ -83,11 +84,11 @@ class ResolvingContextTest extends TestCase
 
         try {
             $context->checkForCircularReference('foo');
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (CircularReferenceException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Circular reference detected for the parameter "foo" while resolving ["bar", "foo"].',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 
@@ -98,11 +99,11 @@ class ResolvingContextTest extends TestCase
 
         try {
             $context->checkForCircularReference('foo');
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (CircularReferenceException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Circular reference detected for the parameter "foo" while resolving ["foo"].',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
     }

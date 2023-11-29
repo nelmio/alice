@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Parser\IncludeProcessor\IncludeDataMerger
+ * @internal
  */
 class IncludeDataMergerTest extends TestCase
 {
@@ -24,7 +25,7 @@ class IncludeDataMergerTest extends TestCase
      * @var IncludeDataMerger
      */
     private $merger;
-    
+
     protected function setUp(): void
     {
         $this->merger = new IncludeDataMerger();
@@ -43,8 +44,7 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        static::assertSame($expected, $actual);
-
+        self::assertSame($expected, $actual);
 
         $data = [
             'parameters' => [
@@ -61,8 +61,7 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        static::assertSame($expected, $actual);
-
+        self::assertSame($expected, $actual);
 
         $data = [
             'parameters' => 'foo',
@@ -75,7 +74,7 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testMergesParametersAndReturnTheResult(): void
@@ -101,7 +100,7 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testCanMergeClassNames(): void
@@ -157,7 +156,7 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testCanMergeCompleteDataSet(): void
@@ -226,6 +225,6 @@ class IncludeDataMergerTest extends TestCase
         ];
 
         $actual = $this->merger->mergeInclude($data, $include);
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

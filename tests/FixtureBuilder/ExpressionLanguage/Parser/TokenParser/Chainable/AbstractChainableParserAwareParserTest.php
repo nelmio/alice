@@ -22,17 +22,18 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\AbstractChainableParserAwareParser
+ * @internal
  */
 class AbstractChainableParserAwareParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(ImpartialChainableParserAwareParser::class, AbstractChainableParserAwareParser::class, true));
+        self::assertTrue(is_a(ImpartialChainableParserAwareParser::class, AbstractChainableParserAwareParser::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ImpartialChainableParserAwareParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ImpartialChainableParserAwareParser::class))->isCloneable());
     }
 
     public function testCanBeInstantiatedWithoutAParser(): void
@@ -50,8 +51,8 @@ class AbstractChainableParserAwareParserTest extends TestCase
         $parser = new ImpartialChainableParserAwareParser();
         $newParser = $parser->withParser(new FakeParser());
 
-        static::assertEquals(new ImpartialChainableParserAwareParser(), $parser);
-        static::assertEquals(new ImpartialChainableParserAwareParser(new FakeParser()), $newParser);
+        self::assertEquals(new ImpartialChainableParserAwareParser(), $parser);
+        self::assertEquals(new ImpartialChainableParserAwareParser(new FakeParser()), $newParser);
     }
 
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
@@ -70,6 +71,6 @@ class AbstractChainableParserAwareParserTest extends TestCase
         $token = new Token('', new TokenType(TokenType::DYNAMIC_ARRAY_TYPE));
         $parser = new ImpartialChainableParserAwareParser(new FakeParser());
 
-        static::assertNull($parser->parse($token));
+        self::assertNull($parser->parse($token));
     }
 }

@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Symfony;
 
-use function bin2hex;
 use Nelmio\Alice\Bridge\Symfony\Application\AppKernel;
-use function random_bytes;
 use Symfony\Component\HttpKernel\KernelInterface;
+use function bin2hex;
+use function random_bytes;
 
 class KernelFactory
 {
     public static $environments = [];
 
     public static function createKernel(
-        string $config = null,
+        ?string $config = null,
         string $kernelClass = AppKernel::class,
         string $environment = 'test',
         $debug = true

@@ -29,7 +29,7 @@ use Throwable;
 final class EvaluatedValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof EvaluatedValue;
@@ -68,10 +68,10 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         // closure.
         $evaluateExpression = static function ($_expression) use ($_scope) {
             foreach ($_scope as $_scopeVariableName => $_scopeVariableValue) {
-                $$_scopeVariableName = $_scopeVariableValue;
+                ${$_scopeVariableName} = $_scopeVariableValue;
             }
 
-            return eval("return $_expression;");
+            return eval("return {$_expression};");
         };
 
         try {

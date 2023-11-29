@@ -20,24 +20,27 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ParameterValue
+ * @internal
  */
 class ParameterValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(ParameterValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(ParameterValue::class, ValueInterface::class, true));
     }
 
     /**
      * @dataProvider provideInputValues
+     * @param mixed $value
+     * @param mixed $errorMessage
      */
     public function testThrowsErrorIfInvalidTypeGiven($value, $errorMessage): void
     {
         try {
             new ParameterValue($value);
-            static::fail('Expected error to be thrown.');
+            self::fail('Expected error to be thrown.');
         } catch (TypeError $error) {
-            static::assertEquals($errorMessage, $error->getMessage());
+            self::assertEquals($errorMessage, $error->getMessage());
         }
     }
 
@@ -46,12 +49,12 @@ class ParameterValueTest extends TestCase
         $parameterKey = 'dummy_param';
         $value = new ParameterValue($parameterKey);
 
-        static::assertEquals($parameterKey, $value->getValue());
+        self::assertEquals($parameterKey, $value->getValue());
 
         $parameterKey = new FakeValue();
         $value = new ParameterValue($parameterKey);
 
-        static::assertEquals($parameterKey, $value->getValue());
+        self::assertEquals($parameterKey, $value->getValue());
     }
 
     public function testIsImmutable(): void
@@ -65,21 +68,21 @@ class ParameterValueTest extends TestCase
         // Mutate returned value
         $value->getValue()->setValue('v2');
 
-        static::assertNotSame(new MutableValue('v0'), $value->getValue());
+        self::assertNotSame(new MutableValue('v0'), $value->getValue());
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new ParameterValue('foo');
-        static::assertEquals('<{foo}>', $value);
+        self::assertEquals('<{foo}>', $value);
 
         $value = new ParameterValue(
-            new DummyValue('foo')
+            new DummyValue('foo'),
         );
-        static::assertEquals('<{foo}>', $value);
+        self::assertEquals('<{foo}>', $value);
     }
 
-    public function provideInputValues()
+    public function provideInputValues(): iterable
     {
         yield 'null' => [
             null,

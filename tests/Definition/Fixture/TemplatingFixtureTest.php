@@ -25,6 +25,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\TemplatingFixture
+ * @internal
  */
 class TemplatingFixtureTest extends TestCase
 {
@@ -32,9 +33,9 @@ class TemplatingFixtureTest extends TestCase
 
     public function testIsAFixture(): void
     {
-        static::assertTrue(is_a(TemplatingFixture::class, FixtureInterface::class, true));
+        self::assertTrue(is_a(TemplatingFixture::class, FixtureInterface::class, true));
     }
-    
+
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = 'user0';
@@ -56,20 +57,19 @@ class TemplatingFixtureTest extends TestCase
 
         $flags = (new FlagBag($reference))
             ->withFlag($flag1)
-            ->withFlag($flag2)
-        ;
+            ->withFlag($flag2);
 
         $fixtureWithFlags = new SimpleFixtureWithFlags($decoratedFixture, $flags);
         $fixture = new TemplatingFixture($fixtureWithFlags);
 
-        static::assertEquals($reference, $fixture->getId());
-        static::assertEquals($className, $fixture->getClassName());
-        static::assertEquals($specs, $fixture->getSpecs());
-        static::assertEquals($valueForCurrent, $fixture->getValueForCurrent());
-        static::assertTrue($fixture->isATemplate());
-        static::assertTrue($fixture->extendsFixtures());
-        static::assertEquals([new FixtureReference('user_base')], $fixture->getExtendedFixturesReferences());
-        static::assertEquals($flags, $fixture->getFlags());
+        self::assertEquals($reference, $fixture->getId());
+        self::assertEquals($className, $fixture->getClassName());
+        self::assertEquals($specs, $fixture->getSpecs());
+        self::assertEquals($valueForCurrent, $fixture->getValueForCurrent());
+        self::assertTrue($fixture->isATemplate());
+        self::assertTrue($fixture->extendsFixtures());
+        self::assertEquals([new FixtureReference('user_base')], $fixture->getExtendedFixturesReferences());
+        self::assertEquals($flags, $fixture->getFlags());
 
         $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(2);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
@@ -101,10 +101,10 @@ class TemplatingFixtureTest extends TestCase
         $fixture = new TemplatingFixture($fixtureWithFlags);
         $newFixture = $fixture->withSpecs($newSpecs);
 
-        static::assertInstanceOf(TemplatingFixture::class, $newFixture);
-        static::assertNotSame($fixture, $newFixture);
+        self::assertInstanceOf(TemplatingFixture::class, $newFixture);
+        self::assertNotSame($fixture, $newFixture);
 
-        static::assertEquals($specs, $fixture->getSpecs());
-        static::assertEquals($newSpecs, $newFixture->getSpecs());
+        self::assertEquals($specs, $fixture->getSpecs());
+        self::assertEquals($newSpecs, $newFixture->getSpecs());
     }
 }

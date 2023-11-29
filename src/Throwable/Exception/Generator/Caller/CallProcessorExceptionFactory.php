@@ -25,8 +25,8 @@ final class CallProcessorExceptionFactory
         return new ProcessorNotFoundException(
             sprintf(
                 'No suitable processor found to handle the method call "%s".',
-                $methodCall
-            )
+                $methodCall,
+            ),
         );
     }
 

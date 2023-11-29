@@ -22,6 +22,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory
+ * @internal
  */
 class InstantiationExceptionFactoryTest extends TestCase
 {
@@ -31,82 +32,82 @@ class InstantiationExceptionFactoryTest extends TestCase
         $previous = new Error();
         $exception = InstantiationExceptionFactory::create(new DummyFixture('foo'), $code, $previous);
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not instantiate fixture "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals($code, $exception->getCode());
-        static::assertSame($previous, $exception->getPrevious());
+        self::assertEquals($code, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
     }
 
     public function testCreateForNonPublicConstructor(): void
     {
         $exception = InstantiationExceptionFactory::createForNonPublicConstructor(
-            new SimpleFixture('foo', 'Dummy', SpecificationBagFactory::create())
+            new SimpleFixture('foo', 'Dummy', SpecificationBagFactory::create()),
         );
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not instantiate "foo", the constructor of "Dummy" is not public.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForConstructorIsMissingMandatoryParameters(): void
     {
         $exception = InstantiationExceptionFactory::createForConstructorIsMissingMandatoryParameters(
-            new DummyFixture('foo')
+            new DummyFixture('foo'),
         );
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not instantiate "foo", the constructor has mandatory parameters but no parameters have been given.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForCouldNotGetConstructorData(): void
     {
         $exception = InstantiationExceptionFactory::createForCouldNotGetConstructorData(
-            new DummyFixture('foo')
+            new DummyFixture('foo'),
         );
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not get the necessary data on the constructor to instantiate "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForInvalidInstanceType(): void
     {
         $exception = InstantiationExceptionFactory::createForInvalidInstanceType(
             new SimpleFixture('foo', 'Dummy', SpecificationBagFactory::create()),
-            new stdClass()
+            new stdClass(),
         );
 
-        static::assertEquals(
+        self::assertEquals(
             'Instantiated fixture was expected to be an instance of "Dummy". Got "stdClass" instead.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForInstantiatorNotFoundForFixture(): void
     {
         $exception = InstantiationExceptionFactory::createForInstantiatorNotFoundForFixture(
-            new DummyFixture('foo')
+            new DummyFixture('foo'),
         );
 
-        static::assertEquals(
+        self::assertEquals(
             'No suitable instantiator found for the fixture "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

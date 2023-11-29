@@ -48,7 +48,7 @@ final class ResolvedFunctionCallValue implements ValueInterface
     {
         return $this->arguments;
     }
-    
+
     public function getValue()
     {
         return [
@@ -56,7 +56,7 @@ final class ResolvedFunctionCallValue implements ValueInterface
             $this->getArguments(),
         ];
     }
-    
+
     public function __toString(): string
     {
         return sprintf('<%s(%s)>', $this->name, [] === $this->arguments ? '' : var_export($this->arguments, true));

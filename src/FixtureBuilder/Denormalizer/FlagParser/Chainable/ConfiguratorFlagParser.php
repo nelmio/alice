@@ -21,12 +21,12 @@ use Nelmio\Alice\IsAServiceTrait;
 final class ConfiguratorFlagParser implements ChainableFlagParserInterface
 {
     use IsAServiceTrait;
-    
+
     public function canParse(string $element): bool
     {
         return 'configurator' === $element;
     }
-    
+
     public function parse(string $element): FlagBag
     {
         return (new FlagBag(''))->withFlag(new ConfiguratorFlag());

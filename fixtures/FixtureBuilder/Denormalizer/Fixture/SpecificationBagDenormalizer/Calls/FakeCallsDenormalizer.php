@@ -22,7 +22,7 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeCallsDenormalizer implements CallsDenormalizerInterface
 {
     use NotCallableTrait;
-    
+
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,

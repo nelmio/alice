@@ -29,8 +29,8 @@ final class TypeErrorFactory
             sprintf(
                 'Expected quantifier to be either an integer or a "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($quantifier) ? get_class($quantifier) : gettype($quantifier)
-            )
+                is_object($quantifier) ? $quantifier::class : gettype($quantifier),
+            ),
         );
     }
 
@@ -40,8 +40,8 @@ final class TypeErrorFactory
             sprintf(
                 'Expected element to be either string, an array or a "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($element) ? get_class($element) : gettype($element)
-            )
+                is_object($element) ? $element::class : gettype($element),
+            ),
         );
     }
 
@@ -51,8 +51,8 @@ final class TypeErrorFactory
             sprintf(
                 'Expected quantifier to be either a scalar value or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($quantifier) ? get_class($quantifier) : gettype($quantifier)
-            )
+                is_object($quantifier) ? $quantifier::class : gettype($quantifier),
+            ),
         );
     }
 
@@ -62,8 +62,8 @@ final class TypeErrorFactory
             sprintf(
                 'Expected first member to be either a string or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($firstMember) ? get_class($firstMember) : gettype($firstMember)
-            )
+                is_object($firstMember) ? $firstMember::class : gettype($firstMember),
+            ),
         );
     }
 
@@ -73,8 +73,8 @@ final class TypeErrorFactory
             sprintf(
                 'Expected second member to be either null, a string or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($secondMember) ? get_class($secondMember) : gettype($secondMember)
-            )
+                is_object($secondMember) ? $secondMember::class : gettype($secondMember),
+            ),
         );
     }
 
@@ -84,8 +84,8 @@ final class TypeErrorFactory
             sprintf(
                 'Expected parameter key to be either a string or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($parameterKey) ? get_class($parameterKey) : gettype($parameterKey)
-            )
+                is_object($parameterKey) ? $parameterKey::class : gettype($parameterKey),
+            ),
         );
     }
 
@@ -96,8 +96,8 @@ final class TypeErrorFactory
                 'Expected denormalizer %d to be a "%s". Got "%s" instead.',
                 $index,
                 ChainableFixtureDenormalizerInterface::class,
-                is_object($denormalizer) ? get_class($denormalizer) : gettype($denormalizer)
-            )
+                is_object($denormalizer) ? $denormalizer::class : gettype($denormalizer),
+            ),
         );
     }
 
@@ -106,8 +106,8 @@ final class TypeErrorFactory
         return new TypeError(
             sprintf(
                 'Expected method call value to be an array. Got "%s" instead.',
-                gettype($methodCall)
-            )
+                gettype($methodCall),
+            ),
         );
     }
 
@@ -116,8 +116,8 @@ final class TypeErrorFactory
         return new TypeError(
             sprintf(
                 'Expected method name. Got "%s" instead.',
-                gettype($unparsedMethod)
-            )
+                gettype($unparsedMethod),
+            ),
         );
     }
 
@@ -126,8 +126,8 @@ final class TypeErrorFactory
         return new TypeError(
             sprintf(
                 'Expected parameters to be an array. Got "%s" instead.',
-                is_object($fixturesParameters) ? get_class($fixturesParameters) : gettype($fixturesParameters)
-            )
+                is_object($fixturesParameters) ? $fixturesParameters::class : gettype($fixturesParameters),
+            ),
         );
     }
 
@@ -138,8 +138,8 @@ final class TypeErrorFactory
                 'Expected include statement to be either null or an array of files to include. Got "%s" instead '
                 .'in file "%s".',
                 gettype($include),
-                $file
-            )
+                $file,
+            ),
         );
     }
 
@@ -149,8 +149,8 @@ final class TypeErrorFactory
             sprintf(
                 'Expected elements of include statement to be file names. Got "%s" instead in file "%s".',
                 gettype($includeFile),
-                $file
-            )
+                $file,
+            ),
         );
     }
 
@@ -159,8 +159,8 @@ final class TypeErrorFactory
         return new TypeError(
             sprintf(
                 'The file "%s" must return a PHP array.',
-                $file
-            )
+                $file,
+            ),
         );
     }
 
@@ -170,8 +170,8 @@ final class TypeErrorFactory
             sprintf(
                 'Expected resolvers to be "%s" objects. Got "%s" instead.',
                 ParameterResolverInterface::class,
-                is_object($resolver)? get_class($resolver) : $resolver
-            )
+                is_object($resolver) ? $resolver::class : $resolver,
+            ),
         );
     }
 

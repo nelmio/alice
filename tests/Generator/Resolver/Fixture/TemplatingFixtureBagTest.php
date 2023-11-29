@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
-use function Nelmio\Alice\deep_clone;
 use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\MutableFixture;
@@ -26,9 +25,11 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use PHPUnit\Framework\TestCase;
+use function Nelmio\Alice\deep_clone;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplatingFixtureBag
+ * @internal
  */
 class TemplatingFixtureBagTest extends TestCase
 {
@@ -41,50 +42,49 @@ class TemplatingFixtureBagTest extends TestCase
         $template = new TemplatingFixture(
             new SimpleFixtureWithFlags(
                 new DummyFixture($templateId),
-                (new FlagBag('user_base'))->withFlag(new TemplateFlag())
-            )
+                (new FlagBag('user_base'))->withFlag(new TemplateFlag()),
+            ),
         );
-        
+
         $bag = (new TemplatingFixtureBag())
             ->with($fixture)
-            ->with($template)
-        ;
+            ->with($template);
 
-        static::assertTrue($bag->has($fixtureId));
-        static::assertFalse($bag->hasTemplate($fixtureId));
-        static::assertEquals($fixture, $bag->get($fixtureId));
+        self::assertTrue($bag->has($fixtureId));
+        self::assertFalse($bag->hasTemplate($fixtureId));
+        self::assertEquals($fixture, $bag->get($fixtureId));
 
-        static::assertTrue($bag->has($templateId));
-        static::assertTrue($bag->hasTemplate($templateId));
-        static::assertEquals($template, $bag->get($templateId));
+        self::assertTrue($bag->has($templateId));
+        self::assertTrue($bag->hasTemplate($templateId));
+        self::assertEquals($template, $bag->get($templateId));
 
-        static::assertFalse($bag->has('foo'));
+        self::assertFalse($bag->has('foo'));
 
         try {
             $bag->get('foo');
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (FixtureNotFoundException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not find the fixture "foo".',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 
         try {
             $bag->getTemplate($fixtureId);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (FixtureNotFoundException $exception) {
             // expected result
         }
 
-        static::assertEquals(
+        self::assertEquals(
             (new FixtureBag())->with($fixture),
-            $bag->getFixtures()
+            $bag->getFixtures(),
         );
     }
 
     /**
-     * @depends \Nelmio\Alice\FixtureBagTest::testIsImmutable
+     * @depends test\Nelmio\Alice\FixtureBagTest::testIsImmutable
      */
     public function testIsImmutable(): void
     {
@@ -100,7 +100,7 @@ class TemplatingFixtureBagTest extends TestCase
         // @phpstan-ignore-next-line
         $bag->getFixtures()->get('user0')->setSpecs(SpecificationBagFactory::create(new NoMethodCall()));
 
-        static::assertEquals($originalFixture, $bag->getFixtures()->get('user0'));
+        self::assertEquals($originalFixture, $bag->getFixtures()->get('user0'));
     }
 
     public function testAddTemplateFixtureToTemplates(): void
@@ -109,19 +109,18 @@ class TemplatingFixtureBagTest extends TestCase
         $template = new TemplatingFixture(
             new SimpleFixtureWithFlags(
                 new DummyFixture('user_base'),
-                (new FlagBag('user_base'))->withFlag(new TemplateFlag())
-            )
+                (new FlagBag('user_base'))->withFlag(new TemplateFlag()),
+            ),
         );
 
         $bag = (new TemplatingFixtureBag())
             ->with($fixture)
-            ->with($template)
-        ;
+            ->with($template);
 
-        static::assertEquals(
+        self::assertEquals(
             (new FixtureBag())
                 ->with($fixture),
-            $bag->getFixtures()
+            $bag->getFixtures(),
         );
     }
 }

@@ -22,6 +22,7 @@ use Symfony\Component\Config\Definition\Processor;
  * @covers \Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
  *
  * @group integration
+ * @internal
  */
 class ConfigurationTest extends TestCase
 {
@@ -39,7 +40,7 @@ class ConfigurationTest extends TestCase
         ];
         $actual = $processor->processConfiguration($configuration, []);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testOverriddeValues(): void
@@ -64,10 +65,10 @@ class ConfigurationTest extends TestCase
                     'loading_limit' => 50,
                     'max_unique_values_retry' => 15,
                 ],
-            ]
+            ],
         );
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testLocaleMustBeAStringValues(): void
@@ -83,8 +84,8 @@ class ConfigurationTest extends TestCase
             [
                 'nelmio_alice' => [
                     'locale' => false,
-                ]
-            ]
+                ],
+            ],
         );
     }
 
@@ -105,11 +106,11 @@ class ConfigurationTest extends TestCase
             [
                 'nelmio_alice' => [
                     'seed' => null,
-                ]
-            ]
+                ],
+            ],
         );
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testFunctionsBlacklistMustAnArray(): void
@@ -125,8 +126,8 @@ class ConfigurationTest extends TestCase
             [
                 'nelmio_alice' => [
                     'functions_blacklist' => 'string',
-                ]
-            ]
+                ],
+            ],
         );
     }
 
@@ -143,8 +144,8 @@ class ConfigurationTest extends TestCase
             [
                 'nelmio_alice' => [
                     'functions_blacklist' => [true],
-                ]
-            ]
+                ],
+            ],
         );
     }
 
@@ -161,8 +162,8 @@ class ConfigurationTest extends TestCase
             [
                 'nelmio_alice' => [
                     'max_unique_values_retry' => 0,
-                ]
-            ]
+                ],
+            ],
         );
     }
 
@@ -179,8 +180,8 @@ class ConfigurationTest extends TestCase
             [
                 'nelmio_alice' => [
                     'loading_limit' => false,
-                ]
-            ]
+                ],
+            ],
         );
     }
 
@@ -197,8 +198,8 @@ class ConfigurationTest extends TestCase
             [
                 'nelmio_alice' => [
                     'loading_limit' => 0,
-                ]
-            ]
+                ],
+            ],
         );
     }
 
@@ -215,8 +216,8 @@ class ConfigurationTest extends TestCase
             [
                 'nelmio_alice' => [
                     'max_unique_values_retry' => false,
-                ]
-            ]
+                ],
+            ],
         );
     }
 
@@ -234,7 +235,7 @@ class ConfigurationTest extends TestCase
         ];
 
         foreach ($expected as $parameterName => $value) {
-            static::assertEquals($value, $kernel->getContainer()->getParameter($parameterName));
+            self::assertEquals($value, $kernel->getContainer()->getParameter($parameterName));
         }
 
         $kernel->shutdown();

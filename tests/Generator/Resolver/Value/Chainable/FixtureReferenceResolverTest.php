@@ -40,6 +40,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver
+ * @internal
  */
 class FixtureReferenceResolverTest extends TestCase
 {
@@ -47,12 +48,12 @@ class FixtureReferenceResolverTest extends TestCase
 
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(FixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(FixtureReferenceResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FixtureReferenceResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FixtureReferenceResolver::class))->isCloneable());
     }
 
     public function testIsGeneratorAware(): void
@@ -62,16 +63,16 @@ class FixtureReferenceResolverTest extends TestCase
         $resolver = new FixtureReferenceResolver();
         $newResolver = $resolver->withObjectGenerator($generator);
 
-        static::assertEquals(new FixtureReferenceResolver(), $resolver);
-        static::assertEquals(new FixtureReferenceResolver($generator), $newResolver);
+        self::assertEquals(new FixtureReferenceResolver(), $resolver);
+        self::assertEquals(new FixtureReferenceResolver($generator), $newResolver);
     }
 
     public function testCanResolveFixtureReferenceValues(): void
     {
         $resolver = new FixtureReferenceResolver();
 
-        static::assertTrue($resolver->canResolve(new FixtureReferenceValue('')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new FixtureReferenceValue('')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testCannotResolveValueIfHasNoGenerator(): void
@@ -86,7 +87,7 @@ class FixtureReferenceResolverTest extends TestCase
             new FakeFixture(),
             ResolvedFixtureSetFactory::create(),
             [],
-            new GenerationContext()
+            new GenerationContext(),
         );
     }
 
@@ -102,7 +103,7 @@ class FixtureReferenceResolverTest extends TestCase
             new FakeFixture(),
             ResolvedFixtureSetFactory::create(),
             [],
-            new GenerationContext()
+            new GenerationContext(),
         );
     }
 
@@ -113,7 +114,7 @@ class FixtureReferenceResolverTest extends TestCase
         $set = ResolvedFixtureSetFactory::create(
             null,
             null,
-            new ObjectBag(['dummy' => $expectedInstance = new stdClass()])
+            new ObjectBag(['dummy' => $expectedInstance = new stdClass()]),
         );
         $scope = [];
         $context = new GenerationContext();
@@ -123,7 +124,7 @@ class FixtureReferenceResolverTest extends TestCase
         $resolver = new FixtureReferenceResolver(new FakeObjectGenerator());
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testIfTheReferenceRefersToAnInstantiatedFixtureAndRequiresToBeCompleteThenGenerateIt(): void
@@ -133,14 +134,14 @@ class FixtureReferenceResolverTest extends TestCase
         $set = ResolvedFixtureSetFactory::create(
             null,
             $fixtures = (new FixtureBag())->with(
-                $referredFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create())
+                $referredFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create()),
             ),
             (new ObjectBag())->with(
                 new SimpleObject(
                     'dummy',
-                    $expectedInstance = new stdClass()
-                )
-            )
+                    $expectedInstance = new stdClass(),
+                ),
+            ),
         );
         $scope = [];
         $context = new GenerationContext();
@@ -157,10 +158,9 @@ class FixtureReferenceResolverTest extends TestCase
                 $objects = new ObjectBag([
                     'dummy' => $expectedInstance = StdClassFactory::create([
                         'complete' => true,
-                    ])
-                ])
-            )
-        ;
+                    ]),
+                ]),
+            );
         /** @var ObjectGeneratorInterface $generator */
         $generator = $generatorProphecy->reveal();
 
@@ -169,15 +169,15 @@ class FixtureReferenceResolverTest extends TestCase
             ResolvedFixtureSetFactory::create(
                 null,
                 $fixtures,
-                $objects
-            )
+                $objects,
+            ),
         );
 
         $resolver = new FixtureReferenceResolver($generator);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
-        static::assertEquals($context, $generatorContext);
+        self::assertEquals($expected, $actual);
+        self::assertEquals($context, $generatorContext);
 
         $generatorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -189,9 +189,9 @@ class FixtureReferenceResolverTest extends TestCase
         $set = ResolvedFixtureSetFactory::create(
             null,
             $fixtures = (new FixtureBag())->with(
-                $referredFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create())
+                $referredFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create()),
             ),
-            null
+            null,
         );
         $scope = [];
         $context = new GenerationContext();
@@ -204,9 +204,8 @@ class FixtureReferenceResolverTest extends TestCase
         $generatorProphecy
             ->generate($referredFixture, $set, $generatorContext)
             ->willReturn(
-                $objects = new ObjectBag(['dummy' => $expectedInstance = new stdClass()])
-            )
-        ;
+                $objects = new ObjectBag(['dummy' => $expectedInstance = new stdClass()]),
+            );
         /** @var ObjectGeneratorInterface $generator */
         $generator = $generatorProphecy->reveal();
 
@@ -215,8 +214,8 @@ class FixtureReferenceResolverTest extends TestCase
             ResolvedFixtureSetFactory::create(
                 null,
                 $fixtures,
-                $objects
-            )
+                $objects,
+            ),
         );
 
         $resolver = new FixtureReferenceResolver($generator);
@@ -224,8 +223,8 @@ class FixtureReferenceResolverTest extends TestCase
 
         $generatorContext->unmarkAsNeedsCompleteGeneration();
 
-        static::assertEquals($expected, $actual);
-        static::assertEquals($generatorContext, $context);
+        self::assertEquals($expected, $actual);
+        self::assertEquals($generatorContext, $context);
 
         $generatorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

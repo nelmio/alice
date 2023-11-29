@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceExceptionFactory
+ * @internal
  */
 class CircularReferenceExceptionFactoryTest extends TestCase
 {
@@ -24,11 +25,11 @@ class CircularReferenceExceptionFactoryTest extends TestCase
     {
         $exception = CircularReferenceExceptionFactory::createForParameter('foo', ['bar' => 1, 'baz' => 0]);
 
-        static::assertEquals(
+        self::assertEquals(
             'Circular reference detected for the parameter "foo" while resolving ["bar", "baz"].',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

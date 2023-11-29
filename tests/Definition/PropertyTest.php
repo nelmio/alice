@@ -19,6 +19,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Property
+ * @internal
  */
 class PropertyTest extends TestCase
 {
@@ -28,8 +29,8 @@ class PropertyTest extends TestCase
         $value = new stdClass();
         $definition = new Property($property, $value);
 
-        static::assertEquals($property, $definition->getName());
-        static::assertEquals($value, $definition->getValue());
+        self::assertEquals($property, $definition->getName());
+        self::assertEquals($value, $definition->getValue());
     }
 
     public function testIsMutable(): void
@@ -46,7 +47,7 @@ class PropertyTest extends TestCase
         $expected = StdClassFactory::create(['foo' => 'bar', 'ping' => 'pong']);
         $actual = $definition->getValue();
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testWithersReturnNewModifiedInstance(): void
@@ -55,13 +56,13 @@ class PropertyTest extends TestCase
         $definition = new Property($name, 'foo');
         $newDefinition = $definition->withValue(new stdClass());
 
-        static::assertEquals(
+        self::assertEquals(
             new Property($name, 'foo'),
-            $definition
+            $definition,
         );
-        static::assertEquals(
+        self::assertEquals(
             new Property($name, new stdClass()),
-            $newDefinition
+            $newDefinition,
         );
     }
 }

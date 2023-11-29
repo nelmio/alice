@@ -22,6 +22,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
+ * @internal
  */
 class PhpParserTest extends TestCase
 {
@@ -33,21 +34,21 @@ class PhpParserTest extends TestCase
      * @var PhpParser
      */
     private $parser;
-    
+
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/php';
     }
-    
+
     public static function tearDownAfterClass(): void
     {
         self::$dir = null;
 
         parent::tearDownAfterClass();
     }
-    
+
     protected function setUp(): void
     {
         $this->parser = new PhpParser();
@@ -55,12 +56,12 @@ class PhpParserTest extends TestCase
 
     public function testIsAChainableParser(): void
     {
-        static::assertTrue(is_a(PhpParser::class, ChainableParserInterface::class, true));
+        self::assertTrue(is_a(PhpParser::class, ChainableParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(PhpParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(PhpParser::class))->isCloneable());
     }
 
     /**
@@ -69,9 +70,9 @@ class PhpParserTest extends TestCase
     public function testCanParsePhpFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
-        $expected = (in_array(get_class($this->parser), $expectedParsers, true));
+        $expected = in_array(get_class($this->parser), $expectedParsers, true);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -81,7 +82,7 @@ class PhpParserTest extends TestCase
     {
         $actual = $this->parser->canParse($file);
 
-        static::assertFalse($actual);
+        self::assertFalse($actual);
     }
 
     /**
@@ -91,7 +92,7 @@ class PhpParserTest extends TestCase
     {
         $actual = $this->parser->canParse($file);
 
-        static::assertFalse($actual);
+        self::assertFalse($actual);
     }
 
     /**
@@ -101,7 +102,7 @@ class PhpParserTest extends TestCase
     {
         $actual = $this->parser->canParse($file);
 
-        static::assertFalse($actual);
+        self::assertFalse($actual);
     }
 
     public function testThrowsAnExceptionIfFileDoesNotExist(): void
@@ -116,7 +117,7 @@ class PhpParserTest extends TestCase
     {
         $actual = $this->parser->parse(self::$dir.'/basic.php');
 
-        static::assertSame(
+        self::assertSame(
             [
                 'Nelmio\Alice\support\models\User' => [
                     'user0' => [
@@ -124,7 +125,7 @@ class PhpParserTest extends TestCase
                     ],
                 ],
             ],
-            $actual
+            $actual,
         );
     }
 
@@ -132,14 +133,14 @@ class PhpParserTest extends TestCase
     {
         $actual = $this->parser->parse(self::$dir.'/empty.php');
 
-        static::assertSame([], $actual);
+        self::assertSame([], $actual);
     }
 
     public function testParseReturnsNamedParameters(): void
     {
         $actual = $this->parser->parse(self::$dir.'/named_parameters.php');
 
-        static::assertSame(
+        self::assertSame(
             [
                 'Nelmio\Alice\DummyWithMethods' => [
                     'dummy_with_methods' => [
@@ -158,7 +159,7 @@ class PhpParserTest extends TestCase
                     ],
                 ],
             ],
-            $actual
+            $actual,
         );
     }
 

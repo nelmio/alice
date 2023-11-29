@@ -36,6 +36,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer
+ * @internal
  */
 class SimpleSpecificationsDenormalizerTest extends TestCase
 {
@@ -54,13 +55,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $expected = new SpecificationBag(
             null,
             new PropertyBag(),
-            new MethodCallBag()
+            new MethodCallBag(),
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testCanDenormalizeConstructor(): void
@@ -68,7 +69,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $fixture = new FakeFixture();
         $specs = [
             '__construct' => $construct = [
-                'foo'
+                'foo',
             ],
         ];
         $flagParser = new FakeFlagParser();
@@ -79,23 +80,22 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             ->willReturn(
                 $constructor = new SimpleMethodCall(
                     '__construct',
-                    ['foo']
-                )
-            )
-        ;
+                    ['foo'],
+                ),
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
         $expected = new SpecificationBag(
             $constructor,
             new PropertyBag(),
-            new MethodCallBag()
+            new MethodCallBag(),
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -116,23 +116,22 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             ->willReturn(
                 $constructor = new SimpleMethodCall(
                     'create',
-                    ['foo']
-                )
-            )
-        ;
+                    ['foo'],
+                ),
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
         $expected = new SpecificationBag(
             $constructor,
             new PropertyBag(),
-            new MethodCallBag()
+            new MethodCallBag(),
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -158,23 +157,22 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             ->willReturn(
                 $constructor = new SimpleMethodCall(
                     'create',
-                    ['foo', 'bar']
-                )
-            )
-        ;
+                    ['foo', 'bar'],
+                ),
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
         $expected = new SpecificationBag(
             $constructor,
             new PropertyBag(),
-            new MethodCallBag()
+            new MethodCallBag(),
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -182,13 +180,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
     public function testCannotProceedWithInvalidProperty(): void
     {
         $unparsedSpecs = [
-            'foo'
+            'foo',
         ];
 
         $denormalizer = new SimpleSpecificationsDenormalizer(
             new FakeConstructorDenormalizer(),
             new FakePropertyDenormalizer(),
-            new FakeCallsDenormalizer()
+            new FakeCallsDenormalizer(),
         );
 
         $this->expectException(InvalidArgumentException::class);
@@ -202,7 +200,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $fixture = new FakeFixture();
         $specs = [
             '__construct' => $construct = [
-                'foo'
+                'foo',
             ],
             '__factory' => $factory = [
                 'create' => [
@@ -218,14 +216,12 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             ->willReturn(
                 $constructor = new SimpleMethodCall(
                     '__construct',
-                    ['foo']
-                )
-            )
-        ;
+                    ['foo'],
+                ),
+            );
         $constructorDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $factory)
-            ->shouldNotBeCalled()
-        ;
+            ->shouldNotBeCalled();
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
@@ -253,10 +249,9 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             ->willReturn(
                 $constructor = new SimpleMethodCall(
                     '__construct',
-                    []
-                )
-            )
-        ;
+                    [],
+                ),
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
@@ -277,13 +272,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $expected = new SpecificationBag(
             new NoMethodCall(),
             new PropertyBag(),
-            new MethodCallBag()
+            new MethodCallBag(),
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), new FakeFlagParser(), $specs);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testCanDenormalizeProperties(): void
@@ -303,12 +298,10 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $propertyDenormalizerProphecy = $this->prophesize(PropertyDenormalizerInterface::class);
         $propertyDenormalizerProphecy
             ->denormalize($fixture, 'parsed_username', '<name()>', $usernameFlags)
-            ->willReturn($usernameProp = new Property('username', '<name()>'))
-        ;
+            ->willReturn($usernameProp = new Property('username', '<name()>'));
         $propertyDenormalizerProphecy
             ->denormalize($fixture, 'parsed_name', 'bob', $nameFlags)
-            ->willReturn($nameProp = new Property('name', 'bob'))
-        ;
+            ->willReturn($nameProp = new Property('name', 'bob'));
         /** @var PropertyDenormalizerInterface $propertyDenormalizer */
         $propertyDenormalizer = $propertyDenormalizerProphecy->reveal();
 
@@ -317,13 +310,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             (new PropertyBag())
                 ->with($usernameProp)
                 ->with($nameProp),
-            new MethodCallBag()
+            new MethodCallBag(),
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), $propertyDenormalizer, new FakeCallsDenormalizer());
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
         $propertyDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(2);
@@ -347,21 +340,20 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $callsDenormalizerProphecy = $this->prophesize(CallsDenormalizerInterface::class);
         $callsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, 'setLocation', $setLocationArgs)
-            ->willReturn($call = new NoMethodCall())
-        ;
+            ->willReturn($call = new NoMethodCall());
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
         $expected = new SpecificationBag(
             null,
             new PropertyBag(),
-            (new MethodCallBag())->with($call)
+            (new MethodCallBag())->with($call),
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer(new FakeConstructorDenormalizer(), new FakePropertyDenormalizer(), $callsDenormalizer);
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $callsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -371,7 +363,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $fixture = new FakeFixture();
         $specs = [
             '__construct' => $construct = [
-                '<latitude()>'
+                '<latitude()>',
             ],
             'username' => '<name()>',
             'name' => 'bob',
@@ -397,30 +389,26 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             ->willReturn(
                 $constructor = new SimpleMethodCall(
                     '__construct',
-                    ['<latitude()>']
-                )
-            )
-        ;
+                    ['<latitude()>'],
+                ),
+            );
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
         $propertyDenormalizerProphecy = $this->prophesize(PropertyDenormalizerInterface::class);
         $propertyDenormalizerProphecy
             ->denormalize($fixture, 'parsed_username', '<name()>', $usernameFlags)
-            ->willReturn($usernameProp = new Property('username', '<name()>'))
-        ;
+            ->willReturn($usernameProp = new Property('username', '<name()>'));
         $propertyDenormalizerProphecy
             ->denormalize($fixture, 'parsed_name', 'bob', $nameFlags)
-            ->willReturn($nameProp = new Property('name', 'bob'))
-        ;
+            ->willReturn($nameProp = new Property('name', 'bob'));
         /** @var PropertyDenormalizerInterface $propertyDenormalizer */
         $propertyDenormalizer = $propertyDenormalizerProphecy->reveal();
 
         $callsDenormalizerProphecy = $this->prophesize(CallsDenormalizerInterface::class);
         $callsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, 'setLocation', $setLocationArgs)
-            ->willReturn($call = new NoMethodCall())
-        ;
+            ->willReturn($call = new NoMethodCall());
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
@@ -429,13 +417,13 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
             (new PropertyBag())
                 ->with($usernameProp)
                 ->with($nameProp),
-            (new MethodCallBag())->with($call)
+            (new MethodCallBag())->with($call),
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, $propertyDenormalizer, $callsDenormalizer);
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
@@ -447,7 +435,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
     {
         $specs = [
             '__calls' => [
-                'invalid value'
+                'invalid value',
             ],
         ];
 

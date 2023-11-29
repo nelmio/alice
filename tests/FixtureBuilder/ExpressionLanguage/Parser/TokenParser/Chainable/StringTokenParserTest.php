@@ -21,17 +21,18 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringTokenParser
+ * @internal
  */
 class StringTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(StringTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(StringTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(StringTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(StringTokenParser::class))->isCloneable());
     }
 
     public function testCanParseDynamicArrayTokens(): void
@@ -40,8 +41,8 @@ class StringTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new StringTokenParser(new ArgumentEscaper());
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testReturnsTheTokenValue(): void
@@ -52,6 +53,6 @@ class StringTokenParserTest extends TestCase
         $parser = new StringTokenParser(new ArgumentEscaper());
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

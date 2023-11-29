@@ -26,7 +26,7 @@ interface ParameterResolverInterface
     /**
      * Resolves a parameter value.
      *
-     * @param Parameter    $parameter Unresolved parameter
+     * @param Parameter $parameter Unresolved parameter
      *
      * @throws ResolutionThrowable
      *

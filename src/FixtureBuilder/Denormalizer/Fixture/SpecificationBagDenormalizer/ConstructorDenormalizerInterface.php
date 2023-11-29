@@ -23,7 +23,6 @@ interface ConstructorDenormalizerInterface
     /**
      * Denormalizes a constructor.
      *
-     *
      * @throws DenormalizationThrowable
      *
      * @example

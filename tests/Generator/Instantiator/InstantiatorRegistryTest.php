@@ -32,6 +32,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry
+ * @internal
  */
 class InstantiatorRegistryTest extends TestCase
 {
@@ -39,7 +40,7 @@ class InstantiatorRegistryTest extends TestCase
 
     public function testIsAnInstantiator(): void
     {
-        static::assertTrue(is_a(InstantiatorRegistry::class, InstantiatorInterface::class, true));
+        self::assertTrue(is_a(InstantiatorRegistry::class, InstantiatorInterface::class, true));
     }
 
     public function testAcceptChainableInstantiators(): void
@@ -56,7 +57,7 @@ class InstantiatorRegistryTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(InstantiatorRegistry::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(InstantiatorRegistry::class))->isCloneable());
     }
 
     public function testPassValueResolverAwarenessPropertyToItsInstantiator(): void
@@ -66,20 +67,17 @@ class InstantiatorRegistryTest extends TestCase
         $registry = new InstantiatorRegistry([]);
         $newRegistry = $registry->withValueResolver($resolver);
 
-        static::assertEquals(new InstantiatorRegistry([]), $registry);
-        static::assertEquals(new InstantiatorRegistry([]), $newRegistry);
-
+        self::assertEquals(new InstantiatorRegistry([]), $registry);
+        self::assertEquals(new InstantiatorRegistry([]), $newRegistry);
 
         $registry = new InstantiatorRegistry([new FakeChainableInstantiator()]);
         $newRegistry = $registry->withValueResolver($resolver);
 
-        static::assertEquals(new InstantiatorRegistry([new FakeChainableInstantiator()]), $registry);
-        static::assertEquals(
+        self::assertEquals(new InstantiatorRegistry([new FakeChainableInstantiator()]), $registry);
+        self::assertEquals(
             new InstantiatorRegistry([new FakeChainableInstantiator()]),
-            $newRegistry
+            $newRegistry,
         );
-
-
 
         $nonAwareInstantiator = new FakeChainableInstantiator();
         // @phpstan-ignore-next-line
@@ -94,10 +92,10 @@ class InstantiatorRegistryTest extends TestCase
         $registry = new InstantiatorRegistry([$nonAwareInstantiator, $instantiator]);
         $newRegistry = $registry->withValueResolver($resolver);
 
-        static::assertEquals(new InstantiatorRegistry([$nonAwareInstantiator, $instantiator]), $registry);
-        static::assertEquals(
+        self::assertEquals(new InstantiatorRegistry([$nonAwareInstantiator, $instantiator]), $registry);
+        self::assertEquals(
             new InstantiatorRegistry([$nonAwareInstantiator, new FakeChainableInstantiator()]),
-            $newRegistry
+            $newRegistry,
         );
 
         $instantiatorProphecy->withValueResolver(Argument::any())->shouldHaveBeenCalledTimes(1);
@@ -113,23 +111,23 @@ class InstantiatorRegistryTest extends TestCase
             null,
             null,
             (new ObjectBag())
-                ->with(new SimpleObject('dummy', new stdClass()))
+                ->with(new SimpleObject('dummy', new stdClass())),
         );
 
         $instantiator1Prophecy = $this->prophesize(ChainableInstantiatorInterface::class);
         $instantiator1Prophecy->canInstantiate($fixture)->willReturn(false);
-        /* @var ChainableInstantiatorInterface $instantiator1 */
+        /** @var ChainableInstantiatorInterface $instantiator1 */
         $instantiator1 = $instantiator1Prophecy->reveal();
 
         $instantiator2Prophecy = $this->prophesize(ChainableInstantiatorInterface::class);
         $instantiator2Prophecy->canInstantiate($fixture)->willReturn(true);
         $instantiator2Prophecy->instantiate($fixture, $set, $context)->willReturn($expected);
-        /* @var ChainableInstantiatorInterface $instantiator2 */
+        /** @var ChainableInstantiatorInterface $instantiator2 */
         $instantiator2 = $instantiator2Prophecy->reveal();
 
         $instantiator3Prophecy = $this->prophesize(ChainableInstantiatorInterface::class);
         $instantiator3Prophecy->canInstantiate(Argument::any())->shouldNotBeCalled();
-        /* @var ChainableInstantiatorInterface $instantiator3 */
+        /** @var ChainableInstantiatorInterface $instantiator3 */
         $instantiator3 = $instantiator3Prophecy->reveal();
 
         $registry = new InstantiatorRegistry([
@@ -139,7 +137,7 @@ class InstantiatorRegistryTest extends TestCase
         ]);
         $actual = $registry->instantiate($fixture, $set, $context);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
 
         $instantiator1Prophecy->canInstantiate(Argument::any())->shouldHaveBeenCalledTimes(1);
         $instantiator2Prophecy->canInstantiate(Argument::any())->shouldHaveBeenCalledTimes(1);

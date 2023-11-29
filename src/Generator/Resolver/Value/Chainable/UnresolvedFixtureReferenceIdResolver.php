@@ -47,32 +47,30 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
      */
     private $resolver;
 
-    public function __construct(ChainableValueResolverInterface $decoratedResolver, ValueResolverInterface $resolver = null)
+    public function __construct(ChainableValueResolverInterface $decoratedResolver, ?ValueResolverInterface $resolver = null)
     {
         $this->decoratedResolver = $decoratedResolver;
         $this->resolver = $resolver;
     }
-    
+
     public function withObjectGenerator(ObjectGeneratorInterface $generator): self
     {
         $decoratedResolver = ($this->decoratedResolver instanceof ObjectGeneratorAwareInterface)
             ? $this->decoratedResolver->withObjectGenerator($generator)
-            : $this->decoratedResolver
-        ;
+            : $this->decoratedResolver;
 
         return new self($decoratedResolver, $this->resolver);
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         $decoratedResolver = ($this->decoratedResolver instanceof ValueResolverAwareInterface)
             ? $this->decoratedResolver->withValueResolver($resolver)
-            : $this->decoratedResolver
-        ;
+            : $this->decoratedResolver;
 
         return new self($decoratedResolver, $resolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $this->decoratedResolver->canResolve($value);
@@ -100,7 +98,7 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
             $fixture,
             $fixtureSet,
             $scope,
-            $context
+            $context,
         );
 
         return $this->decoratedResolver->resolve(
@@ -108,7 +106,7 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
             $fixture,
             $fixtureSet,
             $scope,
-            $context
+            $context,
         );
     }
 

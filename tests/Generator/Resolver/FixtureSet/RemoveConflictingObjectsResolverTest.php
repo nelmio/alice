@@ -28,6 +28,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver
+ * @internal
  */
 class RemoveConflictingObjectsResolverTest extends TestCase
 {
@@ -35,12 +36,12 @@ class RemoveConflictingObjectsResolverTest extends TestCase
 
     public function testIsAFixtureResolver(): void
     {
-        static::assertTrue(is_a(RemoveConflictingObjectsResolver::class, FixtureSetResolverInterface::class, true));
+        self::assertTrue(is_a(RemoveConflictingObjectsResolver::class, FixtureSetResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(RemoveConflictingObjectsResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(RemoveConflictingObjectsResolver::class))->isCloneable());
     }
 
     public function testRemovesConflictingObjectsByIteratingFixturesIfThereIsLessFixturesThanInjectedObjects(): void
@@ -56,10 +57,9 @@ class RemoveConflictingObjectsResolverTest extends TestCase
                     $fixtures = (new FixtureBag())->with(new DummyFixture('dummy')),
                     $objects = (new ObjectBag())
                         ->with(new SimpleObject('dummy', new stdClass()))
-                        ->with(new SimpleObject('another_injected_object', new stdClass()))
-                )
-            )
-        ;
+                        ->with(new SimpleObject('another_injected_object', new stdClass())),
+                ),
+            );
         /** @var FixtureSetResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
@@ -67,12 +67,12 @@ class RemoveConflictingObjectsResolverTest extends TestCase
             $parameters,
             $fixtures,
             $objects = (new ObjectBag())
-                ->with(new SimpleObject('another_injected_object', new stdClass()))
+                ->with(new SimpleObject('another_injected_object', new stdClass())),
         );
 
         $resolver = new RemoveConflictingObjectsResolver($decoratedResolver);
         $actual = $resolver->resolve($set);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

@@ -19,6 +19,7 @@ use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\Definition\PropertyBag
+ * @internal
  */
 class PropertyBagTest extends TestCase
 {
@@ -26,7 +27,7 @@ class PropertyBagTest extends TestCase
      * @var ReflectionProperty
      */
     private $propRefl;
-    
+
     protected function setUp(): void
     {
         $refl = new ReflectionClass(PropertyBag::class);
@@ -43,9 +44,9 @@ class PropertyBagTest extends TestCase
         $bag = new PropertyBag();
         $newBag = $bag->with($property);
 
-        static::assertInstanceOf(PropertyBag::class, $newBag);
-        static::assertSame([], $this->propRefl->getValue($bag));
-        static::assertSame(['username' => $property], $this->propRefl->getValue($newBag));
+        self::assertInstanceOf(PropertyBag::class, $newBag);
+        self::assertSame([], $this->propRefl->getValue($bag));
+        self::assertSame(['username' => $property], $this->propRefl->getValue($newBag));
     }
 
     /**
@@ -61,37 +62,35 @@ class PropertyBagTest extends TestCase
 
         $bagA = (new PropertyBag())
             ->with($propertyA1)
-            ->with($propertyA2)
-        ;
+            ->with($propertyA2);
         $bagB = (new PropertyBag())
             ->with($propertyB1)
-            ->with($propertyB2)
-        ;
+            ->with($propertyB2);
 
         $bag = $bagA->mergeWith($bagB);
 
-        static::assertInstanceOf(PropertyBag::class, $bag);
-        static::assertSame(
+        self::assertInstanceOf(PropertyBag::class, $bag);
+        self::assertSame(
             [
                 'username' => $propertyA1,
                 'owner' => $propertyA2,
             ],
-            $this->propRefl->getValue($bagA)
+            $this->propRefl->getValue($bagA),
         );
-        static::assertSame(
+        self::assertSame(
             [
                 'username' => $propertyB1,
                 'mail' => $propertyB2,
             ],
-            $this->propRefl->getValue($bagB)
+            $this->propRefl->getValue($bagB),
         );
-        static::assertSame(
+        self::assertSame(
             [
                 'username' => $propertyA1,
                 'mail' => $propertyB2,
                 'owner' => $propertyA2,
             ],
-            $this->propRefl->getValue($bag)
+            $this->propRefl->getValue($bag),
         );
     }
 
@@ -102,44 +101,43 @@ class PropertyBagTest extends TestCase
 
         $bag = (new PropertyBag())
             ->with($property1)
-            ->with($property2)
-        ;
+            ->with($property2);
 
         $array = [];
         foreach ($bag as $index => $property) {
             $array[$index] = $property;
         }
 
-        static::assertSame(
+        self::assertSame(
             [
                 $property1,
                 $property2,
             ],
-            $array
+            $array,
         );
     }
 
     public function testIsCountable(): void
     {
         $bag = new PropertyBag();
-        static::assertCount(0, $bag);
+        self::assertCount(0, $bag);
 
         $bag = $bag->with(new Property('foo', 'bar'));
-        static::assertCount(1, $bag);
+        self::assertCount(1, $bag);
 
         $bag = $bag->with(new Property('foo', 'baz'));
-        static::assertCount(1, $bag);
+        self::assertCount(1, $bag);
 
         $bag = $bag->with(new Property('ping', 'pong'));
-        static::assertCount(2, $bag);
+        self::assertCount(2, $bag);
     }
 
     public function testIsEmpty(): void
     {
         $bag = new PropertyBag();
-        static::assertTrue($bag->isEmpty());
+        self::assertTrue($bag->isEmpty());
 
         $bag = $bag->with(new Property('foo', null));
-        static::assertFalse($bag->isEmpty());
+        self::assertFalse($bag->isEmpty());
     }
 }

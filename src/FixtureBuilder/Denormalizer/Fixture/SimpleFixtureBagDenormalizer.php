@@ -69,8 +69,8 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
                     sprintf(
                         'Expected an array for the class "%s", found "%s" instead.',
                         $fqcnWithFlags,
-                        gettype($rawFixtureSet)
-                    )
+                        gettype($rawFixtureSet),
+                    ),
                 );
             }
 
@@ -81,7 +81,7 @@ final class SimpleFixtureBagDenormalizer implements FixtureBagDenormalizerInterf
                         $fqcn,
                         $reference,
                         $specs ?? [],
-                        $flags
+                        $flags,
                     );
                 }
             } catch (UnexpectedValueException $exception) {

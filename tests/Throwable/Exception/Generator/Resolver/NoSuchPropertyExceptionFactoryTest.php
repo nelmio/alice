@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyExceptionFactory
+ * @internal
  */
 class NoSuchPropertyExceptionFactoryTest extends TestCase
 {
@@ -32,24 +33,23 @@ class NoSuchPropertyExceptionFactoryTest extends TestCase
 
         $exception = NoSuchPropertyExceptionFactory::createForFixture($fixture, $property);
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not find the property "foo" of the object "dummy" (class: Dummy).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
-
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
 
         $code = 500;
         $previous = new Error();
 
         $exception = NoSuchPropertyExceptionFactory::createForFixture($fixture, $property, $code, $previous);
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not find the property "foo" of the object "dummy" (class: Dummy).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals($code, $exception->getCode());
-        static::assertSame($previous, $exception->getPrevious());
+        self::assertEquals($code, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
     }
 }

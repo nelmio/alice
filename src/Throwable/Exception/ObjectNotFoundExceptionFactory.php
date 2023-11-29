@@ -24,8 +24,8 @@ final class ObjectNotFoundExceptionFactory
             sprintf(
                 'Could not find the object "%s" of the class "%s".',
                 $id,
-                $className
-            )
+                $className,
+            ),
         );
     }
 

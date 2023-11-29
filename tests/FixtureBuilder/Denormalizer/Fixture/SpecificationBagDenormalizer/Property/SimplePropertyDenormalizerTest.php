@@ -24,6 +24,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Property\SimplePropertyDenormalizer
+ * @internal
  */
 class SimplePropertyDenormalizerTest extends TestCase
 {
@@ -31,7 +32,7 @@ class SimplePropertyDenormalizerTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimplePropertyDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimplePropertyDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesValueBeforeReturningProperty(): void
@@ -51,7 +52,7 @@ class SimplePropertyDenormalizerTest extends TestCase
         $denormalizer = new SimplePropertyDenormalizer($valueDenormalizer);
         $actual = $denormalizer->denormalize($fixture, $name, $value, $flags);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $valueDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

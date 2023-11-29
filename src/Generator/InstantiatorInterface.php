@@ -22,7 +22,6 @@ interface InstantiatorInterface
      * Instantiates the object described by the given fixture. Has access to the current fixture set and returns the new
      * fixture set containing the instantiated the object.
      *
-     *
      * @throws InstantiationThrowable
      */
     public function instantiate(

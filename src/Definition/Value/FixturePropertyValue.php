@@ -45,7 +45,7 @@ final class FixturePropertyValue implements ValueInterface
     {
         return $this->property;
     }
-    
+
     public function getValue(): array
     {
         return [
@@ -53,7 +53,7 @@ final class FixturePropertyValue implements ValueInterface
             $this->property,
         ];
     }
-    
+
     public function __toString(): string
     {
         return sprintf('%s->%s', $this->reference, $this->property);

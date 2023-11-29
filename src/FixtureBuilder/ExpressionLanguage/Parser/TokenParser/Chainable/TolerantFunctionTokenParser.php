@@ -34,14 +34,14 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/(\)>)(.*?)</';
+    public const REGEX = '/(\)>)(.*?)</';
 
     /**
      * @var ChainableTokenParserInterface
      */
     private $functionTokenParser;
-    
-    public function __construct(ChainableTokenParserInterface $functionTokenParser, ParserInterface $parser = null)
+
+    public function __construct(ChainableTokenParserInterface $functionTokenParser, ?ParserInterface $parser = null)
     {
         parent::__construct($parser);
 
@@ -51,15 +51,15 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
 
         $this->functionTokenParser = $functionTokenParser;
     }
-    
+
     public function withParser(ParserInterface $parser): self
     {
         return new self($this->functionTokenParser, $parser);
     }
-    
+
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::FUNCTION_TYPE;
+        return TokenType::FUNCTION_TYPE === $token->getType();
     }
 
     /**
@@ -71,7 +71,7 @@ final class TolerantFunctionTokenParser extends AbstractChainableParserAwarePars
      *
      * @TODO: handle redundant ListValue tokens
      */
-    public function parse(Token $token): FunctionCallValue|ListValue|ValueInterface|string
+    public function parse(Token $token): FunctionCallValue|ListValue|string|ValueInterface
     {
         parent::parse($token);
 

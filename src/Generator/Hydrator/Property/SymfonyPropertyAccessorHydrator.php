@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Hydrator\Property;
 
-use function enum_exists;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Generator\GenerationContext;
@@ -36,6 +35,7 @@ use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException as Symfo
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException as SymfonyNoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use TypeError;
+use function enum_exists;
 
 final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
 {
@@ -54,7 +54,7 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
     /**
      * @throws NoSuchPropertyException
      * @throws InaccessiblePropertyException
-     * @throws InvalidArgumentException When the typehint does not match for example
+     * @throws InvalidArgumentException      When the typehint does not match for example
      * @throws HydrationException
      */
     public function hydrate(ObjectInterface $object, Property $property, GenerationContext $context): ObjectInterface
@@ -121,7 +121,7 @@ final class SymfonyPropertyAccessorHydrator implements PropertyHydratorInterface
         foreach ($reflectionEnumBackedCases as $reflectionCase) {
             $caseValue = $reflectionCase->getValue()->value ?? $reflectionCase->getValue()->name;
 
-            if ($property->getValue() === ($caseValue)) {
+            if ($property->getValue() === $caseValue) {
                 return $property->withValue($reflectionCase->getValue());
             }
         }

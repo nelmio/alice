@@ -19,22 +19,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
+ * @internal
  */
 class FlagParserNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {
-        static::assertTrue(is_a(FlagParserNotFoundException::class, LogicException::class, true));
+        self::assertTrue(is_a(FlagParserNotFoundException::class, LogicException::class, true));
     }
 
     public function testIsNotADenormalizationThrowable(): void
     {
-        static::assertFalse(is_a(FlagParserNotFoundException::class, DenormalizationThrowable::class, true));
+        self::assertFalse(is_a(FlagParserNotFoundException::class, DenormalizationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildFlagParserNotFoundException();
-        static::assertInstanceOf(ChildFlagParserNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildFlagParserNotFoundException::class, $exception);
     }
 }

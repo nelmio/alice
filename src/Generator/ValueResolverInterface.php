@@ -23,8 +23,8 @@ interface ValueResolverInterface
      * Resolves a value, i.e. determine the final value. Once resolved, the value will be ready to be passed to the
      * object.
      *
-     * @param FixtureInterface   $fixture Fixture to which belongs the arguments.
-     * @param array              $scope   List of variables accessible while resolving the arguments.
+     * @param FixtureInterface $fixture Fixture to which belongs the arguments.
+     * @param array            $scope   List of variables accessible while resolving the arguments.
      *
      * @throws ResolutionThrowable
      */

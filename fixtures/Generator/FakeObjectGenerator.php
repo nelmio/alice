@@ -20,7 +20,7 @@ use Nelmio\Alice\ObjectBag;
 class FakeObjectGenerator implements ObjectGeneratorInterface
 {
     use NotCallableTrait;
-    
+
     public function generate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ObjectBag
     {
         $this->__call(__FUNCTION__, func_get_args());

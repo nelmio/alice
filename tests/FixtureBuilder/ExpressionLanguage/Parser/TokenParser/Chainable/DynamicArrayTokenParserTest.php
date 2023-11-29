@@ -29,6 +29,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser
+ * @internal
  */
 class DynamicArrayTokenParserTest extends TestCase
 {
@@ -36,12 +37,12 @@ class DynamicArrayTokenParserTest extends TestCase
 
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(DynamicArrayTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(DynamicArrayTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(DynamicArrayTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(DynamicArrayTokenParser::class))->isCloneable());
     }
 
     public function testCanParseDynamicArrayTokens(): void
@@ -50,8 +51,8 @@ class DynamicArrayTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new DynamicArrayTokenParser();
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
@@ -91,7 +92,7 @@ class DynamicArrayTokenParserTest extends TestCase
         $parser = new DynamicArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
@@ -111,7 +112,7 @@ class DynamicArrayTokenParserTest extends TestCase
         $parser = new DynamicArrayTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
     }

@@ -40,18 +40,18 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
     private $resolver;
 
     /** @private */
-    const IDS_BY_PATTERN_CACHE_KEY = self::class;
+    public const IDS_BY_PATTERN_CACHE_KEY = self::class;
 
-    public function __construct(ValueResolverInterface $resolver = null)
+    public function __construct(?ValueResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FixtureMatchReferenceValue;
@@ -84,7 +84,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
             $fixture,
             $fixtureSet,
             $scope,
-            $context
+            $context,
         );
     }
 
@@ -126,14 +126,14 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
         $fixtureKeys = array_flip(
             preg_grep(
                 $pattern,
-                array_keys($fixtureSet->getFixtures()->toArray())
-            )
+                array_keys($fixtureSet->getFixtures()->toArray()),
+            ),
         );
         $objectKeys = array_flip(
             preg_grep(
                 $pattern,
-                array_keys($fixtureSet->getObjects()->toArray())
-            )
+                array_keys($fixtureSet->getObjects()->toArray()),
+            ),
         );
 
         return array_keys($fixtureKeys + $objectKeys);

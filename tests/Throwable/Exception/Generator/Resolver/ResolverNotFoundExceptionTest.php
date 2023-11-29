@@ -19,22 +19,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
+ * @internal
  */
 class ResolverNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {
-        static::assertTrue(is_a(ResolverNotFoundException::class, LogicException::class, true));
+        self::assertTrue(is_a(ResolverNotFoundException::class, LogicException::class, true));
     }
 
     public function testIsNotAResolutionThrowable(): void
     {
-        static::assertFalse(is_a(ResolverNotFoundException::class, ResolutionThrowable::class, true));
+        self::assertFalse(is_a(ResolverNotFoundException::class, ResolutionThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildResolverNotFoundException();
-        static::assertInstanceOf(ChildResolverNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildResolverNotFoundException::class, $exception);
     }
 }

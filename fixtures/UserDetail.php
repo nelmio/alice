@@ -30,7 +30,7 @@ class UserDetail
         return $this->email;
     }
 
-    public function setEmail(?string $email): UserDetail
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -42,7 +42,7 @@ class UserDetail
         return $this->user;
     }
 
-    public function setUser(User $user): UserDetail
+    public function setUser(User $user): self
     {
         $this->user = $user;
 

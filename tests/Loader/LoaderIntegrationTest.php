@@ -45,11 +45,12 @@ use TypeError;
  * @group integration
  *
  * @coversNothing
+ * @internal
  */
 class LoaderIntegrationTest extends TestCase
 {
-    const PARSER_FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
-    const FIXTURES_FILES_DIR = __DIR__.'/../../fixtures/Integration';
+    public const PARSER_FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
+    public const FIXTURES_FILES_DIR = __DIR__.'/../../fixtures/Integration';
 
     /**
      * @var FilesLoaderInterface|FileLoaderInterface|DataLoaderInterface
@@ -71,11 +72,11 @@ class LoaderIntegrationTest extends TestCase
     {
         $objects = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/dummy.yml')->getObjects();
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'dummy' => new stdClass(),
             ],
-            $objects
+            $objects,
         );
     }
 
@@ -86,12 +87,12 @@ class LoaderIntegrationTest extends TestCase
             self::FIXTURES_FILES_DIR.'/another_dummy.yml',
         ])->getObjects();
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'dummy' => new stdClass(),
                 'another_dummy' => new stdClass(),
             ],
-            $objects
+            $objects,
         );
     }
 
@@ -101,12 +102,12 @@ class LoaderIntegrationTest extends TestCase
             self::FIXTURES_FILES_DIR.'/dummy.json',
         ])->getObjects();
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'dummy1' => new stdClass(),
                 'dummy2' => new stdClass(),
             ],
-            $objects
+            $objects,
         );
     }
 
@@ -116,38 +117,38 @@ class LoaderIntegrationTest extends TestCase
             self::FIXTURES_FILES_DIR.'/recursive_0/dummy.yml',
         ])->getObjects();
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'dummy' => new stdClass(),
                 'another_dummy' => new stdClass(),
             ],
-            $objects
+            $objects,
         );
 
         $objects = $this->loader->loadFiles([
             self::FIXTURES_FILES_DIR.'/recursive_1/dummy.yml',
         ])->getObjects();
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'dummy' => new stdClass(),
                 'another_dummy' => new stdClass(),
                 'yet_another_dummy' => new stdClass(),
             ],
-            $objects
+            $objects,
         );
 
         $objects = $this->loader->loadFiles([
             self::FIXTURES_FILES_DIR.'/recursive_1/another_dummy.yml',
         ])->getObjects();
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'dummy' => new stdClass(),
                 'another_dummy' => new stdClass(),
                 'yet_another_dummy' => new stdClass(),
             ],
-            $objects
+            $objects,
         );
     }
 
@@ -179,9 +180,9 @@ class LoaderIntegrationTest extends TestCase
     {
         $set = $this->loader->loadData([]);
 
-        static::assertEquals(
+        self::assertEquals(
             new ObjectSet(new ParameterBag(), new ObjectBag()),
-            $set
+            $set,
         );
     }
 
@@ -190,21 +191,21 @@ class LoaderIntegrationTest extends TestCase
      *
      * @param object|string $expected
      */
-    public function testObjectInstantiation(array $data, $expected, string $instanceof = null): void
+    public function testObjectInstantiation(array $data, $expected, ?string $instanceof = null): void
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
 
             if (is_string($expected)) {
-                static::fail('Expected exception to be thrown.');
+                self::fail('Expected exception to be thrown.');
             }
         } catch (Throwable $throwable) {
             if (is_string($expected)) {
-                static::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+                self::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
 
-                static::assertInstanceOf($instanceof, $throwable);
+                self::assertInstanceOf($instanceof, $throwable);
 
-                static::assertSame($expected, $throwable->getMessage());
+                self::assertSame($expected, $throwable->getMessage());
 
                 return;
             }
@@ -212,8 +213,8 @@ class LoaderIntegrationTest extends TestCase
             throw $throwable;
         }
 
-        static::assertCount(1, $objects);
-        static::assertEquals($expected, $objects['dummy']);
+        self::assertCount(1, $objects);
+        self::assertEquals($expected, $objects['dummy']);
     }
 
     /**
@@ -225,21 +226,21 @@ class LoaderIntegrationTest extends TestCase
      *
      * @param object|string $expected
      */
-    public function testObjectInstantiationWithLegacyConstruct(array $data, $expected, string $instanceof = null): void
+    public function testObjectInstantiationWithLegacyConstruct(array $data, $expected, ?string $instanceof = null): void
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
 
             if (is_string($expected)) {
-                static::fail('Expected exception to be thrown.');
+                self::fail('Expected exception to be thrown.');
             }
         } catch (Throwable $throwable) {
             if (is_string($expected)) {
-                static::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+                self::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
 
-                static::assertInstanceOf($instanceof, $throwable);
+                self::assertInstanceOf($instanceof, $throwable);
 
-                static::assertSame($expected, $throwable->getMessage());
+                self::assertSame($expected, $throwable->getMessage());
 
                 return;
             }
@@ -247,8 +248,8 @@ class LoaderIntegrationTest extends TestCase
             throw $throwable;
         }
 
-        static::assertCount(1, $objects);
-        static::assertEquals($expected, $objects['dummy']);
+        self::assertCount(1, $objects);
+        self::assertEquals($expected, $objects['dummy']);
     }
 
     /**
@@ -256,21 +257,21 @@ class LoaderIntegrationTest extends TestCase
      *
      * @param array|string $expected
      */
-    public function testObjectInstantiationWithFactory(array $data, $expected, string $instanceof = null): void
+    public function testObjectInstantiationWithFactory(array $data, $expected, ?string $instanceof = null): void
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
 
             if (is_string($expected)) {
-                static::fail('Expected exception to be thrown.');
+                self::fail('Expected exception to be thrown.');
             }
         } catch (Throwable $throwable) {
             if (is_string($expected)) {
-                static::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+                self::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
 
-                static::assertInstanceOf($instanceof, $throwable);
+                self::assertInstanceOf($instanceof, $throwable);
 
-                static::assertSame($expected, $throwable->getMessage());
+                self::assertSame($expected, $throwable->getMessage());
 
                 return;
             }
@@ -278,8 +279,8 @@ class LoaderIntegrationTest extends TestCase
             throw $throwable;
         }
 
-        static::assertCount(1, $objects);
-        static::assertEquals($expected, $objects['dummy']);
+        self::assertCount(1, $objects);
+        self::assertEquals($expected, $objects['dummy']);
     }
 
     public function testCannotUseBothConstructAndFactoryAtTheSameTime(): void
@@ -303,13 +304,14 @@ class LoaderIntegrationTest extends TestCase
      * @group legacy
      *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
+     * @param mixed $expected
      */
     public function testUsingConstructorAsAFactoryIsDeprecated(array $data, $expected): void
     {
         $objects = $this->loader->loadData($data)->getObjects();
 
-        static::assertCount(1, $objects);
-        static::assertEquals($expected, $objects['dummy']);
+        self::assertCount(1, $objects);
+        self::assertEquals($expected, $objects['dummy']);
     }
 
     /**
@@ -317,21 +319,21 @@ class LoaderIntegrationTest extends TestCase
      *
      * @param array|string $expected
      */
-    public function testObjectHydration(array $data, $expected, string $instanceof = null): void
+    public function testObjectHydration(array $data, $expected, ?string $instanceof = null): void
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
 
             if (!is_array($expected)) {
-                static::fail('Expected exception to be thrown.');
+                self::fail('Expected exception to be thrown.');
             }
         } catch (Throwable $throwable) {
             if (is_string($expected)) {
-                static::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+                self::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
 
-                static::assertInstanceOf($instanceof, $throwable);
+                self::assertInstanceOf($instanceof, $throwable);
 
-                static::assertSame($expected, $throwable->getMessage());
+                self::assertSame($expected, $throwable->getMessage());
 
                 return;
             }
@@ -339,8 +341,8 @@ class LoaderIntegrationTest extends TestCase
             throw $throwable;
         }
 
-        static::assertCount(count($expected), $objects);
-        static::assertEquals($expected, $objects);
+        self::assertCount(count($expected), $objects);
+        self::assertEquals($expected, $objects);
     }
 
     /**
@@ -348,21 +350,21 @@ class LoaderIntegrationTest extends TestCase
      *
      * @param string|array $expected
      */
-    public function testFixtureGeneration(array $data, $expected, string $instanceof = null): void
+    public function testFixtureGeneration(array $data, $expected, ?string $instanceof = null): void
     {
         try {
             $set = $this->loader->loadData($data);
 
             if (!is_array($expected)) {
-                static::fail('Expected exception to be thrown.');
+                self::fail('Expected exception to be thrown.');
             }
         } catch (Throwable $exception) {
             if (is_string($expected)) {
-                static::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
+                self::assertNotNull($instanceof, 'Expected to know the type of the throwable expected.');
 
-                static::assertInstanceOf($instanceof, $exception);
+                self::assertInstanceOf($instanceof, $exception);
 
-                static::assertSame($expected, $exception->getMessage());
+                self::assertSame($expected, $exception->getMessage());
 
                 return;
             }
@@ -372,13 +374,13 @@ class LoaderIntegrationTest extends TestCase
 
         $expectedParameters = $expected['parameters'];
         $actualParameters = $set->getParameters();
-        static::assertCount(count($expectedParameters), $actualParameters);
-        static::assertEquals($expectedParameters, $actualParameters);
+        self::assertCount(count($expectedParameters), $actualParameters);
+        self::assertEquals($expectedParameters, $actualParameters);
 
         $expectedObjects = $expected['objects'];
         $actualObjects = $set->getObjects();
-        static::assertCount(count($expectedObjects), $actualObjects);
-        static::assertEquals($expectedObjects, $actualObjects);
+        self::assertCount(count($expectedObjects), $actualObjects);
+        self::assertEquals($expectedObjects, $actualObjects);
     }
 
     public function testWithReflection(): void
@@ -398,8 +400,8 @@ class LoaderIntegrationTest extends TestCase
         $set = $loader->loadData($data);
 
         $actual = $set->getObjects();
-        static::assertCount(count($expected), $actual);
-        static::assertEquals($expected, $actual);
+        self::assertCount(count($expected), $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testLoadASetOfDataWithInjectedObjects(): void
@@ -414,20 +416,20 @@ class LoaderIntegrationTest extends TestCase
             ],
             [],
             [
-                'injected_dummy' => StdClassFactory::create(['injected' => true])
-            ]
+                'injected_dummy' => StdClassFactory::create(['injected' => true]),
+            ],
         );
         $objects = $set->getObjects();
 
-        static::assertCount(0, $set->getParameters());
-        static::assertCount(2, $objects);
+        self::assertCount(0, $set->getParameters());
+        self::assertCount(2, $objects);
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'injected_dummy' => $injectedDummy = StdClassFactory::create(['injected' => true]),
                 'dummy' => StdClassFactory::create(['relatedDummy' => $injectedDummy]),
             ],
-            $objects
+            $objects,
         );
     }
 
@@ -458,21 +460,21 @@ class LoaderIntegrationTest extends TestCase
             [],
             [
                 'another_dummy' => StdClassFactory::create(['injected' => true]),
-            ]
+            ],
         );
         $objects = $set->getObjects();
 
-        static::assertCount(0, $set->getParameters());
-        static::assertCount(2, $objects);
+        self::assertCount(0, $set->getParameters());
+        self::assertCount(2, $objects);
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'dummy' => new FixtureEntity\ImmutableStd([
                     'relatedDummy' => StdClassFactory::create(['injected' => false]),
                 ]),
                 'another_dummy' => StdClassFactory::create(['injected' => false]),
             ],
-            $objects
+            $objects,
         );
     }
 
@@ -497,15 +499,15 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        static::assertCount(0, $set->getParameters());
+        self::assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        static::assertCount(4, $objects);
+        self::assertCount(4, $objects);
 
-        static::assertContains($objects['user0']->username, ['something', null]);
-        static::assertContains($objects['user1']->username, ['something', 'nothing']);
-        static::assertEquals('nothing', $objects['user2']->username);
-        static::assertEquals('something', $objects['user3']->username);
+        self::assertContains($objects['user0']->username, ['something', null]);
+        self::assertContains($objects['user1']->username, ['something', 'nothing']);
+        self::assertEquals('nothing', $objects['user2']->username);
+        self::assertEquals('something', $objects['user3']->username);
     }
 
     public function testLoadTwoSuccessiveFakerFunctions(): void
@@ -520,14 +522,14 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        static::assertCount(0, $set->getParameters());
+        self::assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        static::assertCount(1, $objects);
+        self::assertCount(1, $objects);
 
         $user = $objects['user'];
-        static::assertInstanceOf(stdClass::class, $user);
-        static::assertMatchesRegularExpression('/^[\w\']+ [\w\']+$/i', $user->username);
+        self::assertInstanceOf(stdClass::class, $user);
+        self::assertMatchesRegularExpression('/^[\w\']+ [\w\']+$/i', $user->username);
     }
 
     public function testLoadFakerFunctionWithData(): void
@@ -542,14 +544,14 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        static::assertCount(0, $set->getParameters());
+        self::assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        static::assertCount(1, $objects);
+        self::assertCount(1, $objects);
 
         $user = $objects['user'];
-        static::assertInstanceOf(stdClass::class, $user);
-        static::assertSame(10, $user->age);
+        self::assertInstanceOf(stdClass::class, $user);
+        self::assertSame(10, $user->age);
     }
 
     public function testLoadLocalizedFakerFunctionWithData(): void
@@ -564,14 +566,14 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        static::assertCount(0, $set->getParameters());
+        self::assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        static::assertCount(1, $objects);
+        self::assertCount(1, $objects);
 
         $user = $objects['user'];
-        static::assertInstanceOf(stdClass::class, $user);
-        static::assertMatchesRegularExpression('/^\d{3} \d{3} \d{3}$/', $user->siren);
+        self::assertInstanceOf(stdClass::class, $user);
+        self::assertMatchesRegularExpression('/^\d{3} \d{3} \d{3}$/', $user->siren);
     }
 
     public function testLoadFakerFunctionWithPhpArguments(): void
@@ -586,19 +588,19 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        static::assertCount(0, $set->getParameters());
+        self::assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        static::assertCount(1, $objects);
+        self::assertCount(1, $objects);
 
         $user = $objects['user'];
-        static::assertInstanceOf(stdClass::class, $user);
+        self::assertInstanceOf(stdClass::class, $user);
 
         $updatedAt = $user->updatedAt;
-        static::assertInstanceOf(DateTimeInterface::class, $updatedAt);
+        self::assertInstanceOf(DateTimeInterface::class, $updatedAt);
         /** @var DateTimeInterface $updatedAt */
-        static::assertGreaterThanOrEqual(strtotime('yesterday'), $updatedAt->getTimestamp());
-        static::assertLessThanOrEqual(strtotime('tomorrow'), $updatedAt->getTimestamp());
+        self::assertGreaterThanOrEqual(strtotime('yesterday'), $updatedAt->getTimestamp());
+        self::assertLessThanOrEqual(strtotime('tomorrow'), $updatedAt->getTimestamp());
     }
 
     public function testLoadSelfReferencedFixture(): void
@@ -613,15 +615,15 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        static::assertCount(0, $set->getParameters());
+        self::assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        static::assertCount(1, $objects);
+        self::assertCount(1, $objects);
 
         $expectedDummy = new stdClass();
         $expectedDummy->relatedDummy = $expectedDummy;
 
-        static::assertEquals($expectedDummy, $objects['dummy']);
+        self::assertEquals($expectedDummy, $objects['dummy']);
     }
 
     public function testLoadAutomaticallyEscapedReference(): void
@@ -636,16 +638,16 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        static::assertCount(0, $set->getParameters());
+        self::assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        static::assertCount(1, $objects);
+        self::assertCount(1, $objects);
 
         $expectedDummy = StdClassFactory::create([
             'email' => 'email@example.com',
         ]);
 
-        static::assertEquals($expectedDummy, $objects['dummy']);
+        self::assertEquals($expectedDummy, $objects['dummy']);
     }
 
     public function testLoadSelfReferencedFixtures(): void
@@ -660,10 +662,10 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        static::assertCount(0, $set->getParameters());
+        self::assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        static::assertCount(2, $objects);
+        self::assertCount(2, $objects);
     }
 
     public function testLoadRangeWithStepFixtures(): void
@@ -678,15 +680,15 @@ class LoaderIntegrationTest extends TestCase
 
         $set = $this->loader->loadData($data);
 
-        static::assertCount(0, $set->getParameters());
+        self::assertCount(0, $set->getParameters());
 
         $objects = $set->getObjects();
-        static::assertCount(2, $objects);
+        self::assertCount(2, $objects);
 
-        static::assertArrayHasKey('dummy1', $objects);
-        static::assertArrayNotHasKey('dummy2', $objects);
-        static::assertArrayHasKey('dummy3', $objects);
-        static::assertArrayNotHasKey('dummy4', $objects);
+        self::assertArrayHasKey('dummy1', $objects);
+        self::assertArrayNotHasKey('dummy2', $objects);
+        self::assertArrayHasKey('dummy3', $objects);
+        self::assertArrayNotHasKey('dummy4', $objects);
     }
 
     public function testLoadReferenceRange(): void
@@ -706,11 +708,11 @@ class LoaderIntegrationTest extends TestCase
             UserDetail::class => [
                 'userdetail_{@user*}' => [
                     'email' => '<email()>',
-                    'user'  => '<current()>',
+                    'user' => '<current()>',
                 ],
                 'userdetail_single_{@user1}' => [
                     'email' => '<email()>',
-                    'user'  => '<($current)>',
+                    'user' => '<($current)>',
                 ],
             ],
         ];
@@ -718,19 +720,19 @@ class LoaderIntegrationTest extends TestCase
         $set = $this->loader->loadData($data);
 
         $objects = $set->getObjects();
-        static::assertCount(5, $objects);
+        self::assertCount(5, $objects);
 
-        static::assertArrayHasKey('userdetail_user0', $objects);
-        static::assertArrayHasKey('userdetail_user1', $objects);
-        static::assertArrayHasKey('userdetail_single_user1', $objects);
+        self::assertArrayHasKey('userdetail_user0', $objects);
+        self::assertArrayHasKey('userdetail_user1', $objects);
+        self::assertArrayHasKey('userdetail_single_user1', $objects);
 
-        static::assertInstanceOf(User::class, $objects['userdetail_user0']->getUser());
-        static::assertInstanceOf(User::class, $objects['userdetail_user1']->getUser());
-        static::assertInstanceOf(User::class, $objects['userdetail_single_user1']->getUser());
+        self::assertInstanceOf(User::class, $objects['userdetail_user0']->getUser());
+        self::assertInstanceOf(User::class, $objects['userdetail_user1']->getUser());
+        self::assertInstanceOf(User::class, $objects['userdetail_single_user1']->getUser());
 
-        static::assertSame($objects['user0'], $objects['userdetail_user0']->getUser());
-        static::assertSame($objects['user1'], $objects['userdetail_user1']->getUser());
-        static::assertSame($objects['user1'], $objects['userdetail_single_user1']->getUser());
+        self::assertSame($objects['user0'], $objects['userdetail_user0']->getUser());
+        self::assertSame($objects['user1'], $objects['userdetail_user1']->getUser());
+        self::assertSame($objects['user1'], $objects['userdetail_single_user1']->getUser());
     }
 
     public function testLoadReferenceRangeWithDotInName(): void
@@ -745,7 +747,7 @@ class LoaderIntegrationTest extends TestCase
             UserDetail::class => [
                 'foo.user_detail.{@foo.user.*}' => [
                     'email' => '<email()>',
-                    'user'  => '<current()>',
+                    'user' => '<current()>',
                 ],
             ],
         ];
@@ -753,19 +755,19 @@ class LoaderIntegrationTest extends TestCase
         $set = $this->loader->loadData($data);
 
         $objects = $set->getObjects();
-        static::assertCount(6, $objects);
+        self::assertCount(6, $objects);
 
-        static::assertArrayHasKey('foo.user.1', $objects);
-        static::assertArrayHasKey('foo.user.2', $objects);
-        static::assertArrayHasKey('foo.user.3', $objects);
+        self::assertArrayHasKey('foo.user.1', $objects);
+        self::assertArrayHasKey('foo.user.2', $objects);
+        self::assertArrayHasKey('foo.user.3', $objects);
 
-        static::assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.1']->getUser());
-        static::assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.2']->getUser());
-        static::assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.3']->getUser());
+        self::assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.1']->getUser());
+        self::assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.2']->getUser());
+        self::assertInstanceOf(User::class, $objects['foo.user_detail.foo.user.3']->getUser());
 
-        static::assertSame($objects['foo.user.1'], $objects['foo.user_detail.foo.user.1']->getUser());
-        static::assertSame($objects['foo.user.2'], $objects['foo.user_detail.foo.user.2']->getUser());
-        static::assertSame($objects['foo.user.3'], $objects['foo.user_detail.foo.user.3']->getUser());
+        self::assertSame($objects['foo.user.1'], $objects['foo.user_detail.foo.user.1']->getUser());
+        self::assertSame($objects['foo.user.2'], $objects['foo.user_detail.foo.user.2']->getUser());
+        self::assertSame($objects['foo.user.3'], $objects['foo.user_detail.foo.user.3']->getUser());
     }
 
     public function testLoadReferenceRangeOutOfOrder(): void
@@ -774,7 +776,7 @@ class LoaderIntegrationTest extends TestCase
             UserDetail::class => [
                 'userdetail_{@user*}' => [
                     'email' => '<email()>',
-                    'user'  => '<current()>',
+                    'user' => '<current()>',
                 ],
             ],
             User::class => [
@@ -793,16 +795,16 @@ class LoaderIntegrationTest extends TestCase
         $set = $this->loader->loadData($data);
 
         $objects = $set->getObjects();
-        static::assertCount(4, $objects);
+        self::assertCount(4, $objects);
 
-        static::assertArrayHasKey('userdetail_user0', $objects);
-        static::assertArrayHasKey('userdetail_user1', $objects);
+        self::assertArrayHasKey('userdetail_user0', $objects);
+        self::assertArrayHasKey('userdetail_user1', $objects);
 
-        static::assertInstanceOf(User::class, $objects['userdetail_user0']->getUser());
-        static::assertInstanceOf(User::class, $objects['userdetail_user1']->getUser());
+        self::assertInstanceOf(User::class, $objects['userdetail_user0']->getUser());
+        self::assertInstanceOf(User::class, $objects['userdetail_user1']->getUser());
 
-        static::assertSame($objects['user0'], $objects['userdetail_user0']->getUser());
-        static::assertSame($objects['user1'], $objects['userdetail_user1']->getUser());
+        self::assertSame($objects['user0'], $objects['userdetail_user0']->getUser());
+        self::assertSame($objects['user1'], $objects['userdetail_user1']->getUser());
     }
 
     public function testTemplatesAreKeptBetweenFiles(): void
@@ -813,11 +815,11 @@ class LoaderIntegrationTest extends TestCase
                 'dummy' => StdClassFactory::create([
                     'foo' => 'bar',
                 ]),
-            ])
+            ]),
         );
         $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/template_in_another_file/dummy.yml');
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testLoadDuplicatedDummyKeysWithIncludeFiles(): void
@@ -826,14 +828,14 @@ class LoaderIntegrationTest extends TestCase
             new ParameterBag(),
             new ObjectBag([
                 'dummy' => StdClassFactory::create([
-                    'var' => 'bar'
+                    'var' => 'bar',
                 ]),
-            ])
+            ]),
         );
 
         $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/duplicates/dummies.yml');
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testLoadDuplicatedDummyKeysWithLists(): void
@@ -856,12 +858,12 @@ class LoaderIntegrationTest extends TestCase
                     'var' => 'foo',
                     'val' => 'val',
                 ]),
-            ])
+            ]),
         );
 
         $actual = $this->loader->loadFile(self::FIXTURES_FILES_DIR.'/duplicates/dummy_list.yml');
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testTemplatesAreBuildBeforeUsage(): void
@@ -870,8 +872,8 @@ class LoaderIntegrationTest extends TestCase
             new ParameterBag(),
             new ObjectBag([
                 'dummy' => new DummyWithConstructorAndCallable(null),
-                'foo-0' => new FixtureEntity\DummyWithConstructorParam(null)
-            ])
+                'foo-0' => new FixtureEntity\DummyWithConstructorParam(null),
+            ]),
         );
 
         $actual = $this->loader->loadData([
@@ -879,22 +881,22 @@ class LoaderIntegrationTest extends TestCase
                 'dummy_template (template)' => [
                     '__calls' => [
                         [
-                            'reset' => []
-                        ]
-                    ]
+                            'reset' => [],
+                        ],
+                    ],
                 ],
                 'dummy (extends dummy_template)' => [
-                    '__construct' => ['foo']
-                ]
+                    '__construct' => ['foo'],
+                ],
             ],
             FixtureEntity\DummyWithConstructorParam::class => [
                 'foo-0' => [
-                    '__construct' => ['@dummy->foo']
+                    '__construct' => ['@dummy->foo'],
                 ],
             ],
         ]);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testTemplateCanExtendOtherTemplateObjectsCombinedWithRange(): void
@@ -923,11 +925,11 @@ class LoaderIntegrationTest extends TestCase
                     'base' => 'true',
                     'foo' => 'baz',
                 ]),
-            ])
+            ]),
         );
         $actual = $this->loader->loadData($data);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testEmptyInheritance(): void
@@ -946,11 +948,11 @@ class LoaderIntegrationTest extends TestCase
                 'dummy' => StdClassFactory::create([
                     'foo' => 'bar',
                 ]),
-            ])
+            ]),
         );
         $actual = $this->loader->loadData($data);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testMultipleInheritanceInTemplates(): void
@@ -983,11 +985,11 @@ class LoaderIntegrationTest extends TestCase
                     'favoriteNumber' => 2,
                     'friends' => 'plenty',
                 ]),
-            ])
+            ]),
         );
         $actual = $this->loader->loadData($data);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testMultipleInheritanceInInstance(): void
@@ -1014,11 +1016,11 @@ class LoaderIntegrationTest extends TestCase
                 'dummy' => StdClassFactory::create([
                     'number' => 3,
                 ]),
-            ])
+            ]),
         );
         $actual = $this->loader->loadData($data);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testUniqueValueGeneration(): void
@@ -1033,18 +1035,18 @@ class LoaderIntegrationTest extends TestCase
 
         $result = $this->loader->loadData($data);
 
-        static::assertCount(0, $result->getParameters());
-        static::assertCount(10, $result->getObjects());
+        self::assertCount(0, $result->getParameters());
+        self::assertCount(10, $result->getObjects());
 
         $objects = $result->getObjects();
         $value = [];
         foreach ($objects as $object) {
-            static::assertGreaterThanOrEqual(1, $object->number);
-            static::assertLessThanOrEqual(10, $object->number);
+            self::assertGreaterThanOrEqual(1, $object->number);
+            self::assertLessThanOrEqual(10, $object->number);
             $value[$object->number] = true;
         }
 
-        static::assertCount(10, $value);
+        self::assertCount(10, $value);
     }
 
     public function testUniqueValueGenerationFailure(): void
@@ -1060,18 +1062,18 @@ class LoaderIntegrationTest extends TestCase
         try {
             $this->loader->loadData($data);
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (GenerationThrowable $exception) {
             $previous = $exception->getPrevious();
 
-            static::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+            self::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
 
             $previous = $previous->getPrevious();
 
-            static::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
-            static::assertMatchesRegularExpression(
+            self::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
+            self::assertMatchesRegularExpression(
                 '/^Could not generate a unique value after 150 attempts for ".*"\.$/',
-                $previous->getMessage()
+                $previous->getMessage(),
             );
         }
     }
@@ -1090,18 +1092,18 @@ class LoaderIntegrationTest extends TestCase
 
         $result = $this->loader->loadData($data);
 
-        static::assertCount(0, $result->getParameters());
-        static::assertCount(10, $result->getObjects());
+        self::assertCount(0, $result->getParameters());
+        self::assertCount(10, $result->getObjects());
 
         $objects = $result->getObjects();
         $value = [];
         foreach ($objects as $object) {
-            static::assertGreaterThanOrEqual(1, $object->requiredParam);
-            static::assertLessThanOrEqual(10, $object->requiredParam);
+            self::assertGreaterThanOrEqual(1, $object->requiredParam);
+            self::assertLessThanOrEqual(10, $object->requiredParam);
             $value[$object->requiredParam] = true;
         }
 
-        static::assertCount(10, $value);
+        self::assertCount(10, $value);
 
         try {
             $this->loader->loadData([
@@ -1113,15 +1115,15 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ]);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (GenerationThrowable $throwable) {
-            static::assertInstanceOf(DebugUnexpectedValueException::class, $throwable);
+            self::assertInstanceOf(DebugUnexpectedValueException::class, $throwable);
 
             $previous = $throwable->getPrevious();
 
-            static::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+            self::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
 
-            static::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous->getPrevious());
+            self::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous->getPrevious());
         }
     }
 
@@ -1165,7 +1167,6 @@ class LoaderIntegrationTest extends TestCase
         };
         $assertEachValuesInRelatedDummiesAreUnique($result);
 
-
         // Do another check with range/list where a temporary fixture is being used for the unique key
         $data = [
             stdClass::class => [
@@ -1181,7 +1182,6 @@ class LoaderIntegrationTest extends TestCase
 
         $assertEachValuesInRelatedDummiesAreUnique($result);
 
-
         try {
             $this->loader->loadData([
                 stdClass::class => [
@@ -1193,15 +1193,15 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ]);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (GenerationThrowable $throwable) {
-            static::assertInstanceOf(DebugUnexpectedValueException::class, $throwable);
+            self::assertInstanceOf(DebugUnexpectedValueException::class, $throwable);
 
             $previous = $throwable->getPrevious();
 
-            static::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+            self::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
 
-            static::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous->getPrevious());
+            self::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous->getPrevious());
         }
     }
 
@@ -1248,15 +1248,15 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ]);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (GenerationThrowable $throwable) {
-            static::assertInstanceOf(DebugUnexpectedValueException::class, $throwable);
+            self::assertInstanceOf(DebugUnexpectedValueException::class, $throwable);
 
             $previous = $throwable->getPrevious();
 
-            static::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+            self::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
 
-            static::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous->getPrevious());
+            self::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous->getPrevious());
         }
     }
 
@@ -1280,8 +1280,8 @@ class LoaderIntegrationTest extends TestCase
 
         $result = $this->loader->loadData($data);
 
-        static::assertCount(0, $result->getParameters());
-        static::assertCount(20, $result->getObjects());
+        self::assertCount(0, $result->getParameters());
+        self::assertCount(20, $result->getObjects());
 
         $objects = $result->getObjects();
         $value = [
@@ -1289,13 +1289,13 @@ class LoaderIntegrationTest extends TestCase
             FixtureEntity\DummyWithPublicProperty::class => [],
         ];
         foreach ($objects as $object) {
-            static::assertGreaterThanOrEqual(1, $object->val);
-            static::assertLessThanOrEqual(10, $object->val);
-            $value[get_class($object)][$object->val] = true;
+            self::assertGreaterThanOrEqual(1, $object->val);
+            self::assertLessThanOrEqual(10, $object->val);
+            $value[$object::class][$object->val] = true;
         }
 
-        static::assertCount(10, $value[stdClass::class]);
-        static::assertCount(10, $value[FixtureEntity\DummyWithPublicProperty::class]);
+        self::assertCount(10, $value[stdClass::class]);
+        self::assertCount(10, $value[FixtureEntity\DummyWithPublicProperty::class]);
     }
 
     /**
@@ -1319,13 +1319,13 @@ class LoaderIntegrationTest extends TestCase
         try {
             $this->loader->loadData($data);
         } catch (DebugUnexpectedValueException $exception) {
-            static::assertNotNull($previous = $exception->getPrevious());
+            self::assertNotNull($previous = $exception->getPrevious());
 
-            static::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+            self::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
 
-            static::assertNotNull($previous = $previous->getPrevious());
+            self::assertNotNull($previous = $previous->getPrevious());
 
-            static::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
+            self::assertInstanceOf(UniqueValueGenerationLimitReachedException::class, $previous);
         }
     }
 
@@ -1371,17 +1371,17 @@ class LoaderIntegrationTest extends TestCase
         try {
             $this->loader->loadData($data);
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (DebugUnexpectedValueException $exception) {
-            static::assertSame(
+            self::assertSame(
                 'An error occurred while generating the fixture "dummy" (stdClass): No value for '
                 .'\'<current()>\' found for the fixture "dummy".',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
 
             $previous = $exception->getPrevious();
 
-            static::assertInstanceOf(NoValueForCurrentException::class, $previous);
+            self::assertInstanceOf(NoValueForCurrentException::class, $previous);
         }
     }
 
@@ -1410,8 +1410,8 @@ class LoaderIntegrationTest extends TestCase
             [
                 'dummy' => StdClassFactory::create([
                     'injected' => true,
-                ])
-            ]
+                ]),
+            ],
         );
 
         $expected = new ObjectSet(
@@ -1424,10 +1424,10 @@ class LoaderIntegrationTest extends TestCase
                     'injected' => false,
                 ]),
                 'another_dummy' => new FixtureEntity\DummyWithConstructorParam($dummy),
-            ])
+            ]),
         );
 
-        static::assertEquals($expected, $set);
+        self::assertEquals($expected, $set);
     }
 
     public function testParametersShouldBeResolvedOnlyOnce(): void
@@ -1443,15 +1443,15 @@ class LoaderIntegrationTest extends TestCase
                         'bar' => '<{unique_id}>',
                     ],
                 ],
-            ]
+            ],
         );
 
         $uniqueId = $set->getParameters()['unique_id'];
 
         $dummy = $set->getObjects()['dummy'];
 
-        static::assertEquals($uniqueId, $dummy->foo);
-        static::assertEquals($uniqueId, $dummy->bar);
+        self::assertEquals($uniqueId, $dummy->foo);
+        self::assertEquals($uniqueId, $dummy->bar);
     }
 
     public function testLoadParsesReferencesInQuotes(): void
@@ -1463,14 +1463,14 @@ class LoaderIntegrationTest extends TestCase
                         'name' => 'foo',
                     ],
                     'dummy2' => [
-                        'dummy' => '\'@dummy1\''
+                        'dummy' => '\'@dummy1\'',
                     ],
                 ],
             ]);
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (DebugUnexpectedValueException $exception) {
-            static::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $exception->getPrevious());
+            self::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $exception->getPrevious());
         }
     }
 
@@ -1490,7 +1490,7 @@ class LoaderIntegrationTest extends TestCase
                         'related' => '@another*',
                     ],
                 ],
-            ]
+            ],
         );
 
         // This loading will also the caching part of the FixtureWildcardReferenceResolver. The
@@ -1505,7 +1505,7 @@ class LoaderIntegrationTest extends TestCase
                         'related' => '@another*',
                     ],
                 ],
-            ]
+            ],
         );
     }
 
@@ -1523,14 +1523,14 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ]);
         } catch (DebugUnexpectedValueException $exception) {
-            static::assertSame(
+            self::assertSame(
                 'An error occurred while generating the fixture "another_dummy" (stdClass): Could not resolve value during the generation process.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
 
             $previous = $exception->getPrevious();
 
-            static::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
+            self::assertInstanceOf(UnresolvableValueDuringGenerationException::class, $previous);
         }
     }
 
@@ -1544,15 +1544,15 @@ class LoaderIntegrationTest extends TestCase
                 ],
                 'dummy2' => [
                     'foo' => 'baz',
-                ]
-            ]
+                ],
+            ],
         ]);
 
-        static::assertCount(2, $set->getObjects());
+        self::assertCount(2, $set->getObjects());
         ['dummy1' => $dummy1, 'dummy2' => $dummy2] = $set->getObjects();
 
-        static::assertNotSame($dummy1, $dummy2);
-        static::assertSame($dummy2, $dummy1->sibling);
+        self::assertNotSame($dummy1, $dummy2);
+        self::assertSame($dummy2, $dummy1->sibling);
     }
 
     public function testNewlinesInIdentity(): void
@@ -1567,15 +1567,15 @@ class LoaderIntegrationTest extends TestCase
         $expected->newlinesKeptNoNewlineAtEnd = new DateTime('2022-01-05');
         $expected->newlinesKeptAllNewlinesFromEnd = new DateTime('2022-01-06');
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'dummy' => $expected,
             ],
-            $objects
+            $objects,
         );
     }
 
-    public function provideFixturesToInstantiate()
+    public function provideFixturesToInstantiate(): iterable
     {
         yield 'with default constructor – use default constructor' => [
             [
@@ -1609,7 +1609,7 @@ class LoaderIntegrationTest extends TestCase
                 FixtureEntity\Instantiator\DummyWithOptionalParameterInConstructor::class => [
                     'dummy' => [
                         '__construct' => [
-                            100
+                            100,
                         ],
                     ],
                 ],
@@ -1757,7 +1757,6 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             (new ReflectionClass(FixtureEntity\Instantiator\DummyWithPrivateConstructor::class))->newInstanceWithoutConstructor(),
-
         ];
 
         yield 'with protected constructor – use reflection' => [
@@ -1769,7 +1768,6 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ],
             (new ReflectionClass(FixtureEntity\Instantiator\DummyWithProtectedConstructor::class))->newInstanceWithoutConstructor(),
-
         ];
 
         yield 'with private named constructor – use reflection' => [
@@ -1830,7 +1828,7 @@ class LoaderIntegrationTest extends TestCase
                                     'bar2' => 'value 4',
                                     'bar1' => 'value 3',
                                 ],
-                            ]
+                            ],
                         ],
                     ],
                 ],
@@ -1839,7 +1837,7 @@ class LoaderIntegrationTest extends TestCase
         ];
     }
 
-    public function provideLegacyFixturesToInstantiate()
+    public function provideLegacyFixturesToInstantiate(): iterable
     {
         yield 'with named constructor - use factory function' => [
             [
@@ -1970,7 +1968,7 @@ class LoaderIntegrationTest extends TestCase
         ];
     }
 
-    public function provideFixturesToInstantiateWithFactory()
+    public function provideFixturesToInstantiateWithFactory(): iterable
     {
         yield 'regular factory' => [
             [
@@ -2101,7 +2099,7 @@ class LoaderIntegrationTest extends TestCase
         ];
     }
 
-    public function provideFixtureToInstantiateWithDeprecatedConstructor()
+    public function provideFixtureToInstantiateWithDeprecatedConstructor(): iterable
     {
         yield 'with named constructor - use factory function' => [
             [
@@ -2190,7 +2188,7 @@ class LoaderIntegrationTest extends TestCase
         ];
     }
 
-    public function provideFixturesToHydrate()
+    public function provideFixturesToHydrate(): iterable
     {
         yield 'public camelCase property' => [
             [
@@ -2205,7 +2203,7 @@ class LoaderIntegrationTest extends TestCase
                     $dummy->publicProperty = 'bob';
 
                     return $dummy;
-                })(new FixtureEntity\Hydrator\CamelCaseDummy())
+                })(new FixtureEntity\Hydrator\CamelCaseDummy()),
             ],
         ];
 
@@ -2222,7 +2220,7 @@ class LoaderIntegrationTest extends TestCase
                     $dummy->public_property = 'bob';
 
                     return $dummy;
-                })(new FixtureEntity\Hydrator\SnakeCaseDummy())
+                })(new FixtureEntity\Hydrator\SnakeCaseDummy()),
             ],
         ];
 
@@ -2239,7 +2237,7 @@ class LoaderIntegrationTest extends TestCase
                     $dummy->PublicProperty = 'bob';
 
                     return $dummy;
-                })(new FixtureEntity\Hydrator\PascalCaseDummy())
+                })(new FixtureEntity\Hydrator\PascalCaseDummy()),
             ],
         ];
 
@@ -2256,7 +2254,7 @@ class LoaderIntegrationTest extends TestCase
                     $dummy->setSetterProperty('bob');
 
                     return $dummy;
-                })(new FixtureEntity\Hydrator\CamelCaseDummy())
+                })(new FixtureEntity\Hydrator\CamelCaseDummy()),
             ],
         ];
 
@@ -2285,7 +2283,7 @@ class LoaderIntegrationTest extends TestCase
                     $dummy->setMagicProperty('bob');
 
                     return $dummy;
-                })(new FixtureEntity\Hydrator\MagicCallDummy())
+                })(new FixtureEntity\Hydrator\MagicCallDummy()),
             ],
         ];
 
@@ -2302,7 +2300,7 @@ class LoaderIntegrationTest extends TestCase
                     $dummy->setMagicProperty('bob');
 
                     return $dummy;
-                })(new FixtureEntity\Hydrator\MagicCallDummy())
+                })(new FixtureEntity\Hydrator\MagicCallDummy()),
             ],
         ];
 
@@ -2319,12 +2317,12 @@ class LoaderIntegrationTest extends TestCase
                     $dummy->setMagicProperty('bob');
 
                     return $dummy;
-                })(new FixtureEntity\Hydrator\MagicCallDummy())
+                })(new FixtureEntity\Hydrator\MagicCallDummy()),
             ],
         ];
     }
 
-    public function provideFixturesToGenerate()
+    public function provideFixturesToGenerate(): iterable
     {
         yield '[construct] with reference to object with throwable setter and caller' => [
             [
@@ -2333,16 +2331,16 @@ class LoaderIntegrationTest extends TestCase
                         'hydrate' => true,
                         '__calls' => [
                             ['call' => [true]],
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 FixtureEntity\DummyWithConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
-                            '@another_dummy'
-                        ]
-                    ]
-                ]
+                            '@another_dummy',
+                        ],
+                    ],
+                ],
             ],
             [
                 'parameters' => [],
@@ -2354,8 +2352,8 @@ class LoaderIntegrationTest extends TestCase
                         return $anotherDummy1;
                     })(new FixtureEntity\OnceTimerDummy()),
                     'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($yetAnotherDummy1),
-                ]
-            ]
+                ],
+            ],
         ];
 
         yield 'empty instance' => [
@@ -2399,7 +2397,7 @@ class LoaderIntegrationTest extends TestCase
                 'objects' => [
                     'dummy' => StdClassFactory::create([
                         'foo' => 'bar',
-                    ])
+                    ]),
                 ],
             ],
         ];
@@ -2652,7 +2650,7 @@ class LoaderIntegrationTest extends TestCase
                     'dummy' => $dummy = (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('foo'),
                     'another_dummy' => (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('__get__foo'),
                 ],
-            ]
+            ],
         ];
 
         yield 'inverted property reference value with a getter' => [
@@ -2672,7 +2670,7 @@ class LoaderIntegrationTest extends TestCase
                     'dummy' => $dummy = (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('__get__foo'),
                     'another_dummy' => (new FixtureEntity\ValueResolver\DummyWithGetter())->setName('foo'),
                 ],
-            ]
+            ],
         ];
 
         yield 'array value' => [
@@ -2693,7 +2691,7 @@ class LoaderIntegrationTest extends TestCase
                         'foo' => 'bar',
                     ]),
                     'another_dummy' => StdClassFactory::create([
-                        'dummies' => [$dummy, $dummy, $dummy]
+                        'dummies' => [$dummy, $dummy, $dummy],
                     ]),
                 ],
             ],
@@ -2765,7 +2763,7 @@ class LoaderIntegrationTest extends TestCase
                         'foo' => 'bar',
                     ]),
                     'another_dummy' => StdClassFactory::create([
-                        'dummies' => [$dummy, $dummy, $dummy]
+                        'dummies' => [$dummy, $dummy, $dummy],
                     ]),
                 ],
             ],
@@ -2789,7 +2787,7 @@ class LoaderIntegrationTest extends TestCase
                         'foo' => 'bar',
                     ]),
                     'another_dummy' => StdClassFactory::create([
-                        'dummies' => [$dummy, $dummy, $dummy]
+                        'dummies' => [$dummy, $dummy, $dummy],
                     ]),
                 ],
             ],
@@ -2813,7 +2811,7 @@ class LoaderIntegrationTest extends TestCase
                         'foo' => 'bar',
                     ]),
                     'another_dummy' => StdClassFactory::create([
-                        'dummies' => [$dummy, $dummy, $dummy]
+                        'dummies' => [$dummy, $dummy, $dummy],
                     ]),
                 ],
             ],
@@ -2846,7 +2844,7 @@ class LoaderIntegrationTest extends TestCase
                         'dummies' => [
                             $dummy1,
                             $dummy2,
-                        ]
+                        ],
                     ]),
                 ],
             ],
@@ -3178,7 +3176,7 @@ class LoaderIntegrationTest extends TestCase
                         'foo' => 'bar',
                     ],
                     'another_dummy' => [
-                        'foo' => '<(@dummy->foo)>'
+                        'foo' => '<(@dummy->foo)>',
                     ],
                 ],
             ],
@@ -3199,10 +3197,10 @@ class LoaderIntegrationTest extends TestCase
             [
                 stdClass::class => [
                     'dummy' => [
-                        'foo' => 'bar'
+                        'foo' => 'bar',
                     ],
                     'another_dummy' => [
-                        'relatedDummy' => '<(@dummy)>'
+                        'relatedDummy' => '<(@dummy)>',
                     ],
                 ],
             ],
@@ -3223,7 +3221,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 stdClass::class => [
                     'dummy_{1..2}' => [
-                        'foo' => '<($current)>'
+                        'foo' => '<($current)>',
                     ],
                 ],
             ],
@@ -3303,7 +3301,7 @@ class LoaderIntegrationTest extends TestCase
                         'email' => 'dummy2@mail.com',
                     ],
                     'detailedDummy_{@dummy_*} (extends detailedDummy)' => [
-                        'dummy' => '<current()>'
+                        'dummy' => '<current()>',
                     ],
                 ],
             ],
@@ -3318,11 +3316,11 @@ class LoaderIntegrationTest extends TestCase
                     ]),
                     'detailedDummy_dummy_1' => StdClassFactory::create([
                         'field' => 'value',
-                        'dummy' => $dummy1
+                        'dummy' => $dummy1,
                     ]),
                     'detailedDummy_dummy_2' => StdClassFactory::create([
                         'field' => 'value',
-                        'dummy' => $dummy2
+                        'dummy' => $dummy2,
                     ]),
                 ],
             ],
@@ -3420,7 +3418,7 @@ class LoaderIntegrationTest extends TestCase
                             '\\',
                             '\\@foo',
                             '\\foo',
-                        ]
+                        ],
                     ]),
                 ],
             ],
@@ -3620,7 +3618,7 @@ class LoaderIntegrationTest extends TestCase
                         'pong',
                         'pong',
                         'pong',
-                        'pong'
+                        'pong',
                     ),
                 ],
             ],
@@ -3641,7 +3639,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => new FixtureEntity\DummyWithVariadicConstructorParam(
-                        'bar'
+                        'bar',
                     ),
                 ],
             ],
@@ -3659,7 +3657,7 @@ class LoaderIntegrationTest extends TestCase
                 'parameters' => [],
                 'objects' => [
                     'dummy' => StdClassFactory::create([
-                        'foo' => ['bar', 'bar', 'bar', 'bar', 'bar']
+                        'foo' => ['bar', 'bar', 'bar', 'bar', 'bar'],
                     ]),
                 ],
             ],
@@ -3703,7 +3701,7 @@ class LoaderIntegrationTest extends TestCase
                         'foo' => 'bar',
                     ],
                     'another_dummy' => [
-                        'foo' => '@dummy->foo'
+                        'foo' => '@dummy->foo',
                     ],
                 ],
             ],
@@ -3728,9 +3726,9 @@ class LoaderIntegrationTest extends TestCase
                             ['setTitle' => ['Fake Title']],
                             ['addFoo' => []],
                             ['addFoo' => []],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 'parameters' => [],
@@ -3747,9 +3745,9 @@ class LoaderIntegrationTest extends TestCase
                         '__calls' => [
                             ['setTitle' => ['Fake Title <current()>']],
                             ['addFoo' => []],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 'parameters' => [],
@@ -3768,9 +3766,9 @@ class LoaderIntegrationTest extends TestCase
                         '__calls' => [
                             ['setTitle' => ['Dummy 2']],
                             ['setRelatedDummy' => ['@dummy_1']],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 'parameters' => [],
@@ -3785,7 +3783,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 FixtureEntity\ValueResolver\DummyWithGetter::class => [
                     'dummy' => [
-                        'name' => 'foobar'
+                        'name' => 'foobar',
                     ],
                 ],
                 stdClass::class => [
@@ -3811,7 +3809,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 FixtureEntity\ValueResolver\DummyWithGetter::class => [
                     'dummy' => [
-                        'name' => 'foobar'
+                        'name' => 'foobar',
                     ],
                 ],
                 FixtureEntity\ValueResolver\DummyWithMethodArgument::class => [
@@ -3844,9 +3842,9 @@ class LoaderIntegrationTest extends TestCase
                         '__construct' => false,
                         '__calls' => [
                             [FixtureEntity\Caller\StaticService::class.'::setTitle' => ['@self', 'Foo']],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 'parameters' => [],
@@ -3863,9 +3861,9 @@ class LoaderIntegrationTest extends TestCase
                         '__construct' => false,
                         '__calls' => [
                             [FixtureEntity\Caller\StaticService::class.'::setTitle (0%?)' => ['@self', 'Foo']],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 'parameters' => [],
@@ -3882,9 +3880,9 @@ class LoaderIntegrationTest extends TestCase
                         '__construct' => false,
                         '__calls' => [
                             [FixtureEntity\Caller\DummyWithStaticFunction::class.'::setTitle' => ['@self', 'Foo']],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             [
                 'parameters' => [],
@@ -3920,9 +3918,7 @@ class LoaderIntegrationTest extends TestCase
             [
                 stdClass::class => [
                     'dummy' => [
-                        'foo' => (static function () {
-                            return StdClassFactory::create(['ping' => 'pong']);
-                        })(),
+                        'foo' => (static fn () => StdClassFactory::create(['ping' => 'pong']))(),
                     ],
                 ],
             ],
@@ -3962,7 +3958,7 @@ class LoaderIntegrationTest extends TestCase
                         '__calls' => [
                             [
                                 'withVal (configurator)' => [
-                                    'foo'
+                                    'foo',
                                 ],
                             ],
                         ],
@@ -4008,7 +4004,7 @@ class LoaderIntegrationTest extends TestCase
 
                             return $address;
                         })(),
-                        'person' => FixtureEntity\InitializationOrder\Person::createWithAddress($address)
+                        'person' => FixtureEntity\InitializationOrder\Person::createWithAddress($address),
                     ],
                 ],
             ];
@@ -4024,22 +4020,22 @@ class LoaderIntegrationTest extends TestCase
                             'hydrate' => true,
                             '__calls' => [
                                 ['call' => [true]],
-                            ]
+                            ],
                         ],
                         'anotherDummy' => [
                             'relatedDummy' => '@yetAnotherDummy',
                             'hydrate' => true,
                             '__calls' => [
                                 ['call' => [true]],
-                            ]
+                            ],
                         ],
                         'yetAnotherDummy' => [
                             'hydrate' => true,
                             '__calls' => [
                                 ['call' => [true]],
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'parameters' => [],
@@ -4064,8 +4060,8 @@ class LoaderIntegrationTest extends TestCase
 
                             return $dummy;
                         })(new FixtureEntity\OnceTimerDummy(), $anotherDummy),
-                    ]
-                ]
+                    ],
+                ],
             ];
         })();
 
@@ -4101,9 +4097,9 @@ class LoaderIntegrationTest extends TestCase
 
         // https://github.com/nelmio/alice/issues/894
         yield 'complex circular reference case' => (static function () {
-            for ($i = 1; $i < 13; $i++) {
+            for ($i = 1; $i < 13; ++$i) {
                 $var = 's'.$i;
-                $$var = new stdClass();
+                ${$var} = new stdClass();
             }
 
             $s1->related = [$s3, $s1];

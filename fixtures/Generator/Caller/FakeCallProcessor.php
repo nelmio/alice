@@ -22,7 +22,7 @@ use Nelmio\Alice\ObjectInterface;
 class FakeCallProcessor implements CallProcessorInterface
 {
     use NotCallableTrait;
-    
+
     public function process(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,

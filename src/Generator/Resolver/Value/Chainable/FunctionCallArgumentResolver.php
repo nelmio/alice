@@ -43,17 +43,17 @@ final class FunctionCallArgumentResolver implements ChainableValueResolverInterf
      */
     private $argumentResolver;
 
-    public function __construct(ValueResolverInterface $decoratedResolver, ValueResolverInterface $argumentResolver = null)
+    public function __construct(ValueResolverInterface $decoratedResolver, ?ValueResolverInterface $argumentResolver = null)
     {
         $this->resolver = $decoratedResolver;
         $this->argumentResolver = $argumentResolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $argumentsResolver): self
     {
         return new self($this->resolver, $argumentsResolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FunctionCallValue;
@@ -88,7 +88,7 @@ final class FunctionCallArgumentResolver implements ChainableValueResolverInterf
             $fixture,
             $fixtureSet,
             $scope,
-            $context
+            $context,
         );
     }
 }

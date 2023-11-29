@@ -26,6 +26,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * @covers \Nelmio\Alice\PropertyAccess\StdPropertyAccessor
+ * @internal
  */
 class StdPropertyAccessorTest extends TestCase
 {
@@ -33,12 +34,12 @@ class StdPropertyAccessorTest extends TestCase
 
     public function testIsAPropertyAccessor(): void
     {
-        static::assertTrue(is_a(StdPropertyAccessor::class, PropertyAccessorInterface::class, true));
+        self::assertTrue(is_a(StdPropertyAccessor::class, PropertyAccessorInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(StdPropertyAccessor::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(StdPropertyAccessor::class))->isCloneable());
     }
 
     public function testSetValueOfAStdClass(): void
@@ -52,7 +53,7 @@ class StdPropertyAccessorTest extends TestCase
         $accessor = new StdPropertyAccessor(new FakePropertyAccessor());
         $accessor->setValue($object, $property, $value);
 
-        static::assertEquals($expected, $object);
+        self::assertEquals($expected, $object);
     }
 
     public function testSetValueWithTheDecoratedAccessorWhenTheObjectIsNotAnInstanceOfStdClass(): void
@@ -68,18 +69,17 @@ class StdPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy
             ->setValue($object, $property, $value)
             ->will(
-                function ($args): void {
+                static function ($args): void {
                     $args[0]->{$args[1]} = $args[2];
-                }
-            )
-        ;
+                },
+            );
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
         $accessor = new StdPropertyAccessor($decoratedAccessor);
         $accessor->setValue($object, $property, $value);
 
-        static::assertEquals($expected, $object);
+        self::assertEquals($expected, $object);
 
         $decoratedAccessorProphecy->setValue(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -91,7 +91,7 @@ class StdPropertyAccessorTest extends TestCase
         $accessor = new StdPropertyAccessor(new FakePropertyAccessor());
         $actual = $accessor->getValue($object, $property);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfPropertyNotFoundOnStdClass(): void
@@ -110,24 +110,21 @@ class StdPropertyAccessorTest extends TestCase
     {
         $object = new DummyWithPublicProperty();
         $property = 'val';
-        $object->$property = $expected = 'bar';
+        $object->{$property} = $expected = 'bar';
 
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->getValue($object, $property)
             ->will(
-                function ($args) {
-                    return $args[0]->{$args[1]};
-                }
-            )
-        ;
+                static fn ($args) => $args[0]->{$args[1]},
+            );
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
         $accessor = new StdPropertyAccessor($decoratedAccessor);
         $actual = $accessor->getValue($object, $property);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedAccessorProphecy->getValue(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -137,7 +134,7 @@ class StdPropertyAccessorTest extends TestCase
         $object = new stdClass();
         $accessor = new StdPropertyAccessor(new FakePropertyAccessor());
 
-        static::assertTrue($accessor->isWritable($object, 'foo'));
+        self::assertTrue($accessor->isWritable($object, 'foo'));
     }
 
     public function testUsesDecoratedAccessorToDertermineIfPropertyIsWritableIfObjectIsNotAnStdClassInstance(): void
@@ -148,15 +145,14 @@ class StdPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isWritable($object, $property)
-            ->willReturn($expected = true)
-        ;
+            ->willReturn($expected = true);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
         $accessor = new StdPropertyAccessor($decoratedAccessor);
         $actual = $accessor->isWritable($object, $property);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedAccessorProphecy->isWritable(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -166,8 +162,8 @@ class StdPropertyAccessorTest extends TestCase
         $object = StdClassFactory::create(['foo' => 'bar']);
         $accessor = new StdPropertyAccessor(new FakePropertyAccessor());
 
-        static::assertTrue($accessor->isReadable($object, 'foo'));
-        static::assertFalse($accessor->isReadable($object, 'foz'));
+        self::assertTrue($accessor->isReadable($object, 'foo'));
+        self::assertFalse($accessor->isReadable($object, 'foz'));
     }
 
     public function testUsesDecoratedAccessorToDertermineIfPropertyIsReadbleIfObjectIsNotAnStdClassInstance(): void
@@ -178,15 +174,14 @@ class StdPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
         $decoratedAccessorProphecy
             ->isReadable($object, $property)
-            ->willReturn($expected = true)
-        ;
+            ->willReturn($expected = true);
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();
 
         $accessor = new StdPropertyAccessor($decoratedAccessor);
         $actual = $accessor->isReadable($object, $property);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedAccessorProphecy->isReadable(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

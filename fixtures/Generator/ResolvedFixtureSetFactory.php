@@ -19,12 +19,12 @@ use Nelmio\Alice\ParameterBag;
 
 class ResolvedFixtureSetFactory
 {
-    public static function create(ParameterBag $parameters = null, FixtureBag $fixtures = null, ObjectBag $objects = null): ResolvedFixtureSet
+    public static function create(?ParameterBag $parameters = null, ?FixtureBag $fixtures = null, ?ObjectBag $objects = null): ResolvedFixtureSet
     {
         return new ResolvedFixtureSet(
             $parameters ?? new ParameterBag(),
             $fixtures ?? new FixtureBag(),
-            $objects ?? new ObjectBag()
+            $objects ?? new ObjectBag(),
         );
     }
 }

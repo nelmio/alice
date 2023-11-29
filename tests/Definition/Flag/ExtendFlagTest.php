@@ -19,12 +19,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Flag\ExtendFlag
+ * @internal
  */
 class ExtendFlagTest extends TestCase
 {
     public function testIsAFlag(): void
     {
-        static::assertTrue(is_a(ExtendFlag::class, FlagInterface::class, true));
+        self::assertTrue(is_a(ExtendFlag::class, FlagInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -32,7 +33,7 @@ class ExtendFlagTest extends TestCase
         $reference = new FixtureReference('Nelmio\Alice\EntityUser#user_base');
         $flag = new ExtendFlag($reference);
 
-        static::assertEquals($reference, $flag->getExtendedFixture());
-        static::assertEquals('extends Nelmio\Alice\EntityUser#user_base', $flag->__toString());
+        self::assertEquals($reference, $flag->getExtendedFixture());
+        self::assertEquals('extends Nelmio\Alice\EntityUser#user_base', $flag->__toString());
     }
 }

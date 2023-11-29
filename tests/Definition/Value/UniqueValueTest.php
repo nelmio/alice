@@ -15,22 +15,24 @@ namespace Nelmio\Alice\Definition\Value;
 
 use InvalidArgumentException;
 use Nelmio\Alice\Definition\ValueInterface;
-use const PHP_VERSION_ID;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use const PHP_VERSION_ID;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\UniqueValue
+ * @internal
  */
 class UniqueValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
     }
 
     /**
      * @dataProvider provideValues
+     * @param mixed $value
      */
     public function testReadAccessorsReturnPropertiesValues($value): void
     {
@@ -38,8 +40,8 @@ class UniqueValueTest extends TestCase
 
         $definition = new UniqueValue($id, $value);
 
-        static::assertEquals($id, $definition->getId());
-        static::assertEquals($value, $definition->getValue());
+        self::assertEquals($id, $definition->getId());
+        self::assertEquals($value, $definition->getValue());
     }
 
     public function testCannotCreateUniqueOfUniqueValue(): void
@@ -56,7 +58,7 @@ class UniqueValueTest extends TestCase
     {
         $id = 'Nelmio\Entity\User#user0#username';
         $value = [
-            $arg0 = new stdClass()
+            $arg0 = new stdClass(),
         ];
         $definition = new UniqueValue($id, $value);
 
@@ -66,7 +68,7 @@ class UniqueValueTest extends TestCase
         // Mutate returned value
         $definition->getValue()[0]->foo = 'baz';
 
-        static::assertEquals([new stdClass()], $definition->getValue());
+        self::assertEquals([new stdClass()], $definition->getValue());
     }
 
     public function testImmutableFactories(): void
@@ -79,17 +81,17 @@ class UniqueValueTest extends TestCase
         $original = new UniqueValue($id, $value);
         $clone = $original->withValue($newValue);
 
-        static::assertInstanceOf(UniqueValue::class, $clone);
-        static::assertEquals($id, $original->getId());
-        static::assertEquals($id, $clone->getId());
-        static::assertEquals($value, $original->getValue());
-        static::assertEquals($newValue, $clone->getValue());
+        self::assertInstanceOf(UniqueValue::class, $clone);
+        self::assertEquals($id, $original->getId());
+        self::assertEquals($id, $clone->getId());
+        self::assertEquals($value, $original->getValue());
+        self::assertEquals($newValue, $clone->getValue());
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new UniqueValue('', 'foo');
-        static::assertEquals('(unique) \'foo\'', (string) $value);
+        self::assertEquals('(unique) \'foo\'', (string) $value);
 
         $value = new UniqueValue('', new stdClass());
 
@@ -98,13 +100,13 @@ class UniqueValueTest extends TestCase
         } else {
             $expectedStdClass = "(unique) stdClass::__set_state(array(\n))";
         }
-        static::assertEquals($expectedStdClass, (string) $value);
+        self::assertEquals($expectedStdClass, (string) $value);
 
         $value = new UniqueValue('', new DummyValue('foo'));
-        static::assertEquals('(unique) foo', (string) $value);
+        self::assertEquals('(unique) foo', (string) $value);
     }
 
-    public function provideValues()
+    public function provideValues(): iterable
     {
         yield 'null value' => [null];
         yield 'string value' => ['azerty'];
