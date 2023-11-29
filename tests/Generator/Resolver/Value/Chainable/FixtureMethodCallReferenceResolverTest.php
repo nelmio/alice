@@ -150,7 +150,7 @@ class FixtureMethodCallReferenceResolverTest extends TestCase
             $error = new Error();
             $dummyProphecy = $this->prophesize(DummyWithGetter::class);
             $dummyProphecy->getFoo()->will(
-                static function () use ($error): void {
+                function () use ($error): void {
                     throw $error;
                 },
             );

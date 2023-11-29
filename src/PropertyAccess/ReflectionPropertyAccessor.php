@@ -55,7 +55,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
             }
 
             $setPropertyClosure = Closure::bind(
-                static function ($object) use ($propertyPath, $value): void {
+                function ($object) use ($propertyPath, $value): void {
                     $object->{$propertyPath} = $value;
                 },
                 $objectOrArray,
@@ -83,7 +83,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
             }
 
             $getPropertyClosure = Closure::bind(
-                static fn ($object) => $object->{$propertyPath},
+                fn ($object) => $object->{$propertyPath},
                 $objectOrArray,
                 $objectOrArray,
             );

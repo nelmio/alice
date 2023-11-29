@@ -102,7 +102,7 @@ abstract class ChainableDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy
             ->denormalize(Argument::cetera())
             ->will(
-                static fn ($args) => $args[0]->with(FixtureFactory::create($args[2], '')),
+                fn ($args) => $args[0]->with(FixtureFactory::create($args[2], '')),
             );
 
         return $decoratedDenormalizerProphecy->reveal();

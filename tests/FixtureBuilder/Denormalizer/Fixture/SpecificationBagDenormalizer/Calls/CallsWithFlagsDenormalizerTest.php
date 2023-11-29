@@ -133,7 +133,7 @@ class CallsWithFlagsDenormalizerTest extends TestCase
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
-        $returnMethodUnchanged = static fn (array $args) => $args[0];
+        $returnMethodUnchanged = fn (array $args) => $args[0];
 
         $dummyFlagMethodHandlerProphecy = $this->prophesize(MethodFlagHandler::class);
         $dummyFlagMethodHandlerProphecy

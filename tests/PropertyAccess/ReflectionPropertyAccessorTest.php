@@ -160,7 +160,7 @@ class ReflectionPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy
             ->setValue($object, $property, $value)
             ->will(
-                static function ($args): void {
+                function ($args): void {
                     $args[0]->{$args[1]} = $args[2];
                 },
             );

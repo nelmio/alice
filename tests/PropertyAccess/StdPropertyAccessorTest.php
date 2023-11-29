@@ -69,7 +69,7 @@ class StdPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy
             ->setValue($object, $property, $value)
             ->will(
-                static function ($args): void {
+                function ($args): void {
                     $args[0]->{$args[1]} = $args[2];
                 },
             );
@@ -116,7 +116,7 @@ class StdPropertyAccessorTest extends TestCase
         $decoratedAccessorProphecy
             ->getValue($object, $property)
             ->will(
-                static fn ($args) => $args[0]->{$args[1]},
+                fn ($args) => $args[0]->{$args[1]},
             );
         /** @var PropertyAccessorInterface $decoratedAccessor */
         $decoratedAccessor = $decoratedAccessorProphecy->reveal();

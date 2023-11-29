@@ -288,7 +288,7 @@ class RecursiveParameterResolverTest extends TestCase
         $decoratedResolverProphecy
             ->resolve(Argument::cetera())
             ->will(
-                static function ($args) {
+                function ($args) {
                     $hash = spl_object_hash($args[0]);
 
                     return new ParameterBag(['foo' => uniqid($hash)]);

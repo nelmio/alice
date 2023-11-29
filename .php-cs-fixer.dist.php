@@ -45,6 +45,7 @@ $config = new FidryConfig(
 $config->addRules([
     'php_unit_method_casing' => ['case' => 'camel_case'],
     'phpdoc_no_empty_return' => false,
+    'static_lambda' => false,
 ]);
 
 $config->setFinder($finder);
