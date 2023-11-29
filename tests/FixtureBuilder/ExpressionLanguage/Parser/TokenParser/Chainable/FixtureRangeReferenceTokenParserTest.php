@@ -24,17 +24,18 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureRangeReferenceTokenParser
+ * @internal
  */
 class FixtureRangeReferenceTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(FixtureRangeReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(FixtureRangeReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FixtureRangeReferenceTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FixtureRangeReferenceTokenParser::class))->isCloneable());
     }
 
     public function testCanParseRangedReferencesTokens(): void
@@ -43,8 +44,8 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new FixtureRangeReferenceTokenParser();
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testThrowsAnExceptionIfPassedTokenIsMalformed(): void
@@ -54,7 +55,6 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
 
         $this->expectException(ParseException::class);
         $this->expectExceptionMessage('Could not parse the token "" (type: RANGE_REFERENCE_TYPE).');
-
 
         $parser->parse($token);
     }
@@ -94,7 +94,7 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
         $parser = new FixtureRangeReferenceTokenParser();
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testReturnsAChoiceListWithStepsIfCanParseToken(): void
@@ -109,6 +109,6 @@ class FixtureRangeReferenceTokenParserTest extends TestCase
         $parser = new FixtureRangeReferenceTokenParser();
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

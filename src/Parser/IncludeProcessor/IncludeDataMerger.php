@@ -36,8 +36,7 @@ final class IncludeDataMerger
                     && is_array($fixtures)
             )
                 ? array_merge($includeData[$class], $fixtures)
-                : $fixtures
-            ;
+                : $fixtures;
         }
 
         return $includeData;

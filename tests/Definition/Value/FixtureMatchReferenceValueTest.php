@@ -18,12 +18,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue
+ * @internal
  */
 class FixtureMatchReferenceValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(FixtureMatchReferenceValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(FixtureMatchReferenceValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -31,7 +32,7 @@ class FixtureMatchReferenceValueTest extends TestCase
         $regex = '/dummy/';
         $value = new FixtureMatchReferenceValue($regex);
 
-        static::assertEquals($regex, $value->getValue());
+        self::assertEquals($regex, $value->getValue());
     }
 
     public function testCanMatchAgainstValues(): void
@@ -39,8 +40,8 @@ class FixtureMatchReferenceValueTest extends TestCase
         $regex = '/^d/';
         $value = new FixtureMatchReferenceValue($regex);
 
-        static::assertTrue($value->match('d'));
-        static::assertFalse($value->match('a'));
+        self::assertTrue($value->match('d'));
+        self::assertFalse($value->match('a'));
     }
 
     public function testCanCreateAReferenceForWildcards(): void
@@ -48,18 +49,18 @@ class FixtureMatchReferenceValueTest extends TestCase
         $expected = new FixtureMatchReferenceValue('/^user.*/');
         $actual = FixtureMatchReferenceValue::createWildcardReference('user');
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('dummy');
-        static::assertEquals('@(regex: /^dummy.*/)', (string) $value);
+        self::assertEquals('@(regex: /^dummy.*/)', (string) $value);
     }
 
     public function testReferenceIsRegexEscaped(): void
     {
         $value = FixtureMatchReferenceValue::createWildcardReference('du/m*m+y.ref[ere]n(c)e');
-        static::assertEquals('/^du\\/m\\*m\\+y\\.ref\\[ere\\]n\\(c\\)e.*/', $value->getValue());
+        self::assertEquals('/^du\\/m\\*m\\+y\\.ref\\[ere\\]n\\(c\\)e.*/', $value->getValue());
     }
 }

@@ -24,7 +24,7 @@ class StaticService
                 $dummy->title = $title;
             },
             null,
-            DummyWithStaticFunction::class
+            DummyWithStaticFunction::class,
         )($instance);
     }
 }

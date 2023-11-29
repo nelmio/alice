@@ -32,7 +32,7 @@ class StdClassFactory
     {
         $instance = new stdClass();
         foreach ($attributes as $attribute => $value) {
-            $instance->$attribute = $value;
+            $instance->{$attribute} = $value;
         }
 
         return $instance;

@@ -32,6 +32,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\TokenParserRegistry
+ * @internal
  */
 class TokenParserRegistryTest extends TestCase
 {
@@ -41,7 +42,7 @@ class TokenParserRegistryTest extends TestCase
      * @var ReflectionProperty
      */
     private $parsersRefl;
-    
+
     protected function setUp(): void
     {
         $this->parsersRefl = (new ReflectionClass(TokenParserRegistry::class))->getProperty('parsers');
@@ -50,12 +51,12 @@ class TokenParserRegistryTest extends TestCase
 
     public function testIsATokenParser(): void
     {
-        static::assertTrue(is_a(TokenParserRegistry::class, TokenParserInterface::class, true));
+        self::assertTrue(is_a(TokenParserRegistry::class, TokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(TokenParserRegistry::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(TokenParserRegistry::class))->isCloneable());
     }
 
     public function testAcceptsOnlyChainableParsers(): void
@@ -78,29 +79,29 @@ class TokenParserRegistryTest extends TestCase
 
         $tokenParser = new TokenParserRegistry([
             $parser1 = new FakeChainableTokenParser(),
-            $parser2 = new ProphecyChainableTokenParserAware(new FakeChainableTokenParser(), $parserAware)
+            $parser2 = new ProphecyChainableTokenParserAware(new FakeChainableTokenParser(), $parserAware),
         ]);
 
         $newTokenParser = $tokenParser->withParser($parser);
 
-        static::assertInstanceOf(TokenParserRegistry::class, $newTokenParser);
+        self::assertInstanceOf(TokenParserRegistry::class, $newTokenParser);
 
-        static::assertSame(
+        self::assertSame(
             [
                 $parser1,
                 $parser2,
             ],
-            $this->parsersRefl->getValue($tokenParser)
+            $this->parsersRefl->getValue($tokenParser),
         );
 
         $newTokenParserParsers = $this->parsersRefl->getValue($newTokenParser);
-        static::assertCount(2, $newTokenParserParsers);
-        static::assertEquals(
+        self::assertCount(2, $newTokenParserParsers);
+        self::assertEquals(
             [
                 $parser1,
                 $returnedParser,
             ],
-            $newTokenParserParsers
+            $newTokenParserParsers,
         );
     }
 
@@ -111,18 +112,18 @@ class TokenParserRegistryTest extends TestCase
 
         $parser1Prophecy = $this->prophesize(ChainableTokenParserInterface::class);
         $parser1Prophecy->canParse($token)->willReturn(false);
-        /* @var ChainableTokenParserInterface $parser1 */
+        /** @var ChainableTokenParserInterface $parser1 */
         $parser1 = $parser1Prophecy->reveal();
 
         $parser2Prophecy = $this->prophesize(ChainableTokenParserInterface::class);
         $parser2Prophecy->canParse($token)->willReturn(true);
         $parser2Prophecy->parse($token)->willReturn($expected);
-        /* @var ChainableTokenParserInterface $parser2 */
+        /** @var ChainableTokenParserInterface $parser2 */
         $parser2 = $parser2Prophecy->reveal();
 
         $parser3Prophecy = $this->prophesize(ChainableTokenParserInterface::class);
         $parser3Prophecy->canParse(Argument::any())->shouldNotBeCalled();
-        /* @var ChainableTokenParserInterface $parser3 */
+        /** @var ChainableTokenParserInterface $parser3 */
         $parser3 = $parser3Prophecy->reveal();
 
         $registry = new TokenParserRegistry([
@@ -132,7 +133,7 @@ class TokenParserRegistryTest extends TestCase
         ]);
         $actual = $registry->parse($token);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
 
         $parser1Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $parser2Prophecy->canParse(Argument::any())->shouldHaveBeenCalledTimes(1);

@@ -19,22 +19,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException
+ * @internal
  */
 class MalformedFunctionExceptionTest extends TestCase
 {
     public function testIsAnInvalidArgumentException(): void
     {
-        static::assertTrue(is_a(MalformedFunctionException::class, InvalidArgumentException::class, true));
+        self::assertTrue(is_a(MalformedFunctionException::class, InvalidArgumentException::class, true));
     }
 
     public function testIsNotAParseThrowable(): void
     {
-        static::assertFalse(is_a(MalformedFunctionException::class, ExpressionLanguageParseThrowable::class, true));
+        self::assertFalse(is_a(MalformedFunctionException::class, ExpressionLanguageParseThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildMalformedFunctionException();
-        static::assertInstanceOf(ChildMalformedFunctionException::class, $exception);
+        self::assertInstanceOf(ChildMalformedFunctionException::class, $exception);
     }
 }

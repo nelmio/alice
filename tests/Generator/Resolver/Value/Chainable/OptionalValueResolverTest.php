@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Faker\Generator;
-use function in_array;
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
@@ -27,9 +26,11 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
+use function in_array;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
+ * @internal
  */
 class OptionalValueResolverTest extends TestCase
 {
@@ -37,12 +38,12 @@ class OptionalValueResolverTest extends TestCase
 
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(OptionalValueResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(OptionalValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(OptionalValueResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(OptionalValueResolver::class))->isCloneable());
     }
 
     public function testWithersReturnNewModifiedInstance(): void
@@ -50,16 +51,16 @@ class OptionalValueResolverTest extends TestCase
         $resolver = new OptionalValueResolver();
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        static::assertEquals(new OptionalValueResolver(), $resolver);
-        static::assertEquals(new OptionalValueResolver(new FakeValueResolver()), $newResolver);
+        self::assertEquals(new OptionalValueResolver(), $resolver);
+        self::assertEquals(new OptionalValueResolver(new FakeValueResolver()), $newResolver);
     }
 
     public function testCanResolveOptionalValues(): void
     {
         $resolver = new OptionalValueResolver();
 
-        static::assertTrue($resolver->canResolve(new OptionalValue('', '')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new OptionalValue('', '')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testCannotResolveValueIfHasNoResolver(): void
@@ -89,7 +90,7 @@ class OptionalValueResolverTest extends TestCase
 
         $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
-        static::assertSame($expectedValue, $resolvedValue->getValue());
+        self::assertSame($expectedValue, $resolvedValue->getValue());
     }
 
     public function testCanHandleExtremaQuantifiersCorrectlyWithoutGenerator(): void
@@ -100,7 +101,7 @@ class OptionalValueResolverTest extends TestCase
 
         $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
-        static::assertTrue(in_array($resolvedValue->getValue(), ['first_0', 'second_0'], true));
+        self::assertTrue(in_array($resolvedValue->getValue(), ['first_0', 'second_0'], true));
     }
 
     public static function optionalValueProvider(): iterable

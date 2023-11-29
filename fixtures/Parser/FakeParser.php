@@ -19,7 +19,7 @@ use Nelmio\Alice\ParserInterface;
 class FakeParser implements ParserInterface
 {
     use NotCallableTrait;
-    
+
     public function parse(string $file): array
     {
         $this->__call(__METHOD__, func_get_args());

@@ -22,12 +22,13 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\ConfiguratorFlagHandler
+ * @internal
  */
 class ConfiguratorFlagHandlerTest extends TestCase
 {
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ConfiguratorFlagHandler::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ConfiguratorFlagHandler::class))->isCloneable());
     }
 
     public function testCreatesAnOptionalCallIfFlagIsAnOptionalFlagIs(): void
@@ -40,7 +41,7 @@ class ConfiguratorFlagHandlerTest extends TestCase
 
         $actual = $handler->handleMethodFlags($call, new ConfiguratorFlag());
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testLeavesTheFunctionUnchangedIfFlagIsNotAnOptionalFlag(): void
@@ -55,6 +56,6 @@ class ConfiguratorFlagHandlerTest extends TestCase
 
         $actual = $handler->handleMethodFlags($call, $flag);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

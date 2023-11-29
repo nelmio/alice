@@ -18,6 +18,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\ResolvedValueWithFixtureSet
+ * @internal
  */
 class ResolvedValueWithFixtureSetTest extends TestCase
 {
@@ -28,7 +29,7 @@ class ResolvedValueWithFixtureSetTest extends TestCase
 
         $resolvedValueWithSet = new ResolvedValueWithFixtureSet($value, $set);
 
-        static::assertEquals($value, $resolvedValueWithSet->getValue());
-        static::assertEquals($set, $resolvedValueWithSet->getSet());
+        self::assertEquals($value, $resolvedValueWithSet->getValue());
+        self::assertEquals($set, $resolvedValueWithSet->getSet());
     }
 }

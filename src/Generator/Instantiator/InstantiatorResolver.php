@@ -45,7 +45,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
      */
     private $valueResolver;
 
-    public function __construct(InstantiatorInterface $instantiator, ValueResolverInterface $valueResolver = null)
+    public function __construct(InstantiatorInterface $instantiator, ?ValueResolverInterface $valueResolver = null)
     {
         if (null !== $valueResolver && $instantiator instanceof ValueResolverAwareInterface) {
             $instantiator = $instantiator->withValueResolver($valueResolver);
@@ -54,7 +54,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         $this->instantiator = $instantiator;
         $this->valueResolver = $valueResolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->instantiator, $resolver);
@@ -101,14 +101,14 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
             $this->valueResolver,
             $fixture,
             $set,
-            $context
+            $context,
         );
 
         return [
             $fixture->withSpecs(
                 $specs->withConstructor(
-                    $constructor->withArguments($resolvedArguments)
-                )
+                    $constructor->withArguments($resolvedArguments),
+                ),
             ),
             $set,
         ];
@@ -148,7 +148,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
                     $scope[$index] = $value;
                 }
 
-                $argumentPosition++;
+                ++$argumentPosition;
             }
         }
 

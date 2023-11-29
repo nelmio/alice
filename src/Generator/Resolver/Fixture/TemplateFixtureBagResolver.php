@@ -36,7 +36,7 @@ final class TemplateFixtureBagResolver implements FixtureBagResolverInterface
     {
         $this->resolver = new TemplateFixtureResolver();
     }
-    
+
     public function resolve(FixtureBag $unresolvedFixtures): FixtureBag
     {
         $resolvedFixtures = new TemplatingFixtureBag();
@@ -45,7 +45,7 @@ final class TemplateFixtureBagResolver implements FixtureBagResolverInterface
                 $this->resolver,
                 $fixture,
                 $unresolvedFixtures,
-                $resolvedFixtures
+                $resolvedFixtures,
             );
         }
 
@@ -75,7 +75,7 @@ final class TemplateFixtureBagResolver implements FixtureBagResolverInterface
             $fixture,
             $unresolvedFixtures,
             $resolvedFixtures,
-            $context
+            $context,
         );
     }
 }

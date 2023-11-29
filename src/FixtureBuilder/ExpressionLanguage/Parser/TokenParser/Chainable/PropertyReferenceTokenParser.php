@@ -27,13 +27,11 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
 {
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::PROPERTY_REFERENCE_TYPE;
+        return TokenType::PROPERTY_REFERENCE_TYPE === $token->getType();
     }
 
     /**
      * Parses tokens values like "@user->username".
-     *
-     *
      *
      * @throws ParseException
      */
@@ -42,7 +40,7 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
         parent::parse($token);
 
         $explodedValue = explode('->', $token->getValue());
-        if (count($explodedValue) !== 2) {
+        if (2 !== count($explodedValue)) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
@@ -53,7 +51,7 @@ final class PropertyReferenceTokenParser extends AbstractChainableParserAwarePar
 
         return new FixturePropertyValue(
             $reference,
-            $explodedValue[1]
+            $explodedValue[1],
         );
     }
 }

@@ -15,11 +15,11 @@ namespace Nelmio\Alice;
 
 class ObjectSetFactory
 {
-    public static function create(ParameterBag $parameters = null, ObjectBag $objects = null): ObjectSet
+    public static function create(?ParameterBag $parameters = null, ?ObjectBag $objects = null): ObjectSet
     {
         return new ObjectSet(
             $parameters ?? new ParameterBag(),
-            $objects ?? new ObjectBag()
+            $objects ?? new ObjectBag(),
         );
     }
 }

@@ -27,32 +27,33 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\ParameterValueResolver
+ * @internal
  */
 class ParameterValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(ParameterValueResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(ParameterValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ParameterValueResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ParameterValueResolver::class))->isCloneable());
     }
 
     public function testCanResolveVariableValues(): void
     {
         $resolver = new ParameterValueResolver();
 
-        static::assertTrue($resolver->canResolve(new ParameterValue('')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new ParameterValue('')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testReturnsParameterFromTheFixtureSet(): void
     {
         $value = new ParameterValue('foo');
         $set = ResolvedFixtureSetFactory::create(
-            new ParameterBag(['foo' => 'bar'])
+            new ParameterBag(['foo' => 'bar']),
         );
 
         $expected = new ResolvedValueWithFixtureSet('bar', $set);
@@ -60,7 +61,7 @@ class ParameterValueResolverTest extends TestCase
         $resolver = new ParameterValueResolver();
         $actual = $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope(): void

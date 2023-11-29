@@ -23,6 +23,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer
+ * @internal
  */
 class ReferenceLexerTest extends TestCase
 {
@@ -30,7 +31,7 @@ class ReferenceLexerTest extends TestCase
      * @var ReferenceLexer
      */
     private $lexer;
-    
+
     protected function setUp(): void
     {
         $this->lexer = new ReferenceLexer();
@@ -38,12 +39,12 @@ class ReferenceLexerTest extends TestCase
 
     public function testIsALexer(): void
     {
-        static::assertInstanceOf(LexerInterface::class, $this->lexer);
+        self::assertInstanceOf(LexerInterface::class, $this->lexer);
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ReferenceLexer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ReferenceLexer::class))->isCloneable());
     }
 
     public function testThrowsAnExceptionWhenAnInvalidValueIsGiven(): void
@@ -61,7 +62,7 @@ class ReferenceLexerTest extends TestCase
     {
         $actual = $this->lexer->lex($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testUsesTheRegexCachedGroupForTheTokenValue(): void
@@ -71,7 +72,7 @@ class ReferenceLexerTest extends TestCase
 
         $actual = $this->lexer->lex($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfNoMatchingPatternFound(): void
@@ -82,7 +83,7 @@ class ReferenceLexerTest extends TestCase
         $this->lexer->lex('foo');
     }
 
-    public function provideValues()
+    public function provideValues(): iterable
     {
         yield 'method reference' => [
             $value = '@user->getUserName()',

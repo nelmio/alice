@@ -27,7 +27,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExcepti
 final class ParameterValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ParameterValue;
@@ -53,7 +53,7 @@ final class ParameterValueResolver implements ChainableValueResolverInterface
 
         return new ResolvedValueWithFixtureSet(
             $parameters->get($parameterKey),
-            $fixtureSet
+            $fixtureSet,
         );
     }
 }

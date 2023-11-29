@@ -27,7 +27,7 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExcepti
 final class VariableValueResolver implements ChainableValueResolverInterface
 {
     use IsAServiceTrait;
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof VariableValue;
@@ -49,7 +49,7 @@ final class VariableValueResolver implements ChainableValueResolverInterface
         if (array_key_exists($variableName, $scope)) {
             return new ResolvedValueWithFixtureSet(
                 $scope[$variableName],
-                $fixtureSet
+                $fixtureSet,
             );
         }
 

@@ -39,16 +39,16 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
      */
     private $argumentResolver;
 
-    public function __construct(ValueResolverInterface $resolver = null)
+    public function __construct(?ValueResolverInterface $resolver = null)
     {
         $this->argumentResolver = $resolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FixtureMethodCallValue;
@@ -89,7 +89,7 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
         /** @var ResolvedFixtureSet $fixtureSet */
         [$instance, $fixtureSet] = [
             $fixtureReferenceResult->getValue(),
-            $fixtureReferenceResult->getSet()
+            $fixtureReferenceResult->getSet(),
         ];
 
         try {
@@ -104,7 +104,7 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
 
         return new ResolvedValueWithFixtureSet(
             $resolvedValue,
-            $fixtureSet
+            $fixtureSet,
         );
     }
 }

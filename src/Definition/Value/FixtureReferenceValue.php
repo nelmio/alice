@@ -37,7 +37,7 @@ final class FixtureReferenceValue implements ValueInterface
             } elseif (is_array($reference)) {
                 $referenceString = 'array';
             } else {
-                $referenceString = is_scalar($reference) ? gettype($reference) : get_class($reference);
+                $referenceString = is_scalar($reference) ? gettype($reference) : $reference::class;
             }
 
             throw InvalidArgumentExceptionFactory::createForInvalidReferenceType($referenceString);

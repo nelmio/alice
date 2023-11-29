@@ -21,6 +21,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationExceptionFactory
+ * @internal
  */
 class HydrationExceptionFactoryTest extends TestCase
 {
@@ -33,12 +34,12 @@ class HydrationExceptionFactoryTest extends TestCase
         $previous = new Error();
 
         $exception = HydrationExceptionFactory::create($object, $property, $code, $previous);
-        static::assertEquals(
+        self::assertEquals(
             'Could not hydrate the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals($code, $exception->getCode());
-        static::assertSame($previous, $exception->getPrevious());
+        self::assertEquals($code, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
     }
 
     public function testCreateForInaccessibleProperty(): void
@@ -47,24 +48,23 @@ class HydrationExceptionFactoryTest extends TestCase
         $property = new Property('foo', 'bar');
 
         $exception = HydrationExceptionFactory::createForInaccessibleProperty($object, $property);
-        static::assertEquals(
+        self::assertEquals(
             'Could not access to the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
-
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
 
         $code = 500;
         $previous = new Error();
 
         $exception = HydrationExceptionFactory::createForInaccessibleProperty($object, $property, $code, $previous);
-        static::assertEquals(
+        self::assertEquals(
             'Could not access to the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals($code, $exception->getCode());
-        static::assertSame($previous, $exception->getPrevious());
+        self::assertEquals($code, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
     }
 
     public function testCreateForInvalidProperty(): void
@@ -73,24 +73,23 @@ class HydrationExceptionFactoryTest extends TestCase
         $property = new Property('foo', 'bar');
 
         $exception = HydrationExceptionFactory::createForInvalidProperty($object, $property);
-        static::assertEquals(
+        self::assertEquals(
             'Invalid value given for the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
-
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
 
         $code = 500;
         $previous = new Error();
 
         $exception = HydrationExceptionFactory::createForInvalidProperty($object, $property, $code, $previous);
-        static::assertEquals(
+        self::assertEquals(
             'Invalid value given for the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals($code, $exception->getCode());
-        static::assertSame($previous, $exception->getPrevious());
+        self::assertEquals($code, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
     }
 
     public function testCreateForCouldNotHydrateObjectWithProperty(): void
@@ -99,23 +98,22 @@ class HydrationExceptionFactoryTest extends TestCase
         $property = new Property('foo', 'bar');
 
         $exception = HydrationExceptionFactory::createForCouldNotHydrateObjectWithProperty($object, $property);
-        static::assertEquals(
+        self::assertEquals(
             'Could not hydrate the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
-
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
 
         $code = 500;
         $previous = new Error();
 
         $exception = HydrationExceptionFactory::createForCouldNotHydrateObjectWithProperty($object, $property, $code, $previous);
-        static::assertEquals(
+        self::assertEquals(
             'Could not hydrate the property "foo" of the object "dummy" (class: stdClass).',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals($code, $exception->getCode());
-        static::assertSame($previous, $exception->getPrevious());
+        self::assertEquals($code, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
     }
 }

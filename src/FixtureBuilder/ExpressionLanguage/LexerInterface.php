@@ -23,7 +23,6 @@ interface LexerInterface
     /**
      * Converts a string into a sequence of tokens.
      *
-     *
      * @throws ExpressionLanguageParseThrowable
      *
      * @return Token[]

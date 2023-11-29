@@ -20,15 +20,16 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Faker\Provider\AliceProvider
+ * @internal
  */
 class AliceProviderTest extends TestCase
 {
     public function testIdentityReturnsTheValueUnchanged(): void
     {
-        $value = $expected ='foo';
+        $value = $expected = 'foo';
         $actual = AliceProvider::identity($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testCurrentReturnsFixtureCurrentValue(): void
@@ -38,7 +39,7 @@ class AliceProviderTest extends TestCase
 
         $actual = AliceProvider::current($fixture);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testCurrentThrowsAnExceptionIfFixtureHasNoCurrentValue(): void
@@ -47,14 +48,14 @@ class AliceProviderTest extends TestCase
 
         try {
             AliceProvider::current($fixture);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (NoValueForCurrentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'No value for \'<current()>\' found for the fixture "dummy".',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNull($exception->getPrevious());
         }
     }
 }

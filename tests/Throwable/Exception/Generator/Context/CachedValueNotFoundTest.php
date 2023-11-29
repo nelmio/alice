@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound
+ * @internal
  */
 class CachedValueNotFoundTest extends TestCase
 {
@@ -24,11 +25,11 @@ class CachedValueNotFoundTest extends TestCase
     {
         $exception = CachedValueNotFound::create('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'No value with the key "foo" was found in the cache.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

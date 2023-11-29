@@ -26,12 +26,12 @@ class DummyValue implements ValueInterface
     {
         $this->value = $value;
     }
-    
+
     public function getValue()
     {
         return $this->value;
     }
-    
+
     public function __toString(): string
     {
         return $this->value;

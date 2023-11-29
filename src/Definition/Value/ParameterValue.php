@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
-use function Nelmio\Alice\deep_clone;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
+use function Nelmio\Alice\deep_clone;
 
 /**
  * Value object representing '<{param}>'.
@@ -38,12 +38,12 @@ final class ParameterValue implements ValueInterface
 
         $this->parameterKey = $parameterKey;
     }
-    
+
     public function getValue()
     {
         return deep_clone($this->parameterKey);
     }
-    
+
     public function __toString(): string
     {
         return sprintf('<{%s}>', $this->parameterKey);

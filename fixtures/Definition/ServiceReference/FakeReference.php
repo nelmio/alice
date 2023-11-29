@@ -19,7 +19,7 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeReference implements ServiceReferenceInterface
 {
     use NotCallableTrait;
-    
+
     public function getId(): string
     {
         $this->__call(__METHOD__, func_get_args());

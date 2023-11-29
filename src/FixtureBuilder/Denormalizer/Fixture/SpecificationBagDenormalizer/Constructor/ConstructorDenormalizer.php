@@ -46,7 +46,7 @@ final class ConstructorDenormalizer implements ConstructorDenormalizerInterface
     ): MethodCallInterface {
         return new SimpleMethodCall(
             '__construct',
-            $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor)
+            $this->argumentDenormalizer->denormalize($scope, $parser, $unparsedConstructor),
         );
     }
 }

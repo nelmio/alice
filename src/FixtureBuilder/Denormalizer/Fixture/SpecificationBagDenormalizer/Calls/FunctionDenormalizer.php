@@ -38,7 +38,7 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
     {
         $this->argumentsDenormalizer = $argumentsDenormalizer;
     }
-    
+
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
@@ -60,7 +60,7 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
      */
     private function getCallerReference(FixtureInterface $scope, string $method): array
     {
-        if (false === strpos($method, '::')) {
+        if (false === mb_strpos($method, '::')) {
             return [null, $method];
         }
 
@@ -71,8 +71,8 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
 
         [$caller, $method] = $explodedMethod;
 
-        if (0 === strpos($caller, '@')) {
-            return [new InstantiatedReference(substr($caller, 1)), $method];
+        if (0 === mb_strpos($caller, '@')) {
+            return [new InstantiatedReference(mb_substr($caller, 1)), $method];
         }
 
         return [new StaticReference($caller), $method];

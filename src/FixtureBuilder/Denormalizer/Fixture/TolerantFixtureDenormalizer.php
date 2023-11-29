@@ -25,17 +25,17 @@ use Throwable;
 final class TolerantFixtureDenormalizer implements FixtureDenormalizerInterface
 {
     use IsAServiceTrait;
-    
+
     /**
      * @var FixtureDenormalizerInterface
      */
     private $denormalizer;
-    
+
     public function __construct(FixtureDenormalizerInterface $denormalizer)
     {
         $this->denormalizer = $denormalizer;
     }
-    
+
     public function denormalize(FixtureBag $builtFixtures, string $className, string $fixtureId, array $specs, FlagBag $flags): FixtureBag
     {
         try {
@@ -53,10 +53,10 @@ final class TolerantFixtureDenormalizer implements FixtureDenormalizerInterface
                 'An error occurred while denormalizing the fixture "%s" (%s): %s',
                 $fixtureId,
                 $className,
-                $throwable->getMessage()
+                $throwable->getMessage(),
             ),
             $throwable->getCode(),
-            $throwable
+            $throwable,
         ];
 
         throw new $throwableClass(...$arguments);

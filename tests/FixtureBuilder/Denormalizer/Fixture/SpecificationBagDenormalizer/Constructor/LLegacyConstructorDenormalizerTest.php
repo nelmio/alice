@@ -24,6 +24,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\LegacyConstructorDenormalizer
+ * @internal
  */
 class LLegacyConstructorDenormalizerTest extends TestCase
 {
@@ -31,7 +32,7 @@ class LLegacyConstructorDenormalizerTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(LegacyConstructorDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(LegacyConstructorDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesConstructorWithTheDecoratedFactoryDenormalizer(): void
@@ -46,9 +47,8 @@ class LLegacyConstructorDenormalizerTest extends TestCase
         $factoryDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $constructor)
             ->willReturn(
-                $expected = new FakeMethodCall()
-            )
-        ;
+                $expected = new FakeMethodCall(),
+            );
         /** @var ConstructorDenormalizerInterface $factoryDenormalizer */
         $factoryDenormalizer = $factoryDenormalizerProphecy->reveal();
 
@@ -56,7 +56,7 @@ class LLegacyConstructorDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testDenormalizesConstructorWithTheDecoratedConstructorDenormalizerIfCannotDenormalizeWithTheFactoryDenormalizer(): void
@@ -68,16 +68,14 @@ class LLegacyConstructorDenormalizerTest extends TestCase
         $constructorDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
         $constructorDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $constructor)
-            ->willReturn($expected = new FakeMethodCall())
-        ;
+            ->willReturn($expected = new FakeMethodCall());
         /** @var ConstructorDenormalizerInterface $constructorDenormalizer */
         $constructorDenormalizer = $constructorDenormalizerProphecy->reveal();
 
         $factoryDenormalizerProphecy = $this->prophesize(ConstructorDenormalizerInterface::class);
         $factoryDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $constructor)
-            ->willThrow(UnexpectedValueException::class)
-        ;
+            ->willThrow(UnexpectedValueException::class);
         /** @var ConstructorDenormalizerInterface $factoryDenormalizer */
         $factoryDenormalizer = $factoryDenormalizerProphecy->reveal();
 
@@ -85,6 +83,6 @@ class LLegacyConstructorDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

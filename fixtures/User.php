@@ -24,7 +24,7 @@ class User
         return $this->id;
     }
 
-    public function setId(string $id): User
+    public function setId(string $id): self
     {
         $this->id = $id;
 
@@ -36,7 +36,7 @@ class User
         return $this->name;
     }
 
-    public function setName(?string $name): User
+    public function setName(?string $name): self
     {
         $this->name = $name;
 

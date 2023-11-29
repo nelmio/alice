@@ -19,22 +19,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException
+ * @internal
  */
 class UnparsableFileExceptionTest extends TestCase
 {
     public function testIsAnException(): void
     {
-        static::assertTrue(is_a(UnparsableFileException::class, Exception::class, true));
+        self::assertTrue(is_a(UnparsableFileException::class, Exception::class, true));
     }
 
     public function testIsAParseThrowable(): void
     {
-        static::assertTrue(is_a(UnparsableFileException::class, ParseThrowable::class, true));
+        self::assertTrue(is_a(UnparsableFileException::class, ParseThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildUnparsableFileException();
-        static::assertInstanceOf(ChildUnparsableFileException::class, $exception);
+        self::assertInstanceOf(ChildUnparsableFileException::class, $exception);
     }
 }

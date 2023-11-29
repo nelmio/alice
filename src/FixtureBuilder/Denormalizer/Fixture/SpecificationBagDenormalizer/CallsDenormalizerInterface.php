@@ -23,7 +23,7 @@ interface CallsDenormalizerInterface
     /**
      * Denormalizes a method call.
      *
-     * @param FixtureInterface    $scope See SpecificationsDenormalizerInterface
+     * @param FixtureInterface $scope See SpecificationsDenormalizerInterface
      *
      * @throws DenormalizationThrowable
      *

@@ -26,17 +26,17 @@ final class NoSuchMethodExceptionFactory
         FixtureInterface $fixture,
         FixtureMethodCallValue $value,
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ): NoSuchMethodException {
         return new NoSuchMethodException(
             sprintf(
                 'Could not find the method "%s" of the object "%s" (class: %s).',
                 $value->getFunctionCall()->getName(),
                 $fixture->getId(),
-                $fixture->getClassName()
+                $fixture->getClassName(),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 

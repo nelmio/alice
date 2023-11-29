@@ -18,11 +18,12 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversNothing
+ * @internal
  */
 class ExpressionLanguageParseThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void
     {
-        static::assertTrue(is_a(RootExpressionLanguageParseException::class, BuildThrowable::class, true));
+        self::assertTrue(is_a(RootExpressionLanguageParseException::class, BuildThrowable::class, true));
     }
 }

@@ -19,22 +19,23 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException
+ * @internal
  */
 class InvalidScopeExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(InvalidScopeException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(InvalidScopeException::class, RuntimeException::class, true));
     }
 
     public function testIsADenormalizationThrowable(): void
     {
-        static::assertTrue(is_a(InvalidScopeException::class, DenormalizationThrowable::class, true));
+        self::assertTrue(is_a(InvalidScopeException::class, DenormalizationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildInvalidScopeException();
-        static::assertInstanceOf(ChildInvalidScopeException::class, $exception);
+        self::assertInstanceOf(ChildInvalidScopeException::class, $exception);
     }
 }

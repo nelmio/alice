@@ -23,6 +23,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall
+ * @internal
  */
 class ConfiguratorMethodCallTest extends TestCase
 {
@@ -30,9 +31,9 @@ class ConfiguratorMethodCallTest extends TestCase
 
     public function testIsAMethodCall(): void
     {
-        static::assertTrue(is_a(ConfiguratorMethodCall::class, MethodCallInterface::class, true));
+        self::assertTrue(is_a(ConfiguratorMethodCall::class, MethodCallInterface::class, true));
     }
-    
+
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $caller = new InstantiatedReference('user.factory');
@@ -51,11 +52,11 @@ class ConfiguratorMethodCallTest extends TestCase
 
         $definition = new ConfiguratorMethodCall($methodCall);
 
-        static::assertEquals($caller, $definition->getCaller());
-        static::assertEquals($method, $definition->getMethod());
-        static::assertEquals($arguments, $definition->getArguments());
-        static::assertEquals($stringValue, $definition->__toString());
-        static::assertSame($methodCall, $definition->getOriginalMethodCall());
+        self::assertEquals($caller, $definition->getCaller());
+        self::assertEquals($method, $definition->getMethod());
+        self::assertEquals($arguments, $definition->getArguments());
+        self::assertEquals($stringValue, $definition->__toString());
+        self::assertSame($methodCall, $definition->getOriginalMethodCall());
 
         $methodCallProphecy->getCaller()->shouldHaveBeenCalledTimes(1);
         $methodCallProphecy->getMethod()->shouldHaveBeenCalledTimes(1);
@@ -69,7 +70,7 @@ class ConfiguratorMethodCallTest extends TestCase
             'mutate',
             [
                 $arg0 = new stdClass(),
-            ]
+            ],
         );
 
         $definition = new ConfiguratorMethodCall($caller);
@@ -84,16 +85,16 @@ class ConfiguratorMethodCallTest extends TestCase
         // @phpstan-ignore-next-line
         $definition->getArguments()[0]->foz = 'baz';
 
-        static::assertEquals('mutated', $definition->getCaller()->getId());
-        static::assertEquals('dummy', $definition->getMethod());
-        static::assertEquals(
+        self::assertEquals('mutated', $definition->getCaller()->getId());
+        self::assertEquals('dummy', $definition->getMethod());
+        self::assertEquals(
             [
                 StdClassFactory::create([
                     'foo' => 'bar',
                     'foz' => 'baz',
                 ]),
             ],
-            $definition->getArguments()
+            $definition->getArguments(),
         );
     }
 
@@ -108,12 +109,12 @@ class ConfiguratorMethodCallTest extends TestCase
         ];
         $newDefinition = $definition->withArguments($newArguments);
 
-        static::assertInstanceOf(ConfiguratorMethodCall::class, $newDefinition);
+        self::assertInstanceOf(ConfiguratorMethodCall::class, $newDefinition);
 
-        static::assertEquals(
+        self::assertEquals(
             new SimpleMethodCall('getUsername', $newArguments),
-            $definition->getOriginalMethodCall()
+            $definition->getOriginalMethodCall(),
         );
-        static::assertSame($newArguments, $newDefinition->getArguments());
+        self::assertSame($newArguments, $newDefinition->getArguments());
     }
 }

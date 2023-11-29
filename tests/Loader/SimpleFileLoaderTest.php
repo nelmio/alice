@@ -25,6 +25,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Loader\SimpleFileLoader
+ * @internal
  */
 class SimpleFileLoaderTest extends TestCase
 {
@@ -32,12 +33,12 @@ class SimpleFileLoaderTest extends TestCase
 
     public function testIsALoader(): void
     {
-        static::assertTrue(is_a(SimpleFileLoader::class, FileLoaderInterface::class, true));
+        self::assertTrue(is_a(SimpleFileLoader::class, FileLoaderInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleFileLoader::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleFileLoader::class))->isCloneable());
     }
 
     public function testLoadAFileAndReturnsAnObjectSet(): void
@@ -69,7 +70,7 @@ class SimpleFileLoaderTest extends TestCase
         $loader = new SimpleFileLoader($parser, $dataLoader);
         $result = $loader->loadFile($file, $parameters, $objects);
 
-        static::assertSame($objectSet, $result);
+        self::assertSame($objectSet, $result);
 
         $parserProphecy->parse(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $dataLoaderProphecy->loadData(Argument::cetera())->shouldHaveBeenCalledTimes(1);

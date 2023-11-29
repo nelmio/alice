@@ -20,17 +20,19 @@ use stdClass;
 
 /**
  * @covers ::\Nelmio\Alice\deep_clone
+ * @internal
  */
 class DeepCloneTest extends TestCase
 {
     /**
      * @dataProvider provideScalarValues
+     * @param mixed $value
      */
     public function testDeepCloneScalarsReturnsScalar($value): void
     {
         $clone = deep_clone($value);
 
-        static::assertEquals($value, $clone);
+        self::assertEquals($value, $clone);
     }
 
     public function testDeepCloneObjects(): void
@@ -87,9 +89,7 @@ class DeepCloneTest extends TestCase
         $foo = new stdClass();
         $bar = new stdClass();
 
-        $c1 = static function () use ($foo) {
-            return $foo;
-        };
+        $c1 = static fn () => $foo;
 
         $foo->name = 'foo';
         $foo->bar = $bar;
@@ -99,11 +99,11 @@ class DeepCloneTest extends TestCase
 
         $fooClone = deep_clone($c1)();
 
-        static::assertSame($foo, $fooClone);
-        static::assertSame($bar, $fooClone->bar);
+        self::assertSame($foo, $fooClone);
+        self::assertSame($bar, $fooClone->bar);
     }
 
-    public function provideScalarValues()
+    public function provideScalarValues(): iterable
     {
         return [
             [null],
@@ -122,7 +122,7 @@ class DeepCloneTest extends TestCase
 
     private function assertEqualsButNotSame($expected, $value): void
     {
-        static::assertEquals($expected, $value);
-        static::assertNotSame($expected, $value);
+        self::assertEquals($expected, $value);
+        self::assertNotSame($expected, $value);
     }
 }

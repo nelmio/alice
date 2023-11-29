@@ -27,18 +27,18 @@ final class StaticFactoryInstantiator extends AbstractChainableInstantiator
     private $namedArgumentsResolver;
 
     // TODO: make $namedArgumentsResolver non-nullable in 4.0. It is currently nullable only for BC purposes
-    public function __construct(NamedArgumentsResolver $namedArgumentsResolver = null)
+    public function __construct(?NamedArgumentsResolver $namedArgumentsResolver = null)
     {
         $this->namedArgumentsResolver = $namedArgumentsResolver;
     }
-    
+
     public function canInstantiate(FixtureInterface $fixture): bool
     {
         $constructor = $fixture->getSpecs()->getConstructor();
 
         return null !== $constructor && false === $constructor instanceof NoMethodCall && $constructor->getCaller() instanceof StaticReference;
     }
-    
+
     protected function createInstance(FixtureInterface $fixture)
     {
         $constructor = $fixture->getSpecs()->getConstructor();
@@ -46,7 +46,7 @@ final class StaticFactoryInstantiator extends AbstractChainableInstantiator
             $fixture->getClassName(),
             $constructor->getCaller()->getId(),
             $constructor->getMethod(),
-            $constructor->getArguments()
+            $constructor->getArguments(),
         ];
 
         if (null === $arguments) {

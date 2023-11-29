@@ -31,7 +31,7 @@ final class EvaluatedValue implements ValueInterface
     {
         return $this->expression;
     }
-    
+
     public function __toString(): string
     {
         return $this->expression;

@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Caller\CallProcessorExceptionFactory
+ * @internal
  */
 class CallProcessorExceptionFactoryTest extends TestCase
 {
@@ -25,11 +26,11 @@ class CallProcessorExceptionFactoryTest extends TestCase
     {
         $exception = CallProcessorExceptionFactory::createForNoProcessorFoundForMethodCall(new DummyMethodCall('dummy'));
 
-        static::assertEquals(
+        self::assertEquals(
             'No suitable processor found to handle the method call "dummy".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

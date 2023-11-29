@@ -25,11 +25,11 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseExce
 final class OptionalTokenParser extends AbstractChainableParserAwareParser
 {
     /** @private */
-    const REGEX = '/^(?<quantifier>\d+|\d*\.\d+|<.+>)%\? \ *?(?<first_member>[^:]+)(?:\: +(?<second_member>[^\ ]+))?/';
-    
+    public const REGEX = '/^(?<quantifier>\d+|\d*\.\d+|<.+>)%\? \ *?(?<first_member>[^:]+)(?:\: +(?<second_member>[^\ ]+))?/';
+
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::OPTIONAL_TYPE;
+        return TokenType::OPTIONAL_TYPE === $token->getType();
     }
 
     /**
@@ -52,7 +52,7 @@ final class OptionalTokenParser extends AbstractChainableParserAwareParser
             $this->parser->parse(trim($matches['first_member'])),
             array_key_exists('second_member', $matches)
                 ? $this->parser->parse($matches['second_member'])
-                : null
+                : null,
         );
     }
 }

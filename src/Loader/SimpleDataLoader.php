@@ -38,7 +38,7 @@ final class SimpleDataLoader implements DataLoaderInterface
         $this->builder = $fixtureBuilder;
         $this->generator = $generator;
     }
-    
+
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
         $fixtureSet = $this->builder->build($data, $parameters, $objects);

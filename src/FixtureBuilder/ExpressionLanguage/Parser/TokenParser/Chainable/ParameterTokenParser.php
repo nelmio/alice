@@ -31,7 +31,7 @@ final class ParameterTokenParser implements ChainableTokenParserInterface
 
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::PARAMETER_TYPE;
+        return TokenType::PARAMETER_TYPE === $token->getType();
     }
 
     /**
@@ -46,7 +46,7 @@ final class ParameterTokenParser implements ChainableTokenParserInterface
         $value = $token->getValue();
 
         try {
-            $paramKey = strlen($value) > 3 ? substr($value, 2, -2) : false;
+            $paramKey = mb_strlen($value) > 3 ? mb_substr($value, 2, -2) : false;
 
             return new ParameterValue($paramKey);
         } catch (TypeError $error) {

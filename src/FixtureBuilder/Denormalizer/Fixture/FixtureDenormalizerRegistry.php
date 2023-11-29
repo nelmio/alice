@@ -24,7 +24,7 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExc
 final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
 {
     use IsAServiceTrait;
-    
+
     /**
      * @var ChainableFixtureDenormalizerInterface[]
      */
@@ -43,15 +43,15 @@ final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
             if ($denormalizer instanceof FixtureDenormalizerAwareInterface) {
                 $denormalizer = $denormalizer->withFixtureDenormalizer($this);
             }
-            
+
             if ($denormalizer instanceof FlagParserAwareInterface) {
                 $denormalizer = $denormalizer->withFlagParser($flagParser);
             }
-            
+
             $this->denormalizers[] = $denormalizer;
         }
     }
-    
+
     public function denormalize(FixtureBag $builtFixtures, string $className, string $fixtureId, array $specs, FlagBag $flags): FixtureBag
     {
         foreach ($this->denormalizers as $denormalizer) {

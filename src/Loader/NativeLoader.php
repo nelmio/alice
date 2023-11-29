@@ -176,43 +176,43 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
  * methods can be added in minor versions, which could make your application break if you are extending this class and
  * have a method with the same name.
  *
- * @method DataLoaderInterface getDataLoader()
- * @method FileLoaderInterface getFileLoader()
- * @method FilesLoaderInterface getFilesLoader()
- * @method FixtureBuilderInterface getFixtureBuilder()
- * @method GeneratorInterface getGenerator()
- * @method ParserInterface getParser()
- * @method DenormalizerInterface getDenormalizer()
- * @method FixtureBagDenormalizerInterface getFixtureBagDenormalizer()
- * @method FixtureDenormalizerInterface getFixtureDenormalizer()
- * @method FlagParserInterface getFlagParser()
- * @method ConstructorDenormalizerInterface getConstructorDenormalizer()
- * @method PropertyDenormalizerInterface getPropertyDenormalizer()
- * @method CallsDenormalizerInterface getCallsDenormalizer()
- * @method ArgumentsDenormalizerInterface getArgumentsDenormalizer()
- * @method ValueDenormalizerInterface getValueDenormalizer()
+ * @method DataLoaderInterface               getDataLoader()
+ * @method FileLoaderInterface               getFileLoader()
+ * @method FilesLoaderInterface              getFilesLoader()
+ * @method FixtureBuilderInterface           getFixtureBuilder()
+ * @method GeneratorInterface                getGenerator()
+ * @method ParserInterface                   getParser()
+ * @method DenormalizerInterface             getDenormalizer()
+ * @method FixtureBagDenormalizerInterface   getFixtureBagDenormalizer()
+ * @method FixtureDenormalizerInterface      getFixtureDenormalizer()
+ * @method FlagParserInterface               getFlagParser()
+ * @method ConstructorDenormalizerInterface  getConstructorDenormalizer()
+ * @method PropertyDenormalizerInterface     getPropertyDenormalizer()
+ * @method CallsDenormalizerInterface        getCallsDenormalizer()
+ * @method ArgumentsDenormalizerInterface    getArgumentsDenormalizer()
+ * @method ValueDenormalizerInterface        getValueDenormalizer()
  * @method ExpressionLanguageParserInterface getExpressionLanguageParser()
- * @method LexerInterface getLexer()
- * @method TokenParserInterface getExpressionLanguageTokenParser()
- * @method ObjectGeneratorInterface getObjectGenerator()
- * @method FixtureSetResolverInterface getFixtureSetResolver()
- * @method ParameterBagResolverInterface getParameterResolver()
- * @method ValueResolverInterface getValueResolver()
- * @method FakerGenerator getFakerGenerator()
- * @method InstantiatorInterface getInstantiator()
- * @method HydratorInterface getHydrator()
- * @method PropertyHydratorInterface getPropertyHydrator()
- * @method PropertyAccessorInterface getPropertyAccessor()
- * @method CallerInterface getCaller()
- * @method CallProcessorInterface getCallProcessor()
- * @method NamedArgumentsResolver getNamedArgumentsResolver()
+ * @method LexerInterface                    getLexer()
+ * @method TokenParserInterface              getExpressionLanguageTokenParser()
+ * @method ObjectGeneratorInterface          getObjectGenerator()
+ * @method FixtureSetResolverInterface       getFixtureSetResolver()
+ * @method ParameterBagResolverInterface     getParameterResolver()
+ * @method ValueResolverInterface            getValueResolver()
+ * @method FakerGenerator                    getFakerGenerator()
+ * @method InstantiatorInterface             getInstantiator()
+ * @method HydratorInterface                 getHydrator()
+ * @method PropertyHydratorInterface         getPropertyHydrator()
+ * @method PropertyAccessorInterface         getPropertyAccessor()
+ * @method CallerInterface                   getCaller()
+ * @method CallProcessorInterface            getCallProcessor()
+ * @method NamedArgumentsResolver            getNamedArgumentsResolver()
  */
 class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoaderInterface
 {
     use IsAServiceTrait;
 
     /** @protected */
-    const LOCALE = 'en_US';
+    public const LOCALE = 'en_US';
 
     private $previous = '';
 
@@ -241,24 +241,24 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
      */
     private $dataLoader;
 
-    public function __construct(FakerGenerator $fakerGenerator = null)
+    public function __construct(?FakerGenerator $fakerGenerator = null)
     {
         $this->fakerGenerator = $fakerGenerator ?? $this->getFakerGenerator();
         $this->dataLoader = $this->getDataLoader();
         $this->fileLoader = $this->getFileLoader();
         $this->filesLoader = $this->getFilesLoader();
     }
-    
+
     public function loadFiles(array $files, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->filesLoader->loadFiles($files, $parameters, $objects);
     }
-    
+
     public function loadFile(string $file, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->fileLoader->loadFile($file, $parameters, $objects);
     }
-    
+
     public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
     {
         return $this->dataLoader->loadData($data, $parameters, $objects);
@@ -268,7 +268,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     {
         return new SimpleDataLoader(
             $this->getFixtureBuilder(),
-            $this->getGenerator()
+            $this->getGenerator(),
         );
     }
 
@@ -276,7 +276,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     {
         return new SimpleFileLoader(
             $this->getParser(),
-            $this->dataLoader
+            $this->dataLoader,
         );
     }
 
@@ -284,14 +284,14 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     {
         return new SimpleFilesLoader(
             $this->getParser(),
-            $this->dataLoader
+            $this->dataLoader,
         );
     }
 
     protected function createFixtureBuilder(): FixtureBuilderInterface
     {
         return new SimpleBuilder(
-            $this->getDenormalizer()
+            $this->getDenormalizer(),
         );
     }
 
@@ -299,7 +299,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     {
         return new DoublePassGenerator(
             $this->getFixtureSetResolver(),
-            $this->getObjectGenerator()
+            $this->getObjectGenerator(),
         );
     }
 
@@ -315,8 +315,8 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             $registry,
             new DefaultFileLocator(),
             new DefaultIncludeProcessor(
-                new DefaultFileLocator()
-            )
+                new DefaultFileLocator(),
+            ),
         );
     }
 
@@ -324,7 +324,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     {
         return new SimpleDenormalizer(
             new SimpleParameterBagDenormalizer(),
-            $this->getFixtureBagDenormalizer()
+            $this->getFixtureBagDenormalizer(),
         );
     }
 
@@ -332,7 +332,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     {
         return new SimpleFixtureBagDenormalizer(
             $this->getFixtureDenormalizer(),
-            $this->getFlagParser()
+            $this->getFlagParser(),
         );
     }
 
@@ -346,28 +346,28 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
                         new SimpleSpecificationsDenormalizer(
                             $this->getConstructorDenormalizer(),
                             $this->getPropertyDenormalizer(),
-                            $this->getCallsDenormalizer()
-                        )
+                            $this->getCallsDenormalizer(),
+                        ),
                     ),
                     new SimpleCollectionDenormalizer(
                         new CollectionDenormalizerWithTemporaryFixture(
-                            new NullListNameDenormalizer()
-                        )
+                            new NullListNameDenormalizer(),
+                        ),
                     ),
                     new SimpleCollectionDenormalizer(
                         new CollectionDenormalizerWithTemporaryFixture(
-                            new NullRangeNameDenormalizer()
-                        )
+                            new NullRangeNameDenormalizer(),
+                        ),
                     ),
                     new ReferenceRangeNameDenormalizer(
                         new SimpleSpecificationsDenormalizer(
                             $this->getConstructorDenormalizer(),
                             $this->getPropertyDenormalizer(),
-                            $this->getCallsDenormalizer()
-                        )
-                    )
-                ]
-            )
+                            $this->getCallsDenormalizer(),
+                        ),
+                    ),
+                ],
+            ),
         );
     }
 
@@ -388,10 +388,10 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     {
         return new LegacyConstructorDenormalizer(
             new ConstructorDenormalizer(
-                $this->getArgumentsDenormalizer()
+                $this->getArgumentsDenormalizer(),
             ),
             new FactoryDenormalizer(
-                $this->getCallsDenormalizer()
+                $this->getCallsDenormalizer(),
             ),
         );
     }
@@ -399,7 +399,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     protected function createPropertyDenormalizer(): PropertyDenormalizerInterface
     {
         return new SimplePropertyDenormalizer(
-            $this->getValueDenormalizer()
+            $this->getValueDenormalizer(),
         );
     }
 
@@ -407,19 +407,19 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     {
         return new CallsWithFlagsDenormalizer(
             new FunctionDenormalizer(
-                $this->getArgumentsDenormalizer()
+                $this->getArgumentsDenormalizer(),
             ),
             [
                 new ConfiguratorFlagHandler(),
                 new OptionalFlagHandler(),
-            ]
+            ],
         );
     }
 
     protected function createArgumentsDenormalizer(): ArgumentsDenormalizerInterface
     {
         return new SimpleArgumentsDenormalizer(
-            $this->getValueDenormalizer()
+            $this->getValueDenormalizer(),
         );
     }
 
@@ -427,8 +427,8 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     {
         return new UniqueValueDenormalizer(
             new SimpleValueDenormalizer(
-                $this->getExpressionLanguageParser()
-            )
+                $this->getExpressionLanguageParser(),
+            ),
         );
     }
 
@@ -438,9 +438,9 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             new StringMergerParser(
                 new SimpleParser(
                     $this->getLexer(),
-                    $this->getExpressionLanguageTokenParser()
-                )
-            )
+                    $this->getExpressionLanguageTokenParser(),
+                ),
+            ),
         );
     }
 
@@ -452,12 +452,12 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
                     new FunctionLexer(
                         new StringThenReferenceLexer(
                             new SubPatternsLexer(
-                                new ReferenceLexer()
-                            )
-                        )
-                    )
-                )
-            )
+                                new ReferenceLexer(),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         );
     }
 
@@ -472,7 +472,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             new FixtureMethodReferenceTokenParser(),
             new FixtureRangeReferenceTokenParser(),
             new IdentityTokenParser(
-                new FunctionTokenParser($argumentEscaper)
+                new FunctionTokenParser($argumentEscaper),
             ),
             new MethodReferenceTokenParser(),
             new OptionalTokenParser(),
@@ -484,8 +484,8 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             new StringTokenParser($argumentEscaper),
             new TolerantFunctionTokenParser(
                 new IdentityTokenParser(
-                    new FunctionTokenParser($argumentEscaper)
-                )
+                    new FunctionTokenParser($argumentEscaper),
+                ),
             ),
             new VariableTokenParser(),
             new WildcardReferenceTokenParser(),
@@ -499,8 +499,8 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
                 $this->getValueResolver(),
                 $this->getInstantiator(),
                 $this->getHydrator(),
-                $this->getCaller()
-            )
+                $this->getCaller(),
+            ),
         );
     }
 
@@ -509,8 +509,8 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
         return new RemoveConflictingObjectsResolver(
             new SimpleFixtureSetResolver(
                 $this->getParameterResolver(),
-                new TemplateFixtureBagResolver()
-            )
+                new TemplateFixtureBagResolver(),
+            ),
         );
     }
 
@@ -523,7 +523,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
         ]);
 
         return new RemoveConflictingParametersParameterBagResolver(
-            new SimpleParameterBagResolver($registry)
+            new SimpleParameterBagResolver($registry),
         );
     }
 
@@ -536,24 +536,24 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             new FunctionCallArgumentResolver(
                 new PhpFunctionCallValueResolver(
                     $this->getBlacklistedFunctions(),
-                    new FakerFunctionCallValueResolver($this->fakerGenerator)
-                )
+                    new FakerFunctionCallValueResolver($this->fakerGenerator),
+                ),
             ),
             new FixturePropertyReferenceResolver(
-                $this->getPropertyAccessor()
+                $this->getPropertyAccessor(),
             ),
             new FixtureMethodCallReferenceResolver(),
             new UnresolvedFixtureReferenceIdResolver(
                 new SelfFixtureReferenceResolver(
-                    new FixtureReferenceResolver()
-                )
+                    new FixtureReferenceResolver(),
+                ),
             ),
             new FixtureWildcardReferenceResolver(),
             new ListValueResolver(),
             new OptionalValueResolver(null, $this->getFakerGenerator()),
             new ParameterValueResolver(),
             new UniqueValueResolver(
-                new UniqueValuesPool()
+                new UniqueValuesPool(),
             ),
             new ValueForCurrentValueResolver(),
             new VariableValueResolver(),
@@ -590,8 +590,8 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
                     new NullConstructorInstantiator(),
                     new NoMethodCallInstantiator(),
                     new StaticFactoryInstantiator($namedArgumentsResolver),
-                ])
-            )
+                ]),
+            ),
         );
     }
 
@@ -603,14 +603,14 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
     protected function createHydrator(): HydratorInterface
     {
         return new SimpleHydrator(
-            $this->getPropertyHydrator()
+            $this->getPropertyHydrator(),
         );
     }
 
     protected function createPropertyHydrator(): PropertyHydratorInterface
     {
         return new SymfonyPropertyAccessorHydrator(
-            $this->getPropertyAccessor()
+            $this->getPropertyAccessor(),
         );
     }
 
@@ -619,7 +619,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
         return new StdPropertyAccessor(
             PropertyAccess::createPropertyAccessorBuilder()
                 ->enableMagicCall()
-                ->getPropertyAccessor()
+                ->getPropertyAccessor(),
         );
     }
 
@@ -655,7 +655,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
             return $this->cache[$method];
         }
 
-        if (0 !== strpos($method, 'get')) {
+        if (0 !== mb_strpos($method, 'get')) {
             throw BadMethodCallExceptionFactory::createForUnknownMethod($method);
         }
 
@@ -666,7 +666,7 @@ class NativeLoader implements FilesLoaderInterface, FileLoaderInterface, DataLoa
 
         $this->previous = $realMethod;
 
-        $service = $this->$realMethod(...$arguments);
+        $service = $this->{$realMethod}(...$arguments);
         $this->cache[$method] = $service;
 
         return $service;

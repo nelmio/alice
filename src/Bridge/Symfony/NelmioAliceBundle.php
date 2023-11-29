@@ -30,56 +30,56 @@ final class NelmioAliceBundle extends Bundle
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.file_parser.registry',
-                'nelmio_alice.file_parser'
-            )
+                'nelmio_alice.file_parser',
+            ),
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.fixture_builder.denormalizer.flag_parser.registry',
-                'nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser'
-            )
+                'nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser',
+            ),
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer',
-                'nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer'
-            )
+                'nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer',
+            ),
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.simple_denormalizer',
-                'nelmio_alice.fixture_builder.denormalizer.chainable_method_flag_handler'
-            )
+                'nelmio_alice.fixture_builder.denormalizer.chainable_method_flag_handler',
+            ),
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry',
-                'nelmio_alice.fixture_builder.expression_language.chainable_token_parser'
-            )
+                'nelmio_alice.fixture_builder.expression_language.chainable_token_parser',
+            ),
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.generator.instantiator.registry',
-                'nelmio_alice.generator.instantiator.chainable_instantiator'
-            )
+                'nelmio_alice.generator.instantiator.chainable_instantiator',
+            ),
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.generator.caller.registry',
-                'nelmio_alice.generator.caller.chainable_call_processor'
-            )
+                'nelmio_alice.generator.caller.chainable_call_processor',
+            ),
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.generator.resolver.parameter.registry',
-                'nelmio_alice.generator.resolver.parameter.chainable_resolver'
-            )
+                'nelmio_alice.generator.resolver.parameter.chainable_resolver',
+            ),
         );
         $container->addCompilerPass(
             new RegisterTagServicesPass(
                 'nelmio_alice.generator.resolver.value.registry',
-                'nelmio_alice.generator.resolver.value.chainable_resolver'
-            )
+                'nelmio_alice.generator.resolver.value.chainable_resolver',
+            ),
         );
     }
 }

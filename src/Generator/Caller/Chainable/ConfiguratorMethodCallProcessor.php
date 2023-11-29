@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Caller\Chainable;
 
 use LogicException;
-use function method_exists;
 use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Generator\Caller\CallProcessorAwareInterface;
@@ -24,6 +23,7 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\ObjectInterface;
+use function method_exists;
 
 final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInterface, CallProcessorAwareInterface
 {
@@ -34,21 +34,21 @@ final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInt
      */
     private $processor;
 
-    public function __construct(CallProcessorInterface $processor = null)
+    public function __construct(?CallProcessorInterface $processor = null)
     {
         $this->processor = $processor;
     }
-    
+
     public function withProcessor(CallProcessorInterface $processor): self
     {
         return new self($processor);
     }
-    
+
     public function canProcess(MethodCallInterface $methodCall): bool
     {
         return $methodCall instanceof ConfiguratorMethodCall;
     }
-    
+
     public function process(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
@@ -67,7 +67,7 @@ final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInt
             $object,
             $fixtureSet,
             $context,
-            $methodCall->getOriginalMethodCall()
+            $methodCall->getOriginalMethodCall(),
         );
 
         $context->unmarkRetrieveCallResult();

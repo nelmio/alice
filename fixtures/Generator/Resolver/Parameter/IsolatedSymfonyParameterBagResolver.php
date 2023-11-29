@@ -19,13 +19,11 @@ use Nelmio\Alice\Symfony\KernelIsolatedServiceCall;
 
 class IsolatedSymfonyParameterBagResolver implements ParameterBagResolverInterface
 {
-    public function resolve(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null): ParameterBag
+    public function resolve(ParameterBag $unresolvedParameters, ?ParameterBag $injectedParameters = null): ParameterBag
     {
         return KernelIsolatedServiceCall::call(
             'nelmio_alice.generator.resolver.parameter_bag',
-            static function (ParameterBagResolverInterface $resolver) use ($unresolvedParameters, $injectedParameters) {
-                return $resolver->resolve($unresolvedParameters, $injectedParameters);
-            }
+            static fn (ParameterBagResolverInterface $resolver) => $resolver->resolve($unresolvedParameters, $injectedParameters),
         );
     }
 }

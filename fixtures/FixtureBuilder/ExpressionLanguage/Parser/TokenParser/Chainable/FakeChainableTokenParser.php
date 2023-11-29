@@ -20,12 +20,12 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeChainableTokenParser implements ChainableTokenParserInterface
 {
     use NotCallableTrait;
-    
+
     public function canParse(Token $token): bool
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function parse(Token $token): void
     {
         $this->__call(__METHOD__, func_get_args());

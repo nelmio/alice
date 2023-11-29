@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedExceptionFactory
+ * @internal
  */
 class RecursionLimitReachedExceptionFactoryTest extends TestCase
 {
@@ -24,11 +25,11 @@ class RecursionLimitReachedExceptionFactoryTest extends TestCase
     {
         $exception = RecursionLimitReachedExceptionFactory::create(10, 'foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'Recursion limit (10 tries) reached while resolving the parameter "foo"',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

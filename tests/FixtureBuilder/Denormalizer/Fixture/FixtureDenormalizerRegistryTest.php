@@ -33,6 +33,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry
+ * @internal
  */
 class FixtureDenormalizerRegistryTest extends TestCase
 {
@@ -42,7 +43,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
      * @var ReflectionProperty
      */
     private $propRefl;
-    
+
     protected function setUp(): void
     {
         $propRelf = (new ReflectionClass(FixtureDenormalizerRegistry::class))->getProperty('denormalizers');
@@ -53,7 +54,7 @@ class FixtureDenormalizerRegistryTest extends TestCase
 
     public function testIsADenormalizer(): void
     {
-        static::assertTrue(is_a(FixtureDenormalizerRegistry::class, FixtureDenormalizerInterface::class, true));
+        self::assertTrue(is_a(FixtureDenormalizerRegistry::class, FixtureDenormalizerInterface::class, true));
     }
 
     public function testOnlyAcceptsChainableFixtureDenormalizers(): void
@@ -62,23 +63,23 @@ class FixtureDenormalizerRegistryTest extends TestCase
 
         try {
             new FixtureDenormalizerRegistry($flagParser, [new stdClass()]);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (TypeError $error) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected denormalizer 0 to be a "'.ChainableFixtureDenormalizerInterface::class.'". Got '
                 .'"stdClass" instead.',
-                $error->getMessage()
+                $error->getMessage(),
             );
         }
 
         try {
             new FixtureDenormalizerRegistry($flagParser, [1]);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (TypeError $error) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected denormalizer 0 to be a "'.ChainableFixtureDenormalizerInterface::class.'". Got '
                 .'"integer" instead.',
-                $error->getMessage()
+                $error->getMessage(),
             );
         }
     }
@@ -103,16 +104,16 @@ class FixtureDenormalizerRegistryTest extends TestCase
                 $chainableDenormalizer1,
                 $flagParserAwareDenormalizer,
                 $denormalizerAwareDenormalizer,
-            ]
+            ],
         );
         $actualDenormalizers = $this->propRefl->getValue($denormalizer);
 
-        static::assertCount(3, $actualDenormalizers);
-        static::assertSame($chainableDenormalizer1, $actualDenormalizers[0]);
-        static::assertNotSame($flagParserAwareDenormalizer, $actualDenormalizers[1]);
-        static::assertNull($flagParserAwareDenormalizer->parser);
-        static::assertNotNull($actualDenormalizers[1]->parser);
-        static::assertSame($denormalizer, $denormalizerAwareDenormalizer->denormalizer);
+        self::assertCount(3, $actualDenormalizers);
+        self::assertSame($chainableDenormalizer1, $actualDenormalizers[0]);
+        self::assertNotSame($flagParserAwareDenormalizer, $actualDenormalizers[1]);
+        self::assertNull($flagParserAwareDenormalizer->parser);
+        self::assertNotNull($actualDenormalizers[1]->parser);
+        self::assertSame($denormalizer, $denormalizerAwareDenormalizer->denormalizer);
     }
 
     public function testUsesTheFirstSuitableDenormalizer(): void
@@ -156,11 +157,11 @@ class FixtureDenormalizerRegistryTest extends TestCase
                 $chainableDenormalizer1,
                 $chainableDenormalizer2,
                 $chainableDenormalizer3,
-            ]
+            ],
         );
         $actual = $denormalizer->denormalize($builtFixtures, $className, $reference, $specs, $flags);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
         $chainableDenormalizer1Prophecy->canDenormalize(Argument::any())->shouldHaveBeenCalledTimes(1);
         $chainableDenormalizer2Prophecy->canDenormalize(Argument::any())->shouldHaveBeenCalledTimes(1);
         $chainableDenormalizer2Prophecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);

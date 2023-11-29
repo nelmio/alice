@@ -25,17 +25,15 @@ use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseExce
 final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
 {
     /** @private */
-    const REGEX = '/^(?<quantifier>\d+|<.*>)x (?<elements>.*)/';
-    
+    public const REGEX = '/^(?<quantifier>\d+|<.*>)x (?<elements>.*)/';
+
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::DYNAMIC_ARRAY_TYPE;
+        return TokenType::DYNAMIC_ARRAY_TYPE === $token->getType();
     }
 
     /**
      * Parses "10x @user*", "<randomNumber(0, 10)x @user<{param}>*", etc.
-     *
-     *
      *
      * @throws ParseException
      */
@@ -54,7 +52,7 @@ final class DynamicArrayTokenParser extends AbstractChainableParserAwareParser
 
         return new DynamicArrayValue(
             $quantifier,
-            $this->parser->parse($matches['elements'])
+            $this->parser->parse($matches['elements']),
         );
     }
 }

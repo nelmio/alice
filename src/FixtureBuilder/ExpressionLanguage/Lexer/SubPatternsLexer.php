@@ -27,9 +27,9 @@ final class SubPatternsLexer implements LexerInterface
 {
     use IsAServiceTrait;
 
-    const REFERENCE_LEXER = 'reference';
+    public const REFERENCE_LEXER = 'reference';
 
-    const PATTERNS = [
+    public const PATTERNS = [
         '/^((?:\d+|<.+>)%\? [^:]+:[^\ ]+)/' => null,
         '/^((?:\d+|\d*\.\d+|<.+>)%\? [^:]+(?:\: +\S+)?)/' => TokenType::OPTIONAL_TYPE,
         '/^((?:\d+|\d*\.\d+|<.+>)%\? : ?[^\ ]+?)/' => null,
@@ -75,16 +75,16 @@ final class SubPatternsLexer implements LexerInterface
     public function lex(string $value): array
     {
         $offset = 0;
-        $valueLength = strlen($value);
+        $valueLength = mb_strlen($value);
         $tokens = [];
 
         while ($offset < $valueLength) {
-            $valueFragment = substr($value, $offset);
+            $valueFragment = mb_substr($value, $offset);
             $fragmentTokens = $this->lexFragment($this->referenceLexer, $valueFragment);
 
             foreach ($fragmentTokens as $fragmentToken) {
                 $tokens[] = $fragmentToken;
-                $offset += strlen($fragmentToken->getValue());
+                $offset += mb_strlen($fragmentToken->getValue());
             }
         }
 

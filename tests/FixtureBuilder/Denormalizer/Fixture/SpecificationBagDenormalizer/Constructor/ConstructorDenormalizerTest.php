@@ -24,6 +24,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorDenormalizer
+ * @internal
  */
 class ConstructorDenormalizerTest extends TestCase
 {
@@ -31,7 +32,7 @@ class ConstructorDenormalizerTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ConstructorDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ConstructorDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesInputAsAConstructorMethod(): void
@@ -43,21 +44,20 @@ class ConstructorDenormalizerTest extends TestCase
         $argumentsDenormalizerProphecy = $this->prophesize(ArgumentsDenormalizerInterface::class);
         $argumentsDenormalizerProphecy
             ->denormalize($fixture, $flagParser, $arguments)
-            ->willReturn($arguments)
-        ;
+            ->willReturn($arguments);
         /** @var ArgumentsDenormalizerInterface $argumentsDenormalizer */
         $argumentsDenormalizer = $argumentsDenormalizerProphecy->reveal();
 
         $expected = new SimpleMethodCall(
             '__construct',
-            ['foo', 'bar']
+            ['foo', 'bar'],
         );
 
         $denormalizer = new ConstructorDenormalizer($argumentsDenormalizer);
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $arguments);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $argumentsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

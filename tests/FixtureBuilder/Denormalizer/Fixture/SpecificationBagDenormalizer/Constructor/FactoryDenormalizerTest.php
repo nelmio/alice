@@ -26,6 +26,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FactoryDenormalizer
+ * @internal
  */
 class FactoryDenormalizerTest extends TestCase
 {
@@ -33,7 +34,7 @@ class FactoryDenormalizerTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FactoryDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FactoryDenormalizer::class))->isCloneable());
     }
 
     public function testCannotDenormalizeEmptyFactory(): void
@@ -43,7 +44,7 @@ class FactoryDenormalizerTest extends TestCase
         $flagParser = new FakeFlagParser();
 
         $denormalizer = new FactoryDenormalizer(
-            new FakeCallsDenormalizer()
+            new FakeCallsDenormalizer(),
         );
 
         $this->expectException(UnexpectedValueException::class);
@@ -62,7 +63,7 @@ class FactoryDenormalizerTest extends TestCase
         $flagParser = new FakeFlagParser();
 
         $denormalizer = new FactoryDenormalizer(
-            new FakeCallsDenormalizer()
+            new FakeCallsDenormalizer(),
         );
 
         $this->expectException(UnexpectedValueException::class);
@@ -80,7 +81,7 @@ class FactoryDenormalizerTest extends TestCase
         $flagParser = new FakeFlagParser();
 
         $denormalizer = new FactoryDenormalizer(
-            new FakeCallsDenormalizer()
+            new FakeCallsDenormalizer(),
         );
 
         $this->expectException(UnexpectedValueException::class);
@@ -113,12 +114,11 @@ class FactoryDenormalizerTest extends TestCase
                 $fixture,
                 $flagParser,
                 'Nelmio\Alice\Entity\User::create',
-                $unparsedArguments
+                $unparsedArguments,
             )
             ->willReturn(
-                $expected = new FakeMethodCall()
-            )
-        ;
+                $expected = new FakeMethodCall(),
+            );
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
@@ -126,7 +126,7 @@ class FactoryDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $factory);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testCanDenormalizeAStaticFactory(): void
@@ -135,7 +135,7 @@ class FactoryDenormalizerTest extends TestCase
             'Nelmio\Entity\UserFactory::create' => $arguments = [
                 '<latitude()>',
                 '1 (unique)' => '<longitude()>',
-            ]
+            ],
         ];
 
         $fixture = new FakeFixture();
@@ -147,12 +147,11 @@ class FactoryDenormalizerTest extends TestCase
                 $fixture,
                 $flagParser,
                 'Nelmio\Entity\UserFactory::create',
-                $arguments
+                $arguments,
             )
             ->willReturn(
-                $expected = new FakeMethodCall()
-            )
-        ;
+                $expected = new FakeMethodCall(),
+            );
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
@@ -160,7 +159,7 @@ class FactoryDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testCanDenormalizeANonStaticFactory(): void
@@ -169,7 +168,7 @@ class FactoryDenormalizerTest extends TestCase
             '@nelmio.entity.user_factory::create' => $arguments = [
                 '<latitude()>',
                 '1 (unique)' => '<longitude()>',
-            ]
+            ],
         ];
 
         $fixture = new FakeFixture();
@@ -181,12 +180,11 @@ class FactoryDenormalizerTest extends TestCase
                 $fixture,
                 $flagParser,
                 '@nelmio.entity.user_factory::create',
-                $arguments
+                $arguments,
             )
             ->willReturn(
-                $expected = new FakeMethodCall()
-            )
-        ;
+                $expected = new FakeMethodCall(),
+            );
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
@@ -194,6 +192,6 @@ class FactoryDenormalizerTest extends TestCase
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $constructor);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

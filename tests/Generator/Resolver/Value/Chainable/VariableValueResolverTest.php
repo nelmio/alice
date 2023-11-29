@@ -27,32 +27,33 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver
+ * @internal
  */
 class VariableValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(VariableValueResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(VariableValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(VariableValueResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(VariableValueResolver::class))->isCloneable());
     }
 
     public function testCanResolveVariableValues(): void
     {
         $resolver = new VariableValueResolver();
 
-        static::assertTrue($resolver->canResolve(new VariableValue('')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new VariableValue('')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testGetsTheVariableFromTheScope(): void
     {
         $value = new VariableValue('ping');
         $set = ResolvedFixtureSetFactory::create(
-            new ParameterBag(['foo' => 'bar'])
+            new ParameterBag(['foo' => 'bar']),
         );
         $scope = ['ping' => 'pong'];
 
@@ -61,7 +62,7 @@ class VariableValueResolverTest extends TestCase
         $resolver = new VariableValueResolver();
         $actual = $resolver->resolve($value, new FakeFixture(), $set, $scope, new GenerationContext());
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfTheVariableCannotBeFoundInTheScope(): void

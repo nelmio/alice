@@ -29,6 +29,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry
+ * @internal
  */
 class ParameterResolverRegistryTest extends TestCase
 {
@@ -36,14 +37,14 @@ class ParameterResolverRegistryTest extends TestCase
 
     public function testIsAParameterResolver(): void
     {
-        static::assertTrue(is_a(ParameterResolverRegistry::class, ParameterResolverInterface::class, true));
+        self::assertTrue(is_a(ParameterResolverRegistry::class, ParameterResolverInterface::class, true));
     }
 
     public function testAcceptsChainableParameterResolvers(): void
     {
         $resolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $resolverProphecy->canResolve(Argument::any())->shouldNotBeCalled();
-        /* @var ChainableParameterResolverInterface $resolver */
+        /** @var ChainableParameterResolverInterface $resolver */
         $resolver = $resolverProphecy->reveal();
 
         new ParameterResolverRegistry([$resolver]);
@@ -59,12 +60,12 @@ class ParameterResolverRegistryTest extends TestCase
 
         $registry = new ParameterResolverRegistry([$oneResolver, $secondResolver]);
 
-        static::assertSame($registry, $propRefl->getValue($registry)[1]->resolver);
+        self::assertSame($registry, $propRefl->getValue($registry)[1]->resolver);
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ParameterResolverRegistry::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ParameterResolverRegistry::class))->isCloneable());
     }
 
     public function testThrowsAnExceptionIfInvalidResolverIsPassed(): void
@@ -82,18 +83,18 @@ class ParameterResolverRegistryTest extends TestCase
 
         $resolver1Prophecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $resolver1Prophecy->canResolve($parameter)->willReturn(false);
-        /* @var ChainableParameterResolverInterface $resolver1 */
+        /** @var ChainableParameterResolverInterface $resolver1 */
         $resolver1 = $resolver1Prophecy->reveal();
 
         $resolver2Prophecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $resolver2Prophecy->canResolve($parameter)->willReturn(true);
         $resolver2Prophecy->resolve(Argument::cetera())->willReturn($expected);
-        /* @var ChainableParameterResolverInterface $resolver2 */
+        /** @var ChainableParameterResolverInterface $resolver2 */
         $resolver2 = $resolver2Prophecy->reveal();
 
         $resolver3Prophecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $resolver3Prophecy->canResolve(Argument::any())->shouldNotBeCalled();
-        /* @var ChainableParameterResolverInterface $resolver */
+        /** @var ChainableParameterResolverInterface $resolver */
         $resolver = $resolver3Prophecy->reveal();
 
         $registry = new ParameterResolverRegistry([
@@ -103,7 +104,7 @@ class ParameterResolverRegistryTest extends TestCase
         ]);
         $actual = $registry->resolve($parameter, new ParameterBag(), new ParameterBag());
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
 
         $resolver1Prophecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
         $resolver2Prophecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);

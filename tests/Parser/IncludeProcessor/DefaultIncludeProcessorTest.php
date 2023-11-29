@@ -26,13 +26,14 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
+ * @internal
  */
 class DefaultIncludeProcessorTest extends TestCase
 {
     use ProphecyTrait;
 
     private static $dir;
-    
+
     protected function setUp(): void
     {
         self::$dir = __DIR__.'/../../../fixtures/Parser/files/cache';
@@ -40,24 +41,24 @@ class DefaultIncludeProcessorTest extends TestCase
 
     public function testIsAnIncludeProcessor(): void
     {
-        static::assertTrue(is_a(DefaultIncludeProcessor::class, IncludeProcessorInterface::class, true));
+        self::assertTrue(is_a(DefaultIncludeProcessor::class, IncludeProcessorInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(DefaultIncludeProcessor::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(DefaultIncludeProcessor::class))->isCloneable());
     }
 
     public function testThrowsAnExceptionIfNoIncludeStatementFound(): void
     {
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /* @var ParserInterface $parser */
+        /** @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
         $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
         $fileLocatorProphecy->locate('dummy.php')->willReturn('dummy.php');
-        /* @var FileLocatorInterface $fileLocator */
+        /** @var FileLocatorInterface $fileLocator */
         $fileLocator = $fileLocatorProphecy->reveal();
 
         $processor = new DefaultIncludeProcessor($fileLocator);
@@ -85,19 +86,19 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /* @var ParserInterface $parser */
+        /** @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
         $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
         $fileLocatorProphecy->locate($mainFile)->willReturn('main.yml');
-        /* @var FileLocatorInterface $fileLocator */
+        /** @var FileLocatorInterface $fileLocator */
         $fileLocator = $fileLocatorProphecy->reveal();
 
         $processor = new DefaultIncludeProcessor($fileLocator);
 
         $actual = $processor->process($parser, $mainFile, $parsedMainFileContent);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function testIfNotNullIncludeStatementMustBeAnArray(): void
@@ -112,7 +113,7 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /* @var ParserInterface $parser */
+        /** @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
         $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
@@ -137,7 +138,7 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /* @var ParserInterface $parser */
+        /** @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
         $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
@@ -162,7 +163,7 @@ class DefaultIncludeProcessorTest extends TestCase
 
         $parserProphecy = $this->prophesize(ParserInterface::class);
         $parserProphecy->parse(Argument::any())->shouldNotBeCalled();
-        /* @var ParserInterface $parser */
+        /** @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
         $processor = new DefaultIncludeProcessor(new DefaultFileLocator());
@@ -217,7 +218,7 @@ class DefaultIncludeProcessorTest extends TestCase
         $parserProphecy->parse(Argument::containingString('file1.yml'))->willReturn($parsedFile1Content);
         $parserProphecy->parse(Argument::containingString('file2.yml'))->willReturn($parsedFile2Content);
         $parserProphecy->parse(Argument::containingString('file3.yml'))->willReturn($parsedFile3Content);
-        /* @var ParserInterface $parser */
+        /** @var ParserInterface $parser */
         $parser = $parserProphecy->reveal();
 
         $fileLocatorProphecy = $this->prophesize(FileLocatorInterface::class);
@@ -226,13 +227,13 @@ class DefaultIncludeProcessorTest extends TestCase
         $fileLocatorProphecy->locate($file1Path, Argument::cetera())->willReturn('file1.yml');
         $fileLocatorProphecy->locate($file2Path, Argument::cetera())->willReturn('file2.yml');
         $fileLocatorProphecy->locate($file3Path, Argument::cetera())->willReturn('file3.yml');
-        /* @var FileLocatorInterface $fileLocator */
+        /** @var FileLocatorInterface $fileLocator */
         $fileLocator = $fileLocatorProphecy->reveal();
 
         $processor = new DefaultIncludeProcessor($fileLocator);
 
         $actual = $processor->process($parser, $mainFile, $parsedMainFileContent);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

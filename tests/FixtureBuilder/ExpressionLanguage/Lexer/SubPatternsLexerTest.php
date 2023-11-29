@@ -24,6 +24,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer
+ * @internal
  */
 class SubPatternsLexerTest extends TestCase
 {
@@ -31,12 +32,12 @@ class SubPatternsLexerTest extends TestCase
 
     public function testIsALexer(): void
     {
-        static::assertTrue(is_a(SubPatternsLexer::class, LexerInterface::class, true));
+        self::assertTrue(is_a(SubPatternsLexer::class, LexerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SubPatternsLexer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SubPatternsLexer::class))->isCloneable());
     }
 
     public function testLexAValueToReturnAListOfTokens(): void
@@ -48,8 +49,8 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer(new FakeLexer());
         $actual = $lexer->lex('<{param}>');
 
-        static::assertCount(count($expected), $actual);
-        static::assertEquals($expected, $actual);
+        self::assertCount(count($expected), $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -64,8 +65,8 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer(new FakeLexer());
         $actual = $lexer->lex('<identity("foo'.$lineBreak.'bar")>');
 
-        static::assertCount(count($expected), $actual);
-        static::assertEquals($expected, $actual);
+        self::assertCount(count($expected), $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testUsesDecoratedLexerToLexReferenceValues(): void
@@ -83,8 +84,8 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer($referenceLexer);
         $actual = $lexer->lex($value);
 
-        static::assertCount(count($expected), $actual);
-        static::assertEquals($expected, $actual);
+        self::assertCount(count($expected), $actual);
+        self::assertEquals($expected, $actual);
 
         $referenceLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -99,8 +100,8 @@ class SubPatternsLexerTest extends TestCase
         $lexer = new SubPatternsLexer(new FakeLexer());
         $actual = $lexer->lex($value);
 
-        static::assertCount(count($expected), $actual);
-        static::assertEquals($expected, $actual);
+        self::assertCount(count($expected), $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionWhenAnInvalidValueIsGiven(): void
@@ -113,7 +114,7 @@ class SubPatternsLexerTest extends TestCase
         $lexer->lex('<foo>');
     }
 
-    public function lineBreaksProvider()
+    public function lineBreaksProvider(): iterable
     {
         return [
             ['\n'],

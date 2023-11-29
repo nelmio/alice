@@ -23,6 +23,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Faker\GeneratorFactory
  *
  * @group integration
+ * @internal
  */
 class GeneratorFactoryTest extends TestCase
 {
@@ -32,11 +33,11 @@ class GeneratorFactoryTest extends TestCase
 
         try {
             $this->assertGeneratorLocaleIs('fr_FR', FakerFactory::create());
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (Exception $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Generator has not been initialised with the locale "fr_FR".',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 
@@ -54,7 +55,7 @@ class GeneratorFactoryTest extends TestCase
         $expected = FakerFactory::create('fr_FR');
         $expected->addProvider(new DummyProvider());
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -75,9 +76,9 @@ class GeneratorFactoryTest extends TestCase
     {
         $factory = new GeneratorFactory(FakerFactory::create());
 
-        static::assertSame(
+        self::assertSame(
             $factory->createOrReturnExistingInstance('fr_FR'),
-            $factory->createOrReturnExistingInstance('fr_FR')
+            $factory->createOrReturnExistingInstance('fr_FR'),
         );
     }
 
@@ -85,9 +86,9 @@ class GeneratorFactoryTest extends TestCase
     {
         $factory = new GeneratorFactory(FakerFactory::create());
 
-        static::assertEquals(
+        self::assertEquals(
             $factory->createOrReturnExistingInstance('unknown'),
-            $factory->createOrReturnExistingInstance('en_US')
+            $factory->createOrReturnExistingInstance('en_US'),
         );
     }
 
@@ -96,7 +97,7 @@ class GeneratorFactoryTest extends TestCase
         $generator = FakerFactory::create();
         $factory = new GeneratorFactory($generator);
 
-        static::assertSame($generator, $factory->getSeedGenerator());
+        self::assertSame($generator, $factory->getSeedGenerator());
     }
 
     private function assertGeneratorLocaleIs(string $locale, FakerGenerator $generator): void
@@ -104,7 +105,7 @@ class GeneratorFactoryTest extends TestCase
         $providers = $generator->getProviders();
         $regex = sprintf('/^Faker\\\Provider\\\%s\\\.*/', $locale);
         foreach ($providers as $provider) {
-            if (preg_match($regex, get_class($provider))) {
+            if (preg_match($regex, $provider::class)) {
                 return;
             }
         }

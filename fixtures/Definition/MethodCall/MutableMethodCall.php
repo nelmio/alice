@@ -26,7 +26,6 @@ class MutableMethodCall implements MethodCallInterface
      */
     private $caller;
 
-    
     private $method;
 
     /**
@@ -34,28 +33,28 @@ class MutableMethodCall implements MethodCallInterface
      */
     private $arguments;
 
-    public function __construct(ServiceReferenceInterface $caller = null, $method, array $arguments = null)
+    public function __construct(?ServiceReferenceInterface $caller = null, $method, ?array $arguments = null)
     {
         $this->caller = $caller;
         $this->method = $method;
         $this->arguments = $arguments;
     }
-    
-    public function withArguments(array $arguments = null): void
+
+    public function withArguments(?array $arguments = null): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getCaller()
     {
         return $this->caller;
     }
 
-    public function setCaller(ServiceReferenceInterface $caller = null): void
+    public function setCaller(?ServiceReferenceInterface $caller = null): void
     {
         $this->caller = $caller;
     }
-    
+
     public function getMethod(): string
     {
         return $this->method;
@@ -65,17 +64,17 @@ class MutableMethodCall implements MethodCallInterface
     {
         $this->method = $method;
     }
-    
+
     public function getArguments()
     {
         return $this->arguments;
     }
 
-    public function setArguments(array $arguments = null): void
+    public function setArguments(?array $arguments = null): void
     {
         $this->arguments = $arguments;
     }
-    
+
     public function __toString(): string
     {
         return 'mutable_method_call';

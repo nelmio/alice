@@ -18,17 +18,18 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\ParameterNotFoundException
+ * @internal
  */
 class ParameterNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(ParameterNotFoundException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(ParameterNotFoundException::class, RuntimeException::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildParameterNotFoundException();
-        static::assertInstanceOf(ChildParameterNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildParameterNotFoundException::class, $exception);
     }
 }

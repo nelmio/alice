@@ -26,8 +26,8 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 final class NelmioAliceExtension extends Extension
 {
-    const SERVICES_DIR = __DIR__.'/../Resources/config';
-    
+    public const SERVICES_DIR = __DIR__.'/../Resources/config';
+
     public function load(array $configs, ContainerBuilder $container): void
     {
         $this->loadConfig($configs, $container);
@@ -47,7 +47,7 @@ final class NelmioAliceExtension extends Extension
         foreach ($processedConfiguration as $key => $value) {
             $container->setParameter(
                 $this->getAlias().'.'.$key,
-                $value
+                $value,
             );
         }
     }
@@ -64,7 +64,7 @@ final class NelmioAliceExtension extends Extension
 
         foreach ($finder as $file) {
             $loader->load(
-                $file->getRelativePathname()
+                $file->getRelativePathname(),
             );
         }
 

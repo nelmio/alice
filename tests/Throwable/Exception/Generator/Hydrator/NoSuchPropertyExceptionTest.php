@@ -19,22 +19,23 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException
+ * @internal
  */
 class NoSuchPropertyExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(NoSuchPropertyException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(NoSuchPropertyException::class, RuntimeException::class, true));
     }
 
     public function testIsAHydrationThrowable(): void
     {
-        static::assertTrue(is_a(NoSuchPropertyException::class, HydrationThrowable::class, true));
+        self::assertTrue(is_a(NoSuchPropertyException::class, HydrationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildNoSuchPropertyException();
-        static::assertInstanceOf(ChildNoSuchPropertyException::class, $exception);
+        self::assertInstanceOf(ChildNoSuchPropertyException::class, $exception);
     }
 }

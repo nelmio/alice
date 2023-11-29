@@ -18,12 +18,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\ServiceReference\FixtureReference
+ * @internal
  */
 class FixtureReferenceTest extends TestCase
 {
     public function testIsAReference(): void
     {
-        static::assertTrue(is_a(FixtureReference::class, ServiceReferenceInterface::class, true));
+        self::assertTrue(is_a(FixtureReference::class, ServiceReferenceInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -31,11 +32,11 @@ class FixtureReferenceTest extends TestCase
         $id = 'user_base';
         $definition = new FixtureReference($id);
 
-        static::assertEquals($id, $definition->getId());
+        self::assertEquals($id, $definition->getId());
     }
 
     public function testIsImmutable(): void
     {
-        static::assertTrue(true, 'Nothing to do.');
+        self::assertTrue(true, 'Nothing to do.');
     }
 }

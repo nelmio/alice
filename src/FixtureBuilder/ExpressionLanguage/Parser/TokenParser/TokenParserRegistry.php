@@ -39,25 +39,22 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
     public function __construct(array $parsers)
     {
         $this->parsers = (
-            static function (ChainableTokenParserInterface ...$parsers) {
-                return $parsers;
-            }
+            static fn (ChainableTokenParserInterface ...$parsers) => $parsers
         )(...$parsers);
     }
-    
+
     public function withParser(ParserInterface $parser): self
     {
         $parsers = [];
         foreach ($this->parsers as $tokenParser) {
             $parsers[] = ($tokenParser instanceof ParserAwareInterface)
                 ? $tokenParser->withParser($parser)
-                : $tokenParser
-            ;
+                : $tokenParser;
         }
 
         return new self($parsers);
     }
-    
+
     public function parse(Token $token)
     {
         foreach ($this->parsers as $parser) {

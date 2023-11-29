@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token
+ * @internal
  */
 class TokenTest extends TestCase
 {
@@ -27,17 +28,17 @@ class TokenTest extends TestCase
 
         $token = new Token($value, $type);
 
-        static::assertEquals($value, $token->getValue());
-        static::assertEquals($type->getValue(), $token->getType());
-        static::assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
+        self::assertEquals($value, $token->getValue());
+        self::assertEquals($type->getValue(), $token->getType());
+        self::assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
     }
 
     /**
-     * @depends \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenTypeTest::testIsImmutable
+     * @depends test\Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenTypeTest::testIsImmutable
      */
     public function testIsImmutable(): void
     {
-        static::assertTrue(true, 'Nothing to do.');
+        self::assertTrue(true, 'Nothing to do.');
     }
 
     public function testWithersReturnNewModifiedInstance(): void
@@ -49,11 +50,11 @@ class TokenTest extends TestCase
         $token = new Token($value, $type);
         $newToken = $token->withValue($newValue);
 
-        static::assertEquals($value, $token->getValue());
-        static::assertEquals($type->getValue(), $token->getType());
+        self::assertEquals($value, $token->getValue());
+        self::assertEquals($type->getValue(), $token->getType());
 
-        static::assertInstanceOf(Token::class, $newToken);
-        static::assertEquals($newValue, $newToken->getValue());
-        static::assertEquals($type->getValue(), $newToken->getType());
+        self::assertInstanceOf(Token::class, $newToken);
+        self::assertEquals($newValue, $newToken->getValue());
+        self::assertEquals($type->getValue(), $newToken->getType());
     }
 }

@@ -23,17 +23,17 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/\{(?<list>[\p{L}\d\._\/]+(?:,\s[^,\s]+)*)\}/u';
-    
+    public const REGEX = '/\{(?<list>[\p{L}\d\._\/]+(?:,\s[^,\s]+)*)\}/u';
+
     public function canDenormalize(string $reference, array &$matches = []): bool
     {
         if (1 === preg_match(self::REGEX, $reference, $matches)) {
-            return false === strpos($matches['list'], '..');
+            return false === mb_strpos($matches['list'], '..');
         }
 
         return false;
     }
-    
+
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,
@@ -68,7 +68,7 @@ final class NullListNameDenormalizer implements CollectionDenormalizer
                 str_replace(
                     sprintf('{%s}', $matches['list']),
                     $element,
-                    $id
+                    $id,
                 )
             ] = $element;
         }

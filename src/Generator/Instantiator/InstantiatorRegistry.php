@@ -37,25 +37,22 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
     public function __construct(array $instantiators)
     {
         $this->instantiators = (
-            static function (ChainableInstantiatorInterface ...$instantiators) {
-                return $instantiators;
-            }
+            static fn (ChainableInstantiatorInterface ...$instantiators) => $instantiators
         )(...$instantiators);
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         $instantiators = [];
         foreach ($this->instantiators as $instantiator) {
             $instantiators[] = ($instantiator instanceof ValueResolverAwareInterface)
                 ? $instantiator->withValueResolver($resolver)
-                : $instantiator
-            ;
+                : $instantiator;
         }
 
         return new self($instantiators);
     }
-    
+
     public function instantiate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,

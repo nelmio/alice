@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
-use function Nelmio\Alice\deep_clone;
 use Nelmio\Alice\Definition\ValueInterface;
+use function Nelmio\Alice\deep_clone;
 
 final class ArrayValue implements ValueInterface
 {
@@ -38,7 +38,7 @@ final class ArrayValue implements ValueInterface
     {
         return deep_clone($this->values);
     }
-    
+
     public function __toString(): string
     {
         return var_export($this->values, true);

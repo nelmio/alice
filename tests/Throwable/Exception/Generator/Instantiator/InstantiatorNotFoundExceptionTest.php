@@ -19,22 +19,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException
+ * @internal
  */
 class InstantiatorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {
-        static::assertTrue(is_a(InstantiatorNotFoundException::class, LogicException::class, true));
+        self::assertTrue(is_a(InstantiatorNotFoundException::class, LogicException::class, true));
     }
 
     public function testIsNotAnInstantiationThrowable(): void
     {
-        static::assertFalse(is_a(InstantiatorNotFoundException::class, InstantiationThrowable::class, true));
+        self::assertFalse(is_a(InstantiatorNotFoundException::class, InstantiationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildInstantiatorNotFoundException();
-        static::assertInstanceOf(ChildInstantiatorNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildInstantiatorNotFoundException::class, $exception);
     }
 }

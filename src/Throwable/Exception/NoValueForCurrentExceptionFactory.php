@@ -25,8 +25,8 @@ final class NoValueForCurrentExceptionFactory
         return new NoValueForCurrentException(
             sprintf(
                 'No value for \'<current()>\' found for the fixture "%s".',
-                $fixture->getId()
-            )
+                $fixture->getId(),
+            ),
         );
     }
 

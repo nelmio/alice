@@ -22,17 +22,17 @@ final class FixtureSet
      * @var ParameterBag
      */
     private $loadedParameters;
-    
+
     /**
      * @var ParameterBag
      */
     private $injectedParameters;
-    
+
     /**
      * @var FixtureBag
      */
     private $fixtures;
-    
+
     /**
      * @var ObjectBag
      */

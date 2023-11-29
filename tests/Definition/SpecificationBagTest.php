@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\SpecificationBag
+ * @internal
  */
 class SpecificationBagTest extends TestCase
 {
@@ -28,16 +29,16 @@ class SpecificationBagTest extends TestCase
         $calls = new MethodCallBag();
 
         $bag = new SpecificationBag($constructor, $properties, $calls);
-        static::assertEquals($constructor, $bag->getConstructor());
-        static::assertEquals($properties, $bag->getProperties());
-        static::assertEquals($calls, $bag->getMethodCalls());
+        self::assertEquals($constructor, $bag->getConstructor());
+        self::assertEquals($properties, $bag->getProperties());
+        self::assertEquals($calls, $bag->getMethodCalls());
 
         $constructor = null;
 
         $bag = new SpecificationBag($constructor, $properties, $calls);
-        static::assertEquals($constructor, $bag->getConstructor());
-        static::assertEquals($properties, $bag->getProperties());
-        static::assertEquals($calls, $bag->getMethodCalls());
+        self::assertEquals($constructor, $bag->getConstructor());
+        self::assertEquals($properties, $bag->getProperties());
+        self::assertEquals($calls, $bag->getMethodCalls());
     }
 
     public function testWithersReturnNewModifiedInstance(): void
@@ -50,15 +51,15 @@ class SpecificationBagTest extends TestCase
         $newConstructor = new FakeMethodCall();
         $newBag = $bag->withConstructor($newConstructor);
 
-        static::assertInstanceOf(SpecificationBag::class, $newBag);
+        self::assertInstanceOf(SpecificationBag::class, $newBag);
 
-        static::assertEquals($constructor, $bag->getConstructor());
-        static::assertEquals($calls, $bag->getMethodCalls());
-        static::assertEquals($properties, $bag->getProperties());
+        self::assertEquals($constructor, $bag->getConstructor());
+        self::assertEquals($calls, $bag->getMethodCalls());
+        self::assertEquals($properties, $bag->getProperties());
 
-        static::assertEquals(new FakeMethodCall(), $newBag->getConstructor());
-        static::assertEquals($calls, $newBag->getMethodCalls());
-        static::assertEquals($properties, $newBag->getProperties());
+        self::assertEquals(new FakeMethodCall(), $newBag->getConstructor());
+        self::assertEquals($calls, $newBag->getMethodCalls());
+        self::assertEquals($properties, $newBag->getProperties());
     }
 
     public function testMergeTwoBags(): void
@@ -74,12 +75,10 @@ class SpecificationBagTest extends TestCase
 
         $propertiesA = (new PropertyBag())
             ->with($propertyA1)
-            ->with($propertyA2)
-        ;
+            ->with($propertyA2);
         $propertiesB = (new PropertyBag())
             ->with($propertyB1)
-            ->with($propertyB2)
-        ;
+            ->with($propertyB2);
 
         $callA1 = new SimpleMethodCall('setUsername', []);
         $callA2 = new SimpleMethodCall('setOwner', []);
@@ -89,27 +88,25 @@ class SpecificationBagTest extends TestCase
 
         $callsA = (new MethodCallBag())
             ->with($callA1)
-            ->with($callA2)
-        ;
+            ->with($callA2);
         $callsB = (new MethodCallBag())
             ->with($callB1)
-            ->with($callB2)
-        ;
+            ->with($callB2);
 
         $bagA = new SpecificationBag($constructorA, $propertiesA, $callsA);
         $bagB = new SpecificationBag($constructorB, $propertiesB, $callsB);
         $bag = $bagA->mergeWith($bagB);
 
-        static::assertInstanceOf(SpecificationBag::class, $bag);
-        static::assertEquals($constructorA, $bagA->getConstructor());
-        static::assertEquals($propertiesA, $bagA->getProperties());
-        static::assertEquals($callsA, $bagA->getMethodCalls());
+        self::assertInstanceOf(SpecificationBag::class, $bag);
+        self::assertEquals($constructorA, $bagA->getConstructor());
+        self::assertEquals($propertiesA, $bagA->getProperties());
+        self::assertEquals($callsA, $bagA->getMethodCalls());
 
-        static::assertEquals($constructorB, $bagB->getConstructor());
-        static::assertEquals($propertiesB, $bagB->getProperties());
-        static::assertEquals($callsB, $bagB->getMethodCalls());
+        self::assertEquals($constructorB, $bagB->getConstructor());
+        self::assertEquals($propertiesB, $bagB->getProperties());
+        self::assertEquals($callsB, $bagB->getMethodCalls());
 
-        static::assertEquals($constructorA, $bag->getConstructor());
+        self::assertEquals($constructorA, $bag->getConstructor());
     }
 
     /**
@@ -124,9 +121,9 @@ class SpecificationBagTest extends TestCase
         $bagB = new SpecificationBag($constructorB, new PropertyBag(), new MethodCallBag());
         $bag = $bagA->mergeWith($bagB);
 
-        static::assertEquals($constructorA, $bagA->getConstructor());
-        static::assertEquals($constructorB, $bagB->getConstructor());
-        static::assertEquals($constructorA, $bag->getConstructor());
+        self::assertEquals($constructorA, $bagA->getConstructor());
+        self::assertEquals($constructorB, $bagB->getConstructor());
+        self::assertEquals($constructorA, $bag->getConstructor());
     }
 
     /**
@@ -141,8 +138,8 @@ class SpecificationBagTest extends TestCase
         $bagB = new SpecificationBag($constructorB, new PropertyBag(), new MethodCallBag());
         $bag = $bagA->mergeWith($bagB);
 
-        static::assertEquals($constructorA, $bagA->getConstructor());
-        static::assertEquals($constructorB, $bagB->getConstructor());
-        static::assertEquals($constructorA, $bag->getConstructor());
+        self::assertEquals($constructorA, $bagA->getConstructor());
+        self::assertEquals($constructorB, $bagB->getConstructor());
+        self::assertEquals($constructorA, $bag->getConstructor());
     }
 }

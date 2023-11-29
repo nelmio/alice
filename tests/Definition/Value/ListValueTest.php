@@ -19,12 +19,13 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ListValue
+ * @internal
  */
 class ListValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(ListValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(ListValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -32,12 +33,12 @@ class ListValueTest extends TestCase
         $list = [];
         $value = new ListValue($list);
 
-        static::assertEquals($list, $value->getValue());
+        self::assertEquals($list, $value->getValue());
 
         $list = [new stdClass()];
         $value = new ListValue($list);
 
-        static::assertEquals($list, $value->getValue());
+        self::assertEquals($list, $value->getValue());
     }
 
     public function testIsImmutable(): void
@@ -53,17 +54,17 @@ class ListValueTest extends TestCase
         // @phpstan-ignore-next-line
         $value->getValue()[0]->foo = 'baz';
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 new stdClass(),
             ],
-            $value->getValue()
+            $value->getValue(),
         );
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new ListValue(['a', 'b', new DummyValue('c')]);
-        static::assertEquals('abc', (string) $value);
+        self::assertEquals('abc', (string) $value);
     }
 }

@@ -44,6 +44,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver
+ * @internal
  */
 class FixturePropertyReferenceResolverTest extends TestCase
 {
@@ -51,12 +52,12 @@ class FixturePropertyReferenceResolverTest extends TestCase
 
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(FixturePropertyReferenceResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(FixturePropertyReferenceResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FixturePropertyReferenceResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FixturePropertyReferenceResolver::class))->isCloneable());
     }
 
     public function testWithersReturnNewModifiedInstance(): void
@@ -64,16 +65,16 @@ class FixturePropertyReferenceResolverTest extends TestCase
         $resolver = new FixturePropertyReferenceResolver(new FakePropertyAccessor());
         $newResolver = $resolver->withValueResolver(new FakeValueResolver());
 
-        static::assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor()), $resolver);
-        static::assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor(), new FakeValueResolver()), $newResolver);
+        self::assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor()), $resolver);
+        self::assertEquals(new FixturePropertyReferenceResolver(new FakePropertyAccessor(), new FakeValueResolver()), $newResolver);
     }
 
     public function testCanResolvePropertyReferenceValues(): void
     {
         $resolver = new FixturePropertyReferenceResolver(new FakePropertyAccessor());
 
-        static::assertTrue($resolver->canResolve(new FixturePropertyValue(new FakeValue(), '')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new FixturePropertyValue(new FakeValue(), '')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testCannotResolveValueIfHasNoResolver(): void
@@ -91,7 +92,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
     {
         $value = new FixturePropertyValue(
             $reference = new FakeValue(),
-            $property = 'prop'
+            $property = 'prop',
         );
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
@@ -109,10 +110,9 @@ class FixturePropertyReferenceResolverTest extends TestCase
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     $instance = new stdClass(),
-                    $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
-                )
-            )
-        ;
+                    $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong'])),
+                ),
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -126,7 +126,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
         $resolver = new FixturePropertyReferenceResolver($propertyAccessor, $valueResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $valueResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $propertyAccessorProphecy->getValue(Argument::cetera())->shouldHaveBeenCalledTimes(1);
@@ -137,7 +137,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
         try {
             $value = new FixturePropertyValue(
                 $reference = new DummyValue('dummy'),
-                $property = 'prop'
+                $property = 'prop',
             );
             $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
 
@@ -147,10 +147,9 @@ class FixturePropertyReferenceResolverTest extends TestCase
                 ->willReturn(
                     new ResolvedValueWithFixtureSet(
                         $instance = new stdClass(),
-                        $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
-                    )
-                )
-            ;
+                        $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong'])),
+                    ),
+                );
             /** @var ValueResolverInterface $valueResolver */
             $valueResolver = $valueResolverProphecy->reveal();
 
@@ -162,14 +161,14 @@ class FixturePropertyReferenceResolverTest extends TestCase
             $resolver = new FixturePropertyReferenceResolver($propertyAccessor, $valueResolver);
             $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not resolve value "dummy->prop".',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
@@ -177,7 +176,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
     {
         $value = new FixturePropertyValue(
             $reference = new FakeValue(),
-            $property = 'publicProperty'
+            $property = 'publicProperty',
         );
 
         $instance = new Dummy();
@@ -189,9 +188,8 @@ class FixturePropertyReferenceResolverTest extends TestCase
         $valueResolverProphecy
             ->resolve(Argument::cetera())
             ->willReturn(
-                new ResolvedValueWithFixtureSet($instance, $set)
-            )
-        ;
+                new ResolvedValueWithFixtureSet($instance, $set),
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -200,14 +198,14 @@ class FixturePropertyReferenceResolverTest extends TestCase
         $resolver = new FixturePropertyReferenceResolver(PropertyAccess::createPropertyAccessor(), $valueResolver);
         $actual = $resolver->resolve($value, new FakeFixture(), $set, [], new GenerationContext());
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfReferenceResolvedIsNotAnObject(): void
     {
         $value = new FixturePropertyValue(
             $reference = new DummyValue('dummy'),
-            $property = 'publicProperty'
+            $property = 'publicProperty',
         );
 
         $instance = new Dummy();
@@ -219,15 +217,14 @@ class FixturePropertyReferenceResolverTest extends TestCase
         $valueResolverProphecy
             ->resolve(Argument::cetera())
             ->willReturn(
-                new ResolvedValueWithFixtureSet('string value', $set)
-            )
-        ;
+                new ResolvedValueWithFixtureSet('string value', $set),
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
         $resolver = new FixturePropertyReferenceResolver(PropertyAccess::createPropertyAccessor(), $valueResolver);
 
-        if ((new ReflectionMethod(PropertyAccessorInterface::class, 'getValue'))->getParameters()[0]->getType() !== null) {
+        if (null !== (new ReflectionMethod(PropertyAccessorInterface::class, 'getValue'))->getParameters()[0]->getType()) {
             // Since symfony/property-access 6.0
             $this->expectException(TypeError::class);
             $this->expectExceptionMessageMatches(sprintf('/^%s/', preg_quote('Symfony\Component\PropertyAccess\PropertyAccessor::getValue(): Argument #1 ($objectOrArray) must be of type object|array, string given', '/')));
@@ -244,7 +241,7 @@ class FixturePropertyReferenceResolverTest extends TestCase
         try {
             $value = new FixturePropertyValue(
                 $reference = new FakeValue(),
-                $property = 'prop'
+                $property = 'prop',
             );
 
             $instance = new stdClass();
@@ -256,9 +253,8 @@ class FixturePropertyReferenceResolverTest extends TestCase
             $valueResolverProphecy
                 ->resolve(Argument::cetera())
                 ->willReturn(
-                    new ResolvedValueWithFixtureSet(new stdClass(), $set)
-                )
-            ;
+                    new ResolvedValueWithFixtureSet(new stdClass(), $set),
+                );
             /** @var ValueResolverInterface $valueResolver */
             $valueResolver = $valueResolverProphecy->reveal();
 
@@ -268,17 +264,17 @@ class FixturePropertyReferenceResolverTest extends TestCase
                 new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create()),
                 $set,
                 [],
-                new GenerationContext()
+                new GenerationContext(),
             );
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (NoSuchPropertyException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not find the property "prop" of the object "dummy" (class: Dummy).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 }

@@ -26,7 +26,7 @@ final class ResolvingContext
      */
     private $resolving = [];
 
-    public function __construct(string $key = null)
+    public function __construct(?string $key = null)
     {
         if (null !== $key) {
             $this->add($key);
@@ -37,7 +37,7 @@ final class ResolvingContext
      * Returns the existing instance if is an object or create a new one otherwise. It also ensure that the key will be
      * added also it won't increment the counter if already present.
      */
-    public static function createFrom(self $resolving = null, string $key): self
+    public static function createFrom(?self $resolving = null, string $key): self
     {
         $instance = $resolving ?? new self();
         if (false === $instance->has($key)) {
@@ -56,8 +56,7 @@ final class ResolvingContext
     {
         $this->resolving[$key] = array_key_exists($key, $this->resolving)
             ? $this->resolving[$key] + 1
-            : 1
-        ;
+            : 1;
     }
 
     /**

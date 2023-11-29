@@ -23,8 +23,8 @@ final class ObjectGeneratorNotFoundExceptionFactory
         return new ObjectGeneratorNotFoundException(
             sprintf(
                 'Expected method "%s" to be called only if it has a generator.',
-                $method
-            )
+                $method,
+            ),
         );
     }
 

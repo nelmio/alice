@@ -27,12 +27,12 @@ class AppKernel extends Kernel
      * @var string|null
      */
     private $config;
-    
+
     public function __construct($environment, $debug)
     {
         parent::__construct($environment, $debug);
     }
-    
+
     public function registerBundles(): array
     {
         return [
@@ -40,12 +40,12 @@ class AppKernel extends Kernel
             new NelmioAliceBundle(),
         ];
     }
-    
+
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load($this->config ?? __DIR__.'/config.yml');
     }
-    
+
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new class() implements CompilerPassInterface {

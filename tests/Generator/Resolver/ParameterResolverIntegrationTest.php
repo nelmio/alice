@@ -24,11 +24,12 @@ use stdClass;
  * @group integration
  *
  * @coversNothing
+ * @internal
  */
 class ParameterResolverIntegrationTest extends TestCase
 {
     protected ParameterBagResolverInterface $resolver;
-    
+
     protected function setUp(): void
     {
         $this->resolver = (new NativeLoader())->getParameterResolver();
@@ -44,13 +45,13 @@ class ParameterResolverIntegrationTest extends TestCase
     ): void {
         $actual = $this->resolver->resolve($unresolvedParameters, $injectedParameters);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
      * @dataProvider provideCircularReferences
      */
-    public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null): void
+    public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ?ParameterBag $injectedParameters = null): void
     {
         $this->expectException(CircularReferenceException::class);
         $this->expectExceptionMessageMatches('/^Circular reference detected for the parameter "[^\"]+" while resolving \[.+]\.$/');
@@ -65,11 +66,11 @@ class ParameterResolverIntegrationTest extends TestCase
         $this->resolver->resolve(
             new ParameterBag([
                 'param1' => '<{inexisting_param}>',
-            ])
+            ]),
         );
     }
 
-    public function provideCircularReferences()
+    public function provideCircularReferences(): iterable
     {
         $return = [];
 
@@ -102,7 +103,7 @@ class ParameterResolverIntegrationTest extends TestCase
         return $return;
     }
 
-    public function provideParameters()
+    public function provideParameters(): iterable
     {
         $return = [];
 
@@ -126,7 +127,7 @@ class ParameterResolverIntegrationTest extends TestCase
         $return['static values'] = [
             $staticValues,
             null,
-            $staticValues
+            $staticValues,
         ];
 
         $return['simple dynamic parameter'] = [
@@ -138,7 +139,7 @@ class ParameterResolverIntegrationTest extends TestCase
             new ParameterBag([
                 'param1' => 'hello',
                 'param2' => 'hello',
-            ])
+            ]),
         ];
 
         $return['simple inversed dynamic parameter'] = [
@@ -150,21 +151,21 @@ class ParameterResolverIntegrationTest extends TestCase
             new ParameterBag([
                 'param1' => 'hello',
                 'param2' => 'hello',
-            ])
+            ]),
         ];
 
         $return['composite parameter'] = [
             new ParameterBag([
                 'param1' => '<{param2}> <{param3}>',
                 'param2' => 'NaN',
-                'param3' => 'Bat'
+                'param3' => 'Bat',
             ]),
             null,
             new ParameterBag([
                 'param1' => 'NaN Bat',
                 'param2' => 'NaN',
-                'param3' => 'Bat'
-            ])
+                'param3' => 'Bat',
+            ]),
         ];
 
         $return['composite stringified reference'] = [
@@ -180,7 +181,7 @@ class ParameterResolverIntegrationTest extends TestCase
                 'param2' => true,
                 'param3' => false,
                 'param4' => -.89,
-            ])
+            ]),
         ];
 
         $return['composite stringified reference'] = [
@@ -196,7 +197,7 @@ class ParameterResolverIntegrationTest extends TestCase
                 'param2' => false,
                 'param3' => false,
                 'param4' => -.89,
-            ])
+            ]),
         ];
 
         $return['nested parameters'] = [
@@ -210,7 +211,7 @@ class ParameterResolverIntegrationTest extends TestCase
                 'param1' => 'foo',
                 'param2' => 3,
                 'param3' => 'foo',
-            ])
+            ]),
         ];
 
         $return['deep nested parameters'] = [
@@ -218,15 +219,15 @@ class ParameterResolverIntegrationTest extends TestCase
                 'param1' => '<{param<{param<{param3}>}>}>',
                 'param3' => 2,
                 'param2' => 4,
-                'param4' => 'foo'
+                'param4' => 'foo',
             ]),
             null,
             new ParameterBag([
                 'param1' => 'foo',
                 'param3' => 2,
                 'param2' => 4,
-                'param4' => 'foo'
-            ])
+                'param4' => 'foo',
+            ]),
         ];
 
         $return['deep nested parameters'] = [
@@ -234,15 +235,15 @@ class ParameterResolverIntegrationTest extends TestCase
                 'param1' => 'hey <{param<{param<{param3}>}>}> <{param4}> world',
                 'param3' => 2,
                 'param2' => 4,
-                'param4' => 'foo'
+                'param4' => 'foo',
             ]),
             null,
             new ParameterBag([
                 'param1' => 'hey foo foo world',
                 'param3' => 2,
                 'param2' => 4,
-                'param4' => 'foo'
-            ])
+                'param4' => 'foo',
+            ]),
         ];
 
         return $return;

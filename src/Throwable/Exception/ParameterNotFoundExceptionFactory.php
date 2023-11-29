@@ -25,8 +25,8 @@ final class ParameterNotFoundExceptionFactory
         return new ParameterNotFoundException(
             sprintf(
                 'Could not find the parameter "%s".',
-                $key
-            )
+                $key,
+            ),
         );
     }
 
@@ -36,8 +36,8 @@ final class ParameterNotFoundExceptionFactory
             sprintf(
                 'Could not find the parameter "%s" when resolving "%s".',
                 $key,
-                $parameter->getKey()
-            )
+                $parameter->getKey(),
+            ),
         );
     }
 

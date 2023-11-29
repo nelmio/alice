@@ -34,11 +34,11 @@ abstract class AbstractChainableParserAwareParser implements ChainableTokenParse
      */
     protected $parser;
 
-    public function __construct(ParserInterface $parser = null)
+    public function __construct(?ParserInterface $parser = null)
     {
         $this->parser = $parser;
     }
-    
+
     public function withParser(ParserInterface $parser)
     {
         return new static($parser);

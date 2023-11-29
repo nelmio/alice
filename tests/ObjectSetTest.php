@@ -18,6 +18,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\ObjectSet
+ * @internal
  */
 class ObjectSetTest extends TestCase
 {
@@ -32,18 +33,18 @@ class ObjectSetTest extends TestCase
 
         $set = new ObjectSet($parameters, $objects);
 
-        static::assertSame(
+        self::assertSame(
             [
                 'foo' => 'bar',
             ],
-            $set->getParameters()
+            $set->getParameters(),
         );
-        static::assertEquals(
+        self::assertEquals(
             [
-                'dummy' => $std
+                'dummy' => $std,
             ],
-            $set->getObjects()
+            $set->getObjects(),
         );
-        static::assertCount(1, $set->getObjects());
+        self::assertCount(1, $set->getObjects());
     }
 }

@@ -18,18 +18,19 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Flag\UniqueFlag
+ * @internal
  */
 class UniqueFlagTest extends TestCase
 {
     public function testIsAFlag(): void
     {
-        static::assertTrue(is_a(UniqueFlag::class, FlagInterface::class, true));
+        self::assertTrue(is_a(UniqueFlag::class, FlagInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $flag = new UniqueFlag();
 
-        static::assertEquals('unique', $flag->__toString());
+        self::assertEquals('unique', $flag->__toString());
     }
 }

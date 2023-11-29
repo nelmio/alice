@@ -30,6 +30,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver
+ * @internal
  */
 class FakerFunctionCallValueResolverValueTest extends TestCase
 {
@@ -37,20 +38,20 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
 
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(FakerFunctionCallValueResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(FakerFunctionCallValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FakerFunctionCallValueResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FakerFunctionCallValueResolver::class))->isCloneable());
     }
 
     public function testCanResolvePropertyReferenceValues(): void
     {
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
 
-        static::assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new ResolvedFunctionCallValue('')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testReturnsSetWithResolvedValue(): void
@@ -72,7 +73,7 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $resolver = new FakerFunctionCallValueResolver($fakerGenerator);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testCallAProviderFunction(): void
@@ -84,8 +85,8 @@ class FakerFunctionCallValueResolverValueTest extends TestCase
         $resolver = new FakerFunctionCallValueResolver(FakerGeneratorFactory::create());
         $result = $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
-        static::assertEquals(9, strlen($result->getValue()));
-        static::assertEquals('Hello ', substr($result->getValue(), 0, 6));
+        self::assertEquals(9, mb_strlen($result->getValue()));
+        self::assertEquals('Hello ', mb_substr($result->getValue(), 0, 6));
     }
 
     public function testThrowsAnExceptionIfTriesToCallAnUndefinedProviderFunction(): void

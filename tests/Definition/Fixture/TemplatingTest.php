@@ -23,15 +23,16 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\Templating
+ * @internal
  */
 class TemplatingTest extends TestCase
 {
     /**
-     * @depends \Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
+     * @depends test\Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
      */
     public function testIsImmutable(): void
     {
-        static::assertTrue(true, 'Nothing to do.');
+        self::assertTrue(true, 'Nothing to do.');
     }
 
     /**
@@ -41,10 +42,10 @@ class TemplatingTest extends TestCase
     {
         $templating = new Templating($fixture);
 
-        static::assertEquals($isATemplate, $templating->isATemplate());
-        static::assertEquals($extendsFixtures, $templating->extendsFixtures());
-        static::assertEquals($extendedFixtures, $templating->getExtendedFixtures());
-        static::assertCount(count($extendedFixtures), $templating->getExtendedFixtures());
+        self::assertEquals($isATemplate, $templating->isATemplate());
+        self::assertEquals($extendsFixtures, $templating->extendsFixtures());
+        self::assertEquals($extendedFixtures, $templating->getExtendedFixtures());
+        self::assertCount(count($extendedFixtures), $templating->getExtendedFixtures());
     }
 
     /**
@@ -58,8 +59,8 @@ class TemplatingTest extends TestCase
             $this->createFixtureWithFlags(
                 (new FlagBag(''))
                     ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
-                    ->withFlag(new ExtendFlag(new FixtureReference('user_base1')))
-            )
+                    ->withFlag(new ExtendFlag(new FixtureReference('user_base1'))),
+            ),
         );
 
         $expected = [
@@ -68,13 +69,13 @@ class TemplatingTest extends TestCase
         ];
         $actual = $templating->getExtendedFixtures();
 
-        static::assertCount(count($expected), $actual);
+        self::assertCount(count($expected), $actual);
         foreach ($expected as $index => $expectedReference) {
-            static::assertEquals($expectedReference, $actual[$index]);
+            self::assertEquals($expectedReference, $actual[$index]);
         }
     }
 
-    public function provideFlags()
+    public function provideFlags(): iterable
     {
         $emptyFlagBag = new FlagBag('user0');
         yield 'empty flagbag' => [
@@ -102,8 +103,7 @@ class TemplatingTest extends TestCase
 
         $extendsFlagBag = $emptyFlagBag
             ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
-            ->withFlag(new ExtendFlag(new FixtureReference('user_base1')))
-        ;
+            ->withFlag(new ExtendFlag(new FixtureReference('user_base1')));
         yield 'flagbag with extends' => [
             $this->createFixtureWithFlags($extendsFlagBag),
             false,
@@ -118,8 +118,7 @@ class TemplatingTest extends TestCase
             ->withFlag(new TemplateFlag())
             ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
             ->withFlag(new ExtendFlag(new FixtureReference('user_base1')))
-            ->withFlag(new DummyFlag())
-        ;
+            ->withFlag(new DummyFlag());
         yield 'flagbag with template, extends and non templating flags' => [
             $this->createFixtureWithFlags($templateAndExtendsFlagBag),
             true,
@@ -137,9 +136,9 @@ class TemplatingTest extends TestCase
             new SimpleFixture(
                 $flags->getKey(),
                 'Dummy',
-                SpecificationBagFactory::create()
+                SpecificationBagFactory::create(),
             ),
-            $flags
+            $flags,
         );
     }
 }

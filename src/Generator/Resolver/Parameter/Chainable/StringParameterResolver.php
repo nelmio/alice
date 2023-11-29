@@ -28,24 +28,24 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
 {
     use IsAServiceTrait;
 
-    const PATTERN = '/<{(?<parameter>[^<{]+?)}>/';
-    const SINGLE_PARAMETER_PATTERN = '/^<{(?<parameter>(?(?=\{)^[\>]|.)+)}>$/';
+    public const PATTERN = '/<{(?<parameter>[^<{]+?)}>/';
+    public const SINGLE_PARAMETER_PATTERN = '/^<{(?<parameter>(?(?=\{)^[\>]|.)+)}>$/';
 
     /**
      * @var ParameterResolverInterface|null
      */
     private $resolver;
 
-    public function __construct(ParameterResolverInterface $resolver = null)
+    public function __construct(?ParameterResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
     }
-    
+
     public function withResolver(ParameterResolverInterface $resolver)
     {
         return new self($resolver);
     }
-    
+
     public function canResolve(Parameter $parameter): bool
     {
         return is_string($parameter->getValue());
@@ -58,7 +58,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        ResolvingContext $context = null
+        ?ResolvingContext $context = null
     ): ParameterBag {
         $context = ResolvingContext::createFrom($context, $parameter->getKey());
 
@@ -73,23 +73,23 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
                     $key,
                     $unresolvedParameters,
                     $resolvedParameters,
-                    $context
+                    $context,
                 );
 
                 return $resolvedParameters->get($key);
             },
-            $parameter->getValue()
+            $parameter->getValue(),
         );
 
         return $resolvedParameters->with($parameter->withValue($value));
     }
 
     /**
-     * @param Parameter                  $parameter Parameter being resolved
-     * @param string                     $key       Key of the parameter that need to be resolved to resolve $parameter
+     * @param Parameter $parameter Parameter being resolved
+     * @param string    $key       Key of the parameter that need to be resolved to resolve $parameter
      */
     private function resolveStringKey(
-        ParameterResolverInterface $resolver = null,
+        ?ParameterResolverInterface $resolver = null,
         Parameter $parameter,
         string $key,
         ParameterBag $unresolvedParameters,
@@ -115,7 +115,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
             new Parameter($key, $unresolvedParameters->get($key)),
             $unresolvedParameters,
             $resolvedParameters,
-            $context
+            $context,
         );
     }
 }

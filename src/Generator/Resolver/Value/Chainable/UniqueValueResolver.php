@@ -48,7 +48,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
      */
     private $limit;
 
-    public function __construct(UniqueValuesPool $pool, ValueResolverInterface $resolver = null, int $limit = 150)
+    public function __construct(UniqueValuesPool $pool, ?ValueResolverInterface $resolver = null, int $limit = 150)
     {
         $this->pool = $pool;
         $this->resolver = $resolver;
@@ -58,12 +58,12 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
 
         $this->limit = $limit;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->pool, $resolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof UniqueValue;
@@ -94,7 +94,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
             $fixture,
             $fixtureSet,
             $scope,
-            $context
+            $context,
         );
 
         if ($this->pool->has($generatedValue)) {

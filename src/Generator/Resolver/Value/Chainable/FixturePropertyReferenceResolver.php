@@ -46,17 +46,17 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
      */
     private $resolver;
 
-    public function __construct(PropertyAccessorInterface $propertyAccessor, ValueResolverInterface $resolver = null)
+    public function __construct(PropertyAccessorInterface $propertyAccessor, ?ValueResolverInterface $resolver = null)
     {
         $this->propertyAccessor = $propertyAccessor;
         $this->resolver = $resolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->propertyAccessor, $resolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FixturePropertyValue;
@@ -86,7 +86,7 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
         /** @var ResolvedFixtureSet $fixtureSet */
         [$instance, $fixtureSet] = [
             $fixtureReferenceResult->getValue(),
-            $fixtureReferenceResult->getSet()
+            $fixtureReferenceResult->getSet(),
         ];
 
         try {
@@ -99,7 +99,7 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
 
         return new ResolvedValueWithFixtureSet(
             $propertyValue,
-            $fixtureSet
+            $fixtureSet,
         );
     }
 }

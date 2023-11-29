@@ -18,11 +18,12 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversNothing
+ * @internal
  */
 class GenerationThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void
     {
-        static::assertTrue(is_a(RootGenerationException::class, LoadingThrowable::class, true));
+        self::assertTrue(is_a(RootGenerationException::class, LoadingThrowable::class, true));
     }
 }

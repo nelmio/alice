@@ -19,7 +19,7 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeFixtureBagResolver implements FixtureBagResolverInterface
 {
     use NotCallableTrait;
-    
+
     public function resolve(FixtureBag $unresolvedFixtures): FixtureBag
     {
         $this->__call(__FUNCTION__, func_get_args());

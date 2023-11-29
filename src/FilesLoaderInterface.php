@@ -23,7 +23,7 @@ interface FilesLoaderInterface
     /**
      * Loads a collection of fixture files.
      *
-     * @param string[] $files       Files to load.
+     * @param string[] $files      Files to load.
      * @param array    $parameters Additional parameters to inject.
      * @param array    $objects    Additional objects to inject.
      *

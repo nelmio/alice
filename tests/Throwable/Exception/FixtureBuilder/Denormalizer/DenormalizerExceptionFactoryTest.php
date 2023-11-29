@@ -18,29 +18,30 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory
+ * @internal
  */
 class DenormalizerExceptionFactoryTest extends TestCase
 {
     public function testCreateForUndenormalizableConstructor(): void
     {
         $exception = DenormalizerExceptionFactory::createForUndenormalizableConstructor();
-        static::assertEquals(
+        self::assertEquals(
             'Could not denormalize the given constructor.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForUndenormalizableFactory(): void
     {
         $exception = DenormalizerExceptionFactory::createForUndenormalizableFactory();
-        static::assertEquals(
+        self::assertEquals(
             'Could not denormalize the given factory.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForUnparsableValue(): void
@@ -49,47 +50,47 @@ class DenormalizerExceptionFactoryTest extends TestCase
         $previous = new Error();
 
         $exception = DenormalizerExceptionFactory::createForUnparsableValue('foo', $code, $previous);
-        static::assertEquals(
+        self::assertEquals(
             'Could not parse value "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals($code, $exception->getCode());
-        static::assertSame($previous, $exception->getPrevious());
+        self::assertEquals($code, $exception->getCode());
+        self::assertSame($previous, $exception->getPrevious());
     }
 
     public function testCreateDenormalizerNotFoundForFixture(): void
     {
         $exception = DenormalizerExceptionFactory::createDenormalizerNotFoundForFixture('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'No suitable fixture denormalizer found to handle the fixture with the reference "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateDenormalizerNotFoundUnexpectedCall(): void
     {
         $exception = DenormalizerExceptionFactory::createDenormalizerNotFoundUnexpectedCall('fake');
 
-        static::assertEquals(
+        self::assertEquals(
             'Expected method "fake" to be called only if it has a denormalizer.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForInvalidScopeForUniqueValue(): void
     {
         $exception = DenormalizerExceptionFactory::createForInvalidScopeForUniqueValue();
 
-        static::assertEquals(
+        self::assertEquals(
             'Cannot bind a unique value scope to a temporary fixture.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

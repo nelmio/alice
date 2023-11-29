@@ -33,7 +33,7 @@ final class TemplateFixtureResolver
      * @throws FixtureNotFoundException
      */
     public function resolve(
-        TemplatingFixture|FixtureInterface $fixture,
+        FixtureInterface|TemplatingFixture $fixture,
         FixtureBag $unresolvedFixtures,
         TemplatingFixtureBag $resolvedFixtures,
         ResolvingContext $context
@@ -57,7 +57,7 @@ final class TemplateFixtureResolver
                 : [],
             $unresolvedFixtures,
             $resolvedFixtures,
-            $context
+            $context,
         );
         $fixture = $this->getExtendedFixture($fixture, $extendedFixtures);
 
@@ -65,7 +65,7 @@ final class TemplateFixtureResolver
     }
 
     /**
-     * @param FixtureReference[]   $extendedFixtureReferences
+     * @param FixtureReference[] $extendedFixtureReferences
      *
      * @throws FixtureNotFoundException
      *
@@ -94,7 +94,7 @@ final class TemplateFixtureResolver
                 }
 
                 $fixtures = $fixtures->with(
-                    $resolvedFixtures->getTemplate($fixtureId)
+                    $resolvedFixtures->getTemplate($fixtureId),
                 );
 
                 continue;
@@ -109,11 +109,11 @@ final class TemplateFixtureResolver
                 $unresolvedFixtures->get($fixtureId),
                 $unresolvedFixtures,
                 $resolvedFixtures,
-                $context
+                $context,
             );
 
             $fixtures = $fixtures->with(
-                $resolvedFixtures->get($fixtureId)
+                $resolvedFixtures->get($fixtureId),
             );
         }
 

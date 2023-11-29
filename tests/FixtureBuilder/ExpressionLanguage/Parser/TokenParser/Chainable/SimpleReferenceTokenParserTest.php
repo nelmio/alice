@@ -23,17 +23,18 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\SimpleReferenceTokenParser
+ * @internal
  */
 class SimpleReferenceTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(SimpleReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(SimpleReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleReferenceTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleReferenceTokenParser::class))->isCloneable());
     }
 
     public function testCanParseDynamicArrayTokens(): void
@@ -42,8 +43,8 @@ class SimpleReferenceTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new SimpleReferenceTokenParser();
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testThrowsAnErrorIfAMalformedTokenIsGiven(): void
@@ -53,14 +54,14 @@ class SimpleReferenceTokenParserTest extends TestCase
 
             $parser = new SimpleReferenceTokenParser();
             $parser->parse($token);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (ParseException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not parse the token "" (type: SIMPLE_REFERENCE_TYPE).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNull($exception->getPrevious());
         }
     }
 
@@ -72,6 +73,6 @@ class SimpleReferenceTokenParserTest extends TestCase
         $parser = new SimpleReferenceTokenParser();
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }
