@@ -24,9 +24,9 @@ jobs:
         name: PHP ${{ matrix.php }} ${{ matrix.description }} - ${{ matrix.symfony-versions }}
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
 
-            - uses: actions/cache@v2
+            - uses: actions/cache@v3
               with:
                   path: ~/.composer/cache/files
                   key: ${{ matrix.php }}-${{ matrix.symfony-versions }}
@@ -58,7 +58,7 @@ jobs:
               if: matrix.symfony-versions
 
             - name: Run codecov
-              uses: codecov/codecov-action@v1
+              uses: codecov/codecov-action@v3
               with:
                   file: './coverage.xml'
                   fail_ci_if_error: true
