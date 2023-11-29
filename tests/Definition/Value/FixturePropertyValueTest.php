@@ -40,7 +40,7 @@ class FixturePropertyValueTest extends TestCase
     }
 
     /**
-     * @depends test\Nelmio\Alice\Definition\Value\FixtureReferenceValueTest::testIsImmutable
+     * @depends \Nelmio\Alice\Definition\Value\FixtureReferenceValueTest::testIsImmutable
      */
     public function testIsImmutable(): void
     {
