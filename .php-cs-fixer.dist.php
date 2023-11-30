@@ -44,6 +44,7 @@ $config = new FidryConfig(
 
 $config->addRules([
     'php_unit_method_casing' => ['case' => 'camel_case'],
+    'php_unit_test_annotation' => false,
     'phpdoc_no_empty_return' => false,
     'static_lambda' => false,
 ]);
