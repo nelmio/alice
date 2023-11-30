@@ -18,7 +18,6 @@ jobs:
                     - '8.2'
                 symfony-versions:
                     - false
-                    - '5.4.*'
                     - '6.4.*'
 
         name: PHP ${{ matrix.php }} ${{ matrix.description }} - ${{ matrix.symfony-versions }}
