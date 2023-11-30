@@ -76,7 +76,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
         $object = new SimpleObject('dummy', $instance);
 
         $accessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
-        $accessorProphecy->setValue($instance, 'username', 'bob')->willReturn(null);
+        $accessorProphecy->setValue($instance, 'username', 'bob')->willReturn();
         /** @var PropertyAccessorInterface $accessor */
         $accessor = $accessorProphecy->reveal();
 
