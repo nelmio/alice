@@ -26,7 +26,6 @@ interface ArgumentsDenormalizerInterface
     /**
      * Denormalizes an array of arguments.
      *
-     *
      * @throws DenormalizationThrowable
      *
      * @return array|ValueInterface[]

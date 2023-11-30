@@ -51,7 +51,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
 
         $this->limit = $limit;
     }
-    
+
     public function withResolver(ParameterResolverInterface $resolver)
     {
         $decoratedResolver = $this->resolver;
@@ -61,7 +61,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
 
         return new self($decoratedResolver);
     }
-    
+
     public function canResolve(Parameter $parameter): bool
     {
         return $this->resolver->canResolve($parameter);
@@ -79,8 +79,8 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        ResolvingContext $context = null,
-        ParameterBag $previousResult = null,
+        ?ResolvingContext $context = null,
+        ?ParameterBag $previousResult = null,
         int $counter = 1
     ): ParameterBag {
         if (null === $previousResult) {
@@ -97,7 +97,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
             $parameter->withValue($previousParameterValue),
             $unresolvedParameters,
             $resolvedParameters,
-            $context
+            $context,
         );
         $newParameterValue = $newResult->get($parameterKey);
         $result = $this->mergeResults($previousResult, $newResult);
@@ -125,7 +125,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
     {
         foreach ($previous as $key => $value) {
             $new = $new->with(
-                new Parameter((string) $key, $value)
+                new Parameter((string) $key, $value),
             );
         }
 

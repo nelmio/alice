@@ -52,7 +52,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
         $this->propertyDenormalizer = $propertyDenormalizer;
         $this->callsDenormalizer = $callsDenormalizer;
     }
-    
+
     public function denormalize(FixtureInterface $scope, FlagParserInterface $parser, array $unparsedSpecs): SpecificationBag
     {
         $constructor = null;
@@ -64,8 +64,8 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
                 throw new InvalidArgumentException(
                     sprintf(
                         'Invalid property name: %s.',
-                        $unparsedPropertyName
-                    )
+                        $unparsedPropertyName,
+                    ),
                 );
             }
 
@@ -76,7 +76,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
                     @trigger_error(
                         'Using factories with the fixture keyword "__construct" has been deprecated since '
                         .'3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.',
-                        E_USER_DEPRECATED
+                        E_USER_DEPRECATED,
                     );
                 }
 
@@ -112,8 +112,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
     ): MethodCallInterface {
         return (false === $value)
             ? new NoMethodCall()
-            : $this->constructorDenormalizer->denormalize($scope, $parser, $value)
-        ;
+            : $this->constructorDenormalizer->denormalize($scope, $parser, $value);
     }
 
     private function denormalizeFactory(
@@ -180,7 +179,7 @@ final class SimpleSpecificationsDenormalizer implements SpecificationsDenormaliz
             $scope,
             $parser,
             $unparsedMethod,
-            $methodCall[$unparsedMethod]
+            $methodCall[$unparsedMethod],
         );
     }
 }

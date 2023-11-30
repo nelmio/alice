@@ -24,23 +24,23 @@
         "fakerphp/faker": "^1.10",
         "myclabs/deep-copy": "^1.10",
         "sebastian/comparator": "^3.0 || ^4.0 || ^5.0",
-        "symfony/property-access": "^5.4 || ^6.0 || ^7.0",
-        "symfony/yaml": "^5.4 || ^6.0 || ^7.0"
+        "symfony/property-access": "^6.4 || ^7.0",
+        "symfony/yaml": "^5.4 || ^6.0"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.1",
         "phpspec/prophecy": "^1.6",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.3",
-        "symfony/config": "^5.4 || ^6.0 || ^7.0",
-        "symfony/dependency-injection": "^5.4 || ^6.0 || ^7.0",
-        "symfony/finder": "^5.4 || ^6.0 || ^7.0",
-        "symfony/http-kernel": "^5.4 || ^6.0 || ^7.0",
-        "symfony/phpunit-bridge": "^5.4 || ^6.0 || ^7.0",
-        "symfony/var-dumper": "^5.4 || ^6.0 || ^7.0"
+        "symfony/config": "^6.4 || ^7.0",
+        "symfony/dependency-injection": "^6.4 || ^7.0",
+        "symfony/finder": "^6.4 || ^7.0",
+        "symfony/http-kernel": "^6.4 || ^7.0",
+        "symfony/phpunit-bridge": "^6.4 || ^7.0",
+        "symfony/var-dumper": "^6.4 || ^7.0"
     },
     "conflict": {
-        "symfony/framework-bundle": "<5.4.0"
+        "symfony/framework-bundle": "<6.4.0"
     },
 
     "autoload": {

@@ -18,18 +18,19 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Flag\ConfiguratorFlag
+ * @internal
  */
 class ConfiguratorFlagTest extends TestCase
 {
     public function testIsAFlag(): void
     {
-        static::assertTrue(is_a(ConfiguratorFlag::class, FlagInterface::class, true));
+        self::assertTrue(is_a(ConfiguratorFlag::class, FlagInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $flag = new ConfiguratorFlag();
 
-        static::assertEquals('configurator', $flag->__toString());
+        self::assertEquals('configurator', $flag->__toString());
     }
 }

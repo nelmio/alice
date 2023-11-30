@@ -27,6 +27,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SimpleFixtureBagDenormalizer
+ * @internal
  */
 class SimpleFixtureBagDenormalizerTest extends TestCase
 {
@@ -34,12 +35,12 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
 
     public function testIsAFixtureBagDenormalizer(): void
     {
-        static::assertTrue(is_a(SimpleFixtureBagDenormalizer::class, FixtureBagDenormalizerInterface::class, true));
+        self::assertTrue(is_a(SimpleFixtureBagDenormalizer::class, FixtureBagDenormalizerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleFixtureBagDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleFixtureBagDenormalizer::class))->isCloneable());
     }
 
     public function testDenormalizesASetOfDataIntoAFixtureBag(): void
@@ -83,13 +84,11 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
         $userFlags = (new FlagBag('Nelmio\Alice\Entity\User'))->withFlag(new ElementFlag('dummy_flag'));
         $flagParserProphecy
             ->parse('Nelmio\Entity\User (dummy_flag)')
-            ->willReturn($userFlags)
-        ;
+            ->willReturn($userFlags);
         $ownerFlags = new FlagBag('Nelmio\Entity\Owner');
         $flagParserProphecy
             ->parse('Nelmio\Entity\Owner')
-            ->willReturn(new FlagBag('Nelmio\Entity\Owner'))
-        ;
+            ->willReturn(new FlagBag('Nelmio\Entity\Owner'));
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -102,12 +101,11 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
                 'Nelmio\Alice\Entity\User',
                 'user_alice',
                 [
-                    'username' => 'alice'
+                    'username' => 'alice',
                 ],
-                $userFlags
+                $userFlags,
             )
-            ->willReturn($bag1)
-        ;
+            ->willReturn($bag1);
         $bag2 = $bag1->with($fixture2);
         $fixtureDenormalizerProphecy
             ->denormalize(
@@ -115,12 +113,11 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
                 'Nelmio\Alice\Entity\User',
                 'user_bob',
                 [
-                    'username' => 'bob'
+                    'username' => 'bob',
                 ],
-                $userFlags
+                $userFlags,
             )
-            ->willReturn($bag2)
-        ;
+            ->willReturn($bag2);
         $bag3 = $bag2->with($fixture3);
         $fixtureDenormalizerProphecy
             ->denormalize(
@@ -128,10 +125,9 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
                 'Nelmio\Entity\Owner',
                 'owner1',
                 [],
-                $ownerFlags
+                $ownerFlags,
             )
-            ->willReturn($bag3)
-        ;
+            ->willReturn($bag3);
         $bag4 = $bag3->with($fixture4);
         $fixtureDenormalizerProphecy
             ->denormalize(
@@ -139,17 +135,16 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
                 'Nelmio\Entity\Owner',
                 'owner2',
                 [],
-                $ownerFlags
+                $ownerFlags,
             )
-            ->willReturn($bag4)
-        ;
+            ->willReturn($bag4);
         /** @var FixtureDenormalizerInterface $fixtureDenormalizer */
         $fixtureDenormalizer = $fixtureDenormalizerProphecy->reveal();
 
         $denormalizer = new SimpleFixtureBagDenormalizer($fixtureDenormalizer, $flagParser);
         $actual = $denormalizer->denormalize($data);
 
-        static::assertSame($bag4, $actual);
+        self::assertSame($bag4, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(2);
         $fixtureDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(4);
@@ -165,8 +160,7 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
         $userFlags = new FlagBag('Nelmio\Alice\Entity\User');
         $flagParserProphecy
             ->parse('Nelmio\Entity\User')
-            ->willReturn($userFlags)
-        ;
+            ->willReturn($userFlags);
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -175,11 +169,11 @@ class SimpleFixtureBagDenormalizerTest extends TestCase
         try {
             $denormalizer->denormalize($data);
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (InvalidArgumentException $exception) {
-            static::assertSame(
+            self::assertSame(
                 'Expected an array for the class "Nelmio\Entity\User", found "string" instead.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
 

@@ -24,8 +24,8 @@ final class CircularReferenceExceptionFactory
             sprintf(
                 'Circular reference detected for the parameter "%s" while resolving ["%s"].',
                 $key,
-                implode('", "', array_keys($resolving))
-            )
+                implode('", "', array_keys($resolving)),
+            ),
         );
     }
 

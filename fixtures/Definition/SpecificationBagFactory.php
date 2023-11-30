@@ -16,14 +16,14 @@ namespace Nelmio\Alice\Definition;
 class SpecificationBagFactory
 {
     public static function create(
-        MethodCallInterface $constructor = null,
-        PropertyBag $properties = null,
-        MethodCallBag $calls = null
+        ?MethodCallInterface $constructor = null,
+        ?PropertyBag $properties = null,
+        ?MethodCallBag $calls = null
     ): SpecificationBag {
         return new SpecificationBag(
             $constructor,
             $properties ?? new PropertyBag(),
-            $calls ?? new MethodCallBag()
+            $calls ?? new MethodCallBag(),
         );
     }
 }

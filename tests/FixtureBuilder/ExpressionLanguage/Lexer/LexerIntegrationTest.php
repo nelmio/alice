@@ -26,6 +26,7 @@ use function str_repeat;
  * @group integration
  *
  * @coversNothing
+ * @internal
  */
 class LexerIntegrationTest extends TestCase
 {
@@ -33,7 +34,7 @@ class LexerIntegrationTest extends TestCase
      * @var LexerInterface
      */
     protected $lexer;
-    
+
     protected function setUp(): void
     {
         $this->lexer = (new NativeLoader())->getLexer();
@@ -41,6 +42,7 @@ class LexerIntegrationTest extends TestCase
 
     /**
      * @dataProvider provideValues
+     * @param mixed $expected
      */
     public function testCanLexValues(string $value, $expected): void
     {
@@ -48,12 +50,12 @@ class LexerIntegrationTest extends TestCase
             $actual = $this->lexer->lex($value);
 
             if (null === $expected) {
-                static::fail(
+                self::fail(
                     sprintf(
                         'Expected exception to be thrown for "%s", got "%s" instead.',
                         $value,
-                        var_export($actual, true)
-                    )
+                        var_export($actual, true),
+                    ),
                 );
             }
         } catch (InvalidArgumentException $exception) {
@@ -70,14 +72,14 @@ class LexerIntegrationTest extends TestCase
             throw $exception;
         }
 
-        static::assertEquals($expected, $actual, var_export($actual, true));
-        static::assertSameSize($expected, $actual);
+        self::assertEquals($expected, $actual, var_export($actual, true));
+        self::assertSameSize($expected, $actual);
     }
 
     /**
-     * @link https://github.com/nelmio/alice/issues/377
+     * @see https://github.com/nelmio/alice/issues/377
      */
-    public function provideValues()
+    public function provideValues(): iterable
     {
         // simple values
         yield 'empty string' => [
@@ -563,36 +565,36 @@ class LexerIntegrationTest extends TestCase
             '<function(\'foo\nbar\')>',
             [
                 new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\nbar\'IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
-            ]
+            ],
         ];
 
         yield '[Function] with windows type line break in single quoted string argument' => [
             '<function(\'foo\\r\\nbar\')>',
             [
                 new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\r\nbar\'IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
-            ]
+            ],
         ];
 
         yield '[Function] with unix type line break in double quoted string argument' => [
             '<function("foo\nbar")>',
             [
-                new Token('<aliceTokenizedFunction(FUNCTION_START__function__"foo\nbar"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE))
-            ]
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__"foo\nbar"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
         ];
 
         yield '[Function] with windows type line break in double quoted string argument' => [
             '<function("foo\r\nbar")>',
             [
-                new Token('<aliceTokenizedFunction(FUNCTION_START__function__"foo\r\nbar"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE))
-            ]
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__"foo\r\nbar"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
         ];
 
         $arg = str_repeat('a', 2000);
         yield '[Function] with long argument' => [
             '<function("'.$arg.'")>',
             [
-                new Token('<aliceTokenizedFunction(FUNCTION_START__function__"'.$arg.'"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE))
-            ]
+                new Token('<aliceTokenizedFunction(FUNCTION_START__function__"'.$arg.'"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
         ];
 
         // Arrays
@@ -985,7 +987,6 @@ class LexerIntegrationTest extends TestCase
                 new Token('foo ', new TokenType(TokenType::STRING_TYPE)),
                 new Token('@user0->username->value', new TokenType(TokenType::PROPERTY_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-
             ],
         ];
         yield '[Reference] with nested' => [
@@ -1002,7 +1003,6 @@ class LexerIntegrationTest extends TestCase
                 new Token('@user0', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
                 new Token('@user1', new TokenType(TokenType::SIMPLE_REFERENCE_TYPE)),
                 new Token(' bar', new TokenType(TokenType::STRING_TYPE)),
-
             ],
         ];
         yield '[Reference] nominal range' => [

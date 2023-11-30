@@ -50,19 +50,19 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
     // TODO: make $namedArgumentsResolver non-nullable in 4.0. It is currently nullable only for BC purposes
     public function __construct(
         CallProcessorInterface $callProcessor,
-        ValueResolverInterface $resolver = null,
-        NamedArgumentsResolver $namedArgumentsResolver = null
+        ?ValueResolverInterface $resolver = null,
+        ?NamedArgumentsResolver $namedArgumentsResolver = null
     ) {
         $this->callProcessor = $callProcessor;
         $this->resolver = $resolver;
         $this->namedArgumentsResolver = $namedArgumentsResolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($this->callProcessor, $resolver, $this->namedArgumentsResolver);
     }
-    
+
     public function doCallsOn(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
@@ -85,7 +85,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
                 $fixture,
                 $fixtureSet,
                 $scope,
-                $context
+                $context,
             );
 
             $fixtureSet = $this->callProcessor->process($object, $fixtureSet, $context, $methodCall);

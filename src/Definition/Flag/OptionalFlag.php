@@ -41,7 +41,7 @@ final class OptionalFlag implements FlagInterface
     {
         return $this->percentage;
     }
-    
+
     public function __toString(): string
     {
         return '%?';

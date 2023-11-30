@@ -30,6 +30,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NullConstructorInstantiator
+ * @internal
  */
 class NullConstructorInstantiatorTest extends TestCase
 {
@@ -37,7 +38,7 @@ class NullConstructorInstantiatorTest extends TestCase
      * @var NullConstructorInstantiator
      */
     private $instantiator;
-    
+
     protected function setUp(): void
     {
         $this->instantiator = new NullConstructorInstantiator();
@@ -45,19 +46,19 @@ class NullConstructorInstantiatorTest extends TestCase
 
     public function testIsAChainableInstantiator(): void
     {
-        static::assertTrue(is_a(NullConstructorInstantiator::class, ChainableInstantiatorInterface::class, true));
+        self::assertTrue(is_a(NullConstructorInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(NullConstructorInstantiator::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(NullConstructorInstantiator::class))->isCloneable());
     }
 
     public function testCanInstantiateFixtureUsingADefaultConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());
 
-        static::assertTrue($this->instantiator->canInstantiate($fixture));
+        self::assertTrue($this->instantiator->canInstantiate($fixture));
     }
 
     public function testIfCannotGetConstructorReflectionTriesToInstantiateObjectWithoutArguments(): void
@@ -68,7 +69,7 @@ class NullConstructorInstantiatorTest extends TestCase
         $expected = new DummyWithDefaultConstructor();
         $actual = $set->getObjects()->get($fixture)->getInstance();
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfInstantiatingObjectWithoutArgumentsFails(): void
@@ -87,14 +88,14 @@ class NullConstructorInstantiatorTest extends TestCase
             $fixture = new SimpleFixture('dummy', 'Unknown', SpecificationBagFactory::create());
             $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (InstantiationException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not get the necessary data on the constructor to instantiate "dummy".',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 

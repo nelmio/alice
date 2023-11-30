@@ -32,6 +32,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver
+ * @internal
  */
 class FunctionCallArgumentResolverTest extends TestCase
 {
@@ -39,20 +40,20 @@ class FunctionCallArgumentResolverTest extends TestCase
 
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(FunctionCallArgumentResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(FunctionCallArgumentResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FunctionCallArgumentResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FunctionCallArgumentResolver::class))->isCloneable());
     }
 
     public function testCanResolvePropertyReferenceValues(): void
     {
         $resolver = new FunctionCallArgumentResolver(new FakeValueResolver());
 
-        static::assertTrue($resolver->canResolve(new FunctionCallValue('')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new FunctionCallValue('')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testIsResolverAware(): void
@@ -75,14 +76,14 @@ class FunctionCallArgumentResolverTest extends TestCase
         $resolver = new FunctionCallArgumentResolver($decoratedResolverConstructor());
         $newResolver = $resolver->withValueResolver($argumentResolverConstructor());
 
-        static::assertNotSame($resolver, $newResolver);
-        static::assertEquals(
+        self::assertNotSame($resolver, $newResolver);
+        self::assertEquals(
             new FunctionCallArgumentResolver($decoratedResolverConstructor()),
-            $resolver
+            $resolver,
         );
-        static::assertEquals(
+        self::assertEquals(
             new FunctionCallArgumentResolver($decoratedResolverConstructor(), $argumentResolverConstructor()),
-            $newResolver
+            $newResolver,
         );
     }
 
@@ -98,15 +99,15 @@ class FunctionCallArgumentResolverTest extends TestCase
 
         try {
             $resolver->resolve($value, $fixture, $set, $scope, $context);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (ResolverNotFoundException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected method "Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver::resolve"'
                 .' to be called only if it has a resolver.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNull($exception->getPrevious());
         }
     }
 
@@ -118,7 +119,7 @@ class FunctionCallArgumentResolverTest extends TestCase
                 'scalar',
                 new FakeValue(),
                 'another scalar',
-            ]
+            ],
         );
         $fixture = new FakeFixture();
         $set = ResolvedFixtureSetFactory::create(new ParameterBag(['foo' => 'bar']));
@@ -132,10 +133,9 @@ class FunctionCallArgumentResolverTest extends TestCase
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     $instance = new stdClass(),
-                    $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong']))
-                )
-            )
-        ;
+                    $newSet = ResolvedFixtureSetFactory::create(new ParameterBag(['ping' => 'pong'])),
+                ),
+            );
         /** @var ValueResolverInterface $argumentResolver */
         $argumentResolver = $argumentResolverProphecy->reveal();
 
@@ -148,26 +148,25 @@ class FunctionCallArgumentResolverTest extends TestCase
                         'scalar',
                         $instance,
                         'another scalar',
-                    ]
+                    ],
                 ),
                 $fixture,
                 $newSet,
                 $scope,
-                $context
+                $context,
             )
             ->willReturn(
                 $expected = new ResolvedValueWithFixtureSet(
                     'end',
-                    ResolvedFixtureSetFactory::create(new ParameterBag(['gnip' => 'gnop']))
-                )
-            )
-        ;
+                    ResolvedFixtureSetFactory::create(new ParameterBag(['gnip' => 'gnop'])),
+                ),
+            );
         /** @var ValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new FunctionCallArgumentResolver($decoratedResolver, $argumentResolver);
         $actual = $resolver->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

@@ -20,39 +20,40 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\GenerationContext
+ * @internal
  */
 class GenerationContextTest extends TestCase
 {
     public function testAccessors(): void
     {
         $context = new GenerationContext();
-        static::assertTrue($context->isFirstPass());
-        static::assertFalse($context->needsCompleteGeneration());
+        self::assertTrue($context->isFirstPass());
+        self::assertFalse($context->needsCompleteGeneration());
 
         $context->setToSecondPass();
-        static::assertFalse($context->isFirstPass());
-        static::assertFalse($context->needsCompleteGeneration());
-        static::assertFalse($context->needsCallResult());
+        self::assertFalse($context->isFirstPass());
+        self::assertFalse($context->needsCompleteGeneration());
+        self::assertFalse($context->needsCallResult());
 
         $context->markAsNeedsCompleteGeneration();
-        static::assertFalse($context->isFirstPass());
-        static::assertTrue($context->needsCompleteGeneration());
-        static::assertFalse($context->needsCallResult());
+        self::assertFalse($context->isFirstPass());
+        self::assertTrue($context->needsCompleteGeneration());
+        self::assertFalse($context->needsCallResult());
 
         $context->unmarkAsNeedsCompleteGeneration();
-        static::assertFalse($context->isFirstPass());
-        static::assertFalse($context->needsCompleteGeneration());
-        static::assertFalse($context->needsCallResult());
+        self::assertFalse($context->isFirstPass());
+        self::assertFalse($context->needsCompleteGeneration());
+        self::assertFalse($context->needsCallResult());
 
         $context->markRetrieveCallResult();
-        static::assertFalse($context->isFirstPass());
-        static::assertFalse($context->needsCompleteGeneration());
-        static::assertTrue($context->needsCallResult());
+        self::assertFalse($context->isFirstPass());
+        self::assertFalse($context->needsCompleteGeneration());
+        self::assertTrue($context->needsCallResult());
 
         $context->unmarkRetrieveCallResult();
-        static::assertFalse($context->isFirstPass());
-        static::assertFalse($context->needsCompleteGeneration());
-        static::assertFalse($context->needsCallResult());
+        self::assertFalse($context->isFirstPass());
+        self::assertFalse($context->needsCompleteGeneration());
+        self::assertFalse($context->needsCallResult());
     }
 
     public function testThrowsAnExceptionWhenACircularReferenceIsDetected(): void
@@ -63,11 +64,11 @@ class GenerationContextTest extends TestCase
 
         try {
             $context->markIsResolvingFixture('foo');
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (CircularReferenceException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Circular reference detected for the parameter "foo" while resolving ["bar", "foo"].',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
     }
@@ -78,7 +79,7 @@ class GenerationContextTest extends TestCase
 
         $context->cacheValue('foo', $foo = new stdClass());
 
-        static::assertSame($foo, $context->getCachedValue('foo'));
+        self::assertSame($foo, $context->getCachedValue('foo'));
     }
 
     public function testCannotRetrieveAnInexistingValueFromCache(): void
@@ -87,14 +88,14 @@ class GenerationContextTest extends TestCase
 
         try {
             $context->getCachedValue('foo');
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (CachedValueNotFound $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'No value with the key "foo" was found in the cache.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNull($exception->getPrevious());
         }
     }
 }

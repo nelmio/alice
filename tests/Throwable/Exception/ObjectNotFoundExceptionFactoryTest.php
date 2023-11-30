@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\ObjectNotFoundExceptionFactory
+ * @internal
  */
 class ObjectNotFoundExceptionFactoryTest extends TestCase
 {
@@ -24,11 +25,11 @@ class ObjectNotFoundExceptionFactoryTest extends TestCase
     {
         $exception = ObjectNotFoundExceptionFactory::create('foo', 'Dummy');
 
-        static::assertEquals(
+        self::assertEquals(
             'Could not find the object "foo" of the class "Dummy".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

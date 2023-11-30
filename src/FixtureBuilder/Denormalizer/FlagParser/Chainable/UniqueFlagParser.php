@@ -21,12 +21,12 @@ use Nelmio\Alice\IsAServiceTrait;
 final class UniqueFlagParser implements ChainableFlagParserInterface
 {
     use IsAServiceTrait;
-    
+
     public function canParse(string $element): bool
     {
         return 'unique' === $element;
     }
-    
+
     public function parse(string $element): FlagBag
     {
         return (new FlagBag(''))->withFlag(new UniqueFlag());

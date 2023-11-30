@@ -23,7 +23,7 @@ final class FunctionTreeTokenizer
     use IsAServiceTrait;
 
     /** @private */
-    const DELIMITER= '___##';
+    public const DELIMITER = '___##';
 
     /**
      * Replaces the function delimiters by tokens to easily identify them in the future and return the value splat into
@@ -46,17 +46,17 @@ final class FunctionTreeTokenizer
         $value = preg_replace(
             '/(.*?)<((?:.*?:)?(?:\p{L}|_|[0-9])+?)\((.*?)/',
             sprintf('$1%1$sFUNCTION_START__$2__%1$s$3', self::DELIMITER),
-            $value
+            $value,
         );
         $value = preg_replace(
             '/<\(/',
             sprintf('%1$sIDENTITY_START%1$s', self::DELIMITER),
-            $value
+            $value,
         );
         $value = preg_replace(
             '/\)>/',
             sprintf('%1$sIDENTITY_OR_FUNCTION_END%1$s', self::DELIMITER),
-            $value
+            $value,
         );
 
         return preg_split(sprintf('/%s/', self::DELIMITER), $value, -1, PREG_SPLIT_NO_EMPTY);
@@ -68,33 +68,32 @@ final class FunctionTreeTokenizer
     public function detokenize(string $value): string
     {
         $count = 1;
-        while ($count !== 0) {
+        while (0 !== $count) {
             $value = preg_replace(
                 '/FUNCTION_START__(.*?)__/',
                 '<$1(',
                 $value,
                 1,
-                $count
+                $count,
             );
         }
 
         $value = preg_replace(
             '/IDENTITY_START/',
             '<(',
-            $value
-        );
-        $value = preg_replace(
-            '/IDENTITY_OR_FUNCTION_END/',
-            ')>',
-            $value
+            $value,
         );
 
-        return $value;
+        return preg_replace(
+            '/IDENTITY_OR_FUNCTION_END/',
+            ')>',
+            $value,
+        );
     }
 
     public function isOpeningToken(string $value): bool
     {
-        return 'FUNCTION_START__' === substr($value, 0, 16) || 'IDENTITY_START' === substr($value, 0, 14);
+        return 'FUNCTION_START__' === mb_substr($value, 0, 16) || 'IDENTITY_START' === mb_substr($value, 0, 14);
     }
 
     public function isClosingToken(string $value): bool

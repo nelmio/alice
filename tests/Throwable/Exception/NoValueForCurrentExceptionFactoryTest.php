@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\NoValueForCurrentExceptionFactory
+ * @internal
  */
 class NoValueForCurrentExceptionFactoryTest extends TestCase
 {
@@ -25,11 +26,11 @@ class NoValueForCurrentExceptionFactoryTest extends TestCase
     {
         $exception = NoValueForCurrentExceptionFactory::create(new DummyFixture('dummy'));
 
-        static::assertEquals(
+        self::assertEquals(
             'No value for \'<current()>\' found for the fixture "dummy".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

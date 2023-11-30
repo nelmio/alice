@@ -33,10 +33,10 @@ final class RemoveConflictingParametersParameterBagResolver implements Parameter
     {
         $this->resolver = $decoratedResolver;
     }
-    
+
     public function resolve(
         ParameterBag $unresolvedParameters,
-        ParameterBag $injectedParameters = null
+        ?ParameterBag $injectedParameters = null
     ): ParameterBag {
         if (null === $injectedParameters) {
             $injectedParameters = new ParameterBag();

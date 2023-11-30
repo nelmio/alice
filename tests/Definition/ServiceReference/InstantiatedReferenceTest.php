@@ -18,19 +18,20 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\ServiceReference\InstantiatedReference
+ * @internal
  */
 class InstantiatedReferenceTest extends TestCase
 {
     public function testIsAReference(): void
     {
-        static::assertTrue(is_a(InstantiatedReference::class, ServiceReferenceInterface::class, true));
+        self::assertTrue(is_a(InstantiatedReference::class, ServiceReferenceInterface::class, true));
     }
-    
+
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $reference = 'nelmio.alice.user_factory';
         $definition = new InstantiatedReference($reference);
-        
-        static::assertEquals($reference, $definition->getId());
+
+        self::assertEquals($reference, $definition->getId());
     }
 }

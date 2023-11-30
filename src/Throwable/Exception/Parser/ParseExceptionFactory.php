@@ -25,44 +25,44 @@ final class ParseExceptionFactory
         return new ParserNotFoundException(
             sprintf(
                 'No suitable parser found for the file "%s".',
-                $file
-            )
+                $file,
+            ),
         );
     }
 
-    public static function createForUnparsableFile(string $file, int $code = 0, Throwable $previous = null): UnparsableFileException
+    public static function createForUnparsableFile(string $file, int $code = 0, ?Throwable $previous = null): UnparsableFileException
     {
         return new UnparsableFileException(
             sprintf(
                 'Could not parse the file "%s".',
-                $file
+                $file,
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
-    public static function createForInvalidYaml(string $file, int $code = 0, Throwable $previous = null): UnparsableFileException
+    public static function createForInvalidYaml(string $file, int $code = 0, ?Throwable $previous = null): UnparsableFileException
     {
         return new UnparsableFileException(
             sprintf(
                 'The file "%s" does not contain valid YAML.',
-                $file
+                $file,
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
-    public static function createForInvalidJson(string $file, int $code = 0, Throwable $previous = null): UnparsableFileException
+    public static function createForInvalidJson(string $file, int $code = 0, ?Throwable $previous = null): UnparsableFileException
     {
         return new UnparsableFileException(
             sprintf(
                 'The file "%s" does not contain valid JSON.',
-                $file
+                $file,
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 

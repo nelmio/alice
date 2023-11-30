@@ -33,16 +33,16 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
      */
     private $processor;
 
-    public function __construct(CallProcessorInterface $processor = null)
+    public function __construct(?CallProcessorInterface $processor = null)
     {
         $this->processor = $processor;
     }
-    
+
     public function withProcessor(CallProcessorInterface $processor): self
     {
         return new self($processor);
     }
-    
+
     public function canProcess(MethodCallInterface $methodCall): bool
     {
         return $methodCall instanceof OptionalMethodCall;
@@ -65,7 +65,7 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
             throw new LogicException('TODO');
         }
 
-        if (mt_rand(0, 99) >= $methodCall->getPercentage()) {
+        if (random_int(0, 99) >= $methodCall->getPercentage()) {
             return $fixtureSet;
         }
 
@@ -73,7 +73,7 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
             $object,
             $fixtureSet,
             $context,
-            $methodCall->getOriginalMethodCall()
+            $methodCall->getOriginalMethodCall(),
         );
     }
 }

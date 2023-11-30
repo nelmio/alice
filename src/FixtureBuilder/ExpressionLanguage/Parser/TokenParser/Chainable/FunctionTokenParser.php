@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
-use const DIRECTORY_SEPARATOR;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ValueForCurrentValue;
@@ -25,6 +24,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @internal
@@ -34,7 +34,7 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = '/^\s*<(?<function>(.|\r?\n)+?)\((?<arguments>.*)\)>\s*$/s';
+    public const REGEX = '/^\s*<(?<function>(.|\r?\n)+?)\((?<arguments>.*)\)>\s*$/s';
 
     /**
      * @var ArgumentEscaper
@@ -46,20 +46,20 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
      */
     protected $parser;
 
-    public function __construct(ArgumentEscaper $argumentEscaper, ParserInterface $parser = null)
+    public function __construct(ArgumentEscaper $argumentEscaper, ?ParserInterface $parser = null)
     {
         $this->argumentEscaper = $argumentEscaper;
         $this->parser = $parser;
     }
-    
+
     public function withParser(ParserInterface $parser)
     {
-        return new static($this->argumentEscaper, $parser);
+        return new self($this->argumentEscaper, $parser);
     }
-    
+
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::FUNCTION_TYPE;
+        return TokenType::FUNCTION_TYPE === $token->getType();
     }
 
     /**
@@ -85,10 +85,8 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         if ('identity' === $function) {
             $value = preg_replace_callback(
                 '/__ARG_TOKEN__[\da-z]{32}/',
-                static function (array $matches) use ($argumentEscaper): string {
-                    return '\''.$argumentEscaper->unescape($matches[0]).'\'';
-                },
-                $matches['arguments']
+                static fn (array $matches): string => '\''.$argumentEscaper->unescape($matches[0]).'\'',
+                $matches['arguments'],
             );
 
             $arguments = [new EvaluatedValue($value)];
@@ -119,7 +117,7 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
 
                 return $argumentEscaper->escape($string);
             },
-            $argumentsString
+            $argumentsString,
         );
 
         $arguments = [];
@@ -136,13 +134,13 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
     private function parseArgument(ParserInterface $parser, string $value)
     {
         switch (true) {
-            case $value === 'true':
+            case 'true' === $value:
                 return true;
 
-            case $value === 'false':
+            case 'false' === $value:
                 return false;
 
-            case $value === 'null':
+            case 'null' === $value:
                 return null;
 
             case preg_match('/^([-+])?([0-9]+)$/', $value, $matches):

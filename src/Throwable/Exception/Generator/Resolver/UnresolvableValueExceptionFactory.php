@@ -21,66 +21,66 @@ use Throwable;
  */
 final class UnresolvableValueExceptionFactory
 {
-    public static function create(ValueInterface $value, int $code = 0, Throwable $previous = null): UnresolvableValueException
+    public static function create(ValueInterface $value, int $code = 0, ?Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
             null === $previous || '' === trim($previous->getMessage())
                 ? sprintf(
                     'Could not resolve value "%s".',
-                    $value
+                    $value,
                 )
                 : sprintf(
                     'Could not resolve value "%s": %s',
                     $value,
-                    $previous->getMessage()
+                    $previous->getMessage(),
                 ),
             $code,
-            $previous
+            $previous,
         );
     }
 
-    public static function createForInvalidReferenceId(ValueInterface $value, $result, int $code = 0, Throwable $previous = null): UnresolvableValueException
+    public static function createForInvalidReferenceId(ValueInterface $value, $result, int $code = 0, ?Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
             sprintf(
                 'Expected fixture reference value "%s" to be resolved into a string. Got "%s" instead.',
                 $value,
                 is_object($result)
-                    ? get_class($result)
-                    : sprintf('(%s) %s', gettype($result), $result)
+                    ? $result::class
+                    : sprintf('(%s) %s', gettype($result), $result),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
-    public static function createForCouldNotEvaluateExpression(ValueInterface $value, int $code = 0, Throwable $previous = null): UnresolvableValueException
+    public static function createForCouldNotEvaluateExpression(ValueInterface $value, int $code = 0, ?Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
             null === $previous || '' === trim($previous->getMessage())
                 ? sprintf(
                     'Could not evaluate the expression "%s".',
-                    $value->__toString()
+                    $value->__toString(),
                 )
                 : sprintf(
                     'Could not evaluate the expression "%s": %s',
                     $value->__toString(),
-                    $previous->getMessage()
+                    $previous->getMessage(),
                 ),
             $code,
-            $previous
+            $previous,
         );
     }
 
-    public static function createForCouldNotFindVariable(ValueInterface $value, int $code = 0, Throwable $previous = null): UnresolvableValueException
+    public static function createForCouldNotFindVariable(ValueInterface $value, int $code = 0, ?Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
             sprintf(
                 'Could not find a variable "%s".',
-                $value->__toString()
+                $value->__toString(),
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 
@@ -89,8 +89,8 @@ final class UnresolvableValueExceptionFactory
         return new UnresolvableValueException(
             sprintf(
                 'Could not find the parameter "%s".',
-                $parameterKey
-            )
+                $parameterKey,
+            ),
         );
     }
 
@@ -102,9 +102,9 @@ final class UnresolvableValueExceptionFactory
         return new UnresolvableValueException(
             sprintf(
                 'Expected the quantifier "%s" for the optional value to be resolved into a string, got "%s" instead.',
-                get_class($quantifier),
-                is_object($resolvedQuantifier) ? get_class($resolvedQuantifier) : gettype($resolvedQuantifier)
-            )
+                $quantifier::class,
+                is_object($resolvedQuantifier) ? $resolvedQuantifier::class : gettype($resolvedQuantifier),
+            ),
         );
     }
 
@@ -113,8 +113,8 @@ final class UnresolvableValueExceptionFactory
         return new UnresolvableValueException(
             sprintf(
                 'Could not find a fixture or object ID matching the pattern "%s".',
-                $value->__toString()
-            )
+                $value->__toString(),
+            ),
         );
     }
 

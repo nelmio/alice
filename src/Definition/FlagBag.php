@@ -16,8 +16,8 @@ namespace Nelmio\Alice\Definition;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
-use function Nelmio\Alice\deep_clone;
 use Traversable;
+use function Nelmio\Alice\deep_clone;
 
 /**
  * Collection of flags.
@@ -44,7 +44,7 @@ final class FlagBag implements IteratorAggregate, Countable
 
     public function withKey(string $key): self
     {
-        $clone = clone ($this);
+        $clone = clone $this;
         $clone->key = $key;
 
         return $clone;
@@ -56,7 +56,7 @@ final class FlagBag implements IteratorAggregate, Countable
      */
     public function withFlag(FlagInterface $flag): self
     {
-        $clone = clone ($this);
+        $clone = clone $this;
         $clone->flags[$flag->__toString()] = deep_clone($flag);
 
         return $clone;
@@ -73,17 +73,17 @@ final class FlagBag implements IteratorAggregate, Countable
     public function mergeWith(self $flags, bool $override = true): self
     {
         if ($override) {
-            $clone = clone ($this);
+            $clone = clone $this;
             foreach ($flags as $flag) {
                 /** @var FlagInterface $flag */
-                $clone->flags[$flag->__toString()] = clone ($flag);
+                $clone->flags[$flag->__toString()] = clone $flag;
             }
         } else {
-            $clone = clone ($flags);
+            $clone = clone $flags;
             $clone->key = $this->key;
             foreach ($this as $flag) {
                 /** @var FlagInterface $flag */
-                $clone->flags[$flag->__toString()] = clone ($flag);
+                $clone->flags[$flag->__toString()] = clone $flag;
             }
         }
 
@@ -94,12 +94,12 @@ final class FlagBag implements IteratorAggregate, Countable
     {
         return $this->key;
     }
-    
+
     public function getIterator(): Traversable
     {
         return new ArrayIterator(array_values($this->flags));
     }
-    
+
     public function count(): int
     {
         return count($this->flags);

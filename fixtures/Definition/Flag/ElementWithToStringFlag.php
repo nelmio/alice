@@ -32,7 +32,7 @@ class ElementWithToStringFlag implements FlagInterface
         $this->element = $element;
         $this->toString = $toString;
     }
-    
+
     public function __toString(): string
     {
         return $this->toString;

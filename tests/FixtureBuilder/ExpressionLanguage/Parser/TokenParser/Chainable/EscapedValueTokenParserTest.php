@@ -22,17 +22,18 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedValueTokenParser
+ * @internal
  */
 class EscapedValueTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(EscapedValueTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(EscapedValueTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(EscapedValueTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(EscapedValueTokenParser::class))->isCloneable());
     }
 
     /**
@@ -43,7 +44,7 @@ class EscapedValueTokenParserTest extends TestCase
         $parser = new EscapedValueTokenParser();
         $actual = $parser->canParse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfAMalformedTokenIsGiven(): void
@@ -66,7 +67,7 @@ class EscapedValueTokenParserTest extends TestCase
         $parser = new EscapedValueTokenParser();
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testTheEscapedValueIsDetokenizedBeforeBeingReturned(): void
@@ -77,10 +78,10 @@ class EscapedValueTokenParserTest extends TestCase
         $parser = new EscapedValueTokenParser();
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
-    public function provideTokens()
+    public function provideTokens(): iterable
     {
         return [
             [

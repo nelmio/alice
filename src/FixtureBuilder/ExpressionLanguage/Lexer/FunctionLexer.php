@@ -25,7 +25,7 @@ final class FunctionLexer implements LexerInterface
     use IsAServiceTrait;
 
     /** @private */
-    const DELIMITER= '___##';
+    public const DELIMITER = '___##';
 
     /**
      * @var LexerInterface

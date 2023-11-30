@@ -41,9 +41,10 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
     }
 
     /**
+     * @param  mixed                 $value
      * @throws InvalidScopeException
      */
-    public function denormalize(FixtureInterface $scope, FlagBag $flags = null, $value)
+    public function denormalize(FixtureInterface $scope, ?FlagBag $flags = null, $value)
     {
         $value = $this->denormalizer->denormalize($scope, $flags, $value);
 
@@ -54,7 +55,7 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
         return $this->generateValue($scope, $flags, $value);
     }
 
-    private function requiresUnique(FlagBag $flags = null): bool
+    private function requiresUnique(?FlagBag $flags = null): bool
     {
         if (null === $flags) {
             return false;
@@ -77,7 +78,7 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
     private function generateValue(FixtureInterface $scope, FlagBag $flags, $value): ValueInterface
     {
         $uniqueId = sprintf('%s#%s', $scope->getClassName(), $flags->getKey());
-        if ('temporary_id' === substr($scope->getId(), 0, 12)) {
+        if ('temporary_id' === mb_substr($scope->getId(), 0, 12)) {
             throw DenormalizerExceptionFactory::createForInvalidScopeForUniqueValue();
         }
 
@@ -86,7 +87,7 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
 
             return new DynamicArrayValue(
                 $value->getQuantifier(),
-                new UniqueValue($uniqueId, $value->getElement())
+                new UniqueValue($uniqueId, $value->getElement()),
             );
         }
 

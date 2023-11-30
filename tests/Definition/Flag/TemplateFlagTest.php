@@ -18,17 +18,18 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\Flag\TemplateFlag
+ * @internal
  */
 class TemplateFlagTest extends TestCase
 {
     public function testIsAFlag(): void
     {
-        static::assertTrue(is_a(TemplateFlag::class, FlagInterface::class, true));
+        self::assertTrue(is_a(TemplateFlag::class, FlagInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $flag = new TemplateFlag();
-        static::assertEquals('template', $flag->__toString());
+        self::assertEquals('template', $flag->__toString());
     }
 }

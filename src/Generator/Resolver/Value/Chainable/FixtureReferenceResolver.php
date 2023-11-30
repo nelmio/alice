@@ -46,16 +46,16 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
      */
     private $incompleteObjects = [];
 
-    public function __construct(ObjectGeneratorInterface $generator = null)
+    public function __construct(?ObjectGeneratorInterface $generator = null)
     {
         $this->generator = $generator;
     }
-    
+
     public function withObjectGenerator(ObjectGeneratorInterface $generator): self
     {
         return new self($generator);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof FixtureReferenceValue;
@@ -105,7 +105,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         string $referredFixtureId,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        bool $passIncompleteObject = null
+        ?bool $passIncompleteObject = null
     ): ResolvedValueWithFixtureSet {
         if ($fixtureSet->getObjects()->has($referredFixture)) {
             $referredObject = $fixtureSet->getObjects()->get($referredFixture);
@@ -118,7 +118,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
 
                 return new ResolvedValueWithFixtureSet(
                     $referredObject->getInstance(),
-                    $fixtureSet
+                    $fixtureSet,
                 );
             }
         }
@@ -137,14 +137,14 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
 
             $context->markIsResolvingFixture($referredFixtureId);
             $objects = $this->generator->generate($referredFixture, $fixtureSet, $context);
-            $fixtureSet =  $fixtureSet->withObjects($objects);
+            $fixtureSet = $fixtureSet->withObjects($objects);
 
             // Restore the context
             $needsCompleteGeneration ? $context->markAsNeedsCompleteGeneration() : $context->unmarkAsNeedsCompleteGeneration();
 
             return new ResolvedValueWithFixtureSet(
                 $fixtureSet->getObjects()->get($referredFixture)->getInstance(),
-                $fixtureSet
+                $fixtureSet,
             );
         } catch (CircularReferenceException $exception) {
             if (false === $needsCompleteGeneration

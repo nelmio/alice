@@ -35,7 +35,7 @@ abstract class ChainableDenormalizerTest extends TestCase
 
     public function testIsABuilderMethod(): void
     {
-        static::assertInstanceOf(ChainableFixtureDenormalizerInterface::class, $this->denormalizer);
+        self::assertInstanceOf(ChainableFixtureDenormalizerInterface::class, $this->denormalizer);
     }
 
     abstract public function testCanBuildSimpleFixtures($name);
@@ -62,25 +62,25 @@ abstract class ChainableDenormalizerTest extends TestCase
     {
         $actual = $this->denormalizer->canDenormalize($fixtureId);
 
-        static::assertTrue($actual);
+        self::assertTrue($actual);
     }
 
     public function assertCannotBuild(string $fixtureId): void
     {
         $actual = $this->denormalizer->canDenormalize($fixtureId);
 
-        static::assertFalse($actual);
+        self::assertFalse($actual);
     }
 
     public function assertBuiltResultIsTheSame(string $fixtureId, array $expected): void
     {
-        static::assertTrue($this->denormalizer->canDenormalize($fixtureId));
+        self::assertTrue($this->denormalizer->canDenormalize($fixtureId));
         $actual = $this->denormalizer->denormalize(
             new FixtureBag(),
             'Dummy',
             $fixtureId,
             [],
-            new FlagBag('')
+            new FlagBag(''),
         );
 
         $expectedFixtures = new FixtureBag();
@@ -88,12 +88,12 @@ abstract class ChainableDenormalizerTest extends TestCase
             $expectedFixtures = $expectedFixtures->with($item);
         }
 
-        static::assertEquals($expectedFixtures, $actual);
+        self::assertEquals($expectedFixtures, $actual);
     }
 
     public function markAsInvalidCase(): void
     {
-        static::assertTrue(true, 'Invalid scenario');
+        self::assertTrue(true, 'Invalid scenario');
     }
 
     public function createDummyDenormalizer(): FixtureDenormalizerInterface
@@ -102,11 +102,8 @@ abstract class ChainableDenormalizerTest extends TestCase
         $decoratedDenormalizerProphecy
             ->denormalize(Argument::cetera())
             ->will(
-                function ($args) {
-                    return $args[0]->with(FixtureFactory::create($args[2], ''));
-                }
-            )
-        ;
+                fn ($args) => $args[0]->with(FixtureFactory::create($args[2], '')),
+            );
 
         return $decoratedDenormalizerProphecy->reveal();
     }

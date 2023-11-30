@@ -24,8 +24,8 @@ final class RecursionLimitReachedExceptionFactory
             sprintf(
                 'Recursion limit (%d tries) reached while resolving the parameter "%s"',
                 $limit,
-                $key
-            )
+                $key,
+            ),
         );
     }
 

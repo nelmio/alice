@@ -22,7 +22,7 @@ interface ConfiguratorInterface
      * Configures a given object. Has access to the current fixture set and returns the new fixture set containing the
      * configured object.
      *
-     * @param ObjectInterface    $object Object to configure
+     * @param ObjectInterface $object Object to configure
      *
      * @throws ConfigurationThrowable
      */

@@ -37,6 +37,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * @covers \Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator
+ * @internal
  */
 class SymfonyPropertyAccessorHydratorTest extends TestCase
 {
@@ -60,12 +61,12 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
 
     public function testIsAnHydrator(): void
     {
-        static::assertTrue(is_a(SymfonyPropertyAccessorHydrator::class, PropertyHydratorInterface::class, true));
+        self::assertTrue(is_a(SymfonyPropertyAccessorHydrator::class, PropertyHydratorInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SymfonyPropertyAccessorHydrator::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SymfonyPropertyAccessorHydrator::class))->isCloneable());
     }
 
     public function testReturnsHydratedObject(): void
@@ -82,7 +83,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
         $hydrator = new SymfonyPropertyAccessorHydrator($accessor);
         $result = $hydrator->hydrate($object, $property, new GenerationContext());
 
-        static::assertEquals($object, $result);
+        self::assertEquals($object, $result);
 
         $accessorProphecy->setValue(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -102,14 +103,14 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
             $hydrator = new SymfonyPropertyAccessorHydrator($accessor);
             $hydrator->hydrate($object, $property, new GenerationContext());
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (InaccessiblePropertyException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not access to the property "username" of the object "dummy" (class: Nelmio\Alice\Entity\Hydrator\Dummy).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
@@ -120,14 +121,14 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
             $property = new Property('foo', 'bar');
 
             $this->hydrator->hydrate($object, $property, new GenerationContext());
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (NoSuchPropertyException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not hydrate the property "foo" of the object "dummy" (class: Nelmio\Alice\Dummy).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
@@ -139,14 +140,14 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
 
             $this->hydrator->hydrate($object, $property, new GenerationContext());
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Invalid value given for the property "immutableDateTime" of the object "dummy" (class: Nelmio\Alice\Entity\DummyWithDate).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
@@ -157,7 +158,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
 
         $result = $this->hydrator->hydrate($object, $property, new GenerationContext());
 
-        static::assertEquals(DummyEnum::Case1, $result->getInstance()->getDummyEnum());
+        self::assertEquals(DummyEnum::Case1, $result->getInstance()->getDummyEnum());
     }
 
     public function testThrowsInvalidArgumentExceptionIfEnumCaseIsNotFound(): void
@@ -168,14 +169,14 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
 
             $this->hydrator->hydrate($object, $property, new GenerationContext());
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Invalid value given for the property "dummyEnum" of the object "dummy" (class: Nelmio\Alice\Entity\DummyWithEnum).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
@@ -188,22 +189,21 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
             $accessorProphecy = $this->prophesize(PropertyAccessorInterface::class);
             $accessorProphecy
                 ->setValue(Argument::cetera())
-                ->willThrow(GenericPropertyAccessException::class)
-            ;
+                ->willThrow(GenericPropertyAccessException::class);
             /** @var PropertyAccessorInterface $accessor */
             $accessor = $accessorProphecy->reveal();
 
             $hydrator = new SymfonyPropertyAccessorHydrator($accessor);
             $hydrator->hydrate($object, $property, new GenerationContext());
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (HydrationException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not hydrate the property "foo" of the object "dummy" (class: Nelmio\Alice\Entity\DummyWithDate).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
@@ -219,10 +219,10 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
         $expected = $property->getValue();
         $actual = $this->propertyAccessor->getValue($hydratedObject->getInstance(), $property->getName());
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
-    public function provideProperties()
+    public function provideProperties(): iterable
     {
         return [
             // Accessor methods

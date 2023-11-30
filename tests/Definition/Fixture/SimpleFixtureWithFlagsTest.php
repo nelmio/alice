@@ -24,6 +24,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags
+ * @internal
  */
 class SimpleFixtureWithFlagsTest extends TestCase
 {
@@ -31,7 +32,7 @@ class SimpleFixtureWithFlagsTest extends TestCase
 
     public function testIsAFixtureWithFlags(): void
     {
-        static::assertTrue(is_a(SimpleFixtureWithFlags::class, FixtureWithFlagsInterface::class, true));
+        self::assertTrue(is_a(SimpleFixtureWithFlags::class, FixtureWithFlagsInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -53,11 +54,11 @@ class SimpleFixtureWithFlagsTest extends TestCase
 
         $fixture = new SimpleFixtureWithFlags($decoratedFixture, $flags);
 
-        static::assertEquals($reference, $fixture->getId());
-        static::assertEquals($className, $fixture->getClassName());
-        static::assertEquals($specs, $fixture->getSpecs());
-        static::assertEquals($valueForCurrent, $fixture->getValueForCurrent());
-        static::assertEquals($flags, $fixture->getFlags());
+        self::assertEquals($reference, $fixture->getId());
+        self::assertEquals($className, $fixture->getClassName());
+        self::assertEquals($specs, $fixture->getSpecs());
+        self::assertEquals($valueForCurrent, $fixture->getValueForCurrent());
+        self::assertEquals($flags, $fixture->getFlags());
 
         $decoratedFixtureProphecy->getId()->shouldHaveBeenCalledTimes(2);
         $decoratedFixtureProphecy->getClassName()->shouldHaveBeenCalledTimes(1);
@@ -88,13 +89,13 @@ class SimpleFixtureWithFlagsTest extends TestCase
         $fixture = new SimpleFixtureWithFlags($decoratedFixture, $flags);
         $newFixture = $fixture->withSpecs($newSpecs);
 
-        static::assertInstanceOf(SimpleFixtureWithFlags::class, $newFixture);
-        static::assertNotSame($fixture, $newFixture);
+        self::assertInstanceOf(SimpleFixtureWithFlags::class, $newFixture);
+        self::assertNotSame($fixture, $newFixture);
 
-        static::assertEquals($specs, $fixture->getSpecs());
-        static::assertEquals($flags, $fixture->getFlags());
-        static::assertEquals($newSpecs, $newFixture->getSpecs());
-        static::assertEquals($flags, $newFixture->getFlags());
+        self::assertEquals($specs, $fixture->getSpecs());
+        self::assertEquals($flags, $fixture->getFlags());
+        self::assertEquals($newSpecs, $newFixture->getSpecs());
+        self::assertEquals($flags, $newFixture->getFlags());
     }
 
     public function testThrowsAnExceptionIfFixtureIdAndFlagKeyMistmatch(): void

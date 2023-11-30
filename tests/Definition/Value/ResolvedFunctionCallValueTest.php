@@ -19,12 +19,13 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue
+ * @internal
  */
 class ResolvedFunctionCallValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(ResolvedFunctionCallValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(ResolvedFunctionCallValue::class, ValueInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -34,9 +35,9 @@ class ResolvedFunctionCallValueTest extends TestCase
 
         $value = new ResolvedFunctionCallValue($name, $arguments);
 
-        static::assertEquals($name, $value->getName());
-        static::assertEquals($arguments, $value->getArguments());
-        static::assertEquals([$name, $arguments], $value->getValue());
+        self::assertEquals($name, $value->getName());
+        self::assertEquals($arguments, $value->getArguments());
+        self::assertEquals([$name, $arguments], $value->getValue());
     }
 
     public function testIsMutable(): void
@@ -49,30 +50,30 @@ class ResolvedFunctionCallValueTest extends TestCase
         // Mutate injected value
         $arg0->foo = 'bar';
 
-        static::assertEquals($arg0->foo, $value->getArguments()[0]->foo);
-        static::assertSame($arg0, $value->getArguments()[0]);
+        self::assertEquals($arg0->foo, $value->getArguments()[0]->foo);
+        self::assertSame($arg0, $value->getArguments()[0]);
 
-        static::assertNotEquals(
+        self::assertNotEquals(
             [
                 new stdClass(),
             ],
-            $value->getArguments()
+            $value->getArguments(),
         );
-        static::assertNotEquals(
+        self::assertNotEquals(
             [
                 'setUsername',
                 [new stdClass()],
             ],
-            $value->getValue()
+            $value->getValue(),
         );
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new ResolvedFunctionCallValue('foo');
-        static::assertEquals('<foo()>', (string) $value);
+        self::assertEquals('<foo()>', (string) $value);
 
         $value = new ResolvedFunctionCallValue('foo', ['bar']);
-        static::assertEquals("<foo(array (\n  0 => 'bar',\n))>", (string) $value);
+        self::assertEquals("<foo(array (\n  0 => 'bar',\n))>", (string) $value);
     }
 }

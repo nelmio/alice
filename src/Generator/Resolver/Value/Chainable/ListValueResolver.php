@@ -35,16 +35,16 @@ final class ListValueResolver implements ChainableValueResolverInterface, ValueR
      */
     private $resolver;
 
-    public function __construct(ValueResolverInterface $resolver = null)
+    public function __construct(?ValueResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof ListValue;
@@ -88,7 +88,7 @@ final class ListValueResolver implements ChainableValueResolverInterface, ValueR
 
         return new ResolvedValueWithFixtureSet(
             implode('', $values),
-            $fixtureSet
+            $fixtureSet,
         );
     }
 }

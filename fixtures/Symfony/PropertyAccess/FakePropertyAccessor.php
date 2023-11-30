@@ -19,22 +19,22 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 class FakePropertyAccessor implements PropertyAccessorInterface
 {
     use NotCallableTrait;
-    
+
     public function setValue(&$objectOrArray, $propertyPath, $value): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getValue($objectOrArray, $propertyPath): mixed
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function isWritable($objectOrArray, $propertyPath): bool
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function isReadable($objectOrArray, $propertyPath): bool
     {
         $this->__call(__METHOD__, func_get_args());

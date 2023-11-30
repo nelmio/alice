@@ -38,7 +38,6 @@ interface FixtureInterface extends FixtureIdInterface
     /**
      * Creates a new instance with the given specs.
      *
-     *
      * @return static
      */
     public function withSpecs(SpecificationBag $specs);

@@ -19,22 +19,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException
+ * @internal
  */
 class ParserNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {
-        static::assertTrue(is_a(ParserNotFoundException::class, LogicException::class, true));
+        self::assertTrue(is_a(ParserNotFoundException::class, LogicException::class, true));
     }
 
     public function testIsNotAParseThrowable(): void
     {
-        static::assertFalse(is_a(ParserNotFoundException::class, ParseThrowable::class, true));
+        self::assertFalse(is_a(ParserNotFoundException::class, ParseThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildParserNotFoundException();
-        static::assertInstanceOf(ChildParserNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildParserNotFoundException::class, $exception);
     }
 }

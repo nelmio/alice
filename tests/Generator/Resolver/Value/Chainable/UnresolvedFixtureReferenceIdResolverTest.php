@@ -42,6 +42,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver
+ * @internal
  */
 class UnresolvedFixtureReferenceIdResolverTest extends TestCase
 {
@@ -49,22 +50,22 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
 
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(UnresolvedFixtureReferenceIdResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(UnresolvedFixtureReferenceIdResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsObjectGeneratorAware(): void
     {
-        static::assertTrue(is_a(UnresolvedFixtureReferenceIdResolver::class, ObjectGeneratorAwareInterface::class, true));
+        self::assertTrue(is_a(UnresolvedFixtureReferenceIdResolver::class, ObjectGeneratorAwareInterface::class, true));
     }
 
     public function testIsValueResolverAware(): void
     {
-        static::assertTrue(is_a(UnresolvedFixtureReferenceIdResolver::class, ValueResolverAwareInterface::class, true));
+        self::assertTrue(is_a(UnresolvedFixtureReferenceIdResolver::class, ValueResolverAwareInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(UnresolvedFixtureReferenceIdResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(UnresolvedFixtureReferenceIdResolver::class))->isCloneable());
     }
 
     public function testCanResolveTheValueResolvableByItsDecoratedResolver(): void
@@ -78,7 +79,7 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
 
         $resolver = new UnresolvedFixtureReferenceIdResolver($decoratedResolver);
 
-        static::assertTrue($resolver->canResolve($value));
+        self::assertTrue($resolver->canResolve($value));
 
         $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -101,43 +102,39 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
         $resolver = new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver());
         $newResolver = $resolver->withObjectGenerator($generator);
 
-        static::assertEquals($newResolver, $resolver);
-        static::assertNotSame($newResolver, $resolver);
-
+        self::assertEquals($newResolver, $resolver);
+        self::assertNotSame($newResolver, $resolver);
 
         $resolver = new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver(), new FakeValueResolver());
         $newResolver = $resolver->withObjectGenerator($generator);
 
-        static::assertEquals($newResolver, $resolver);
-        static::assertNotSame($newResolver, $resolver);
-
+        self::assertEquals($newResolver, $resolver);
+        self::assertNotSame($newResolver, $resolver);
 
         $decoratedResolverProphecy = $this->prophesize(ChainableValueResolverInterface::class);
         $decoratedResolverProphecy->willImplement(ObjectGeneratorAwareInterface::class);
         $decoratedResolverProphecy
             ->withObjectGenerator($generator)
-            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver())
-        ;
+            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver());
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new UnresolvedFixtureReferenceIdResolver($decoratedResolver);
         $newResolver = $resolver->withObjectGenerator($generator);
 
-        static::assertEquals(new UnresolvedFixtureReferenceIdResolver($decoratedResolver), $resolver);
-        static::assertEquals(new UnresolvedFixtureReferenceIdResolver($newDecoratedResolver), $newResolver);
-
+        self::assertEquals(new UnresolvedFixtureReferenceIdResolver($decoratedResolver), $resolver);
+        self::assertEquals(new UnresolvedFixtureReferenceIdResolver($newDecoratedResolver), $newResolver);
 
         $resolver = new UnresolvedFixtureReferenceIdResolver($decoratedResolver, new FakeValueResolver());
         $newResolver = $resolver->withObjectGenerator($generator);
 
-        static::assertEquals(
+        self::assertEquals(
             new UnresolvedFixtureReferenceIdResolver($decoratedResolver, new FakeValueResolver()),
-            $resolver
+            $resolver,
         );
-        static::assertEquals(
+        self::assertEquals(
             new UnresolvedFixtureReferenceIdResolver($newDecoratedResolver, new FakeValueResolver()),
-            $newResolver
+            $newResolver,
         );
 
         $decoratedResolverProphecy->withObjectGenerator(Argument::any())->shouldHaveBeenCalledTimes(2);
@@ -153,55 +150,51 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
         $resolver = new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver());
         $newResolver = $resolver->withValueResolver($valueResolver);
 
-        static::assertEquals(
+        self::assertEquals(
             new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver()),
-            $resolver
+            $resolver,
         );
-        static::assertEquals(
+        self::assertEquals(
             new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver(), $valueResolver),
-            $newResolver
+            $newResolver,
         );
-
 
         $resolver = new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver(), $injectedValueResolver);
         $newResolver = $resolver->withValueResolver($valueResolver);
 
-        static::assertEquals(
+        self::assertEquals(
             new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver(), $injectedValueResolver),
-            $resolver
+            $resolver,
         );
-        static::assertEquals(
+        self::assertEquals(
             new UnresolvedFixtureReferenceIdResolver(new FakeChainableValueResolver(), $valueResolver),
-            $newResolver
+            $newResolver,
         );
-
 
         $decoratedResolverProphecy = $this->prophesize(ChainableValueResolverInterface::class);
         $decoratedResolverProphecy->willImplement(ValueResolverAwareInterface::class);
         $decoratedResolverProphecy
             ->withValueResolver($valueResolver)
-            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver())
-        ;
+            ->willReturn($newDecoratedResolver = new FakeChainableValueResolver());
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new UnresolvedFixtureReferenceIdResolver($decoratedResolver);
         $newResolver = $resolver->withValueResolver($valueResolver);
 
-        static::assertEquals(new UnresolvedFixtureReferenceIdResolver($decoratedResolver), $resolver);
-        static::assertEquals(new UnresolvedFixtureReferenceIdResolver($newDecoratedResolver, $valueResolver), $newResolver);
-
+        self::assertEquals(new UnresolvedFixtureReferenceIdResolver($decoratedResolver), $resolver);
+        self::assertEquals(new UnresolvedFixtureReferenceIdResolver($newDecoratedResolver, $valueResolver), $newResolver);
 
         $resolver = new UnresolvedFixtureReferenceIdResolver($decoratedResolver, $injectedValueResolver);
         $newResolver = $resolver->withValueResolver($valueResolver);
 
-        static::assertEquals(
+        self::assertEquals(
             new UnresolvedFixtureReferenceIdResolver($decoratedResolver, $injectedValueResolver),
-            $resolver
+            $resolver,
         );
-        static::assertEquals(
+        self::assertEquals(
             new UnresolvedFixtureReferenceIdResolver($newDecoratedResolver, $valueResolver),
-            $newResolver
+            $newResolver,
         );
 
         $decoratedResolverProphecy->withValueResolver(Argument::any())->shouldHaveBeenCalledTimes(2);
@@ -218,7 +211,7 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
 
         $resolver = new UnresolvedFixtureReferenceIdResolver($decoratedResolver);
 
-        static::assertTrue($resolver->canResolve($value));
+        self::assertTrue($resolver->canResolve($value));
         $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
@@ -232,12 +225,12 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
             null,
             $fixtureBag = (new FixtureBag())
                 ->with(
-                    $dummyFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create())
+                    $dummyFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create()),
                 )
                 ->with(
-                    $anotherDummyFixture = new SimpleFixture('another_dummy', 'Dummy', SpecificationBagFactory::create())
+                    $anotherDummyFixture = new SimpleFixture('another_dummy', 'Dummy', SpecificationBagFactory::create()),
                 ),
-            (new ObjectBag(['dummy' => $expectedObject]))
+            new ObjectBag(['dummy' => $expectedObject]),
         );
         $scope = ['injected' => true];
         $context = new GenerationContext();
@@ -249,17 +242,16 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
             ->willReturn(
                 $expected = new ResolvedValueWithFixtureSet(
                     $resolvedFixture = new SimpleFixture('resolved_fixture', 'Dummy', SpecificationBagFactory::create()),
-                    ResolvedFixtureSetFactory::create(null, $fixtureBag->with($resolvedFixture))
-                )
-            )
-        ;
+                    ResolvedFixtureSetFactory::create(null, $fixtureBag->with($resolvedFixture)),
+                ),
+            );
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new UnresolvedFixtureReferenceIdResolver($decoratedResolver, new FakeValueResolver());
         $actual = $resolver->resolve($value, $dummyFixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -276,12 +268,12 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
             null,
             $fixtureBag = (new FixtureBag())
                 ->with(
-                    $dummyFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create())
+                    $dummyFixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create()),
                 )
                 ->with(
-                    $anotherDummyFixture = new SimpleFixture('another_dummy', 'Dummy', SpecificationBagFactory::create())
+                    $anotherDummyFixture = new SimpleFixture('another_dummy', 'Dummy', SpecificationBagFactory::create()),
                 ),
-            $objectBag = (new ObjectBag(['dummy' => $expectedObject]))
+            $objectBag = (new ObjectBag(['dummy' => $expectedObject])),
         );
         $scope = ['injected' => true];
         $context = new GenerationContext();
@@ -296,11 +288,10 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
                     $newSet = ResolvedFixtureSetFactory::create(
                         null,
                         $fixtureBag->with(new SimpleFixture('value_resolver_fixture', 'Dummy', SpecificationBagFactory::create())),
-                        $newObjectBag = $objectBag->with(new SimpleObject('value_resolver_fixture', new stdClass()))
-                    )
-                )
-            )
-        ;
+                        $newObjectBag = $objectBag->with(new SimpleObject('value_resolver_fixture', new stdClass())),
+                    ),
+                ),
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 
@@ -310,17 +301,16 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
             ->willReturn(
                 $expected = new ResolvedValueWithFixtureSet(
                     $expectedObject,
-                    ResolvedFixtureSetFactory::create(null, $fixtureBag, $newObjectBag->with(new SimpleObject('alice', $expectedObject)))
-                )
-            )
-        ;
+                    ResolvedFixtureSetFactory::create(null, $fixtureBag, $newObjectBag->with(new SimpleObject('alice', $expectedObject))),
+                ),
+            );
         /** @var ChainableValueResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new UnresolvedFixtureReferenceIdResolver($decoratedResolver, $valueResolver);
         $actual = $resolver->resolve($value, $dummyFixture, $set, $scope, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $valueResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
@@ -343,10 +333,9 @@ class UnresolvedFixtureReferenceIdResolverTest extends TestCase
             ->willReturn(
                 new ResolvedValueWithFixtureSet(
                     200,    // returns a new value instead of a string
-                    ResolvedFixtureSetFactory::create()
-                )
-            )
-        ;
+                    ResolvedFixtureSetFactory::create(),
+                ),
+            );
         /** @var ValueResolverInterface $valueResolver */
         $valueResolver = $valueResolverProphecy->reveal();
 

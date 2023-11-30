@@ -25,6 +25,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver
+ * @internal
  */
 class SimpleParameterBagResolverTest extends TestCase
 {
@@ -32,12 +33,12 @@ class SimpleParameterBagResolverTest extends TestCase
 
     public function testIsAParameterBagResolver(): void
     {
-        static::assertTrue(is_a(SimpleParameterBagResolver::class, ParameterBagResolverInterface::class, true));
+        self::assertTrue(is_a(SimpleParameterBagResolver::class, ParameterBagResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(SimpleParameterBagResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(SimpleParameterBagResolver::class))->isCloneable());
     }
 
     public function testDecoratesResolverToResolveParameterBag(): void
@@ -53,43 +54,41 @@ class SimpleParameterBagResolverTest extends TestCase
                 new Parameter('foo', '(unresolved) bar'),
                 $unresolvedParameters,
                 new ParameterBag(),
-                new ResolvingContext('foo')
+                new ResolvingContext('foo'),
             )
             ->willReturn(
                 $firstResolveResult = new ParameterBag([
                     'foo' => 'bar',
                     'other_param' => 'yo',
-                ])
-            )
-        ;
+                ]),
+            );
         $injectedResolverProphecy
             ->resolve(
                 new Parameter('ping', '(unresolved) pong'),
                 $unresolvedParameters,
                 $firstResolveResult,
-                new ResolvingContext('ping')
+                new ResolvingContext('ping'),
             )
             ->willReturn(
                 new ParameterBag([
                     'foo' => 'bar',
                     'other_param' => 'yo',
                     'ping' => 'pong',
-                ])
-            )
-        ;
-        /* @var ParameterResolverInterface $injectedResolver */
+                ]),
+            );
+        /** @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
         $resolver = new SimpleParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters);
 
-        static::assertEquals(
+        self::assertEquals(
             new ParameterBag([
                 'foo' => 'bar',
                 'other_param' => 'yo',
                 'ping' => 'pong',
             ]),
-            $result
+            $result,
         );
         $injectedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
@@ -107,13 +106,13 @@ class SimpleParameterBagResolverTest extends TestCase
 
         $injectedResolverProphecy = $this->prophesize(ParameterResolverInterface::class);
         $injectedResolverProphecy->resolve(Argument::cetera())->shouldNotBeCalled();
-        /* @var ParameterResolverInterface $injectedResolver */
+        /** @var ParameterResolverInterface $injectedResolver */
         $injectedResolver = $injectedResolverProphecy->reveal();
 
         $resolver = new SimpleParameterBagResolver($injectedResolver);
         $result = $resolver->resolve($unresolvedParameters, $resolvedParameters);
 
-        static::assertEquals($resolvedParameters, $result);
+        self::assertEquals($resolvedParameters, $result);
     }
 
     public function testResolvesBagWithInjectedParameters(): void
@@ -132,15 +131,14 @@ class SimpleParameterBagResolverTest extends TestCase
                 new Parameter('foo', '(unresolved) bar'),
                 $unresolvedParameters,
                 $injectedParameters,
-                new ResolvingContext('foo')
+                new ResolvingContext('foo'),
             )
             ->willReturn(
                 new ParameterBag([
                     'other_param' => 'yo',
                     'foo' => 'bar',
-                ])
-            )
-        ;
+                ]),
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('ping', '(unresolved) pong'),
@@ -149,29 +147,28 @@ class SimpleParameterBagResolverTest extends TestCase
                     'other_param' => 'yo',
                     'foo' => 'bar',
                 ]),
-                new ResolvingContext('ping')
+                new ResolvingContext('ping'),
             )
             ->willReturn(
                 new ParameterBag([
                     'other_param' => 'yo',
                     'foo' => 'bar',
                     'ping' => 'pong',
-                ])
-            )
-        ;
-        /* @var ParameterResolverInterface $decoratedResolver */
+                ]),
+            );
+        /** @var ParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new SimpleParameterBagResolver($decoratedResolver);
         $result = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
-        static::assertEquals(
+        self::assertEquals(
             new ParameterBag([
                 'other_param' => 'yo',
                 'foo' => 'bar',
                 'ping' => 'pong',
             ]),
-            $result
+            $result,
         );
     }
 }

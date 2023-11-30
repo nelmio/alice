@@ -33,6 +33,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
+ * @internal
  */
 class ValueResolverRegistryTest extends TestCase
 {
@@ -40,7 +41,7 @@ class ValueResolverRegistryTest extends TestCase
 
     public function testIsAValueResolver(): void
     {
-        static::assertTrue(is_a(ValueResolverRegistry::class, ValueResolverInterface::class, true));
+        self::assertTrue(is_a(ValueResolverRegistry::class, ValueResolverInterface::class, true));
     }
 
     public function testAcceptChainableInstantiators(): void
@@ -57,7 +58,7 @@ class ValueResolverRegistryTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ValueResolverRegistry::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ValueResolverRegistry::class))->isCloneable());
     }
 
     public function testPicksTheFirstSuitableResolverToResolveTheGivenValue(): void
@@ -70,23 +71,23 @@ class ValueResolverRegistryTest extends TestCase
         $context->markIsResolvingFixture('foo');
         $expected = new ResolvedValueWithFixtureSet(
             10,
-            ResolvedFixtureSetFactory::create(null, null, (new ObjectBag())->with(new SimpleObject('dummy', new stdClass())))
+            ResolvedFixtureSetFactory::create(null, null, (new ObjectBag())->with(new SimpleObject('dummy', new stdClass()))),
         );
 
         $instantiator1Prophecy = $this->prophesize(ChainableValueResolverInterface::class);
         $instantiator1Prophecy->canResolve($value)->willReturn(false);
-        /* @var ChainableValueResolverInterface $instantiator1 */
+        /** @var ChainableValueResolverInterface $instantiator1 */
         $instantiator1 = $instantiator1Prophecy->reveal();
 
         $instantiator2Prophecy = $this->prophesize(ChainableValueResolverInterface::class);
         $instantiator2Prophecy->canResolve($value)->willReturn(true);
         $instantiator2Prophecy->resolve($value, $fixture, $set, $scope, $context)->willReturn($expected);
-        /* @var ChainableValueResolverInterface $instantiator2 */
+        /** @var ChainableValueResolverInterface $instantiator2 */
         $instantiator2 = $instantiator2Prophecy->reveal();
 
         $instantiator3Prophecy = $this->prophesize(ChainableValueResolverInterface::class);
         $instantiator3Prophecy->canResolve(Argument::any())->shouldNotBeCalled();
-        /* @var ChainableValueResolverInterface $instantiator3 */
+        /** @var ChainableValueResolverInterface $instantiator3 */
         $instantiator3 = $instantiator3Prophecy->reveal();
 
         $registry = new ValueResolverRegistry([
@@ -96,7 +97,7 @@ class ValueResolverRegistryTest extends TestCase
         ]);
         $actual = $registry->resolve($value, $fixture, $set, $scope, $context);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
 
         $instantiator1Prophecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);
         $instantiator2Prophecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(1);

@@ -78,7 +78,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
                 str_replace(
                     $this->token,
                     (string) $currentIndex,
-                    $range->getName()
+                    $range->getName(),
                 )
             ] = $currentIndex;
         }
@@ -101,7 +101,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
         $reference = str_replace(
             sprintf('{%s}', $matches['range']),
             $this->token,
-            $name
+            $name,
         );
 
         $step = 1;

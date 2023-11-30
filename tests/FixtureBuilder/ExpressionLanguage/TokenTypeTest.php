@@ -19,6 +19,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType
+ * @internal
  */
 class TokenTypeTest extends TestCase
 {
@@ -35,7 +36,7 @@ class TokenTypeTest extends TestCase
 
     public function testIsImmutable(): void
     {
-        static::assertTrue(true, 'Nothing to do.');
+        self::assertTrue(true, 'Nothing to do.');
     }
 
     /**
@@ -48,9 +49,9 @@ class TokenTypeTest extends TestCase
         $reflProp->setAccessible(true);
         $values = $reflProp->getValue($reflClass);
 
-        static::assertCount(count($this->constants), $values);
+        self::assertCount(count($this->constants), $values);
         foreach ($this->constants as $constant) {
-            static::assertTrue($values[$constant]);
+            self::assertTrue($values[$constant]);
         }
     }
 
@@ -60,7 +61,7 @@ class TokenTypeTest extends TestCase
     public function testCanCreateType(string $typeConstant): void
     {
         $type = new TokenType($typeConstant);
-        static::assertEquals($type->getValue(), constant(sprintf('%s::%s', TokenType::class, $typeConstant)));
+        self::assertEquals($type->getValue(), constant(sprintf('%s::%s', TokenType::class, $typeConstant)));
     }
 
     public function testThrowsAnExceptionIfAnInvalidTypeIsGiven(): void
@@ -71,7 +72,7 @@ class TokenTypeTest extends TestCase
         new TokenType('unknown');
     }
 
-    public function provideAcceptableTypes()
+    public function provideAcceptableTypes(): iterable
     {
         $reflClass = new ReflectionClass(TokenType::class);
         $constants = $reflClass->getConstants();

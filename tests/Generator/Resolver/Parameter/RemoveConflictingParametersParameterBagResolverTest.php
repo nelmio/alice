@@ -22,6 +22,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver
+ * @internal
  */
 class RemoveConflictingParametersParameterBagResolverTest extends TestCase
 {
@@ -29,16 +30,16 @@ class RemoveConflictingParametersParameterBagResolverTest extends TestCase
 
     public function testIsAParameterBagResolver(): void
     {
-        static::assertTrue(is_a(
+        self::assertTrue(is_a(
             RemoveConflictingParametersParameterBagResolver::class,
             ParameterBagResolverInterface::class,
-            true
+            true,
         ));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(RemoveConflictingParametersParameterBagResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(RemoveConflictingParametersParameterBagResolver::class))->isCloneable());
     }
 
     public function testRemovesAllConflictingKeysFromInjectedParametersBagBeforeResolvingIt(): void
@@ -52,27 +53,26 @@ class RemoveConflictingParametersParameterBagResolverTest extends TestCase
             'foz' => 'baz',
         ]);
 
-
         $decoratedResolverProphecy = $this->prophesize(ParameterBagResolverInterface::class);
         $decoratedResolverProphecy
             ->resolve(
                 $unresolvedParameters,
-                new ParameterBag(['foz' => 'baz'])
+                new ParameterBag(['foz' => 'baz']),
             )
             ->willReturn(
                 $expected = new ParameterBag([
                     'foo' => '(resolved) bar',
                     'ping' => '(resolved) pong',
                     'foz' => 'baz',
-                ])
+                ]),
             );
-        /* @var ParameterBagResolverInterface $decoratedResolver */
+        /** @var ParameterBagResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new RemoveConflictingParametersParameterBagResolver($decoratedResolver);
         $actual = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
@@ -85,27 +85,26 @@ class RemoveConflictingParametersParameterBagResolverTest extends TestCase
         ]);
         $injectedParameters = null;
 
-
         $decoratedResolverProphecy = $this->prophesize(ParameterBagResolverInterface::class);
         $decoratedResolverProphecy
             ->resolve(
                 $unresolvedParameters,
-                new ParameterBag()
+                new ParameterBag(),
             )
             ->willReturn(
                 $expected = new ParameterBag([
                     'foo' => '(resolved) bar',
                     'ping' => '(resolved) pong',
                     'foz' => 'baz',
-                ])
+                ]),
             );
-        /* @var ParameterBagResolverInterface $decoratedResolver */
+        /** @var ParameterBagResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new RemoveConflictingParametersParameterBagResolver($decoratedResolver);
         $actual = $resolver->resolve($unresolvedParameters, $injectedParameters);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }

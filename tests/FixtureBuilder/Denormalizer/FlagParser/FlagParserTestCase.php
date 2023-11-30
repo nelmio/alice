@@ -28,13 +28,13 @@ abstract class FlagParserTestCase extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionObject($this->parser))->isCloneable());
+        self::assertFalse((new ReflectionObject($this->parser))->isCloneable());
     }
 
     /**
      * @dataProvider provideElements
      */
-    public function testCanParseElements(string $element, FlagBag $expected = null): void
+    public function testCanParseElements(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -50,7 +50,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideExtends
      */
-    public function testCanParseExtends(string $element, FlagBag $expected = null): void
+    public function testCanParseExtends(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -66,7 +66,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideOptionals
      */
-    public function testCanParseOptionals(string $element, FlagBag $expected = null): void
+    public function testCanParseOptionals(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -82,7 +82,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideTemplates
      */
-    public function testCanParseTemplates(string $element, FlagBag $expected = null): void
+    public function testCanParseTemplates(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -90,7 +90,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideUniques
      */
-    public function testCanParseUniques(string $element, FlagBag $expected = null): void
+    public function testCanParseUniques(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -98,7 +98,7 @@ abstract class FlagParserTestCase extends TestCase
     /**
      * @dataProvider provideConfigurators
      */
-    public function testCanParseConfigurators(string $element, FlagBag $expected = null): void
+    public function testCanParseConfigurators(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
@@ -106,76 +106,76 @@ abstract class FlagParserTestCase extends TestCase
     public function assertCanParse(string $element, FlagBag $expected): void
     {
         if ($this->parser instanceof ChainableFlagParserInterface) {
-            static::assertTrue($this->parser->canParse($element));
+            self::assertTrue($this->parser->canParse($element));
         }
 
         $actual = $this->parser->parse($element);
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function assertCannotParse(string $element): void
     {
         if ($this->parser instanceof ChainableFlagParserInterface) {
             $actual = $this->parser->canParse($element);
-            static::assertFalse($actual);
+            self::assertFalse($actual);
 
             return;
         }
 
         try {
             $this->parser->parse($element);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (LogicException $exception) {
             // expected
         }
     }
-    
+
     public function markAsInvalidCase(): void
     {
-        static::markTestSkipped('Invalid scenario.');
+        self::markTestSkipped('Invalid scenario.');
     }
 
-    public function provideElements()
+    public function provideElements(): iterable
     {
         return Reference::getElements();
     }
 
-    public function provideMalformedElements()
+    public function provideMalformedElements(): iterable
     {
         return Reference::getMalformedElements();
     }
 
-    public function provideExtends()
+    public function provideExtends(): iterable
     {
         return Reference::getExtends();
     }
 
-    public function provideMalformedExtends()
+    public function provideMalformedExtends(): iterable
     {
         return Reference::getMalformedExtends();
     }
 
-    public function provideOptionals()
+    public function provideOptionals(): iterable
     {
         return Reference::getOptionals();
     }
 
-    public function provideMalformedOptionals()
+    public function provideMalformedOptionals(): iterable
     {
         return Reference::getMalformedOptionals();
     }
 
-    public function provideTemplates()
+    public function provideTemplates(): iterable
     {
         return Reference::getTemplates();
     }
 
-    public function provideUniques()
+    public function provideUniques(): iterable
     {
         return Reference::getUniques();
     }
 
-    public function provideConfigurators()
+    public function provideConfigurators(): iterable
     {
         return Reference::getConfigurators();
     }

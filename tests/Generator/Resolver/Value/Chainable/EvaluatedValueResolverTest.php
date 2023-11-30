@@ -27,25 +27,26 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver
+ * @internal
  */
 class EvaluatedValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver(): void
     {
-        static::assertTrue(is_a(EvaluatedValueResolver::class, ChainableValueResolverInterface::class, true));
+        self::assertTrue(is_a(EvaluatedValueResolver::class, ChainableValueResolverInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(EvaluatedValueResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(EvaluatedValueResolver::class))->isCloneable());
     }
 
     public function testCanResolveFixtureReferenceValues(): void
     {
         $resolver = new EvaluatedValueResolver();
 
-        static::assertTrue($resolver->canResolve(new EvaluatedValue('')));
-        static::assertFalse($resolver->canResolve(new FakeValue()));
+        self::assertTrue($resolver->canResolve(new EvaluatedValue('')));
+        self::assertFalse($resolver->canResolve(new FakeValue()));
     }
 
     public function testEvaluateTheGivenExpression(): void
@@ -56,13 +57,13 @@ class EvaluatedValueResolverTest extends TestCase
 
         $expected = new ResolvedValueWithFixtureSet(
             'Hello world!',
-            $set
+            $set,
         );
 
         $resolver = new EvaluatedValueResolver();
         $actual = $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfInvalidExpression(): void
@@ -75,22 +76,22 @@ class EvaluatedValueResolverTest extends TestCase
             $resolver = new EvaluatedValueResolver();
             $resolver->resolve($value, $fixture, $set, [], new GenerationContext());
 
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
 
             if (PHP_VERSION_ID < 80000) {
-                static::assertEquals(
+                self::assertEquals(
                     'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
-                        . ' expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN)',
-                    $exception->getMessage()
+                        .' expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN)',
+                    $exception->getMessage(),
                 );
             } else {
-                static::assertEquals(
+                self::assertEquals(
                     'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
-                     . ' expecting variable or "${" or "{$"',
-                    $exception->getMessage()
+                     .' expecting variable or "${" or "{$"',
+                    $exception->getMessage(),
                 );
             }
         }
@@ -121,13 +122,13 @@ class EvaluatedValueResolverTest extends TestCase
 
         $expected = new ResolvedValueWithFixtureSet(
             'bar',
-            $set
+            $set,
         );
 
         $resolver = new EvaluatedValueResolver();
         $actual = $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
@@ -148,30 +149,30 @@ class EvaluatedValueResolverTest extends TestCase
                 'expression' => '["foo" => $foo, "expression" => $_expression, "scope" => $_scope]',
                 'scope' => $scope,
             ],
-            $set
+            $set,
         );
 
         $resolver = new EvaluatedValueResolver();
         $actual = $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
 
-        static::assertEquals($expected, $actual);
-        static::assertSame(['foo' => 'bar'], $scope);
+        self::assertEquals($expected, $actual);
+        self::assertSame(['foo' => 'bar'], $scope);
 
         $value = new EvaluatedValue('$scope');
 
         try {
             $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
-            static::fail('Expected an exception to be thrown.');
+            self::fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
             if (PHP_VERSION_ID < 80000) {
-                static::assertEquals(
+                self::assertEquals(
                     'Could not evaluate the expression "$scope": Undefined variable: scope',
-                    $exception->getMessage()
+                    $exception->getMessage(),
                 );
             } else {
-                static::assertEquals(
+                self::assertEquals(
                     'Could not evaluate the expression "$scope": Undefined variable $scope',
-                    $exception->getMessage()
+                    $exception->getMessage(),
                 );
             }
         }
@@ -195,29 +196,29 @@ class EvaluatedValueResolverTest extends TestCase
                     'current' => '1',
                 ],
             ],
-            $set
+            $set,
         );
 
         $resolver = new EvaluatedValueResolver();
         $actual = $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $value = new EvaluatedValue('$scope');
 
         try {
             $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
-            static::fail('Expected an exception to be thrown.');
+            self::fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
             if (PHP_VERSION_ID < 80000) {
-                static::assertEquals(
+                self::assertEquals(
                     'Could not evaluate the expression "$scope": Undefined variable: scope',
-                    $exception->getMessage()
+                    $exception->getMessage(),
                 );
             } else {
-                static::assertEquals(
+                self::assertEquals(
                     'Could not evaluate the expression "$scope": Undefined variable $scope',
-                    $exception->getMessage()
+                    $exception->getMessage(),
                 );
             }
         }

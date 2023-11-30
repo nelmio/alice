@@ -25,7 +25,7 @@ use Nelmio\Alice\ObjectInterface;
 final class CompleteObjectGenerator implements ObjectGeneratorInterface
 {
     use IsAServiceTrait;
-    
+
     /**
      * @var ObjectGeneratorInterface
      */
@@ -35,7 +35,7 @@ final class CompleteObjectGenerator implements ObjectGeneratorInterface
     {
         $this->objectGenerator = $objectGenerator;
     }
-    
+
     public function generate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
@@ -62,7 +62,7 @@ final class CompleteObjectGenerator implements ObjectGeneratorInterface
 
     private function isObjectComplete(FixtureInterface $fixture, ObjectInterface $object, GenerationContext $context): bool
     {
-        return (
+        return
             $object instanceof CompleteObject
             || $context->needsCompleteGeneration()
             || false === $context->isFirstPass()
@@ -70,7 +70,6 @@ final class CompleteObjectGenerator implements ObjectGeneratorInterface
                 false === $context->needsCompleteGeneration()
                 && $fixture->getSpecs()->getProperties()->isEmpty()
                 && $fixture->getSpecs()->getMethodCalls()->isEmpty()
-            )
-        );
+            );
     }
 }

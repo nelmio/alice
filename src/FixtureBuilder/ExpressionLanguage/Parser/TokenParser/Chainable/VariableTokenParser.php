@@ -33,7 +33,7 @@ final class VariableTokenParser implements ChainableTokenParserInterface
 
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::VARIABLE_TYPE;
+        return TokenType::VARIABLE_TYPE === $token->getType();
     }
 
     /**
@@ -45,14 +45,14 @@ final class VariableTokenParser implements ChainableTokenParserInterface
      */
     public function parse(Token $token)
     {
-        $variable = !is_string($token->getValue()) || $token->getValue() === ''
+        $variable = !is_string($token->getValue()) || '' === $token->getValue()
             ? false
-            : substr($token->getValue(), 1);
+            : mb_substr($token->getValue(), 1);
 
         if ('current' === $variable) {
             return new FunctionCallValue(
                 'current',
-                [new ValueForCurrentValue()]
+                [new ValueForCurrentValue()],
             );
         }
 

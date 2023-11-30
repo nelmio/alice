@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Caller;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
-
 use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\IsAServiceTrait;
@@ -32,15 +31,12 @@ final class CallProcessorRegistry implements CallProcessorInterface
 
     public function __construct(array $processors)
     {
-        $processors = (static function (ChainableCallProcessorInterface ...$processors) {
-            return $processors;
-        })(...$processors);
+        $processors = (static fn (ChainableCallProcessorInterface ...$processors) => $processors)(...$processors);
 
         foreach ($processors as $processor) {
             $this->processors[] = $processor instanceof CallProcessorAwareInterface
                 ? $processor->withProcessor($this)
-                : $processor
-            ;
+                : $processor;
         }
     }
 

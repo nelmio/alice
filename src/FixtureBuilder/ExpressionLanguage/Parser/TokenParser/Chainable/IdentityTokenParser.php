@@ -39,7 +39,7 @@ final class IdentityTokenParser implements ChainableTokenParserInterface, Parser
      */
     private $tokenizer;
 
-    public function __construct(ChainableTokenParserInterface $decoratedTokenParser, ParserInterface $parser = null)
+    public function __construct(ChainableTokenParserInterface $decoratedTokenParser, ?ParserInterface $parser = null)
     {
         if (null !== $parser && $decoratedTokenParser instanceof ParserAwareInterface) {
             $decoratedTokenParser = $decoratedTokenParser->withParser($parser);
@@ -48,15 +48,15 @@ final class IdentityTokenParser implements ChainableTokenParserInterface, Parser
         $this->decoratedTokenParser = $decoratedTokenParser;
         $this->tokenizer = new FunctionTokenizer();
     }
-    
+
     public function withParser(ParserInterface $parser): self
     {
-        return new static($this->decoratedTokenParser, $parser);
+        return new self($this->decoratedTokenParser, $parser);
     }
-    
+
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::IDENTITY_TYPE;
+        return TokenType::IDENTITY_TYPE === $token->getType();
     }
 
     /**
@@ -72,7 +72,7 @@ final class IdentityTokenParser implements ChainableTokenParserInterface, Parser
         $realValue = preg_replace('/^<\((.*)\)>$/s', '<identity($1)>', $value);
 
         return $this->decoratedTokenParser->parse(
-            new Token($realValue, new TokenType(TokenType::FUNCTION_TYPE))
+            new Token($realValue, new TokenType(TokenType::FUNCTION_TYPE)),
         );
     }
 }

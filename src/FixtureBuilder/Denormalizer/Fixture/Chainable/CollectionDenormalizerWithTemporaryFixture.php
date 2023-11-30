@@ -55,34 +55,34 @@ final class CollectionDenormalizerWithTemporaryFixture implements CollectionDeno
 
     public function __construct(
         CollectionDenormalizer $decoratedCollectionDenormalizer,
-        FixtureDenormalizerInterface $decoratedDenormalizer = null,
-        FlagParserInterface $parser = null
+        ?FixtureDenormalizerInterface $decoratedDenormalizer = null,
+        ?FlagParserInterface $parser = null
     ) {
         $this->collectionDenormalizer = $decoratedCollectionDenormalizer;
         $this->denormalizer = $decoratedDenormalizer;
         $this->parser = $parser;
     }
-    
+
     public function withFlagParser(FlagParserInterface $parser): self
     {
-        return new static($this->collectionDenormalizer, $this->denormalizer, $parser);
+        return new self($this->collectionDenormalizer, $this->denormalizer, $parser);
     }
-    
+
     public function withFixtureDenormalizer(FixtureDenormalizerInterface $denormalizer)
     {
-        return new static($this->collectionDenormalizer, $denormalizer, $this->parser);
+        return new self($this->collectionDenormalizer, $denormalizer, $this->parser);
     }
-    
+
     public function canDenormalize(string $reference): bool
     {
         return $this->collectionDenormalizer->canDenormalize($reference);
     }
-    
+
     public function buildIds(string $id): array
     {
         return $this->collectionDenormalizer->buildIds($id);
     }
-    
+
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,
@@ -109,7 +109,7 @@ final class CollectionDenormalizerWithTemporaryFixture implements CollectionDeno
             $builtFixtures,
             $className,
             $specs,
-            $flags
+            $flags,
         );
 
         $fixtureIds = $this->buildIds($fixtureId);
@@ -121,11 +121,11 @@ final class CollectionDenormalizerWithTemporaryFixture implements CollectionDeno
                             $fixtureId,
                             $tempFixture->getClassName(),
                             $tempFixture->getSpecs(),
-                            (string) $valueForCurrent
+                            (string) $valueForCurrent,
                         ),
-                        $flags->withKey($fixtureId)
-                    )
-                )
+                        $flags->withKey($fixtureId),
+                    ),
+                ),
             );
         }
 
@@ -152,7 +152,7 @@ final class CollectionDenormalizerWithTemporaryFixture implements CollectionDeno
             $className,
             $tempFixtureId,
             $specs,
-            $flags
+            $flags,
         );
 
         $tempFixture = $builtFixtures->get($tempFixtureId);

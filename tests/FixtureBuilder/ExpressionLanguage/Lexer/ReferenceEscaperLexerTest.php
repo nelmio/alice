@@ -22,6 +22,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer
+ * @internal
  */
 class ReferenceEscaperLexerTest extends TestCase
 {
@@ -29,18 +30,18 @@ class ReferenceEscaperLexerTest extends TestCase
 
     public function testIsALexer(): void
     {
-        static::assertTrue(is_a(ReferenceEscaperLexer::class, LexerInterface::class, true));
+        self::assertTrue(is_a(ReferenceEscaperLexer::class, LexerInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(ReferenceEscaperLexer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(ReferenceEscaperLexer::class))->isCloneable());
     }
 
     /**
      * @dataProvider provideValues
      */
-    public function testEscapesStringBeforeHandlingItOverToTheDecoratedLexer(string $value, string $expectedEscapedValue = null): void
+    public function testEscapesStringBeforeHandlingItOverToTheDecoratedLexer(string $value, ?string $expectedEscapedValue = null): void
     {
         if (null === $expectedEscapedValue) {
             $expectedEscapedValue = $value;
@@ -54,12 +55,12 @@ class ReferenceEscaperLexerTest extends TestCase
         $lexer = new ReferenceEscaperLexer($decoratedLexer);
         $actual = $lexer->lex($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function provideValues()
+    public function provideValues(): iterable
     {
         yield 'empty string' => [''];
 

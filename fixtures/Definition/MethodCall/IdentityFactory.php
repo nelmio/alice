@@ -22,7 +22,7 @@ class IdentityFactory
     {
         return new FunctionCallValue(
             'identity',
-            [new EvaluatedValue($expression)]
+            [new EvaluatedValue($expression)],
         );
     }
 }

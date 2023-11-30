@@ -19,19 +19,20 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Definition\MethodCall\NoMethodCall
+ * @internal
  */
 class NoMethodCallTest extends TestCase
 {
     public function testIsAMethodCall(): void
     {
-        static::assertTrue(is_a(NoMethodCall::class, MethodCallInterface::class, true));
+        self::assertTrue(is_a(NoMethodCall::class, MethodCallInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
     {
         $call = new NoMethodCall();
 
-        static::assertEquals('none', $call->__toString());
+        self::assertEquals('none', $call->__toString());
     }
 
     public function testCannotCreateNewInstanceWithNewArguments(): void

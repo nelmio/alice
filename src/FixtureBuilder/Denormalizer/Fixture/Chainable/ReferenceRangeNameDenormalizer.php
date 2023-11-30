@@ -47,7 +47,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
      */
     private $specsDenormalizer;
 
-    public function __construct(SpecificationsDenormalizerInterface $specsDenormalizer, FlagParserInterface $parser = null)
+    public function __construct(SpecificationsDenormalizerInterface $specsDenormalizer, ?FlagParserInterface $parser = null)
     {
         $this->specsDenormalizer = $specsDenormalizer;
         $this->flagParser = $parser;
@@ -94,12 +94,12 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
 
             $builtFixtures = $builtFixtures->with(
                 $this->buildFixture(
-                    $fixtureIdPrefix . $referencedFixtureId,
+                    $fixtureIdPrefix.$referencedFixtureId,
                     $className,
                     $specs,
                     $idFlags->mergeWith($flags),
-                    $valueForCurrent
-                )
+                    $valueForCurrent,
+                ),
             );
         }
 
@@ -124,13 +124,11 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
         /** @var array<string, TemplatingFixture> $matchedFixtures */
         $matchedFixtures = array_filter(
             $builtFixtures->toArray(),
-            static function (string $referenceName) use ($referencedName) {
-                return str_starts_with($referenceName, $referencedName);
-            },
-            ARRAY_FILTER_USE_KEY
+            static fn (string $referenceName) => str_starts_with($referenceName, $referencedName),
+            ARRAY_FILTER_USE_KEY,
         );
 
-        if (count($matchedFixtures) === 0) {
+        if (0 === count($matchedFixtures)) {
             throw FixtureNotFoundExceptionFactory::createWildcard($referencedName);
         }
 
@@ -147,7 +145,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
         return str_replace(
             sprintf('{%s}', $matches['expression']),
             '',
-            $matches[0]
+            $matches[0],
         );
     }
 
@@ -162,17 +160,17 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
             $fixtureId,
             $className,
             new SpecificationBag(null, new PropertyBag(), new MethodCallBag()),
-            $valueForCurrent
+            $valueForCurrent,
         );
         $fixture = $fixture->withSpecs(
-            $this->specsDenormalizer->denormalize($fixture, $this->flagParser, $specs)
+            $this->specsDenormalizer->denormalize($fixture, $this->flagParser, $specs),
         );
 
         return new TemplatingFixture(
             new SimpleFixtureWithFlags(
                 $fixture,
-                $flags->withKey($fixtureId)
-            )
+                $flags->withKey($fixtureId),
+            ),
         );
     }
 }

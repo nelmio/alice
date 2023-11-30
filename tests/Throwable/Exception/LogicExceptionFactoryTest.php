@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\LogicExceptionFactory
+ * @internal
  */
 class LogicExceptionFactoryTest extends TestCase
 {
@@ -24,36 +25,36 @@ class LogicExceptionFactoryTest extends TestCase
     {
         $exception = LogicExceptionFactory::createForUncallableMethod('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'By its nature, "foo()" should not be called.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForCannotDenormalizerForChainableFixtureBuilderDenormalizer(): void
     {
         $exception = LogicExceptionFactory::createForCannotDenormalizerForChainableFixtureBuilderDenormalizer('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'As a chainable denormalizer, "foo" should be called only if "::canDenormalize() returns true. Got '
             .'false instead.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 
     public function testCreateForCannotHaveBothConstructorAndFactory(): void
     {
         $exception = LogicExceptionFactory::createForCannotHaveBothConstructorAndFactory();
 
-        static::assertEquals(
+        self::assertEquals(
             'Cannot use the fixture property "__construct" and "__factory" together.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

@@ -19,22 +19,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
+ * @internal
  */
 class ObjectGeneratorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {
-        static::assertTrue(is_a(ObjectGeneratorNotFoundException::class, LogicException::class, true));
+        self::assertTrue(is_a(ObjectGeneratorNotFoundException::class, LogicException::class, true));
     }
 
     public function testIsNotAGenerationThrowable(): void
     {
-        static::assertFalse(is_a(ObjectGeneratorNotFoundException::class, GenerationThrowable::class, true));
+        self::assertFalse(is_a(ObjectGeneratorNotFoundException::class, GenerationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildObjectGeneratorNotFoundException();
-        static::assertInstanceOf(ChildObjectGeneratorNotFoundException::class, $exception);
+        self::assertInstanceOf(ChildObjectGeneratorNotFoundException::class, $exception);
     }
 }

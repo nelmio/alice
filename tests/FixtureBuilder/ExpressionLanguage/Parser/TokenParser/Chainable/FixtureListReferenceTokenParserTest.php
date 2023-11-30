@@ -24,17 +24,18 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureListReferenceTokenParser
+ * @internal
  */
 class FixtureListReferenceTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(FixtureListReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(FixtureListReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FixtureListReferenceTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FixtureListReferenceTokenParser::class))->isCloneable());
     }
 
     /**
@@ -45,7 +46,7 @@ class FixtureListReferenceTokenParserTest extends TestCase
         $parser = new FixtureListReferenceTokenParser();
         $actual = $parser->canParse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testThrowsAnExceptionIfInvalidTokenIsGiven(): void
@@ -83,10 +84,10 @@ class FixtureListReferenceTokenParserTest extends TestCase
         $parser = new FixtureListReferenceTokenParser();
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
-    public function provideTokens()
+    public function provideTokens(): iterable
     {
         return [
             [

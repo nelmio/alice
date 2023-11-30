@@ -30,7 +30,7 @@ class DummyChainableParserAwareDenormalizer implements ChainableFixtureDenormali
      * @var FlagParserInterface|null
      */
     public $parser;
-    
+
     /**
      * @var FlagParserAwareInterface
      */
@@ -41,12 +41,12 @@ class DummyChainableParserAwareDenormalizer implements ChainableFixtureDenormali
         $this->decoratedDenormalizer = $decoratedDenormalizer;
         $this->decoratedFlagAware = $decoratedFlagAware;
     }
-    
+
     public function canDenormalize(string $reference): bool
     {
         return $this->decoratedDenormalizer->canDenormalize($reference);
     }
-    
+
     public function denormalize(
         FixtureBag $builtFixtures,
         string $className,
@@ -56,16 +56,16 @@ class DummyChainableParserAwareDenormalizer implements ChainableFixtureDenormali
     ): FixtureBag {
         return $this->decoratedDenormalizer->denormalize($builtFixtures, $className, $fixtureId, $specs, $flags);
     }
-    
+
     public function withFlagParser(FlagParserInterface $parser)
     {
         $this->decoratedFlagAware->withFlagParser($parser);
         $clone = clone $this;
         $clone->parser = $parser;
-        
+
         return $clone;
     }
-    
+
     public function __clone()
     {
         $this->decoratedDenormalizer = clone $this->decoratedDenormalizer;

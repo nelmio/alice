@@ -30,6 +30,7 @@ use ReflectionObject;
 
 /**
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NoMethodCallInstantiator
+ * @internal
  */
 class NoMethodCallInstantiatorTest extends TestCase
 {
@@ -45,26 +46,26 @@ class NoMethodCallInstantiatorTest extends TestCase
 
     public function testIsAChainableInstantiator(): void
     {
-        static::assertTrue(is_a(NoMethodCallInstantiator::class, ChainableInstantiatorInterface::class, true));
+        self::assertTrue(is_a(NoMethodCallInstantiator::class, ChainableInstantiatorInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(NoMethodCallInstantiator::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(NoMethodCallInstantiator::class))->isCloneable());
     }
 
     public function testCanInstantiateFixtureWithNoMethodCallConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create(new NoMethodCall()));
 
-        static::assertTrue($this->instantiator->canInstantiate($fixture));
+        self::assertTrue($this->instantiator->canInstantiate($fixture));
     }
 
     public function testCannotInstantiateFixtureWithDefaultConstructor(): void
     {
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
 
-        static::assertFalse($this->instantiator->canInstantiate($fixture));
+        self::assertFalse($this->instantiator->canInstantiate($fixture));
     }
 
     public function testInstantiatesWithReflectionAndNoArguments(): void
@@ -72,27 +73,27 @@ class NoMethodCallInstantiatorTest extends TestCase
         $fixture = new SimpleFixture(
             'dummy',
             DummyWithRequiredParameterInConstructor::class,
-            SpecificationBagFactory::create()
+            SpecificationBagFactory::create(),
         );
         $set = $this->instantiator->instantiate($fixture, ResolvedFixtureSetFactory::create(), new GenerationContext());
 
         $instance = $set->getObjects()->get($fixture)->getInstance();
-        static::assertInstanceOf(DummyWithRequiredParameterInConstructor::class, $instance);
+        self::assertInstanceOf(DummyWithRequiredParameterInConstructor::class, $instance);
 
         try {
             (new ReflectionObject($instance))->getProperty('requiredParam');
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (ReflectionException $exception) {
             if (PHP_VERSION_ID < 80000) {
-                static::assertEquals(
+                self::assertEquals(
                     'Property requiredParam does not exist',
-                    $exception->getMessage()
+                    $exception->getMessage(),
                 );
             } else {
-                static::assertEquals(
+                self::assertEquals(
                     'Property Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor::$requiredParam'
-                    . ' does not exist',
-                    $exception->getMessage()
+                    .' does not exist',
+                    $exception->getMessage(),
                 );
             }
         }
@@ -104,8 +105,8 @@ class NoMethodCallInstantiatorTest extends TestCase
             'dummy',
             AbstractDummyWithRequiredParameterInConstructor::class,
             SpecificationBagFactory::create(
-                new SimpleMethodCall('fake', [10])
-            )
+                new SimpleMethodCall('fake', [10]),
+            ),
         );
 
         $this->expectException(InstantiationException::class);

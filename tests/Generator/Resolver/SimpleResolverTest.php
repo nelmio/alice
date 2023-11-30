@@ -28,6 +28,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
+ * @internal
  */
 class SimpleResolverTest extends TestCase
 {
@@ -35,7 +36,7 @@ class SimpleResolverTest extends TestCase
 
     public function testIsAResolver(): void
     {
-        static::assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));
+        self::assertTrue(is_a(SimpleFixtureSetResolver::class, FixtureSetResolverInterface::class, true));
     }
 
     public function testCanResolveAFixtureSet(): void
@@ -79,7 +80,7 @@ class SimpleResolverTest extends TestCase
         $resolver = new SimpleFixtureSetResolver($parametersResolver, $fixtureResolver);
         $actual = $resolver->resolve($set);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $parametersResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(1);
         $fixtureResolverProphecy->resolve(Argument::any())->shouldHaveBeenCalledTimes(1);

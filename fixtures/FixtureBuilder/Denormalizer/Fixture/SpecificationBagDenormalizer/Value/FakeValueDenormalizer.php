@@ -21,8 +21,8 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeValueDenormalizer implements ValueDenormalizerInterface
 {
     use NotCallableTrait;
-    
-    public function denormalize(FixtureInterface $scope, FlagBag $flags = null, $value): void
+
+    public function denormalize(FixtureInterface $scope, ?FlagBag $flags = null, $value): void
     {
         $this->__call(__FUNCTION__, func_get_args());
     }

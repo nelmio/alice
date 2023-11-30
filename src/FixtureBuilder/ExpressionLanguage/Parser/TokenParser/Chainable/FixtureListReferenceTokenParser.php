@@ -31,7 +31,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
     use IsAServiceTrait;
 
     /** @private */
-    const REGEX = NullListNameDenormalizer::REGEX;
+    public const REGEX = NullListNameDenormalizer::REGEX;
 
     /**
      * @var string Unique token
@@ -42,10 +42,10 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
     {
         $this->token = uniqid(__CLASS__, true);
     }
-    
+
     public function canParse(Token $token): bool
     {
-        return $token->getType() === TokenType::LIST_REFERENCE_TYPE;
+        return TokenType::LIST_REFERENCE_TYPE === $token->getType();
     }
 
     /**
@@ -73,7 +73,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
     private function buildReferences(Token $token): array
     {
         $matches = [];
-        $name = (string) substr($token->getValue(), 1);
+        $name = (string) mb_substr($token->getValue(), 1);
 
         if (1 !== preg_match(self::REGEX, $name, $matches)) {
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
@@ -86,7 +86,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
             $fixtureId = str_replace(
                 sprintf('{%s}', $matches['list']),
                 $element,
-                $name
+                $name,
             );
             $references[] = new FixtureReferenceValue($fixtureId);
         }

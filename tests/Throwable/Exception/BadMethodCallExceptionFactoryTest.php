@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\BadMethodCallExceptionFactory
+ * @internal
  */
 class BadMethodCallExceptionFactoryTest extends TestCase
 {
@@ -24,11 +25,11 @@ class BadMethodCallExceptionFactoryTest extends TestCase
     {
         $exception = BadMethodCallExceptionFactory::createForUnknownMethod('foo');
 
-        static::assertEquals(
+        self::assertEquals(
             'Unknown method "foo".',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

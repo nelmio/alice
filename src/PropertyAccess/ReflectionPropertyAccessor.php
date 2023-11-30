@@ -35,7 +35,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
     {
         $this->decoratedPropertyAccessor = $decoratedPropertyAccessor;
     }
-    
+
     public function setValue(&$objectOrArray, $propertyPath, $value): void
     {
         try {
@@ -46,7 +46,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
                 throw $exception;
             }
 
-            if ($propertyReflectionProperty->getDeclaringClass()->getName() !== get_class($objectOrArray)) {
+            if ($propertyReflectionProperty->getDeclaringClass()->getName() !== $objectOrArray::class) {
                 $propertyReflectionProperty->setAccessible(true);
 
                 $propertyReflectionProperty->setValue($objectOrArray, $value);
@@ -59,13 +59,13 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
                     $object->{$propertyPath} = $value;
                 },
                 $objectOrArray,
-                $objectOrArray
+                $objectOrArray,
             );
 
             $setPropertyClosure($objectOrArray);
         }
     }
-    
+
     public function getValue($objectOrArray, $propertyPath): mixed
     {
         try {
@@ -76,29 +76,27 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
                 throw $exception;
             }
 
-            if ($propertyReflectionProperty->getDeclaringClass()->getName() !== get_class($objectOrArray)) {
+            if ($propertyReflectionProperty->getDeclaringClass()->getName() !== $objectOrArray::class) {
                 $propertyReflectionProperty->setAccessible(true);
 
                 return $propertyReflectionProperty->getValue($objectOrArray);
             }
 
             $getPropertyClosure = Closure::bind(
-                function ($object) use ($propertyPath) {
-                    return $object->{$propertyPath};
-                },
+                fn ($object) => $object->{$propertyPath},
                 $objectOrArray,
-                $objectOrArray
+                $objectOrArray,
             );
 
             return $getPropertyClosure($objectOrArray);
         }
     }
-    
+
     public function isWritable($objectOrArray, $propertyPath): bool
     {
         return $this->decoratedPropertyAccessor->isWritable($objectOrArray, $propertyPath) || $this->propertyExists($objectOrArray, $propertyPath);
     }
-    
+
     public function isReadable($objectOrArray, $propertyPath): bool
     {
         return $this->decoratedPropertyAccessor->isReadable($objectOrArray, $propertyPath) || $this->propertyExists($objectOrArray, $propertyPath);
@@ -121,7 +119,7 @@ final class ReflectionPropertyAccessor implements PropertyAccessorInterface
             return null;
         }
 
-        $reflectionClass = (new ReflectionClass(get_class($objectOrArray)));
+        $reflectionClass = (new ReflectionClass($objectOrArray::class));
         while ($reflectionClass instanceof ReflectionClass) {
             if ($reflectionClass->hasProperty($propertyPath)
                 && false === $reflectionClass->getProperty($propertyPath)->isStatic()

@@ -29,6 +29,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\PropertyReferenceTokenParser
+ * @internal
  */
 class PropertyReferenceTokenParserTest extends TestCase
 {
@@ -36,12 +37,12 @@ class PropertyReferenceTokenParserTest extends TestCase
 
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(PropertyReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(PropertyReferenceTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(PropertyReferenceTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(PropertyReferenceTokenParser::class))->isCloneable());
     }
 
     public function testCanParseDynamicArrayTokens(): void
@@ -50,8 +51,8 @@ class PropertyReferenceTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new PropertyReferenceTokenParser();
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testThrowsAnExceptionIfNoDecoratedParserIsFound(): void
@@ -107,7 +108,7 @@ class PropertyReferenceTokenParserTest extends TestCase
         $parser = new PropertyReferenceTokenParser($decoratedParser);
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }

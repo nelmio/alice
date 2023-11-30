@@ -36,7 +36,7 @@ final class EscapedValueTokenParser implements ChainableTokenParserInterface
     {
         $this->tokenizer = new FunctionTokenizer();
     }
-    
+
     public function canParse(Token $token): bool
     {
         return TokenType::ESCAPED_VALUE_TYPE === $token->getType();
@@ -52,6 +52,6 @@ final class EscapedValueTokenParser implements ChainableTokenParserInterface
             throw ExpressionLanguageExceptionFactory::createForUnparsableToken($token);
         }
 
-        return $this->tokenizer->detokenize(substr($value, 1));
+        return $this->tokenizer->detokenize(mb_substr($value, 1));
     }
 }

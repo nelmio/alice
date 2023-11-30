@@ -22,6 +22,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  * @group integration
  *
  * @coversNothing
+ * @internal
  */
 class LoaderIntegrationTest extends CoreLoaderIntegrationTest
 {
@@ -29,26 +30,26 @@ class LoaderIntegrationTest extends CoreLoaderIntegrationTest
      * @var KernelInterface
      */
     private static $kernel;
-    
+
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         static::$kernel = KernelFactory::createKernel();
     }
-    
+
     protected function setUp(): void
     {
         static::$kernel->boot();
 
         $this->nonIsolatedLoader = $this->loader = new NonIsolatedSymfonyLoader(static::$kernel->getContainer());
     }
-    
+
     protected function tearDown(): void
     {
         static::$kernel->shutdown();
     }
-    
+
     public static function tearDownAfterClass(): void
     {
         static::$kernel = null;

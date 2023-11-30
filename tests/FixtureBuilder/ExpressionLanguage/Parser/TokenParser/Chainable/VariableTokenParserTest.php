@@ -23,17 +23,18 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\VariableTokenParser
+ * @internal
  */
 class VariableTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {
-        static::assertTrue(is_a(VariableTokenParser::class, ChainableTokenParserInterface::class, true));
+        self::assertTrue(is_a(VariableTokenParser::class, ChainableTokenParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(VariableTokenParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(VariableTokenParser::class))->isCloneable());
     }
 
     public function testCanParseDynamicArrayTokens(): void
@@ -42,8 +43,8 @@ class VariableTokenParserTest extends TestCase
         $anotherToken = new Token('', new TokenType(TokenType::IDENTITY_TYPE));
         $parser = new VariableTokenParser();
 
-        static::assertTrue($parser->canParse($token));
-        static::assertFalse($parser->canParse($anotherToken));
+        self::assertTrue($parser->canParse($token));
+        self::assertFalse($parser->canParse($anotherToken));
     }
 
     public function testThrowsAnExceptionIfCouldNotParseToken(): void
@@ -53,14 +54,14 @@ class VariableTokenParserTest extends TestCase
             $parser = new VariableTokenParser();
 
             $parser->parse($token);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (ParseException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not parse the token "" (type: VARIABLE_TYPE).',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
-            static::assertEquals(0, $exception->getCode());
-            static::assertNotNull($exception->getPrevious());
+            self::assertEquals(0, $exception->getCode());
+            self::assertNotNull($exception->getPrevious());
         }
     }
 
@@ -72,6 +73,6 @@ class VariableTokenParserTest extends TestCase
         $parser = new VariableTokenParser();
         $actual = $parser->parse($token);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

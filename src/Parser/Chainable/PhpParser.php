@@ -23,8 +23,8 @@ final class PhpParser implements ChainableParserInterface
     use IsAServiceTrait;
 
     /** @interval */
-    const REGEX = '/.+\.php[7]?$/i';
-    
+    public const REGEX = '/.+\.php[7]?$/i';
+
     public function canParse(string $file): bool
     {
         if (false === stream_is_local($file)) {

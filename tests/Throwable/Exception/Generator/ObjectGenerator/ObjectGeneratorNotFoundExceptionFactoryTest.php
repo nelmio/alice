@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundExceptionFactory
+ * @internal
  */
 class ObjectGeneratorNotFoundExceptionFactoryTest extends TestCase
 {
@@ -24,11 +25,11 @@ class ObjectGeneratorNotFoundExceptionFactoryTest extends TestCase
     {
         $exception = ObjectGeneratorNotFoundExceptionFactory::createUnexpectedCall('dummyMethod');
 
-        static::assertEquals(
+        self::assertEquals(
             'Expected method "dummyMethod" to be called only if it has a generator.',
-            $exception->getMessage()
+            $exception->getMessage(),
         );
-        static::assertEquals(0, $exception->getCode());
-        static::assertNull($exception->getPrevious());
+        self::assertEquals(0, $exception->getCode());
+        self::assertNull($exception->getPrevious());
     }
 }

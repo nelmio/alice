@@ -25,8 +25,8 @@ final class ResolverNotFoundExceptionFactory
         return new ResolverNotFoundException(
             sprintf(
                 'No resolver found to resolve parameter "%s".',
-                $parameterKey
-            )
+                $parameterKey,
+            ),
         );
     }
 
@@ -35,8 +35,8 @@ final class ResolverNotFoundExceptionFactory
         return new ResolverNotFoundException(
             sprintf(
                 'No resolver found to resolve value "%s".',
-                $value
-            )
+                $value,
+            ),
         );
     }
 
@@ -45,8 +45,8 @@ final class ResolverNotFoundExceptionFactory
         return new ResolverNotFoundException(
             sprintf(
                 'Expected method "%s" to be called only if it has a resolver.',
-                $method
-            )
+                $method,
+            ),
         );
     }
 

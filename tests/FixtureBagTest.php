@@ -25,6 +25,7 @@ use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\FixtureBag
+ * @internal
  */
 class FixtureBagTest extends TestCase
 {
@@ -32,7 +33,7 @@ class FixtureBagTest extends TestCase
      * @var ReflectionProperty
      */
     private $propRefl;
-    
+
     protected function setUp(): void
     {
         $propRelf = (new ReflectionClass(FixtureBag::class))->getProperty('fixtures');
@@ -46,18 +47,18 @@ class FixtureBagTest extends TestCase
         $fixture = new DummyFixture('foo');
         $bag = (new FixtureBag())->with($fixture);
 
-        static::assertTrue($bag->has('foo'));
-        static::assertFalse($bag->has('bar'));
+        self::assertTrue($bag->has('foo'));
+        self::assertFalse($bag->has('bar'));
 
-        static::assertEquals($fixture, $bag->get('foo'));
+        self::assertEquals($fixture, $bag->get('foo'));
 
         try {
             $bag->get('bar');
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (FixtureNotFoundException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Could not find the fixture "bar".',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
     }
@@ -74,10 +75,10 @@ class FixtureBagTest extends TestCase
         // @phpstan-ignore-next-line
         $bag->get('foo')->setSpecs(SpecificationBagFactory::create(new NoMethodCall()));
 
-        static::assertEquals(
+        self::assertEquals(
             (new FixtureBag())
                 ->with(new MutableFixture('foo', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create())),
-            $bag
+            $bag,
         );
     }
 
@@ -89,17 +90,17 @@ class FixtureBagTest extends TestCase
         $newBag = $bag->with($fixture);
         $newBagEmptied = $newBag->without($fixture);
 
-        static::assertInstanceOf(FixtureBag::class, $newBag);
-        static::assertNotSame($newBag, $bag);
+        self::assertInstanceOf(FixtureBag::class, $newBag);
+        self::assertNotSame($newBag, $bag);
 
-        static::assertEquals(new FixtureBag(), $bag);
+        self::assertEquals(new FixtureBag(), $bag);
         $this->assertSameFixtures(
             [
                 'foo' => $fixture,
             ],
-            $newBag
+            $newBag,
         );
-        static::assertEquals(new FixtureBag(), $newBagEmptied);
+        self::assertEquals(new FixtureBag(), $newBagEmptied);
     }
 
     public function testIfTwoFixturesWithTheSameIdIsAddedThenTheFirstOneWillBeOverridden(): void
@@ -109,20 +110,19 @@ class FixtureBagTest extends TestCase
 
         $bag = (new FixtureBag())
             ->with($fixture1)
-            ->with($fixture2)
-        ;
+            ->with($fixture2);
 
         $this->assertNotSameFixtures(
             [
                 'foo' => $fixture1,
             ],
-            $bag
+            $bag,
         );
         $this->assertSameFixtures(
             [
                 'foo' => $fixture2,
             ],
-            $bag
+            $bag,
         );
     }
 
@@ -135,30 +135,29 @@ class FixtureBagTest extends TestCase
         $bag1 = (new FixtureBag())->with($fixture1);
         $bag2 = (new FixtureBag())
             ->with($fixture2)
-            ->with($fixture3)
-        ;
+            ->with($fixture3);
         $bag3 = $bag1->mergeWith($bag2);
 
-        static::assertInstanceOf(FixtureBag::class, $bag2);
+        self::assertInstanceOf(FixtureBag::class, $bag2);
         $this->assertSameFixtures(
             [
                 'foo' => $fixture1,
             ],
-            $bag1
+            $bag1,
         );
         $this->assertSameFixtures(
             [
                 'foo' => $fixture2,
                 'bar' => $fixture3,
             ],
-            $bag2
+            $bag2,
         );
         $this->assertSameFixtures(
             [
                 'foo' => $fixture2,
                 'bar' => $fixture3,
             ],
-            $bag3
+            $bag3,
         );
     }
 
@@ -169,15 +168,14 @@ class FixtureBagTest extends TestCase
 
         $bag = (new FixtureBag())
             ->with($fixture1)
-            ->with($fixture2)
-        ;
+            ->with($fixture2);
 
         $fixtures = [];
         foreach ($bag as $key => $value) {
             $fixtures[$key] = $value;
         }
 
-        static::assertSame($fixtures, $this->propRefl->getValue($bag));
+        self::assertSame($fixtures, $this->propRefl->getValue($bag));
     }
 
     public function testToArray(): void
@@ -187,25 +185,24 @@ class FixtureBagTest extends TestCase
 
         $bag = (new FixtureBag())
             ->with($fixture1)
-            ->with($fixture2)
-        ;
+            ->with($fixture2);
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'foo' => $fixture1,
                 'bar' => $fixture2,
             ],
-            $bag->toArray()
+            $bag->toArray(),
         );
     }
 
     private function assertSameFixtures(array $expected, FixtureBag $actual): void
     {
-        static::assertEquals($expected, $this->propRefl->getValue($actual));
+        self::assertEquals($expected, $this->propRefl->getValue($actual));
     }
 
     private function assertNotSameFixtures(array $expected, FixtureBag $actual): void
     {
-        static::assertNotEquals($expected, $this->propRefl->getValue($actual));
+        self::assertNotEquals($expected, $this->propRefl->getValue($actual));
     }
 }

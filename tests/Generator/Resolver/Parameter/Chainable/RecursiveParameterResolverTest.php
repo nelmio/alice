@@ -28,6 +28,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver
+ * @internal
  */
 class RecursiveParameterResolverTest extends TestCase
 {
@@ -35,28 +36,28 @@ class RecursiveParameterResolverTest extends TestCase
 
     public function testIsAChainableParameterResolver(): void
     {
-        static::assertTrue(is_a(RecursiveParameterResolver::class, ChainableParameterResolverInterface::class, true));
+        self::assertTrue(is_a(RecursiveParameterResolver::class, ChainableParameterResolverInterface::class, true));
     }
 
     public function testIsAParameterResolverAwareResolver(): void
     {
-        static::assertTrue(is_a(RecursiveParameterResolver::class, ParameterResolverAwareInterface::class, true));
+        self::assertTrue(is_a(RecursiveParameterResolver::class, ParameterResolverAwareInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(RecursiveParameterResolver::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(RecursiveParameterResolver::class))->isCloneable());
     }
 
     public function testThrowsExceptionIfInvalidRecursionLimitGiven(): void
     {
         try {
             new RecursiveParameterResolver(new FakeChainableParameterResolver(), 1);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (InvalidArgumentException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Expected limit for recursive calls to be of at least 2. Got "1" instead.',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }
     }
@@ -66,13 +67,13 @@ class RecursiveParameterResolverTest extends TestCase
         $resolver = new RecursiveParameterResolver(new DummyChainableParameterResolverAwareResolver());
         $newResolver = $resolver->withResolver(new FakeParameterResolver());
 
-        static::assertEquals(
+        self::assertEquals(
             new RecursiveParameterResolver(new DummyChainableParameterResolverAwareResolver()),
-            $resolver
+            $resolver,
         );
-        static::assertEquals(
+        self::assertEquals(
             new RecursiveParameterResolver(new DummyChainableParameterResolverAwareResolver(new FakeParameterResolver())),
-            $newResolver
+            $newResolver,
         );
     }
 
@@ -84,13 +85,13 @@ class RecursiveParameterResolverTest extends TestCase
         $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $decoratedResolverProphecy->canResolve($parameter1)->willReturn(false);
         $decoratedResolverProphecy->canResolve($parameter2)->willReturn(true);
-        /* @var ChainableParameterResolverInterface $decoratedResolver */
+        /** @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new RecursiveParameterResolver($decoratedResolver);
 
-        static::assertFalse($resolver->canResolve($parameter1));
-        static::assertTrue($resolver->canResolve($parameter2));
+        self::assertFalse($resolver->canResolve($parameter1));
+        self::assertTrue($resolver->canResolve($parameter2));
 
         $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
@@ -112,26 +113,24 @@ class RecursiveParameterResolverTest extends TestCase
                 $parameter,
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             )
-            ->willReturn($expected)
-        ;
+            ->willReturn($expected);
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'bar'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             )
-            ->willReturn($expected)
-        ;
-        /* @var ChainableParameterResolverInterface $decoratedResolver */
+            ->willReturn($expected);
+        /** @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new RecursiveParameterResolver($decoratedResolver);
         $actual = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(2);
     }
 
@@ -148,56 +147,53 @@ class RecursiveParameterResolverTest extends TestCase
                 $parameter,
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             )
             ->willReturn(
                 new ParameterBag([
                     'foo' => 'first result',
                     'another_param1' => 'val1',
-                ])
-            )
-        ;
+                ]),
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'first result'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             )
             ->willReturn(
                 new ParameterBag([
                     'foo' => 'second result',
                     'another_param2' => 'val2',
                     // 'another_param1' has already been resolved so is not return in the result set!
-                ])
-            )
-        ;
+                ]),
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'second result'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             )
             ->willReturn(
                 new ParameterBag([
                     'foo' => 'second result',   // same as previous
-                ])
-            )
-        ;
-        /* @var ChainableParameterResolverInterface $decoratedResolver */
+                ]),
+            );
+        /** @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new RecursiveParameterResolver($decoratedResolver);
         $actual = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        static::assertEquals(
+        self::assertEquals(
             new ParameterBag([
                 'foo' => 'second result',
                 'another_param1' => 'val1',
                 'another_param2' => 'val2',
             ]),
-            $actual
+            $actual,
         );
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
@@ -205,16 +201,15 @@ class RecursiveParameterResolverTest extends TestCase
     /**
      * @dataProvider provideContexts
      */
-    public function testTheSameContextIsPassedBetweenEachResolution(ResolvingContext $context = null): void
+    public function testTheSameContextIsPassedBetweenEachResolution(?ResolvingContext $context = null): void
     {
         $parameter = new Parameter('foo', null);
 
         $decoratedResolverProphecy = $this->prophesize(ChainableParameterResolverInterface::class);
         $decoratedResolverProphecy
             ->resolve(Argument::any(), Argument::any(), Argument::any(), $context)
-            ->willReturn(new ParameterBag(['foo' => null]))
-        ;
-        /* @var ChainableParameterResolverInterface $decoratedResolver */
+            ->willReturn(new ParameterBag(['foo' => null]));
+        /** @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new RecursiveParameterResolver($decoratedResolver);
@@ -237,52 +232,48 @@ class RecursiveParameterResolverTest extends TestCase
                 $parameter,
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             )
             ->willReturn(
-                new ParameterBag(['foo' => 'result1'])
-            )
-        ;
+                new ParameterBag(['foo' => 'result1']),
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'result1'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             )
             ->willReturn(
-                new ParameterBag(['foo' => 'result2'])
-            )
-        ;
+                new ParameterBag(['foo' => 'result2']),
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'result2'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             )
             ->willReturn(
-                new ParameterBag(['foo' => 'result3'])
-            )
-        ;
+                new ParameterBag(['foo' => 'result3']),
+            );
         $decoratedResolverProphecy
             ->resolve(
                 new Parameter('foo', 'result3'),
                 $unresolvedParameters,
                 $resolvedParameters,
-                $context
+                $context,
             )
             ->willReturn(
-                $expected = new ParameterBag(['foo' => 'result3'])
-            )
-        ;
-        /* @var ChainableParameterResolverInterface $decoratedResolver */
+                $expected = new ParameterBag(['foo' => 'result3']),
+            );
+        /** @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new RecursiveParameterResolver($decoratedResolver);
         $actual = $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(4);
     }
 
@@ -301,21 +292,20 @@ class RecursiveParameterResolverTest extends TestCase
                     $hash = spl_object_hash($args[0]);
 
                     return new ParameterBag(['foo' => uniqid($hash)]);
-                }
-            )
-        ;
-        /* @var ChainableParameterResolverInterface $decoratedResolver */
+                },
+            );
+        /** @var ChainableParameterResolverInterface $decoratedResolver */
         $decoratedResolver = $decoratedResolverProphecy->reveal();
 
         $resolver = new RecursiveParameterResolver($decoratedResolver);
 
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (RecursionLimitReachedException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Recursion limit (5 tries) reached while resolving the parameter "foo"',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
             $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(5);
         }
@@ -324,17 +314,17 @@ class RecursiveParameterResolverTest extends TestCase
 
         try {
             $resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);
-            static::fail('Expected exception to be thrown.');
+            self::fail('Expected exception to be thrown.');
         } catch (RecursionLimitReachedException $exception) {
-            static::assertEquals(
+            self::assertEquals(
                 'Recursion limit (10 tries) reached while resolving the parameter "foo"',
-                $exception->getMessage()
+                $exception->getMessage(),
             );
             $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(15);
         }
     }
 
-    public function provideContexts()
+    public function provideContexts(): iterable
     {
         return [
             'no context' => [

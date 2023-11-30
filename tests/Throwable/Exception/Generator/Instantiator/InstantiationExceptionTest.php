@@ -19,22 +19,23 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
+ * @internal
  */
 class InstantiationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(InstantiationException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(InstantiationException::class, RuntimeException::class, true));
     }
 
     public function testIsAnInstantiationThrowable(): void
     {
-        static::assertTrue(is_a(InstantiationException::class, InstantiationThrowable::class, true));
+        self::assertTrue(is_a(InstantiationException::class, InstantiationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildInstantiationException();
-        static::assertInstanceOf(ChildInstantiationException::class, $exception);
+        self::assertInstanceOf(ChildInstantiationException::class, $exception);
     }
 }

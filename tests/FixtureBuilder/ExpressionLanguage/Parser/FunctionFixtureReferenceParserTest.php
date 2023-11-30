@@ -25,6 +25,7 @@ use ReflectionClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser
+ * @internal
  */
 class FunctionFixtureReferenceParserTest extends TestCase
 {
@@ -32,12 +33,12 @@ class FunctionFixtureReferenceParserTest extends TestCase
 
     public function testIsAParser(): void
     {
-        static::assertTrue(is_a(FunctionFixtureReferenceParser::class, ParserInterface::class, true));
+        self::assertTrue(is_a(FunctionFixtureReferenceParser::class, ParserInterface::class, true));
     }
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(FunctionFixtureReferenceParser::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(FunctionFixtureReferenceParser::class))->isCloneable());
     }
 
     public function testIsInstantiatedWithAParser(): void
@@ -58,7 +59,7 @@ class FunctionFixtureReferenceParserTest extends TestCase
         $parser = new FunctionFixtureReferenceParser($decoratedParser);
         $actual = $parser->parse($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -85,9 +86,8 @@ class FunctionFixtureReferenceParserTest extends TestCase
                     new FakeValue(),
                     new FixtureReferenceValue('hatter'),
                     new FunctionCallValue('h'),
-                ])
-            )
-        ;
+                ]),
+            );
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -97,7 +97,7 @@ class FunctionFixtureReferenceParserTest extends TestCase
                 new ListValue([
                     'bob',
                     new FunctionCallValue('f'),
-                ])
+                ]),
             ),
             new FakeValue(),
             new FunctionCallValue('i'),
@@ -111,14 +111,14 @@ class FunctionFixtureReferenceParserTest extends TestCase
                 new ListValue([
                     'hatter',
                     new FunctionCallValue('h'),
-                ])
+                ]),
             ),
         ]);
 
         $parser = new FunctionFixtureReferenceParser($decoratedParser);
         $actual = $parser->parse($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
@@ -134,9 +134,8 @@ class FunctionFixtureReferenceParserTest extends TestCase
                 new ListValue([
                     new FakeValue(),
                     new FakeValue(),
-                ])
-            )
-        ;
+                ]),
+            );
         /** @var ParserInterface $decoratedParser */
         $decoratedParser = $decoratedParserProphecy->reveal();
 
@@ -148,13 +147,15 @@ class FunctionFixtureReferenceParserTest extends TestCase
         $parser = new FunctionFixtureReferenceParser($decoratedParser);
         $actual = $parser->parse($value);
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
     /**
      * @dataProvider provideOneElementValues
+     * @param mixed $value
+     * @param mixed $expected
      */
     public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($value, $expected): void
     {
@@ -166,10 +167,10 @@ class FunctionFixtureReferenceParserTest extends TestCase
         $parser = new FunctionFixtureReferenceParser($decoratedParser);
         $actual = $parser->parse('');
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
-    public function provideOneElementValues()
+    public function provideOneElementValues(): iterable
     {
         yield 'one value' => [
             new FakeValue(),
@@ -187,7 +188,7 @@ class FunctionFixtureReferenceParserTest extends TestCase
                 new FunctionCallValue('foo'),
             ]),
             new FixtureReferenceValue(
-                new FunctionCallValue('foo')
+                new FunctionCallValue('foo'),
             ),
         ];
     }

@@ -22,7 +22,7 @@ use Nelmio\Alice\ObjectInterface;
 class FakeCaller implements CallerInterface
 {
     use NotCallableTrait;
-    
+
     public function doCallsOn(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
     {
         $this->__call(__METHOD__, func_get_args());

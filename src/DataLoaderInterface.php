@@ -23,9 +23,9 @@ interface DataLoaderInterface
     /**
      * Loads a data set.
      *
-     * @param array  $data       Data to load
-     * @param array  $parameters Additional parameters to inject
-     * @param array  $objects    Additional objects to inject
+     * @param array $data       Data to load
+     * @param array $parameters Additional parameters to inject
+     * @param array $objects    Additional objects to inject
      *
      * @throws LoadingThrowable
      *

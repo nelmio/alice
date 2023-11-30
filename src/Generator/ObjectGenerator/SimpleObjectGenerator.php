@@ -35,12 +35,12 @@ use Throwable;
 final class SimpleObjectGenerator implements ObjectGeneratorInterface
 {
     use IsAServiceTrait;
-    
+
     /**
      * @var InstantiatorInterface
      */
     private $instantiator;
-    
+
     /**
      * @var HydratorInterface
      */
@@ -77,7 +77,7 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
         $this->hydrator = $hydrator;
         $this->caller = $caller;
     }
-    
+
     public function generate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
@@ -102,10 +102,10 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
                 'An error occurred while generating the fixture "%s" (%s): %s',
                 $fixture->getId(),
                 $fixture->getClassName(),
-                $throwable->getMessage()
+                $throwable->getMessage(),
             ),
             $throwable->getCode(),
-            $throwable
+            $throwable,
         ];
 
         throw new $throwableClass(...$arguments);
@@ -161,8 +161,8 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
 
         return $set->withObjects(
             $set->getObjects()->with(
-                new CompleteObject($object)
-            )
+                new CompleteObject($object),
+            ),
         );
     }
 
@@ -170,7 +170,7 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
     {
         $object = $set->getObjects()->get($fixture);
 
-        return (
+        return
             $object instanceof CompleteObject
             || $context->needsCompleteGeneration()
             || false === $context->isFirstPass()
@@ -178,7 +178,6 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
                 false === $context->needsCompleteGeneration()
                 && $fixture->getSpecs()->getProperties()->isEmpty()
                 && $fixture->getSpecs()->getMethodCalls()->isEmpty()
-            )
-        );
+            );
     }
 }

@@ -35,17 +35,17 @@ class ProphecyChainableTokenParserAware implements ChainableTokenParserInterface
         $this->decoratedParser = $decoratedParser;
         $this->decoratedAware = $decoratedAware;
     }
-    
+
     public function canParse(Token $token): bool
     {
         return $this->decoratedParser->canParse($token);
     }
-    
+
     public function withParser(ParserInterface $parser)
     {
         return $this->decoratedAware->withParser($parser);
     }
-    
+
     public function parse(Token $token)
     {
         return $this->decoratedParser->parse($token);

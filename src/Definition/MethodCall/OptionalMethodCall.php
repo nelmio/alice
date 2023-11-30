@@ -36,25 +36,25 @@ final class OptionalMethodCall implements MethodCallInterface
         $this->methodCall = $methodCall;
         $this->flag = $flag;
     }
-    
-    public function withArguments(array $arguments = null): self
+
+    public function withArguments(?array $arguments = null): self
     {
         $clone = clone $this;
         $clone->methodCall = $clone->methodCall->withArguments($arguments);
 
         return $clone;
     }
-    
+
     public function getCaller()
     {
         return $this->methodCall->getCaller();
     }
-    
+
     public function getMethod(): string
     {
         return $this->methodCall->getMethod();
     }
-    
+
     public function getArguments()
     {
         return $this->methodCall->getArguments();
@@ -72,7 +72,7 @@ final class OptionalMethodCall implements MethodCallInterface
     {
         return $this->methodCall;
     }
-    
+
     public function __toString(): string
     {
         return $this->methodCall->__toString();

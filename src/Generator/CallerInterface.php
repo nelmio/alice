@@ -20,7 +20,7 @@ interface CallerInterface
     /**
      * Do calls on the already hydrated object.
      *
-     * @param ObjectInterface    $object     Hydrated object
+     * @param ObjectInterface $object Hydrated object
      *
      * @return ResolvedFixtureSet Set containing the object on which the calls have been made.
      */

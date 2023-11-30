@@ -22,6 +22,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\Definition\Object\SimpleObject
+ * @internal
  */
 class SimpleObjectTest extends TestCase
 {
@@ -29,7 +30,7 @@ class SimpleObjectTest extends TestCase
      * @var ReflectionProperty
      */
     private $propRefl;
-    
+
     protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(SimpleObject::class))->getProperty('instance');
@@ -38,7 +39,7 @@ class SimpleObjectTest extends TestCase
 
     public function testIsAnObject(): void
     {
-        static::assertTrue(is_a(SimpleObject::class, ObjectInterface::class, true));
+        self::assertTrue(is_a(SimpleObject::class, ObjectInterface::class, true));
     }
 
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -48,8 +49,8 @@ class SimpleObjectTest extends TestCase
 
         $object = new SimpleObject($reference, $instance);
 
-        static::assertEquals($reference, $object->getId());
-        static::assertEquals($instance, $object->getInstance());
+        self::assertEquals($reference, $object->getId());
+        self::assertEquals($instance, $object->getInstance());
     }
 
     public function testIsNotImmutable(): void
@@ -68,7 +69,7 @@ class SimpleObjectTest extends TestCase
         $expected = StdClassFactory::create(['foo' => 'bar', 'ping' => 'pong']);
         $actual = $object->getInstance();
 
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testNamedConstructor(): void
@@ -82,7 +83,7 @@ class SimpleObjectTest extends TestCase
         $originalNewInstance = clone $newInstance;
         $newObject = $object->withInstance($newInstance);
 
-        static::assertEquals(new SimpleObject($reference, $originalInstance), $object);
-        static::assertEquals(new SimpleObject($reference, $originalNewInstance), $newObject);
+        self::assertEquals(new SimpleObject($reference, $originalInstance), $object);
+        self::assertEquals(new SimpleObject($reference, $originalNewInstance), $newObject);
     }
 }

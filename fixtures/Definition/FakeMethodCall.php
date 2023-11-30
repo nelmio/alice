@@ -18,27 +18,27 @@ use Nelmio\Alice\NotCallableTrait;
 class FakeMethodCall implements MethodCallInterface
 {
     use NotCallableTrait;
-    
-    public function withArguments(array $arguments = null): void
+
+    public function withArguments(?array $arguments = null): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getCaller(): void
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getMethod(): string
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function getArguments(): array
     {
         $this->__call(__METHOD__, func_get_args());
     }
-    
+
     public function __toString(): string
     {
         $this->__call(__METHOD__, func_get_args());

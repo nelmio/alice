@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\BareFixtureSet
+ * @internal
  */
 class BareFixtureSetTest extends TestCase
 {
@@ -28,11 +29,11 @@ class BareFixtureSetTest extends TestCase
     {
         $set = new BareFixtureSet(
             $parameters = (new ParameterBag())->with(new Parameter('foo', 'bar')),
-            $fixtures = (new FixtureBag())->with(new DummyFixture('foo'))
+            $fixtures = (new FixtureBag())->with(new DummyFixture('foo')),
         );
 
-        static::assertEquals($parameters, $set->getParameters());
-        static::assertEquals($fixtures, $set->getFixtures());
+        self::assertEquals($parameters, $set->getParameters());
+        self::assertEquals($fixtures, $set->getFixtures());
     }
 
     /**
@@ -41,6 +42,6 @@ class BareFixtureSetTest extends TestCase
      */
     public function testIsImmutable(): void
     {
-        static::assertTrue(true, 'Nothing to do.');
+        self::assertTrue(true, 'Nothing to do.');
     }
 }

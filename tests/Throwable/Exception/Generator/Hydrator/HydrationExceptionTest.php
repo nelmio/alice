@@ -19,22 +19,23 @@ use RuntimeException;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationException
+ * @internal
  */
 class HydrationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {
-        static::assertTrue(is_a(HydrationException::class, RuntimeException::class, true));
+        self::assertTrue(is_a(HydrationException::class, RuntimeException::class, true));
     }
 
     public function testIsAHydrationThrowable(): void
     {
-        static::assertTrue(is_a(HydrationException::class, HydrationThrowable::class, true));
+        self::assertTrue(is_a(HydrationException::class, HydrationThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildHydrationException();
-        static::assertInstanceOf(ChildHydrationException::class, $exception);
+        self::assertInstanceOf(ChildHydrationException::class, $exception);
     }
 }

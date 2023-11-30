@@ -19,22 +19,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException
+ * @internal
  */
 class LexExceptionTest extends TestCase
 {
     public function testIsAnException(): void
     {
-        static::assertTrue(is_a(LexException::class, Exception::class, true));
+        self::assertTrue(is_a(LexException::class, Exception::class, true));
     }
 
     public function testIsAParseThrowable(): void
     {
-        static::assertTrue(is_a(LexException::class, ExpressionLanguageParseThrowable::class, true));
+        self::assertTrue(is_a(LexException::class, ExpressionLanguageParseThrowable::class, true));
     }
 
     public function testIsExtensible(): void
     {
         $exception = new ChildLexException();
-        static::assertInstanceOf(ChildLexException::class, $exception);
+        self::assertInstanceOf(ChildLexException::class, $exception);
     }
 }

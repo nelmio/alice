@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
-use function Nelmio\Alice\deep_clone;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
+use function Nelmio\Alice\deep_clone;
 
 final class UniqueValue implements ValueInterface
 {
@@ -24,11 +24,11 @@ final class UniqueValue implements ValueInterface
      */
     private $id;
 
-    
     private $value;
 
     /**
-     * @param string $id Unique across a fixture set, is used to generate unique values.
+     * @param string $id    Unique across a fixture set, is used to generate unique values.
+     * @param mixed  $value
      */
     public function __construct(string $id, $value)
     {
@@ -50,19 +50,19 @@ final class UniqueValue implements ValueInterface
     {
         return $this->id;
     }
-    
+
     public function getValue()
     {
         return deep_clone($this->value);
     }
-    
+
     public function __toString(): string
     {
         return sprintf(
             '(unique) %s',
             $this->value instanceof ValueInterface
                 ? $this->value
-                : var_export($this->value, true)
+                : var_export($this->value, true),
         );
     }
 }

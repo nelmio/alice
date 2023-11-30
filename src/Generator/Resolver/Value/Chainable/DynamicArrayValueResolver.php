@@ -35,16 +35,16 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
      */
     private $resolver;
 
-    public function __construct(ValueResolverInterface $resolver = null)
+    public function __construct(?ValueResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof DynamicArrayValue;
@@ -80,7 +80,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
         }
 
         $array = [];
-        for ($i = 0; $i < $quantifier; $i++) {
+        for ($i = 0; $i < $quantifier; ++$i) {
             $result = $this->resolver->resolve($element, $fixture, $fixtureSet, $scope, $context);
 
             $array[] = $result->getValue();

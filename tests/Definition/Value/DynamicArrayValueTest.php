@@ -20,37 +20,44 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\Definition\Value\DynamicArrayValue
+ * @internal
  */
 class DynamicArrayValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
-        static::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
+        self::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
     }
 
     /**
      * @dataProvider provideInputTypes
+     * @param mixed $quantifier
+     * @param mixed $element
+     * @param mixed $errorMessage
      */
     public function testThrowsErrorIfInvalidInputType($quantifier, $element, $errorMessage): void
     {
         try {
             new DynamicArrayValue($quantifier, $element);
-            static::fail('Expected error to be thrown.');
+            self::fail('Expected error to be thrown.');
         } catch (TypeError $error) {
-            static::assertEquals($errorMessage, $error->getMessage());
+            self::assertEquals($errorMessage, $error->getMessage());
         }
     }
 
     /**
      * @dataProvider provideValues
+     * @param mixed $quantifier
+     * @param mixed $element
+     * @param mixed $expectedQuantifier
      */
     public function testReadAccessorsReturnPropertiesValues($quantifier, $element, $expectedQuantifier): void
     {
         $value = new DynamicArrayValue($quantifier, $element);
 
-        static::assertEquals($expectedQuantifier, $value->getQuantifier());
-        static::assertEquals($element, $value->getElement());
-        static::assertEquals([$expectedQuantifier, $element], $value->getValue());
+        self::assertEquals($expectedQuantifier, $value->getQuantifier());
+        self::assertEquals($element, $value->getElement());
+        self::assertEquals([$expectedQuantifier, $element], $value->getValue());
     }
 
     public function testIsImmutable(): void
@@ -69,68 +76,68 @@ class DynamicArrayValueTest extends TestCase
         // @phpstan-ignore-next-line
         $value->getElement()->setValue('e2');
 
-        static::assertEquals(new MutableValue('q0'), $value->getQuantifier());
-        static::assertEquals(new MutableValue('e0'), $value->getElement());
-        static::assertEquals(
+        self::assertEquals(new MutableValue('q0'), $value->getQuantifier());
+        self::assertEquals(new MutableValue('e0'), $value->getElement());
+        self::assertEquals(
             [
                 new MutableValue('q0'),
                 new MutableValue('e0'),
             ],
-            $value->getValue()
+            $value->getValue(),
         );
     }
 
     public function testCanBeCastedIntoAString(): void
     {
         $value = new DynamicArrayValue(10, 'foo');
-        static::assertEquals('10x foo', (string) $value);
+        self::assertEquals('10x foo', (string) $value);
 
         $value = new DynamicArrayValue(new DummyValue('10'), new DummyValue('foo'));
-        static::assertEquals('10x foo', (string) $value);
+        self::assertEquals('10x foo', (string) $value);
     }
 
-    public function provideInputTypes()
+    public function provideInputTypes(): iterable
     {
         yield 'null/array' => [
             null,
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
-            .'"NULL" instead.'
+            .'"NULL" instead.',
         ];
 
         yield 'bool/array' => [
             true,
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
-            .'"boolean" instead.'
+            .'"boolean" instead.',
         ];
 
         yield 'string/array' => [
             '',
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
-            .'"string" instead.'
+            .'"string" instead.',
         ];
 
         yield 'float/array' => [
             .5,
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
-            .'"double" instead.'
+            .'"double" instead.',
         ];
 
         yield 'array/array' => [
             [],
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
-            .'"array" instead.'
+            .'"array" instead.',
         ];
 
         yield 'object/array' => [
             new stdClass(),
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
-            .'"stdClass" instead.'
+            .'"stdClass" instead.',
         ];
 
         yield 'closure/array' => [
@@ -138,35 +145,35 @@ class DynamicArrayValueTest extends TestCase
             },
             'dummy_element',
             'Expected quantifier to be either an integer or a "'.ValueInterface::class.'". Got '
-            .'"Closure" instead.'
+            .'"Closure" instead.',
         ];
 
         yield 'int/null' => [
             -1,
             null,
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
-            .'"NULL" instead.'
+            .'"NULL" instead.',
         ];
 
         yield 'int/bool' => [
             -1,
             true,
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
-            .'"boolean" instead.'
+            .'"boolean" instead.',
         ];
 
         yield 'int/float' => [
             -1,
             .5,
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
-            .'"double" instead.'
+            .'"double" instead.',
         ];
 
         yield 'int/int' => [
             1,
             1,
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
-            .'"integer" instead.'
+            .'"integer" instead.',
         ];
 
         yield 'int/closure' => [
@@ -174,18 +181,18 @@ class DynamicArrayValueTest extends TestCase
             static function (): void {
             },
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
-            .'"Closure" instead.'
+            .'"Closure" instead.',
         ];
 
         yield 'int/non value interface object' => [
             -1,
             new stdClass(),
             'Expected element to be either string, an array or a "'.ValueInterface::class.'". Got '
-            .'"stdClass" instead.'
+            .'"stdClass" instead.',
         ];
     }
 
-    public function provideValues()
+    public function provideValues(): iterable
     {
         yield 'int value' => [-1, 'string', -1];
         yield 'object value' => [new FakeValue(), new FakeValue(), new FakeValue()];

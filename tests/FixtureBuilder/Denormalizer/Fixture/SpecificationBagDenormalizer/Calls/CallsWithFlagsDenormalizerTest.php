@@ -30,6 +30,7 @@ use TypeError;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\CallsWithFlagsDenormalizer
+ * @internal
  */
 class CallsWithFlagsDenormalizerTest extends TestCase
 {
@@ -37,7 +38,7 @@ class CallsWithFlagsDenormalizerTest extends TestCase
 
     public function testIsNotClonable(): void
     {
-        static::assertFalse((new ReflectionClass(CallsWithFlagsDenormalizer::class))->isCloneable());
+        self::assertFalse((new ReflectionClass(CallsWithFlagsDenormalizer::class))->isCloneable());
     }
 
     public function testCannotAcceptInvalidMethodHandlers(): void
@@ -48,7 +49,7 @@ class CallsWithFlagsDenormalizerTest extends TestCase
             new FakeCallsDenormalizer(),
             [
                 new stdClass(),
-            ]
+            ],
         );
     }
 
@@ -73,19 +74,18 @@ class CallsWithFlagsDenormalizerTest extends TestCase
                 $fixture,
                 $flagParser,
                 'parsed_method',
-                $unparsedArguments
+                $unparsedArguments,
             )
             ->willReturn(
-                $expected = new FakeMethodCall()
-            )
-        ;
+                $expected = new FakeMethodCall(),
+            );
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
         $denormalizer = new CallsWithFlagsDenormalizer($callsDenormalizer, []);
         $actual = $denormalizer->denormalize($fixture, $flagParser, $unparsedMethod, $unparsedArguments);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
 
         $flagParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
         $callsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
@@ -107,16 +107,15 @@ class CallsWithFlagsDenormalizerTest extends TestCase
             ->willReturn(
                 $flags = (new FlagBag('parsed_method'))
                     ->withFlag(
-                        $dummyFlag = new DummyFlag()
+                        $dummyFlag = new DummyFlag(),
                     )
                     ->withFlag(
-                        $elem1Flag = new ElementFlag('elem1')
+                        $elem1Flag = new ElementFlag('elem1'),
                     )
                     ->withFlag(
-                        $elem2Flag = new ElementFlag('elem2')
-                    )
-            )
-        ;
+                        $elem2Flag = new ElementFlag('elem2'),
+                    ),
+            );
         /** @var FlagParserInterface $flagParser */
         $flagParser = $flagParserProphecy->reveal();
 
@@ -126,43 +125,37 @@ class CallsWithFlagsDenormalizerTest extends TestCase
                 $fixture,
                 $flagParser,
                 'parsed_method',
-                $unparsedArguments
+                $unparsedArguments,
             )
             ->willReturn(
-                $denormalizedCall = new FakeMethodCall()
-            )
-        ;
+                $denormalizedCall = new FakeMethodCall(),
+            );
         /** @var CallsDenormalizerInterface $callsDenormalizer */
         $callsDenormalizer = $callsDenormalizerProphecy->reveal();
 
-        $returnMethodUnchanged = function (array $args) {
-            return $args[0];
-        };
+        $returnMethodUnchanged = fn (array $args) => $args[0];
 
         $dummyFlagMethodHandlerProphecy = $this->prophesize(MethodFlagHandler::class);
         $dummyFlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $denormalizedCall,
-                $dummyFlag
+                $dummyFlag,
             )
             ->willReturn(
-                $methodAfterDummyFlagMethodHandler = new SimpleMethodCall('method_after_dummy_flag_method_handler')
-            )
-        ;
+                $methodAfterDummyFlagMethodHandler = new SimpleMethodCall('method_after_dummy_flag_method_handler'),
+            );
         $dummyFlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterDummyFlagMethodHandler,
-                $elem1Flag
+                $elem1Flag,
             )
-            ->will($returnMethodUnchanged)
-        ;
+            ->will($returnMethodUnchanged);
         $dummyFlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterDummyFlagMethodHandler,
-                $elem2Flag
+                $elem2Flag,
             )
-            ->will($returnMethodUnchanged)
-        ;
+            ->will($returnMethodUnchanged);
         /** @var MethodFlagHandler $dummyFlagMethodHandler */
         $dummyFlagMethodHandler = $dummyFlagMethodHandlerProphecy->reveal();
 
@@ -170,26 +163,23 @@ class CallsWithFlagsDenormalizerTest extends TestCase
         $elem1FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterDummyFlagMethodHandler,
-                $dummyFlag
+                $dummyFlag,
             )
-            ->will($returnMethodUnchanged)
-        ;
+            ->will($returnMethodUnchanged);
         $elem1FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterDummyFlagMethodHandler,
-                $elem1Flag
+                $elem1Flag,
             )
             ->willReturn(
-                $methodAfterElem1FlagMethodHandler = new SimpleMethodCall('method_after_elem1_flag_method_handler')
-            )
-        ;
+                $methodAfterElem1FlagMethodHandler = new SimpleMethodCall('method_after_elem1_flag_method_handler'),
+            );
         $elem1FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterElem1FlagMethodHandler,
-                $elem2Flag
+                $elem2Flag,
             )
-            ->will($returnMethodUnchanged)
-        ;
+            ->will($returnMethodUnchanged);
         /** @var MethodFlagHandler $elem1FlagMethodHandler */
         $elem1FlagMethodHandler = $elem1FlagMethodHandlerProphecy->reveal();
 
@@ -197,24 +187,21 @@ class CallsWithFlagsDenormalizerTest extends TestCase
         $elem2FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterElem1FlagMethodHandler,
-                $dummyFlag
+                $dummyFlag,
             )
-            ->will($returnMethodUnchanged)
-        ;
+            ->will($returnMethodUnchanged);
         $elem2FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterElem1FlagMethodHandler,
-                $elem1Flag
+                $elem1Flag,
             )
-            ->will($returnMethodUnchanged)
-        ;
+            ->will($returnMethodUnchanged);
         $elem2FlagMethodHandlerProphecy
             ->handleMethodFlags(
                 $methodAfterElem1FlagMethodHandler,
-                $elem2Flag
+                $elem2Flag,
             )
-            ->will($returnMethodUnchanged)
-        ;
+            ->will($returnMethodUnchanged);
         /** @var MethodFlagHandler $elem2FlagMethodHandler */
         $elem2FlagMethodHandler = $elem2FlagMethodHandlerProphecy->reveal();
 
@@ -226,11 +213,11 @@ class CallsWithFlagsDenormalizerTest extends TestCase
                 $dummyFlagMethodHandler,
                 $elem1FlagMethodHandler,
                 $elem2FlagMethodHandler,
-            ]
+            ],
         );
 
         $actual = $denormalizer->denormalize($fixture, $flagParser, $unparsedMethod, $unparsedArguments);
 
-        static::assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

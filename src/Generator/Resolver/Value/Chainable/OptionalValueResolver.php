@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
 use Faker\Generator as FakerGenerator;
-use function mt_rand;
 use Nelmio\Alice\Definition\Value\OptionalValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -28,6 +27,7 @@ use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
+use function mt_rand;
 
 final class OptionalValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {
@@ -43,17 +43,17 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
      */
     private $faker;
 
-    public function __construct(ValueResolverInterface $resolver = null, FakerGenerator $faker = null)
+    public function __construct(?ValueResolverInterface $resolver = null, ?FakerGenerator $faker = null)
     {
         $this->resolver = $resolver;
         $this->faker = $faker;
     }
-    
+
     public function withValueResolver(ValueResolverInterface $resolver): self
     {
         return new self($resolver, $this->faker);
     }
-    
+
     public function canResolve(ValueInterface $value): bool
     {
         return $value instanceof OptionalValue;
@@ -100,11 +100,10 @@ final class OptionalValueResolver implements ChainableValueResolverInterface, Va
     {
         // TODO: keeping mt_rand for BC purposes. The generator should be made
         //   non-nullable in 4.x and mt_rand usage removed
-        $random = null !== $this->faker ? $this->faker->numberBetween(0, 99) : mt_rand(0, 99);
+        $random = null !== $this->faker ? $this->faker->numberBetween(0, 99) : random_int(0, 99);
 
         return ($random < $quantifier)
             ? $value->getFirstMember()  // @phpstan-ignore-line
-            : $value->getSecondMember() // @phpstan-ignore-line
-        ;
+            : $value->getSecondMember(); // @phpstan-ignore-line
     }
 }

@@ -19,8 +19,8 @@ use Nelmio\Alice\ParameterBag;
 class FakeParameterBagResolver implements ParameterBagResolverInterface
 {
     use NotCallableTrait;
-    
-    public function resolve(ParameterBag $unresolvedParameters, ParameterBag $injectedParameters = null): ParameterBag
+
+    public function resolve(ParameterBag $unresolvedParameters, ?ParameterBag $injectedParameters = null): ParameterBag
     {
         $this->__call(__FUNCTION__, func_get_args());
     }

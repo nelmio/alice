@@ -20,6 +20,7 @@ use stdClass;
 
 /**
  * @covers \Nelmio\Alice\ParameterBag
+ * @internal
  */
 class ParameterBagTest extends TestCase
 {
@@ -32,14 +33,14 @@ class ParameterBagTest extends TestCase
 
         $bag = new ParameterBag($parameters);
 
-        static::assertTrue($bag->has('foo'));
-        static::assertTrue($bag->has('ping'));
+        self::assertTrue($bag->has('foo'));
+        self::assertTrue($bag->has('ping'));
 
-        static::assertFalse($bag->has('bar'));
-        static::assertFalse($bag->has('pong'));
+        self::assertFalse($bag->has('bar'));
+        self::assertFalse($bag->has('pong'));
 
-        static::assertEquals('bar', $bag->get('foo'));
-        static::assertEquals('pong', $bag->get('ping'));
+        self::assertEquals('bar', $bag->get('foo'));
+        self::assertEquals('pong', $bag->get('ping'));
 
         $this->assertBagSize(2, $bag);
     }
@@ -65,11 +66,11 @@ class ParameterBagTest extends TestCase
         // Mutate retrieved object
         $bag->get('foo')->foo = 'baz';
 
-        static::assertEquals(
+        self::assertEquals(
             new ParameterBag([
                 'foo' => new stdClass(),
             ]),
-            $bag
+            $bag,
         );
     }
 
@@ -81,23 +82,22 @@ class ParameterBagTest extends TestCase
         $bag = new ParameterBag(['foo' => 'bar']);
         $newBag = $bag->with(new Parameter('ping', 'pong'));
 
-        static::assertEquals(new ParameterBag(['foo' => 'bar']), $bag);
-        static::assertEquals(new ParameterBag(['foo' => 'bar', 'ping' => 'pong']), $newBag);
+        self::assertEquals(new ParameterBag(['foo' => 'bar']), $bag);
+        self::assertEquals(new ParameterBag(['foo' => 'bar', 'ping' => 'pong']), $newBag);
     }
 
     public function testIfTwoParametersWithTheSameKeyAreAddedThenTheNewerOneWillBeDiscarded(): void
     {
         $bag = (new ParameterBag([
-                'foo' => 'bar',
-                'ping' => 'pong',
-            ]))
+            'foo' => 'bar',
+            'ping' => 'pong',
+        ]))
             ->with(new Parameter('ping', 'boo'))
-            ->with(new Parameter('he', 'ho'))
-        ;
+            ->with(new Parameter('he', 'ho'));
 
-        static::assertEquals('bar', $bag->get('foo'));
-        static::assertEquals('pong', $bag->get('ping'));
-        static::assertEquals('ho', $bag->get('he'));
+        self::assertEquals('bar', $bag->get('foo'));
+        self::assertEquals('pong', $bag->get('ping'));
+        self::assertEquals('ho', $bag->get('he'));
 
         $this->assertBagSize(3, $bag);
     }
@@ -116,26 +116,25 @@ class ParameterBagTest extends TestCase
             $traversed[$key] = $param;
         }
 
-        static::assertSame($params, $traversed);
+        self::assertSame($params, $traversed);
     }
 
     public function testIsCountable(): void
     {
         $bag = new ParameterBag();
-        static::assertCount(0, $bag);
+        self::assertCount(0, $bag);
 
         $bag = $bag
             ->with(new Parameter('foo', 'bar'))
-            ->with(new Parameter('ping', 'pong'))
-        ;
-        static::assertCount(2, $bag);
+            ->with(new Parameter('ping', 'pong'));
+        self::assertCount(2, $bag);
     }
 
     public function testCanRemoveElements(): void
     {
         $bag = (new ParameterBag(['foo' => 'bar']))->without('foo')->without('foo');
 
-        static::assertEquals(new ParameterBag(), $bag);
+        self::assertEquals(new ParameterBag(), $bag);
     }
 
     private function assertBagSize(int $size, ParameterBag $bag): void
@@ -144,26 +143,26 @@ class ParameterBagTest extends TestCase
         $paramReflection = $reflectionObject->getProperty('parameters');
         $paramReflection->setAccessible(true);
 
-        static::assertCount($size, $paramReflection->getValue($bag));
+        self::assertCount($size, $paramReflection->getValue($bag));
     }
 
     public function testToArray(): void
     {
         $bag = new ParameterBag();
 
-        static::assertEquals([], $bag->toArray());
+        self::assertEquals([], $bag->toArray());
 
         $bag = new ParameterBag([
             'foo' => 'bar',
             'baz' => $std = new stdClass(),
         ]);
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 'foo' => 'bar',
                 'baz' => $std,
             ],
-            $bag->toArray()
+            $bag->toArray(),
         );
     }
 }

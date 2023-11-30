@@ -16,16 +16,16 @@ namespace Nelmio\Alice;
 class FixtureSetFactory
 {
     public static function create(
-        ParameterBag $loadedParameters = null,
-        ParameterBag $injectedParameters = null,
-        FixtureBag $fixtures = null,
-        ObjectBag $objects = null
+        ?ParameterBag $loadedParameters = null,
+        ?ParameterBag $injectedParameters = null,
+        ?FixtureBag $fixtures = null,
+        ?ObjectBag $objects = null
     ): FixtureSet {
         return new FixtureSet(
             $loadedParameters ?? new ParameterBag(),
             $injectedParameters ?? new ParameterBag(),
             $fixtures ?? new FixtureBag(),
-            $objects ?? new ObjectBag()
+            $objects ?? new ObjectBag(),
         );
     }
 }
