@@ -84,7 +84,7 @@ class TemplatingFixtureBagTest extends TestCase
     }
 
     /**
-     * @depends test\Nelmio\Alice\FixtureBagTest::testIsImmutable
+     * @depends \Nelmio\Alice\FixtureBagTest::testIsImmutable
      */
     public function testIsImmutable(): void
     {

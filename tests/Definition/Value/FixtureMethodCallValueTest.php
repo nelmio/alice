@@ -40,8 +40,8 @@ class FixtureMethodCallValueTest extends TestCase
     }
 
     /**
-     * @depends test\Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
-     * @depends test\Nelmio\Alice\Definition\Value\FunctionCallValueTest::testIsImmutable
+     * @depends \Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
+     * @depends \Nelmio\Alice\Definition\Value\FunctionCallValueTest::testIsImmutable
      */
     public function testIsImmutable(): void
     {
