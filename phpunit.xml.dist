@@ -18,7 +18,7 @@
          executionOrder="random">
 
     <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=8"/>
     </php>
 
     <listeners>
