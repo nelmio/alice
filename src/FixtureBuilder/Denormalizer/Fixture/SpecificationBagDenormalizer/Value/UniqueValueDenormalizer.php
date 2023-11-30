@@ -44,7 +44,7 @@ final class UniqueValueDenormalizer implements ValueDenormalizerInterface
      * @param  mixed                 $value
      * @throws InvalidScopeException
      */
-    public function denormalize(FixtureInterface $scope, ?FlagBag $flags = null, $value)
+    public function denormalize(FixtureInterface $scope, ?FlagBag $flags, $value)
     {
         $value = $this->denormalizer->denormalize($scope, $flags, $value);
 

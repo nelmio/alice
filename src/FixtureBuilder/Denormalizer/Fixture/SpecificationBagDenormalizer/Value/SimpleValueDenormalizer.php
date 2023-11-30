@@ -37,7 +37,7 @@ final class SimpleValueDenormalizer implements ValueDenormalizerInterface
         $this->parser = $parser;
     }
 
-    public function denormalize(FixtureInterface $scope, ?FlagBag $flags = null, $value)
+    public function denormalize(FixtureInterface $scope, ?FlagBag $flags, $value)
     {
         if (is_string($value)) {
             return $this->parseValue($this->parser, $value);
