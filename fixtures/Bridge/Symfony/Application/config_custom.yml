@@ -8,6 +8,9 @@
 #
 
 framework:
+    handle_all_throwables: true
+    php_errors:
+        log: true
     annotations:
         enabled: false
     secret:                  NelmioAliceBundleSecret
