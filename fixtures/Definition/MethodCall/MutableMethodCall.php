@@ -33,7 +33,7 @@ class MutableMethodCall implements MethodCallInterface
      */
     private $arguments;
 
-    public function __construct(?ServiceReferenceInterface $caller = null, $method, ?array $arguments = null)
+    public function __construct(?ServiceReferenceInterface $caller, $method, ?array $arguments = null)
     {
         $this->caller = $caller;
         $this->method = $method;
