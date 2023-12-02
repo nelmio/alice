@@ -30,5 +30,5 @@ interface ValueDenormalizerInterface
      *
      * @return ValueInterface|mixed
      */
-    public function denormalize(FixtureInterface $scope, ?FlagBag $flags = null, $value);
+    public function denormalize(FixtureInterface $scope, ?FlagBag $flags, $value);
 }

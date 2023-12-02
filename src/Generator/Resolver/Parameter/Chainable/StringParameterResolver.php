@@ -89,7 +89,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
      * @param string    $key       Key of the parameter that need to be resolved to resolve $parameter
      */
     private function resolveStringKey(
-        ?ParameterResolverInterface $resolver = null,
+        ?ParameterResolverInterface $resolver,
         Parameter $parameter,
         string $key,
         ParameterBag $unresolvedParameters,
