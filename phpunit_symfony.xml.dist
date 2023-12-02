@@ -19,7 +19,7 @@
 >
 
     <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=8" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0" />
     </php>
 
     <listeners>
