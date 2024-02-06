@@ -203,7 +203,7 @@ class ArrayParameterResolverTest extends TestCase
     /**
      * @dataProvider provideContexts
      */
-    public function testTheContextPassedToTheInjectedResolverIsAlwaysValid(?ResolvingContext $context = null, ResolvingContext $expected): void
+    public function testTheContextPassedToTheInjectedResolverIsAlwaysValid(?ResolvingContext $context, ResolvingContext $expected): void
     {
         $array = [
             $val1 = 'foo',
