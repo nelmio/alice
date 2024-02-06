@@ -54,19 +54,12 @@ jobs:
               if: matrix.symfony-versions
 
             - name: Run PHPUnit tests
-              run: XDEBUG_MODE=coverage bin/phpunit --coverage-clover=coverage.xml
+              run: bin/phpunit
               if: false == matrix.symfony-versions
 
             - name: Run Symfony tests
               run: bin/phpunit --configuration phpunit_symfony.xml.dist
               if: matrix.symfony-versions
-
-            - name: Run codecov
-              uses: codecov/codecov-action@v4
-              with:
-                  file: './coverage.xml'
-                  fail_ci_if_error: true
-              if: false == matrix.symfony-versions
 
     # This is a "trick", a meta task which does not change, and we can use in
     # the protected branch rules as opposed to the tests one above which
