@@ -82,7 +82,7 @@ class ParameterValueTest extends TestCase
         self::assertEquals('<{foo}>', $value);
     }
 
-    public function provideInputValues(): iterable
+    public static function provideInputValues(): iterable
     {
         yield 'null' => [
             null,

@@ -103,7 +103,7 @@ class DeepCloneTest extends TestCase
         self::assertSame($bar, $fooClone->bar);
     }
 
-    public function provideScalarValues(): iterable
+    public static function provideScalarValues(): iterable
     {
         return [
             [null],

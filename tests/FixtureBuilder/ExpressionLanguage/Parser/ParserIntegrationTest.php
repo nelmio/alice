@@ -87,7 +87,7 @@ class ParserIntegrationTest extends TestCase
         self::assertEquals($expected, $actual, var_export($actual, true));
     }
 
-    public function provideValues(): iterable
+    public static function provideValues(): iterable
     {
         // Simple values
         yield 'empty string' => [

@@ -55,7 +55,7 @@ class OptionalFlagTest extends TestCase
         }
     }
 
-    public function providePercentageValues(): iterable
+    public static function providePercentageValues(): iterable
     {
         yield 'negative value' => [
             -1,

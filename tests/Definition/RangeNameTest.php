@@ -36,7 +36,7 @@ class RangeNameTest extends TestCase
         self::assertEquals($expected[1], $range->getTo());
     }
 
-    public function provideRanges(): iterable
+    public static function provideRanges(): iterable
     {
         yield [
             [10, 11],

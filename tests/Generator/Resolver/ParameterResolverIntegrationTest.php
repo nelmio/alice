@@ -70,7 +70,7 @@ class ParameterResolverIntegrationTest extends TestCase
         );
     }
 
-    public function provideCircularReferences(): iterable
+    public static function provideCircularReferences(): iterable
     {
         $return = [];
 
@@ -103,7 +103,7 @@ class ParameterResolverIntegrationTest extends TestCase
         return $return;
     }
 
-    public function provideParameters(): iterable
+    public static function provideParameters(): iterable
     {
         $return = [];
 

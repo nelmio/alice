@@ -57,7 +57,7 @@ class ParameterTest extends TestCase
         self::assertEquals('rab', $newParam->getValue());
     }
 
-    public function provideValues(): iterable
+    public static function provideValues(): iterable
     {
         return [
             'boolean' => [true],

@@ -83,7 +83,7 @@ class ReferenceLexerTest extends TestCase
         $this->lexer->lex('foo');
     }
 
-    public function provideValues(): iterable
+    public static function provideValues(): iterable
     {
         yield 'method reference' => [
             $value = '@user->getUserName()',

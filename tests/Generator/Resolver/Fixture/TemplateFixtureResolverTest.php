@@ -21,7 +21,7 @@ use ReflectionClass;
  *
  * More tests in:
  *
- * @see \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolverTest
+ * @see TemplateFixtureBagResolverTest
  * @internal
  */
 class TemplateFixtureResolverTest extends TestCase

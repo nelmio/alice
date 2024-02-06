@@ -81,7 +81,7 @@ class EscapedValueTokenParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function provideTokens(): iterable
+    public static function provideTokens(): iterable
     {
         return [
             [

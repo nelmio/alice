@@ -72,7 +72,7 @@ class TokenTypeTest extends TestCase
         new TokenType('unknown');
     }
 
-    public function provideAcceptableTypes(): iterable
+    public static function provideAcceptableTypes(): iterable
     {
         $reflClass = new ReflectionClass(TokenType::class);
         $constants = $reflClass->getConstants();

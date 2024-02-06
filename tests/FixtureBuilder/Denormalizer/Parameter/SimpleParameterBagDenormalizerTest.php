@@ -69,7 +69,7 @@ class SimpleParameterBagDenormalizerTest extends TestCase
         }
     }
 
-    public function provideDataWithNoParameters(): iterable
+    public static function provideDataWithNoParameters(): iterable
     {
         yield 'no parameters' => [
             [],
@@ -88,7 +88,7 @@ class SimpleParameterBagDenormalizerTest extends TestCase
         ];
     }
 
-    public function provideDataWithInvalidParameterKeys(): iterable
+    public static function provideDataWithInvalidParameterKeys(): iterable
     {
         yield 'string value' => [
             [

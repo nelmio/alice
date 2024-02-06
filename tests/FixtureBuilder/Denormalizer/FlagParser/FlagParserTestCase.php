@@ -135,47 +135,47 @@ abstract class FlagParserTestCase extends TestCase
         self::markTestSkipped('Invalid scenario.');
     }
 
-    public function provideElements(): iterable
+    public static function provideElements(): iterable
     {
         return Reference::getElements();
     }
 
-    public function provideMalformedElements(): iterable
+    public static function provideMalformedElements(): iterable
     {
         return Reference::getMalformedElements();
     }
 
-    public function provideExtends(): iterable
+    public static function provideExtends(): iterable
     {
         return Reference::getExtends();
     }
 
-    public function provideMalformedExtends(): iterable
+    public static function provideMalformedExtends(): iterable
     {
         return Reference::getMalformedExtends();
     }
 
-    public function provideOptionals(): iterable
+    public static function provideOptionals(): iterable
     {
         return Reference::getOptionals();
     }
 
-    public function provideMalformedOptionals(): iterable
+    public static function provideMalformedOptionals(): iterable
     {
         return Reference::getMalformedOptionals();
     }
 
-    public function provideTemplates(): iterable
+    public static function provideTemplates(): iterable
     {
         return Reference::getTemplates();
     }
 
-    public function provideUniques(): iterable
+    public static function provideUniques(): iterable
     {
         return Reference::getUniques();
     }
 
-    public function provideConfigurators(): iterable
+    public static function provideConfigurators(): iterable
     {
         return Reference::getConfigurators();
     }

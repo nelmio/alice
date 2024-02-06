@@ -106,7 +106,7 @@ class UniqueValueTest extends TestCase
         self::assertEquals('(unique) foo', (string) $value);
     }
 
-    public function provideValues(): iterable
+    public static function provideValues(): iterable
     {
         yield 'null value' => [null];
         yield 'string value' => ['azerty'];
