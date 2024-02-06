@@ -92,7 +92,7 @@ class DefaultFileLocatorTest extends TestCase
         $this->locator->locate(__DIR__.'/Fixtures/foobar.xml');
     }
 
-    public function provideAbsolutePaths(): iterable
+    public static function provideAbsolutePaths(): iterable
     {
         return [
             ['/foo.xml'],

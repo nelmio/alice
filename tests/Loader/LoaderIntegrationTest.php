@@ -1575,7 +1575,7 @@ class LoaderIntegrationTest extends TestCase
         );
     }
 
-    public function provideFixturesToInstantiate(): iterable
+    public static function provideFixturesToInstantiate(): iterable
     {
         yield 'with default constructor – use default constructor' => [
             [
@@ -1837,7 +1837,7 @@ class LoaderIntegrationTest extends TestCase
         ];
     }
 
-    public function provideLegacyFixturesToInstantiate(): iterable
+    public static function provideLegacyFixturesToInstantiate(): iterable
     {
         yield 'with named constructor - use factory function' => [
             [
@@ -1968,7 +1968,7 @@ class LoaderIntegrationTest extends TestCase
         ];
     }
 
-    public function provideFixturesToInstantiateWithFactory(): iterable
+    public static function provideFixturesToInstantiateWithFactory(): iterable
     {
         yield 'regular factory' => [
             [
@@ -2099,7 +2099,7 @@ class LoaderIntegrationTest extends TestCase
         ];
     }
 
-    public function provideFixtureToInstantiateWithDeprecatedConstructor(): iterable
+    public static function provideFixtureToInstantiateWithDeprecatedConstructor(): iterable
     {
         yield 'with named constructor - use factory function' => [
             [
@@ -2188,7 +2188,7 @@ class LoaderIntegrationTest extends TestCase
         ];
     }
 
-    public function provideFixturesToHydrate(): iterable
+    public static function provideFixturesToHydrate(): iterable
     {
         yield 'public camelCase property' => [
             [
@@ -2322,7 +2322,7 @@ class LoaderIntegrationTest extends TestCase
         ];
     }
 
-    public function provideFixturesToGenerate(): iterable
+    public static function provideFixturesToGenerate(): iterable
     {
         yield '[construct] with reference to object with throwable setter and caller' => [
             [

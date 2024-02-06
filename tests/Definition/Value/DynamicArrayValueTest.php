@@ -96,7 +96,7 @@ class DynamicArrayValueTest extends TestCase
         self::assertEquals('10x foo', (string) $value);
     }
 
-    public function provideInputTypes(): iterable
+    public static function provideInputTypes(): iterable
     {
         yield 'null/array' => [
             null,
@@ -192,7 +192,7 @@ class DynamicArrayValueTest extends TestCase
         ];
     }
 
-    public function provideValues(): iterable
+    public static function provideValues(): iterable
     {
         yield 'int value' => [-1, 'string', -1];
         yield 'object value' => [new FakeValue(), new FakeValue(), new FakeValue()];

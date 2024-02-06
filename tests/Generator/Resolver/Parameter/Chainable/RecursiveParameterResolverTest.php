@@ -324,7 +324,7 @@ class RecursiveParameterResolverTest extends TestCase
         }
     }
 
-    public function provideContexts(): iterable
+    public static function provideContexts(): iterable
     {
         return [
             'no context' => [

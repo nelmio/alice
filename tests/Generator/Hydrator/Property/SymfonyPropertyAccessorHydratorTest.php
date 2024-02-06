@@ -222,7 +222,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function provideProperties(): iterable
+    public static function provideProperties(): iterable
     {
         return [
             // Accessor methods

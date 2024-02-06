@@ -128,7 +128,7 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
         }
     }
 
-    public function provideParser(): iterable
+    public static function provideParser(): iterable
     {
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
         $decoratedParserProphecy->parse('@user')->willReturn('foo');

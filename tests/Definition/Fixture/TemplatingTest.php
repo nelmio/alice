@@ -75,7 +75,7 @@ class TemplatingTest extends TestCase
         }
     }
 
-    public function provideFlags(): iterable
+    public static function provideFlags(): iterable
     {
         $emptyFlagBag = new FlagBag('user0');
         yield 'empty flagbag' => [

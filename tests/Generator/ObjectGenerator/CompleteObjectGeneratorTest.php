@@ -120,7 +120,7 @@ class CompleteObjectGeneratorTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function provideSets(): iterable
+    public static function provideSets(): iterable
     {
         yield 'decorated generator generates a complete object => complete object' => (function () {
             $fixture = new SimpleFixture(

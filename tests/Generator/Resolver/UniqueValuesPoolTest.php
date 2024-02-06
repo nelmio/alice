@@ -49,7 +49,7 @@ class UniqueValuesPoolTest extends TestCase
         self::assertTrue($pool->has($value));
     }
 
-    public function provideHasValueSet(): iterable
+    public static function provideHasValueSet(): iterable
     {
         $baseValue = new UniqueValue('foo', 'temporary value');
 
