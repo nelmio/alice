@@ -79,7 +79,7 @@ class LexerIntegrationTest extends TestCase
     /**
      * @see https://github.com/nelmio/alice/issues/377
      */
-    public function provideValues(): iterable
+    public static function provideValues(): iterable
     {
         // simple values
         yield 'empty string' => [

@@ -170,7 +170,7 @@ class FunctionFixtureReferenceParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function provideOneElementValues(): iterable
+    public static function provideOneElementValues(): iterable
     {
         yield 'one value' => [
             new FakeValue(),

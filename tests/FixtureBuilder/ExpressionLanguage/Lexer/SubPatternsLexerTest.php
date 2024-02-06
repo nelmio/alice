@@ -114,7 +114,7 @@ class SubPatternsLexerTest extends TestCase
         $lexer->lex('<foo>');
     }
 
-    public function lineBreaksProvider(): iterable
+    public static function lineBreaksProvider(): iterable
     {
         return [
             ['\n'],

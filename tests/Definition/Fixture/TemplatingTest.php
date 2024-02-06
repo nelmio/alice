@@ -56,7 +56,7 @@ class TemplatingTest extends TestCase
     public function testExtendedFixturesOrderIsInversed(): void
     {
         $templating = new Templating(
-            $this->createFixtureWithFlags(
+            self::createFixtureWithFlags(
                 (new FlagBag(''))
                     ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
                     ->withFlag(new ExtendFlag(new FixtureReference('user_base1'))),
@@ -75,11 +75,11 @@ class TemplatingTest extends TestCase
         }
     }
 
-    public function provideFlags(): iterable
+    public static function provideFlags(): iterable
     {
         $emptyFlagBag = new FlagBag('user0');
         yield 'empty flagbag' => [
-            $this->createFixtureWithFlags($emptyFlagBag),
+            self::createFixtureWithFlags($emptyFlagBag),
             false,
             false,
             [],
@@ -87,7 +87,7 @@ class TemplatingTest extends TestCase
 
         $flagBagWithNonTemplateFlag = $emptyFlagBag->withFlag(new DummyFlag());
         yield 'flagbag with non-templating element' => [
-            $this->createFixtureWithFlags($flagBagWithNonTemplateFlag),
+            self::createFixtureWithFlags($flagBagWithNonTemplateFlag),
             false,
             false,
             [],
@@ -95,7 +95,7 @@ class TemplatingTest extends TestCase
 
         $templateFlagBag = $emptyFlagBag->withFlag(new TemplateFlag());
         yield 'flagbag with template' => [
-            $this->createFixtureWithFlags($templateFlagBag),
+            self::createFixtureWithFlags($templateFlagBag),
             true,
             false,
             [],
@@ -105,7 +105,7 @@ class TemplatingTest extends TestCase
             ->withFlag(new ExtendFlag(new FixtureReference('user_base0')))
             ->withFlag(new ExtendFlag(new FixtureReference('user_base1')));
         yield 'flagbag with extends' => [
-            $this->createFixtureWithFlags($extendsFlagBag),
+            self::createFixtureWithFlags($extendsFlagBag),
             false,
             true,
             [
@@ -120,7 +120,7 @@ class TemplatingTest extends TestCase
             ->withFlag(new ExtendFlag(new FixtureReference('user_base1')))
             ->withFlag(new DummyFlag());
         yield 'flagbag with template, extends and non templating flags' => [
-            $this->createFixtureWithFlags($templateAndExtendsFlagBag),
+            self::createFixtureWithFlags($templateAndExtendsFlagBag),
             true,
             true,
             [
@@ -130,7 +130,7 @@ class TemplatingTest extends TestCase
         ];
     }
 
-    private function createFixtureWithFlags(FlagBag $flags): SimpleFixtureWithFlags
+    private static function createFixtureWithFlags(FlagBag $flags): SimpleFixtureWithFlags
     {
         return new SimpleFixtureWithFlags(
             new SimpleFixture(

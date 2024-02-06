@@ -49,7 +49,7 @@ class UniqueValuesPoolTest extends TestCase
         self::assertTrue($pool->has($value));
     }
 
-    public function provideHasValueSet(): iterable
+    public static function provideHasValueSet(): iterable
     {
         $baseValue = new UniqueValue('foo', 'temporary value');
 
@@ -61,25 +61,25 @@ class UniqueValuesPoolTest extends TestCase
         ];
 
         yield '[null value] with `null' => [
-            $this->createPoolWithValue(null),
+            self::createPoolWithValue(null),
             $baseValue->withValue(null),
             true,
         ];
 
         yield '[null value] with `false' => [
-            $this->createPoolWithValue(false),
+            self::createPoolWithValue(false),
             $baseValue->withValue(null),
             false,
         ];
 
         yield '[null value] with empty array' => [
-            $this->createPoolWithValue([]),
+            self::createPoolWithValue([]),
             $baseValue->withValue(null),
             false,
         ];
 
         yield '[null value] with empty string' => [
-            $this->createPoolWithValue(''),
+            self::createPoolWithValue(''),
             $baseValue->withValue(null),
             false,
         ];
@@ -92,56 +92,56 @@ class UniqueValuesPoolTest extends TestCase
         ];
 
         yield '[`true`] with `true`' => [
-            $this->createPoolWithValue(true),
+            self::createPoolWithValue(true),
             $baseValue->withValue(true),
             true,
         ];
 
         yield '[`true`] with `1`' => [
-            $this->createPoolWithValue(1),
+            self::createPoolWithValue(1),
             $baseValue->withValue(true),
             false,
         ];
 
         yield '[`true`] with `-1`' => [
-            $this->createPoolWithValue(-1),
+            self::createPoolWithValue(-1),
             $baseValue->withValue(true),
             false,
         ];
 
         yield '[`true`] with `"1"`' => [
-            $this->createPoolWithValue('1'),
+            self::createPoolWithValue('1'),
             $baseValue->withValue(true),
             false,
         ];
 
         yield '[`true`] with `"-1"`' => [
-            $this->createPoolWithValue('-1'),
+            self::createPoolWithValue('-1'),
             $baseValue->withValue(true),
             false,
         ];
 
         yield '[`true`] with `"alice"`' => [
-            $this->createPoolWithValue('alice'),
+            self::createPoolWithValue('alice'),
             $baseValue->withValue(true),
             false,
         ];
 
         // Check objects
         yield 'with two equivalent objects' => [
-            $this->createPoolWithValue(new stdClass()),
+            self::createPoolWithValue(new stdClass()),
             $baseValue->withValue(new stdClass()),
             true,
         ];
 
         yield 'with two non-equivalent objects' => [
-            $this->createPoolWithValue(new stdClass()),
+            self::createPoolWithValue(new stdClass()),
             $baseValue->withValue(StdClassFactory::create(['foo' => 'bar'])),
             false,
         ];
 
         yield 'with two equivalent objects (2)' => [
-            $this->createPoolWithValue(
+            self::createPoolWithValue(
                 StdClassFactory::create([
                     'relatedDummy' => StdClassFactory::create([
                         'foo' => 'bar',
@@ -159,7 +159,7 @@ class UniqueValuesPoolTest extends TestCase
         ];
 
         yield 'with two non-equivalent objects (2)' => [
-            $this->createPoolWithValue(
+            self::createPoolWithValue(
                 StdClassFactory::create([
                     'relatedDummy' => StdClassFactory::create([
                         'foo' => 'bar',
@@ -178,43 +178,43 @@ class UniqueValuesPoolTest extends TestCase
 
         // Checks arrays
         yield 'two identical arrays' => [
-            $this->createPoolWithValue([]),
+            self::createPoolWithValue([]),
             $baseValue->withValue([]),
             true,
         ];
 
         yield 'two equivalent arrays' => [
-            $this->createPoolWithValue([10, 20]),
+            self::createPoolWithValue([10, 20]),
             $baseValue->withValue([20, 10]),
             true,
         ];
 
         yield 'two equivalent arrays (2)' => [
-            $this->createPoolWithValue([10, 'foo' => new stdClass(), 20]),
+            self::createPoolWithValue([10, 'foo' => new stdClass(), 20]),
             $baseValue->withValue([20, 10, 'foo' => new stdClass()]),
             true,
         ];
 
         yield 'two non-equivalent arrays (2)' => [
-            $this->createPoolWithValue([10, 20, 30]),
+            self::createPoolWithValue([10, 20, 30]),
             $baseValue->withValue([20, 10]),
             false,
         ];
 
         yield 'two non-equivalent arrays (3)' => [
-            $this->createPoolWithValue([1]),
+            self::createPoolWithValue([1]),
             $baseValue->withValue([true]),
             false,
         ];
 
         yield 'two non-equivalent arrays (4)' => [
-            $this->createPoolWithValue([10, 'foo' => StdClassFactory::create(['foo' => 'bar']), 20]),
+            self::createPoolWithValue([10, 'foo' => StdClassFactory::create(['foo' => 'bar']), 20]),
             $baseValue->withValue([20, 10, 'foo' => new stdClass()]),
             false,
         ];
     }
 
-    private function createPoolWithValue($value): UniqueValuesPool
+    private static function createPoolWithValue($value): UniqueValuesPool
     {
         $pool = new UniqueValuesPool();
         $pool->add(new UniqueValue('foo', $value));

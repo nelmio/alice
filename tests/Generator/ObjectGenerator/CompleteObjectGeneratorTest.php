@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\ObjectGenerator;
 
+use Closure;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\Object\CompleteObject;
@@ -106,13 +107,14 @@ class CompleteObjectGeneratorTest extends TestCase
     public function testReturnsCompleteObjectWheneverItIsPossible(
         FixtureInterface $fixture,
         GenerationContext $context,
-        ObjectGeneratorInterface $decoratedGenerator,
+        Closure $decoratedGeneratorFactory,
         ObjectBag $expected
     ): void {
         $set = ResolvedFixtureSetFactory::create(
             null,
             (new FixtureBag())->with($fixture),
         );
+        $decoratedGenerator = $decoratedGeneratorFactory($this);
 
         $generator = new CompleteObjectGenerator($decoratedGenerator);
         $actual = $generator->generate($fixture, $set, $context);
@@ -120,7 +122,7 @@ class CompleteObjectGeneratorTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function provideSets(): iterable
+    public static function provideSets(): iterable
     {
         yield 'decorated generator generates a complete object => complete object' => (function () {
             $fixture = new SimpleFixture(
@@ -134,18 +136,20 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $context = new GenerationContext();
 
-            $decoratedGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
-            $decoratedGeneratorProphecy
-                ->generate(Argument::cetera())
-                ->willReturn(
-                    (new ObjectBag())->with(
-                        new CompleteObject(
-                            new SimpleObject('dummy', new stdClass()),
+            $decoratedGeneratorFactory = static function (self $testCase): ObjectGeneratorInterface {
+                $decoratedGeneratorProphecy = $testCase->prophesize(ObjectGeneratorInterface::class);
+                $decoratedGeneratorProphecy
+                    ->generate(Argument::cetera())
+                    ->willReturn(
+                        (new ObjectBag())->with(
+                            new CompleteObject(
+                                new SimpleObject('dummy', new stdClass()),
+                            ),
                         ),
-                    ),
-                );
-            /** @var ObjectGeneratorInterface $decoratedGenerator */
-            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+                    );
+
+                return $decoratedGeneratorProphecy->reveal();
+            };
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
@@ -158,7 +162,7 @@ class CompleteObjectGeneratorTest extends TestCase
             return [
                 $fixture,
                 $context,
-                $decoratedGenerator,
+                $decoratedGeneratorFactory,
                 $expected,
             ];
         })();
@@ -176,16 +180,18 @@ class CompleteObjectGeneratorTest extends TestCase
             $context = new GenerationContext();
             $context->setToSecondPass();
 
-            $decoratedGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
-            $decoratedGeneratorProphecy
-                ->generate(Argument::cetera())
-                ->willReturn(
-                    (new ObjectBag())->with(
-                        new SimpleObject('dummy', new stdClass()),
-                    ),
-                );
-            /** @var ObjectGeneratorInterface $decoratedGenerator */
-            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+            $decoratedGeneratorFactory = static function (self $testCase): ObjectGeneratorInterface {
+                $decoratedGeneratorProphecy = $testCase->prophesize(ObjectGeneratorInterface::class);
+                $decoratedGeneratorProphecy
+                    ->generate(Argument::cetera())
+                    ->willReturn(
+                        (new ObjectBag())->with(
+                            new SimpleObject('dummy', new stdClass()),
+                        ),
+                    );
+
+                return $decoratedGeneratorProphecy->reveal();
+            };
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
@@ -196,7 +202,7 @@ class CompleteObjectGeneratorTest extends TestCase
             return [
                 $fixture,
                 $context,
-                $decoratedGenerator,
+                $decoratedGeneratorFactory,
                 $expected,
             ];
         })();
@@ -214,16 +220,18 @@ class CompleteObjectGeneratorTest extends TestCase
             $context = new GenerationContext();
             $context->markAsNeedsCompleteGeneration();
 
-            $decoratedGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
-            $decoratedGeneratorProphecy
-                ->generate(Argument::cetera())
-                ->willReturn(
-                    (new ObjectBag())->with(
-                        new SimpleObject('dummy', new stdClass()),
-                    ),
-                );
-            /** @var ObjectGeneratorInterface $decoratedGenerator */
-            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+            $decoratedGeneratorFactory = static function (self $testCase): ObjectGeneratorInterface {
+                $decoratedGeneratorProphecy = $testCase->prophesize(ObjectGeneratorInterface::class);
+                $decoratedGeneratorProphecy
+                    ->generate(Argument::cetera())
+                    ->willReturn(
+                        (new ObjectBag())->with(
+                            new SimpleObject('dummy', new stdClass()),
+                        ),
+                    );
+
+                return $decoratedGeneratorProphecy->reveal();
+            };
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
@@ -234,7 +242,7 @@ class CompleteObjectGeneratorTest extends TestCase
             return [
                 $fixture,
                 $context,
-                $decoratedGenerator,
+                $decoratedGeneratorFactory,
                 $expected,
             ];
         })();
@@ -248,16 +256,18 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $context = new GenerationContext();
 
-            $decoratedGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
-            $decoratedGeneratorProphecy
-                ->generate(Argument::cetera())
-                ->willReturn(
-                    (new ObjectBag())->with(
-                        new SimpleObject('dummy', new stdClass()),
-                    ),
-                );
-            /** @var ObjectGeneratorInterface $decoratedGenerator */
-            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+            $decoratedGeneratorFactory = static function (self $testCase): ObjectGeneratorInterface {
+                $decoratedGeneratorProphecy = $testCase->prophesize(ObjectGeneratorInterface::class);
+                $decoratedGeneratorProphecy
+                    ->generate(Argument::cetera())
+                    ->willReturn(
+                        (new ObjectBag())->with(
+                            new SimpleObject('dummy', new stdClass()),
+                        ),
+                    );
+
+                return $decoratedGeneratorProphecy->reveal();
+            };
 
             $expected = (new ObjectBag())->with(
                 new CompleteObject(
@@ -268,7 +278,7 @@ class CompleteObjectGeneratorTest extends TestCase
             return [
                 $fixture,
                 $context,
-                $decoratedGenerator,
+                $decoratedGeneratorFactory,
                 $expected,
             ];
         })();
@@ -285,21 +295,23 @@ class CompleteObjectGeneratorTest extends TestCase
 
             $context = new GenerationContext();
 
-            $decoratedGeneratorProphecy = $this->prophesize(ObjectGeneratorInterface::class);
-            $decoratedGeneratorProphecy
-                ->generate(Argument::cetera())
-                ->willReturn(
-                    $expected = (new ObjectBag())->with(
-                        new SimpleObject('dummy', new stdClass()),
-                    ),
-                );
-            /** @var ObjectGeneratorInterface $decoratedGenerator */
-            $decoratedGenerator = $decoratedGeneratorProphecy->reveal();
+            $expected = (new ObjectBag())->with(
+                new SimpleObject('dummy', new stdClass()),
+            );
+
+            $decoratedGeneratorFactory = static function (self $testCase) use ($expected): ObjectGeneratorInterface {
+                $decoratedGeneratorProphecy = $testCase->prophesize(ObjectGeneratorInterface::class);
+                $decoratedGeneratorProphecy
+                    ->generate(Argument::cetera())
+                    ->willReturn($expected);
+
+                return $decoratedGeneratorProphecy->reveal();
+            };
 
             return [
                 $fixture,
                 $context,
-                $decoratedGenerator,
+                $decoratedGeneratorFactory,
                 $expected,
             ];
         })();

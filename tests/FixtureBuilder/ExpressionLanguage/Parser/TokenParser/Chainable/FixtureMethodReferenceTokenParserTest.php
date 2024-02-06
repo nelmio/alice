@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable;
 
+use Closure;
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
@@ -109,9 +110,13 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
 
     /**
      * @dataProvider provideParser
+     *
+     * @param Closure(self): ParserInterface $decoratedParserFactory
      */
-    public function testThrowsAnExceptionIfParsingReturnsAnUnexpectedResult(ParserInterface $decoratedParser): void
+    public function testThrowsAnExceptionIfParsingReturnsAnUnexpectedResult(Closure $decoratedParserFactory): void
     {
+        $decoratedParser = $decoratedParserFactory($this);
+
         try {
             $token = new Token('@user->getName()', new TokenType(TokenType::METHOD_REFERENCE_TYPE));
 
@@ -128,24 +133,36 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
         }
     }
 
-    public function provideParser(): iterable
+    public static function provideParser(): iterable
     {
-        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse('@user')->willReturn('foo');
-        $decoratedParserProphecy->parse('<getName()>')->willReturn(new FunctionCallValue('getName'));
+        yield 'unexpected reference' => [
+            function (self $testCase) {
+                $decoratedParserProphecy = $testCase->prophesize(ParserInterface::class);
+                $decoratedParserProphecy->parse('@user')->willReturn('foo');
+                $decoratedParserProphecy->parse('<getName()>')->willReturn(new FunctionCallValue('getName'));
 
-        yield 'unexpected reference' => [$decoratedParserProphecy->reveal()];
+                return $decoratedParserProphecy->reveal();
+            },
+        ];
 
-        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse('@user')->willReturn(new FixtureReferenceValue('user'));
-        $decoratedParserProphecy->parse('<getName()>')->willReturn('foo');
+        yield 'unexpected fixture call' => [
+            function (self $testCase) {
+                $decoratedParserProphecy = $testCase->prophesize(ParserInterface::class);
+                $decoratedParserProphecy->parse('@user')->willReturn(new FixtureReferenceValue('user'));
+                $decoratedParserProphecy->parse('<getName()>')->willReturn('foo');
 
-        yield 'unexpected fixture call' => [$decoratedParserProphecy->reveal()];
+                return $decoratedParserProphecy->reveal();
+            },
+        ];
 
-        $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
-        $decoratedParserProphecy->parse('@user')->willReturn('foo');
-        $decoratedParserProphecy->parse('<getName()>')->willReturn('bar');
+        yield 'unexpected reference and fixture call' => [
+            function (self $testCase) {
+                $decoratedParserProphecy = $testCase->prophesize(ParserInterface::class);
+                $decoratedParserProphecy->parse('@user')->willReturn('foo');
+                $decoratedParserProphecy->parse('<getName()>')->willReturn('bar');
 
-        yield 'unexpected reference and fixture call' => [$decoratedParserProphecy->reveal()];
+                return $decoratedParserProphecy->reveal();
+            },
+        ];
     }
 }

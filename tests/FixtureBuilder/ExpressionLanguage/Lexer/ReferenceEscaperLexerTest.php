@@ -60,7 +60,7 @@ class ReferenceEscaperLexerTest extends TestCase
         $decoratedLexerProphecy->lex(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    public function provideValues(): iterable
+    public static function provideValues(): iterable
     {
         yield 'empty string' => [''];
 

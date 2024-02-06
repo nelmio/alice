@@ -60,7 +60,7 @@ class FunctionTokenizerTest extends TestCase
         }
     }
 
-    public function provideValues(): iterable
+    public static function provideValues(): iterable
     {
         yield 'non function' => [
             'foo',

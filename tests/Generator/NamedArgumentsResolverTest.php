@@ -39,7 +39,7 @@ class NamedArgumentsResolverTest extends TestCase
         );
     }
 
-    public function provideResolveArgumentsCases(): iterable
+    public static function provideResolveArgumentsCases(): iterable
     {
         yield 'constructor: no named arguments' => [
             DummyWithMethods::class,

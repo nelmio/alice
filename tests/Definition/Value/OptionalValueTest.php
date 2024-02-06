@@ -124,7 +124,7 @@ class OptionalValueTest extends TestCase
         self::assertEquals('10%? foo : null', (string) $value);
     }
 
-    public function provideInputValues(): iterable
+    public static function provideInputValues(): iterable
     {
         yield 'null/string/string' => [
             null,
