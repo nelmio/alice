@@ -24,12 +24,12 @@ class UnresolvableValueDuringGenerationExceptionFactoryTest extends TestCase
 {
     public function testCreateFromResolutionThrowable(): void
     {
-        $previous = new RootResolutionException();
+        $previous = new RootResolutionException('Could not find the fixture "some_fixture".');
 
         $exception = UnresolvableValueDuringGenerationExceptionFactory::createFromResolutionThrowable($previous);
 
         self::assertEquals(
-            'Could not resolve value during the generation process.',
+            'Could not resolve value during the generation process: Could not find the fixture "some_fixture".',
             $exception->getMessage(),
         );
         self::assertEquals(0, $exception->getCode());
