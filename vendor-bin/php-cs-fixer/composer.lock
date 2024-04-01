@@ -227,26 +227,26 @@
         },
         {
             "name": "fidry/php-cs-fixer-config",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theofidry/php-cs-fixer-config.git",
-                "reference": "3bf91a6c6aa79a096a4b329b02b4c4a946f2191e"
+                "reference": "0f4d3d2ce674d79d894dc72e79606685a41bed8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theofidry/php-cs-fixer-config/zipball/3bf91a6c6aa79a096a4b329b02b4c4a946f2191e",
-                "reference": "3bf91a6c6aa79a096a4b329b02b4c4a946f2191e",
+                "url": "https://api.github.com/repos/theofidry/php-cs-fixer-config/zipball/0f4d3d2ce674d79d894dc72e79606685a41bed8c",
+                "reference": "0f4d3d2ce674d79d894dc72e79606685a41bed8c",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0"
             },
             "conflict": {
-                "friendsofphp/php-cs-fixer": "<3.32.0,>=4.0"
+                "friendsofphp/php-cs-fixer": "<3.32.0 || >=4.0"
             },
             "require-dev": {
-                "ergebnis/composer-normalize": "~2.13.0",
+                "ergebnis/composer-normalize": "^2.13.0",
                 "fidry/makefile": "^0.2.1 || ^1.0.0",
                 "friendsofphp/php-cs-fixer": "^3.32.0",
                 "phpunit/phpunit": "^9.4.3 || ^10.0",
@@ -271,9 +271,9 @@
             "description": "The PHP-CS-Fixer default config for my projects",
             "support": {
                 "issues": "https://github.com/theofidry/php-cs-fixer-config/issues",
-                "source": "https://github.com/theofidry/php-cs-fixer-config/tree/1.2.0"
+                "source": "https://github.com/theofidry/php-cs-fixer-config/tree/1.2.1"
             },
-            "time": "2023-11-22T09:14:35+00:00"
+            "time": "2024-04-01T13:32:19+00:00"
         },
         {
             "name": "friendsofphp/php-cs-fixer",
