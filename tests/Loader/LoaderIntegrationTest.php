@@ -1524,7 +1524,7 @@ class LoaderIntegrationTest extends TestCase
             ]);
         } catch (DebugUnexpectedValueException $exception) {
             self::assertSame(
-                'An error occurred while generating the fixture "another_dummy" (stdClass): Could not resolve value during the generation process.',
+                'An error occurred while generating the fixture "another_dummy" (stdClass): Could not resolve value during the generation process: Could not evaluate the expression "@dummy": Undefined variable $_instances',
                 $exception->getMessage(),
             );
 
@@ -2629,7 +2629,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            'An error occurred while generating the fixture "another_dummy" (stdClass): Could not resolve value during the generation process.',
+            'An error occurred while generating the fixture "another_dummy" (stdClass): Could not resolve value during the generation process: Could not find the property "bob" of the object "another_dummy" (class: stdClass).',
             GenerationThrowable::class,
         ];
 
@@ -3113,7 +3113,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            'An error occurred while generating the fixture "another_dummy" (Nelmio\Alice\Entity\DummyWithGetter): Could not resolve value during the generation process.',
+            'An error occurred while generating the fixture "another_dummy" (Nelmio\Alice\Entity\DummyWithGetter): Could not resolve value during the generation process: Could not find a variable "$foo".',
             GenerationThrowable::class,
         ];
 
@@ -3145,7 +3145,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            'An error occurred while generating the fixture "dummy" (stdClass): Could not resolve value during the generation process.',
+            'An error occurred while generating the fixture "dummy" (stdClass): Could not resolve value during the generation process: Could not evaluate the expression ""Hello": syntax error, unexpected end of file, expecting variable or "${" or "{$"',
             GenerationThrowable::class,
         ];
 
@@ -3690,7 +3690,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\DummyWithConstructorParam): Could not resolve value during the generation process.',
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\DummyWithConstructorParam): Could not resolve value during the generation process: Circular reference detected for the parameter "another_dummy" while resolving ["another_dummy", "dummy"].',
             GenerationThrowable::class,
         ];
 
