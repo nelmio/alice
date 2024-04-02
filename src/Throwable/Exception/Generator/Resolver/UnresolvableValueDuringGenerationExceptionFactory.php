@@ -23,7 +23,7 @@ final class UnresolvableValueDuringGenerationExceptionFactory
     public static function createFromResolutionThrowable(ResolutionThrowable $previous): UnresolvableValueDuringGenerationException
     {
         return new UnresolvableValueDuringGenerationException(
-            'Could not resolve value during the generation process: ' . $previous->getMessage(),
+            'Could not resolve value during the generation process: '.$previous->getMessage(),
             0,
             $previous,
         );
