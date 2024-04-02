@@ -102,7 +102,7 @@
 
         <service id="nelmio_alice.generator.resolver.value.chainable.optional_value_resolver"
                  class="Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver">
-            <argument type="service" id="nelmio_alice.faker.generator" />
+            <argument type="service" key="$faker" id="nelmio_alice.faker.generator" />
             <tag name="nelmio_alice.generator.resolver.value.chainable_resolver" />
         </service>
 
