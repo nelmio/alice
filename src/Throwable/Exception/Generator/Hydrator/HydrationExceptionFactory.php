@@ -84,7 +84,7 @@ final class HydrationExceptionFactory
     ): NoSuchPropertyException {
         return new NoSuchPropertyException(
             sprintf(
-                'Could not hydrate the property "%s" of the object "%s" (class: %s).',
+                'Could not hydrate the property "%s" of the object "%s", as the property does not exist (class: %s).',
                 $property->getName(),
                 $object->getId(),
                 get_class($object->getInstance()),

@@ -124,7 +124,7 @@ class SymfonyPropertyAccessorHydratorTest extends TestCase
             self::fail('Expected exception to be thrown.');
         } catch (NoSuchPropertyException $exception) {
             self::assertEquals(
-                'Could not hydrate the property "foo" of the object "dummy" (class: Nelmio\Alice\Dummy).',
+                'Could not hydrate the property "foo" of the object "dummy", as the property does not exist (class: Nelmio\Alice\Dummy).',
                 $exception->getMessage(),
             );
             self::assertEquals(0, $exception->getCode());
