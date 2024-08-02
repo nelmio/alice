@@ -3401,10 +3401,10 @@ class LoaderIntegrationTest extends TestCase
                 stdClass::class => [
                     'dummy' => [
                         'atValues' => [
-                            '\\@<("hello")>',
+                            '\@<("hello")>',
                             '\\\\',
-                            '\\\\\\@foo',
-                            '\\\\foo',
+                            '\\\\\@foo',
+                            '\\\foo',
                         ],
                     ],
                 ],
@@ -3416,8 +3416,8 @@ class LoaderIntegrationTest extends TestCase
                         'atValues' => [
                             '@hello',
                             '\\',
-                            '\\@foo',
-                            '\\foo',
+                            '\@foo',
+                            '\foo',
                         ],
                     ]),
                 ],

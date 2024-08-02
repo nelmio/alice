@@ -61,7 +61,7 @@ final class YamlParser implements ChainableParserInterface
         }
 
         try {
-            $data = defined('Symfony\\Component\\Yaml\\Yaml::PARSE_CONSTANT')
+            $data = defined('Symfony\Component\Yaml\Yaml::PARSE_CONSTANT')
                 ? $this->yamlParser->parse(file_get_contents($file), Yaml::PARSE_CONSTANT)
                 : $this->yamlParser->parse(file_get_contents($file));
 

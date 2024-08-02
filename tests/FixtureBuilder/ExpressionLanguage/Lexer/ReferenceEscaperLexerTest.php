@@ -70,6 +70,6 @@ class ReferenceEscaperLexerTest extends TestCase
 
         yield 'string with a reference with members' => ['bar @foo baz'];
 
-        yield 'reference in a middle of a word' => ['email@example', 'email\\@example'];
+        yield 'reference in a middle of a word' => ['email@example', 'email\@example'];
     }
 }

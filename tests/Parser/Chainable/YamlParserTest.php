@@ -148,7 +148,7 @@ class YamlParserTest extends TestCase
         $expected = [new stdClass()];
 
         $symfonyYamlParserProphecy = $this->prophesize(SymfonyYamlParser::class);
-        if (defined('Symfony\\Component\\Yaml\\Yaml::PARSE_CONSTANT')) {
+        if (defined('Symfony\Component\Yaml\Yaml::PARSE_CONSTANT')) {
             $symfonyYamlParserProphecy->parse($fileContent, Yaml::PARSE_CONSTANT)->willReturn($expected);
         } else {
             $symfonyYamlParserProphecy->parse($fileContent)->willReturn($expected);
@@ -186,7 +186,7 @@ class YamlParserTest extends TestCase
 
     public function testParseReturnsInterpretedConstants(): void
     {
-        if (!defined('Symfony\\Component\\Yaml\\Yaml::PARSE_CONSTANT')) {
+        if (!defined('Symfony\Component\Yaml\Yaml::PARSE_CONSTANT')) {
             self::markTestSkipped('This test needs symfony/yaml v3.2 or higher.');
         }
 
