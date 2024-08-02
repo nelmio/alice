@@ -2266,7 +2266,7 @@ class LoaderIntegrationTest extends TestCase
                     ],
                 ],
             ],
-            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy): Could not hydrate the property "setter_property" of the object "dummy" (class: Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy).',
+            'An error occurred while generating the fixture "dummy" (Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy): Could not hydrate the property "setter_property" of the object "dummy", as the property does not exist (class: Nelmio\Alice\Entity\Hydrator\SnakeCaseDummy).',
             GenerationThrowable::class,
         ];
 

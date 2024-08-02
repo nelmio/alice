@@ -99,7 +99,7 @@ class HydrationExceptionFactoryTest extends TestCase
 
         $exception = HydrationExceptionFactory::createForCouldNotHydrateObjectWithProperty($object, $property);
         self::assertEquals(
-            'Could not hydrate the property "foo" of the object "dummy" (class: stdClass).',
+            'Could not hydrate the property "foo" of the object "dummy", as the property does not exist (class: stdClass).',
             $exception->getMessage(),
         );
         self::assertEquals(0, $exception->getCode());
@@ -110,7 +110,7 @@ class HydrationExceptionFactoryTest extends TestCase
 
         $exception = HydrationExceptionFactory::createForCouldNotHydrateObjectWithProperty($object, $property, $code, $previous);
         self::assertEquals(
-            'Could not hydrate the property "foo" of the object "dummy" (class: stdClass).',
+            'Could not hydrate the property "foo" of the object "dummy", as the property does not exist (class: stdClass).',
             $exception->getMessage(),
         );
         self::assertEquals($code, $exception->getCode());
