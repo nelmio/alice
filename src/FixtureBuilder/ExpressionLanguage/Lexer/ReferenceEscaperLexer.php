@@ -42,7 +42,7 @@ final class ReferenceEscaperLexer implements LexerInterface
      */
     public function lex(string $value): array
     {
-        $escapedValue = preg_replace('/(\\p{L})@/', '$1\\@', $value);
+        $escapedValue = preg_replace('/(\p{L})@/', '$1\@', $value);
 
         return $this->lexer->lex($escapedValue);
     }

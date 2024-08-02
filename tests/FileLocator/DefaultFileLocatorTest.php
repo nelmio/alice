@@ -96,8 +96,8 @@ class DefaultFileLocatorTest extends TestCase
     {
         return [
             ['/foo.xml'],
-            ['\\server\\foo.xml'],
-            ['c:\\\\foo.xml'],
+            ['\server\foo.xml'],
+            ['c:\\\foo.xml'],
             ['c:/foo.xml'],
             ['https://server/foo.xml'],
             ['phar://server/foo.xml'],
