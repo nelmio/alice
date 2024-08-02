@@ -154,38 +154,38 @@ class LexerIntegrationTest extends TestCase
             ],
         ];
         yield '[Escape character] with empty reference' => [
-            '\\@',
+            '\@',
             [
-                new Token('\\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
         yield '[Escape character] with reference' => [
-            '\\@user0',
+            '\@user0',
             [
-                new Token('\\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('user', new TokenType(TokenType::STRING_TYPE)),
                 new Token('0', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Escape character] with function reference' => [
-            '\\@<foo()>',
+            '\@<foo()>',
             [
-                new Token('\\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('<aliceTokenizedFunction(FUNCTION_START__foo__IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
         yield '[Escape character] double escape with reference' => [
-            '\\\\@',
+            '\\\@',
             [
                 new Token('\\\\', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
                 new Token('@', new TokenType(TokenType::STRING_TYPE)),
             ],
         ];
         yield '[Escape character] triple escape with empty reference' => [
-            '\\\\\\@',
+            '\\\\\@',
             [
                 new Token('\\\\', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
-                new Token('\\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
+                new Token('\@', new TokenType(TokenType::ESCAPED_VALUE_TYPE)),
             ],
         ];
 
@@ -569,7 +569,7 @@ class LexerIntegrationTest extends TestCase
         ];
 
         yield '[Function] with windows type line break in single quoted string argument' => [
-            '<function(\'foo\\r\\nbar\')>',
+            '<function(\'foo\r\nbar\')>',
             [
                 new Token('<aliceTokenizedFunction(FUNCTION_START__function__\'foo\r\nbar\'IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],

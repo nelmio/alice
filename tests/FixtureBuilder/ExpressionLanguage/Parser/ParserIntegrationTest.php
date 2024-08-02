@@ -140,27 +140,27 @@ class ParserIntegrationTest extends TestCase
             '\\',
         ];
         yield '[Escape character] with empty reference' => [
-            '\\@',
+            '\@',
             '@',
         ];
         yield '[Escape character] with reference' => [
-            '\\@user0',
+            '\@user0',
             '@user0',
         ];
         yield '[Escape character] with function reference' => [
-            '\\@<foo()>',
+            '\@<foo()>',
             new ListValue([
                 '@',
                 new FunctionCallValue('foo'),
             ]),
         ];
         yield '[Escape character] double escape with reference' => [
-            '\\\\@',
-            '\\@',
+            '\\\@',
+            '\@',
         ];
         yield '[Escape character] triple escape with empty reference' => [
-            '\\\\\\@',
-            '\\@',
+            '\\\\\@',
+            '\@',
         ];
 
         // Escaped arrow
@@ -580,11 +580,11 @@ class ParserIntegrationTest extends TestCase
         ];
 
         yield '[Function] with windows type line break in single quoted string argument' => [
-            '<function(\'foo\\r\\nbar\')>',
+            '<function(\'foo\r\nbar\')>',
             new FunctionCallValue(
                 'function',
                 [
-                    'foo\\r\\nbar',
+                    'foo\r\nbar',
                 ],
             ),
         ];

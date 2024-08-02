@@ -99,7 +99,7 @@ class EvaluatedValueResolverTest extends TestCase
 
     public function testThrowsAnExceptionIfAnErrorOccurredDuringEvaluation(): void
     {
-        $value = new EvaluatedValue('(function () { throw new \\Exception(""); })()');
+        $value = new EvaluatedValue('(function () { throw new \Exception(""); })()');
         $fixture = new SimpleFixture('dummy', 'Dummy', SpecificationBagFactory::create());
         $set = ResolvedFixtureSetFactory::create();
 
