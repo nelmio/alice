@@ -39,7 +39,6 @@ class ConfiguratorMethodCallTest extends TestCase
         $caller = new InstantiatedReference('user.factory');
         $method = 'setUsername';
         $arguments = [new stdClass()];
-        $percentage = 30;
         $stringValue = 'user.factory->setUsername';
 
         $methodCallProphecy = $this->prophesize(MethodCallInterface::class);
@@ -47,7 +46,6 @@ class ConfiguratorMethodCallTest extends TestCase
         $methodCallProphecy->getMethod()->willReturn($method);
         $methodCallProphecy->getArguments()->willReturn($arguments);
         $methodCallProphecy->__toString()->willReturn($stringValue);
-        /** @var MethodCallInterface $caller */
         $methodCall = $methodCallProphecy->reveal();
 
         $definition = new ConfiguratorMethodCall($methodCall);
