@@ -40,10 +40,9 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
         FlagParserInterface $parser,
         array $unparsedMethod
     ): MethodCallInterface {
-        /** @var string|bool $method */
         $method = key($unparsedMethod);
 
-        if (false === $method
+        if (null === $method
             || false === is_string($method)
             || 1 !== count($unparsedMethod)
         ) {

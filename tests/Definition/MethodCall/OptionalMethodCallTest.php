@@ -48,7 +48,6 @@ class OptionalMethodCallTest extends TestCase
         $methodCallProphecy->getMethod()->willReturn($method);
         $methodCallProphecy->getArguments()->willReturn($arguments);
         $methodCallProphecy->__toString()->willReturn($stringValue);
-        /** @var MethodCallInterface $caller */
         $methodCall = $methodCallProphecy->reveal();
 
         $flag = new OptionalFlag($percentage);
