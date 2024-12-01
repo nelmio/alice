@@ -9,10 +9,6 @@ parameters:
         - src/Generator/Resolver/FixtureSet/FakeFixtureSetResolver.php
     level: 3
     ignoreErrors:
-        # Prophecy
-        - '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::[a-zA-Z0-9_]+\(\)#'
-
-
         # To fix at some point
         - path: src/Throwable/Exception/FileLocator/FileNotFoundException.php
           message: '#Unsafe usage of new static#'
