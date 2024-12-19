@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Caller\Chainable;
 
+use Faker\Generator as FakerGenerator;
 use LogicException;
 use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
@@ -33,14 +34,20 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
      */
     private $processor;
 
-    public function __construct(?CallProcessorInterface $processor = null)
+    /**
+     * @var ?FakerGenerator
+     */
+    private $faker;
+
+    public function __construct(?CallProcessorInterface $processor = null, ?FakerGenerator $faker = null)
     {
         $this->processor = $processor;
+        $this->faker = $faker;
     }
 
     public function withProcessor(CallProcessorInterface $processor): self
     {
-        return new self($processor);
+        return new self($processor, $this->faker);
     }
 
     public function canProcess(MethodCallInterface $methodCall): bool
@@ -65,7 +72,13 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
             throw new LogicException('TODO');
         }
 
-        if (random_int(0, 99) >= $methodCall->getPercentage()) {
+        // TODO: for BC purposes, let's fallback to random_int. The generator should be made
+        //   non-nullable in 4.x and the random_int usage removed. (See OptionalValueResolver)
+        $random = null !== $this->faker
+            ? $this->faker->numberBetween(0, 99)
+            : random_int(0, 99);
+
+        if ($random >= $methodCall->getPercentage()) {
             return $fixtureSet;
         }
 
