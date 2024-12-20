@@ -37,6 +37,7 @@ use Nelmio\Alice\User;
 use Nelmio\Alice\UserDetail;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionObject;
 use stdClass;
 use Throwable;
 use TypeError;
@@ -1573,6 +1574,33 @@ class LoaderIntegrationTest extends TestCase
             ],
             $objects,
         );
+    }
+
+    public function testOptionalMethodCallsAreDeterministic(): void
+    {
+        $gen_sequence = function (NativeLoader $loader) {
+            $set = $loader->loadData([
+                FixtureEntity\Caller\Dummy::class => [
+                    'dummy{0..9}' => [
+                        '__construct' => false,
+                        '__calls' => [
+                            ['setTitle (50%?)' => ['Foo']],
+                        ],
+                    ],
+                ],
+            ]);
+            $objs = array_values($set->getObjects());
+
+            return array_map(
+                fn ($obj) => (new ReflectionObject($obj))->getProperty('title')->getValue($obj),
+                $objs,
+            );
+        };
+
+        $seq_1 = $gen_sequence(new NativeLoader());
+        $seq_2 = $gen_sequence(new NativeLoader());
+
+        self::assertSame($seq_1, $seq_2);
     }
 
     public static function provideFixturesToInstantiate(): iterable
