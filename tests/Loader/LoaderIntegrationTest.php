@@ -4094,34 +4094,32 @@ class LoaderIntegrationTest extends TestCase
         })();
 
         // https://github.com/nelmio/alice/issues/770
-        yield 'typed parameters' => (static function () {
-            return [
-                [
-                    'parameters' => [
-                        'intParam' => 100,
-                        'stringParam' => '100',
-                    ],
-                    stdClass::class => [
-                        'dummy' => [
-                            'intParam' => '<{intParam}>',
-                            'stringParam' => '<{stringParam}>',
-                        ],
+        yield 'typed parameters' => (static fn () => [
+            [
+                'parameters' => [
+                    'intParam' => 100,
+                    'stringParam' => '100',
+                ],
+                stdClass::class => [
+                    'dummy' => [
+                        'intParam' => '<{intParam}>',
+                        'stringParam' => '<{stringParam}>',
                     ],
                 ],
-                [
-                    'parameters' => [
+            ],
+            [
+                'parameters' => [
+                    'intParam' => 100,
+                    'stringParam' => '100',
+                ],
+                'objects' => [
+                    'dummy' => StdClassFactory::create([
                         'intParam' => 100,
                         'stringParam' => '100',
-                    ],
-                    'objects' => [
-                        'dummy' => StdClassFactory::create([
-                            'intParam' => 100,
-                            'stringParam' => '100',
-                        ]),
-                    ],
+                    ]),
                 ],
-            ];
-        })();
+            ],
+        ])();
 
         // https://github.com/nelmio/alice/issues/894
         yield 'complex circular reference case' => (static function () {
