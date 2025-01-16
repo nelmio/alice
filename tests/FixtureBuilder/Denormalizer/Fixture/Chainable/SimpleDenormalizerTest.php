@@ -37,7 +37,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\SimpleDenormalizer
  * @internal
  */
-class SimpleDenormalizerTest extends ChainableDenormalizerTest
+class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 {
     use ProphecyTrait;
 

@@ -25,13 +25,13 @@ class LexerParserSynchronizationTest extends TestCase
 {
     public function testProvidesAreSynchronized(): void
     {
-        $lexerTestCase = new LexerIntegrationTest();
+        $lexerTestCase = new LexerIntegrationTest('LexerIntegrationTest#lexer');
         $lexerProviderKeys = [];
         foreach ($lexerTestCase->provideValues() as $key => $values) {
             $lexerProviderKeys[] = $key;
         }
 
-        $parserTestCase = new ParserIntegrationTest();
+        $parserTestCase = new ParserIntegrationTest('LexerIntegrationTest#parser');
         $parserProviderKeys = [];
         foreach ($parserTestCase->provideValues() as $key => $value) {
             $parserProviderKeys[] = $key;

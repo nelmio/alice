@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Value\Chainable;
 
+use ErrorException;
 use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureInterface;
@@ -25,6 +26,10 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExcepti
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 use Throwable;
+use function error_reporting;
+use function ErrorException;
+use function restore_error_handler;
+use function set_error_handler;
 
 final class EvaluatedValueResolver implements ChainableValueResolverInterface
 {
@@ -75,9 +80,21 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         };
 
         try {
+            set_error_handler(function (int $errorNumber, string $errorString, string $errorFile, int $errorLine) {
+                $suppressed = !(error_reporting() & $errorNumber);
+
+                if ($suppressed) {
+                    return false;
+                }
+
+                throw new ErrorException($errorString, 0, $errorNumber, $errorFile, $errorLine);
+            });
+
             $evaluatedExpression = $evaluateExpression($expression);
         } catch (Throwable $throwable) {
             throw UnresolvableValueExceptionFactory::createForCouldNotEvaluateExpression($value, 0, $throwable);
+        } finally {
+            restore_error_handler();
         }
 
         return new ResolvedValueWithFixtureSet($evaluatedExpression, $fixtureSet);
