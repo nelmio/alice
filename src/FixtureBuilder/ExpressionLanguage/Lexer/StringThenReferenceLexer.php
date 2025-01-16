@@ -50,7 +50,7 @@ final class StringThenReferenceLexer implements LexerInterface
 
             if (TokenType::STRING_TYPE === $token->getType()
                 && TokenType::SIMPLE_REFERENCE_TYPE === $nextToken->getType()
-                && '' !== trim($token->getValue())
+                && '' !== mb_trim($token->getValue())
                 && !in_array(mb_substr($token->getValue(), -1), [' ', '\''], true)
             ) {
                 array_splice($tokens, $idx, 2, [

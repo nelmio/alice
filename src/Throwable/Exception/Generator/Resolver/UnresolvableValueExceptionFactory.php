@@ -24,7 +24,7 @@ final class UnresolvableValueExceptionFactory
     public static function create(ValueInterface $value, int $code = 0, ?Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
-            null === $previous || '' === trim($previous->getMessage())
+            null === $previous || '' === mb_trim($previous->getMessage())
                 ? sprintf(
                     'Could not resolve value "%s".',
                     $value,
@@ -57,7 +57,7 @@ final class UnresolvableValueExceptionFactory
     public static function createForCouldNotEvaluateExpression(ValueInterface $value, int $code = 0, ?Throwable $previous = null): UnresolvableValueException
     {
         return new UnresolvableValueException(
-            null === $previous || '' === trim($previous->getMessage())
+            null === $previous || '' === mb_trim($previous->getMessage())
                 ? sprintf(
                     'Could not evaluate the expression "%s".',
                     $value->__toString(),
