@@ -35,6 +35,8 @@ use Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\User;
 use Nelmio\Alice\UserDetail;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionObject;
@@ -187,12 +189,8 @@ class LoaderIntegrationTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideFixturesToInstantiate
-     *
-     * @param object|string $expected
-     */
-    public function testObjectInstantiation(array $data, $expected, ?string $instanceof = null): void
+    #[DataProvider('provideFixturesToInstantiate')]
+    public function testObjectInstantiation(array $data, object|string $expected, ?string $instanceof = null): void
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
@@ -219,15 +217,11 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @group legacy
-     *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
-     *
-     * @dataProvider provideLegacyFixturesToInstantiate
-     *
-     * @param object|string $expected
      */
-    public function testObjectInstantiationWithLegacyConstruct(array $data, $expected, ?string $instanceof = null): void
+    #[Group('legacy')]
+    #[DataProvider('provideLegacyFixturesToInstantiate')]
+    public function testObjectInstantiationWithLegacyConstruct(array $data, object|string $expected, ?string $instanceof = null): void
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
@@ -253,12 +247,8 @@ class LoaderIntegrationTest extends TestCase
         self::assertEquals($expected, $objects['dummy']);
     }
 
-    /**
-     * @dataProvider provideFixturesToInstantiateWithFactory
-     *
-     * @param array|string $expected
-     */
-    public function testObjectInstantiationWithFactory(array $data, $expected, ?string $instanceof = null): void
+    #[DataProvider('provideFixturesToInstantiateWithFactory')]
+    public function testObjectInstantiationWithFactory(array $data, mixed $expected, ?string $instanceof = null): void
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
@@ -300,14 +290,11 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @dataProvider provideFixtureToInstantiateWithDeprecatedConstructor
-     *
-     * @group legacy
-     *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
-     * @param mixed $expected
      */
-    public function testUsingConstructorAsAFactoryIsDeprecated(array $data, $expected): void
+    #[Group('legacy')]
+    #[DataProvider('provideFixtureToInstantiateWithDeprecatedConstructor')]
+    public function testUsingConstructorAsAFactoryIsDeprecated(array $data, mixed $expected): void
     {
         $objects = $this->loader->loadData($data)->getObjects();
 
@@ -315,12 +302,8 @@ class LoaderIntegrationTest extends TestCase
         self::assertEquals($expected, $objects['dummy']);
     }
 
-    /**
-     * @dataProvider provideFixturesToHydrate
-     *
-     * @param array|string $expected
-     */
-    public function testObjectHydration(array $data, $expected, ?string $instanceof = null): void
+    #[DataProvider('provideFixturesToHydrate')]
+    public function testObjectHydration(array $data, string|array $expected, ?string $instanceof = null): void
     {
         try {
             $objects = $this->loader->loadData($data)->getObjects();
@@ -346,12 +329,8 @@ class LoaderIntegrationTest extends TestCase
         self::assertEquals($expected, $objects);
     }
 
-    /**
-     * @dataProvider provideFixturesToGenerate
-     *
-     * @param string|array $expected
-     */
-    public function testFixtureGeneration(array $data, $expected, ?string $instanceof = null): void
+    #[DataProvider('provideFixturesToGenerate')]
+    public function testFixtureGeneration(array $data, string|array $expected, ?string $instanceof = null): void
     {
         try {
             $set = $this->loader->loadData($data);

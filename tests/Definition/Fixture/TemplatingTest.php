@@ -19,6 +19,7 @@ use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,9 +36,7 @@ class TemplatingTest extends TestCase
         self::assertTrue(true, 'Nothing to do.');
     }
 
-    /**
-     * @dataProvider provideFlags
-     */
+    #[DataProvider('provideFlags')]
     public function testDetectTemplateFlags(SimpleFixtureWithFlags $fixture, bool $isATemplate, bool $extendsFixtures, array $extendedFixtures): void
     {
         $templating = new Templating($fixture);

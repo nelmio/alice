@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -22,11 +23,8 @@ use stdClass;
  */
 class ParameterTest extends TestCase
 {
-    /**
-     * @dataProvider provideValues
-     * @param mixed $value
-     */
-    public function testAccessors($value): void
+    #[DataProvider('provideValues')]
+    public function testAccessors(mixed $value): void
     {
         $parameter = new Parameter('foo', $value);
 
