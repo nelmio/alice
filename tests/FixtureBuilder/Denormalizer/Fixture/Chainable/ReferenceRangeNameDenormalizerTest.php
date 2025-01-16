@@ -38,7 +38,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\ReferenceRangeNameDenormalizer
  * @internal
  */
-class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
+class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTestCase
 {
     use ProphecyTrait;
 
