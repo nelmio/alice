@@ -93,7 +93,7 @@ final class FunctionTokenParser implements ChainableTokenParserInterface, Parser
         } elseif ('current' === $function) {
             $arguments = [new ValueForCurrentValue()];
         } else {
-            $arguments = $this->parseArguments($this->parser, trim($matches['arguments']));
+            $arguments = $this->parseArguments($this->parser, mb_trim($matches['arguments']));
         }
 
         return new FunctionCallValue($function, $arguments);

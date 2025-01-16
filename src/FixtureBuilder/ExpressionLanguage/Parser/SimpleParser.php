@@ -59,12 +59,12 @@ final class SimpleParser implements ParserInterface
 
         if (count($parsedTokens) > 1) {
             $first = reset($parsedTokens);
-            if (is_string($first) && '' === trim($first)) {
+            if (is_string($first) && '' === mb_trim($first)) {
                 array_shift($parsedTokens);
             }
 
             $last = end($parsedTokens);
-            if (is_string($last) && '' === trim($last)) {
+            if (is_string($last) && '' === mb_trim($last)) {
                 array_pop($parsedTokens);
             }
         }

@@ -7,6 +7,9 @@ on:
     schedule:
         - cron: '45 4 1 * *'
 
+env:
+    PHP_CS_FIXER_IGNORE_ENV: 1
+
 jobs:
     php-cs-fixer:
         name: PHP-CS-Fixer
@@ -18,7 +21,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.3'
+                  php-version: '8.4'
 
             - name: Install dependencies
               run: composer install --no-progress --no-interaction --prefer-dist
@@ -39,7 +42,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.3'
+                  php-version: '8.4'
 
             - name: Install dependencies
               run: composer install --no-progress --no-interaction --prefer-dist
