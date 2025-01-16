@@ -27,7 +27,6 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExcepti
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 use Throwable;
 use function error_reporting;
-use function ErrorException;
 use function restore_error_handler;
 use function set_error_handler;
 
