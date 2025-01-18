@@ -49,7 +49,7 @@ final class OptionalTokenParser extends AbstractChainableParserAwareParser
 
         return new OptionalValue(
             $this->parser->parse($matches['quantifier']),
-            $this->parser->parse(trim($matches['first_member'])),
+            $this->parser->parse(mb_trim($matches['first_member'])),
             array_key_exists('second_member', $matches)
                 ? $this->parser->parse($matches['second_member'])
                 : null,

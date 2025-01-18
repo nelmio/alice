@@ -59,7 +59,7 @@ final class StringArrayTokenParser extends AbstractChainableParserAwareParser
 
         $elements = preg_split('/\s*,\s*/', $elements);
         foreach ($elements as $index => $argument) {
-            $elements[$index] = $parser->parse(trim($argument));
+            $elements[$index] = $parser->parse(mb_trim($argument));
         }
 
         return $elements;

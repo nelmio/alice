@@ -47,7 +47,7 @@ final class ElementFlagParser implements FlagParserInterface
         $stringFlags = preg_split('/\s*,\s*/', $matches['stringFlags']);
         foreach ($stringFlags as $stringFlag) {
             $flags = $flags->mergeWith(
-                $this->parser->parse(trim($stringFlag)),
+                $this->parser->parse(mb_trim($stringFlag)),
             );
         }
 
