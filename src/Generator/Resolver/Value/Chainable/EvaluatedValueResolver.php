@@ -105,6 +105,6 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
      */
     private function replacePlaceholders(string $expression): string
     {
-        return preg_replace('/(@(?<id>[^ @\-]+))/', '\$_instances[\'$2\']', $expression);
+        return preg_replace('/(@(?<id>[^ @\-,\]]+))/', '\$_instances[\'$2\']', $expression);
     }
 }

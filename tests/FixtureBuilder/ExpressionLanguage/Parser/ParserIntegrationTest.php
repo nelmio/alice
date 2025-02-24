@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use Nelmio\Alice\Definition\MethodCall\IdentityFactory;
 use Nelmio\Alice\Definition\Value\ArrayValue;
 use Nelmio\Alice\Definition\Value\DynamicArrayValue;
+use Nelmio\Alice\Definition\Value\EvaluatedValue;
 use Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue;
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
@@ -619,6 +620,35 @@ class ParserIntegrationTest extends TestCase
                 [
                     // On windows if true
                     $args,
+                ],
+            ),
+        ];
+
+        // Object instantiation
+        yield '[Instantiation] create new object' => [
+            '<(new stdClass())>',
+            new FunctionCallValue(
+                'identity',
+                [
+                    new EvaluatedValue('new stdClass()'),
+                ],
+            ),
+        ];
+        yield '[Instantiation] create new object with an argument' => [
+            '<(new stdClass(\'foo\'))>',
+            new FunctionCallValue(
+                'identity',
+                [
+                    new EvaluatedValue('new stdClass(\'foo\')'),
+                ],
+            ),
+        ];
+        yield '[Instantiation] create new object with an array argument' => [
+            '<(new stdClass([@entity1, @entity2]))>',
+            new FunctionCallValue(
+                'identity',
+                [
+                    new EvaluatedValue('new stdClass([@entity1, @entity2])'),
                 ],
             ),
         ];
