@@ -874,7 +874,7 @@ class LoaderIntegrationTest extends TestCase
             new ParameterBag(),
             new ObjectBag([
                 'dummy' => new DummyWithConstructorAndCallable(null),
-                'foo-0' => new FixtureEntity\DummyWithConstructorParam(null),
+                'foo-0' => new DummyWithConstructorParam(null),
             ]),
         );
 
@@ -891,7 +891,7 @@ class LoaderIntegrationTest extends TestCase
                     '__construct' => ['foo'],
                 ],
             ],
-            FixtureEntity\DummyWithConstructorParam::class => [
+            DummyWithConstructorParam::class => [
                 'foo-0' => [
                     '__construct' => ['@dummy->foo'],
                 ],
@@ -1395,7 +1395,7 @@ class LoaderIntegrationTest extends TestCase
                     'foz' => '<{foo}>',
                     'foo' => 'baz',
                 ],
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'another_dummy' => [
                         '__construct' => ['@dummy'],
                     ],
@@ -1425,7 +1425,7 @@ class LoaderIntegrationTest extends TestCase
                 'dummy' => $dummy = StdClassFactory::create([
                     'injected' => false,
                 ]),
-                'another_dummy' => new FixtureEntity\DummyWithConstructorParam($dummy),
+                'another_dummy' => new DummyWithConstructorParam($dummy),
             ]),
         );
 
@@ -2363,7 +2363,7 @@ class LoaderIntegrationTest extends TestCase
                         ],
                     ],
                 ],
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             '@another_dummy',
@@ -2380,7 +2380,7 @@ class LoaderIntegrationTest extends TestCase
 
                         return $anotherDummy1;
                     })(new FixtureEntity\OnceTimerDummy()),
-                    'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($yetAnotherDummy1),
+                    'dummy' => $dummy1 = new DummyWithConstructorParam($yetAnotherDummy1),
                 ],
             ],
         ];
@@ -3405,7 +3405,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[current] in constructor' => [
             [
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'dummy{1..2}' => [
                         '__construct' => ['<current()>'],
                     ],
@@ -3417,10 +3417,10 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy1' => new FixtureEntity\DummyWithConstructorParam(1),
-                    'dummy2' => new FixtureEntity\DummyWithConstructorParam(2),
-                    'dummy_alice' => new FixtureEntity\DummyWithConstructorParam('alice'),
-                    'dummy_bob' => new FixtureEntity\DummyWithConstructorParam('bob'),
+                    'dummy1' => new DummyWithConstructorParam(1),
+                    'dummy2' => new DummyWithConstructorParam(2),
+                    'dummy_alice' => new DummyWithConstructorParam('alice'),
+                    'dummy_bob' => new DummyWithConstructorParam('bob'),
                 ],
             ],
         ];
@@ -3595,7 +3595,7 @@ class LoaderIntegrationTest extends TestCase
                     'ping' => 'pong',
                     'foo' => 'bar',
                 ],
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             [
@@ -3612,7 +3612,7 @@ class LoaderIntegrationTest extends TestCase
                     'foo' => 'bar',
                 ],
                 'objects' => [
-                    'dummy' => new FixtureEntity\DummyWithConstructorParam([
+                    'dummy' => new DummyWithConstructorParam([
                         'foo' => 'pong',
                         'bar' => 'bar',
                     ]),
@@ -3706,7 +3706,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'object circular reference' => [
             [
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             '@another_dummy',
@@ -4203,30 +4203,28 @@ class LoaderIntegrationTest extends TestCase
             ];
         })();
 
-        yield 'allow to instantiate an entity with an array arguments' => (static function () {
-            return [
-                [
-                    stdClass::class => [
-                        'entity1' => [],
-                        'entity2' => [],
-                        'dummy' => [
-                            'rootClass' => '<(new stdClass())>',
-                            'instance' => '<(new Nelmio\Alice\Entity\DummyWithConstructorParam([@entity1, @entity2]))>',
-                        ],
+        yield 'allow to instantiate an entity with an array arguments' => (static fn () => [
+            [
+                stdClass::class => [
+                    'entity1' => [],
+                    'entity2' => [],
+                    'dummy' => [
+                        'rootClass' => '<(new stdClass())>',
+                        'instance' => '<(new Nelmio\Alice\Entity\DummyWithConstructorParam([@entity1, @entity2]))>',
                     ],
                 ],
-                [
-                    'parameters' => [],
-                    'objects' => [
-                        'entity1' => new stdClass(),
-                        'entity2' => new stdClass(),
-                        'dummy' => StdClassFactory::create([
-                            'rootClass' => new stdClass(),
-                            'instance' => new FixtureEntity\DummyWithConstructorParam([new stdClass(), new stdClass()]),
-                        ]),
-                    ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'entity1' => new stdClass(),
+                    'entity2' => new stdClass(),
+                    'dummy' => StdClassFactory::create([
+                        'rootClass' => new stdClass(),
+                        'instance' => new DummyWithConstructorParam([new stdClass(), new stdClass()]),
+                    ]),
                 ],
-            ];
-        })();
+            ],
+        ])();
     }
 }
