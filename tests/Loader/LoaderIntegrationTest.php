@@ -20,6 +20,7 @@ use LogicException;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity as FixtureEntity;
 use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
+use Nelmio\Alice\Entity\DummyWithConstructorParam;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\FilesLoaderInterface;
@@ -4197,6 +4198,32 @@ class LoaderIntegrationTest extends TestCase
                         's10' => $s10,
                         's11' => $s11,
                         's12' => $s12,
+                    ],
+                ],
+            ];
+        })();
+
+        yield 'allow to instantiate an entity with an array arguments' => (static function () {
+            return [
+                [
+                    stdClass::class => [
+                        'entity1' => [],
+                        'entity2' => [],
+                        'dummy' => [
+                            'rootClass' => '<(new stdClass())>',
+                            'instance' => '<(new Nelmio\Alice\Entity\DummyWithConstructorParam([@entity1, @entity2]))>',
+                        ],
+                    ],
+                ],
+                [
+                    'parameters' => [],
+                    'objects' => [
+                        'entity1' => new stdClass(),
+                        'entity2' => new stdClass(),
+                        'dummy' => StdClassFactory::create([
+                            'rootClass' => new stdClass(),
+                            'instance' => new FixtureEntity\DummyWithConstructorParam([new stdClass(), new stdClass()]),
+                        ]),
                     ],
                 ],
             ];
