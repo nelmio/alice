@@ -597,6 +597,26 @@ class LexerIntegrationTest extends TestCase
             ],
         ];
 
+        // Object instantiation
+        yield '[Instantiation] create new object' => [
+            '<(new stdClass())>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTnew stdClass()IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Instantiation] create new object with an argument' => [
+            '<(new stdClass(\'foo\'))>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTnew stdClass(\'foo\')IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Instantiation] create new object with an array argument' => [
+            '<(new stdClass([@entity1, @entity2]))>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTnew stdClass([@entity1, @entity2])IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+
         // Arrays
         yield '[Array] nominal string array' => [
             '10x @user',
