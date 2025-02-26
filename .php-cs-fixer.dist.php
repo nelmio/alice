@@ -47,6 +47,7 @@ $config->addRules([
     'php_unit_test_annotation' => false,
     'phpdoc_no_empty_return' => false,
     'static_lambda' => false,
+    'php_unit_data_provider_method_order' => false,
 ]);
 
 $config->setFinder($finder);
