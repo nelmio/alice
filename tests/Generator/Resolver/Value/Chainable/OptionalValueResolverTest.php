@@ -23,6 +23,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
@@ -74,9 +75,7 @@ class OptionalValueResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    /**
-     * @dataProvider optionalValueProvider
-     */
+    #[DataProvider('optionalValueProvider')]
     public function testCanHandleExtremaQuantifiersCorrectly(
         OptionalValue $value,
         int $randomValue,

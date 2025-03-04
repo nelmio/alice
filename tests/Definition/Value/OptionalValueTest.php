@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use TypeError;
@@ -29,14 +30,8 @@ class OptionalValueTest extends TestCase
         self::assertTrue(is_a(OptionalValue::class, ValueInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideInputValues
-     * @param mixed $quantifier
-     * @param mixed $firstMember
-     * @param mixed $secondMember
-     * @param mixed $errorMessage
-     */
-    public function testThrowsErrorIfInvalidTypeGiven($quantifier, $firstMember, $secondMember, $errorMessage): void
+    #[DataProvider('provideInputValues')]
+    public function testThrowsErrorIfInvalidTypeGiven(mixed $quantifier, mixed $firstMember, mixed $secondMember, mixed $errorMessage): void
     {
         try {
             new OptionalValue($quantifier, $firstMember, $secondMember);
