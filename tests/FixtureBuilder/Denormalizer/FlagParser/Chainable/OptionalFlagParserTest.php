@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\OptionalFlagParser
@@ -33,9 +34,7 @@ class OptionalFlagParserTest extends FlagParserTestCase
         self::assertTrue(is_a(OptionalFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideOptionals
-     */
+    #[DataProvider('provideOptionals')]
     public function testCanParseOptionals(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);

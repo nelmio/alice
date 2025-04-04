@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
 use Nelmio\Alice\Entity\StdClassFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -38,9 +39,7 @@ class UniqueValuesPoolTest extends TestCase
         self::assertTrue(true, 'Nothing to do.');
     }
 
-    /**
-     * @dataProvider provideHasValueSet
-     */
+    #[DataProvider('provideHasValueSet')]
     public function testHasObjectValue(UniqueValuesPool $pool, UniqueValue $value, bool $expected): void
     {
         self::assertEquals($expected, $pool->has($value));
