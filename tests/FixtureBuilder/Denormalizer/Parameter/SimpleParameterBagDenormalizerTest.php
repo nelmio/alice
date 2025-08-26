@@ -15,6 +15,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter;
 
 use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 use stdClass;
@@ -46,9 +47,7 @@ class SimpleParameterBagDenormalizerTest extends TestCase
         self::assertFalse((new ReflectionObject($this->denormalizer))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideDataWithNoParameters
-     */
+    #[DataProvider('provideDataWithNoParameters')]
     public function testReturnsEmptyBagIfNoParametersHaveBeenDeclared(array $data): void
     {
         $actual = $this->denormalizer->denormalize($data);
@@ -56,9 +55,7 @@ class SimpleParameterBagDenormalizerTest extends TestCase
         self::assertEquals(new ParameterBag(), $actual);
     }
 
-    /**
-     * @dataProvider provideDataWithInvalidParameterKeys
-     */
+    #[DataProvider('provideDataWithInvalidParameterKeys')]
     public function testThrowsExceptionIfParametersKeyIsNotAnArray(array $data, string $expectedExceptionMessage): void
     {
         try {

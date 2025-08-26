@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 use Nelmio\Alice\Definition\Flag\ElementFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\PhpUnit\ProphecyTrait;
 use RuntimeException;
 
@@ -77,9 +78,7 @@ class ElementFlagParserTest extends FlagParserTestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider provideElements
-     */
+    #[DataProvider('provideElements')]
     public function testCanParseElements(string $element, ?FlagBag $expected = null): void
     {
         $actual = $this->parser->parse($element);
@@ -87,9 +86,7 @@ class ElementFlagParserTest extends FlagParserTestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider provideMalformedElements
-     */
+    #[DataProvider('provideMalformedElements')]
     public function testCannotParseMalformedElements(string $element): void
     {
         try {

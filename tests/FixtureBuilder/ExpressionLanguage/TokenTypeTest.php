@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -55,9 +56,7 @@ class TokenTypeTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideAcceptableTypes
-     */
+    #[DataProvider('provideAcceptableTypes')]
     public function testCanCreateType(string $typeConstant): void
     {
         $type = new TokenType($typeConstant);

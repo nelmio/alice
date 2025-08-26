@@ -29,15 +29,17 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer
  * @internal
  */
+#[CoversClass(SimpleSpecificationsDenormalizer::class)]
 class SimpleSpecificationsDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
@@ -136,13 +138,11 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         $constructorDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @group legacy
-     *
-     * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
-     */
+    #[Group('legacy')]
     public function testUsingAFactoryWithConstructIsDeprecated(): void
     {
+        $this->expectUserDeprecationMessage('Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.');
+
         $fixture = new FakeFixture();
         $specs = [
             '__construct' => $factory = [
@@ -170,6 +170,7 @@ class SimpleSpecificationsDenormalizerTest extends TestCase
         );
 
         $denormalizer = new SimpleSpecificationsDenormalizer($constructorDenormalizer, new FakePropertyDenormalizer(), new FakeCallsDenormalizer());
+
         $actual = $denormalizer->denormalize(new FakeFixture(), $flagParser, $specs);
 
         self::assertEquals($expected, $actual);

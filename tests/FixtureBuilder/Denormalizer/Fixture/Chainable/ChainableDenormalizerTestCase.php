@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-abstract class ChainableDenormalizerTest extends TestCase
+abstract class ChainableDenormalizerTestCase extends TestCase
 {
     use ProphecyTrait;
     use ReferenceProviderTrait;
