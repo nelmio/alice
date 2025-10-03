@@ -24,6 +24,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
@@ -109,10 +110,9 @@ class FixtureMethodReferenceTokenParserTest extends TestCase
     }
 
     /**
-     * @dataProvider provideParser
-     *
      * @param Closure(self): ParserInterface $decoratedParserFactory
      */
+    #[DataProvider('provideParser')]
     public function testThrowsAnExceptionIfParsingReturnsAnUnexpectedResult(Closure $decoratedParserFactory): void
     {
         $decoratedParser = $decoratedParserFactory($this);

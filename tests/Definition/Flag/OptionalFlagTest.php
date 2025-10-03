@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Definition\Flag;
 
 use InvalidArgumentException;
 use Nelmio\Alice\Definition\FlagInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,9 +37,7 @@ class OptionalFlagTest extends TestCase
         self::assertEquals('%?', $flag->__toString());
     }
 
-    /**
-     * @dataProvider providePercentageValues
-     */
+    #[DataProvider('providePercentageValues')]
     public function testThrowsExceptionIfPercentageValueIsInvalid(int $percentage, ?string $expectedMessage = null): void
     {
         try {

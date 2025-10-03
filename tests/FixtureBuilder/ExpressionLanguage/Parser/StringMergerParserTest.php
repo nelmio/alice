@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -139,12 +140,8 @@ class StringMergerParserTest extends TestCase
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @dataProvider provideOneElementValues
-     * @param mixed $parsedValue
-     * @param mixed $expected
-     */
-    public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($parsedValue, $expected): void
+    #[DataProvider('provideOneElementValues')]
+    public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList(mixed $parsedValue, mixed $expected): void
     {
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
         $decoratedParserProphecy->parse(Argument::any())->willReturn($parsedValue);

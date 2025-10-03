@@ -21,6 +21,7 @@ use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -200,9 +201,7 @@ class ArrayParameterResolverTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideContexts
-     */
+    #[DataProvider('provideContexts')]
     public function testTheContextPassedToTheInjectedResolverIsAlwaysValid(?ResolvingContext $context, ResolvingContext $expected): void
     {
         $array = [

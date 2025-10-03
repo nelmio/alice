@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -38,9 +39,7 @@ class ReferenceEscaperLexerTest extends TestCase
         self::assertFalse((new ReflectionClass(ReferenceEscaperLexer::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideValues
-     */
+    #[DataProvider('provideValues')]
     public function testEscapesStringBeforeHandlingItOverToTheDecoratedLexer(string $value, ?string $expectedEscapedValue = null): void
     {
         if (null === $expectedEscapedValue) {

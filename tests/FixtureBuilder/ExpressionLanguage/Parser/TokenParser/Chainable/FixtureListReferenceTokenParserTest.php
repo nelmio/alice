@@ -19,6 +19,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserIn
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -38,9 +39,7 @@ class FixtureListReferenceTokenParserTest extends TestCase
         self::assertFalse((new ReflectionClass(FixtureListReferenceTokenParser::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideTokens
-     */
+    #[DataProvider('provideTokens')]
     public function testCanParseListReferenceTokens(Token $token, bool $expected): void
     {
         $parser = new FixtureListReferenceTokenParser();
