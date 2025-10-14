@@ -32,6 +32,8 @@ parameters:
           message: '#Unsafe usage of new static#'
         - path: src/FixtureBuilder/ExpressionLanguage/Parser/TokenParser/Chainable/AbstractChainableParserAwareParser.php
           message: '#::parse\(\)#'
+        - path: src/PropertyAccess/ReflectionPropertyAccessor.php
+          identifier: classConstant.nonObject
 
 
         # False positives
