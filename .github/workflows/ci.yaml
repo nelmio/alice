@@ -20,11 +20,18 @@ jobs:
                     - '8.4'
                 symfony-versions:
                     - false
-                    - '6.4.*'
-                    - '7.*.*'
+                    - '^6.4'
+                    - '^7.3'
+                    - '^8.0'
                 exclude:
                     - php: '8.1'
-                      symfony-versions: '7.*.*'
+                      symfony-versions: '^7.3'
+                    - php: '8.1'
+                      symfony-versions: '^8.0'
+                    - php: '8.2'
+                      symfony-versions: '^8.0'
+                    - php: '8.3'
+                      symfony-versions: '^8.0'
 
         name: PHP ${{ matrix.php }} ${{ matrix.description }} - ${{ matrix.symfony-versions }}
         steps:
@@ -40,15 +47,14 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
+                  tools: flex
+
+            - name: "Restrict Symfony version"
+              run: composer config extra.symfony.require "${{ matrix.symfony }}"
+              if: matrix.symfony-versions
 
             - name: Install dependencies
               run: composer install
-
-            - name: Setup Symfony version
-              run: |
-                composer bin symfony require "symfony/framework-bundle:${{ matrix.symfony-versions }}" --no-update
-                composer bin symfony require "symfony/serializer:${{ matrix.symfony-versions }}" --no-update
-              if: matrix.symfony-versions
 
             - name: Install bin dependencies
               run: composer bin symfony install

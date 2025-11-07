@@ -25,20 +25,22 @@
         "myclabs/deep-copy": "^1.10",
         "sebastian/comparator": "^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0",
         "symfony/polyfill-php84": "^1.31",
-        "symfony/property-access": "^6.4 || ^7.0",
-        "symfony/yaml": "^6.0 || ^7.0"
+        "symfony/property-access": "^6.4 || ^7.3 || ^8.0",
+        "symfony/yaml": "^6.4 || ^7.3 || ^8.0"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.1",
         "phpspec/prophecy": "^1.6",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.3",
-        "symfony/config": "^6.4 || ^7.0",
-        "symfony/dependency-injection": "^6.4 || ^7.0",
-        "symfony/finder": "^6.4 || ^7.0",
-        "symfony/http-kernel": "^6.4 || ^7.0",
-        "symfony/phpunit-bridge": "^6.4 || ^7.0",
-        "symfony/var-dumper": "^6.4 || ^7.0"
+        "symfony/config": "^6.4 || ^7.3 || ^8.0",
+        "symfony/dependency-injection": "^6.4 || ^7.3 || ^8.0",
+        "symfony/finder": "^6.4 || ^7.3 || ^8.0",
+        "symfony/framework-bundle": "^6.4 || ^7.3 || ^8.0",
+        "symfony/http-kernel": "^6.4 || ^7.3 || ^8.0",
+        "symfony/phpunit-bridge": "^6.4 || ^7.3 || ^8.0",
+        "symfony/serializer": "^6.4 || ^7.3 || ^8.0",
+        "symfony/var-dumper": "^6.4 || ^7.3 || ^8.0"
     },
     "conflict": {
         "symfony/framework-bundle": "<6.4.0"
