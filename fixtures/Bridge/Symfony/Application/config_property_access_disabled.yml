@@ -25,3 +25,5 @@ framework:
     session:
         enabled: false
     property_access: false
+    property_info:
+        with_constructor_extractor: true

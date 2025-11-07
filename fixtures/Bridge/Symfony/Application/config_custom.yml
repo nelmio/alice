@@ -24,6 +24,8 @@ framework:
     test:                    ~
     session:
         enabled: false
+    property_info:
+        with_constructor_extractor: true
 
 nelmio_alice:
     locale: 'fr_FR'
