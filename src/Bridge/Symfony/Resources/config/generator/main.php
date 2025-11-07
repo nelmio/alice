@@ -1,0 +1,29 @@
+<?php
+
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
+return static function(ContainerConfigurator $container) {
+    $services = $container->services();
+    $parameters = $container->parameters();
+
+    $services->alias('nelmio_alice.generator', 'nelmio_alice.generator.double_pass');
+
+    $services->set('nelmio_alice.generator.double_pass', \Nelmio\Alice\Generator\DoublePassGenerator::class)
+        ->args([
+            service('nelmio_alice.generator.resolver.fixture_set'),
+            service('nelmio_alice.generator.object_generator'),
+        ]);
+
+    $services->alias('nelmio_alice.generator.object_generator', 'nelmio_alice.generator.object_generator.complete');
+
+    $services->set('nelmio_alice.generator.object_generator.complete', \Nelmio\Alice\Generator\ObjectGenerator\CompleteObjectGenerator::class)
+        ->args([service('nelmio_alice.generator.object_generator.simple')]);
+
+    $services->set('nelmio_alice.generator.object_generator.simple', \Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator::class)
+        ->args([
+            service('nelmio_alice.generator.resolver.value'),
+            service('nelmio_alice.generator.instantiator'),
+            service('nelmio_alice.generator.hydrator'),
+            service('nelmio_alice.generator.caller'),
+        ]);
+};
