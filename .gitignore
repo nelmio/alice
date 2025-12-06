@@ -10,6 +10,7 @@
 /fixtures/Bridge/Symfony/Application/var/
 /humbuglog.json
 /humbuglog.txt
+/var/
 /vendor-bin/*/bin/
 /vendor-bin/*/composer.lock
 /vendor-bin/*/vendor/

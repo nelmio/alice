@@ -8,6 +8,7 @@ parameters:
         - tests/Bridge
         - src/Generator/Resolver/FixtureSet/FakeFixtureSetResolver.php
     level: 3
+    tmpDir: var/phpstan
     ignoreErrors:
         # To fix at some point
         - path: src/Throwable/Exception/FileLocator/FileNotFoundException.php
