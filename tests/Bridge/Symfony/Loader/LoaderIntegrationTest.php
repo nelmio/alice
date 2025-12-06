@@ -19,6 +19,7 @@ use Nelmio\Alice\Symfony\KernelFactory;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpKernel\KernelInterface;
+use function restore_error_handler;
 
 /**
  * @internal
@@ -49,6 +50,7 @@ final class LoaderIntegrationTest extends CoreLoaderIntegrationTest
     protected function tearDown(): void
     {
         self::$kernel->shutdown();
+        restore_error_handler();
     }
 
     public static function tearDownAfterClass(): void

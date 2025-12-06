@@ -2,14 +2,16 @@
     "require-dev": {
         "symfony/framework-bundle": "^5.4 || ^6.3",
         "symfony/serializer": "^5.4 || ^6.3",
-        "theofidry/composer-inheritance-plugin": "^1.2"
+        "theofidry/composer-inheritance-plugin": "^1.2",
+        "symfony/runtime": "^5.4 || ^6.3"
     },
     "config": {
         "bin-dir": "bin",
         "sort-packages": true,
         "allow-plugins": {
-            "wikimedia/composer-merge-plugin": true,
-            "theofidry/composer-inheritance-plugin": true
+            "symfony/runtime": false,
+            "theofidry/composer-inheritance-plugin": true,
+            "wikimedia/composer-merge-plugin": true
         }
     }
 }

@@ -31,9 +31,13 @@ final class CheckBundleDependenciesPassTest extends TestCase
         self::expectException(LogicException::class);
         self::expectExceptionMessage('NelmioAliceBundle requires framework_bundle.property_access to be enabled.');
 
-        $kernel = KernelFactory::createKernel(
-            __DIR__.'/../../../../fixtures/Bridge/Symfony/Application/config_property_access_disabled.yml',
-        );
-        $kernel->boot();
+        try {
+            $kernel = KernelFactory::createKernel(
+                __DIR__.'/../../../../fixtures/Bridge/Symfony/Application/config_property_access_disabled.yml',
+            );
+            $kernel->boot();
+        } finally {
+            restore_exception_handler();
+        }
     }
 }

@@ -39,6 +39,8 @@ use Nelmio\Alice\UserDetail;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -46,12 +48,14 @@ use ReflectionObject;
 use stdClass;
 use Throwable;
 use TypeError;
+use function restore_error_handler;
 
 /**
  * @internal
  */
 #[Group('integration')]
 #[CoversNothing]
+#[RunTestsInSeparateProcesses]
 class LoaderIntegrationTest extends TestCase
 {
     public const PARSER_FILES_DIR = __DIR__.'/../../fixtures/Parser/files';

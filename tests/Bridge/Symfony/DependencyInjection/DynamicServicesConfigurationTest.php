@@ -22,20 +22,20 @@ use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Symfony\KernelFactory;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use function restore_error_handler;
 
 /**
  * @internal
  */
 #[Group('integration')]
 #[CoversNothing]
+#[RunClassInSeparateProcess]
 final class DynamicServicesConfigurationTest extends TestCase
 {
-    /**
-     * @var AppKernel
-     */
-    private $kernel;
+    private AppKernel $kernel;
 
     protected function setUp(): void
     {

@@ -16,9 +16,13 @@ namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 use Nelmio\Alice\Symfony\KernelFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
+use function get_error_handler;
+use function restore_error_handler;
 
 /**
  * @internal
@@ -222,6 +226,7 @@ final class ConfigurationTest extends TestCase
         );
     }
 
+    #[RunInSeparateProcess]
     public function testConfigurationParametersAreInjectedAsParameters(): void
     {
         $kernel = KernelFactory::createKernel();
