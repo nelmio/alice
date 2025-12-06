@@ -14,6 +14,7 @@
          bootstrap="vendor-bin/symfony/vendor/autoload.php"
          colors="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
+         cacheResultFile="var/phpunit.cache"
          enforceTimeLimit="true"
          executionOrder="random"
 >

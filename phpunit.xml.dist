@@ -15,6 +15,7 @@
          colors="true"
          enforceTimeLimit="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
+         cacheResultFile="var/phpunit.cache"
          executionOrder="random">
 
     <php>
@@ -33,10 +34,6 @@
             <directory>src/Bridge</directory>
             <file>src/deep_clone.php</file>
         </exclude>
-
-        <report>
-            <clover outputFile="dist/clover.xml"/>
-        </report>
     </coverage>
 
     <testsuites>
