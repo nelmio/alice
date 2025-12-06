@@ -26,7 +26,7 @@ use stdClass;
  * @coversNothing
  * @internal
  */
-final class ParameterResolverIntegrationTest extends TestCase
+class ParameterResolverIntegrationTest extends TestCase
 {
     protected ParameterBagResolverInterface $resolver;
 

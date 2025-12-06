@@ -49,7 +49,7 @@ use TypeError;
  * @coversNothing
  * @internal
  */
-final class LoaderIntegrationTest extends TestCase
+class LoaderIntegrationTest extends TestCase
 {
     public const PARSER_FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
     public const FIXTURES_FILES_DIR = __DIR__.'/../../fixtures/Integration';
