@@ -41,7 +41,7 @@ final class DummyMethodCall implements MethodCallInterface
         $this->__call(__METHOD__, func_get_args());
     }
 
-    public function getCaller(): void
+    public function getCaller(): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

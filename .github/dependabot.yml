@@ -32,3 +32,14 @@ updates:
             dependencies:
                 patterns:
                     - "*"
+
+    -   package-ecosystem: "composer"
+        directory: "vendor-bin/rector"
+        schedule:
+            interval: "weekly"
+        cooldown:
+            default-days: 7
+        groups:
+            dependencies:
+                patterns:
+                    - "*"
