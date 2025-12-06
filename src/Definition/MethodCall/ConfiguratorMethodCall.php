@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
+use Stringable;
 
 /**
  * Represents a method call that is a configurator, i.e. for which the results should be kept.
  */
-final class ConfiguratorMethodCall implements MethodCallInterface
+final class ConfiguratorMethodCall implements Stringable, MethodCallInterface
 {
     /**
      * @var MethodCallInterface

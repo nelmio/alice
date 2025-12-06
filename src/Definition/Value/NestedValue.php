@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
-final class NestedValue implements ValueInterface
+final class NestedValue implements Stringable, ValueInterface
 {
     /**
      * @var ValueInterface[]|array

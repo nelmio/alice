@@ -15,8 +15,9 @@ namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use Stringable;
 
-final class ExtendFlag implements FlagInterface
+final class ExtendFlag implements Stringable, FlagInterface
 {
     /**
      * @var FixtureReference

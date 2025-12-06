@@ -15,11 +15,12 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
+use Stringable;
 
 /**
  * Value object representing "@user0".
  */
-final class FixtureReferenceValue implements ValueInterface
+final class FixtureReferenceValue implements Stringable, ValueInterface
 {
     /**
      * @var string|ValueInterface

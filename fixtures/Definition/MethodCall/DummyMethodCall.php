@@ -15,8 +15,9 @@ namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\NotCallableTrait;
+use Stringable;
 
-final class DummyMethodCall implements MethodCallInterface
+final class DummyMethodCall implements Stringable, MethodCallInterface
 {
     use NotCallableTrait;
 

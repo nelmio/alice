@@ -15,12 +15,13 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
+use Stringable;
 use function Nelmio\Alice\deep_clone;
 
 /**
  * Value object representing an array like "10x @user0". '10' is called "quantifier" and "@user0" is called "element".
  */
-final class DynamicArrayValue implements ValueInterface
+final class DynamicArrayValue implements Stringable, ValueInterface
 {
     /**
      * @var int|ValueInterface

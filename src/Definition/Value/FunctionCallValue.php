@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 use function Nelmio\Alice\deep_clone;
 
 /**
  * Value object representing '<name()>'.
  */
-final class FunctionCallValue implements ValueInterface
+final class FunctionCallValue implements Stringable, ValueInterface
 {
     /**
      * @var string

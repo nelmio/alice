@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
 /**
  * Value object representing "@user0->getUserName()".
  */
-final class FixtureMethodCallValue implements ValueInterface
+final class FixtureMethodCallValue implements Stringable, ValueInterface
 {
     /**
      * @var ValueInterface
