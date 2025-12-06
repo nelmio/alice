@@ -24,12 +24,12 @@ class FakeChainableInstantiator implements ChainableInstantiatorInterface
 {
     use NotCallableTrait;
 
-    public function canInstantiate(FixtureInterface $fixture): bool
+    public function canInstantiate(FixtureInterface $fixture): never
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
+    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

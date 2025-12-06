@@ -23,16 +23,17 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
-use function in_array;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
  * @internal
  */
-class OptionalValueResolverTest extends TestCase
+#[CoversClass(OptionalValueResolver::class)]
+final class OptionalValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -74,9 +75,7 @@ class OptionalValueResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    /**
-     * @dataProvider optionalValueProvider
-     */
+    #[DataProvider('optionalValueProvider')]
     public function testCanHandleExtremaQuantifiersCorrectly(
         OptionalValue $value,
         int $randomValue,
@@ -101,7 +100,7 @@ class OptionalValueResolverTest extends TestCase
 
         $resolvedValue = $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
 
-        self::assertTrue(in_array($resolvedValue->getValue(), ['first_0', 'second_0'], true));
+        self::assertContains($resolvedValue->getValue(), ['first_0', 'second_0']);
     }
 
     public static function optionalValueProvider(): iterable

@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\BadMethodCallExceptionFactory
  * @internal
  */
-class BadMethodCallExceptionFactoryTest extends TestCase
+#[CoversClass(BadMethodCallExceptionFactory::class)]
+final class BadMethodCallExceptionFactoryTest extends TestCase
 {
     public function testCreateForUnknownMethod(): void
     {

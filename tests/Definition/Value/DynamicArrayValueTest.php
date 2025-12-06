@@ -14,27 +14,24 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\DynamicArrayValue
  * @internal
  */
-class DynamicArrayValueTest extends TestCase
+#[CoversClass(DynamicArrayValue::class)]
+final class DynamicArrayValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
         self::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideInputTypes
-     * @param mixed $quantifier
-     * @param mixed $element
-     * @param mixed $errorMessage
-     */
+    #[DataProvider('provideInputTypes')]
     public function testThrowsErrorIfInvalidInputType($quantifier, $element, $errorMessage): void
     {
         try {
@@ -45,12 +42,7 @@ class DynamicArrayValueTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $quantifier
-     * @param mixed $element
-     * @param mixed $expectedQuantifier
-     */
+    #[DataProvider('provideValues')]
     public function testReadAccessorsReturnPropertiesValues($quantifier, $element, $expectedQuantifier): void
     {
         $value = new DynamicArrayValue($quantifier, $element);

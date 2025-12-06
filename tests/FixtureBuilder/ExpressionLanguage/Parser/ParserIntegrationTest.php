@@ -31,16 +31,18 @@ use Nelmio\Alice\Definition\Value\VariableValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use function str_repeat;
 use const DIRECTORY_SEPARATOR;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[Group('integration')]
+#[CoversNothing]
 class ParserIntegrationTest extends TestCase
 {
     /**
@@ -53,10 +55,7 @@ class ParserIntegrationTest extends TestCase
         $this->parser = (new NativeLoader())->getExpressionLanguageParser();
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $expected
-     */
+    #[DataProvider('provideValues')]
     public function testParseValues(string $value, $expected): void
     {
         try {
@@ -71,13 +70,7 @@ class ParserIntegrationTest extends TestCase
                     ),
                 );
             }
-        } catch (InvalidArgumentException $exception) {
-            if (null === $expected) {
-                return;
-            }
-
-            throw $exception;
-        } catch (ExpressionLanguageParseThrowable $exception) {
+        } catch (InvalidArgumentException|ExpressionLanguageParseThrowable $exception) {
             if (null === $expected) {
                 return;
             }

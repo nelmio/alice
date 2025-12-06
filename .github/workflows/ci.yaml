@@ -7,54 +7,55 @@ on:
     schedule:
         - cron: '45 4 1 * *'
 
+permissions: {}
+
 jobs:
     tests:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         strategy:
             fail-fast: false
             matrix:
                 php:
-                    - '8.1'
                     - '8.2'
                     - '8.3'
                     - '8.4'
                 symfony-versions:
                     - false
-                    - '^6.4'
-                    - '^7.3'
-                    - '^8.0'
+                    - '6.4.*'
+                    - '7.4.*'
+                    - '8.*.*'
                 exclude:
-                    - php: '8.1'
-                      symfony-versions: '^7.3'
-                    - php: '8.1'
-                      symfony-versions: '^8.0'
                     - php: '8.2'
-                      symfony-versions: '^8.0'
+                      symfony-versions: '8.*.*'
                     - php: '8.3'
-                      symfony-versions: '^8.0'
+                      symfony-versions: '8.*.*'
 
         name: PHP ${{ matrix.php }} ${{ matrix.description }} - ${{ matrix.symfony-versions }}
         steps:
             - name: Checkout
-              uses: actions/checkout@v5
+              uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+              with:
+                  persist-credentials: false
 
-            - uses: actions/cache@v4
+            - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
               with:
                   path: ~/.composer/cache/files
                   key: ${{ matrix.php }}-${{ matrix.symfony-versions }}
 
             - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+              uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # 2.36.0
               with:
                   php-version: ${{ matrix.php }}
-                  tools: flex
-
-            - name: "Restrict Symfony version"
-              run: composer config extra.symfony.require "${{ matrix.symfony }}"
-              if: matrix.symfony-versions
+                  tools: composer, flex
 
             - name: Install dependencies
               run: composer install
+
+            - name: Configure Symfony version
+              run: echo "SYMFONY_REQUIRE=${{ matrix.symfony-versions }}" >> $GITHUB_ENV
+              if: matrix.symfony-versions
 
             - name: Install bin dependencies
               run: composer bin symfony install

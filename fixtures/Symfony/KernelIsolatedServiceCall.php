@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Symfony;
 
+use Closure;
+
 class KernelIsolatedServiceCall
 {
-    public static function call(string $serviceId, callable $getResult)
+    public static function call(string $serviceId, Closure $getResult): mixed
     {
         $kernel = KernelFactory::createKernel();
         $kernel->boot();

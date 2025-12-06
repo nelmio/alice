@@ -20,22 +20,22 @@ class FakePropertyAccessor implements PropertyAccessorInterface
 {
     use NotCallableTrait;
 
-    public function setValue(&$objectOrArray, $propertyPath, $value): void
+    public function setValue(&$objectOrArray, $propertyPath, $value): never
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    public function getValue($objectOrArray, $propertyPath): mixed
+    public function getValue($objectOrArray, $propertyPath): never
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    public function isWritable($objectOrArray, $propertyPath): bool
+    public function isWritable($objectOrArray, $propertyPath): never
     {
         $this->__call(__METHOD__, func_get_args());
     }
 
-    public function isReadable($objectOrArray, $propertyPath): bool
+    public function isReadable($objectOrArray, $propertyPath): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

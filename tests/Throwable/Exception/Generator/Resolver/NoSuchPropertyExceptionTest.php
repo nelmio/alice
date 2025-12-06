@@ -14,14 +14,15 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\ResolutionThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException
  * @internal
  */
-class NoSuchPropertyExceptionTest extends TestCase
+#[CoversClass(NoSuchPropertyException::class)]
+final class NoSuchPropertyExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

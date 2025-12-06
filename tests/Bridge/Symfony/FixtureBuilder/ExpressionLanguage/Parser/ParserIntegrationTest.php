@@ -15,14 +15,15 @@ namespace Nelmio\Alice\Bridge\Symfony\FixtureBuilder\ExpressionLanguage\Parser;
 
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\IsolatedSymfonyBuiltInParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest as CoreParserIntegrationTest;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
-class ParserIntegrationTest extends CoreParserIntegrationTest
+#[Group('integration')]
+#[CoversNothing]
+final class ParserIntegrationTest extends CoreParserIntegrationTest
 {
     protected function setUp(): void
     {

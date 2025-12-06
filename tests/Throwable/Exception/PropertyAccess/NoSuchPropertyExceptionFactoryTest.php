@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\PropertyAccess;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\PropertyAccess\NoSuchPropertyExceptionFactory
  * @internal
  */
-class NoSuchPropertyExceptionFactoryTest extends TestCase
+#[CoversClass(NoSuchPropertyExceptionFactory::class)]
+final class NoSuchPropertyExceptionFactoryTest extends TestCase
 {
     public function testCreateForUnreadablePropertyFromStdClass(): void
     {

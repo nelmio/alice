@@ -49,7 +49,7 @@ final class LegacyConstructorDenormalizer implements ConstructorDenormalizerInte
     ): MethodCallInterface {
         try {
             return $this->factoryDenormalizer->denormalize($scope, $parser, $unparsedConstructor);
-        } catch (UnexpectedValueException $exception) {
+        } catch (UnexpectedValueException) {
             // Continue
         }
 

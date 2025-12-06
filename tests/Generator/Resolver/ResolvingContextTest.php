@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\ResolvingContext
  * @internal
  */
-class ResolvingContextTest extends TestCase
+#[CoversClass(ResolvingContext::class)]
+final class ResolvingContextTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {
@@ -67,7 +68,7 @@ class ResolvingContextTest extends TestCase
         try {
             $context->checkForCircularReference('foo');
             self::fail('Expected exception to be thrown.');
-        } catch (CircularReferenceException $exception) {
+        } catch (CircularReferenceException) {
             // Expected result
         }
     }

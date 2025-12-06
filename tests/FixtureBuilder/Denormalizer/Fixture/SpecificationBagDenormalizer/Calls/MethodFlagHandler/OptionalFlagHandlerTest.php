@@ -17,14 +17,15 @@ use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\MethodCall\OptionalMethodCall;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\OptionalFlagHandler
  * @internal
  */
-class OptionalFlagHandlerTest extends TestCase
+#[CoversClass(OptionalFlagHandler::class)]
+final class OptionalFlagHandlerTest extends TestCase
 {
     public function testIsNotClonable(): void
     {

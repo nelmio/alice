@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Fixture;
 
 use Nelmio\Alice\FixtureIdInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Fixture\FixtureId
  * @internal
  */
-class FixtureIdTest extends TestCase
+#[CoversClass(FixtureId::class)]
+final class FixtureIdTest extends TestCase
 {
     public function testIsAFixtureId(): void
     {

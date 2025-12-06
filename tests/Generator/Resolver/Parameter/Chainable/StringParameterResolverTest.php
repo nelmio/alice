@@ -22,6 +22,7 @@ use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -29,10 +30,10 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver
  * @internal
  */
-class StringParameterResolverTest extends TestCase
+#[CoversClass(StringParameterResolver::class)]
+final class StringParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
 

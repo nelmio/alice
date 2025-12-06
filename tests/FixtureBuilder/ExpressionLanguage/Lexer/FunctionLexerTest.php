@@ -16,27 +16,23 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer
  * @internal
  */
-class FunctionLexerTest extends TestCase
+#[CoversClass(FunctionLexer::class)]
+final class FunctionLexerTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var FunctionLexer
-     */
-    private $lexer;
-
     protected function setUp(): void
     {
-        $this->lexer = new FunctionLexer(new DummyLexer());
+        $lexer = new FunctionLexer(new DummyLexer());
     }
 
     public function testIsALexer(): void

@@ -15,25 +15,24 @@ namespace Nelmio\Alice\Definition\Value;
 
 use InvalidArgumentException;
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use const PHP_VERSION_ID;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\UniqueValue
  * @internal
  */
-class UniqueValueTest extends TestCase
+#[CoversClass(UniqueValue::class)]
+final class UniqueValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
         self::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $value
-     */
+    #[DataProvider('provideValues')]
     public function testReadAccessorsReturnPropertiesValues($value): void
     {
         $id = 'Nelmio\Entity\User#user0#username';

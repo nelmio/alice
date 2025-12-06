@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\DummyValue;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory
  * @internal
  */
-class ResolverNotFoundExceptionFactoryTest extends TestCase
+#[CoversClass(ResolverNotFoundExceptionFactory::class)]
+final class ResolverNotFoundExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactoryForParameter(): void
     {

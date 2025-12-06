@@ -15,14 +15,15 @@ namespace Nelmio\Alice\Bridge\Symfony\FixtureBuilder\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\IsolatedSymfonyBuiltInLexer;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerIntegrationTest as CoreLexerIntegrationTest;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
-class LexerIntegrationTest extends CoreLexerIntegrationTest
+#[Group('integration')]
+#[CoversNothing]
+final class LexerIntegrationTest extends CoreLexerIntegrationTest
 {
     protected function setUp(): void
     {

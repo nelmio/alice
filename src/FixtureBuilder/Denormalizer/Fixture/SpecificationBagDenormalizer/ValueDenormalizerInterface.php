@@ -24,7 +24,6 @@ interface ValueDenormalizerInterface
      * Denormalizes a given value. For example, will denormalize '$username' into a VariableValue.
      *
      * @param FixtureInterface $scope Used for unique values for example.
-     * @param mixed            $value
      *
      * @throws DenormalizationThrowable
      *

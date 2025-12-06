@@ -15,13 +15,12 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter;
 
 use Nelmio\Alice\FixtureBuilder\Denormalizer\ParameterBagDenormalizerInterface;
 use Nelmio\Alice\NotCallableTrait;
-use Nelmio\Alice\ParameterBag;
 
 class FakeParameterBagDenormalizer implements ParameterBagDenormalizerInterface
 {
     use NotCallableTrait;
 
-    public function denormalize(array $data): ParameterBag
+    public function denormalize(array $data): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

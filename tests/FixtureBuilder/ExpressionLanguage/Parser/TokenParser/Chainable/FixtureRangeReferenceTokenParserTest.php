@@ -19,14 +19,15 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserIn
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureRangeReferenceTokenParser
  * @internal
  */
-class FixtureRangeReferenceTokenParserTest extends TestCase
+#[CoversClass(FixtureRangeReferenceTokenParser::class)]
+final class FixtureRangeReferenceTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {

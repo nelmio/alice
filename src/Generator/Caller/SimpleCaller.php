@@ -107,7 +107,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
             $arguments = [];
         }
 
-        foreach ($arguments as $k => &$value) {
+        foreach ($arguments as &$value) {
             if ($value instanceof ValueInterface) {
                 try {
                     $result = $this->resolver->resolve($value, $fixture, $fixtureSet, $scope, $context);

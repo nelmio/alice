@@ -14,14 +14,16 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Bridge\Symfony\Generator\Resolver;
 
 use Nelmio\Alice\Generator\Resolver\Parameter\IsolatedSymfonyParameterBagResolver;
+use Nelmio\Alice\Generator\Resolver\ParameterResolverIntegrationTest as CoreParameterResolverIntegrationTest;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
-class ParameterResolverIntegrationTest extends \Nelmio\Alice\Generator\Resolver\ParameterResolverIntegrationTest
+#[Group('integration')]
+#[CoversNothing]
+final class ParameterResolverIntegrationTest extends CoreParameterResolverIntegrationTest
 {
     protected function setUp(): void
     {

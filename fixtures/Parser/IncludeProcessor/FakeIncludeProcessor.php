@@ -21,7 +21,7 @@ final class FakeIncludeProcessor implements IncludeProcessorInterface
 {
     use NotCallableTrait;
 
-    public function process(ParserInterface $parser, string $file, array $data): array
+    public function process(ParserInterface $parser, string $file, array $data): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

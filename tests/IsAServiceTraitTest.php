@@ -13,15 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Throwable;
 
 /**
- * @covers \Nelmio\Alice\IsAServiceTrait
  * @internal
  */
-class IsAServiceTraitTest extends TestCase
+#[CoversClass(IsAServiceTrait::class)]
+final class IsAServiceTraitTest extends TestCase
 {
     public function testThrowsAnExceptionWhenTryingToCloneInstance(): void
     {
@@ -32,19 +33,11 @@ class IsAServiceTraitTest extends TestCase
             self::assertEquals(0, $exception->getCode());
             self::assertNull($exception->getPrevious());
 
-            if (PHP_VERSION_ID < 80000) {
-                self::assertEquals(
-                    'Call to private Nelmio\Alice\NotClonableDummy::__clone() from context '
-                    .'\'Nelmio\Alice\IsAServiceTraitTest\'',
-                    $exception->getMessage(),
-                );
-            } else {
-                self::assertEquals(
-                    'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
-                    .'Nelmio\Alice\IsAServiceTraitTest',
-                    $exception->getMessage(),
-                );
-            }
+            self::assertEquals(
+                'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
+                .'Nelmio\Alice\IsAServiceTraitTest',
+                $exception->getMessage(),
+            );
         }
 
         $dummyRefl = new ReflectionClass(NotClonableDummy::class);

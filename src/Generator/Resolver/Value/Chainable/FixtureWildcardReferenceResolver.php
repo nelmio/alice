@@ -102,7 +102,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
 
         try {
             $cache = $context->getCachedValue(self::IDS_BY_PATTERN_CACHE_KEY);
-        } catch (CachedValueNotFound $exception) {
+        } catch (CachedValueNotFound) {
             $cache = [];
         }
 

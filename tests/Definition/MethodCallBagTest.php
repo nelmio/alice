@@ -15,15 +15,17 @@ namespace Nelmio\Alice\Definition;
 
 use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCallBag
  * @internal
  */
-class MethodCallBagTest extends TestCase
+#[CoversClass(MethodCallBag::class)]
+final class MethodCallBagTest extends TestCase
 {
     /**
      * @var ReflectionProperty
@@ -34,7 +36,6 @@ class MethodCallBagTest extends TestCase
     {
         $refl = new ReflectionClass(MethodCallBag::class);
         $propRefl = $refl->getProperty('methodCalls');
-        $propRefl->setAccessible(true);
 
         $this->propRefl = $propRefl;
     }
@@ -70,9 +71,7 @@ class MethodCallBagTest extends TestCase
         );
     }
 
-    /**
-     * @testdox When calls overlaps, they are stacked
-     */
+    #[TestDox('When calls overlaps, they are stacked')]
     public function testStackCalls(): void
     {
         $methodCall1 = new DummyMethodCall('mc1');
@@ -96,9 +95,7 @@ class MethodCallBagTest extends TestCase
         );
     }
 
-    /**
-     * @testdox Can merge two bags. When calls overlaps, they are stacked.
-     */
+    #[TestDox('Can merge two bags. When calls overlaps, they are stacked.')]
     public function testMergeTwoBags(): void
     {
         $callA1 = new SimpleMethodCall('setUsername', []);

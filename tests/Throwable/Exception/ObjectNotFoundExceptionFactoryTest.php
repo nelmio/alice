@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\ObjectNotFoundExceptionFactory
  * @internal
  */
-class ObjectNotFoundExceptionFactoryTest extends TestCase
+#[CoversClass(ObjectNotFoundExceptionFactory::class)]
+final class ObjectNotFoundExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void
     {

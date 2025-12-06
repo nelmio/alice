@@ -41,7 +41,7 @@ class FakeFixture implements FixtureInterface
         $this->__call(__METHOD__, func_get_args());
     }
 
-    public function withSpecs(SpecificationBag $specs): void
+    public function withSpecs(SpecificationBag $specs): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

@@ -23,7 +23,7 @@ class FakeHydrator implements HydratorInterface
 {
     use NotCallableTrait;
 
-    public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
+    public function hydrate(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

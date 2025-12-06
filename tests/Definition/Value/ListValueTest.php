@@ -14,14 +14,15 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\ListValue
  * @internal
  */
-class ListValueTest extends TestCase
+#[CoversClass(ListValue::class)]
+final class ListValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

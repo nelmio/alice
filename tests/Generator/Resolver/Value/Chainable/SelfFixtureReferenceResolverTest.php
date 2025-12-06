@@ -28,6 +28,7 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeChainableValueResolver;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\ObjectBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -35,10 +36,10 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\SelfFixtureReferenceResolver
  * @internal
  */
-class SelfFixtureReferenceResolverTest extends TestCase
+#[CoversClass(SelfFixtureReferenceResolver::class)]
+final class SelfFixtureReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;
 

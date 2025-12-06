@@ -14,14 +14,15 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition;
 
 use Nelmio\Alice\Entity\StdClassFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Property
  * @internal
  */
-class PropertyTest extends TestCase
+#[CoversClass(Property::class)]
+final class PropertyTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

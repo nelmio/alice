@@ -40,7 +40,7 @@ class MutableMethodCall implements MethodCallInterface
         $this->arguments = $arguments;
     }
 
-    public function withArguments(?array $arguments = null): void
+    public function withArguments(?array $arguments = null): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

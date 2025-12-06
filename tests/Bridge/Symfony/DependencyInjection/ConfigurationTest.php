@@ -14,17 +14,18 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
 use Nelmio\Alice\Symfony\KernelFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
- * @covers \Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
- *
- * @group integration
  * @internal
  */
-class ConfigurationTest extends TestCase
+#[CoversClass(Configuration::class)]
+#[Group('integration')]
+final class ConfigurationTest extends TestCase
 {
     public function testDefaultValues(): void
     {
@@ -239,14 +240,5 @@ class ConfigurationTest extends TestCase
         }
 
         $kernel->shutdown();
-    }
-
-    public function provideInvalidSeedValues()
-    {
-        yield 'negative integer' => [-1];
-
-        yield 'null integer' => [0];
-
-        yield 'string value' => ['seed'];
     }
 }

@@ -16,14 +16,15 @@ namespace Nelmio\Alice\Generator;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\ResolvedFixtureSet
  * @internal
  */
-class ResolvedFixtureSetTest extends TestCase
+#[CoversClass(ResolvedFixtureSet::class)]
+final class ResolvedFixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

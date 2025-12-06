@@ -20,7 +20,7 @@ final class DummyFileLocator implements FileLocatorInterface
 {
     use NotCallableTrait;
 
-    public function locate(string $name, ?string $currentPath = null): string
+    public function locate(string $name, ?string $currentPath = null): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

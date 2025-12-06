@@ -15,25 +15,24 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerIntegrationTest;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
  * @internal
  */
-class LexerParserSynchronizationTest extends TestCase
+#[CoversNothing]
+final class LexerParserSynchronizationTest extends TestCase
 {
     public function testProvidesAreSynchronized(): void
     {
-        $lexerTestCase = new LexerIntegrationTest();
         $lexerProviderKeys = [];
-        foreach ($lexerTestCase->provideValues() as $key => $values) {
+        foreach (LexerIntegrationTest::provideValues() as $key => $values) {
             $lexerProviderKeys[] = $key;
         }
 
-        $parserTestCase = new ParserIntegrationTest();
         $parserProviderKeys = [];
-        foreach ($parserTestCase->provideValues() as $key => $value) {
+        foreach (ParserIntegrationTest::provideValues() as $key => $value) {
             $parserProviderKeys[] = $key;
         }
 

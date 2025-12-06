@@ -20,21 +20,19 @@ use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Symfony\KernelFactory;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @coversNothing
- *
- * @group integration
  * @internal
  */
-class DynamicServicesConfigurationTest extends TestCase
+#[Group('integration')]
+#[CoversNothing]
+final class DynamicServicesConfigurationTest extends TestCase
 {
-    /**
-     * @var AppKernel
-     */
-    private $kernel;
+    private AppKernel $kernel;
 
     protected function setUp(): void
     {
@@ -58,7 +56,6 @@ class DynamicServicesConfigurationTest extends TestCase
 
         self::assertInstanceOf(RecursiveParameterResolver::class, $resolver);
         $limitRefl = (new ReflectionClass(RecursiveParameterResolver::class))->getProperty('limit');
-        $limitRefl->setAccessible(true);
 
         self::assertEquals(50, $limitRefl->getValue($resolver));
     }
@@ -70,7 +67,6 @@ class DynamicServicesConfigurationTest extends TestCase
 
         self::assertInstanceOf(UniqueValueResolver::class, $resolver);
         $limitRefl = (new ReflectionClass(UniqueValueResolver::class))->getProperty('limit');
-        $limitRefl->setAccessible(true);
 
         self::assertEquals(15, $limitRefl->getValue($resolver));
     }

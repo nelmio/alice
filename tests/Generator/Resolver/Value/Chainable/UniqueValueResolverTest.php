@@ -27,39 +27,27 @@ use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
-use ReflectionProperty;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver
  * @internal
  */
-class UniqueValueResolverTest extends TestCase
+#[CoversClass(UniqueValueResolver::class)]
+final class UniqueValueResolverTest extends TestCase
 {
     use ProphecyTrait;
-
-    /**
-     * @var ReflectionProperty
-     */
-    private $resolverRefl;
-
-    /**
-     * @var ReflectionProperty
-     */
-    private $poolRefl;
 
     protected function setUp(): void
     {
         $reflClass = new ReflectionClass(UniqueValueResolver::class);
 
-        $this->resolverRefl = $reflClass->getProperty('resolver');
-        $this->resolverRefl->setAccessible(true);
+        $resolverRefl = $reflClass->getProperty('resolver');
 
-        $this->poolRefl = $reflClass->getProperty('pool');
-        $this->poolRefl->setAccessible(true);
+        $poolRefl = $reflClass->getProperty('pool');
     }
 
     public function testIsAChainableResolver(): void
@@ -255,7 +243,7 @@ class UniqueValueResolverTest extends TestCase
         try {
             $resolver->resolve($value, $fixture, $set, $scope, $context);
             self::fail('Expected exception to be thrown.');
-        } catch (UniqueValueGenerationLimitReachedException $exception) {
+        } catch (UniqueValueGenerationLimitReachedException) {
             $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(150);
         }
     }

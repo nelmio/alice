@@ -21,6 +21,8 @@ use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -28,10 +30,10 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
  * @internal
  */
-class ArrayParameterResolverTest extends TestCase
+#[CoversClass(ArrayParameterResolver::class)]
+final class ArrayParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -63,7 +65,6 @@ class ArrayParameterResolverTest extends TestCase
     public function testWithersReturnANewModifiedInstance(): void
     {
         $propertyRefl = (new ReflectionClass(ArrayParameterResolver::class))->getProperty('resolver');
-        $propertyRefl->setAccessible(true);
 
         $resolver = new ArrayParameterResolver();
         $newResolver = $resolver->withResolver(new FakeParameterResolver());
@@ -200,9 +201,7 @@ class ArrayParameterResolverTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideContexts
-     */
+    #[DataProvider('provideContexts')]
     public function testTheContextPassedToTheInjectedResolverIsAlwaysValid(?ResolvingContext $context, ResolvingContext $expected): void
     {
         $array = [

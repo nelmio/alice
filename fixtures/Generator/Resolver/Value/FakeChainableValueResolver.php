@@ -24,7 +24,7 @@ class FakeChainableValueResolver implements ChainableValueResolverInterface
 {
     use NotCallableTrait;
 
-    public function canResolve(ValueInterface $value): bool
+    public function canResolve(ValueInterface $value): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

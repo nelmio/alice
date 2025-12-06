@@ -22,14 +22,15 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver
  * @internal
  */
-class VariableValueResolverTest extends TestCase
+#[CoversClass(VariableValueResolver::class)]
+final class VariableValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver(): void
     {

@@ -15,13 +15,14 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use LogicException;
 use Nelmio\Alice\Throwable\ResolutionThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
  * @internal
  */
-class ResolverNotFoundExceptionTest extends TestCase
+#[CoversClass(ResolverNotFoundException::class)]
+final class ResolverNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {

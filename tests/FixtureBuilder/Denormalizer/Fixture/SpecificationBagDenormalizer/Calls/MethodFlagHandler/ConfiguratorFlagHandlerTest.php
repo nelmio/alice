@@ -17,14 +17,15 @@ use Nelmio\Alice\Definition\FakeMethodCall;
 use Nelmio\Alice\Definition\Flag\ConfiguratorFlag;
 use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\ConfiguratorFlagHandler
  * @internal
  */
-class ConfiguratorFlagHandlerTest extends TestCase
+#[CoversClass(ConfiguratorFlagHandler::class)]
+final class ConfiguratorFlagHandlerTest extends TestCase
 {
     public function testIsNotClonable(): void
     {

@@ -15,13 +15,14 @@ namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
 use LogicException;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
  * @internal
  */
-class DenormalizerNotFoundExceptionTest extends TestCase
+#[CoversClass(DenormalizerNotFoundException::class)]
+final class DenormalizerNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {
