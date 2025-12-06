@@ -31,8 +31,6 @@ final class ParameterValueTest extends TestCase
 
     /**
      * @dataProvider provideInputValues
-     * @param mixed $value
-     * @param mixed $errorMessage
      */
     public function testThrowsErrorIfInvalidTypeGiven($value, $errorMessage): void
     {

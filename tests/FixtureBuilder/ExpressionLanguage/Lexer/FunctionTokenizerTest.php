@@ -41,8 +41,6 @@ final class FunctionTokenizerTest extends TestCase
 
     /**
      * @dataProvider provideValues
-     * @param mixed $value
-     * @param mixed $expected
      */
     public function testTokenizeValues($value, $expected): void
     {

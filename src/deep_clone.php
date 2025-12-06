@@ -18,7 +18,6 @@ use DeepCopy\DeepCopy;
 if (false === function_exists('Nelmio\Alice\deep_clone')) {
     /**
      * Deep clone the given value.
-     * @param mixed $value
      */
     function deep_clone($value)
     {

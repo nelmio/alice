@@ -26,7 +26,6 @@ final class DeepCloneTest extends TestCase
 {
     /**
      * @dataProvider provideScalarValues
-     * @param mixed $value
      */
     public function testDeepCloneScalarsReturnsScalar($value): void
     {

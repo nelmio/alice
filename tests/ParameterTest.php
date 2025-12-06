@@ -24,7 +24,6 @@ final class ParameterTest extends TestCase
 {
     /**
      * @dataProvider provideValues
-     * @param mixed $value
      */
     public function testAccessors($value): void
     {

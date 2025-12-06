@@ -172,7 +172,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideSimpleFixtures
-     * @param mixed $name
      */
     public function testCanBuildSimpleFixtures($name): void
     {
@@ -181,7 +180,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideListFixtures
-     * @param mixed $name
      */
     public function testCanBuildListFixtures($name): void
     {
@@ -190,7 +188,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideMalformedListFixtures
-     * @param mixed $name
      */
     public function testCanBuildMalformedListFixtures($name): void
     {
@@ -199,7 +196,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideSegmentFixtures
-     * @param mixed $name
      */
     public function testCanBuildSegmentFixtures($name): void
     {
@@ -208,7 +204,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideMalformedSegmentFixtures
-     * @param mixed $name
      */
     public function testCanBuildMalformedSegmentFixtures($name): void
     {
@@ -217,8 +212,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideSimpleFixtures
-     * @param mixed $name
-     * @param mixed $expected
      */
     public function testBuildSimpleFixtures($name, $expected): void
     {
@@ -227,8 +220,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideListFixtures
-     * @param mixed $name
-     * @param mixed $expected
      */
     public function testBuildListFixtures($name, $expected): void
     {
@@ -237,8 +228,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideMalformedListFixtures
-     * @param mixed $name
-     * @param mixed $expected
      */
     public function testBuildMalformedListFixtures($name, $expected): void
     {
@@ -247,8 +236,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideSegmentFixtures
-     * @param mixed $name
-     * @param mixed $expected
      */
     public function testBuildSegmentFixtures($name, $expected): void
     {
@@ -257,8 +244,6 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
 
     /**
      * @dataProvider provideMalformedSegmentFixtures
-     * @param mixed $name
-     * @param mixed $expected
      */
     public function testBuildMalformedSegmentFixtures($name, $expected): void
     {
