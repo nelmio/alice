@@ -15,17 +15,10 @@
          colors="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          cacheResultFile="var/phpunit.cache"
+         displayDetailsOnPhpunitDeprecations="true"
          enforceTimeLimit="true"
          executionOrder="random"
 >
-
-    <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0" />
-    </php>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
 
     <testsuites>
         <testsuite name="Independent tests">
@@ -33,9 +26,9 @@
         </testsuite>
     </testsuites>
 
-    <coverage>
+    <source>
         <include>
             <directory>src/Bridge/Symfony</directory>
         </include>
-    </coverage>
+    </source>
 </phpunit>

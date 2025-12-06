@@ -22,6 +22,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -131,6 +132,7 @@ final class EvaluatedValueResolverTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
+    #[WithoutErrorHandler]
     /**
      * @testdox The only variables the evaluated function has access to are "private" variables and the scope variables.
      */
@@ -178,6 +180,7 @@ final class EvaluatedValueResolverTest extends TestCase
         }
     }
 
+    #[WithoutErrorHandler]
     public function testVariablesInferenceWithCurrent(): void
     {
         $value = new EvaluatedValue('["foo" => $foo, "expression" => $_expression, "scope" => $_scope]');
@@ -208,6 +211,7 @@ final class EvaluatedValueResolverTest extends TestCase
 
         try {
             $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
+
             self::fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
             if (PHP_VERSION_ID < 80000) {

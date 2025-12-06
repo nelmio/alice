@@ -32,12 +32,11 @@
         "bamarni/composer-bin-plugin": "^1.8.1",
         "phpspec/prophecy": "^1.6",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^9.3",
+        "phpunit/phpunit": "^10",
         "symfony/config": "^6.4 || ^7.0",
         "symfony/dependency-injection": "^6.4 || ^7.0",
         "symfony/finder": "^6.4 || ^7.0",
         "symfony/http-kernel": "^6.4 || ^7.0",
-        "symfony/phpunit-bridge": "^6.4 || ^7.0",
         "symfony/var-dumper": "^6.4 || ^7.0"
     },
     "conflict": {
