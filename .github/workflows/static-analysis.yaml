@@ -7,6 +7,8 @@ on:
     schedule:
         - cron: '45 4 1 * *'
 
+permissions: {}
+
 env:
     PHP_CS_FIXER_IGNORE_ENV: 1
 
@@ -14,6 +16,8 @@ jobs:
     php-cs-fixer:
         name: PHP-CS-Fixer
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         steps:
             - name: Checkout
               uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
