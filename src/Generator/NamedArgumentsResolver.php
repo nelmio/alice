@@ -23,7 +23,7 @@ class NamedArgumentsResolver
     {
         try {
             $method = new ReflectionMethod($className, $methodName);
-        } catch (ReflectionException $exception) {
+        } catch (ReflectionException) {
             return $arguments;
         }
 

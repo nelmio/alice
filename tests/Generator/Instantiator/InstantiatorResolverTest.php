@@ -170,7 +170,7 @@ class InstantiatorResolverTest extends TestCase
         try {
             $instantiator->instantiate($fixture, $set, new GenerationContext());
             self::fail('Expected exception to be thrown.');
-        } catch (GenerationThrowable $throwable) {
+        } catch (GenerationThrowable) {
             // Expected result.
         }
     }

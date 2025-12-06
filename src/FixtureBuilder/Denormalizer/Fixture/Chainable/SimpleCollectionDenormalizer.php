@@ -102,7 +102,7 @@ final class SimpleCollectionDenormalizer implements CollectionDenormalizer, Fixt
     ): FixtureBag {
         try {
             return $this->collectionDenormalizer->denormalize($builtFixtures, $className, $fixtureId, $specs, $flags);
-        } catch (InvalidScopeException $exception) {
+        } catch (InvalidScopeException) {
             // Continue to fallback on a more conventional way
         }
 

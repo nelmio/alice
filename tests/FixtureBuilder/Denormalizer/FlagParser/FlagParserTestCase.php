@@ -125,7 +125,7 @@ abstract class FlagParserTestCase extends TestCase
         try {
             $this->parser->parse($element);
             self::fail('Expected exception to be thrown.');
-        } catch (LogicException $exception) {
+        } catch (LogicException) {
             // expected
         }
     }

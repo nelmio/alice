@@ -59,7 +59,7 @@ final class UniqueValuesPool
                 $comparator->assertEquals($val1, $val2);
 
                 return true;
-            } catch (ComparisonFailure $failure) {
+            } catch (ComparisonFailure) {
                 return false;
             }
         }

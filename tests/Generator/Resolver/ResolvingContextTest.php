@@ -67,7 +67,7 @@ class ResolvingContextTest extends TestCase
         try {
             $context->checkForCircularReference('foo');
             self::fail('Expected exception to be thrown.');
-        } catch (CircularReferenceException $exception) {
+        } catch (CircularReferenceException) {
             // Expected result
         }
     }

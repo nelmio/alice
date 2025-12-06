@@ -73,7 +73,7 @@ class TemplatingFixtureBagTest extends TestCase
         try {
             $bag->getTemplate($fixtureId);
             self::fail('Expected exception to be thrown.');
-        } catch (FixtureNotFoundException $exception) {
+        } catch (FixtureNotFoundException) {
             // expected result
         }
 
