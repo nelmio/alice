@@ -58,13 +58,7 @@ class LexerIntegrationTest extends TestCase
                     ),
                 );
             }
-        } catch (InvalidArgumentException $exception) {
-            if (null === $expected) {
-                return;
-            }
-
-            throw $exception;
-        } catch (LexException $exception) {
+        } catch (InvalidArgumentException|LexException $exception) {
             if (null === $expected) {
                 return;
             }
