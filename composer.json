@@ -42,7 +42,6 @@
         "symfony/serializer": "^6.4 || ^7.3 || ^8.0",
         "symfony/var-dumper": "^6.4 || ^7.3 || ^8.0"
     },
-    "minimum-stability": "beta",
     "conflict": {
         "symfony/framework-bundle": "<6.4.0"
     },
