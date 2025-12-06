@@ -19,14 +19,17 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use function str_repeat;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\Group('integration')]
-#[\PHPUnit\Framework\Attributes\CoversNothing]
+#[Group('integration')]
+#[CoversNothing]
 class LexerIntegrationTest extends TestCase
 {
     /**
@@ -39,7 +42,7 @@ class LexerIntegrationTest extends TestCase
         $this->lexer = (new NativeLoader())->getLexer();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
+    #[DataProvider('provideValues')]
     public function testCanLexValues(string $value, $expected): void
     {
         try {

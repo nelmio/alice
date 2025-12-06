@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FileLocator;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use UnexpectedValueException;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(FileNotFoundException::class)]
+#[CoversClass(FileNotFoundException::class)]
 final class FileNotFoundExceptionTest extends TestCase
 {
     public function testIsAnUnexpectedValueException(): void

@@ -24,6 +24,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
@@ -31,7 +32,7 @@ use ReflectionClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(FakerFunctionCallValueResolver::class)]
+#[CoversClass(FakerFunctionCallValueResolver::class)]
 final class FakerFunctionCallValueResolverValueTest extends TestCase
 {
     use ProphecyTrait;

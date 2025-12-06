@@ -19,6 +19,7 @@ use Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor;
 use Nelmio\Alice\Parser\IncludeProcessor\FakeIncludeProcessor;
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -28,7 +29,7 @@ use stdClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(RuntimeCacheParser::class)]
+#[CoversClass(RuntimeCacheParser::class)]
 final class RuntimeCacheParserTest extends TestCase
 {
     use ProphecyTrait;

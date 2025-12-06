@@ -15,12 +15,14 @@ namespace Nelmio\Alice\Definition\Flag;
 
 use InvalidArgumentException;
 use Nelmio\Alice\Definition\FlagInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(OptionalFlag::class)]
+#[CoversClass(OptionalFlag::class)]
 final class OptionalFlagTest extends TestCase
 {
     public function testIsAFlag(): void
@@ -36,7 +38,7 @@ final class OptionalFlagTest extends TestCase
         self::assertEquals('%?', $flag->__toString());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('providePercentageValues')]
+    #[DataProvider('providePercentageValues')]
     public function testThrowsExceptionIfPercentageValueIsInvalid(int $percentage, ?string $expectedMessage = null): void
     {
         try {

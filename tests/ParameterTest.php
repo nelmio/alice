@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(Parameter::class)]
+#[CoversClass(Parameter::class)]
 final class ParameterTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
+    #[DataProvider('provideValues')]
     public function testAccessors($value): void
     {
         $parameter = new Parameter('foo', $value);

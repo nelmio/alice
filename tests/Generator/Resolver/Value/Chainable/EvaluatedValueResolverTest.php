@@ -22,6 +22,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -29,7 +30,7 @@ use ReflectionClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(EvaluatedValueResolver::class)]
+#[CoversClass(EvaluatedValueResolver::class)]
 final class EvaluatedValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver(): void

@@ -19,6 +19,7 @@ use Nelmio\Alice\Definition\Fixture\MutableFixture;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
@@ -26,7 +27,7 @@ use ReflectionProperty;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(FixtureBag::class)]
+#[CoversClass(FixtureBag::class)]
 final class FixtureBagTest extends TestCase
 {
     /**

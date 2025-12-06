@@ -17,6 +17,8 @@ use InvalidArgumentException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -25,7 +27,7 @@ use ReflectionClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(SubPatternsLexer::class)]
+#[CoversClass(SubPatternsLexer::class)]
 final class SubPatternsLexerTest extends TestCase
 {
     use ProphecyTrait;
@@ -53,7 +55,7 @@ final class SubPatternsLexerTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('lineBreaksProvider')]
+    #[DataProvider('lineBreaksProvider')]
     public function testLexAFunctionContainingLineBreaks(string $lineBreak): void
     {
         $expected = [

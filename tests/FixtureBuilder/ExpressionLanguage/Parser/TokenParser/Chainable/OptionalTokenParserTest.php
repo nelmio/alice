@@ -21,6 +21,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -29,7 +30,7 @@ use ReflectionClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(OptionalTokenParser::class)]
+#[CoversClass(OptionalTokenParser::class)]
 final class OptionalTokenParserTest extends TestCase
 {
     use ProphecyTrait;

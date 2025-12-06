@@ -23,13 +23,14 @@ use Nelmio\Alice\Definition\Flag\OptionalFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(FlagBag::class)]
+#[CoversClass(FlagBag::class)]
 final class FlagBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void

@@ -16,13 +16,15 @@ namespace Nelmio\Alice\Bridge\Symfony\Loader;
 use Nelmio\Alice\Loader\LoaderIntegrationTest as CoreLoaderIntegrationTest;
 use Nelmio\Alice\Loader\NonIsolatedSymfonyLoader;
 use Nelmio\Alice\Symfony\KernelFactory;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\Group('integration')]
-#[\PHPUnit\Framework\Attributes\CoversNothing]
+#[Group('integration')]
+#[CoversNothing]
 final class LoaderIntegrationTest extends CoreLoaderIntegrationTest
 {
     /**

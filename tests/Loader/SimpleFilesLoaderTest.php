@@ -19,6 +19,7 @@ use Nelmio\Alice\ObjectSetFactory;
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\User;
 use Nelmio\Alice\UserDetail;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -28,7 +29,7 @@ use stdClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(SimpleFilesLoader::class)]
+#[CoversClass(SimpleFilesLoader::class)]
 final class SimpleFilesLoaderTest extends TestCase
 {
     use ProphecyTrait;

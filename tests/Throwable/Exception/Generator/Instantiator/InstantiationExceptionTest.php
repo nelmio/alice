@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(InstantiationException::class)]
+#[CoversClass(InstantiationException::class)]
 final class InstantiationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

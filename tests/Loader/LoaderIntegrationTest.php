@@ -36,6 +36,10 @@ use Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\User;
 use Nelmio\Alice\UserDetail;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionObject;
@@ -46,8 +50,8 @@ use TypeError;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\Group('integration')]
-#[\PHPUnit\Framework\Attributes\CoversNothing]
+#[Group('integration')]
+#[CoversNothing]
 class LoaderIntegrationTest extends TestCase
 {
     public const PARSER_FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
@@ -190,7 +194,7 @@ class LoaderIntegrationTest extends TestCase
     /**
      * @param object|string $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideFixturesToInstantiate')]
+    #[DataProvider('provideFixturesToInstantiate')]
     public function testObjectInstantiation(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -222,8 +226,8 @@ class LoaderIntegrationTest extends TestCase
      *
      * @param object|string $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideLegacyFixturesToInstantiate')]
-    #[\PHPUnit\Framework\Attributes\Group('legacy')]
+    #[DataProvider('provideLegacyFixturesToInstantiate')]
+    #[Group('legacy')]
     public function testObjectInstantiationWithLegacyConstruct(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -253,7 +257,7 @@ class LoaderIntegrationTest extends TestCase
     /**
      * @param array|string $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideFixturesToInstantiateWithFactory')]
+    #[DataProvider('provideFixturesToInstantiateWithFactory')]
     public function testObjectInstantiationWithFactory(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -298,8 +302,8 @@ class LoaderIntegrationTest extends TestCase
     /**
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideFixtureToInstantiateWithDeprecatedConstructor')]
-    #[\PHPUnit\Framework\Attributes\Group('legacy')]
+    #[DataProvider('provideFixtureToInstantiateWithDeprecatedConstructor')]
+    #[Group('legacy')]
     public function testUsingConstructorAsAFactoryIsDeprecated(array $data, $expected): void
     {
         $objects = $this->loader->loadData($data)->getObjects();
@@ -311,7 +315,7 @@ class LoaderIntegrationTest extends TestCase
     /**
      * @param array|string $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideFixturesToHydrate')]
+    #[DataProvider('provideFixturesToHydrate')]
     public function testObjectHydration(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -341,7 +345,7 @@ class LoaderIntegrationTest extends TestCase
     /**
      * @param string|array $expected
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideFixturesToGenerate')]
+    #[DataProvider('provideFixturesToGenerate')]
     public function testFixtureGeneration(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -428,7 +432,7 @@ class LoaderIntegrationTest extends TestCase
     /**
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      */
-    #[\PHPUnit\Framework\Attributes\Group('legacy')]
+    #[Group('legacy')]
     public function testIfAFixtureAndAnInjectedObjectHaveTheSameIdThenTheInjectedObjectIsOverridden(): void
     {
         $set = $this->loader->loadData(
@@ -1465,7 +1469,7 @@ class LoaderIntegrationTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\TestDox('The cache of the loader')]
+    #[TestDox('The cache of the loader')]
     public function testGenerationCache(): void
     {
         // This loading will trigger the caching part of the FixtureWildcardReferenceResolver to

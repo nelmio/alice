@@ -23,6 +23,7 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
@@ -31,7 +32,7 @@ use ReflectionObject;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(NoMethodCallInstantiator::class)]
+#[CoversClass(NoMethodCallInstantiator::class)]
 final class NoMethodCallInstantiatorTest extends TestCase
 {
     /**

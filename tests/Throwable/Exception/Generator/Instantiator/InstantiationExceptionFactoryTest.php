@@ -17,13 +17,14 @@ use Error;
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(InstantiationExceptionFactory::class)]
+#[CoversClass(InstantiationExceptionFactory::class)]
 final class InstantiationExceptionFactoryTest extends TestCase
 {
     public function testCreate(): void

@@ -23,6 +23,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ObjectSet;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -32,7 +33,7 @@ use stdClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(DoublePassGenerator::class)]
+#[CoversClass(DoublePassGenerator::class)]
 final class DoublePassGeneratorTest extends TestCase
 {
     use ProphecyTrait;

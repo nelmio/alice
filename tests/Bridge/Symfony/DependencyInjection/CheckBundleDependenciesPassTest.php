@@ -15,13 +15,15 @@ namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
 use LogicException;
 use Nelmio\Alice\Symfony\KernelFactory;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\Group('integration')]
-#[\PHPUnit\Framework\Attributes\CoversNothing]
+#[Group('integration')]
+#[CoversNothing]
 final class CheckBundleDependenciesPassTest extends TestCase
 {
     public function testPropertyAccessDisabled(): void

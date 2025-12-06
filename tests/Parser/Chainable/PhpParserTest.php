@@ -16,6 +16,8 @@ namespace Nelmio\Alice\Parser\Chainable;
 use InvalidArgumentException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use TypeError;
@@ -23,7 +25,7 @@ use TypeError;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(PhpParser::class)]
+#[CoversClass(PhpParser::class)]
 final class PhpParserTest extends TestCase
 {
     use FileListProviderTrait;
@@ -64,7 +66,7 @@ final class PhpParserTest extends TestCase
         self::assertFalse((new ReflectionClass(PhpParser::class))->isCloneable());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('providePhpList')]
+    #[DataProvider('providePhpList')]
     public function testCanParsePhpFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
@@ -73,7 +75,7 @@ final class PhpParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideYamlList')]
+    #[DataProvider('provideYamlList')]
     public function testCannotParseYamlFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -81,7 +83,7 @@ final class PhpParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideJsonList')]
+    #[DataProvider('provideJsonList')]
     public function testCannotParseJsonFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -89,7 +91,7 @@ final class PhpParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideUnsupportedList')]
+    #[DataProvider('provideUnsupportedList')]
     public function testCannotParseUnsupportedFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);

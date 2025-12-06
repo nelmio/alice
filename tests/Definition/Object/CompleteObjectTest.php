@@ -17,6 +17,7 @@ use LogicException;
 use Nelmio\Alice\Definition\Value\FakeObject;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
@@ -24,7 +25,7 @@ use stdClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CompleteObject::class)]
+#[CoversClass(CompleteObject::class)]
 final class CompleteObjectTest extends TestCase
 {
     use ProphecyTrait;

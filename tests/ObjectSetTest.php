@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(ObjectSet::class)]
+#[CoversClass(ObjectSet::class)]
 final class ObjectSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void

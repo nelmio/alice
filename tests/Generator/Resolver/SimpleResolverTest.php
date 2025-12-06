@@ -21,6 +21,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -29,7 +30,7 @@ use stdClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(SimpleFixtureSetResolver::class)]
+#[CoversClass(SimpleFixtureSetResolver::class)]
 final class SimpleResolverTest extends TestCase
 {
     use ProphecyTrait;

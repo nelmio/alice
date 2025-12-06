@@ -27,6 +27,7 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
@@ -34,8 +35,8 @@ use ReflectionProperty;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(TemplateFixtureBagResolver::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(TemplateFixtureResolver::class)]
+#[CoversClass(TemplateFixtureBagResolver::class)]
+#[CoversClass(TemplateFixtureResolver::class)]
 final class TemplateFixtureBagResolverTest extends TestCase
 {
     /**

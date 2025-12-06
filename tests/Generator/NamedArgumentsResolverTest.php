@@ -17,16 +17,18 @@ use Nelmio\Alice\Entity\DummyWithMethods;
 use Nelmio\Alice\Entity\DummyWithNoArgumentConstructor;
 use Nelmio\Alice\Entity\DummyWithVariadicConstructorParamAndParam;
 use Nelmio\Alice\Entity\EmptyDummy;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(NamedArgumentsResolver::class)]
+#[CoversClass(NamedArgumentsResolver::class)]
 final class NamedArgumentsResolverTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideResolveArgumentsCases')]
+    #[DataProvider('provideResolveArgumentsCases')]
     public function testResolveArguments(string $className, string $methodName, array $argument, array $expectedResult): void
     {
         $resolver = new NamedArgumentsResolver();

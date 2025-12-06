@@ -23,14 +23,17 @@ use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\FixtureBagTest;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 use function Nelmio\Alice\deep_clone;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(TemplatingFixtureBag::class)]
+#[CoversClass(TemplatingFixtureBag::class)]
 final class TemplatingFixtureBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -83,7 +86,7 @@ final class TemplatingFixtureBagTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Depends(\Nelmio\Alice\FixtureBagTest::testIsImmutable)]
+    #[Depends(FixtureBagTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         $fixture = new MutableFixture('user0', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());

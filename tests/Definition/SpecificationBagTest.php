@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition;
 
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(SpecificationBag::class)]
+#[CoversClass(SpecificationBag::class)]
 final class SpecificationBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -109,7 +111,7 @@ final class SpecificationBagTest extends TestCase
         self::assertEquals($constructorA, $bag->getConstructor());
     }
 
-    #[\PHPUnit\Framework\Attributes\TestDox('Merging a bag that has a constructor method with a new one that does not, the result will have a constructor method.')]
+    #[TestDox('Merging a bag that has a constructor method with a new one that does not, the result will have a constructor method.')]
     public function testMergeTwoBags1(): void
     {
         $constructorA = new SimpleMethodCall('create', []);
@@ -124,7 +126,7 @@ final class SpecificationBagTest extends TestCase
         self::assertEquals($constructorA, $bag->getConstructor());
     }
 
-    #[\PHPUnit\Framework\Attributes\TestDox('Merging a bag that has a constructor method with a new one that has one as well, the result will kept its constructor method.')]
+    #[TestDox('Merging a bag that has a constructor method with a new one that has one as well, the result will kept its constructor method.')]
     public function testMergeTwoBags2(): void
     {
         $constructorA = new SimpleMethodCall('childCreate', []);

@@ -15,12 +15,13 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Instantiator;
 
 use LogicException;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(InstantiatorNotFoundException::class)]
+#[CoversClass(InstantiatorNotFoundException::class)]
 final class InstantiatorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

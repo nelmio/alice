@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Context;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CachedValueNotFound::class)]
+#[CoversClass(CachedValueNotFound::class)]
 final class CachedValueNotFoundTest extends TestCase
 {
     public function testCreate(): void

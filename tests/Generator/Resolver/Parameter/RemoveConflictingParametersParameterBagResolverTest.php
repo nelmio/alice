@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Generator\Resolver\Parameter;
 
 use Nelmio\Alice\Generator\Resolver\ParameterBagResolverInterface;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -23,7 +24,7 @@ use ReflectionClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(RemoveConflictingParametersParameterBagResolver::class)]
+#[CoversClass(RemoveConflictingParametersParameterBagResolver::class)]
 final class RemoveConflictingParametersParameterBagResolverTest extends TestCase
 {
     use ProphecyTrait;

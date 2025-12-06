@@ -17,13 +17,15 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ChainableTokenParserIn
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(EscapedValueTokenParser::class)]
+#[CoversClass(EscapedValueTokenParser::class)]
 final class EscapedValueTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
@@ -36,7 +38,7 @@ final class EscapedValueTokenParserTest extends TestCase
         self::assertFalse((new ReflectionClass(EscapedValueTokenParser::class))->isCloneable());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideTokens')]
+    #[DataProvider('provideTokens')]
     public function testCanParseEscapedTokens(Token $token, bool $expected): void
     {
         $parser = new EscapedValueTokenParser();

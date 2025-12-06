@@ -20,13 +20,14 @@ use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(TemplatingFixture::class)]
+#[CoversClass(TemplatingFixture::class)]
 final class TemplatingFixtureTest extends TestCase
 {
     use ProphecyTrait;

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
@@ -20,7 +22,7 @@ use ReflectionProperty;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(PropertyBag::class)]
+#[CoversClass(PropertyBag::class)]
 final class PropertyBagTest extends TestCase
 {
     /**
@@ -48,7 +50,7 @@ final class PropertyBagTest extends TestCase
         self::assertSame(['username' => $property], $this->propRefl->getValue($newBag));
     }
 
-    #[\PHPUnit\Framework\Attributes\TestDox('Can merge two bags. When properties overlaps, the existing ones are kept.')]
+    #[TestDox('Can merge two bags. When properties overlaps, the existing ones are kept.')]
     public function testMergeTwoBags(): void
     {
         $propertyA1 = new Property('username', 'alice');

@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CircularReferenceExceptionFactory::class)]
+#[CoversClass(CircularReferenceExceptionFactory::class)]
 final class CircularReferenceExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void

@@ -15,12 +15,13 @@ namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(ExtendFlag::class)]
+#[CoversClass(ExtendFlag::class)]
 final class ExtendFlagTest extends TestCase
 {
     public function testIsAFlag(): void

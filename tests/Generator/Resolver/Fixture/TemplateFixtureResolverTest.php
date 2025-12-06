@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -20,7 +21,7 @@ use ReflectionClass;
  * @see TemplateFixtureBagResolverTest
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass('\Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
+#[CoversClass('\Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
 More tests in:::class')]
 final class TemplateFixtureResolverTest extends TestCase
 {

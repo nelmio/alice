@@ -18,12 +18,13 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureIdInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(SimpleFixture::class)]
+#[CoversClass(SimpleFixture::class)]
 final class SimpleFixtureTest extends TestCase
 {
     public function testIsAFixtureId(): void

@@ -24,6 +24,8 @@ use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\ObjectBag;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -33,7 +35,7 @@ use stdClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(SimpleObjectGenerator::class)]
+#[CoversClass(SimpleObjectGenerator::class)]
 final class SimpleObjectGeneratorTest extends TestCase
 {
     use ProphecyTrait;
@@ -48,7 +50,7 @@ final class SimpleObjectGeneratorTest extends TestCase
         self::assertFalse((new ReflectionClass(SimpleObjectGenerator::class))->isCloneable());
     }
 
-    #[\PHPUnit\Framework\Attributes\TestDox('Do a instantiate-hydrate-calls cycle to generate the object described by the fixture.')]
+    #[TestDox('Do a instantiate-hydrate-calls cycle to generate the object described by the fixture.')]
     public function testGenerate(): void
     {
         self::markTestIncomplete('TODO');

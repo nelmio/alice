@@ -32,6 +32,7 @@ use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -45,7 +46,7 @@ use TypeError;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(FixturePropertyReferenceResolver::class)]
+#[CoversClass(FixturePropertyReferenceResolver::class)]
 final class FixturePropertyReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;

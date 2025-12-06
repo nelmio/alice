@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\ResolutionThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(FixtureNotFoundException::class)]
+#[CoversClass(FixtureNotFoundException::class)]
 final class FixtureNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

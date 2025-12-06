@@ -19,12 +19,13 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\DummyValue;
 use Nelmio\Alice\Definition\Value\FixtureMethodCallValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(NoSuchMethodExceptionFactory::class)]
+#[CoversClass(NoSuchMethodExceptionFactory::class)]
 final class NoSuchMethodExceptionFactoryTest extends TestCase
 {
     public function testCreateForFixture(): void

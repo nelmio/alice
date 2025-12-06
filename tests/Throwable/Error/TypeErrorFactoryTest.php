@@ -16,13 +16,14 @@ namespace Nelmio\Alice\Throwable\Error;
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(TypeErrorFactory::class)]
+#[CoversClass(TypeErrorFactory::class)]
 final class TypeErrorFactoryTest extends TestCase
 {
     public function testCreateForDynamicArrayQuantifier(): void

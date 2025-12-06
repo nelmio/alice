@@ -17,6 +17,7 @@ use Nelmio\Alice\Generator\Resolver\ChainableParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
@@ -24,7 +25,7 @@ use stdClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(StaticParameterResolver::class)]
+#[CoversClass(StaticParameterResolver::class)]
 final class StaticParameterResolverTest extends TestCase
 {
     public function testIsAChainableParameterResolver(): void

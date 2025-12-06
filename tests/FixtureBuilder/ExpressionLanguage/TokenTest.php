@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(Token::class)]
+#[CoversClass(Token::class)]
 final class TokenTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -33,7 +35,7 @@ final class TokenTest extends TestCase
         self::assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
     }
 
-    #[\PHPUnit\Framework\Attributes\Depends(TokenTypeTest::testIsImmutable)]
+    #[Depends(TokenTypeTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');

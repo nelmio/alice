@@ -17,14 +17,17 @@ use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException;
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\Group('integration')]
-#[\PHPUnit\Framework\Attributes\CoversNothing]
+#[Group('integration')]
+#[CoversNothing]
 class ParameterResolverIntegrationTest extends TestCase
 {
     protected ParameterBagResolverInterface $resolver;
@@ -34,7 +37,7 @@ class ParameterResolverIntegrationTest extends TestCase
         $this->resolver = (new NativeLoader())->getParameterResolver();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideParameters')]
+    #[DataProvider('provideParameters')]
     public function testResolveParameters(
         ParameterBag $unresolvedParameters,
         ?ParameterBag $injectedParameters,
@@ -45,7 +48,7 @@ class ParameterResolverIntegrationTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideCircularReferences')]
+    #[DataProvider('provideCircularReferences')]
     public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ?ParameterBag $injectedParameters = null): void
     {
         $this->expectException(CircularReferenceException::class);

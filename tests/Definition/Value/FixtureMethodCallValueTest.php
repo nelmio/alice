@@ -13,13 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition\Value;
 
+use Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest;
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(FixtureMethodCallValue::class)]
+#[CoversClass(FixtureMethodCallValue::class)]
 final class FixtureMethodCallValueTest extends TestCase
 {
     public function testIsAValue(): void
@@ -39,8 +42,8 @@ final class FixtureMethodCallValueTest extends TestCase
         self::assertEquals([$reference, $function], $value->getValue());
     }
 
-    #[\PHPUnit\Framework\Attributes\Depends(\Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable)]
-    #[\PHPUnit\Framework\Attributes\Depends(FunctionCallValueTest::testIsImmutable)]
+    #[Depends(FixtureReferenceTest::testIsImmutable)]
+    #[Depends(FunctionCallValueTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');

@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser;
 use LogicException;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 
@@ -31,55 +32,55 @@ abstract class FlagParserTestCase extends TestCase
         self::assertFalse((new ReflectionObject($this->parser))->isCloneable());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideElements')]
+    #[DataProvider('provideElements')]
     public function testCanParseElements(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedElements')]
+    #[DataProvider('provideMalformedElements')]
     public function testCannotParseMalformedElements(string $element): void
     {
         $this->assertCannotParse($element);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideExtends')]
+    #[DataProvider('provideExtends')]
     public function testCanParseExtends(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedExtends')]
+    #[DataProvider('provideMalformedExtends')]
     public function testCannotParseMalformedExtends(string $element): void
     {
         $this->assertCannotParse($element);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideOptionals')]
+    #[DataProvider('provideOptionals')]
     public function testCanParseOptionals(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedOptionals')]
+    #[DataProvider('provideMalformedOptionals')]
     public function testCannotParseMalformedOptionals(string $element): void
     {
         $this->assertCannotParse($element);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideTemplates')]
+    #[DataProvider('provideTemplates')]
     public function testCanParseTemplates(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideUniques')]
+    #[DataProvider('provideUniques')]
     public function testCanParseUniques(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideConfigurators')]
+    #[DataProvider('provideConfigurators')]
     public function testCanParseConfigurators(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);

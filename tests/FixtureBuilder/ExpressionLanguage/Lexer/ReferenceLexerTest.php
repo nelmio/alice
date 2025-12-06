@@ -18,13 +18,15 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(ReferenceLexer::class)]
+#[CoversClass(ReferenceLexer::class)]
 final class ReferenceLexerTest extends TestCase
 {
     /**
@@ -55,7 +57,7 @@ final class ReferenceLexerTest extends TestCase
         $this->lexer->lex('@u->');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
+    #[DataProvider('provideValues')]
     public function testReturnsMatchingToken(string $value, array $expected): void
     {
         $actual = $this->lexer->lex($value);

@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(UnexpectedValueException::class)]
+#[CoversClass(UnexpectedValueException::class)]
 final class UnexpectedValueExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

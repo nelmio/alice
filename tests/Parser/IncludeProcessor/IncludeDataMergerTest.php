@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Parser\IncludeProcessor;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(IncludeDataMerger::class)]
+#[CoversClass(IncludeDataMerger::class)]
 final class IncludeDataMergerTest extends TestCase
 {
     /**

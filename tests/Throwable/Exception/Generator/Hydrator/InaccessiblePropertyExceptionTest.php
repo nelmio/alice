@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
 use Nelmio\Alice\Throwable\HydrationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(InaccessiblePropertyException::class)]
+#[CoversClass(InaccessiblePropertyException::class)]
 final class InaccessiblePropertyExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

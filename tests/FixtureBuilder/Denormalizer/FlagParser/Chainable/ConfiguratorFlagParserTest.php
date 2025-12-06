@@ -16,11 +16,13 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(ConfiguratorFlagParser::class)]
+#[CoversClass(ConfiguratorFlagParser::class)]
 final class ConfiguratorFlagParserTest extends FlagParserTestCase
 {
     protected function setUp(): void
@@ -33,7 +35,7 @@ final class ConfiguratorFlagParserTest extends FlagParserTestCase
         self::assertTrue(is_a(ConfiguratorFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideConfigurators')]
+    #[DataProvider('provideConfigurators')]
     public function testCanParseConfigurators(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);

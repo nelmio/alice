@@ -21,6 +21,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FakeParser;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use Nelmio\Alice\Throwable\Exception\RootParseException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -29,7 +30,7 @@ use ReflectionClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(SimpleValueDenormalizer::class)]
+#[CoversClass(SimpleValueDenormalizer::class)]
 final class SimpleValueDenormalizerTest extends TestCase
 {
     use ProphecyTrait;

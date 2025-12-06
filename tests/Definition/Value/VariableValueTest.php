@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(VariableValue::class)]
+#[CoversClass(VariableValue::class)]
 final class VariableValueTest extends TestCase
 {
     public function testIsAValue(): void

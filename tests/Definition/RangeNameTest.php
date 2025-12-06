@@ -13,15 +13,17 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Definition;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(RangeName::class)]
+#[CoversClass(RangeName::class)]
 final class RangeNameTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideRanges')]
+    #[DataProvider('provideRanges')]
     public function testReadAccessorsReturnPropertiesValues(array $input, array $expected): void
     {
         $name = 'user';

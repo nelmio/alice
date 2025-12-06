@@ -30,6 +30,8 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\DummyFlagParser;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
@@ -37,7 +39,7 @@ use ReflectionClass;
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(ReferenceRangeNameDenormalizer::class)]
+#[CoversClass(ReferenceRangeNameDenormalizer::class)]
 final class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTestCase
 {
     use ProphecyTrait;
@@ -248,61 +250,61 @@ final class ReferenceRangeNameDenormalizerTest extends ChainableDenormalizerTest
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(0);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideSimpleFixtures')]
+    #[DataProvider('provideSimpleFixtures')]
     public function testCanBuildSimpleFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideListFixtures')]
+    #[DataProvider('provideListFixtures')]
     public function testCanBuildListFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedListFixtures')]
+    #[DataProvider('provideMalformedListFixtures')]
     public function testCanBuildMalformedListFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideSegmentFixtures')]
+    #[DataProvider('provideSegmentFixtures')]
     public function testCanBuildSegmentFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedSegmentFixtures')]
+    #[DataProvider('provideMalformedSegmentFixtures')]
     public function testCanBuildMalformedSegmentFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideSimpleFixtures')]
+    #[DataProvider('provideSimpleFixtures')]
     public function testBuildSimpleFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideListFixtures')]
+    #[DataProvider('provideListFixtures')]
     public function testBuildListFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedListFixtures')]
+    #[DataProvider('provideMalformedListFixtures')]
     public function testBuildMalformedListFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideSegmentFixtures')]
+    #[DataProvider('provideSegmentFixtures')]
     public function testBuildSegmentFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedSegmentFixtures')]
+    #[DataProvider('provideMalformedSegmentFixtures')]
     public function testBuildMalformedSegmentFixtures($name, $expected): void
     {
         $this->markAsInvalidCase();
