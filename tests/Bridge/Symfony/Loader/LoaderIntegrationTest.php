@@ -19,11 +19,10 @@ use Nelmio\Alice\Symfony\KernelFactory;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\Group('integration')]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class LoaderIntegrationTest extends CoreLoaderIntegrationTest
 {
     /**

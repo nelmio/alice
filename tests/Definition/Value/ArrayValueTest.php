@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\ArrayValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ArrayValue::class)]
 final class ArrayValueTest extends TestCase
 {
     public function testIsAValue(): void

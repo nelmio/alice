@@ -31,9 +31,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\TokenParserRegistry
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(TokenParserRegistry::class)]
 final class TokenParserRegistryTest extends TestCase
 {
     use ProphecyTrait;

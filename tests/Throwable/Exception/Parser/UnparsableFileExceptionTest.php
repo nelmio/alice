@@ -18,9 +18,9 @@ use Nelmio\Alice\Throwable\ParseThrowable;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UnparsableFileException::class)]
 final class UnparsableFileExceptionTest extends TestCase
 {
     public function testIsAnException(): void

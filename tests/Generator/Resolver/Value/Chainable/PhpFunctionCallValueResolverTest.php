@@ -29,9 +29,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\PhpFunctionCallValueResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(PhpFunctionCallValueResolver::class)]
 final class PhpFunctionCallValueResolverTest extends TestCase
 {
     use ProphecyTrait;

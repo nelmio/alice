@@ -27,9 +27,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleFixtureSetResolver::class)]
 final class SimpleResolverTest extends TestCase
 {
     use ProphecyTrait;

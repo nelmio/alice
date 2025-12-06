@@ -19,9 +19,9 @@ use ReflectionObject;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\ParameterBag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ParameterBag::class)]
 final class ParameterBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -74,9 +74,7 @@ final class ParameterBagTest extends TestCase
         );
     }
 
-    /**
-     * @depends \Nelmio\Alice\ParameterTest::testIsImmutable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends(ParameterTest::testIsImmutable)]
     public function testWithersReturnNewModifiedObject(): void
     {
         $bag = new ParameterBag(['foo' => 'bar']);

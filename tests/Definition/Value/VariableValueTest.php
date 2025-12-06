@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\VariableValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(VariableValue::class)]
 final class VariableValueTest extends TestCase
 {
     public function testIsAValue(): void

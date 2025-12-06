@@ -32,9 +32,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureDenormalizerRegistry::class)]
 final class FixtureDenormalizerRegistryTest extends TestCase
 {
     use ProphecyTrait;

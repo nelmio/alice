@@ -25,9 +25,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Loader\SimpleDataLoader
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleDataLoader::class)]
 final class SimpleDataLoaderTest extends TestCase
 {
     use ProphecyTrait;

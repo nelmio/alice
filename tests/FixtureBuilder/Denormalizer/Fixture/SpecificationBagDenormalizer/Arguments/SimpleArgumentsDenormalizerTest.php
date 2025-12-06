@@ -24,9 +24,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Arguments\SimpleArgumentsDenormalizer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleArgumentsDenormalizer::class)]
 final class SimpleArgumentsDenormalizerTest extends TestCase
 {
     use ProphecyTrait;

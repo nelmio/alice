@@ -17,11 +17,10 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\IsolatedSymfonyBuiltIn
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest as CoreParserIntegrationTest;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\Group('integration')]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class ParserIntegrationTest extends CoreParserIntegrationTest
 {
     protected function setUp(): void

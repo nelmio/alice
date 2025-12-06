@@ -24,9 +24,9 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
- * @covers \Nelmio\Alice\Definition\Fixture\TemplatingFixture
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(TemplatingFixture::class)]
 final class TemplatingFixtureTest extends TestCase
 {
     use ProphecyTrait;

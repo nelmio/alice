@@ -30,9 +30,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ListValueResolver::class)]
 final class ListValueResolverTest extends TestCase
 {
     use ProphecyTrait;

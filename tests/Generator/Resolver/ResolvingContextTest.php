@@ -17,9 +17,9 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceExcepti
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\ResolvingContext
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ResolvingContext::class)]
 final class ResolvingContextTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void

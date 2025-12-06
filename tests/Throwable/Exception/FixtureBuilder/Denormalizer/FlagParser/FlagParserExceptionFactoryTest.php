@@ -16,9 +16,9 @@ namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParse
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FlagParserExceptionFactory::class)]
 final class FlagParserExceptionFactoryTest extends TestCase
 {
     public function testCreateNewException(): void

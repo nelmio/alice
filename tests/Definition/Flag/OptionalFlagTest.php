@@ -18,9 +18,9 @@ use Nelmio\Alice\Definition\FlagInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Flag\OptionalFlag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(OptionalFlag::class)]
 final class OptionalFlagTest extends TestCase
 {
     public function testIsAFlag(): void
@@ -36,9 +36,7 @@ final class OptionalFlagTest extends TestCase
         self::assertEquals('%?', $flag->__toString());
     }
 
-    /**
-     * @dataProvider providePercentageValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providePercentageValues')]
     public function testThrowsExceptionIfPercentageValueIsInvalid(int $percentage, ?string $expectedMessage = null): void
     {
         try {

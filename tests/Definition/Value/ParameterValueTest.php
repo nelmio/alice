@@ -19,9 +19,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\ParameterValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ParameterValue::class)]
 final class ParameterValueTest extends TestCase
 {
     public function testIsAValue(): void
@@ -29,11 +29,7 @@ final class ParameterValueTest extends TestCase
         self::assertTrue(is_a(ParameterValue::class, ValueInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideInputValues
-     * @param mixed $value
-     * @param mixed $errorMessage
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInputValues')]
     public function testThrowsErrorIfInvalidTypeGiven($value, $errorMessage): void
     {
         try {

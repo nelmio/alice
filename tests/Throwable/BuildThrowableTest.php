@@ -17,9 +17,9 @@ use Nelmio\Alice\Throwable\Exception\RootBuildException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class BuildThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void

@@ -30,9 +30,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\DoublePassGenerator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DoublePassGenerator::class)]
 final class DoublePassGeneratorTest extends TestCase
 {
     use ProphecyTrait;

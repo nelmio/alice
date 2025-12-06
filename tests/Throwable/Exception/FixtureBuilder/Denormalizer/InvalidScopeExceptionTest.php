@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InvalidScopeException::class)]
 final class InvalidScopeExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

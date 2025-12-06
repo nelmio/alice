@@ -28,9 +28,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ParameterResolverRegistry::class)]
 final class ParameterResolverRegistryTest extends TestCase
 {
     use ProphecyTrait;

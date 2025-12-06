@@ -29,9 +29,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\CallsWithFlagsDenormalizer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(CallsWithFlagsDenormalizer::class)]
 final class CallsWithFlagsDenormalizerTest extends TestCase
 {
     use ProphecyTrait;

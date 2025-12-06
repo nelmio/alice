@@ -24,9 +24,9 @@ use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * @covers \Nelmio\Alice\FixtureBag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureBag::class)]
 final class FixtureBagTest extends TestCase
 {
     /**

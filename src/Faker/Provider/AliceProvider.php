@@ -20,7 +20,6 @@ final class AliceProvider
     /**
      * Returns whatever is passed to it. This allows you among other things to use a PHP expression while still
      * benefiting from variable replacement.
-     * @param mixed $expression
      */
     public static function identity($expression)
     {

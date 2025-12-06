@@ -25,9 +25,9 @@ use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @covers \Nelmio\Alice\PropertyAccess\StdPropertyAccessor
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(StdPropertyAccessor::class)]
 final class StdPropertyAccessorTest extends TestCase
 {
     use ProphecyTrait;

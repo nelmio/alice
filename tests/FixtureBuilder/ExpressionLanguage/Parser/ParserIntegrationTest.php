@@ -36,11 +36,10 @@ use function str_repeat;
 use const DIRECTORY_SEPARATOR;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\Group('integration')]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 class ParserIntegrationTest extends TestCase
 {
     /**
@@ -53,10 +52,7 @@ class ParserIntegrationTest extends TestCase
         $this->parser = (new NativeLoader())->getExpressionLanguageParser();
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $expected
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
     public function testParseValues(string $value, $expected): void
     {
         try {

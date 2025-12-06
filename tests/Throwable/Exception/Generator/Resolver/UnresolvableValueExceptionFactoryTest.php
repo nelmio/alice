@@ -19,9 +19,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UnresolvableValueExceptionFactory::class)]
 final class UnresolvableValueExceptionFactoryTest extends TestCase
 {
     public function testCreate(): void

@@ -18,9 +18,9 @@ use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ParserNotFoundException::class)]
 final class ParserNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

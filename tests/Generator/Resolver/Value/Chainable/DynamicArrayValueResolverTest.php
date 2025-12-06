@@ -31,9 +31,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DynamicArrayValueResolver::class)]
 final class DynamicArrayValueResolverTest extends TestCase
 {
     use ProphecyTrait;

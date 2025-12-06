@@ -43,9 +43,9 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixturePropertyReferenceResolver::class)]
 final class FixturePropertyReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;

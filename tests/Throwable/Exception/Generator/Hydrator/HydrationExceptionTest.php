@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(HydrationException::class)]
 final class HydrationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

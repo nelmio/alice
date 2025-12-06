@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\ServiceReferenceInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\ServiceReference\InstantiatedReference
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InstantiatedReference::class)]
 final class InstantiatedReferenceTest extends TestCase
 {
     public function testIsAReference(): void

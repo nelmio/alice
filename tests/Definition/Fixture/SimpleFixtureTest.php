@@ -21,9 +21,9 @@ use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixture
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleFixture::class)]
 final class SimpleFixtureTest extends TestCase
 {
     public function testIsAFixtureId(): void

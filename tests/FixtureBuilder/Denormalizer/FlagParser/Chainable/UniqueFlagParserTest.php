@@ -18,9 +18,9 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInter
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserTestCase;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\UniqueFlagParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UniqueFlagParser::class)]
 final class UniqueFlagParserTest extends FlagParserTestCase
 {
     protected function setUp(): void
@@ -33,9 +33,7 @@ final class UniqueFlagParserTest extends FlagParserTestCase
         self::assertTrue(is_a(UniqueFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideUniques
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideUniques')]
     public function testCanParseUniques(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);

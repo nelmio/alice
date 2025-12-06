@@ -18,9 +18,9 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Flag\ExtendFlag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ExtendFlag::class)]
 final class ExtendFlagTest extends TestCase
 {
     public function testIsAFlag(): void

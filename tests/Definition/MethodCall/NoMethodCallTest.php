@@ -18,9 +18,9 @@ use Nelmio\Alice\Definition\MethodCallInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCall\NoMethodCall
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NoMethodCall::class)]
 final class NoMethodCallTest extends TestCase
 {
     public function testIsAMethodCall(): void

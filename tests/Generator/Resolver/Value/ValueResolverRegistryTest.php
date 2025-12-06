@@ -32,9 +32,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ValueResolverRegistry::class)]
 final class ValueResolverRegistryTest extends TestCase
 {
     use ProphecyTrait;

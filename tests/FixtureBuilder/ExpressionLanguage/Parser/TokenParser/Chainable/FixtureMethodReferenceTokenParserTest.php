@@ -29,9 +29,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureMethodReferenceTokenParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureMethodReferenceTokenParser::class)]
 final class FixtureMethodReferenceTokenParserTest extends TestCase
 {
     use ProphecyTrait;
@@ -109,10 +109,9 @@ final class FixtureMethodReferenceTokenParserTest extends TestCase
     }
 
     /**
-     * @dataProvider provideParser
-     *
      * @param Closure(self): ParserInterface $decoratedParserFactory
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideParser')]
     public function testThrowsAnExceptionIfParsingReturnsAnUnexpectedResult(Closure $decoratedParserFactory): void
     {
         $decoratedParser = $decoratedParserFactory($this);

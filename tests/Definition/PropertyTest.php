@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Property
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(Property::class)]
 final class PropertyTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void

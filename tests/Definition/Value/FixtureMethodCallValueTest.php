@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\FixtureMethodCallValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureMethodCallValue::class)]
 final class FixtureMethodCallValueTest extends TestCase
 {
     public function testIsAValue(): void
@@ -39,10 +39,8 @@ final class FixtureMethodCallValueTest extends TestCase
         self::assertEquals([$reference, $function], $value->getValue());
     }
 
-    /**
-     * @depends \Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
-     * @depends \Nelmio\Alice\Definition\Value\FunctionCallValueTest::testIsImmutable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends(\Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable)]
+    #[\PHPUnit\Framework\Attributes\Depends(FunctionCallValueTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');

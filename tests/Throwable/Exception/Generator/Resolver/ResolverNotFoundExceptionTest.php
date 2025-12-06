@@ -18,9 +18,9 @@ use Nelmio\Alice\Throwable\ResolutionThrowable;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ResolverNotFoundException::class)]
 final class ResolverNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

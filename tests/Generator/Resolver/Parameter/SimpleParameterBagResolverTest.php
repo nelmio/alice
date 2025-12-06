@@ -24,9 +24,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleParameterBagResolver::class)]
 final class SimpleParameterBagResolverTest extends TestCase
 {
     use ProphecyTrait;

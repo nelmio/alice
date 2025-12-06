@@ -17,9 +17,9 @@ use Nelmio\Alice\FixtureIdInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Fixture\FixtureId
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureId::class)]
 final class FixtureIdTest extends TestCase
 {
     public function testIsAFixtureId(): void

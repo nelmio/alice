@@ -29,9 +29,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleFixtureSetResolver::class)]
 final class SimpleFixtureSetResolverTest extends TestCase
 {
     use ProphecyTrait;

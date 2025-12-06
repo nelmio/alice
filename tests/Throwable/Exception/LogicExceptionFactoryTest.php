@@ -16,9 +16,9 @@ namespace Nelmio\Alice\Throwable\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\LogicExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(LogicExceptionFactory::class)]
 final class LogicExceptionFactoryTest extends TestCase
 {
     public function testCreateForUncallableMethod(): void

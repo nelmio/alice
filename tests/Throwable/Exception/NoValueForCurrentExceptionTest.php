@@ -17,9 +17,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\NoValueForCurrentException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NoValueForCurrentException::class)]
 final class NoValueForCurrentExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

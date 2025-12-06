@@ -21,14 +21,12 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Generator\NamedArgumentsResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NamedArgumentsResolver::class)]
 final class NamedArgumentsResolverTest extends TestCase
 {
-    /**
-     * @dataProvider provideResolveArgumentsCases
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideResolveArgumentsCases')]
     public function testResolveArguments(string $className, string $methodName, array $argument, array $expectedResult): void
     {
         $resolver = new NamedArgumentsResolver();

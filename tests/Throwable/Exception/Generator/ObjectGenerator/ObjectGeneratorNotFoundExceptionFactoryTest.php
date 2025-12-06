@@ -16,9 +16,9 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ObjectGeneratorNotFoundExceptionFactory::class)]
 final class ObjectGeneratorNotFoundExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void

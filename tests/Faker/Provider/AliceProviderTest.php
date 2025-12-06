@@ -19,9 +19,9 @@ use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Faker\Provider\AliceProvider
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(AliceProvider::class)]
 final class AliceProviderTest extends TestCase
 {
     public function testIdentityReturnsTheValueUnchanged(): void

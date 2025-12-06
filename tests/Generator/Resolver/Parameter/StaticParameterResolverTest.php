@@ -22,9 +22,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(StaticParameterResolver::class)]
 final class StaticParameterResolverTest extends TestCase
 {
     public function testIsAChainableParameterResolver(): void

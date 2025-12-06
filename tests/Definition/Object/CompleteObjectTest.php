@@ -22,9 +22,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Object\CompleteObject
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(CompleteObject::class)]
 final class CompleteObjectTest extends TestCase
 {
     use ProphecyTrait;

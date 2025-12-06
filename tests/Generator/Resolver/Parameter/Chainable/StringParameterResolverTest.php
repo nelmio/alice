@@ -29,9 +29,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StringParameterResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(StringParameterResolver::class)]
 final class StringParameterResolverTest extends TestCase
 {
     use ProphecyTrait;

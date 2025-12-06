@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\FlagInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Flag\ConfiguratorFlag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ConfiguratorFlag::class)]
 final class ConfiguratorFlagTest extends TestCase
 {
     public function testIsAFlag(): void

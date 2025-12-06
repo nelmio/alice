@@ -21,11 +21,10 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\Group('integration')]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 class ParameterResolverIntegrationTest extends TestCase
 {
     protected ParameterBagResolverInterface $resolver;
@@ -35,9 +34,7 @@ class ParameterResolverIntegrationTest extends TestCase
         $this->resolver = (new NativeLoader())->getParameterResolver();
     }
 
-    /**
-     * @dataProvider provideParameters
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideParameters')]
     public function testResolveParameters(
         ParameterBag $unresolvedParameters,
         ?ParameterBag $injectedParameters,
@@ -48,9 +45,7 @@ class ParameterResolverIntegrationTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider provideCircularReferences
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCircularReferences')]
     public function testThrowExceptionIfCircularReferenceDetected(ParameterBag $unresolvedParameters, ?ParameterBag $injectedParameters = null): void
     {
         $this->expectException(CircularReferenceException::class);

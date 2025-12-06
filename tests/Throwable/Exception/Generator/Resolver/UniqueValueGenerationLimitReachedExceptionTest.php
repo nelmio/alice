@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UniqueValueGenerationLimitReachedException::class)]
 final class UniqueValueGenerationLimitReachedExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

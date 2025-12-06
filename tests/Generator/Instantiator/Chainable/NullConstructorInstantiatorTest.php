@@ -29,9 +29,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NullConstructorInstantiator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NullConstructorInstantiator::class)]
 final class NullConstructorInstantiatorTest extends TestCase
 {
     /**

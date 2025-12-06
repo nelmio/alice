@@ -19,9 +19,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\OptionalValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(OptionalValue::class)]
 final class OptionalValueTest extends TestCase
 {
     public function testIsAValue(): void
@@ -29,13 +29,7 @@ final class OptionalValueTest extends TestCase
         self::assertTrue(is_a(OptionalValue::class, ValueInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideInputValues
-     * @param mixed $quantifier
-     * @param mixed $firstMember
-     * @param mixed $secondMember
-     * @param mixed $errorMessage
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInputValues')]
     public function testThrowsErrorIfInvalidTypeGiven($quantifier, $firstMember, $secondMember, $errorMessage): void
     {
         try {

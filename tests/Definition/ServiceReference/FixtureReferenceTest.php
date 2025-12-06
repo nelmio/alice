@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\ServiceReferenceInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\ServiceReference\FixtureReference
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureReference::class)]
 final class FixtureReferenceTest extends TestCase
 {
     public function testIsAReference(): void

@@ -18,9 +18,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class LexerParserSynchronizationTest extends TestCase
 {
     public function testProvidesAreSynchronized(): void

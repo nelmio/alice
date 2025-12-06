@@ -21,9 +21,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(RemoveConflictingParametersParameterBagResolver::class)]
 final class RemoveConflictingParametersParameterBagResolverTest extends TestCase
 {
     use ProphecyTrait;

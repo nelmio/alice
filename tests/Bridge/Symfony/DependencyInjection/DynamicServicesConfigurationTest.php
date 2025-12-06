@@ -24,11 +24,10 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @coversNothing
- *
- * @group integration
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\Group('integration')]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class DynamicServicesConfigurationTest extends TestCase
 {
     /**

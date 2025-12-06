@@ -27,9 +27,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(RemoveConflictingObjectsResolver::class)]
 final class RemoveConflictingObjectsResolverTest extends TestCase
 {
     use ProphecyTrait;

@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NoSuchPropertyException::class)]
 final class NoSuchPropertyExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

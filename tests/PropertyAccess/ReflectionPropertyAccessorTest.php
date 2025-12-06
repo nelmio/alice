@@ -24,9 +24,9 @@ use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @covers \Nelmio\Alice\PropertyAccess\ReflectionPropertyAccessor
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ReflectionPropertyAccessor::class)]
 final class ReflectionPropertyAccessorTest extends TestCase
 {
     use ProphecyTrait;

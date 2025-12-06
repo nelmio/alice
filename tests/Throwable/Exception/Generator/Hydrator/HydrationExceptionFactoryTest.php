@@ -20,9 +20,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(HydrationExceptionFactory::class)]
 final class HydrationExceptionFactoryTest extends TestCase
 {
     public function testCreate(): void

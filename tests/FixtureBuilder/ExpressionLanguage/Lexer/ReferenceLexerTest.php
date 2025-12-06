@@ -22,9 +22,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ReferenceLexer::class)]
 final class ReferenceLexerTest extends TestCase
 {
     /**
@@ -55,9 +55,7 @@ final class ReferenceLexerTest extends TestCase
         $this->lexer->lex('@u->');
     }
 
-    /**
-     * @dataProvider provideValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
     public function testReturnsMatchingToken(string $value, array $expected): void
     {
         $actual = $this->lexer->lex($value);

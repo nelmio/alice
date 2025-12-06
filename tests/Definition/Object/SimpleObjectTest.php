@@ -20,9 +20,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Object\SimpleObject
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleObject::class)]
 final class SimpleObjectTest extends TestCase
 {
     protected function setUp(): void

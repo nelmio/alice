@@ -17,9 +17,9 @@ use PHPUnit\Framework\TestCase;
 use UnexpectedValueException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FileNotFoundException::class)]
 final class FileNotFoundExceptionTest extends TestCase
 {
     public function testIsAnUnexpectedValueException(): void

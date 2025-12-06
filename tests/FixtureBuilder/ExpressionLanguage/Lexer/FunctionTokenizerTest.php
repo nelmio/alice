@@ -18,10 +18,10 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTreeTokenizer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FunctionTokenizer::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(FunctionTreeTokenizer::class)]
 final class FunctionTokenizerTest extends TestCase
 {
     /**
@@ -39,11 +39,7 @@ final class FunctionTokenizerTest extends TestCase
         self::assertFalse((new ReflectionClass(FunctionTokenizer::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $value
-     * @param mixed $expected
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
     public function testTokenizeValues($value, $expected): void
     {
         try {

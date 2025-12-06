@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\NestedValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NestedValue::class)]
 final class NestedValueTest extends TestCase
 {
     public function testIsAValue(): void

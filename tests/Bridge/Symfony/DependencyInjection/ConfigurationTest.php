@@ -19,11 +19,10 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
- * @covers \Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
- *
- * @group integration
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(Configuration::class)]
+#[\PHPUnit\Framework\Attributes\Group('integration')]
 final class ConfigurationTest extends TestCase
 {
     public function testDefaultValues(): void

@@ -35,9 +35,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleSpecificationsDenormalizer::class)]
 final class SimpleSpecificationsDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
@@ -137,10 +137,9 @@ final class SimpleSpecificationsDenormalizerTest extends TestCase
     }
 
     /**
-     * @group legacy
-     *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      */
+    #[\PHPUnit\Framework\Attributes\Group('legacy')]
     public function testUsingAFactoryWithConstructIsDeprecated(): void
     {
         $fixture = new FakeFixture();

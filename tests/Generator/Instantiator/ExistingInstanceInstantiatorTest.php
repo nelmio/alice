@@ -27,9 +27,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ExistingInstanceInstantiator::class)]
 final class ExistingInstanceInstantiatorTest extends TestCase
 {
     use ProphecyTrait;

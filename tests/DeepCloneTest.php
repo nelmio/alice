@@ -19,15 +19,12 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers ::\Nelmio\Alice\deep_clone
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversFunction('\Nelmio\Alice\deep_clone')]
 final class DeepCloneTest extends TestCase
 {
-    /**
-     * @dataProvider provideScalarValues
-     * @param mixed $value
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideScalarValues')]
     public function testDeepCloneScalarsReturnsScalar($value): void
     {
         $clone = deep_clone($value);

@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UniqueValueGenerationLimitReachedExceptionFactory::class)]
 final class UniqueValueGenerationLimitReachedExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void

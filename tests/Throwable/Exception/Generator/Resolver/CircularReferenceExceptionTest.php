@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(CircularReferenceException::class)]
 final class CircularReferenceExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

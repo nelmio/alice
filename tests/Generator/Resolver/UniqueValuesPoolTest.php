@@ -19,9 +19,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\UniqueValuesPool
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UniqueValuesPool::class)]
 final class UniqueValuesPoolTest extends TestCase
 {
     public function testDoesNotHaveValueIfValueIsNotCached(): void
@@ -30,17 +30,13 @@ final class UniqueValuesPoolTest extends TestCase
         self::assertFalse($pool->has(new UniqueValue('', '')));
     }
 
-    /**
-     * @depends \Nelmio\Alice\Definition\Value\UniqueValueTest::testIsImmutable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends(\Nelmio\Alice\Definition\Value\UniqueValueTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');
     }
 
-    /**
-     * @dataProvider provideHasValueSet
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideHasValueSet')]
     public function testHasObjectValue(UniqueValuesPool $pool, UniqueValue $value, bool $expected): void
     {
         self::assertEquals($expected, $pool->has($value));

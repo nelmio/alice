@@ -25,9 +25,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FactoryDenormalizer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FactoryDenormalizer::class)]
 final class FactoryDenormalizerTest extends TestCase
 {
     use ProphecyTrait;

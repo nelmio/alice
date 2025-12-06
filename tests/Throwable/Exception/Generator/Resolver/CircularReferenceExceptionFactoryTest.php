@@ -16,9 +16,9 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(CircularReferenceExceptionFactory::class)]
 final class CircularReferenceExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void

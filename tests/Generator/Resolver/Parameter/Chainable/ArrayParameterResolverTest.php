@@ -28,9 +28,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ArrayParameterResolver::class)]
 final class ArrayParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
@@ -199,9 +199,7 @@ final class ArrayParameterResolverTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideContexts
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContexts')]
     public function testTheContextPassedToTheInjectedResolverIsAlwaysValid(?ResolvingContext $context, ResolvingContext $expected): void
     {
         $array = [

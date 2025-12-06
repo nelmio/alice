@@ -28,9 +28,9 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * @covers \Nelmio\Alice\Parser\Chainable\YamlParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(YamlParser::class)]
 final class YamlParserTest extends TestCase
 {
     use FileListProviderTrait;
@@ -77,9 +77,7 @@ final class YamlParserTest extends TestCase
         self::assertFalse((new ReflectionClass(YamlParser::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider providePhpList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providePhpList')]
     public function testCannotParsePhpFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -87,9 +85,7 @@ final class YamlParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideYamlList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideYamlList')]
     public function testCanParseYamlFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
@@ -98,9 +94,7 @@ final class YamlParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider provideJsonList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideJsonList')]
     public function testCannotParseJsonFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -108,9 +102,7 @@ final class YamlParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideUnsupportedList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideUnsupportedList')]
     public function testCannotParseUnsupportedFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);

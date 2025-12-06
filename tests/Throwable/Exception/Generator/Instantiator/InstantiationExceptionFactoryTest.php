@@ -21,9 +21,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InstantiationExceptionFactory::class)]
 final class InstantiationExceptionFactoryTest extends TestCase
 {
     public function testCreate(): void

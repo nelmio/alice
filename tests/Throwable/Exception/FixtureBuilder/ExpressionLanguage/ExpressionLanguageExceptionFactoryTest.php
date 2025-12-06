@@ -19,9 +19,9 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ExpressionLanguageExceptionFactory::class)]
 final class ExpressionLanguageExceptionFactoryTest extends TestCase
 {
     public function testCreateForNoParserFoundForToken(): void

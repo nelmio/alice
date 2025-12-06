@@ -32,10 +32,10 @@ use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver
- * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(TemplateFixtureBagResolver::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(TemplateFixtureResolver::class)]
 final class TemplateFixtureBagResolverTest extends TestCase
 {
     /**

@@ -23,9 +23,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureRangeReferenceTokenParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureRangeReferenceTokenParser::class)]
 final class FixtureRangeReferenceTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void

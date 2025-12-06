@@ -31,9 +31,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InstantiatorRegistry::class)]
 final class InstantiatorRegistryTest extends TestCase
 {
     use ProphecyTrait;

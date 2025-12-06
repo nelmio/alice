@@ -21,9 +21,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ReferenceEscaperLexer::class)]
 final class ReferenceEscaperLexerTest extends TestCase
 {
     use ProphecyTrait;
@@ -38,9 +38,7 @@ final class ReferenceEscaperLexerTest extends TestCase
         self::assertFalse((new ReflectionClass(ReferenceEscaperLexer::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
     public function testEscapesStringBeforeHandlingItOverToTheDecoratedLexer(string $value, ?string $expectedEscapedValue = null): void
     {
         if (null === $expectedEscapedValue) {

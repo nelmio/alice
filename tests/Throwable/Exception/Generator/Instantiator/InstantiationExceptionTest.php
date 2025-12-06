@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InstantiationException::class)]
 final class InstantiationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

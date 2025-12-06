@@ -36,9 +36,9 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @covers \Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SymfonyPropertyAccessorHydrator::class)]
 final class SymfonyPropertyAccessorHydratorTest extends TestCase
 {
     use ProphecyTrait;
@@ -207,9 +207,7 @@ final class SymfonyPropertyAccessorHydratorTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideProperties
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideProperties')]
     public function testObjectHydrationAgainstMutlipleValues(Property $property): void
     {
         $instance = new Dummy();

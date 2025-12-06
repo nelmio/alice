@@ -24,9 +24,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(GlobalPatternsLexer::class)]
 final class GlobalPatternsLexerTest extends TestCase
 {
     use ProphecyTrait;

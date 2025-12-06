@@ -18,9 +18,9 @@ use ReflectionClass;
 use Throwable;
 
 /**
- * @covers \Nelmio\Alice\IsAServiceTrait
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversTrait(IsAServiceTrait::class)]
 final class IsAServiceTraitTest extends TestCase
 {
     public function testThrowsAnExceptionWhenTryingToCloneInstance(): void

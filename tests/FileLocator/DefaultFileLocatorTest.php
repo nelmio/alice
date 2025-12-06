@@ -19,9 +19,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 
 /**
- * @covers \Nelmio\Alice\FileLocator\DefaultFileLocator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DefaultFileLocator::class)]
 final class DefaultFileLocatorTest extends TestCase
 {
     /**
@@ -39,10 +39,7 @@ final class DefaultFileLocatorTest extends TestCase
         self::assertTrue(is_a(DefaultFileLocator::class, FileLocatorInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideAbsolutePaths
-     * @param mixed $path
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideAbsolutePaths')]
     public function testCanDetectAbsolutePaths($path): void
     {
         $reflectionObject = new ReflectionObject($this->locator);

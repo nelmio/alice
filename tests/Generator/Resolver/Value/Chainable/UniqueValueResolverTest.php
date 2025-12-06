@@ -33,9 +33,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UniqueValueResolver::class)]
 final class UniqueValueResolverTest extends TestCase
 {
     use ProphecyTrait;

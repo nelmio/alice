@@ -18,9 +18,9 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInter
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserTestCase;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ExtendFlagParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ExtendFlagParser::class)]
 final class ExtendFlagParserTest extends FlagParserTestCase
 {
     protected function setUp(): void
@@ -33,9 +33,7 @@ final class ExtendFlagParserTest extends FlagParserTestCase
         self::assertTrue(is_a(ExtendFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideExtends
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideExtends')]
     public function testCanParseExtends(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);

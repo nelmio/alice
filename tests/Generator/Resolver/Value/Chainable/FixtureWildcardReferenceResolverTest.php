@@ -37,9 +37,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureWildcardReferenceResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureWildcardReferenceResolver::class)]
 final class FixtureWildcardReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;

@@ -18,9 +18,9 @@ use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FlagParserNotFoundException::class)]
 final class FlagParserNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

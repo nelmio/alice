@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\Value\DummyValue;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ResolverNotFoundExceptionFactory::class)]
 final class ResolverNotFoundExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactoryForParameter(): void

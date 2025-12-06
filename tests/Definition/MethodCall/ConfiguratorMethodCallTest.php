@@ -22,9 +22,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ConfiguratorMethodCall::class)]
 final class ConfiguratorMethodCallTest extends TestCase
 {
     use ProphecyTrait;

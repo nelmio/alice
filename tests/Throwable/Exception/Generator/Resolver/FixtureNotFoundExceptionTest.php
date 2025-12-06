@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureNotFoundException::class)]
 final class FixtureNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

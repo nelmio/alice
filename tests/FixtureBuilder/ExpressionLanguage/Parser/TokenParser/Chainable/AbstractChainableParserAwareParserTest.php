@@ -21,9 +21,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\AbstractChainableParserAwareParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(AbstractChainableParserAwareParser::class)]
 final class AbstractChainableParserAwareParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void

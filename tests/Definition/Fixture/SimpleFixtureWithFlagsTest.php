@@ -23,9 +23,9 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
- * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleFixtureWithFlags::class)]
 final class SimpleFixtureWithFlagsTest extends TestCase
 {
     use ProphecyTrait;

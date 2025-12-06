@@ -26,9 +26,9 @@ use ReflectionProperty;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\ObjectBag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ObjectBag::class)]
 final class ObjectBagTest extends TestCase
 {
     use ProphecyTrait;

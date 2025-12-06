@@ -20,9 +20,9 @@ use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCallBag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(MethodCallBag::class)]
 final class MethodCallBagTest extends TestCase
 {
     /**
@@ -69,9 +69,7 @@ final class MethodCallBagTest extends TestCase
         );
     }
 
-    /**
-     * @testdox When calls overlaps, they are stacked
-     */
+    #[\PHPUnit\Framework\Attributes\TestDox('When calls overlaps, they are stacked')]
     public function testStackCalls(): void
     {
         $methodCall1 = new DummyMethodCall('mc1');
@@ -95,9 +93,7 @@ final class MethodCallBagTest extends TestCase
         );
     }
 
-    /**
-     * @testdox Can merge two bags. When calls overlaps, they are stacked.
-     */
+    #[\PHPUnit\Framework\Attributes\TestDox('Can merge two bags. When calls overlaps, they are stacked.')]
     public function testMergeTwoBags(): void
     {
         $callA1 = new SimpleMethodCall('setUsername', []);

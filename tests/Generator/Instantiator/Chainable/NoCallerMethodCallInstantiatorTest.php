@@ -29,9 +29,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NoCallerMethodCallInstantiator::class)]
 final class NoCallerMethodCallInstantiatorTest extends TestCase
 {
     /**

@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\ParameterNotFoundExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ParameterNotFoundExceptionFactory::class)]
 final class ParameterNotFoundExceptionFactoryTest extends TestCase
 {
     public function testIsARuntimeException(): void

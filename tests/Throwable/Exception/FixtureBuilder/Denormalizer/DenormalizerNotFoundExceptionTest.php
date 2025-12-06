@@ -18,9 +18,9 @@ use Nelmio\Alice\Throwable\DenormalizationThrowable;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DenormalizerNotFoundException::class)]
 final class DenormalizerNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

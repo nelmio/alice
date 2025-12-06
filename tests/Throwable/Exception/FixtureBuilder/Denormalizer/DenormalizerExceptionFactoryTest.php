@@ -17,9 +17,9 @@ use Error;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DenormalizerExceptionFactory::class)]
 final class DenormalizerExceptionFactoryTest extends TestCase
 {
     public function testCreateForUndenormalizableConstructor(): void

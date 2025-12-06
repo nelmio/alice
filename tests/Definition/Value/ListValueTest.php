@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\ListValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ListValue::class)]
 final class ListValueTest extends TestCase
 {
     public function testIsAValue(): void

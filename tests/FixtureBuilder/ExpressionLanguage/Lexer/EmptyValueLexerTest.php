@@ -23,9 +23,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(EmptyValueLexer::class)]
 final class EmptyValueLexerTest extends TestCase
 {
     use ProphecyTrait;

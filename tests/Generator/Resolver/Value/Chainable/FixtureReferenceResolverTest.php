@@ -39,9 +39,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureReferenceResolver::class)]
 final class FixtureReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;

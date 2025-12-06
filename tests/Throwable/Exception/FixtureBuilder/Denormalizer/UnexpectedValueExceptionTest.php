@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UnexpectedValueException::class)]
 final class UnexpectedValueExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

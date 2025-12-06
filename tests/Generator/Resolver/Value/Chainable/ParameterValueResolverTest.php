@@ -26,9 +26,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\ParameterValueResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ParameterValueResolver::class)]
 final class ParameterValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver(): void

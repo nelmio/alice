@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(RecursionLimitReachedException::class)]
 final class RecursionLimitReachedExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

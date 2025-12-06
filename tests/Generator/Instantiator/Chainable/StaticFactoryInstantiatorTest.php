@@ -32,9 +32,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(StaticFactoryInstantiator::class)]
 final class StaticFactoryInstantiatorTest extends TestCase
 {
     /**

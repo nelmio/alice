@@ -21,9 +21,9 @@ use RuntimeException;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InvalidArgumentException::class)]
 final class InvalidArgumentExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

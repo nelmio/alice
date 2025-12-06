@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\MethodCall\DummyMethodCall;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Caller\CallProcessorExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(CallProcessorExceptionFactory::class)]
 final class CallProcessorExceptionFactoryTest extends TestCase
 {
     public function testCreateForNoProcessorFoundForMethodCall(): void

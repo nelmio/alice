@@ -25,9 +25,9 @@ use ReflectionClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DefaultIncludeProcessor::class)]
 final class DefaultIncludeProcessorTest extends TestCase
 {
     use ProphecyTrait;

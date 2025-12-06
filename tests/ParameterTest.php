@@ -17,15 +17,12 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Parameter
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(Parameter::class)]
 final class ParameterTest extends TestCase
 {
-    /**
-     * @dataProvider provideValues
-     * @param mixed $value
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
     public function testAccessors($value): void
     {
         $parameter = new Parameter('foo', $value);

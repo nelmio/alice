@@ -19,9 +19,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCall\SimpleMethodCall
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleMethodCall::class)]
 final class SimpleMethodCallTest extends TestCase
 {
     public function testIsAMethodCall(): void

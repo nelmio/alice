@@ -31,9 +31,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FunctionCallArgumentResolver::class)]
 final class FunctionCallArgumentResolverTest extends TestCase
 {
     use ProphecyTrait;

@@ -21,9 +21,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\OptionalFlagHandler
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(OptionalFlagHandler::class)]
 final class OptionalFlagHandlerTest extends TestCase
 {
     public function testIsNotClonable(): void

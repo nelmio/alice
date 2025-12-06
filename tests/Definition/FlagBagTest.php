@@ -27,9 +27,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\FlagBag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FlagBag::class)]
 final class FlagBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void

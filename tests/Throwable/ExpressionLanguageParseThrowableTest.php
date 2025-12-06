@@ -17,9 +17,9 @@ use Nelmio\Alice\Throwable\Exception\RootExpressionLanguageParseException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class ExpressionLanguageParseThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void

@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UnresolvableValueException::class)]
 final class UnresolvableValueExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

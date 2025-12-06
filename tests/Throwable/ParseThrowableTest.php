@@ -17,9 +17,9 @@ use Nelmio\Alice\Throwable\Exception\RootParseException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class ParseThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void

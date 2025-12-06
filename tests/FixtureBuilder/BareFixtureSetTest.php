@@ -20,9 +20,9 @@ use Nelmio\Alice\ParameterBag;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\BareFixtureSet
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(BareFixtureSet::class)]
 final class BareFixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -36,10 +36,8 @@ final class BareFixtureSetTest extends TestCase
         self::assertEquals($fixtures, $set->getFixtures());
     }
 
-    /**
-     * @depends \Nelmio\Alice\ParameterBagTest::testIsImmutable
-     * @depends \Nelmio\Alice\FixtureBagTest::testIsImmutable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends(\Nelmio\Alice\ParameterBagTest::testIsImmutable)]
+    #[\PHPUnit\Framework\Attributes\Depends(\Nelmio\Alice\FixtureBagTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');

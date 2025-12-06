@@ -19,9 +19,9 @@ use Nelmio\Alice\Definition\FlagBag;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InvalidArgumentExceptionFactory::class)]
 final class InvalidArgumentExceptionFactoryTest extends TestCase
 {
     public function testCreateForInvalidReferenceType(): void

@@ -23,9 +23,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\FixtureListReferenceTokenParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureListReferenceTokenParser::class)]
 final class FixtureListReferenceTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
@@ -38,9 +38,7 @@ final class FixtureListReferenceTokenParserTest extends TestCase
         self::assertFalse((new ReflectionClass(FixtureListReferenceTokenParser::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideTokens
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTokens')]
     public function testCanParseListReferenceTokens(Token $token, bool $expected): void
     {
         $parser = new FixtureListReferenceTokenParser();

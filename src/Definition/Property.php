@@ -40,7 +40,6 @@ final class Property
 
     /**
      * param ValueInterface|mixed $value.
-     * @param mixed $value
      */
     public function withValue($value): self
     {

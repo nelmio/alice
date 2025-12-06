@@ -25,9 +25,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FlagParserRegistry::class)]
 final class FlagParserRegistryTest extends TestCase
 {
     use ProphecyTrait;

@@ -26,9 +26,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Parser\RuntimeCacheParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(RuntimeCacheParser::class)]
 final class RuntimeCacheParserTest extends TestCase
 {
     use ProphecyTrait;

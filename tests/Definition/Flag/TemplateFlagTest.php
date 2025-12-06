@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\FlagInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Flag\TemplateFlag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(TemplateFlag::class)]
 final class TemplateFlagTest extends TestCase
 {
     public function testIsAFlag(): void

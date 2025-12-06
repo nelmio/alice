@@ -32,9 +32,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\AbstractChainableInstantiator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(AbstractChainableInstantiator::class)]
 final class AbstractChainableInstantiatorTest extends TestCase
 {
     use ProphecyTrait;

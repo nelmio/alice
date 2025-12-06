@@ -28,9 +28,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(OptionalValueResolver::class)]
 final class OptionalValueResolverTest extends TestCase
 {
     use ProphecyTrait;
@@ -73,9 +73,7 @@ final class OptionalValueResolverTest extends TestCase
         $resolver->resolve($value, new FakeFixture(), ResolvedFixtureSetFactory::create(), [], new GenerationContext());
     }
 
-    /**
-     * @dataProvider optionalValueProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('optionalValueProvider')]
     public function testCanHandleExtremaQuantifiersCorrectly(
         OptionalValue $value,
         int $randomValue,

@@ -28,9 +28,9 @@ use PHPUnit\Framework\TestCase;
 use function Nelmio\Alice\deep_clone;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplatingFixtureBag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(TemplatingFixtureBag::class)]
 final class TemplatingFixtureBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -83,9 +83,7 @@ final class TemplatingFixtureBagTest extends TestCase
         );
     }
 
-    /**
-     * @depends \Nelmio\Alice\FixtureBagTest::testIsImmutable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends(\Nelmio\Alice\FixtureBagTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         $fixture = new MutableFixture('user0', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());

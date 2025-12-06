@@ -22,9 +22,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FunctionLexer::class)]
 final class FunctionLexerTest extends TestCase
 {
     use ProphecyTrait;

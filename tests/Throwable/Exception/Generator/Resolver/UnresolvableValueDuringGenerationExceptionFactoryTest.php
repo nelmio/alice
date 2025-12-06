@@ -17,9 +17,9 @@ use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UnresolvableValueDuringGenerationExceptionFactory::class)]
 final class UnresolvableValueDuringGenerationExceptionFactoryTest extends TestCase
 {
     public function testCreateFromResolutionThrowable(): void

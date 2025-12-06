@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InaccessiblePropertyException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InaccessiblePropertyException::class)]
 final class InaccessiblePropertyExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

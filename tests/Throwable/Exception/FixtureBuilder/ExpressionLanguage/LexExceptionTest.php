@@ -18,9 +18,9 @@ use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(LexException::class)]
 final class LexExceptionTest extends TestCase
 {
     public function testIsAnException(): void

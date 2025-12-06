@@ -41,9 +41,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UnresolvedFixtureReferenceIdResolver::class)]
 final class UnresolvedFixtureReferenceIdResolverTest extends TestCase
 {
     use ProphecyTrait;

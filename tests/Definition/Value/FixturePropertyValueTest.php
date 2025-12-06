@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\FixturePropertyValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixturePropertyValue::class)]
 final class FixturePropertyValueTest extends TestCase
 {
     public function testIsAValue(): void
@@ -39,9 +39,7 @@ final class FixturePropertyValueTest extends TestCase
         self::assertEquals([$reference, $property], $value->getValue());
     }
 
-    /**
-     * @depends \Nelmio\Alice\Definition\Value\FixtureReferenceValueTest::testIsImmutable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends(FixtureReferenceValueTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');

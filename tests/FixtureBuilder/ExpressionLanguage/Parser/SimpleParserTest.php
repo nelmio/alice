@@ -29,9 +29,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleParser::class)]
 final class SimpleParserTest extends TestCase
 {
     use ProphecyTrait;

@@ -17,9 +17,9 @@ use Error;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ParseExceptionFactory::class)]
 final class ParseExceptionFactoryTest extends TestCase
 {
     public function testCreateForParserNoFoundForFile(): void

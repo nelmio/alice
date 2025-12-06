@@ -20,9 +20,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\ResolvedFixtureSet
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ResolvedFixtureSet::class)]
 final class ResolvedFixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void

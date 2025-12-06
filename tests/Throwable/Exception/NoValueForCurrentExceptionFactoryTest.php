@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\NoValueForCurrentExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NoValueForCurrentExceptionFactory::class)]
 final class NoValueForCurrentExceptionFactoryTest extends TestCase
 {
     public function testCreateException(): void

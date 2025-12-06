@@ -27,9 +27,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(RecursiveParameterResolver::class)]
 final class RecursiveParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
@@ -96,9 +96,7 @@ final class RecursiveParameterResolverTest extends TestCase
         $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    /**
-     * @testdox Resolves the given parameter two times with the decorated resolver. If the two results are identical, return this result
-     */
+    #[\PHPUnit\Framework\Attributes\TestDox('Resolves the given parameter two times with the decorated resolver. If the two results are identical, return this result')]
     public function testResolveWithNoChange(): void
     {
         $parameter = new Parameter('foo', null);
@@ -198,9 +196,7 @@ final class RecursiveParameterResolverTest extends TestCase
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
-    /**
-     * @dataProvider provideContexts
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContexts')]
     public function testTheSameContextIsPassedBetweenEachResolution(?ResolvingContext $context = null): void
     {
         $parameter = new Parameter('foo', null);
@@ -216,9 +212,7 @@ final class RecursiveParameterResolverTest extends TestCase
         $resolver->resolve($parameter, new ParameterBag(), new ParameterBag(), $context);
     }
 
-    /**
-     * @testdox Resolves the given parameter two times with the decorated resolver. As the results differ, re-iterate the operation until two successive resolutions leads to the same result.
-     */
+    #[\PHPUnit\Framework\Attributes\TestDox('Resolves the given parameter two times with the decorated resolver. As the results differ, re-iterate the operation until two successive resolutions leads to the same result.')]
     public function testResolveWithChange(): void
     {
         $parameter = new Parameter('foo', null);

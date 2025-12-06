@@ -42,9 +42,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Caller\SimpleCaller
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleCaller::class)]
 final class SimpleCallerTest extends TestCase
 {
     use ProphecyTrait;

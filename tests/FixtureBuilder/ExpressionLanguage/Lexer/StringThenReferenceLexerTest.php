@@ -22,9 +22,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(StringThenReferenceLexer::class)]
 final class StringThenReferenceLexerTest extends TestCase
 {
     use ProphecyTrait;

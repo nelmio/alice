@@ -18,9 +18,9 @@ use Nelmio\Alice\Throwable\GenerationThrowable;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ObjectGeneratorNotFoundException::class)]
 final class ObjectGeneratorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

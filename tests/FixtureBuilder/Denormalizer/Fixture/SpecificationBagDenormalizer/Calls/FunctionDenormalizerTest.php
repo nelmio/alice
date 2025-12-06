@@ -29,9 +29,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\FunctionDenormalizer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FunctionDenormalizer::class)]
 final class FunctionDenormalizerTest extends TestCase
 {
     use ProphecyTrait;

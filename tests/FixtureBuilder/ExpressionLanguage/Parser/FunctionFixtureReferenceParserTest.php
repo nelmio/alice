@@ -24,9 +24,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FunctionFixtureReferenceParser::class)]
 final class FunctionFixtureReferenceParserTest extends TestCase
 {
     use ProphecyTrait;
@@ -152,11 +152,7 @@ final class FunctionFixtureReferenceParserTest extends TestCase
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @dataProvider provideOneElementValues
-     * @param mixed $value
-     * @param mixed $expected
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideOneElementValues')]
     public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($value, $expected): void
     {
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);

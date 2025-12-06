@@ -22,9 +22,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCall\MethodCallWithReference
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(MethodCallWithReference::class)]
 final class MethodCallWithReferenceTest extends TestCase
 {
     public function testIsAMethodCall(): void

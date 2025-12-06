@@ -18,11 +18,10 @@ use Nelmio\Alice\Symfony\KernelFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
- *
- * @group integration
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\Group('integration')]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class CheckBundleDependenciesPassTest extends TestCase
 {
     public function testPropertyAccessDisabled(): void

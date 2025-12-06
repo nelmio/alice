@@ -20,9 +20,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ElementFlagParser::class)]
 final class ElementFlagParserTest extends FlagParserTestCase
 {
     use ProphecyTrait;
@@ -77,9 +77,7 @@ final class ElementFlagParserTest extends FlagParserTestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider provideElements
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideElements')]
     public function testCanParseElements(string $element, ?FlagBag $expected = null): void
     {
         $actual = $this->parser->parse($element);
@@ -87,9 +85,7 @@ final class ElementFlagParserTest extends FlagParserTestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider provideMalformedElements
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedElements')]
     public function testCannotParseMalformedElements(string $element): void
     {
         try {

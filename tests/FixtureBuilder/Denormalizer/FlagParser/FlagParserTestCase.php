@@ -31,73 +31,55 @@ abstract class FlagParserTestCase extends TestCase
         self::assertFalse((new ReflectionObject($this->parser))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideElements
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideElements')]
     public function testCanParseElements(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    /**
-     * @dataProvider provideMalformedElements
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedElements')]
     public function testCannotParseMalformedElements(string $element): void
     {
         $this->assertCannotParse($element);
     }
 
-    /**
-     * @dataProvider provideExtends
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideExtends')]
     public function testCanParseExtends(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    /**
-     * @dataProvider provideMalformedExtends
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedExtends')]
     public function testCannotParseMalformedExtends(string $element): void
     {
         $this->assertCannotParse($element);
     }
 
-    /**
-     * @dataProvider provideOptionals
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideOptionals')]
     public function testCanParseOptionals(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    /**
-     * @dataProvider provideMalformedOptionals
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideMalformedOptionals')]
     public function testCannotParseMalformedOptionals(string $element): void
     {
         $this->assertCannotParse($element);
     }
 
-    /**
-     * @dataProvider provideTemplates
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTemplates')]
     public function testCanParseTemplates(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    /**
-     * @dataProvider provideUniques
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideUniques')]
     public function testCanParseUniques(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);
     }
 
-    /**
-     * @dataProvider provideConfigurators
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideConfigurators')]
     public function testCanParseConfigurators(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCannotParse($element);

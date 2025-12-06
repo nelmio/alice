@@ -20,11 +20,10 @@ use Nelmio\Alice\Faker\Provider\DummyProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Faker\GeneratorFactory
- *
- * @group integration
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(GeneratorFactory::class)]
+#[\PHPUnit\Framework\Attributes\Group('integration')]
 final class GeneratorFactoryTest extends TestCase
 {
     public function testAssertGeneratorLocaleMethod(): void
@@ -58,9 +57,7 @@ final class GeneratorFactoryTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @testdox When a locale is given, only the non-default providers of the decorated generator are added to the created generator.
-     */
+    #[\PHPUnit\Framework\Attributes\TestDox('When a locale is given, only the non-default providers of the decorated generator are added to the created generator.')]
     public function testFakerDefaultProvidersAreNotAdded(): void
     {
         $generator = FakerFactory::create();

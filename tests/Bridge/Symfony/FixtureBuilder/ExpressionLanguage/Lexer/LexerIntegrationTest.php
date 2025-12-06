@@ -17,11 +17,10 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\IsolatedSymfonyBuiltInL
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerIntegrationTest as CoreLexerIntegrationTest;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\Group('integration')]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class LexerIntegrationTest extends CoreLexerIntegrationTest
 {
     protected function setUp(): void

@@ -22,9 +22,9 @@ use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchMethodExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NoSuchMethodExceptionFactory::class)]
 final class NoSuchMethodExceptionFactoryTest extends TestCase
 {
     public function testCreateForFixture(): void

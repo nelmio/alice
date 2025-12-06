@@ -23,9 +23,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCall\OptionalMethodCall
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(OptionalMethodCall::class)]
 final class OptionalMethodCallTest extends TestCase
 {
     use ProphecyTrait;

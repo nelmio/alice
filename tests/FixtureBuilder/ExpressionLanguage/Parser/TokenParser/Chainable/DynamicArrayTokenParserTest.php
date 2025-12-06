@@ -28,9 +28,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\DynamicArrayTokenParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DynamicArrayTokenParser::class)]
 final class DynamicArrayTokenParserTest extends TestCase
 {
     use ProphecyTrait;

@@ -17,9 +17,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\ObjectSet
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ObjectSet::class)]
 final class ObjectSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void

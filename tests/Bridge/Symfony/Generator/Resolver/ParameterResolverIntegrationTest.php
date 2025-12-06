@@ -17,11 +17,10 @@ use Nelmio\Alice\Generator\Resolver\Parameter\IsolatedSymfonyParameterBagResolve
 use Nelmio\Alice\Generator\Resolver\ParameterResolverIntegrationTest as CoreParameterResolverIntegrationTest;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\Group('integration')]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class ParameterResolverIntegrationTest extends CoreParameterResolverIntegrationTest
 {
     protected function setUp(): void

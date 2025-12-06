@@ -18,9 +18,9 @@ use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(MalformedFunctionException::class)]
 final class MalformedFunctionExceptionTest extends TestCase
 {
     public function testIsAnInvalidArgumentException(): void

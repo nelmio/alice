@@ -25,9 +25,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\SimpleBuilder
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleBuilder::class)]
 final class SimpleBuilderTest extends TestCase
 {
     use ProphecyTrait;

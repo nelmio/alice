@@ -23,9 +23,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SubPatternsLexer::class)]
 final class SubPatternsLexerTest extends TestCase
 {
     use ProphecyTrait;
@@ -53,9 +53,7 @@ final class SubPatternsLexerTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider lineBreaksProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lineBreaksProvider')]
     public function testLexAFunctionContainingLineBreaks(string $lineBreak): void
     {
         $expected = [

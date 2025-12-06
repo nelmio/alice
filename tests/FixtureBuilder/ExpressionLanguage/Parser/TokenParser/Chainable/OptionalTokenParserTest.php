@@ -27,9 +27,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\OptionalTokenParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(OptionalTokenParser::class)]
 final class OptionalTokenParserTest extends TestCase
 {
     use ProphecyTrait;

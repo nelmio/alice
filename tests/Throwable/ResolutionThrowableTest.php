@@ -17,9 +17,9 @@ use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class ResolutionThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void

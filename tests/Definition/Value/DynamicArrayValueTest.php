@@ -19,9 +19,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\DynamicArrayValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(DynamicArrayValue::class)]
 final class DynamicArrayValueTest extends TestCase
 {
     public function testIsAValue(): void
@@ -29,12 +29,7 @@ final class DynamicArrayValueTest extends TestCase
         self::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideInputTypes
-     * @param mixed $quantifier
-     * @param mixed $element
-     * @param mixed $errorMessage
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInputTypes')]
     public function testThrowsErrorIfInvalidInputType($quantifier, $element, $errorMessage): void
     {
         try {
@@ -45,12 +40,7 @@ final class DynamicArrayValueTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $quantifier
-     * @param mixed $element
-     * @param mixed $expectedQuantifier
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
     public function testReadAccessorsReturnPropertiesValues($quantifier, $element, $expectedQuantifier): void
     {
         $value = new DynamicArrayValue($quantifier, $element);

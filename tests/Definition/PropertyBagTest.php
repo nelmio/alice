@@ -18,9 +18,9 @@ use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * @covers \Nelmio\Alice\Definition\PropertyBag
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(PropertyBag::class)]
 final class PropertyBagTest extends TestCase
 {
     /**
@@ -48,9 +48,7 @@ final class PropertyBagTest extends TestCase
         self::assertSame(['username' => $property], $this->propRefl->getValue($newBag));
     }
 
-    /**
-     * @testdox Can merge two bags. When properties overlaps, the existing ones are kept.
-     */
+    #[\PHPUnit\Framework\Attributes\TestDox('Can merge two bags. When properties overlaps, the existing ones are kept.')]
     public function testMergeTwoBags(): void
     {
         $propertyA1 = new Property('username', 'alice');

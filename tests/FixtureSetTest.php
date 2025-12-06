@@ -17,9 +17,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureSet
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureSet::class)]
 final class FixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void

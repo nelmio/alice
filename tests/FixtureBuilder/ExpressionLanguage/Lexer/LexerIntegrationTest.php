@@ -23,11 +23,10 @@ use PHPUnit\Framework\TestCase;
 use function str_repeat;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\Group('integration')]
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 class LexerIntegrationTest extends TestCase
 {
     /**
@@ -40,10 +39,7 @@ class LexerIntegrationTest extends TestCase
         $this->lexer = (new NativeLoader())->getLexer();
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $expected
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
     public function testCanLexValues(string $value, $expected): void
     {
         try {

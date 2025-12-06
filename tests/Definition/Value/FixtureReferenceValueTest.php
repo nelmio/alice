@@ -19,9 +19,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\FixtureReferenceValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureReferenceValue::class)]
 final class FixtureReferenceValueTest extends TestCase
 {
     public function testIsAValue(): void

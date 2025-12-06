@@ -22,9 +22,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\SimpleReferenceTokenParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(SimpleReferenceTokenParser::class)]
 final class SimpleReferenceTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void

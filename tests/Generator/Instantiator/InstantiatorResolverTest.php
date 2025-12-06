@@ -37,9 +37,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorResolver
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InstantiatorResolver::class)]
 final class InstantiatorResolverTest extends TestCase
 {
     use ProphecyTrait;

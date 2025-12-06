@@ -23,9 +23,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Parser\ParserRegistry
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ParserRegistry::class)]
 final class ParserRegistryTest extends TestCase
 {
     use ProphecyTrait;

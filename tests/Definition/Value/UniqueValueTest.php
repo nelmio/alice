@@ -20,9 +20,9 @@ use stdClass;
 use const PHP_VERSION_ID;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\UniqueValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UniqueValue::class)]
 final class UniqueValueTest extends TestCase
 {
     public function testIsAValue(): void
@@ -30,10 +30,7 @@ final class UniqueValueTest extends TestCase
         self::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $value
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValues')]
     public function testReadAccessorsReturnPropertiesValues($value): void
     {
         $id = 'Nelmio\Entity\User#user0#username';

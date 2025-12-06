@@ -18,9 +18,9 @@ use Nelmio\Alice\Throwable\InstantiationThrowable;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(InstantiatorNotFoundException::class)]
 final class InstantiatorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

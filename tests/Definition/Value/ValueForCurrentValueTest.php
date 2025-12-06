@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\ValueForCurrentValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ValueForCurrentValue::class)]
 final class ValueForCurrentValueTest extends TestCase
 {
     public function testIsAValue(): void

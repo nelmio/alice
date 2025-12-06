@@ -16,9 +16,9 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(Token::class)]
 final class TokenTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -33,9 +33,7 @@ final class TokenTest extends TestCase
         self::assertEquals('(DYNAMIC_ARRAY_TYPE) bob', $token->__toString());
     }
 
-    /**
-     * @depends \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenTypeTest::testIsImmutable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends(TokenTypeTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');

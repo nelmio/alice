@@ -22,22 +22,18 @@ use Nelmio\Alice\Definition\SpecificationBagFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Fixture\Templating
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(Templating::class)]
 final class TemplatingTest extends TestCase
 {
-    /**
-     * @depends \Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends(\Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable)]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');
     }
 
-    /**
-     * @dataProvider provideFlags
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFlags')]
     public function testDetectTemplateFlags(SimpleFixtureWithFlags $fixture, bool $isATemplate, bool $extendsFixtures, array $extendedFixtures): void
     {
         $templating = new Templating($fixture);

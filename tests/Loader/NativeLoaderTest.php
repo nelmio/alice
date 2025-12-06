@@ -17,9 +17,9 @@ use BadMethodCallException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Loader\NativeLoader
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NativeLoader::class)]
 final class NativeLoaderTest extends TestCase
 {
     public function testThrowsAnExceptionIfCallUnknownMethod(): void

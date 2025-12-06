@@ -21,9 +21,9 @@ use Nelmio\Alice\Definition\Value\FixturePropertyValue;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyExceptionFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NoSuchPropertyExceptionFactory::class)]
 final class NoSuchPropertyExceptionFactoryTest extends TestCase
 {
     public function testCreateForFixture(): void

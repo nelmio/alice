@@ -35,9 +35,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\ObjectGenerator\CompleteObjectGenerator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(CompleteObjectGenerator::class)]
 final class CompleteObjectGeneratorTest extends TestCase
 {
     use ProphecyTrait;
@@ -101,9 +101,7 @@ final class CompleteObjectGeneratorTest extends TestCase
         $decoratedGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @dataProvider provideSets
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideSets')]
     public function testReturnsCompleteObjectWheneverItIsPossible(
         FixtureInterface $fixture,
         GenerationContext $context,

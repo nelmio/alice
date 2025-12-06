@@ -30,9 +30,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(UniqueValueDenormalizer::class)]
 final class UniqueValueDenormalizerTest extends TestCase
 {
     use ProphecyTrait;

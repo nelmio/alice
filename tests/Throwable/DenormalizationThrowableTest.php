@@ -17,9 +17,9 @@ use Nelmio\Alice\Throwable\Exception\RootDenormalizationException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 final class DenormalizationThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void

@@ -21,9 +21,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(PhpParser::class)]
 final class JsonParserTest extends TestCase
 {
     use FileListProviderTrait;
@@ -64,9 +64,7 @@ final class JsonParserTest extends TestCase
         self::assertFalse((new ReflectionClass(JsonParser::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideJsonList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideJsonList')]
     public function testCanParseJsonFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
@@ -75,9 +73,7 @@ final class JsonParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider providePhpList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providePhpList')]
     public function testCanNotParsePhpFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -85,9 +81,7 @@ final class JsonParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideYamlList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideYamlList')]
     public function testCannotParseYamlFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -95,9 +89,7 @@ final class JsonParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideUnsupportedList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideUnsupportedList')]
     public function testCannotParseUnsupportedFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);

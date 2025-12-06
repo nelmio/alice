@@ -20,9 +20,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Error\TypeErrorFactory
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(TypeErrorFactory::class)]
 final class TypeErrorFactoryTest extends TestCase
 {
     public function testCreateForDynamicArrayQuantifier(): void

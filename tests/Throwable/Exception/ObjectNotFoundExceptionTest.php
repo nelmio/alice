@@ -17,9 +17,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\ObjectNotFoundException
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(ObjectNotFoundException::class)]
 final class ObjectNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

@@ -19,9 +19,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\GenerationContext
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(GenerationContext::class)]
 final class GenerationContextTest extends TestCase
 {
     public function testAccessors(): void

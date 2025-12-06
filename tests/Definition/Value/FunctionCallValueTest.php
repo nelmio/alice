@@ -18,9 +18,9 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\FunctionCallValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FunctionCallValue::class)]
 final class FunctionCallValueTest extends TestCase
 {
     public function testIsAValue(): void

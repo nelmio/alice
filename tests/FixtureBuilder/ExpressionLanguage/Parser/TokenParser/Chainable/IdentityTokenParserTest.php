@@ -22,9 +22,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\IdentityTokenParser
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(IdentityTokenParser::class)]
 final class IdentityTokenParserTest extends TestCase
 {
     use ProphecyTrait;

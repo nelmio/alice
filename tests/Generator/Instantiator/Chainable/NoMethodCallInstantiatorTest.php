@@ -29,9 +29,9 @@ use ReflectionException;
 use ReflectionObject;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NoMethodCallInstantiator
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(NoMethodCallInstantiator::class)]
 final class NoMethodCallInstantiatorTest extends TestCase
 {
     /**

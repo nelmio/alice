@@ -17,9 +17,9 @@ use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(FixtureMatchReferenceValue::class)]
 final class FixtureMatchReferenceValueTest extends TestCase
 {
     public function testIsAValue(): void
