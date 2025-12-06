@@ -21,15 +21,16 @@ use Nelmio\Alice\Generator\FixtureSetResolverInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSet;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver
  * @internal
  */
+#[CoversClass(RemoveConflictingObjectsResolver::class)]
 final class RemoveConflictingObjectsResolverTest extends TestCase
 {
     use ProphecyTrait;

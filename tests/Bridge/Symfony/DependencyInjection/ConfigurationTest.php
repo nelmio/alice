@@ -14,16 +14,17 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Bridge\Symfony\DependencyInjection;
 
 use Nelmio\Alice\Symfony\KernelFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
- * @covers \Nelmio\Alice\Bridge\Symfony\DependencyInjection\Configuration
- *
- * @group integration
  * @internal
  */
+#[CoversClass(Configuration::class)]
+#[Group('integration')]
 final class ConfigurationTest extends TestCase
 {
     public function testDefaultValues(): void

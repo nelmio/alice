@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\LexerInterface;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -24,9 +25,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer
  * @internal
  */
+#[CoversClass(GlobalPatternsLexer::class)]
 final class GlobalPatternsLexerTest extends TestCase
 {
     use ProphecyTrait;

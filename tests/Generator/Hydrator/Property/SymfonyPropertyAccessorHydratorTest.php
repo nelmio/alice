@@ -27,6 +27,8 @@ use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InaccessiblePropertyExce
 use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException;
 use Nelmio\Alice\Throwable\Exception\Generator\Hydrator\NoSuchPropertyException;
 use Nelmio\Alice\Throwable\Exception\Symfony\PropertyAccess\RootException as GenericPropertyAccessException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -36,9 +38,9 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @covers \Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator
  * @internal
  */
+#[CoversClass(SymfonyPropertyAccessorHydrator::class)]
 final class SymfonyPropertyAccessorHydratorTest extends TestCase
 {
     use ProphecyTrait;
@@ -207,9 +209,7 @@ final class SymfonyPropertyAccessorHydratorTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideProperties
-     */
+    #[DataProvider('provideProperties')]
     public function testObjectHydrationAgainstMutlipleValues(Property $property): void
     {
         $instance = new Dummy();

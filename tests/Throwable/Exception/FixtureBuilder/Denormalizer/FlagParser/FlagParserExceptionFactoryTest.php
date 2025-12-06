@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory
  * @internal
  */
+#[CoversClass(FlagParserExceptionFactory::class)]
 final class FlagParserExceptionFactoryTest extends TestCase
 {
     public function testCreateNewException(): void

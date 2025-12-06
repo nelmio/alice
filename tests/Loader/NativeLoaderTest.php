@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Loader;
 
 use BadMethodCallException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Loader\NativeLoader
  * @internal
  */
+#[CoversClass(NativeLoader::class)]
 final class NativeLoaderTest extends TestCase
 {
     public function testThrowsAnExceptionIfCallUnknownMethod(): void

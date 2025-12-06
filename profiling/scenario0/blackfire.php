@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use Blackfire\Client;
+use Blackfire\Profile\Configuration;
 use Faker\Factory;
 use Faker\Generator;
 use Nelmio\Alice\scenario2\ImmutableUser;
@@ -26,9 +28,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 require_once __DIR__.'/../../vendor-bin/profiling/vendor/autoload.php';
 
-$blackfire = new \Blackfire\Client();
+$blackfire = new Client();
 
-$config = new \Blackfire\Profile\Configuration();
+$config = new Configuration();
 $config->setTitle('Scenario 0');
 $config->setSamples(10);
 $config->setReference(0);

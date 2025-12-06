@@ -18,12 +18,13 @@ use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Definition\Value\FakeValue;
 use Nelmio\Alice\Definition\Value\FixturePropertyValue;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyExceptionFactory
  * @internal
  */
+#[CoversClass(NoSuchPropertyExceptionFactory::class)]
 final class NoSuchPropertyExceptionFactoryTest extends TestCase
 {
     public function testCreateForFixture(): void

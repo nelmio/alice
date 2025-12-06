@@ -17,15 +17,16 @@ use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\MethodCall\SimpleMethodCall;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\ArgumentsDenormalizerInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\ConstructorDenormalizer
  * @internal
  */
+#[CoversClass(ConstructorDenormalizer::class)]
 final class ConstructorDenormalizerTest extends TestCase
 {
     use ProphecyTrait;

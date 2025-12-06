@@ -14,14 +14,16 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTokenizer
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTreeTokenizer
  * @internal
  */
+#[CoversClass(FunctionTokenizer::class)]
+#[CoversClass(FunctionTreeTokenizer::class)]
 final class FunctionTokenizerTest extends TestCase
 {
     /**
@@ -39,9 +41,7 @@ final class FunctionTokenizerTest extends TestCase
         self::assertFalse((new ReflectionClass(FunctionTokenizer::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideValues
-     */
+    #[DataProvider('provideValues')]
     public function testTokenizeValues($value, $expected): void
     {
         try {

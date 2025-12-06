@@ -16,6 +16,7 @@ namespace Nelmio\Alice\PropertyAccess;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Symfony\PropertyAccess\FakePropertyAccessor;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -25,9 +26,9 @@ use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @covers \Nelmio\Alice\PropertyAccess\StdPropertyAccessor
  * @internal
  */
+#[CoversClass(StdPropertyAccessor::class)]
 final class StdPropertyAccessorTest extends TestCase
 {
     use ProphecyTrait;

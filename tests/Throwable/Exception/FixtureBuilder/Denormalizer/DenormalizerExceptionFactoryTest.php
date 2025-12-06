@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer;
 
 use Error;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory
  * @internal
  */
+#[CoversClass(DenormalizerExceptionFactory::class)]
 final class DenormalizerExceptionFactoryTest extends TestCase
 {
     public function testCreateForUndenormalizableConstructor(): void

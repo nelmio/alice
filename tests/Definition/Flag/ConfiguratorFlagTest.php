@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Flag\ConfiguratorFlag
  * @internal
  */
+#[CoversClass(ConfiguratorFlag::class)]
 final class ConfiguratorFlagTest extends TestCase
 {
     public function testIsAFlag(): void

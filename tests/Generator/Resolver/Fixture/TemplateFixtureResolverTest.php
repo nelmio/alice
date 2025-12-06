@@ -13,17 +13,16 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Generator\Resolver\Fixture;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
- *
- * More tests in:
- *
  * @see TemplateFixtureBagResolverTest
  * @internal
  */
+#[CoversClass('\Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
+More tests in:::class')]
 final class TemplateFixtureResolverTest extends TestCase
 {
     public function testIsNotClonable(): void

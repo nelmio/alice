@@ -15,13 +15,14 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Error;
 use Nelmio\Alice\Definition\Value\DummyValue;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory
  * @internal
  */
+#[CoversClass(UnresolvableValueExceptionFactory::class)]
 final class UnresolvableValueExceptionFactoryTest extends TestCase
 {
     public function testCreate(): void

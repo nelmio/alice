@@ -15,12 +15,13 @@ namespace Nelmio\Alice\Throwable\Exception\Parser;
 
 use Exception;
 use Nelmio\Alice\Throwable\ParseThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException
  * @internal
  */
+#[CoversClass(UnparsableFileException::class)]
 final class UnparsableFileExceptionTest extends TestCase
 {
     public function testIsAnException(): void

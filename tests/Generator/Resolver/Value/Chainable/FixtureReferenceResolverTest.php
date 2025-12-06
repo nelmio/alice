@@ -32,6 +32,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -39,9 +40,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureReferenceResolver
  * @internal
  */
+#[CoversClass(FixtureReferenceResolver::class)]
 final class FixtureReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;

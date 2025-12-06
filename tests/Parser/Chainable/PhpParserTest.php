@@ -16,14 +16,16 @@ namespace Nelmio\Alice\Parser\Chainable;
 use InvalidArgumentException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
  * @internal
  */
+#[CoversClass(PhpParser::class)]
 final class PhpParserTest extends TestCase
 {
     use FileListProviderTrait;
@@ -64,9 +66,7 @@ final class PhpParserTest extends TestCase
         self::assertFalse((new ReflectionClass(PhpParser::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider providePhpList
-     */
+    #[DataProvider('providePhpList')]
     public function testCanParsePhpFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
@@ -75,9 +75,7 @@ final class PhpParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider provideYamlList
-     */
+    #[DataProvider('provideYamlList')]
     public function testCannotParseYamlFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -85,9 +83,7 @@ final class PhpParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideJsonList
-     */
+    #[DataProvider('provideJsonList')]
     public function testCannotParseJsonFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -95,9 +91,7 @@ final class PhpParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideUnsupportedList
-     */
+    #[DataProvider('provideUnsupportedList')]
     public function testCannotParseUnsupportedFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);

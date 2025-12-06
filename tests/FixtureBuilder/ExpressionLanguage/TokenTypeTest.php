@@ -14,13 +14,16 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType
  * @internal
  */
+#[CoversClass(TokenType::class)]
 final class TokenTypeTest extends TestCase
 {
     /**
@@ -39,9 +42,7 @@ final class TokenTypeTest extends TestCase
         self::assertTrue(true, 'Nothing to do.');
     }
 
-    /**
-     * @testdox Test that the static values used to control the input are grouping all the constants.
-     */
+    #[TestDox('Test that the static values used to control the input are grouping all the constants.')]
     public function testStaticValues(): void
     {
         $reflClass = new ReflectionClass(TokenType::class);
@@ -54,9 +55,7 @@ final class TokenTypeTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideAcceptableTypes
-     */
+    #[DataProvider('provideAcceptableTypes')]
     public function testCanCreateType(string $typeConstant): void
     {
         $type = new TokenType($typeConstant);

@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable;
 
 use Nelmio\Alice\Throwable\Exception\RootDenormalizationException;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversNothing
  * @internal
  */
+#[CoversNothing]
 final class DenormalizationThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void

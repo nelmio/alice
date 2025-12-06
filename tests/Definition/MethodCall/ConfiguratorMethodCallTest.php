@@ -17,14 +17,15 @@ use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\MutableReference;
 use Nelmio\Alice\Entity\StdClassFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall
  * @internal
  */
+#[CoversClass(ConfiguratorMethodCall::class)]
 final class ConfiguratorMethodCallTest extends TestCase
 {
     use ProphecyTrait;

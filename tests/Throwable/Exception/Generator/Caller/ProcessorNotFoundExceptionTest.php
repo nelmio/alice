@@ -16,12 +16,13 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Caller;
 use LogicException;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\ChildInstantiatorNotFoundException;
 use Nelmio\Alice\Throwable\InstantiationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Caller\ProcessorNotFoundException
  * @internal
  */
+#[CoversClass(ProcessorNotFoundException::class)]
 final class ProcessorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

@@ -32,6 +32,12 @@ return RectorConfig::configure()
     ->withPreparedSets(
         phpunitCodeQuality: true,
     )
+    ->withAttributesSets(
+        phpunit: true,
+    )
+    ->withImportNames(
+        removeUnusedImports: true,
+    )
     ->withRules([
         StaticDataProviderClassMethodRector::class
     ])

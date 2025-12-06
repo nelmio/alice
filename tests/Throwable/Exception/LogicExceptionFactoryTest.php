@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\LogicExceptionFactory
  * @internal
  */
+#[CoversClass(LogicExceptionFactory::class)]
 final class LogicExceptionFactoryTest extends TestCase
 {
     public function testCreateForUncallableMethod(): void
