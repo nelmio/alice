@@ -20,7 +20,7 @@ class FakeParser implements ParserInterface
 {
     use NotCallableTrait;
 
-    public function parse(string $file): array
+    public function parse(string $file): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

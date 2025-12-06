@@ -36,7 +36,7 @@ final class DummyMethodCall implements MethodCallInterface
         $this->toString = $toString;
     }
 
-    public function withArguments(?array $arguments = null): self
+    public function withArguments(?array $arguments = null): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

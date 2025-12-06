@@ -23,7 +23,7 @@ class FakeInstantiator implements InstantiatorInterface
 {
     use NotCallableTrait;
 
-    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
+    public function instantiate(FixtureInterface $fixture, ResolvedFixtureSet $fixtureSet, GenerationContext $context): never
     {
         $this->__call(__METHOD__, func_get_args());
     }
