@@ -41,7 +41,7 @@ use const DIRECTORY_SEPARATOR;
  * @coversNothing
  * @internal
  */
-final class ParserIntegrationTest extends TestCase
+class ParserIntegrationTest extends TestCase
 {
     /**
      * @var ParserInterface
