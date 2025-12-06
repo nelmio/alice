@@ -41,7 +41,6 @@ class ObjectBagTest extends TestCase
     protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(ObjectBag::class))->getProperty('objects');
-        $this->propRefl->setAccessible(true);
     }
 
     public function testBagsCanBeInstantiatedWithRegularObjects(): void

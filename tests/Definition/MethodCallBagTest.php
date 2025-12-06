@@ -34,7 +34,6 @@ class MethodCallBagTest extends TestCase
     {
         $refl = new ReflectionClass(MethodCallBag::class);
         $propRefl = $refl->getProperty('methodCalls');
-        $propRefl->setAccessible(true);
 
         $this->propRefl = $propRefl;
     }

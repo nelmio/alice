@@ -58,7 +58,6 @@ class DynamicServicesConfigurationTest extends TestCase
 
         self::assertInstanceOf(RecursiveParameterResolver::class, $resolver);
         $limitRefl = (new ReflectionClass(RecursiveParameterResolver::class))->getProperty('limit');
-        $limitRefl->setAccessible(true);
 
         self::assertEquals(50, $limitRefl->getValue($resolver));
     }
@@ -70,7 +69,6 @@ class DynamicServicesConfigurationTest extends TestCase
 
         self::assertInstanceOf(UniqueValueResolver::class, $resolver);
         $limitRefl = (new ReflectionClass(UniqueValueResolver::class))->getProperty('limit');
-        $limitRefl->setAccessible(true);
 
         self::assertEquals(15, $limitRefl->getValue($resolver));
     }

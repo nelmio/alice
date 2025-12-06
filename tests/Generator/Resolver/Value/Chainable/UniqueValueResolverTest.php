@@ -56,10 +56,8 @@ class UniqueValueResolverTest extends TestCase
         $reflClass = new ReflectionClass(UniqueValueResolver::class);
 
         $this->resolverRefl = $reflClass->getProperty('resolver');
-        $this->resolverRefl->setAccessible(true);
 
         $this->poolRefl = $reflClass->getProperty('pool');
-        $this->poolRefl->setAccessible(true);
     }
 
     public function testIsAChainableResolver(): void

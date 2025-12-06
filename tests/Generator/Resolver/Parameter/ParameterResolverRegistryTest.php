@@ -53,7 +53,6 @@ class ParameterResolverRegistryTest extends TestCase
     public function testInjectsItselfToParameterResolverAwareResolvers(): void
     {
         $propRefl = (new ReflectionClass(ParameterResolverRegistry::class))->getProperty('resolvers');
-        $propRefl->setAccessible(true);
 
         $oneResolver = new FakeChainableParameterResolver();
         $secondResolver = new DummyChainableParameterResolverAwareResolver();

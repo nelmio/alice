@@ -32,7 +32,6 @@ class PropertyBagTest extends TestCase
     {
         $refl = new ReflectionClass(PropertyBag::class);
         $propRefl = $refl->getProperty('properties');
-        $propRefl->setAccessible(true);
 
         $this->propRefl = $propRefl;
     }

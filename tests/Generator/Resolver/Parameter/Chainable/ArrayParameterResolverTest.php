@@ -63,7 +63,6 @@ class ArrayParameterResolverTest extends TestCase
     public function testWithersReturnANewModifiedInstance(): void
     {
         $propertyRefl = (new ReflectionClass(ArrayParameterResolver::class))->getProperty('resolver');
-        $propertyRefl->setAccessible(true);
 
         $resolver = new ArrayParameterResolver();
         $newResolver = $resolver->withResolver(new FakeParameterResolver());

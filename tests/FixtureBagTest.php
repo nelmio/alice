@@ -37,7 +37,6 @@ class FixtureBagTest extends TestCase
     protected function setUp(): void
     {
         $propRelf = (new ReflectionClass(FixtureBag::class))->getProperty('fixtures');
-        $propRelf->setAccessible(true);
 
         $this->propRefl = $propRelf;
     }
