@@ -26,7 +26,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\Chainable\NullRangeNameDenormalizer
  * @internal
  */
-final class NullRangeNameDenormalizerTest extends ChainableDenormalizerTest
+final class NullRangeNameDenormalizerTest extends ChainableDenormalizerTestCase
 {
     protected function setUp(): void
     {
