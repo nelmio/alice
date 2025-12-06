@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
-class DummyValue implements ValueInterface
+class DummyValue implements Stringable, ValueInterface
 {
     /**
      * @var string

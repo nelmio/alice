@@ -15,12 +15,13 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
+use Stringable;
 use function Nelmio\Alice\deep_clone;
 
 /**
  * Value object representing '<{param}>'.
  */
-final class ParameterValue implements ValueInterface
+final class ParameterValue implements Stringable, ValueInterface
 {
     /**
      * @var string|ValueInterface

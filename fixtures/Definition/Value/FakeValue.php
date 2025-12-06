@@ -15,8 +15,9 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\NotCallableTrait;
+use Stringable;
 
-class FakeValue implements ValueInterface
+class FakeValue implements Stringable, ValueInterface
 {
     use NotCallableTrait;
 

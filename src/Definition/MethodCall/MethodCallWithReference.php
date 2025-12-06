@@ -17,11 +17,12 @@ use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
 /**
  * Represents a method call for which the caller has been specified.
  */
-final class MethodCallWithReference implements MethodCallInterface
+final class MethodCallWithReference implements Stringable, MethodCallInterface
 {
     /**
      * @var ServiceReferenceInterface
