@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
-use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Throwable;
@@ -21,7 +21,7 @@ use Throwable;
 /**
  * @internal
  */
-#[CoversTrait(IsAServiceTrait::class)]
+#[CoversClass(IsAServiceTrait::class)]
 final class IsAServiceTraitTest extends TestCase
 {
     public function testThrowsAnExceptionWhenTryingToCloneInstance(): void
