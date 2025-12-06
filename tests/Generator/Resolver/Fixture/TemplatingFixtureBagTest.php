@@ -26,7 +26,7 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBagTest;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\DependsExternal;
 use PHPUnit\Framework\TestCase;
 use function Nelmio\Alice\deep_clone;
 
@@ -86,7 +86,7 @@ final class TemplatingFixtureBagTest extends TestCase
         );
     }
 
-    #[Depends(FixtureBagTest::testIsImmutable)]
+    #[DependsExternal(FixtureBagTest::class, 'testIsImmutable')]
     public function testIsImmutable(): void
     {
         $fixture = new MutableFixture('user0', 'Nelmio\Alice\Entity\User', SpecificationBagFactory::create());

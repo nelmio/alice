@@ -20,7 +20,7 @@ use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\ParameterBagTest;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\DependsExternal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,8 +40,8 @@ final class BareFixtureSetTest extends TestCase
         self::assertEquals($fixtures, $set->getFixtures());
     }
 
-    #[Depends(ParameterBagTest::testIsImmutable)]
-    #[Depends(FixtureBagTest::testIsImmutable)]
+    #[DependsExternal(ParameterBagTest::class, 'testIsImmutable')]
+    #[DependsExternal(FixtureBagTest::class, 'testIsImmutable')]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');

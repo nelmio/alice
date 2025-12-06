@@ -18,7 +18,7 @@ use Nelmio\Alice\Definition\Value\UniqueValueTest;
 use Nelmio\Alice\Entity\StdClassFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\DependsExternal;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -34,7 +34,7 @@ final class UniqueValuesPoolTest extends TestCase
         self::assertFalse($pool->has(new UniqueValue('', '')));
     }
 
-    #[Depends(UniqueValueTest::testIsImmutable)]
+    #[DependsExternal(UniqueValueTest::class, 'testIsImmutable')]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');
