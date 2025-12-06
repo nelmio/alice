@@ -26,7 +26,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer
  * @internal
  */
-class SubPatternsLexerTest extends TestCase
+final class SubPatternsLexerTest extends TestCase
 {
     use ProphecyTrait;
 

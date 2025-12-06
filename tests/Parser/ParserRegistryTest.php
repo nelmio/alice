@@ -26,7 +26,7 @@ use TypeError;
  * @covers \Nelmio\Alice\Parser\ParserRegistry
  * @internal
  */
-class ParserRegistryTest extends TestCase
+final class ParserRegistryTest extends TestCase
 {
     use ProphecyTrait;
 

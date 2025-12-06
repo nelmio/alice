@@ -22,7 +22,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\ParserIntegrationTest 
  * @coversNothing
  * @internal
  */
-class ParserIntegrationTest extends CoreParserIntegrationTest
+final class ParserIntegrationTest extends CoreParserIntegrationTest
 {
     protected function setUp(): void
     {

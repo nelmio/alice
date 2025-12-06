@@ -32,7 +32,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NoCallerMethodCallInstantiator
  * @internal
  */
-class NoCallerMethodCallInstantiatorTest extends TestCase
+final class NoCallerMethodCallInstantiatorTest extends TestCase
 {
     /**
      * @var NoCallerMethodCallInstantiator

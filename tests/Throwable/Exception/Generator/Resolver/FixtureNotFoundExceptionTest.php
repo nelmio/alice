@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\FixtureNotFoundException
  * @internal
  */
-class FixtureNotFoundExceptionTest extends TestCase
+final class FixtureNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

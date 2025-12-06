@@ -35,7 +35,7 @@ use stdClass;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer
  * @internal
  */
-class UniqueValueDenormalizerTest extends TestCase
+final class UniqueValueDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 

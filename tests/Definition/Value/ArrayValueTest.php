@@ -21,7 +21,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\Value\ArrayValue
  * @internal
  */
-class ArrayValueTest extends TestCase
+final class ArrayValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

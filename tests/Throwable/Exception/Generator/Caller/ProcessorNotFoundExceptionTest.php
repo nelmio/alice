@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Caller\ProcessorNotFoundException
  * @internal
  */
-class ProcessorNotFoundExceptionTest extends TestCase
+final class ProcessorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {

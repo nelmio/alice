@@ -32,7 +32,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FakerFunctionCallValueResolver
  * @internal
  */
-class FakerFunctionCallValueResolverValueTest extends TestCase
+final class FakerFunctionCallValueResolverValueTest extends TestCase
 {
     use ProphecyTrait;
 

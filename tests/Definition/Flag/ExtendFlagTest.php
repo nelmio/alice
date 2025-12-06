@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Flag\ExtendFlag
  * @internal
  */
-class ExtendFlagTest extends TestCase
+final class ExtendFlagTest extends TestCase
 {
     public function testIsAFlag(): void
     {

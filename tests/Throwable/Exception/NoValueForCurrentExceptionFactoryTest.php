@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\NoValueForCurrentExceptionFactory
  * @internal
  */
-class NoValueForCurrentExceptionFactoryTest extends TestCase
+final class NoValueForCurrentExceptionFactoryTest extends TestCase
 {
     public function testCreateException(): void
     {

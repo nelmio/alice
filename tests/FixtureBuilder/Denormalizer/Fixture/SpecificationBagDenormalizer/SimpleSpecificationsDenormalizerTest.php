@@ -38,7 +38,7 @@ use TypeError;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\SimpleSpecificationsDenormalizer
  * @internal
  */
-class SimpleSpecificationsDenormalizerTest extends TestCase
+final class SimpleSpecificationsDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 

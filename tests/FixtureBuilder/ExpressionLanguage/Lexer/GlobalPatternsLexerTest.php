@@ -27,7 +27,7 @@ use stdClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer
  * @internal
  */
-class GlobalPatternsLexerTest extends TestCase
+final class GlobalPatternsLexerTest extends TestCase
 {
     use ProphecyTrait;
 

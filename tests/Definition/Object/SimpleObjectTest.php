@@ -24,7 +24,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\Object\SimpleObject
  * @internal
  */
-class SimpleObjectTest extends TestCase
+final class SimpleObjectTest extends TestCase
 {
     /**
      * @var ReflectionProperty

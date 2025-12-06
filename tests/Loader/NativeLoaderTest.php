@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Loader\NativeLoader
  * @internal
  */
-class NativeLoaderTest extends TestCase
+final class NativeLoaderTest extends TestCase
 {
     public function testThrowsAnExceptionIfCallUnknownMethod(): void
     {

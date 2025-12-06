@@ -37,7 +37,7 @@ use ReflectionProperty;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver
  * @internal
  */
-class UniqueValueResolverTest extends TestCase
+final class UniqueValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 

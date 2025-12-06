@@ -22,7 +22,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\MethodCall\SimpleMethodCall
  * @internal
  */
-class SimpleMethodCallTest extends TestCase
+final class SimpleMethodCallTest extends TestCase
 {
     public function testIsAMethodCall(): void
     {

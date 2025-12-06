@@ -33,7 +33,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\DoublePassGenerator
  * @internal
  */
-class DoublePassGeneratorTest extends TestCase
+final class DoublePassGeneratorTest extends TestCase
 {
     use ProphecyTrait;
 

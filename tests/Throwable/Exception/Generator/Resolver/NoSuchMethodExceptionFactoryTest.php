@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchMethodExceptionFactory
  * @internal
  */
-class NoSuchMethodExceptionFactoryTest extends TestCase
+final class NoSuchMethodExceptionFactoryTest extends TestCase
 {
     public function testCreateForFixture(): void
     {

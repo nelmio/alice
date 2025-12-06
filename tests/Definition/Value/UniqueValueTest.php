@@ -23,7 +23,7 @@ use const PHP_VERSION_ID;
  * @covers \Nelmio\Alice\Definition\Value\UniqueValue
  * @internal
  */
-class UniqueValueTest extends TestCase
+final class UniqueValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

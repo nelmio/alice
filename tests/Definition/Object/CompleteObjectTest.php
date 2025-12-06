@@ -25,7 +25,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\Object\CompleteObject
  * @internal
  */
-class CompleteObjectTest extends TestCase
+final class CompleteObjectTest extends TestCase
 {
     use ProphecyTrait;
 

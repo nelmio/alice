@@ -20,7 +20,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\ObjectNotFoundException
  * @internal
  */
-class ObjectNotFoundExceptionTest extends TestCase
+final class ObjectNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

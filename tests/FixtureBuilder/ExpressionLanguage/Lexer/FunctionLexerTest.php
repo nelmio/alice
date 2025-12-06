@@ -25,7 +25,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer
  * @internal
  */
-class FunctionLexerTest extends TestCase
+final class FunctionLexerTest extends TestCase
 {
     use ProphecyTrait;
 

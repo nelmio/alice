@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException
  * @internal
  */
-class InstantiatorNotFoundExceptionTest extends TestCase
+final class InstantiatorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {

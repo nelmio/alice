@@ -24,7 +24,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\OptionalFlagHandler
  * @internal
  */
-class OptionalFlagHandlerTest extends TestCase
+final class OptionalFlagHandlerTest extends TestCase
 {
     public function testIsNotClonable(): void
     {

@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory
  * @internal
  */
-class FixtureNotFoundExceptionFactoryTest extends TestCase
+final class FixtureNotFoundExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void
     {

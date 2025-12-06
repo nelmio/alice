@@ -30,7 +30,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver
  * @internal
  */
-class RecursiveParameterResolverTest extends TestCase
+final class RecursiveParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
 

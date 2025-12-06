@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Generator\Resolver\ResolvingContext
  * @internal
  */
-class ResolvingContextTest extends TestCase
+final class ResolvingContextTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

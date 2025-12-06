@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserExceptionFactory
  * @internal
  */
-class FlagParserExceptionFactoryTest extends TestCase
+final class FlagParserExceptionFactoryTest extends TestCase
 {
     public function testCreateNewException(): void
     {

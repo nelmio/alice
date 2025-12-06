@@ -30,7 +30,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator
  * @internal
  */
-class ExistingInstanceInstantiatorTest extends TestCase
+final class ExistingInstanceInstantiatorTest extends TestCase
 {
     use ProphecyTrait;
 

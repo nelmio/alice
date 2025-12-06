@@ -21,7 +21,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\Property
  * @internal
  */
-class PropertyTest extends TestCase
+final class PropertyTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

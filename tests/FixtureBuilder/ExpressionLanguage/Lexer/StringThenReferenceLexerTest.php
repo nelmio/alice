@@ -25,7 +25,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer
  * @internal
  */
-class StringThenReferenceLexerTest extends TestCase
+final class StringThenReferenceLexerTest extends TestCase
 {
     use ProphecyTrait;
 

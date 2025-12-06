@@ -30,7 +30,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\FlagBag
  * @internal
  */
-class FlagBagTest extends TestCase
+final class FlagBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

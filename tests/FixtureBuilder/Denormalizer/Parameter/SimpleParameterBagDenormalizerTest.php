@@ -24,7 +24,7 @@ use TypeError;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Parameter\SimpleParameterBagDenormalizer
  * @internal
  */
-class SimpleParameterBagDenormalizerTest extends TestCase
+final class SimpleParameterBagDenormalizerTest extends TestCase
 {
     /**
      * @var SimpleParameterBagDenormalizer

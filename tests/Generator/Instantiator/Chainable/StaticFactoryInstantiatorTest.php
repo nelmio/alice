@@ -35,7 +35,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\StaticFactoryInstantiator
  * @internal
  */
-class StaticFactoryInstantiatorTest extends TestCase
+final class StaticFactoryInstantiatorTest extends TestCase
 {
     /**
      * @var StaticFactoryInstantiator

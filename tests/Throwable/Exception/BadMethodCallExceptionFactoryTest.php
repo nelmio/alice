@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\BadMethodCallExceptionFactory
  * @internal
  */
-class BadMethodCallExceptionFactoryTest extends TestCase
+final class BadMethodCallExceptionFactoryTest extends TestCase
 {
     public function testCreateForUnknownMethod(): void
     {

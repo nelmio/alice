@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Context\CachedValueNotFound
  * @internal
  */
-class CachedValueNotFoundTest extends TestCase
+final class CachedValueNotFoundTest extends TestCase
 {
     public function testCreate(): void
     {

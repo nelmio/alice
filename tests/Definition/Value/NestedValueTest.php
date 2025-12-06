@@ -21,7 +21,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\Value\NestedValue
  * @internal
  */
-class NestedValueTest extends TestCase
+final class NestedValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

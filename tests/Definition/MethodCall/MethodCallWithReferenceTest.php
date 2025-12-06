@@ -25,7 +25,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\MethodCall\MethodCallWithReference
  * @internal
  */
-class MethodCallWithReferenceTest extends TestCase
+final class MethodCallWithReferenceTest extends TestCase
 {
     public function testIsAMethodCall(): void
     {

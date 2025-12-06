@@ -25,7 +25,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\MethodCall\ConfiguratorMethodCall
  * @internal
  */
-class ConfiguratorMethodCallTest extends TestCase
+final class ConfiguratorMethodCallTest extends TestCase
 {
     use ProphecyTrait;
 

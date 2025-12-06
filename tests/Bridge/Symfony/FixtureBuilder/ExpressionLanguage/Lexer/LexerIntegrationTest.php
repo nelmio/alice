@@ -22,7 +22,7 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\LexerIntegrationTest as
  * @coversNothing
  * @internal
  */
-class LexerIntegrationTest extends CoreLexerIntegrationTest
+final class LexerIntegrationTest extends CoreLexerIntegrationTest
 {
     protected function setUp(): void
     {

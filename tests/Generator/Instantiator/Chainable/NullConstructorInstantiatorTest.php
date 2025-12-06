@@ -32,7 +32,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NullConstructorInstantiator
  * @internal
  */
-class NullConstructorInstantiatorTest extends TestCase
+final class NullConstructorInstantiatorTest extends TestCase
 {
     /**
      * @var NullConstructorInstantiator

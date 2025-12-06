@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @coversNothing
  * @internal
  */
-class LexerParserSynchronizationTest extends TestCase
+final class LexerParserSynchronizationTest extends TestCase
 {
     public function testProvidesAreSynchronized(): void
     {

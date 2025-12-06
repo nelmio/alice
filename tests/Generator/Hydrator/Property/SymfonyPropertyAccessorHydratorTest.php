@@ -39,7 +39,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  * @covers \Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator
  * @internal
  */
-class SymfonyPropertyAccessorHydratorTest extends TestCase
+final class SymfonyPropertyAccessorHydratorTest extends TestCase
 {
     use ProphecyTrait;
 

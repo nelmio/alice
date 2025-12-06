@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
  * @internal
  */
-class ObjectGeneratorNotFoundExceptionTest extends TestCase
+final class ObjectGeneratorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {

@@ -42,7 +42,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixtureMethodCallReferenceResolver
  * @internal
  */
-class FixtureMethodCallReferenceResolverTest extends TestCase
+final class FixtureMethodCallReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;
 

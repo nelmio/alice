@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException
  * @internal
  */
-class RecursionLimitReachedExceptionTest extends TestCase
+final class RecursionLimitReachedExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

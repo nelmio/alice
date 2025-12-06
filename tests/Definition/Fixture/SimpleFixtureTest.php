@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixture
  * @internal
  */
-class SimpleFixtureTest extends TestCase
+final class SimpleFixtureTest extends TestCase
 {
     public function testIsAFixtureId(): void
     {

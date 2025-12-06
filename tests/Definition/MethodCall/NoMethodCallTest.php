@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\MethodCall\NoMethodCall
  * @internal
  */
-class NoMethodCallTest extends TestCase
+final class NoMethodCallTest extends TestCase
 {
     public function testIsAMethodCall(): void
     {

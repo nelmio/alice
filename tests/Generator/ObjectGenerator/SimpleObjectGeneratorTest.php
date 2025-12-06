@@ -34,7 +34,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\ObjectGenerator\SimpleObjectGenerator
  * @internal
  */
-class SimpleObjectGeneratorTest extends TestCase
+final class SimpleObjectGeneratorTest extends TestCase
 {
     use ProphecyTrait;
 

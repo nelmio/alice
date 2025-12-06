@@ -34,7 +34,7 @@ use TypeError;
  * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry
  * @internal
  */
-class InstantiatorRegistryTest extends TestCase
+final class InstantiatorRegistryTest extends TestCase
 {
     use ProphecyTrait;
 

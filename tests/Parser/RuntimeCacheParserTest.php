@@ -29,7 +29,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Parser\RuntimeCacheParser
  * @internal
  */
-class RuntimeCacheParserTest extends TestCase
+final class RuntimeCacheParserTest extends TestCase
 {
     use ProphecyTrait;
 

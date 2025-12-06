@@ -27,7 +27,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver
  * @internal
  */
-class SimpleParameterBagResolverTest extends TestCase
+final class SimpleParameterBagResolverTest extends TestCase
 {
     use ProphecyTrait;
 

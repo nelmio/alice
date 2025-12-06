@@ -22,7 +22,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Resolver\UniqueValuesPool
  * @internal
  */
-class UniqueValuesPoolTest extends TestCase
+final class UniqueValuesPoolTest extends TestCase
 {
     public function testDoesNotHaveValueIfValueIsNotCached(): void
     {

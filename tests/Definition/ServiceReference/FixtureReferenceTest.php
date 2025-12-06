@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\ServiceReference\FixtureReference
  * @internal
  */
-class FixtureReferenceTest extends TestCase
+final class FixtureReferenceTest extends TestCase
 {
     public function testIsAReference(): void
     {

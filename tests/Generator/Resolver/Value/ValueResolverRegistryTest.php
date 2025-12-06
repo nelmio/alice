@@ -35,7 +35,7 @@ use TypeError;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
  * @internal
  */
-class ValueResolverRegistryTest extends TestCase
+final class ValueResolverRegistryTest extends TestCase
 {
     use ProphecyTrait;
 

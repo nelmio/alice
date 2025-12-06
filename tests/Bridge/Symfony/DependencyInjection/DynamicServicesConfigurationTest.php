@@ -29,7 +29,7 @@ use ReflectionClass;
  * @group integration
  * @internal
  */
-class DynamicServicesConfigurationTest extends TestCase
+final class DynamicServicesConfigurationTest extends TestCase
 {
     /**
      * @var AppKernel

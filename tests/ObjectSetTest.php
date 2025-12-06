@@ -20,7 +20,7 @@ use stdClass;
  * @covers \Nelmio\Alice\ObjectSet
  * @internal
  */
-class ObjectSetTest extends TestCase
+final class ObjectSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

@@ -27,7 +27,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
  * @covers \Nelmio\Alice\Definition\Fixture\TemplatingFixture
  * @internal
  */
-class TemplatingFixtureTest extends TestCase
+final class TemplatingFixtureTest extends TestCase
 {
     use ProphecyTrait;
 

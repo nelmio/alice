@@ -23,7 +23,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Throwable\Error\TypeErrorFactory
  * @internal
  */
-class TypeErrorFactoryTest extends TestCase
+final class TypeErrorFactoryTest extends TestCase
 {
     public function testCreateForDynamicArrayQuantifier(): void
     {

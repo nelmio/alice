@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Caller\CallProcessorExceptionFactory
  * @internal
  */
-class CallProcessorExceptionFactoryTest extends TestCase
+final class CallProcessorExceptionFactoryTest extends TestCase
 {
     public function testCreateForNoProcessorFoundForMethodCall(): void
     {

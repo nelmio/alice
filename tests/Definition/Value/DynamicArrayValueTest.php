@@ -22,7 +22,7 @@ use TypeError;
  * @covers \Nelmio\Alice\Definition\Value\DynamicArrayValue
  * @internal
  */
-class DynamicArrayValueTest extends TestCase
+final class DynamicArrayValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

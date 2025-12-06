@@ -27,7 +27,7 @@ use ReflectionProperty;
  * @covers \Nelmio\Alice\FixtureBag
  * @internal
  */
-class FixtureBagTest extends TestCase
+final class FixtureBagTest extends TestCase
 {
     /**
      * @var ReflectionProperty

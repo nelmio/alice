@@ -24,7 +24,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\EscapedValueTokenParser
  * @internal
  */
-class EscapedValueTokenParserTest extends TestCase
+final class EscapedValueTokenParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {

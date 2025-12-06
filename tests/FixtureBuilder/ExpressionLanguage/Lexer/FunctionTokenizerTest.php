@@ -22,7 +22,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionTreeTokenizer
  * @internal
  */
-class FunctionTokenizerTest extends TestCase
+final class FunctionTokenizerTest extends TestCase
 {
     /**
      * @var FunctionTokenizer

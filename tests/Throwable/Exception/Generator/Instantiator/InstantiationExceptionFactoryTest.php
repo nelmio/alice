@@ -24,7 +24,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationExceptionFactory
  * @internal
  */
-class InstantiationExceptionFactoryTest extends TestCase
+final class InstantiationExceptionFactoryTest extends TestCase
 {
     public function testCreate(): void
     {

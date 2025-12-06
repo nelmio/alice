@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException
  * @internal
  */
-class UnparsableFileExceptionTest extends TestCase
+final class UnparsableFileExceptionTest extends TestCase
 {
     public function testIsAnException(): void
     {

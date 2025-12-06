@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException
  * @internal
  */
-class MalformedFunctionExceptionTest extends TestCase
+final class MalformedFunctionExceptionTest extends TestCase
 {
     public function testIsAnInvalidArgumentException(): void
     {

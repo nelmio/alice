@@ -28,7 +28,7 @@ use TypeError;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserRegistry
  * @internal
  */
-class FlagParserRegistryTest extends TestCase
+final class FlagParserRegistryTest extends TestCase
 {
     use ProphecyTrait;
 

@@ -20,7 +20,7 @@ use UnexpectedValueException;
  * @covers \Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException
  * @internal
  */
-class FileNotFoundExceptionTest extends TestCase
+final class FileNotFoundExceptionTest extends TestCase
 {
     public function testIsAnUnexpectedValueException(): void
     {

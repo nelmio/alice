@@ -27,7 +27,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  * @covers \Nelmio\Alice\PropertyAccess\ReflectionPropertyAccessor
  * @internal
  */
-class ReflectionPropertyAccessorTest extends TestCase
+final class ReflectionPropertyAccessorTest extends TestCase
 {
     use ProphecyTrait;
 

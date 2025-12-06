@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Flag\ConfiguratorFlag
  * @internal
  */
-class ConfiguratorFlagTest extends TestCase
+final class ConfiguratorFlagTest extends TestCase
 {
     public function testIsAFlag(): void
     {

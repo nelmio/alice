@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token
  * @internal
  */
-class TokenTest extends TestCase
+final class TokenTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

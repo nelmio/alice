@@ -26,7 +26,7 @@ use stdClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer
  * @internal
  */
-class EmptyValueLexerTest extends TestCase
+final class EmptyValueLexerTest extends TestCase
 {
     use ProphecyTrait;
 

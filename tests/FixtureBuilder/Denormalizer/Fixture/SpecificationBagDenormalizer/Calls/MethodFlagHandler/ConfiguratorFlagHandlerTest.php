@@ -24,7 +24,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\MethodFlagHandler\ConfiguratorFlagHandler
  * @internal
  */
-class ConfiguratorFlagHandlerTest extends TestCase
+final class ConfiguratorFlagHandlerTest extends TestCase
 {
     public function testIsNotClonable(): void
     {

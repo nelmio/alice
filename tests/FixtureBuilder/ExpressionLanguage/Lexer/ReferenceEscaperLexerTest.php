@@ -24,7 +24,7 @@ use stdClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer
  * @internal
  */
-class ReferenceEscaperLexerTest extends TestCase
+final class ReferenceEscaperLexerTest extends TestCase
 {
     use ProphecyTrait;
 

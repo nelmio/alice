@@ -46,7 +46,7 @@ use TypeError;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FixturePropertyReferenceResolver
  * @internal
  */
-class FixturePropertyReferenceResolverTest extends TestCase
+final class FixturePropertyReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;
 

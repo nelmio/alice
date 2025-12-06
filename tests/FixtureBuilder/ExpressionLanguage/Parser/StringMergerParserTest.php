@@ -25,7 +25,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\StringMergerParser
  * @internal
  */
-class StringMergerParserTest extends TestCase
+final class StringMergerParserTest extends TestCase
 {
     use ProphecyTrait;
 

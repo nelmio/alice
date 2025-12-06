@@ -22,7 +22,7 @@ use ReflectionObject;
  * @covers \Nelmio\Alice\FileLocator\DefaultFileLocator
  * @internal
  */
-class DefaultFileLocatorTest extends TestCase
+final class DefaultFileLocatorTest extends TestCase
 {
     /**
      * @var DefaultFileLocator

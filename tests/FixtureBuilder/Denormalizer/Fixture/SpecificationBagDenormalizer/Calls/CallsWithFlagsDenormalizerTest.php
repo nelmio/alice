@@ -32,7 +32,7 @@ use TypeError;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\CallsWithFlagsDenormalizer
  * @internal
  */
-class CallsWithFlagsDenormalizerTest extends TestCase
+final class CallsWithFlagsDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 

@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\FixtureBuilder\BareFixtureSet
  * @internal
  */
-class BareFixtureSetTest extends TestCase
+final class BareFixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

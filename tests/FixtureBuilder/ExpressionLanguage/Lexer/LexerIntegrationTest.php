@@ -28,7 +28,7 @@ use function str_repeat;
  * @coversNothing
  * @internal
  */
-class LexerIntegrationTest extends TestCase
+final class LexerIntegrationTest extends TestCase
 {
     /**
      * @var LexerInterface

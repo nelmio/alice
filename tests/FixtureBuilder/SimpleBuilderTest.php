@@ -28,7 +28,7 @@ use stdClass;
  * @covers \Nelmio\Alice\FixtureBuilder\SimpleBuilder
  * @internal
  */
-class SimpleBuilderTest extends TestCase
+final class SimpleBuilderTest extends TestCase
 {
     use ProphecyTrait;
 

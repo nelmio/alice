@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException
  * @internal
  */
-class ResolverNotFoundExceptionTest extends TestCase
+final class ResolverNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {

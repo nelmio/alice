@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\NoSuchPropertyException
  * @internal
  */
-class NoSuchPropertyExceptionTest extends TestCase
+final class NoSuchPropertyExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

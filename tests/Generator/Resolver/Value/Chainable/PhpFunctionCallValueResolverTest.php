@@ -32,7 +32,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\PhpFunctionCallValueResolver
  * @internal
  */
-class PhpFunctionCallValueResolverTest extends TestCase
+final class PhpFunctionCallValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 

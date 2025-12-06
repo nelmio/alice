@@ -30,7 +30,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver
  * @internal
  */
-class RemoveConflictingObjectsResolverTest extends TestCase
+final class RemoveConflictingObjectsResolverTest extends TestCase
 {
     use ProphecyTrait;
 

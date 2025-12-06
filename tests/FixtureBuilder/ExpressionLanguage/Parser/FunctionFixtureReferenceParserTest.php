@@ -27,7 +27,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser
  * @internal
  */
-class FunctionFixtureReferenceParserTest extends TestCase
+final class FunctionFixtureReferenceParserTest extends TestCase
 {
     use ProphecyTrait;
 

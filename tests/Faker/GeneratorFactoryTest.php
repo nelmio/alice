@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
  * @group integration
  * @internal
  */
-class GeneratorFactoryTest extends TestCase
+final class GeneratorFactoryTest extends TestCase
 {
     public function testAssertGeneratorLocaleMethod(): void
     {

@@ -28,7 +28,7 @@ use TypeError;
  * @covers \Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
  * @internal
  */
-class DefaultIncludeProcessorTest extends TestCase
+final class DefaultIncludeProcessorTest extends TestCase
 {
     use ProphecyTrait;
 

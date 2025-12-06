@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Value\FixtureMethodCallValue
  * @internal
  */
-class FixtureMethodCallValueTest extends TestCase
+final class FixtureMethodCallValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

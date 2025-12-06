@@ -23,7 +23,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationExceptionFactory
  * @internal
  */
-class HydrationExceptionFactoryTest extends TestCase
+final class HydrationExceptionFactoryTest extends TestCase
 {
     public function testCreate(): void
     {

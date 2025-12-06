@@ -35,7 +35,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\AbstractChainableInstantiator
  * @internal
  */
-class AbstractChainableInstantiatorTest extends TestCase
+final class AbstractChainableInstantiatorTest extends TestCase
 {
     use ProphecyTrait;
 

@@ -22,7 +22,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory
  * @internal
  */
-class UnresolvableValueExceptionFactoryTest extends TestCase
+final class UnresolvableValueExceptionFactoryTest extends TestCase
 {
     public function testCreate(): void
     {

@@ -20,7 +20,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Parameter
  * @internal
  */
-class ParameterTest extends TestCase
+final class ParameterTest extends TestCase
 {
     /**
      * @dataProvider provideValues
