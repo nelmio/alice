@@ -16,6 +16,7 @@ namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer;
 use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ExpressionLanguageExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\MalformedFunctionException;
+use function array_key_last;
 
 /**
  * @private
@@ -85,8 +86,7 @@ final class FunctionTokenizer
 
             if ($this->tokenizer->isClosingToken($value)) {
                 if (false === $this->tokenizer->isTheLastFunction($functions)) {
-                    end($functions);
-                    $lastFunctionKey = key($functions);
+                    $lastFunctionKey = array_key_last($functions);
                     if (null === $lastFunctionKey) {
                         throw ExpressionLanguageExceptionFactory::createForMalformedFunction($originalValue);
                     }
@@ -95,9 +95,7 @@ final class FunctionTokenizer
 
                     continue;
                 }
-
-                end($functions);
-                $lastFunctionKey = key($functions);
+                $lastFunctionKey = array_key_last($functions);
                 $this->append($tree, $tokens, $lastFunctionKey, $key);
                 unset($functions[$lastFunctionKey]);
 
