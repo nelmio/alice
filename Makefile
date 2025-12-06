@@ -16,6 +16,8 @@ INFECTION_BIN = vendor-bin/infection/bin/infection
 INFECTION = $(INFECTION_BIN) --test-framework-options="--exclude-group=integration"
 PHP_CS_FIXER_BIN = vendor-bin/php-cs-fixer/bin/php-cs-fixer
 PHP_CS_FIXER = $(PHP_NO_GC) $(PHP_CS_FIXER_BIN)
+RECTOR_BIN = vendor-bin/rector/bin/rector
+RECTOR = $(RECTOR_BIN)
 PHPSTAN_BIN = vendor-bin/phpstan/bin/phpstan
 PHPSTAN = $(PHP_NO_GC) -dmemory_limit=1G $(PHPSTAN_BIN)
 PHPUNIT_BIN = bin/phpunit
@@ -51,6 +53,11 @@ cs: php_cs_fixer gitignore_sort
 php_cs_fixer: 	  ## Runs PHP-CS-Fixer
 php_cs_fixer: $(PHP_CS_FIXER_BIN)
 	$(PHP_CS_FIXER) fix
+
+.PHONY: rector
+rector: 	  ## Runs Rector
+rector: $(RECTOR_BIN)
+	$(RECTOR) --dry-run
 
 .PHONY: gitignore_sort
 gitignore_sort:	  ## Sorts the .gitignore entries
@@ -156,6 +163,13 @@ $(PHP_CS_FIXER_BIN): vendor-bin/php-cs-fixer/composer.lock
 
 vendor-bin/php-cs-fixer/composer.lock: vendor-bin/php-cs-fixer/composer.json
 	@echo php-cs-fixer composer.lock is not up to date.
+
+$(RECTOR_BIN): vendor-bin/rector/composer.lock
+	composer bin rector install
+	touch -c $@
+
+vendor-bin/rector/composer.lock: vendor-bin/rector/composer.json
+	@echo rector composer.lock is not up to date.
 
 $(PHPSTAN_BIN): vendor-bin/phpstan/composer.lock
 	composer bin phpstan install
