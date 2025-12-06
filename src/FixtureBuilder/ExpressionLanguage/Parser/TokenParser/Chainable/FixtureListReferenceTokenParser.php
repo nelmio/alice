@@ -40,7 +40,7 @@ final class FixtureListReferenceTokenParser implements ChainableTokenParserInter
 
     public function __construct()
     {
-        $this->token = uniqid(__CLASS__, true);
+        $this->token = uniqid(self::class, true);
     }
 
     public function canParse(Token $token): bool
