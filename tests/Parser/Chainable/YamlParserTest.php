@@ -93,7 +93,7 @@ class YamlParserTest extends TestCase
     public function testCanParseYamlFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
-        $expected = in_array(get_class($this->parser), $expectedParsers, true);
+        $expected = in_array($this->parser::class, $expectedParsers, true);
 
         self::assertEquals($expected, $actual);
     }
