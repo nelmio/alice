@@ -34,7 +34,7 @@ final class IsAServiceTraitTest extends TestCase
             self::assertEquals(0, $exception->getCode());
             self::assertNull($exception->getPrevious());
 
-            if (PHP_VERSION_ID <= 85_000) {
+            if (PHP_VERSION_ID < 85_000) {
                 self::assertEquals(
                     'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
                     .'Nelmio\Alice\IsAServiceTraitTest',
