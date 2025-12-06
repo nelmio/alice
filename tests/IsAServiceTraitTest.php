@@ -17,6 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Throwable;
+use const PHP_VERSION_ID;
 
 /**
  * @internal
@@ -33,11 +34,19 @@ final class IsAServiceTraitTest extends TestCase
             self::assertEquals(0, $exception->getCode());
             self::assertNull($exception->getPrevious());
 
-            self::assertEquals(
-                'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
-                .'Nelmio\Alice\IsAServiceTraitTest',
-                $exception->getMessage(),
-            );
+            if (PHP_VERSION_ID < 80_500) {
+                self::assertEquals(
+                    'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
+                    .'Nelmio\Alice\IsAServiceTraitTest',
+                    $exception->getMessage(),
+                );
+            } else {
+                self::assertEquals(
+                    'Call to private method Nelmio\Alice\NotClonableDummy::__clone() from scope '
+                    .'Nelmio\Alice\IsAServiceTraitTest',
+                    $exception->getMessage(),
+                );
+            }
         }
 
         $dummyRefl = new ReflectionClass(NotClonableDummy::class);
