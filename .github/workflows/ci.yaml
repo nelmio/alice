@@ -48,7 +48,7 @@ jobs:
               run: composer install
 
             - name: Configure Symfony version
-              run: echo "SYMFONY_REQUIRE=${{ matrix.symfony }}" >> $GITHUB_ENV
+              run: echo "SYMFONY_REQUIRE=${{ matrix.symfony-versions }}" >> $GITHUB_ENV
               if: matrix.symfony-versions
 
             - name: Install bin dependencies
