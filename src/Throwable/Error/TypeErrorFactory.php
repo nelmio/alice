@@ -17,6 +17,7 @@ use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\ChainableFixtureDenormalizerInterface;
 use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use TypeError;
+use function get_debug_type;
 
 /**
  * @private
@@ -29,7 +30,7 @@ final class TypeErrorFactory
             sprintf(
                 'Expected quantifier to be either an integer or a "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($quantifier) ? $quantifier::class : gettype($quantifier),
+                get_debug_type($quantifier),
             ),
         );
     }
@@ -40,7 +41,7 @@ final class TypeErrorFactory
             sprintf(
                 'Expected element to be either string, an array or a "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($element) ? $element::class : gettype($element),
+                get_debug_type($element),
             ),
         );
     }
@@ -51,7 +52,7 @@ final class TypeErrorFactory
             sprintf(
                 'Expected quantifier to be either a scalar value or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($quantifier) ? $quantifier::class : gettype($quantifier),
+                get_debug_type($quantifier),
             ),
         );
     }
@@ -62,7 +63,7 @@ final class TypeErrorFactory
             sprintf(
                 'Expected first member to be either a string or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($firstMember) ? $firstMember::class : gettype($firstMember),
+                get_debug_type($firstMember),
             ),
         );
     }
@@ -73,7 +74,7 @@ final class TypeErrorFactory
             sprintf(
                 'Expected second member to be either null, a string or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($secondMember) ? $secondMember::class : gettype($secondMember),
+                get_debug_type($secondMember),
             ),
         );
     }
@@ -84,7 +85,7 @@ final class TypeErrorFactory
             sprintf(
                 'Expected parameter key to be either a string or an instance of "%s". Got "%s" instead.',
                 ValueInterface::class,
-                is_object($parameterKey) ? $parameterKey::class : gettype($parameterKey),
+                get_debug_type($parameterKey),
             ),
         );
     }
@@ -96,7 +97,7 @@ final class TypeErrorFactory
                 'Expected denormalizer %d to be a "%s". Got "%s" instead.',
                 $index,
                 ChainableFixtureDenormalizerInterface::class,
-                is_object($denormalizer) ? $denormalizer::class : gettype($denormalizer),
+                get_debug_type($denormalizer),
             ),
         );
     }
@@ -126,7 +127,7 @@ final class TypeErrorFactory
         return new TypeError(
             sprintf(
                 'Expected parameters to be an array. Got "%s" instead.',
-                is_object($fixturesParameters) ? $fixturesParameters::class : gettype($fixturesParameters),
+                get_debug_type($fixturesParameters),
             ),
         );
     }

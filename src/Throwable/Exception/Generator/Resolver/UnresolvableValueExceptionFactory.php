@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use Throwable;
+use function get_debug_type;
 
 /**
  * @private
@@ -103,7 +104,7 @@ final class UnresolvableValueExceptionFactory
             sprintf(
                 'Expected the quantifier "%s" for the optional value to be resolved into a string, got "%s" instead.',
                 $quantifier::class,
-                is_object($resolvedQuantifier) ? $resolvedQuantifier::class : gettype($resolvedQuantifier),
+                get_debug_type($resolvedQuantifier),
             ),
         );
     }
