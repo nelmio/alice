@@ -39,7 +39,7 @@ class FakeMethodCall implements MethodCallInterface
         $this->__call(__METHOD__, func_get_args());
     }
 
-    public function __toString(): string
+    public function __toString(): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

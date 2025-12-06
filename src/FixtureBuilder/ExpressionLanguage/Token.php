@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\ExpressionLanguage;
 
+use Stringable;
+
 /**
  * @internal
  */
-final class Token
+final class Token implements Stringable
 {
     /**
      * @var string
@@ -52,7 +54,7 @@ final class Token
         return $this->type->getValue();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf('(%s) %s', $this->type->getValue(), $this->value);
     }
