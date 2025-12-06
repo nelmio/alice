@@ -15,6 +15,7 @@
          colors="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          cacheResultFile="var/phpunit.cache"
+         displayDetailsOnPhpunitDeprecations="true"
          enforceTimeLimit="true"
          executionOrder="random"
 >

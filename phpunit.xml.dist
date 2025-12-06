@@ -16,6 +16,7 @@
          enforceTimeLimit="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
          cacheResultFile="var/phpunit.cache"
+         displayDetailsOnPhpunitDeprecations="true"
          executionOrder="random">
 
     <php>
