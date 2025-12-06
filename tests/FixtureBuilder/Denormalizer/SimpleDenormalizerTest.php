@@ -18,15 +18,16 @@ use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\FixtureBuilder\BareFixtureSet;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer
  * @internal
  */
+#[CoversClass(SimpleDenormalizer::class)]
 final class SimpleDenormalizerTest extends TestCase
 {
     use ProphecyTrait;

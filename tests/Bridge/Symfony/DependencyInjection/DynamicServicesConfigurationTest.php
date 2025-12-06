@@ -20,15 +20,16 @@ use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver;
 use Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver;
 use Nelmio\Alice\Symfony\KernelFactory;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @coversNothing
- *
- * @group integration
  * @internal
  */
+#[Group('integration')]
+#[CoversNothing]
 final class DynamicServicesConfigurationTest extends TestCase
 {
     /**

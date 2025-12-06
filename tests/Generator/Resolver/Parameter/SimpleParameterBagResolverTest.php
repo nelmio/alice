@@ -18,15 +18,16 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\SimpleParameterBagResolver
  * @internal
  */
+#[CoversClass(SimpleParameterBagResolver::class)]
 final class SimpleParameterBagResolverTest extends TestCase
 {
     use ProphecyTrait;

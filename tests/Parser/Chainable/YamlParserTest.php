@@ -18,6 +18,8 @@ use InvalidArgumentException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -28,9 +30,9 @@ use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * @covers \Nelmio\Alice\Parser\Chainable\YamlParser
  * @internal
  */
+#[CoversClass(YamlParser::class)]
 final class YamlParserTest extends TestCase
 {
     use FileListProviderTrait;
@@ -77,9 +79,7 @@ final class YamlParserTest extends TestCase
         self::assertFalse((new ReflectionClass(YamlParser::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider providePhpList
-     */
+    #[DataProvider('providePhpList')]
     public function testCannotParsePhpFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -87,9 +87,7 @@ final class YamlParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideYamlList
-     */
+    #[DataProvider('provideYamlList')]
     public function testCanParseYamlFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
@@ -98,9 +96,7 @@ final class YamlParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider provideJsonList
-     */
+    #[DataProvider('provideJsonList')]
     public function testCannotParseJsonFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -108,9 +104,7 @@ final class YamlParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideUnsupportedList
-     */
+    #[DataProvider('provideUnsupportedList')]
     public function testCannotParseUnsupportedFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);

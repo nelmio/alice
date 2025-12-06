@@ -14,14 +14,18 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Generator\Resolver;
 
 use Nelmio\Alice\Definition\Value\UniqueValue;
+use Nelmio\Alice\Definition\Value\UniqueValueTest;
 use Nelmio\Alice\Entity\StdClassFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DependsExternal;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\UniqueValuesPool
  * @internal
  */
+#[CoversClass(UniqueValuesPool::class)]
 final class UniqueValuesPoolTest extends TestCase
 {
     public function testDoesNotHaveValueIfValueIsNotCached(): void
@@ -30,17 +34,13 @@ final class UniqueValuesPoolTest extends TestCase
         self::assertFalse($pool->has(new UniqueValue('', '')));
     }
 
-    /**
-     * @depends \Nelmio\Alice\Definition\Value\UniqueValueTest::testIsImmutable
-     */
+    #[DependsExternal(UniqueValueTest::class, 'testIsImmutable')]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');
     }
 
-    /**
-     * @dataProvider provideHasValueSet
-     */
+    #[DataProvider('provideHasValueSet')]
     public function testHasObjectValue(UniqueValuesPool $pool, UniqueValue $value, bool $expected): void
     {
         self::assertEquals($expected, $pool->has($value));

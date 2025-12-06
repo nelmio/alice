@@ -20,6 +20,7 @@ use Nelmio\Alice\Generator\InstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\ObjectBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -27,9 +28,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\ExistingInstanceInstantiator
  * @internal
  */
+#[CoversClass(ExistingInstanceInstantiator::class)]
 final class ExistingInstanceInstantiatorTest extends TestCase
 {
     use ProphecyTrait;

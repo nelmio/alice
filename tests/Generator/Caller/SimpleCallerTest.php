@@ -35,6 +35,7 @@ use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
 use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -42,9 +43,9 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Caller\SimpleCaller
  * @internal
  */
+#[CoversClass(SimpleCaller::class)]
 final class SimpleCallerTest extends TestCase
 {
     use ProphecyTrait;

@@ -17,14 +17,16 @@ use Exception;
 use Faker\Factory as FakerFactory;
 use Faker\Generator as FakerGenerator;
 use Nelmio\Alice\Faker\Provider\DummyProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Faker\GeneratorFactory
- *
- * @group integration
  * @internal
  */
+#[CoversClass(GeneratorFactory::class)]
+#[Group('integration')]
 final class GeneratorFactoryTest extends TestCase
 {
     public function testAssertGeneratorLocaleMethod(): void
@@ -58,9 +60,7 @@ final class GeneratorFactoryTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @testdox When a locale is given, only the non-default providers of the decorated generator are added to the created generator.
-     */
+    #[TestDox('When a locale is given, only the non-default providers of the decorated generator are added to the created generator.')]
     public function testFakerDefaultProvidersAreNotAdded(): void
     {
         $generator = FakerFactory::create();

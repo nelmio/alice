@@ -15,12 +15,13 @@ namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParse
 
 use LogicException;
 use Nelmio\Alice\Throwable\DenormalizationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
  * @internal
  */
+#[CoversClass(FlagParserNotFoundException::class)]
 final class FlagParserNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

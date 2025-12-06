@@ -16,11 +16,13 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ChainableFlagParserInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\UniqueFlagParser
  * @internal
  */
+#[CoversClass(UniqueFlagParser::class)]
 final class UniqueFlagParserTest extends FlagParserTestCase
 {
     protected function setUp(): void
@@ -33,9 +35,7 @@ final class UniqueFlagParserTest extends FlagParserTestCase
         self::assertTrue(is_a(UniqueFlagParser::class, ChainableFlagParserInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideUniques
-     */
+    #[DataProvider('provideUniques')]
     public function testCanParseUniques(string $element, ?FlagBag $expected = null): void
     {
         $this->assertCanParse($element, $expected);

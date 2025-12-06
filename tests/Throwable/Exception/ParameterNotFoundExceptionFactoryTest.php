@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception;
 
 use Nelmio\Alice\Parameter;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\ParameterNotFoundExceptionFactory
  * @internal
  */
+#[CoversClass(ParameterNotFoundExceptionFactory::class)]
 final class ParameterNotFoundExceptionFactoryTest extends TestCase
 {
     public function testIsARuntimeException(): void

@@ -19,13 +19,14 @@ use Nelmio\Alice\Definition\FixtureWithFlagsInterface;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
- * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags
  * @internal
  */
+#[CoversClass(SimpleFixtureWithFlags::class)]
 final class SimpleFixtureWithFlagsTest extends TestCase
 {
     use ProphecyTrait;

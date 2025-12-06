@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureSet
  * @internal
  */
+#[CoversClass(FixtureSet::class)]
 final class FixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void

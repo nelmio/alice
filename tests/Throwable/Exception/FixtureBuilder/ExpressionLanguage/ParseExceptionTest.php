@@ -15,12 +15,13 @@ namespace Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage;
 
 use Exception;
 use Nelmio\Alice\Throwable\ExpressionLanguageParseThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
  * @internal
  */
+#[CoversClass(ParseException::class)]
 final class ParseExceptionTest extends TestCase
 {
     public function testIsAnException(): void

@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\ObjectNotFoundException
  * @internal
  */
+#[CoversClass(ObjectNotFoundException::class)]
 final class ObjectNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void

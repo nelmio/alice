@@ -15,14 +15,15 @@ namespace Nelmio\Alice\Definition\Object;
 
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Object\SimpleObject
  * @internal
  */
+#[CoversClass(SimpleObject::class)]
 final class SimpleObjectTest extends TestCase
 {
     protected function setUp(): void

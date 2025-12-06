@@ -15,14 +15,18 @@ namespace Nelmio\Alice\FixtureBuilder;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
 use Nelmio\Alice\FixtureBag;
+use Nelmio\Alice\FixtureBagTest;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
+use Nelmio\Alice\ParameterBagTest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DependsExternal;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\BareFixtureSet
  * @internal
  */
+#[CoversClass(BareFixtureSet::class)]
 final class BareFixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -36,10 +40,8 @@ final class BareFixtureSetTest extends TestCase
         self::assertEquals($fixtures, $set->getFixtures());
     }
 
-    /**
-     * @depends \Nelmio\Alice\ParameterBagTest::testIsImmutable
-     * @depends \Nelmio\Alice\FixtureBagTest::testIsImmutable
-     */
+    #[DependsExternal(ParameterBagTest::class, 'testIsImmutable')]
+    #[DependsExternal(FixtureBagTest::class, 'testIsImmutable')]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');

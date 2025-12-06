@@ -14,14 +14,16 @@ declare(strict_types=1);
 namespace Nelmio\Alice;
 
 use Nelmio\Alice\Throwable\Exception\ParameterNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DependsExternal;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\ParameterBag
  * @internal
  */
+#[CoversClass(ParameterBag::class)]
 final class ParameterBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
@@ -74,9 +76,7 @@ final class ParameterBagTest extends TestCase
         );
     }
 
-    /**
-     * @depends \Nelmio\Alice\ParameterTest::testIsImmutable
-     */
+    #[DependsExternal(ParameterTest::class, 'testIsImmutable')]
     public function testWithersReturnNewModifiedObject(): void
     {
         $bag = new ParameterBag(['foo' => 'bar']);

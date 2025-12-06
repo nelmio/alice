@@ -18,26 +18,26 @@ use Nelmio\Alice\Definition\Flag\ExtendFlag;
 use Nelmio\Alice\Definition\Flag\TemplateFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
+use Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DependsExternal;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\Fixture\Templating
  * @internal
  */
+#[CoversClass(Templating::class)]
 final class TemplatingTest extends TestCase
 {
-    /**
-     * @depends \Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest::testIsImmutable
-     */
+    #[DependsExternal(FixtureReferenceTest::class, 'testIsImmutable')]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');
     }
 
-    /**
-     * @dataProvider provideFlags
-     */
+    #[DataProvider('provideFlags')]
     public function testDetectTemplateFlags(SimpleFixtureWithFlags $fixture, bool $isATemplate, bool $extendsFixtures, array $extendedFixtures): void
     {
         $templating = new Templating($fixture);

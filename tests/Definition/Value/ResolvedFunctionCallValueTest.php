@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\ResolvedFunctionCallValue
  * @internal
  */
+#[CoversClass(ResolvedFunctionCallValue::class)]
 final class ResolvedFunctionCallValueTest extends TestCase
 {
     public function testIsAValue(): void

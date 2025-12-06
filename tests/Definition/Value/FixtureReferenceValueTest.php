@@ -15,13 +15,14 @@ namespace Nelmio\Alice\Definition\Value;
 
 use InvalidArgumentException;
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\FixtureReferenceValue
  * @internal
  */
+#[CoversClass(FixtureReferenceValue::class)]
 final class FixtureReferenceValueTest extends TestCase
 {
     public function testIsAValue(): void

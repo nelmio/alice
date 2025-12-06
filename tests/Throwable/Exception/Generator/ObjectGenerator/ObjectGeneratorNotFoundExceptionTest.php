@@ -15,12 +15,13 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator;
 
 use LogicException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\ObjectGenerator\ObjectGeneratorNotFoundException
  * @internal
  */
+#[CoversClass(ObjectGeneratorNotFoundException::class)]
 final class ObjectGeneratorNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void

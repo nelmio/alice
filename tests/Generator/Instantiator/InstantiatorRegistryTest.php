@@ -23,6 +23,7 @@ use Nelmio\Alice\Generator\Resolver\Value\FakeValueResolver;
 use Nelmio\Alice\Generator\ValueResolverAwareInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiatorNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -31,9 +32,9 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorRegistry
  * @internal
  */
+#[CoversClass(InstantiatorRegistry::class)]
 final class InstantiatorRegistryTest extends TestCase
 {
     use ProphecyTrait;
