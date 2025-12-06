@@ -28,6 +28,7 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\ObjectGeneratorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\ObjectBag;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -101,9 +102,7 @@ class CompleteObjectGeneratorTest extends TestCase
         $decoratedGeneratorProphecy->generate(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @dataProvider provideSets
-     */
+    #[DataProvider('provideSets')]
     public function testReturnsCompleteObjectWheneverItIsPossible(
         FixtureInterface $fixture,
         GenerationContext $context,

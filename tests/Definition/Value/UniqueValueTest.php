@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Definition\Value;
 
 use InvalidArgumentException;
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use const PHP_VERSION_ID;
@@ -30,11 +31,8 @@ class UniqueValueTest extends TestCase
         self::assertTrue(is_a(UniqueValue::class, ValueInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $value
-     */
-    public function testReadAccessorsReturnPropertiesValues($value): void
+    #[DataProvider('provideValues')]
+    public function testReadAccessorsReturnPropertiesValues(mixed $value): void
     {
         $id = 'Nelmio\Entity\User#user0#username';
 

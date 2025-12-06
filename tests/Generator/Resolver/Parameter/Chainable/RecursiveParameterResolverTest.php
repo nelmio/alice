@@ -21,6 +21,7 @@ use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -198,9 +199,7 @@ class RecursiveParameterResolverTest extends TestCase
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
-    /**
-     * @dataProvider provideContexts
-     */
+    #[DataProvider('provideContexts')]
     public function testTheSameContextIsPassedBetweenEachResolution(?ResolvingContext $context = null): void
     {
         $parameter = new Parameter('foo', null);

@@ -15,22 +15,22 @@ namespace Nelmio\Alice\Parser;
 
 trait FileListProviderTrait
 {
-    public function providePhpList()
+    public static function providePhpList(): array
     {
         return FilesReference::getPhpList();
     }
 
-    public function provideYamlList()
+    public static function provideYamlList(): array
     {
         return FilesReference::getYamlList();
     }
 
-    public function provideJsonList()
+    public static function provideJsonList(): array
     {
         return FilesReference::getJsonList();
     }
 
-    public function provideUnsupportedList()
+    public static function provideUnsupportedList(): array
     {
         return FilesReference::getUnsupportedList();
     }

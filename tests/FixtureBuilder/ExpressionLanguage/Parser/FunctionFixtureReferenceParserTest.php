@@ -18,6 +18,7 @@ use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -152,12 +153,8 @@ class FunctionFixtureReferenceParserTest extends TestCase
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @dataProvider provideOneElementValues
-     * @param mixed $value
-     * @param mixed $expected
-     */
-    public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($value, $expected): void
+    #[DataProvider('provideOneElementValues')]
+    public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList(mixed $value, mixed $expected): void
     {
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);
         $decoratedParserProphecy->parse(Argument::any())->willReturn($expected);

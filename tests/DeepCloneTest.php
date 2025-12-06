@@ -15,6 +15,7 @@ namespace Nelmio\Alice;
 
 use DateTime;
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -24,11 +25,8 @@ use stdClass;
  */
 class DeepCloneTest extends TestCase
 {
-    /**
-     * @dataProvider provideScalarValues
-     * @param mixed $value
-     */
-    public function testDeepCloneScalarsReturnsScalar($value): void
+    #[DataProvider('provideScalarValues')]
+    public function testDeepCloneScalarsReturnsScalar(mixed $value): void
     {
         $clone = deep_clone($value);
 
