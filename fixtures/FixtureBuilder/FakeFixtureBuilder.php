@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace Nelmio\Alice\FixtureBuilder;
 
 use Nelmio\Alice\FixtureBuilderInterface;
-use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\NotCallableTrait;
 
 class FakeFixtureBuilder implements FixtureBuilderInterface
 {
     use NotCallableTrait;
 
-    public function build(array $data, array $parameters = [], array $objects = []): FixtureSet
+    public function build(array $data, array $parameters = [], array $objects = []): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

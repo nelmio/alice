@@ -23,7 +23,7 @@ class FakeCaller implements CallerInterface
 {
     use NotCallableTrait;
 
-    public function doCallsOn(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): ResolvedFixtureSet
+    public function doCallsOn(ObjectInterface $object, ResolvedFixtureSet $fixtureSet, GenerationContext $context): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

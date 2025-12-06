@@ -20,7 +20,7 @@ class FakeLexer implements LexerInterface
 {
     use NotCallableTrait;
 
-    public function lex(string $value): array
+    public function lex(string $value): never
     {
         $this->__call(__METHOD__, func_get_args());
     }
