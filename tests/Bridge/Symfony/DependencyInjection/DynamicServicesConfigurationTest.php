@@ -32,10 +32,7 @@ use ReflectionClass;
 #[CoversNothing]
 final class DynamicServicesConfigurationTest extends TestCase
 {
-    /**
-     * @var AppKernel
-     */
-    private $kernel;
+    private AppKernel $kernel;
 
     protected function setUp(): void
     {
