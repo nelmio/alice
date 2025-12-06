@@ -32,7 +32,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser
  * @internal
  */
-class SimpleParserTest extends TestCase
+final class SimpleParserTest extends TestCase
 {
     use ProphecyTrait;
 

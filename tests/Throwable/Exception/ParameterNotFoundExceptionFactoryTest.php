@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\ParameterNotFoundExceptionFactory
  * @internal
  */
-class ParameterNotFoundExceptionFactoryTest extends TestCase
+final class ParameterNotFoundExceptionFactoryTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

@@ -26,7 +26,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\MethodCall\OptionalMethodCall
  * @internal
  */
-class OptionalMethodCallTest extends TestCase
+final class OptionalMethodCallTest extends TestCase
 {
     use ProphecyTrait;
 

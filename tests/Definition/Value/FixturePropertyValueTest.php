@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Value\FixturePropertyValue
  * @internal
  */
-class FixturePropertyValueTest extends TestCase
+final class FixturePropertyValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

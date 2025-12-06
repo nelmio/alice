@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory
  * @internal
  */
-class InvalidArgumentExceptionFactoryTest extends TestCase
+final class InvalidArgumentExceptionFactoryTest extends TestCase
 {
     public function testCreateForInvalidReferenceType(): void
     {

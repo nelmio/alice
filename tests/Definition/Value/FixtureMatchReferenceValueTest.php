@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Value\FixtureMatchReferenceValue
  * @internal
  */
-class FixtureMatchReferenceValueTest extends TestCase
+final class FixtureMatchReferenceValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

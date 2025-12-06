@@ -21,7 +21,7 @@ use ReflectionProperty;
  * @covers \Nelmio\Alice\Definition\PropertyBag
  * @internal
  */
-class PropertyBagTest extends TestCase
+final class PropertyBagTest extends TestCase
 {
     /**
      * @var ReflectionProperty

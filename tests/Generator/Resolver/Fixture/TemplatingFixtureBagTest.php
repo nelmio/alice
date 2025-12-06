@@ -31,7 +31,7 @@ use function Nelmio\Alice\deep_clone;
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplatingFixtureBag
  * @internal
  */
-class TemplatingFixtureBagTest extends TestCase
+final class TemplatingFixtureBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

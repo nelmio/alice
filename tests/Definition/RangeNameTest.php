@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\RangeName
  * @internal
  */
-class RangeNameTest extends TestCase
+final class RangeNameTest extends TestCase
 {
     /**
      * @dataProvider provideRanges

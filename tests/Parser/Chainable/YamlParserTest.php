@@ -31,7 +31,7 @@ use Symfony\Component\Yaml\Yaml;
  * @covers \Nelmio\Alice\Parser\Chainable\YamlParser
  * @internal
  */
-class YamlParserTest extends TestCase
+final class YamlParserTest extends TestCase
 {
     use FileListProviderTrait;
     use ProphecyTrait;

@@ -23,7 +23,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\ElementFlagParser
  * @internal
  */
-class ElementFlagParserTest extends FlagParserTestCase
+final class ElementFlagParserTest extends FlagParserTestCase
 {
     use ProphecyTrait;
 

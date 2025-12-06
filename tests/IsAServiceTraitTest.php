@@ -21,7 +21,7 @@ use Throwable;
  * @covers \Nelmio\Alice\IsAServiceTrait
  * @internal
  */
-class IsAServiceTraitTest extends TestCase
+final class IsAServiceTraitTest extends TestCase
 {
     public function testThrowsAnExceptionWhenTryingToCloneInstance(): void
     {

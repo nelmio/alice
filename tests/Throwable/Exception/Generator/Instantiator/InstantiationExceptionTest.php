@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException
  * @internal
  */
-class InstantiationExceptionTest extends TestCase
+final class InstantiationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

@@ -24,7 +24,7 @@ use ReflectionClass;
  * @see TemplateFixtureBagResolverTest
  * @internal
  */
-class TemplateFixtureResolverTest extends TestCase
+final class TemplateFixtureResolverTest extends TestCase
 {
     public function testIsNotClonable(): void
     {

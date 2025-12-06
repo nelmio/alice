@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
  * @internal
  */
-class UniqueValueGenerationLimitReachedExceptionTest extends TestCase
+final class UniqueValueGenerationLimitReachedExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

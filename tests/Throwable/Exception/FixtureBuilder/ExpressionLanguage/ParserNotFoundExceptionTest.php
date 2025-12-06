@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException
  * @internal
  */
-class ParserNotFoundExceptionTest extends TestCase
+final class ParserNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {

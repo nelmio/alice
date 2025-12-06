@@ -24,7 +24,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException
  * @internal
  */
-class InvalidArgumentExceptionTest extends TestCase
+final class InvalidArgumentExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

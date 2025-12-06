@@ -27,7 +27,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\SimpleDenormalizer
  * @internal
  */
-class SimpleDenormalizerTest extends TestCase
+final class SimpleDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 

@@ -21,7 +21,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType
  * @internal
  */
-class TokenTypeTest extends TestCase
+final class TokenTypeTest extends TestCase
 {
     /**
      * @var string[]

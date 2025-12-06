@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\PropertyAccess\NoSuchPropertyExceptionFactory
  * @internal
  */
-class NoSuchPropertyExceptionFactoryTest extends TestCase
+final class NoSuchPropertyExceptionFactoryTest extends TestCase
 {
     public function testCreateForUnreadablePropertyFromStdClass(): void
     {

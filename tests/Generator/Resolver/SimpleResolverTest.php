@@ -30,7 +30,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver
  * @internal
  */
-class SimpleResolverTest extends TestCase
+final class SimpleResolverTest extends TestCase
 {
     use ProphecyTrait;
 

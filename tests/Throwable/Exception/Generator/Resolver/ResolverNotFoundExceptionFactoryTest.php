@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory
  * @internal
  */
-class ResolverNotFoundExceptionFactoryTest extends TestCase
+final class ResolverNotFoundExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactoryForParameter(): void
     {

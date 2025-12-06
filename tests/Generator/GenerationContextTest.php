@@ -22,7 +22,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\GenerationContext
  * @internal
  */
-class GenerationContextTest extends TestCase
+final class GenerationContextTest extends TestCase
 {
     public function testAccessors(): void
     {

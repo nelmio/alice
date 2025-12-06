@@ -32,7 +32,7 @@ use stdClass;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Calls\FunctionDenormalizer
  * @internal
  */
-class FunctionDenormalizerTest extends TestCase
+final class FunctionDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 

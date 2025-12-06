@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Value\VariableValue
  * @internal
  */
-class VariableValueTest extends TestCase
+final class VariableValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

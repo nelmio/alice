@@ -25,7 +25,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer
  * @internal
  */
-class ReferenceLexerTest extends TestCase
+final class ReferenceLexerTest extends TestCase
 {
     /**
      * @var ReferenceLexer

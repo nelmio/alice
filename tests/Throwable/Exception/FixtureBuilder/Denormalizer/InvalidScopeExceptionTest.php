@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\InvalidScopeException
  * @internal
  */
-class InvalidScopeExceptionTest extends TestCase
+final class InvalidScopeExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

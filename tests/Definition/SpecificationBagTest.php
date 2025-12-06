@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\SpecificationBag
  * @internal
  */
-class SpecificationBagTest extends TestCase
+final class SpecificationBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

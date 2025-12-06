@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationException
  * @internal
  */
-class UnresolvableValueDuringGenerationExceptionTest extends TestCase
+final class UnresolvableValueDuringGenerationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

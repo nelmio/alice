@@ -24,7 +24,7 @@ use TypeError;
  * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
  * @internal
  */
-class PhpParserTest extends TestCase
+final class PhpParserTest extends TestCase
 {
     use FileListProviderTrait;
 

@@ -22,7 +22,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\Value\FixtureReferenceValue
  * @internal
  */
-class FixtureReferenceValueTest extends TestCase
+final class FixtureReferenceValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

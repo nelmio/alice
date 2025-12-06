@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Faker\Provider\AliceProvider
  * @internal
  */
-class AliceProviderTest extends TestCase
+final class AliceProviderTest extends TestCase
 {
     public function testIdentityReturnsTheValueUnchanged(): void
     {

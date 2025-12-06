@@ -21,7 +21,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FlagParserTestCase;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\Chainable\ConfiguratorFlagParser
  * @internal
  */
-class ConfiguratorFlagParserTest extends FlagParserTestCase
+final class ConfiguratorFlagParserTest extends FlagParserTestCase
 {
     protected function setUp(): void
     {

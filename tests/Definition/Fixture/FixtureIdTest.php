@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Fixture\FixtureId
  * @internal
  */
-class FixtureIdTest extends TestCase
+final class FixtureIdTest extends TestCase
 {
     public function testIsAFixtureId(): void
     {

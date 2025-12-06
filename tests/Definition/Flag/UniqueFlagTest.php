@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Flag\UniqueFlag
  * @internal
  */
-class UniqueFlagTest extends TestCase
+final class UniqueFlagTest extends TestCase
 {
     public function testIsAFlag(): void
     {

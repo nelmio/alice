@@ -36,7 +36,7 @@ use ReflectionProperty;
  * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
  * @internal
  */
-class TemplateFixtureBagResolverTest extends TestCase
+final class TemplateFixtureBagResolverTest extends TestCase
 {
     /**
      * @var TemplateFixtureBagResolver

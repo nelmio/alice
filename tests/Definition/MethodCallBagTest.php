@@ -23,7 +23,7 @@ use ReflectionProperty;
  * @covers \Nelmio\Alice\Definition\MethodCallBag
  * @internal
  */
-class MethodCallBagTest extends TestCase
+final class MethodCallBagTest extends TestCase
 {
     /**
      * @var ReflectionProperty

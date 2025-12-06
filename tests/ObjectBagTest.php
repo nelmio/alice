@@ -29,7 +29,7 @@ use stdClass;
  * @covers \Nelmio\Alice\ObjectBag
  * @internal
  */
-class ObjectBagTest extends TestCase
+final class ObjectBagTest extends TestCase
 {
     use ProphecyTrait;
 

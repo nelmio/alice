@@ -32,7 +32,7 @@ use function in_array;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\OptionalValueResolver
  * @internal
  */
-class OptionalValueResolverTest extends TestCase
+final class OptionalValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 

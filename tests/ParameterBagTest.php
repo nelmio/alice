@@ -22,7 +22,7 @@ use stdClass;
  * @covers \Nelmio\Alice\ParameterBag
  * @internal
  */
-class ParameterBagTest extends TestCase
+final class ParameterBagTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

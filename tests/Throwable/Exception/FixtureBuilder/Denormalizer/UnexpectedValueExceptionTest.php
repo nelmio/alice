@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException
  * @internal
  */
-class UnexpectedValueExceptionTest extends TestCase
+final class UnexpectedValueExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

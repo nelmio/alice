@@ -24,7 +24,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Generator\NamedArgumentsResolver
  * @internal
  */
-class NamedArgumentsResolverTest extends TestCase
+final class NamedArgumentsResolverTest extends TestCase
 {
     /**
      * @dataProvider provideResolveArgumentsCases

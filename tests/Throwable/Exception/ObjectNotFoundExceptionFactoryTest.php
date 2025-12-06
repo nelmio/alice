@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\ObjectNotFoundExceptionFactory
  * @internal
  */
-class ObjectNotFoundExceptionFactoryTest extends TestCase
+final class ObjectNotFoundExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void
     {

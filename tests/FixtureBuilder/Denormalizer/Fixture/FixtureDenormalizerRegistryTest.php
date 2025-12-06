@@ -35,7 +35,7 @@ use TypeError;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry
  * @internal
  */
-class FixtureDenormalizerRegistryTest extends TestCase
+final class FixtureDenormalizerRegistryTest extends TestCase
 {
     use ProphecyTrait;
 

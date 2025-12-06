@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationException
  * @internal
  */
-class HydrationExceptionTest extends TestCase
+final class HydrationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

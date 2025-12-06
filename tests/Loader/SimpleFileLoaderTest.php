@@ -27,7 +27,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Loader\SimpleFileLoader
  * @internal
  */
-class SimpleFileLoaderTest extends TestCase
+final class SimpleFileLoaderTest extends TestCase
 {
     use ProphecyTrait;
 

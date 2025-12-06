@@ -24,7 +24,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
  * @internal
  */
-class JsonParserTest extends TestCase
+final class JsonParserTest extends TestCase
 {
     use FileListProviderTrait;
 

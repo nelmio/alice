@@ -21,7 +21,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\Value\ListValue
  * @internal
  */
-class ListValueTest extends TestCase
+final class ListValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

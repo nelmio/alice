@@ -29,7 +29,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\VariableValueResolver
  * @internal
  */
-class VariableValueResolverTest extends TestCase
+final class VariableValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver(): void
     {

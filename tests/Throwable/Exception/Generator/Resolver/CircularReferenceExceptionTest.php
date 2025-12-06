@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceException
  * @internal
  */
-class CircularReferenceExceptionTest extends TestCase
+final class CircularReferenceExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

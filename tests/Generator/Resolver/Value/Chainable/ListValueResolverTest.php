@@ -33,7 +33,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\ListValueResolver
  * @internal
  */
-class ListValueResolverTest extends TestCase
+final class ListValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 

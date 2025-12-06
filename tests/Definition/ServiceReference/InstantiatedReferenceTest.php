@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\ServiceReference\InstantiatedReference
  * @internal
  */
-class InstantiatedReferenceTest extends TestCase
+final class InstantiatedReferenceTest extends TestCase
 {
     public function testIsAReference(): void
     {

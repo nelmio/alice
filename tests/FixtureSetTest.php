@@ -20,7 +20,7 @@ use stdClass;
  * @covers \Nelmio\Alice\FixtureSet
  * @internal
  */
-class FixtureSetTest extends TestCase
+final class FixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {

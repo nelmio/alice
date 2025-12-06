@@ -24,7 +24,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\RemoveConflictingParametersParameterBagResolver
  * @internal
  */
-class RemoveConflictingParametersParameterBagResolverTest extends TestCase
+final class RemoveConflictingParametersParameterBagResolverTest extends TestCase
 {
     use ProphecyTrait;
 

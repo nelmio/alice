@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueDuringGenerationExceptionFactory
  * @internal
  */
-class UnresolvableValueDuringGenerationExceptionFactoryTest extends TestCase
+final class UnresolvableValueDuringGenerationExceptionFactoryTest extends TestCase
 {
     public function testCreateFromResolutionThrowable(): void
     {

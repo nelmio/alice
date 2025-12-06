@@ -24,7 +24,7 @@ use Symfony\Component\Config\Definition\Processor;
  * @group integration
  * @internal
  */
-class ConfigurationTest extends TestCase
+final class ConfigurationTest extends TestCase
 {
     public function testDefaultValues(): void
     {

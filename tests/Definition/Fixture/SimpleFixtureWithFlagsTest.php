@@ -26,7 +26,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
  * @covers \Nelmio\Alice\Definition\Fixture\SimpleFixtureWithFlags
  * @internal
  */
-class SimpleFixtureWithFlagsTest extends TestCase
+final class SimpleFixtureWithFlagsTest extends TestCase
 {
     use ProphecyTrait;
 

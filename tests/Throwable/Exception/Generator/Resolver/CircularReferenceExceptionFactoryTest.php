@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\CircularReferenceExceptionFactory
  * @internal
  */
-class CircularReferenceExceptionFactoryTest extends TestCase
+final class CircularReferenceExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void
     {

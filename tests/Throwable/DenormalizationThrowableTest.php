@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @coversNothing
  * @internal
  */
-class DenormalizationThrowableTest extends TestCase
+final class DenormalizationThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void
     {

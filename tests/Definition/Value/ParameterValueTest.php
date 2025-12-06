@@ -22,7 +22,7 @@ use TypeError;
  * @covers \Nelmio\Alice\Definition\Value\ParameterValue
  * @internal
  */
-class ParameterValueTest extends TestCase
+final class ParameterValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

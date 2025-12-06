@@ -30,7 +30,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\SimpleValueDenormalizer
  * @internal
  */
-class SimpleValueDenormalizerTest extends TestCase
+final class SimpleValueDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 

@@ -31,7 +31,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\ArrayParameterResolver
  * @internal
  */
-class ArrayParameterResolverTest extends TestCase
+final class ArrayParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
 

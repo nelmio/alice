@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @coversNothing
  * @internal
  */
-class ResolutionThrowableTest extends TestCase
+final class ResolutionThrowableTest extends TestCase
 {
     public function testIsABuildThrowable(): void
     {

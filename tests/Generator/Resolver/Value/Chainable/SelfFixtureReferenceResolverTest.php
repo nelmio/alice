@@ -38,7 +38,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\SelfFixtureReferenceResolver
  * @internal
  */
-class SelfFixtureReferenceResolverTest extends TestCase
+final class SelfFixtureReferenceResolverTest extends TestCase
 {
     use ProphecyTrait;
 

@@ -34,7 +34,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\FunctionCallArgumentResolver
  * @internal
  */
-class FunctionCallArgumentResolverTest extends TestCase
+final class FunctionCallArgumentResolverTest extends TestCase
 {
     use ProphecyTrait;
 

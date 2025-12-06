@@ -24,7 +24,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\AbstractChainableParserAwareParser
  * @internal
  */
-class AbstractChainableParserAwareParserTest extends TestCase
+final class AbstractChainableParserAwareParserTest extends TestCase
 {
     public function testIsAChainableTokenParser(): void
     {

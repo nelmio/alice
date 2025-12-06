@@ -25,7 +25,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\StaticParameterResolver
  * @internal
  */
-class StaticParameterResolverTest extends TestCase
+final class StaticParameterResolverTest extends TestCase
 {
     public function testIsAChainableParameterResolver(): void
     {

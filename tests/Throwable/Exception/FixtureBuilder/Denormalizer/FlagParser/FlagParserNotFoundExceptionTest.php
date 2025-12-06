@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\FlagParser\FlagParserNotFoundException
  * @internal
  */
-class FlagParserNotFoundExceptionTest extends TestCase
+final class FlagParserNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {

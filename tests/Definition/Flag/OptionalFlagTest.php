@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Definition\Flag\OptionalFlag
  * @internal
  */
-class OptionalFlagTest extends TestCase
+final class OptionalFlagTest extends TestCase
 {
     public function testIsAFlag(): void
     {

@@ -21,7 +21,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Definition\Value\FunctionCallValue
  * @internal
  */
-class FunctionCallValueTest extends TestCase
+final class FunctionCallValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

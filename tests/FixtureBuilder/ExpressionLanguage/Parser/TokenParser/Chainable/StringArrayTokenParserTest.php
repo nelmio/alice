@@ -30,7 +30,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringArrayTokenParser
  * @internal
  */
-class StringArrayTokenParserTest extends TestCase
+final class StringArrayTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 

@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException
  * @internal
  */
-class DenormalizerNotFoundExceptionTest extends TestCase
+final class DenormalizerNotFoundExceptionTest extends TestCase
 {
     public function testIsALogicException(): void
     {

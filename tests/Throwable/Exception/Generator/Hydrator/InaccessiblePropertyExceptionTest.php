@@ -21,7 +21,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InaccessiblePropertyException
  * @internal
  */
-class InaccessiblePropertyExceptionTest extends TestCase
+final class InaccessiblePropertyExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

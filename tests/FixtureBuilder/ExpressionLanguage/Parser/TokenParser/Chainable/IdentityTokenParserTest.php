@@ -25,7 +25,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\IdentityTokenParser
  * @internal
  */
-class IdentityTokenParserTest extends TestCase
+final class IdentityTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 

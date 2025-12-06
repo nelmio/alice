@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory
  * @internal
  */
-class ParseExceptionFactoryTest extends TestCase
+final class ParseExceptionFactoryTest extends TestCase
 {
     public function testCreateForParserNoFoundForFile(): void
     {

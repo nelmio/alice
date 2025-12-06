@@ -20,7 +20,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\NoValueForCurrentException
  * @internal
  */
-class NoValueForCurrentExceptionTest extends TestCase
+final class NoValueForCurrentExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

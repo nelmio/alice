@@ -22,7 +22,7 @@ use TypeError;
  * @covers \Nelmio\Alice\Definition\Value\OptionalValue
  * @internal
  */
-class OptionalValueTest extends TestCase
+final class OptionalValueTest extends TestCase
 {
     public function testIsAValue(): void
     {

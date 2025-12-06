@@ -22,7 +22,7 @@ use stdClass;
  * @covers ::\Nelmio\Alice\deep_clone
  * @internal
  */
-class DeepCloneTest extends TestCase
+final class DeepCloneTest extends TestCase
 {
     /**
      * @dataProvider provideScalarValues

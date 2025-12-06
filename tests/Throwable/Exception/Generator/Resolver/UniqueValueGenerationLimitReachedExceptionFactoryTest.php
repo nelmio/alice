@@ -21,7 +21,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedExceptionFactory
  * @internal
  */
-class UniqueValueGenerationLimitReachedExceptionFactoryTest extends TestCase
+final class UniqueValueGenerationLimitReachedExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void
     {

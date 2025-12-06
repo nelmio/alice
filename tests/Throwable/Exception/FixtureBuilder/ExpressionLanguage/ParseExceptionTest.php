@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException
  * @internal
  */
-class ParseExceptionTest extends TestCase
+final class ParseExceptionTest extends TestCase
 {
     public function testIsAnException(): void
     {

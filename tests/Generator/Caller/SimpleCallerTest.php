@@ -45,7 +45,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Caller\SimpleCaller
  * @internal
  */
-class SimpleCallerTest extends TestCase
+final class SimpleCallerTest extends TestCase
 {
     use ProphecyTrait;
 

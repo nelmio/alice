@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException
  * @internal
  */
-class LexExceptionTest extends TestCase
+final class LexExceptionTest extends TestCase
 {
     public function testIsAnException(): void
     {

@@ -34,7 +34,7 @@ use TypeError;
  * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\TokenParserRegistry
  * @internal
  */
-class TokenParserRegistryTest extends TestCase
+final class TokenParserRegistryTest extends TestCase
 {
     use ProphecyTrait;
 

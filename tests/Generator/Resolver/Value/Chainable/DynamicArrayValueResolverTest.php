@@ -34,7 +34,7 @@ use ReflectionClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver
  * @internal
  */
-class DynamicArrayValueResolverTest extends TestCase
+final class DynamicArrayValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 

@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerExceptionFactory
  * @internal
  */
-class DenormalizerExceptionFactoryTest extends TestCase
+final class DenormalizerExceptionFactoryTest extends TestCase
 {
     public function testCreateForUndenormalizableConstructor(): void
     {

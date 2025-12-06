@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Parser\IncludeProcessor\IncludeDataMerger
  * @internal
  */
-class IncludeDataMergerTest extends TestCase
+final class IncludeDataMergerTest extends TestCase
 {
     /**
      * @var IncludeDataMerger

@@ -44,7 +44,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UnresolvedFixtureReferenceIdResolver
  * @internal
  */
-class UnresolvedFixtureReferenceIdResolverTest extends TestCase
+final class UnresolvedFixtureReferenceIdResolverTest extends TestCase
 {
     use ProphecyTrait;
 

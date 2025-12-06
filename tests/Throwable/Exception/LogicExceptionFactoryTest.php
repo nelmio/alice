@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Nelmio\Alice\Throwable\Exception\LogicExceptionFactory
  * @internal
  */
-class LogicExceptionFactoryTest extends TestCase
+final class LogicExceptionFactoryTest extends TestCase
 {
     public function testCreateForUncallableMethod(): void
     {

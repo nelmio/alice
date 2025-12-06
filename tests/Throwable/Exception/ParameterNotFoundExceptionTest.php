@@ -20,7 +20,7 @@ use RuntimeException;
  * @covers \Nelmio\Alice\Throwable\Exception\ParameterNotFoundException
  * @internal
  */
-class ParameterNotFoundExceptionTest extends TestCase
+final class ParameterNotFoundExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

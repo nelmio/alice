@@ -23,7 +23,7 @@ use stdClass;
  * @covers \Nelmio\Alice\Generator\ResolvedFixtureSet
  * @internal
  */
-class ResolvedFixtureSetTest extends TestCase
+final class ResolvedFixtureSetTest extends TestCase
 {
     public function testReadAccessorsReturnPropertiesValues(): void
     {
