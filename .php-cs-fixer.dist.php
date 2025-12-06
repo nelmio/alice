@@ -52,5 +52,6 @@ $config->addRules([
 
 $config->setFinder($finder);
 $config->setCacheFile(__DIR__.'/var/.php-cs-fixer.cache');
+$config->unsupportedPhpVersionAllowed();
 
 return $config;
