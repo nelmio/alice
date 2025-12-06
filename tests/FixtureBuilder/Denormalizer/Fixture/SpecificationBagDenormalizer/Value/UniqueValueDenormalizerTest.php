@@ -15,7 +15,6 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenor
 
 use Nelmio\Alice\Definition\Fixture\FakeFixture;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
-use Nelmio\Alice\Definition\Flag\DummyFlag;
 use Nelmio\Alice\Definition\Flag\UniqueFlag;
 use Nelmio\Alice\Definition\FlagBag;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
@@ -29,7 +28,6 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
-use stdClass;
 
 /**
  * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Value\UniqueValueDenormalizer
@@ -166,31 +164,5 @@ final class UniqueValueDenormalizerTest extends TestCase
         self::assertInstanceOf(UniqueValue::class, $result->getValue()[1]);
         self::assertStringStartsWith('Dummy#', $result->getValue()[1]->getId());
         self::assertEquals('bar', $result->getValue()[1]->getValue());
-    }
-
-    public function provideValues()
-    {
-        $unparsedValues = [
-            'null' => null,
-            'int' => 0,
-            'float' => .5,
-            'bool' => true,
-            'array' => [],
-            'object' => new stdClass(),
-        ];
-
-        $flagBags = [
-            'null' => null,
-            'empty' => new FlagBag(''),
-            'with random flag' => (new FlagBag(''))->withFlag(new DummyFlag()),
-        ];
-
-        foreach ($flagBags as $flagName => $flags) {
-            foreach ($unparsedValues as $unparsedValueName => $unparsedValue) {
-                yield $unparsedValueName.'/'.$flagName => [$unparsedValue, false, $flags];
-            }
-
-            yield 'string value /'.$flagName => ['1', true, $flags];
-        }
     }
 }

@@ -15,27 +15,27 @@ namespace Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture;
 
 trait ReferenceProviderTrait
 {
-    public function provideSimpleFixtures()
+    public static function provideSimpleFixtures(): iterable
     {
         return Reference::getSimpleFixtures();
     }
 
-    public function provideListFixtures()
+    public static function provideListFixtures(): iterable
     {
         return Reference::getListFixtures();
     }
 
-    public function provideMalformedListFixtures()
+    public static function provideMalformedListFixtures(): iterable
     {
         return Reference::getMalformedListFixtures();
     }
 
-    public function provideSegmentFixtures()
+    public static function provideSegmentFixtures(): iterable
     {
         return Reference::getSegmentFixtures();
     }
 
-    public function provideMalformedSegmentFixtures()
+    public static function provideMalformedSegmentFixtures(): iterable
     {
         return Reference::getMalformedSegmentFixtures();
     }
