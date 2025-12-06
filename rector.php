@@ -25,7 +25,7 @@ return RectorConfig::configure()
         __DIR__ . '/tests',
     ])
     ->withSkipPath(__DIR__.'/fixtures/Bridge/Symfony/Application/var/')
-    ->withPhpLevel(81_000)
+    ->withPhpLevel(82_000)
     ->withTypeCoverageLevel(0)
     ->withDeadCodeLevel(0)
     ->withCodeQualityLevel(0)

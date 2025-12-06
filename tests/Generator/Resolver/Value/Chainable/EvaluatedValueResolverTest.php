@@ -82,19 +82,11 @@ final class EvaluatedValueResolverTest extends TestCase
             self::assertEquals(0, $exception->getCode());
             self::assertNotNull($exception->getPrevious());
 
-            if (PHP_VERSION_ID < 80000) {
-                self::assertEquals(
-                    'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
-                        .' expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN)',
-                    $exception->getMessage(),
-                );
-            } else {
-                self::assertEquals(
-                    'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
-                     .' expecting variable or "${" or "{$"',
-                    $exception->getMessage(),
-                );
-            }
+            self::assertEquals(
+                'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
+                .' expecting variable or "${" or "{$"',
+                $exception->getMessage(),
+            );
         }
     }
 
@@ -214,17 +206,10 @@ final class EvaluatedValueResolverTest extends TestCase
 
             self::fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
-            if (PHP_VERSION_ID < 80000) {
-                self::assertEquals(
-                    'Could not evaluate the expression "$scope": Undefined variable: scope',
-                    $exception->getMessage(),
-                );
-            } else {
-                self::assertEquals(
-                    'Could not evaluate the expression "$scope": Undefined variable $scope',
-                    $exception->getMessage(),
-                );
-            }
+            self::assertEquals(
+                'Could not evaluate the expression "$scope": Undefined variable $scope',
+                $exception->getMessage(),
+            );
         }
     }
 }
