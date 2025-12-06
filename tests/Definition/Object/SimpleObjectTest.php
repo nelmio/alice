@@ -34,7 +34,6 @@ class SimpleObjectTest extends TestCase
     protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(SimpleObject::class))->getProperty('instance');
-        $this->propRefl->setAccessible(true);
     }
 
     public function testIsAnObject(): void

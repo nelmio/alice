@@ -141,7 +141,6 @@ class ParameterBagTest extends TestCase
     {
         $reflectionObject = new ReflectionObject($bag);
         $paramReflection = $reflectionObject->getProperty('parameters');
-        $paramReflection->setAccessible(true);
 
         self::assertCount($size, $paramReflection->getValue($bag));
     }

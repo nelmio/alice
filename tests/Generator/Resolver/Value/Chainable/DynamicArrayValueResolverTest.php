@@ -49,7 +49,6 @@ class DynamicArrayValueResolverTest extends TestCase
         $reflClass = new ReflectionClass(DynamicArrayValueResolver::class);
 
         $this->resolverRefl = $reflClass->getProperty('resolver');
-        $this->resolverRefl->setAccessible(true);
     }
 
     public function testIsAChainableResolver(): void

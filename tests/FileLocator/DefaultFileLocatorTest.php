@@ -47,7 +47,6 @@ class DefaultFileLocatorTest extends TestCase
     {
         $reflectionObject = new ReflectionObject($this->locator);
         $methodReflection = $reflectionObject->getMethod('isAbsolutePath');
-        $methodReflection->setAccessible(true);
 
         self::assertTrue(
             $methodReflection->invoke($this->locator, $path),
