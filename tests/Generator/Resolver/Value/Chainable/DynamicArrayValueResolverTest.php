@@ -29,7 +29,6 @@ use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptio
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
-use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\DynamicArrayValueResolver
@@ -39,16 +38,11 @@ class DynamicArrayValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ReflectionProperty
-     */
-    private $resolverRefl;
-
     protected function setUp(): void
     {
         $reflClass = new ReflectionClass(DynamicArrayValueResolver::class);
 
-        $this->resolverRefl = $reflClass->getProperty('resolver');
+        $resolverRefl = $reflClass->getProperty('resolver');
     }
 
     public function testIsAChainableResolver(): void

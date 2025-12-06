@@ -31,7 +31,6 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
-use ReflectionProperty;
 
 /**
  * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\UniqueValueResolver
@@ -41,23 +40,13 @@ class UniqueValueResolverTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ReflectionProperty
-     */
-    private $resolverRefl;
-
-    /**
-     * @var ReflectionProperty
-     */
-    private $poolRefl;
-
     protected function setUp(): void
     {
         $reflClass = new ReflectionClass(UniqueValueResolver::class);
 
-        $this->resolverRefl = $reflClass->getProperty('resolver');
+        $resolverRefl = $reflClass->getProperty('resolver');
 
-        $this->poolRefl = $reflClass->getProperty('pool');
+        $poolRefl = $reflClass->getProperty('pool');
     }
 
     public function testIsAChainableResolver(): void

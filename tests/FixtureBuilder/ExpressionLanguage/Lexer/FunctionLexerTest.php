@@ -29,14 +29,9 @@ class FunctionLexerTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var FunctionLexer
-     */
-    private $lexer;
-
     protected function setUp(): void
     {
-        $this->lexer = new FunctionLexer(new DummyLexer());
+        $lexer = new FunctionLexer(new DummyLexer());
     }
 
     public function testIsALexer(): void

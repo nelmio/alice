@@ -39,14 +39,9 @@ class AbstractChainableInstantiatorTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var AbstractChainableInstantiator
-     */
-    private $instantiator;
-
     protected function setUp(): void
     {
-        $this->instantiator = new DummyChainableInstantiator();
+        $instantiator = new DummyChainableInstantiator();
     }
 
     public function testIsAChainableInstantiator(): void
