@@ -240,13 +240,4 @@ final class ConfigurationTest extends TestCase
 
         $kernel->shutdown();
     }
-
-    public function provideInvalidSeedValues()
-    {
-        yield 'negative integer' => [-1];
-
-        yield 'null integer' => [0];
-
-        yield 'string value' => ['seed'];
-    }
 }
