@@ -33,7 +33,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
 
     public function __construct()
     {
-        $this->token = uniqid(__CLASS__, true);
+        $this->token = uniqid(self::class, true);
     }
 
     public function canDenormalize(string $name, array &$matches = []): bool
