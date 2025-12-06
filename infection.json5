@@ -5,14 +5,11 @@
             "src"
         ],
         "excludes": [
-            "fixtures",
             "src/deep_clone.php",
             "src/Bridge",
             "src/FileLocator/DefaultFileLocator.php",
             "src/FixtureBuilder/Denormalizer/Fixture/Chainable/RangeNameDenormalizer.php",
             "src/Generator/Resolver/Parameter/Chainable/RecursiveParameterResolver.php",
-            "tests",
-            "vendor"
         ]
     },
     "phpUnit": {
