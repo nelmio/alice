@@ -55,7 +55,6 @@ class ParserIntegrationTest extends TestCase
 
     /**
      * @dataProvider provideValues
-     * @param mixed $expected
      */
     public function testParseValues(string $value, $expected): void
     {

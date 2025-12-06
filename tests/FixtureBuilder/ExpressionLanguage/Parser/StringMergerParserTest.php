@@ -141,8 +141,6 @@ final class StringMergerParserTest extends TestCase
 
     /**
      * @dataProvider provideOneElementValues
-     * @param mixed $parsedValue
-     * @param mixed $expected
      */
     public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($parsedValue, $expected): void
     {

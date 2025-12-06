@@ -31,10 +31,6 @@ final class OptionalValueTest extends TestCase
 
     /**
      * @dataProvider provideInputValues
-     * @param mixed $quantifier
-     * @param mixed $firstMember
-     * @param mixed $secondMember
-     * @param mixed $errorMessage
      */
     public function testThrowsErrorIfInvalidTypeGiven($quantifier, $firstMember, $secondMember, $errorMessage): void
     {

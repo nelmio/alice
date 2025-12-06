@@ -27,8 +27,7 @@ final class UniqueValue implements ValueInterface
     private $value;
 
     /**
-     * @param string $id    Unique across a fixture set, is used to generate unique values.
-     * @param mixed  $value
+     * @param string $id Unique across a fixture set, is used to generate unique values.
      */
     public function __construct(string $id, $value)
     {

@@ -32,7 +32,6 @@ final class UniqueValueTest extends TestCase
 
     /**
      * @dataProvider provideValues
-     * @param mixed $value
      */
     public function testReadAccessorsReturnPropertiesValues($value): void
     {

@@ -41,7 +41,6 @@ final class DefaultFileLocatorTest extends TestCase
 
     /**
      * @dataProvider provideAbsolutePaths
-     * @param mixed $path
      */
     public function testCanDetectAbsolutePaths($path): void
     {

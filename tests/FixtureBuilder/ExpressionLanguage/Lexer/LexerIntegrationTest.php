@@ -42,7 +42,6 @@ class LexerIntegrationTest extends TestCase
 
     /**
      * @dataProvider provideValues
-     * @param mixed $expected
      */
     public function testCanLexValues(string $value, $expected): void
     {

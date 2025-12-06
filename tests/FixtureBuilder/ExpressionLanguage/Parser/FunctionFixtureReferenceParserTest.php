@@ -154,8 +154,6 @@ final class FunctionFixtureReferenceParserTest extends TestCase
 
     /**
      * @dataProvider provideOneElementValues
-     * @param mixed $value
-     * @param mixed $expected
      */
     public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($value, $expected): void
     {
