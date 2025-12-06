@@ -71,13 +71,7 @@ class ParserIntegrationTest extends TestCase
                     ),
                 );
             }
-        } catch (InvalidArgumentException $exception) {
-            if (null === $expected) {
-                return;
-            }
-
-            throw $exception;
-        } catch (ExpressionLanguageParseThrowable $exception) {
+        } catch (InvalidArgumentException|ExpressionLanguageParseThrowable $exception) {
             if (null === $expected) {
                 return;
             }
