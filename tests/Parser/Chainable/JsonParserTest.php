@@ -17,14 +17,16 @@ use InvalidArgumentException;
 use Nelmio\Alice\Parser\ChainableParserInterface;
 use Nelmio\Alice\Parser\FileListProviderTrait;
 use Nelmio\Alice\Throwable\Exception\Parser\UnparsableFileException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Parser\Chainable\PhpParser
  * @internal
  */
-class JsonParserTest extends TestCase
+#[CoversClass(PhpParser::class)]
+final class JsonParserTest extends TestCase
 {
     use FileListProviderTrait;
 
@@ -64,20 +66,16 @@ class JsonParserTest extends TestCase
         self::assertFalse((new ReflectionClass(JsonParser::class))->isCloneable());
     }
 
-    /**
-     * @dataProvider provideJsonList
-     */
+    #[DataProvider('provideJsonList')]
     public function testCanParseJsonFiles(string $file, array $expectedParsers): void
     {
         $actual = $this->parser->canParse($file);
-        $expected = in_array(get_class($this->parser), $expectedParsers, true);
+        $expected = in_array($this->parser::class, $expectedParsers, true);
 
         self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @dataProvider providePhpList
-     */
+    #[DataProvider('providePhpList')]
     public function testCanNotParsePhpFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -85,9 +83,7 @@ class JsonParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideYamlList
-     */
+    #[DataProvider('provideYamlList')]
     public function testCannotParseYamlFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -95,9 +91,7 @@ class JsonParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    /**
-     * @dataProvider provideUnsupportedList
-     */
+    #[DataProvider('provideUnsupportedList')]
     public function testCannotParseUnsupportedFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);

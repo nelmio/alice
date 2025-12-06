@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Parser;
 
 use Error;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Parser\ParseExceptionFactory
  * @internal
  */
-class ParseExceptionFactoryTest extends TestCase
+#[CoversClass(ParseExceptionFactory::class)]
+final class ParseExceptionFactoryTest extends TestCase
 {
     public function testCreateForParserNoFoundForFile(): void
     {

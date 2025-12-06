@@ -22,14 +22,16 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\Resolver\Value\ChainableValueResolverInterface;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\Chainable\EvaluatedValueResolver
  * @internal
  */
-class EvaluatedValueResolverTest extends TestCase
+#[CoversClass(EvaluatedValueResolver::class)]
+final class EvaluatedValueResolverTest extends TestCase
 {
     public function testIsAChainableResolver(): void
     {
@@ -81,19 +83,11 @@ class EvaluatedValueResolverTest extends TestCase
             self::assertEquals(0, $exception->getCode());
             self::assertNotNull($exception->getPrevious());
 
-            if (PHP_VERSION_ID < 80000) {
-                self::assertEquals(
-                    'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
-                        .' expecting variable (T_VARIABLE) or ${ (T_DOLLAR_OPEN_CURLY_BRACES) or {$ (T_CURLY_OPEN)',
-                    $exception->getMessage(),
-                );
-            } else {
-                self::assertEquals(
-                    'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
-                     .' expecting variable or "${" or "{$"',
-                    $exception->getMessage(),
-                );
-            }
+            self::assertEquals(
+                'Could not evaluate the expression ""unclosed string": syntax error, unexpected end of file,'
+                .' expecting variable or "${" or "{$"',
+                $exception->getMessage(),
+            );
         }
     }
 
@@ -131,6 +125,7 @@ class EvaluatedValueResolverTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
+    #[WithoutErrorHandler]
     /**
      * @testdox The only variables the evaluated function has access to are "private" variables and the scope variables.
      */
@@ -178,6 +173,7 @@ class EvaluatedValueResolverTest extends TestCase
         }
     }
 
+    #[WithoutErrorHandler]
     public function testVariablesInferenceWithCurrent(): void
     {
         $value = new EvaluatedValue('["foo" => $foo, "expression" => $_expression, "scope" => $_scope]');
@@ -208,19 +204,13 @@ class EvaluatedValueResolverTest extends TestCase
 
         try {
             $resolver->resolve($value, $fixture, $set, $scope, new GenerationContext());
+
             self::fail('Expected an exception to be thrown.');
         } catch (UnresolvableValueException $exception) {
-            if (PHP_VERSION_ID < 80000) {
-                self::assertEquals(
-                    'Could not evaluate the expression "$scope": Undefined variable: scope',
-                    $exception->getMessage(),
-                );
-            } else {
-                self::assertEquals(
-                    'Could not evaluate the expression "$scope": Undefined variable $scope',
-                    $exception->getMessage(),
-                );
-            }
+            self::assertEquals(
+                'Could not evaluate the expression "$scope": Undefined variable $scope',
+                $exception->getMessage(),
+            );
         }
     }
 }

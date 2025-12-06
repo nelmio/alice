@@ -15,13 +15,12 @@ namespace Nelmio\Alice\Loader;
 
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\NotCallableTrait;
-use Nelmio\Alice\ObjectSet;
 
 class FakeDataLoader implements DataLoaderInterface
 {
     use NotCallableTrait;
 
-    public function loadData(array $data, array $parameters = [], array $objects = []): ObjectSet
+    public function loadData(array $data, array $parameters = [], array $objects = []): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

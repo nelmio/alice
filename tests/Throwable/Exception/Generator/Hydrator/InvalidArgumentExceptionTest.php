@@ -16,15 +16,16 @@ namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Definition\Property;
 use Nelmio\Alice\Throwable\HydrationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\InvalidArgumentException
  * @internal
  */
-class InvalidArgumentExceptionTest extends TestCase
+#[CoversClass(InvalidArgumentException::class)]
+final class InvalidArgumentExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

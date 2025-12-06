@@ -18,6 +18,7 @@ use Nelmio\Alice\FileLocator\DefaultFileLocator;
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Parser\IncludeProcessorInterface;
 use Nelmio\Alice\ParserInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -25,10 +26,10 @@ use ReflectionClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Parser\IncludeProcessor\DefaultIncludeProcessor
  * @internal
  */
-class DefaultIncludeProcessorTest extends TestCase
+#[CoversClass(DefaultIncludeProcessor::class)]
+final class DefaultIncludeProcessorTest extends TestCase
 {
     use ProphecyTrait;
 

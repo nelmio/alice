@@ -19,6 +19,7 @@ use Nelmio\Alice\Definition\Object\CompleteObject;
 use Nelmio\Alice\Definition\Object\SimpleObject;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\Throwable\Exception\ObjectNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
@@ -26,10 +27,10 @@ use ReflectionProperty;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\ObjectBag
  * @internal
  */
-class ObjectBagTest extends TestCase
+#[CoversClass(ObjectBag::class)]
+final class ObjectBagTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -41,7 +42,6 @@ class ObjectBagTest extends TestCase
     protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(ObjectBag::class))->getProperty('objects');
-        $this->propRefl->setAccessible(true);
     }
 
     public function testBagsCanBeInstantiatedWithRegularObjects(): void
@@ -306,24 +306,24 @@ class ObjectBagTest extends TestCase
         self::assertTrue(is_a(ObjectBag::class, Countable::class, true));
 
         $bag = new ObjectBag();
-        self::assertEquals(0, $bag->count());
+        self::assertCount(0, $bag);
 
         $bag = new ObjectBag([
             'foo' => new stdClass(),
             'bar' => new stdClass(),
         ]);
-        self::assertEquals(2, $bag->count());
+        self::assertCount(2, $bag);
 
         $object1 = new CompleteObject(new SimpleObject('foo', new stdClass()));
         $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
-        self::assertEquals(2, $bag->count());
+        self::assertCount(2, $bag);
 
         $object3 = new CompleteObject(new SimpleObject('foz', new stdClass()));
         $object4 = new CompleteObject(new SimpleObject('baz', new stdClass()));
         $anotherBag = (new ObjectBag())->with($object3)->with($object4);
         $bag = $bag->mergeWith($anotherBag);
-        self::assertEquals(4, $bag->count());
+        self::assertCount(4, $bag);
     }
 
     private function assertSameObjects(array $expected, ObjectBag $actual): void

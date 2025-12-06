@@ -15,6 +15,7 @@ namespace Nelmio\Alice\Parser;
 
 use Nelmio\Alice\ParserInterface;
 use Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -23,10 +24,10 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Parser\ParserRegistry
  * @internal
  */
-class ParserRegistryTest extends TestCase
+#[CoversClass(ParserRegistry::class)]
+final class ParserRegistryTest extends TestCase
 {
     use ProphecyTrait;
 

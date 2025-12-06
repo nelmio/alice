@@ -16,15 +16,16 @@ namespace Nelmio\Alice\Bridge\Symfony\Loader;
 use Nelmio\Alice\Loader\LoaderIntegrationTest as CoreLoaderIntegrationTest;
 use Nelmio\Alice\Loader\NonIsolatedSymfonyLoader;
 use Nelmio\Alice\Symfony\KernelFactory;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
-class LoaderIntegrationTest extends CoreLoaderIntegrationTest
+#[Group('integration')]
+#[CoversNothing]
+final class LoaderIntegrationTest extends CoreLoaderIntegrationTest
 {
     /**
      * @var KernelInterface
@@ -35,24 +36,24 @@ class LoaderIntegrationTest extends CoreLoaderIntegrationTest
     {
         parent::setUpBeforeClass();
 
-        static::$kernel = KernelFactory::createKernel();
+        self::$kernel = KernelFactory::createKernel();
     }
 
     protected function setUp(): void
     {
-        static::$kernel->boot();
+        self::$kernel->boot();
 
-        $this->nonIsolatedLoader = $this->loader = new NonIsolatedSymfonyLoader(static::$kernel->getContainer());
+        $this->nonIsolatedLoader = $this->loader = new NonIsolatedSymfonyLoader(self::$kernel->getContainer());
     }
 
     protected function tearDown(): void
     {
-        static::$kernel->shutdown();
+        self::$kernel->shutdown();
     }
 
     public static function tearDownAfterClass(): void
     {
-        static::$kernel = null;
+        self::$kernel = null;
 
         parent::tearDownAfterClass();
     }

@@ -16,13 +16,12 @@ namespace Nelmio\Alice\Generator;
 use Nelmio\Alice\FixtureSet;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\NotCallableTrait;
-use Nelmio\Alice\ObjectSet;
 
 class FakeGenerator implements GeneratorInterface
 {
     use NotCallableTrait;
 
-    public function generate(FixtureSet $fixtureSet): ObjectSet
+    public function generate(FixtureSet $fixtureSet): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

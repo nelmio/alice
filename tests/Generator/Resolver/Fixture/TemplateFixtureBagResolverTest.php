@@ -27,16 +27,17 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReference;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\FixtureBag;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver
- * @covers \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureResolver
  * @internal
  */
-class TemplateFixtureBagResolverTest extends TestCase
+#[CoversClass(TemplateFixtureBagResolver::class)]
+#[CoversClass(TemplateFixtureResolver::class)]
+final class TemplateFixtureBagResolverTest extends TestCase
 {
     /**
      * @var TemplateFixtureBagResolver
@@ -51,7 +52,6 @@ class TemplateFixtureBagResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->propRefl = (new ReflectionClass(TemplatingFixture::class))->getProperty('fixture');
-        $this->propRefl->setAccessible(true);
 
         $this->resolver = new TemplateFixtureBagResolver();
     }

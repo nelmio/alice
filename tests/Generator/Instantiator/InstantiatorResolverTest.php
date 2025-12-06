@@ -30,6 +30,7 @@ use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\RootResolutionException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -37,10 +38,10 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\InstantiatorResolver
  * @internal
  */
-class InstantiatorResolverTest extends TestCase
+#[CoversClass(InstantiatorResolver::class)]
+final class InstantiatorResolverTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -170,7 +171,7 @@ class InstantiatorResolverTest extends TestCase
         try {
             $instantiator->instantiate($fixture, $set, new GenerationContext());
             self::fail('Expected exception to be thrown.');
-        } catch (GenerationThrowable $throwable) {
+        } catch (GenerationThrowable) {
             // Expected result.
         }
     }

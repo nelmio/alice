@@ -23,7 +23,7 @@ class NamedArgumentsResolver
     {
         try {
             $method = new ReflectionMethod($className, $methodName);
-        } catch (ReflectionException $exception) {
+        } catch (ReflectionException) {
             return $arguments;
         }
 
@@ -79,7 +79,7 @@ class NamedArgumentsResolver
             $buffer[] = $parameter->getDefaultValue();
         }
 
-        $unknownNamedParameters = array_filter(array_keys($arguments), static fn ($key) => is_string($key));
+        $unknownNamedParameters = array_filter(array_keys($arguments), is_string(...));
 
         if ([] !== $unknownNamedParameters) {
             throw new RuntimeException(sprintf(

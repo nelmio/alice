@@ -14,14 +14,15 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Hydrator;
 
 use Nelmio\Alice\Throwable\HydrationThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Hydrator\HydrationException
  * @internal
  */
-class HydrationExceptionTest extends TestCase
+#[CoversClass(HydrationException::class)]
+final class HydrationExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

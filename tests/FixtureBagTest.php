@@ -19,15 +19,16 @@ use Nelmio\Alice\Definition\Fixture\MutableFixture;
 use Nelmio\Alice\Definition\MethodCall\NoMethodCall;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Throwable\Exception\FixtureNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * @covers \Nelmio\Alice\FixtureBag
  * @internal
  */
-class FixtureBagTest extends TestCase
+#[CoversClass(FixtureBag::class)]
+final class FixtureBagTest extends TestCase
 {
     /**
      * @var ReflectionProperty
@@ -37,7 +38,6 @@ class FixtureBagTest extends TestCase
     protected function setUp(): void
     {
         $propRelf = (new ReflectionClass(FixtureBag::class))->getProperty('fixtures');
-        $propRelf->setAccessible(true);
 
         $this->propRefl = $propRelf;
     }

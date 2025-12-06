@@ -19,15 +19,17 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Loader\NativeLoader;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\LexException;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use function str_repeat;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[Group('integration')]
+#[CoversNothing]
 class LexerIntegrationTest extends TestCase
 {
     /**
@@ -40,10 +42,7 @@ class LexerIntegrationTest extends TestCase
         $this->lexer = (new NativeLoader())->getLexer();
     }
 
-    /**
-     * @dataProvider provideValues
-     * @param mixed $expected
-     */
+    #[DataProvider('provideValues')]
     public function testCanLexValues(string $value, $expected): void
     {
         try {
@@ -58,13 +57,7 @@ class LexerIntegrationTest extends TestCase
                     ),
                 );
             }
-        } catch (InvalidArgumentException $exception) {
-            if (null === $expected) {
-                return;
-            }
-
-            throw $exception;
-        } catch (LexException $exception) {
+        } catch (InvalidArgumentException|LexException $exception) {
             if (null === $expected) {
                 return;
             }
@@ -594,6 +587,26 @@ class LexerIntegrationTest extends TestCase
             '<function("'.$arg.'")>',
             [
                 new Token('<aliceTokenizedFunction(FUNCTION_START__function__"'.$arg.'"IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+
+        // Object instantiation
+        yield '[Instantiation] create new object' => [
+            '<(new stdClass())>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTnew stdClass()IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Instantiation] create new object with an argument' => [
+            '<(new stdClass(\'foo\'))>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTnew stdClass(\'foo\')IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
+            ],
+        ];
+        yield '[Instantiation] create new object with an array argument' => [
+            '<(new stdClass([@entity1, @entity2]))>',
+            [
+                new Token('<aliceTokenizedFunction(IDENTITY_STARTnew stdClass([@entity1, @entity2])IDENTITY_OR_FUNCTION_END)>', new TokenType(TokenType::FUNCTION_TYPE)),
             ],
         ];
 

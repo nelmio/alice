@@ -21,16 +21,17 @@ use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Token;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\TokenType;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParseException;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\ExpressionLanguage\ParserNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\TokenParser\Chainable\StringArrayTokenParser
  * @internal
  */
-class StringArrayTokenParserTest extends TestCase
+#[CoversClass(StringArrayTokenParser::class)]
+final class StringArrayTokenParserTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -72,10 +73,6 @@ class StringArrayTokenParserTest extends TestCase
             $parser = new StringArrayTokenParser(new FakeParser());
 
             $parser->parse($token);
-
-            if (PHP_VERSION_ID < 80000) {
-                self::fail('Expected exception to be thrown.');
-            }
         } catch (ParseException $exception) {
             self::assertEquals(
                 'Could not parse the token "" (type: STRING_ARRAY_TYPE).',

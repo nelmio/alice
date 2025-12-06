@@ -24,6 +24,7 @@ use Nelmio\Alice\Generator\ResolvedValueWithFixtureSet;
 use Nelmio\Alice\Generator\ValueResolverInterface;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -32,10 +33,10 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Value\ValueResolverRegistry
  * @internal
  */
-class ValueResolverRegistryTest extends TestCase
+#[CoversClass(ValueResolverRegistry::class)]
+final class ValueResolverRegistryTest extends TestCase
 {
     use ProphecyTrait;
 

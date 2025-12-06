@@ -16,13 +16,14 @@ namespace Nelmio\Alice\Faker\Provider;
 use Nelmio\Alice\Definition\Fixture\SimpleFixture;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use Nelmio\Alice\Throwable\Exception\NoValueForCurrentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Faker\Provider\AliceProvider
  * @internal
  */
-class AliceProviderTest extends TestCase
+#[CoversClass(AliceProvider::class)]
+final class AliceProviderTest extends TestCase
 {
     public function testIdentityReturnsTheValueUnchanged(): void
     {

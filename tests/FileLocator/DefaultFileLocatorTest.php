@@ -15,14 +15,16 @@ namespace Nelmio\Alice\FileLocator;
 
 use Nelmio\Alice\FileLocatorInterface;
 use Nelmio\Alice\Throwable\Exception\FileLocator\FileNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 
 /**
- * @covers \Nelmio\Alice\FileLocator\DefaultFileLocator
  * @internal
  */
-class DefaultFileLocatorTest extends TestCase
+#[CoversClass(DefaultFileLocator::class)]
+final class DefaultFileLocatorTest extends TestCase
 {
     /**
      * @var DefaultFileLocator
@@ -39,15 +41,11 @@ class DefaultFileLocatorTest extends TestCase
         self::assertTrue(is_a(DefaultFileLocator::class, FileLocatorInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideAbsolutePaths
-     * @param mixed $path
-     */
+    #[DataProvider('provideAbsolutePaths')]
     public function testCanDetectAbsolutePaths($path): void
     {
         $reflectionObject = new ReflectionObject($this->locator);
         $methodReflection = $reflectionObject->getMethod('isAbsolutePath');
-        $methodReflection->setAccessible(true);
 
         self::assertTrue(
             $methodReflection->invoke($this->locator, $path),

@@ -18,14 +18,15 @@ use Nelmio\Alice\Definition\ServiceReference\InstantiatedReference;
 use Nelmio\Alice\Definition\ServiceReference\MutableReference;
 use Nelmio\Alice\Definition\ServiceReference\StaticReference;
 use Nelmio\Alice\Entity\StdClassFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCall\MethodCallWithReference
  * @internal
  */
-class MethodCallWithReferenceTest extends TestCase
+#[CoversClass(MethodCallWithReference::class)]
+final class MethodCallWithReferenceTest extends TestCase
 {
     public function testIsAMethodCall(): void
     {

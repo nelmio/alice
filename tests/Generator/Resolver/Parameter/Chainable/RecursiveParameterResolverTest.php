@@ -21,16 +21,19 @@ use Nelmio\Alice\Generator\Resolver\ResolvingContext;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\RecursionLimitReachedException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\Chainable\RecursiveParameterResolver
  * @internal
  */
-class RecursiveParameterResolverTest extends TestCase
+#[CoversClass(RecursiveParameterResolver::class)]
+final class RecursiveParameterResolverTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -96,9 +99,7 @@ class RecursiveParameterResolverTest extends TestCase
         $decoratedResolverProphecy->canResolve(Argument::any())->shouldHaveBeenCalledTimes(2);
     }
 
-    /**
-     * @testdox Resolves the given parameter two times with the decorated resolver. If the two results are identical, return this result
-     */
+    #[TestDox('Resolves the given parameter two times with the decorated resolver. If the two results are identical, return this result')]
     public function testResolveWithNoChange(): void
     {
         $parameter = new Parameter('foo', null);
@@ -198,9 +199,7 @@ class RecursiveParameterResolverTest extends TestCase
         $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(3);
     }
 
-    /**
-     * @dataProvider provideContexts
-     */
+    #[DataProvider('provideContexts')]
     public function testTheSameContextIsPassedBetweenEachResolution(?ResolvingContext $context = null): void
     {
         $parameter = new Parameter('foo', null);
@@ -216,9 +215,7 @@ class RecursiveParameterResolverTest extends TestCase
         $resolver->resolve($parameter, new ParameterBag(), new ParameterBag(), $context);
     }
 
-    /**
-     * @testdox Resolves the given parameter two times with the decorated resolver. As the results differ, re-iterate the operation until two successive resolutions leads to the same result.
-     */
+    #[TestDox('Resolves the given parameter two times with the decorated resolver. As the results differ, re-iterate the operation until two successive resolutions leads to the same result.')]
     public function testResolveWithChange(): void
     {
         $parameter = new Parameter('foo', null);

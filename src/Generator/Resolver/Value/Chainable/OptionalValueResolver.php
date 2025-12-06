@@ -27,7 +27,6 @@ use Nelmio\Alice\IsAServiceTrait;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundExceptionFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueException;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\UnresolvableValueExceptionFactory;
-use function mt_rand;
 
 final class OptionalValueResolver implements ChainableValueResolverInterface, ValueResolverAwareInterface
 {

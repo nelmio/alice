@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception;
 
 use Nelmio\Alice\Definition\Fixture\DummyFixture;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\NoValueForCurrentExceptionFactory
  * @internal
  */
-class NoValueForCurrentExceptionFactoryTest extends TestCase
+#[CoversClass(NoValueForCurrentExceptionFactory::class)]
+final class NoValueForCurrentExceptionFactoryTest extends TestCase
 {
     public function testCreateException(): void
     {

@@ -14,26 +14,24 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Definition\Value\ParameterValue
  * @internal
  */
-class ParameterValueTest extends TestCase
+#[CoversClass(ParameterValue::class)]
+final class ParameterValueTest extends TestCase
 {
     public function testIsAValue(): void
     {
         self::assertTrue(is_a(ParameterValue::class, ValueInterface::class, true));
     }
 
-    /**
-     * @dataProvider provideInputValues
-     * @param mixed $value
-     * @param mixed $errorMessage
-     */
+    #[DataProvider('provideInputValues')]
     public function testThrowsErrorIfInvalidTypeGiven($value, $errorMessage): void
     {
         try {

@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\Throwable\Exception;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\FixtureNotFoundExceptionFactory
  * @internal
  */
-class FixtureNotFoundExceptionFactoryTest extends TestCase
+#[CoversClass(FixtureNotFoundExceptionFactory::class)]
+final class FixtureNotFoundExceptionFactoryTest extends TestCase
 {
     public function testCreateNewExceptionWithFactory(): void
     {

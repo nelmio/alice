@@ -23,16 +23,17 @@ use Nelmio\Alice\Generator\GenerationContext;
 use Nelmio\Alice\Generator\Instantiator\ChainableInstantiatorInterface;
 use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\NoMethodCallInstantiator
  * @internal
  */
-class NoMethodCallInstantiatorTest extends TestCase
+#[CoversClass(NoMethodCallInstantiator::class)]
+final class NoMethodCallInstantiatorTest extends TestCase
 {
     /**
      * @var NoMethodCallInstantiator
@@ -84,18 +85,11 @@ class NoMethodCallInstantiatorTest extends TestCase
             (new ReflectionObject($instance))->getProperty('requiredParam');
             self::fail('Expected exception to be thrown.');
         } catch (ReflectionException $exception) {
-            if (PHP_VERSION_ID < 80000) {
-                self::assertEquals(
-                    'Property requiredParam does not exist',
-                    $exception->getMessage(),
-                );
-            } else {
-                self::assertEquals(
-                    'Property Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor::$requiredParam'
-                    .' does not exist',
-                    $exception->getMessage(),
-                );
-            }
+            self::assertEquals(
+                'Property Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor::$requiredParam'
+                .' does not exist',
+                $exception->getMessage(),
+            );
         }
     }
 

@@ -20,6 +20,7 @@ use Nelmio\Alice\Generator\Resolver\ParameterResolverInterface;
 use Nelmio\Alice\Parameter;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Resolver\ResolverNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -28,10 +29,10 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\Generator\Resolver\Parameter\ParameterResolverRegistry
  * @internal
  */
-class ParameterResolverRegistryTest extends TestCase
+#[CoversClass(ParameterResolverRegistry::class)]
+final class ParameterResolverRegistryTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -53,7 +54,6 @@ class ParameterResolverRegistryTest extends TestCase
     public function testInjectsItselfToParameterResolverAwareResolvers(): void
     {
         $propRefl = (new ReflectionClass(ParameterResolverRegistry::class))->getProperty('resolvers');
-        $propRefl->setAccessible(true);
 
         $oneResolver = new FakeChainableParameterResolver();
         $secondResolver = new DummyChainableParameterResolverAwareResolver();

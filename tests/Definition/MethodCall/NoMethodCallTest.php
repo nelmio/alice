@@ -15,13 +15,14 @@ namespace Nelmio\Alice\Definition\MethodCall;
 
 use LogicException;
 use Nelmio\Alice\Definition\MethodCallInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\MethodCall\NoMethodCall
  * @internal
  */
-class NoMethodCallTest extends TestCase
+#[CoversClass(NoMethodCall::class)]
+final class NoMethodCallTest extends TestCase
 {
     public function testIsAMethodCall(): void
     {

@@ -23,6 +23,7 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserAwareInterface;
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParserInterface;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\DenormalizerNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -32,10 +33,10 @@ use stdClass;
 use TypeError;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\FixtureDenormalizerRegistry
  * @internal
  */
-class FixtureDenormalizerRegistryTest extends TestCase
+#[CoversClass(FixtureDenormalizerRegistry::class)]
+final class FixtureDenormalizerRegistryTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -47,7 +48,6 @@ class FixtureDenormalizerRegistryTest extends TestCase
     protected function setUp(): void
     {
         $propRelf = (new ReflectionClass(FixtureDenormalizerRegistry::class))->getProperty('denormalizers');
-        $propRelf->setAccessible(true);
 
         $this->propRefl = $propRelf;
     }

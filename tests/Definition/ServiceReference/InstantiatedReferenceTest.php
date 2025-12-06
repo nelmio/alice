@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\ServiceReference;
 
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Nelmio\Alice\Definition\ServiceReference\InstantiatedReference
  * @internal
  */
-class InstantiatedReferenceTest extends TestCase
+#[CoversClass(InstantiatedReference::class)]
+final class InstantiatedReferenceTest extends TestCase
 {
     public function testIsAReference(): void
     {

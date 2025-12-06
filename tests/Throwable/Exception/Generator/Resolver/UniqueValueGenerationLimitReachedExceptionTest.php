@@ -14,14 +14,15 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Throwable\Exception\Generator\Resolver;
 
 use Nelmio\Alice\Throwable\ResolutionThrowable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * @covers \Nelmio\Alice\Throwable\Exception\Generator\Resolver\UniqueValueGenerationLimitReachedException
  * @internal
  */
-class UniqueValueGenerationLimitReachedExceptionTest extends TestCase
+#[CoversClass(UniqueValueGenerationLimitReachedException::class)]
+final class UniqueValueGenerationLimitReachedExceptionTest extends TestCase
 {
     public function testIsARuntimeException(): void
     {

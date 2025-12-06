@@ -15,17 +15,11 @@
          colors="true"
          enforceTimeLimit="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
+         cacheDirectory="var/phpunit-cache"
+         displayDetailsOnPhpunitDeprecations="true"
          executionOrder="random">
 
-    <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0"/>
-    </php>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
-    </listeners>
-
-    <coverage>
+    <source>
         <include>
             <directory>src</directory>
         </include>
@@ -33,11 +27,7 @@
             <directory>src/Bridge</directory>
             <file>src/deep_clone.php</file>
         </exclude>
-
-        <report>
-            <clover outputFile="dist/clover.xml"/>
-        </report>
-    </coverage>
+    </source>
 
     <testsuites>
         <testsuite name="Dependent tests">
@@ -55,7 +45,6 @@
             <file>tests/Definition/Value/FunctionCallValueTest.php</file>
             <file>tests/Definition/Value/FixtureMethodCallValueTest.php</file>
             <file>tests/Definition/Value/FixtureReferenceValueTest.php</file>
-            <file>tests/Definition/Value/FixturePropertyValueTest.php</file>
             <file>tests/Definition/Value/FixturePropertyValueTest.php</file>
             <file>tests/Definition/Value/UniqueValueTest.php</file>
             <file>tests/ParameterTest.php</file>
@@ -76,6 +65,36 @@
         <testsuite name="Independent tests">
             <directory>tests</directory>
             <exclude>tests/Bridge</exclude>
+            <exclude>tests/Definition/PropertyTest.php</exclude>
+            <exclude>tests/Definition/PropertyBagTest.php</exclude>
+            <exclude>tests/Definition/MethodCallBagTest.php</exclude>
+            <exclude>tests/Definition/SpecificationBagTest.php</exclude>
+            <exclude>tests/Definition/FlagBagTest.php</exclude>
+            <exclude>tests/Definition/Fixture/SimpleFixtureTest.php</exclude>
+            <exclude>tests/Definition/Fixture/SimpleFixtureWithFlagsTest.php</exclude>
+            <exclude>tests/Definition/Fixture/TemplatingFixtureTest.php</exclude>
+            <exclude>tests/Definition/ServiceReference/FixtureReferenceTest.php</exclude>
+            <exclude>tests/Definition/Fixture/TemplatingTest.php</exclude>
+            <exclude>tests/Definition/MethodCall/OptionalMethodCallTest.php</exclude>
+            <exclude>tests/Definition/Value/FunctionCallValueTest.php</exclude>
+            <exclude>tests/Definition/Value/FixtureMethodCallValueTest.php</exclude>
+            <exclude>tests/Definition/Value/FixtureReferenceValueTest.php</exclude>
+            <exclude>tests/Definition/Value/FixturePropertyValueTest.php</exclude>
+            <exclude>tests/Definition/Value/UniqueValueTest.php</exclude>
+            <exclude>tests/ParameterTest.php</exclude>
+            <exclude>tests/ParameterBagTest.php</exclude>
+            <exclude>tests/FixtureBagTest.php</exclude>
+            <exclude>tests/Definition/Object/SimpleObjectTest.php</exclude>
+            <exclude>tests/ObjectBagTest.php</exclude>
+            <exclude>tests/ObjectSetTest.php</exclude>
+            <exclude>tests/FixtureSetTest.php</exclude>
+            <exclude>tests/FixtureBuilder/BareFixtureSetTest.php</exclude>
+            <exclude>tests/Generator/ResolvedFixtureSetTest.php</exclude>
+            <exclude>tests/Generator/ResolvedValueWithFixtureSetTest.php</exclude>
+            <exclude>tests/Generator/Resolver/Fixture/TemplatingFixtureBagTest.php</exclude>
+            <exclude>tests/Generator/Resolver/UniqueValuesPoolTest.php</exclude>
+            <exclude>tests/FixtureBuilder/ExpressionLanguage/TokenTypeTest.php</exclude>
+            <exclude>tests/FixtureBuilder/ExpressionLanguage/TokenTest.php</exclude>
         </testsuite>
     </testsuites>
 </phpunit>

@@ -39,7 +39,7 @@ $config = new FidryConfig(
         For the full copyright and license information, please view the LICENSE
         file that was distributed with this source code.
         EOF,
-    74_000,
+    82_000,
 );
 
 $config->addRules([
@@ -47,9 +47,10 @@ $config->addRules([
     'php_unit_test_annotation' => false,
     'phpdoc_no_empty_return' => false,
     'static_lambda' => false,
+    'php_unit_data_provider_method_order' => false,
 ]);
 
 $config->setFinder($finder);
-$config->setCacheFile(__DIR__.'/dist/.php-cs-fixer.cache');
+$config->setCacheFile(__DIR__.'/var/.php-cs-fixer.cache');
 
 return $config;

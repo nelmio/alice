@@ -18,16 +18,18 @@ use Nelmio\Alice\Definition\Value\FixtureReferenceValue;
 use Nelmio\Alice\Definition\Value\FunctionCallValue;
 use Nelmio\Alice\Definition\Value\ListValue;
 use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\ParserInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser
  * @internal
  */
-class FunctionFixtureReferenceParserTest extends TestCase
+#[CoversClass(FunctionFixtureReferenceParser::class)]
+final class FunctionFixtureReferenceParserTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -152,11 +154,7 @@ class FunctionFixtureReferenceParserTest extends TestCase
         $decoratedParserProphecy->parse(Argument::any())->shouldHaveBeenCalledTimes(1);
     }
 
-    /**
-     * @dataProvider provideOneElementValues
-     * @param mixed $value
-     * @param mixed $expected
-     */
+    #[DataProvider('provideOneElementValues')]
     public function testIfThereIsOnlyOneElementThenReturnTheElementInsteadOfAValueList($value, $expected): void
     {
         $decoratedParserProphecy = $this->prophesize(ParserInterface::class);

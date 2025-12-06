@@ -1,6 +1,6 @@
 {
     "require-dev": {
-        "infection/infection": "^0.25",
+        "infection/infection": "*",
         "theofidry/composer-inheritance-plugin": "^1.2"
     },
     "config": {

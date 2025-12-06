@@ -25,6 +25,7 @@ use Nelmio\Alice\Generator\ResolvedFixtureSetFactory;
 use Nelmio\Alice\ObjectBag;
 use Nelmio\Alice\ParameterBag;
 use Nelmio\Alice\Throwable\Exception\Generator\Instantiator\InstantiationException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -32,21 +33,16 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Generator\Instantiator\Chainable\AbstractChainableInstantiator
  * @internal
  */
-class AbstractChainableInstantiatorTest extends TestCase
+#[CoversClass(AbstractChainableInstantiator::class)]
+final class AbstractChainableInstantiatorTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var AbstractChainableInstantiator
-     */
-    private $instantiator;
-
     protected function setUp(): void
     {
-        $this->instantiator = new DummyChainableInstantiator();
+        $instantiator = new DummyChainableInstantiator();
     }
 
     public function testIsAChainableInstantiator(): void

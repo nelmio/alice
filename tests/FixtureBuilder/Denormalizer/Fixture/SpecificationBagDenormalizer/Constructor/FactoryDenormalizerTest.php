@@ -20,15 +20,16 @@ use Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalize
 use Nelmio\Alice\FixtureBuilder\Denormalizer\FlagParser\FakeFlagParser;
 use Nelmio\Alice\FixtureInterface;
 use Nelmio\Alice\Throwable\Exception\FixtureBuilder\Denormalizer\UnexpectedValueException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionClass;
 
 /**
- * @covers \Nelmio\Alice\FixtureBuilder\Denormalizer\Fixture\SpecificationBagDenormalizer\Constructor\FactoryDenormalizer
  * @internal
  */
-class FactoryDenormalizerTest extends TestCase
+#[CoversClass(FactoryDenormalizer::class)]
+final class FactoryDenormalizerTest extends TestCase
 {
     use ProphecyTrait;
 

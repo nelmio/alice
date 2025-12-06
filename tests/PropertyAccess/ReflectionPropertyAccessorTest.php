@@ -16,6 +16,7 @@ namespace Nelmio\Alice\PropertyAccess;
 use Nelmio\Alice\Entity\DummyWithPrivateProperty;
 use Nelmio\Alice\Entity\DummyWithPrivatePropertyChild;
 use Nelmio\Alice\Entity\DummyWithPublicProperty;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -24,10 +25,10 @@ use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @covers \Nelmio\Alice\PropertyAccess\ReflectionPropertyAccessor
  * @internal
  */
-class ReflectionPropertyAccessorTest extends TestCase
+#[CoversClass(ReflectionPropertyAccessor::class)]
+final class ReflectionPropertyAccessorTest extends TestCase
 {
     use ProphecyTrait;
 

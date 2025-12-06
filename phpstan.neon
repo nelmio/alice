@@ -8,6 +8,7 @@ parameters:
         - tests/Bridge
         - src/Generator/Resolver/FixtureSet/FakeFixtureSetResolver.php
     level: 3
+    tmpDir: var/phpstan
     ignoreErrors:
         # To fix at some point
         - path: src/Throwable/Exception/FileLocator/FileNotFoundException.php
@@ -32,6 +33,8 @@ parameters:
           message: '#Unsafe usage of new static#'
         - path: src/FixtureBuilder/ExpressionLanguage/Parser/TokenParser/Chainable/AbstractChainableParserAwareParser.php
           message: '#::parse\(\)#'
+        - path: src/PropertyAccess/ReflectionPropertyAccessor.php
+          identifier: classConstant.nonObject
 
 
         # False positives

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Nelmio\Alice\FixtureBuilder\Denormalizer;
 
-use Nelmio\Alice\FixtureBuilder\BareFixtureSet;
 use Nelmio\Alice\FixtureBuilder\DenormalizerInterface;
 use Nelmio\Alice\NotCallableTrait;
 
@@ -21,7 +20,7 @@ class FakeDenormalizer implements DenormalizerInterface
 {
     use NotCallableTrait;
 
-    public function denormalize(array $data): BareFixtureSet
+    public function denormalize(array $data): never
     {
         $this->__call(__METHOD__, func_get_args());
     }

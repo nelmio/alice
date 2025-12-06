@@ -18,6 +18,7 @@ use Nelmio\Alice\FixtureBuilderInterface;
 use Nelmio\Alice\FixtureSetFactory;
 use Nelmio\Alice\GeneratorInterface;
 use Nelmio\Alice\ObjectSetFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -25,10 +26,10 @@ use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Loader\SimpleDataLoader
  * @internal
  */
-class SimpleDataLoaderTest extends TestCase
+#[CoversClass(SimpleDataLoader::class)]
+final class SimpleDataLoaderTest extends TestCase
 {
     use ProphecyTrait;
 

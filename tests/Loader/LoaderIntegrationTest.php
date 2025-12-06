@@ -20,6 +20,7 @@ use LogicException;
 use Nelmio\Alice\DataLoaderInterface;
 use Nelmio\Alice\Entity as FixtureEntity;
 use Nelmio\Alice\Entity\DummyWithConstructorAndCallable;
+use Nelmio\Alice\Entity\DummyWithConstructorParam;
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\FileLoaderInterface;
 use Nelmio\Alice\FilesLoaderInterface;
@@ -35,6 +36,10 @@ use Nelmio\Alice\Throwable\Exception\Parser\ParserNotFoundException;
 use Nelmio\Alice\Throwable\GenerationThrowable;
 use Nelmio\Alice\User;
 use Nelmio\Alice\UserDetail;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionObject;
@@ -43,11 +48,10 @@ use Throwable;
 use TypeError;
 
 /**
- * @group integration
- *
- * @coversNothing
  * @internal
  */
+#[Group('integration')]
+#[CoversNothing]
 class LoaderIntegrationTest extends TestCase
 {
     public const PARSER_FILES_DIR = __DIR__.'/../../fixtures/Parser/files';
@@ -188,10 +192,9 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @dataProvider provideFixturesToInstantiate
-     *
      * @param object|string $expected
      */
+    #[DataProvider('provideFixturesToInstantiate')]
     public function testObjectInstantiation(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -219,14 +222,12 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @group legacy
-     *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
-     *
-     * @dataProvider provideLegacyFixturesToInstantiate
      *
      * @param object|string $expected
      */
+    #[DataProvider('provideLegacyFixturesToInstantiate')]
+    #[Group('legacy')]
     public function testObjectInstantiationWithLegacyConstruct(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -254,10 +255,9 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @dataProvider provideFixturesToInstantiateWithFactory
-     *
      * @param array|string $expected
      */
+    #[DataProvider('provideFixturesToInstantiateWithFactory')]
     public function testObjectInstantiationWithFactory(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -300,13 +300,10 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @dataProvider provideFixtureToInstantiateWithDeprecatedConstructor
-     *
-     * @group legacy
-     *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
-     * @param mixed $expected
      */
+    #[DataProvider('provideFixtureToInstantiateWithDeprecatedConstructor')]
+    #[Group('legacy')]
     public function testUsingConstructorAsAFactoryIsDeprecated(array $data, $expected): void
     {
         $objects = $this->loader->loadData($data)->getObjects();
@@ -316,10 +313,9 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @dataProvider provideFixturesToHydrate
-     *
      * @param array|string $expected
      */
+    #[DataProvider('provideFixturesToHydrate')]
     public function testObjectHydration(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -347,10 +343,9 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @dataProvider provideFixturesToGenerate
-     *
      * @param string|array $expected
      */
+    #[DataProvider('provideFixturesToGenerate')]
     public function testFixtureGeneration(array $data, $expected, ?string $instanceof = null): void
     {
         try {
@@ -435,10 +430,9 @@ class LoaderIntegrationTest extends TestCase
     }
 
     /**
-     * @group legacy
-     *
      * @expectedDeprecation Using factories with the fixture keyword "__construct" has been deprecated since 3.0.0 and will no longer be supported in Alice 4.0.0. Use "__factory" instead.
      */
+    #[Group('legacy')]
     public function testIfAFixtureAndAnInjectedObjectHaveTheSameIdThenTheInjectedObjectIsOverridden(): void
     {
         $set = $this->loader->loadData(
@@ -873,7 +867,7 @@ class LoaderIntegrationTest extends TestCase
             new ParameterBag(),
             new ObjectBag([
                 'dummy' => new DummyWithConstructorAndCallable(null),
-                'foo-0' => new FixtureEntity\DummyWithConstructorParam(null),
+                'foo-0' => new DummyWithConstructorParam(null),
             ]),
         );
 
@@ -890,7 +884,7 @@ class LoaderIntegrationTest extends TestCase
                     '__construct' => ['foo'],
                 ],
             ],
-            FixtureEntity\DummyWithConstructorParam::class => [
+            DummyWithConstructorParam::class => [
                 'foo-0' => [
                     '__construct' => ['@dummy->foo'],
                 ],
@@ -1394,7 +1388,7 @@ class LoaderIntegrationTest extends TestCase
                     'foz' => '<{foo}>',
                     'foo' => 'baz',
                 ],
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'another_dummy' => [
                         '__construct' => ['@dummy'],
                     ],
@@ -1424,7 +1418,7 @@ class LoaderIntegrationTest extends TestCase
                 'dummy' => $dummy = StdClassFactory::create([
                     'injected' => false,
                 ]),
-                'another_dummy' => new FixtureEntity\DummyWithConstructorParam($dummy),
+                'another_dummy' => new DummyWithConstructorParam($dummy),
             ]),
         );
 
@@ -1475,9 +1469,7 @@ class LoaderIntegrationTest extends TestCase
         }
     }
 
-    /**
-     * @testdox The cache of the loader
-     */
+    #[TestDox('The cache of the loader')]
     public function testGenerationCache(): void
     {
         // This loading will trigger the caching part of the FixtureWildcardReferenceResolver to
@@ -2362,7 +2354,7 @@ class LoaderIntegrationTest extends TestCase
                         ],
                     ],
                 ],
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             '@another_dummy',
@@ -2379,7 +2371,7 @@ class LoaderIntegrationTest extends TestCase
 
                         return $anotherDummy1;
                     })(new FixtureEntity\OnceTimerDummy()),
-                    'dummy' => $dummy1 = new FixtureEntity\DummyWithConstructorParam($yetAnotherDummy1),
+                    'dummy' => $dummy1 = new DummyWithConstructorParam($yetAnotherDummy1),
                 ],
             ],
         ];
@@ -3404,7 +3396,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield '[current] in constructor' => [
             [
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'dummy{1..2}' => [
                         '__construct' => ['<current()>'],
                     ],
@@ -3416,10 +3408,10 @@ class LoaderIntegrationTest extends TestCase
             [
                 'parameters' => [],
                 'objects' => [
-                    'dummy1' => new FixtureEntity\DummyWithConstructorParam(1),
-                    'dummy2' => new FixtureEntity\DummyWithConstructorParam(2),
-                    'dummy_alice' => new FixtureEntity\DummyWithConstructorParam('alice'),
-                    'dummy_bob' => new FixtureEntity\DummyWithConstructorParam('bob'),
+                    'dummy1' => new DummyWithConstructorParam(1),
+                    'dummy2' => new DummyWithConstructorParam(2),
+                    'dummy_alice' => new DummyWithConstructorParam('alice'),
+                    'dummy_bob' => new DummyWithConstructorParam('bob'),
                 ],
             ],
         ];
@@ -3594,7 +3586,7 @@ class LoaderIntegrationTest extends TestCase
                     'ping' => 'pong',
                     'foo' => 'bar',
                 ],
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             [
@@ -3611,7 +3603,7 @@ class LoaderIntegrationTest extends TestCase
                     'foo' => 'bar',
                 ],
                 'objects' => [
-                    'dummy' => new FixtureEntity\DummyWithConstructorParam([
+                    'dummy' => new DummyWithConstructorParam([
                         'foo' => 'pong',
                         'bar' => 'bar',
                     ]),
@@ -3705,7 +3697,7 @@ class LoaderIntegrationTest extends TestCase
 
         yield 'object circular reference' => [
             [
-                FixtureEntity\DummyWithConstructorParam::class => [
+                DummyWithConstructorParam::class => [
                     'dummy' => [
                         '__construct' => [
                             '@another_dummy',
@@ -4201,5 +4193,29 @@ class LoaderIntegrationTest extends TestCase
                 ],
             ];
         })();
+
+        yield 'allow to instantiate an entity with an array arguments' => (static fn () => [
+            [
+                stdClass::class => [
+                    'entity1' => [],
+                    'entity2' => [],
+                    'dummy' => [
+                        'rootClass' => '<(new stdClass())>',
+                        'instance' => '<(new Nelmio\Alice\Entity\DummyWithConstructorParam([@entity1, @entity2]))>',
+                    ],
+                ],
+            ],
+            [
+                'parameters' => [],
+                'objects' => [
+                    'entity1' => new stdClass(),
+                    'entity2' => new stdClass(),
+                    'dummy' => StdClassFactory::create([
+                        'rootClass' => new stdClass(),
+                        'instance' => new DummyWithConstructorParam([new stdClass(), new stdClass()]),
+                    ]),
+                ],
+            ],
+        ])();
     }
 }

@@ -15,26 +15,20 @@ namespace Nelmio\Alice\Definition\Object;
 
 use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use ReflectionProperty;
 use stdClass;
 
 /**
- * @covers \Nelmio\Alice\Definition\Object\SimpleObject
  * @internal
  */
-class SimpleObjectTest extends TestCase
+#[CoversClass(SimpleObject::class)]
+final class SimpleObjectTest extends TestCase
 {
-    /**
-     * @var ReflectionProperty
-     */
-    private $propRefl;
-
     protected function setUp(): void
     {
-        $this->propRefl = (new ReflectionClass(SimpleObject::class))->getProperty('instance');
-        $this->propRefl->setAccessible(true);
+        $propRefl = (new ReflectionClass(SimpleObject::class))->getProperty('instance');
     }
 
     public function testIsAnObject(): void
