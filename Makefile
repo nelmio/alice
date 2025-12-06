@@ -5,7 +5,6 @@ MAKEFLAGS += --no-builtin-rules
 COVERAGE_DIR = dist/coverage
 COVERAGE_DIR_XML = $(COVERAGE_DIR)/xml
 COVERAGE_DIR_HTML = $(COVERAGE_DIR)/html
-CLOVER_COVERAGE = $(COVERAGE_DIR)/clover.xml
 
 PHP_NO_GC = php -d zend.enable_gc=0
 PHP_DBG=phpdbg -qrr -d zend.enable_gc=0 bin/phpunit
@@ -107,7 +106,7 @@ phpunit_symfony: $(PHPUNIT_SYMFONY_BIN)
 .PHONY: phpunit_coverage
 phpunit_coverage: ## Runs PHPUnit with coverage
 phpunit_coverage: $(PHPUNIT_BIN)
-	XDEBUG_MODE=coverage $(PHP_NO_GC) $(PHPUNIT) --exclude-group=integration --coverage-text --coverage-html=$(COVERAGE_DIR_HTML) --coverage-clover=$(CLOVER_COVERAGE)
+	XDEBUG_MODE=coverage $(PHP_NO_GC) $(PHPUNIT) --exclude-group=integration --coverage-text --coverage-html=$(COVERAGE_DIR_HTML)
 
 .PHONY: infection
 infection: 	  ## Runs Infection
@@ -178,7 +177,3 @@ $(INFECTION_BIN): vendor-bin/infection/composer.lock
 
 vendor-bin/infection/composer.lock: vendor-bin/infection/composer.json
 	@echo infection composer.lock is not up to date
-
-$(CLOVER_COVERAGE):
-	$(MAKE) phpunit_coverage
-	touch -c $@
