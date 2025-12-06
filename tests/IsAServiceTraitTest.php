@@ -17,6 +17,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Throwable;
+use function var_dump;
 use const PHP_VERSION_ID;
 
 /**
@@ -34,6 +35,7 @@ final class IsAServiceTraitTest extends TestCase
             self::assertEquals(0, $exception->getCode());
             self::assertNull($exception->getPrevious());
 
+            var_dump(PHP_VERSION_ID);die;
             if (PHP_VERSION_ID < 85_000) {
                 self::assertEquals(
                     'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
