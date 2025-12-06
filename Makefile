@@ -2,7 +2,7 @@
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-COVERAGE_DIR = dist/coverage
+COVERAGE_DIR = var/phpunit-coverage
 COVERAGE_DIR_XML = $(COVERAGE_DIR)/xml
 COVERAGE_DIR_HTML = $(COVERAGE_DIR)/html
 CLOVER_COVERAGE = $(COVERAGE_DIR)/clover.xml
