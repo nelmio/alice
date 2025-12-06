@@ -95,7 +95,7 @@ class ElementFlagParserTest extends FlagParserTestCase
         try {
             $this->parser->parse($element);
             self::fail('Expected exception to be thrown.');
-        } catch (RuntimeException $exception) {
+        } catch (RuntimeException) {
             // expected
         }
     }

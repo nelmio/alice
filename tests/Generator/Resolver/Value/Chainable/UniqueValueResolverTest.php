@@ -255,7 +255,7 @@ class UniqueValueResolverTest extends TestCase
         try {
             $resolver->resolve($value, $fixture, $set, $scope, $context);
             self::fail('Expected exception to be thrown.');
-        } catch (UniqueValueGenerationLimitReachedException $exception) {
+        } catch (UniqueValueGenerationLimitReachedException) {
             $decoratedResolverProphecy->resolve(Argument::cetera())->shouldHaveBeenCalledTimes(150);
         }
     }

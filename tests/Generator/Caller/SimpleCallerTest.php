@@ -361,7 +361,7 @@ class SimpleCallerTest extends TestCase
             $caller->doCallsOn($object, $set, new GenerationContext());
 
             self::fail('Expected exception to be thrown.');
-        } catch (GenerationThrowable $throwable) {
+        } catch (GenerationThrowable) {
             // Expected result
         }
     }
