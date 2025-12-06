@@ -35,7 +35,6 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use function restore_error_handler;
 use function str_repeat;
 use const DIRECTORY_SEPARATOR;
 

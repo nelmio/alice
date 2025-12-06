@@ -18,7 +18,6 @@
          displayDetailsOnPhpunitDeprecations="true"
          enforceTimeLimit="true"
          executionOrder="random"
-         failOnRisky="false"
 >
 
     <testsuites>
