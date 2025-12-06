@@ -305,24 +305,24 @@ final class ObjectBagTest extends TestCase
         self::assertTrue(is_a(ObjectBag::class, Countable::class, true));
 
         $bag = new ObjectBag();
-        self::assertEquals(0, $bag->count());
+        self::assertCount(0, $bag);
 
         $bag = new ObjectBag([
             'foo' => new stdClass(),
             'bar' => new stdClass(),
         ]);
-        self::assertEquals(2, $bag->count());
+        self::assertCount(2, $bag);
 
         $object1 = new CompleteObject(new SimpleObject('foo', new stdClass()));
         $object2 = new CompleteObject(new SimpleObject('bar', new stdClass()));
         $bag = (new ObjectBag())->with($object1)->with($object2);
-        self::assertEquals(2, $bag->count());
+        self::assertCount(2, $bag);
 
         $object3 = new CompleteObject(new SimpleObject('foz', new stdClass()));
         $object4 = new CompleteObject(new SimpleObject('baz', new stdClass()));
         $anotherBag = (new ObjectBag())->with($object3)->with($object4);
         $bag = $bag->mergeWith($anotherBag);
-        self::assertEquals(4, $bag->count());
+        self::assertCount(4, $bag);
     }
 
     private function assertSameObjects(array $expected, ObjectBag $actual): void
