@@ -1,9 +1,9 @@
 {
     "require-dev": {
-        "symfony/framework-bundle": "^5.4 || ^6.3",
-        "symfony/serializer": "^5.4 || ^6.3",
+        "symfony/framework-bundle": "^6.4 || ^7.4",
+        "symfony/serializer": "^6.4 || ^7.4",
         "theofidry/composer-inheritance-plugin": "^1.2",
-        "symfony/runtime": "^5.4 || ^6.3"
+        "symfony/runtime": "^6.4 || ^7.4"
     },
     "config": {
         "bin-dir": "bin",
