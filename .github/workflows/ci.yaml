@@ -7,9 +7,13 @@ on:
     schedule:
         - cron: '45 4 1 * *'
 
+permissions: {}
+
 jobs:
     tests:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         strategy:
             fail-fast: false
             matrix:
