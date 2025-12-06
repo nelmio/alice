@@ -17,7 +17,6 @@ use Nelmio\Alice\Entity\StdClassFactory;
 use Nelmio\Alice\ObjectInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use ReflectionProperty;
 use stdClass;
 
 /**
@@ -26,14 +25,9 @@ use stdClass;
  */
 final class SimpleObjectTest extends TestCase
 {
-    /**
-     * @var ReflectionProperty
-     */
-    private $propRefl;
-
     protected function setUp(): void
     {
-        $this->propRefl = (new ReflectionClass(SimpleObject::class))->getProperty('instance');
+        $propRefl = (new ReflectionClass(SimpleObject::class))->getProperty('instance');
     }
 
     public function testIsAnObject(): void
