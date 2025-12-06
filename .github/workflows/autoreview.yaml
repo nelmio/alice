@@ -9,9 +9,6 @@ on:
 
 permissions: {}
 
-env:
-    PHP_CS_FIXER_IGNORE_ENV: 1
-
 jobs:
     php-cs-fixer:
         name: PHP-CS-Fixer
