@@ -15,7 +15,7 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\DependsExternal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,7 +41,7 @@ final class FixturePropertyValueTest extends TestCase
         self::assertEquals([$reference, $property], $value->getValue());
     }
 
-    #[Depends(FixtureReferenceValueTest::testIsImmutable)]
+    #[DependsExternal(FixtureReferenceValueTest::class, 'testIsImmutable')]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');

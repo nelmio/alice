@@ -22,7 +22,7 @@ use Nelmio\Alice\Definition\ServiceReference\FixtureReferenceTest;
 use Nelmio\Alice\Definition\SpecificationBagFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\DependsExternal;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,7 +31,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(Templating::class)]
 final class TemplatingTest extends TestCase
 {
-    #[Depends(FixtureReferenceTest::testIsImmutable)]
+    #[DependsExternal(FixtureReferenceTest::class, 'testIsImmutable')]
     public function testIsImmutable(): void
     {
         self::assertTrue(true, 'Nothing to do.');
