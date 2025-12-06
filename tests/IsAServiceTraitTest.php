@@ -32,19 +32,11 @@ final class IsAServiceTraitTest extends TestCase
             self::assertEquals(0, $exception->getCode());
             self::assertNull($exception->getPrevious());
 
-            if (PHP_VERSION_ID < 80000) {
-                self::assertEquals(
-                    'Call to private Nelmio\Alice\NotClonableDummy::__clone() from context '
-                    .'\'Nelmio\Alice\IsAServiceTraitTest\'',
-                    $exception->getMessage(),
-                );
-            } else {
-                self::assertEquals(
-                    'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
-                    .'Nelmio\Alice\IsAServiceTraitTest',
-                    $exception->getMessage(),
-                );
-            }
+            self::assertEquals(
+                'Call to private Nelmio\Alice\NotClonableDummy::__clone() from scope '
+                .'Nelmio\Alice\IsAServiceTraitTest',
+                $exception->getMessage(),
+            );
         }
 
         $dummyRefl = new ReflectionClass(NotClonableDummy::class);

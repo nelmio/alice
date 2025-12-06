@@ -72,10 +72,6 @@ final class StringArrayTokenParserTest extends TestCase
             $parser = new StringArrayTokenParser(new FakeParser());
 
             $parser->parse($token);
-
-            if (PHP_VERSION_ID < 80000) {
-                self::fail('Expected exception to be thrown.');
-            }
         } catch (ParseException $exception) {
             self::assertEquals(
                 'Could not parse the token "" (type: STRING_ARRAY_TYPE).',

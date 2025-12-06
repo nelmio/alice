@@ -84,18 +84,11 @@ final class NoMethodCallInstantiatorTest extends TestCase
             (new ReflectionObject($instance))->getProperty('requiredParam');
             self::fail('Expected exception to be thrown.');
         } catch (ReflectionException $exception) {
-            if (PHP_VERSION_ID < 80000) {
-                self::assertEquals(
-                    'Property requiredParam does not exist',
-                    $exception->getMessage(),
-                );
-            } else {
-                self::assertEquals(
-                    'Property Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor::$requiredParam'
-                    .' does not exist',
-                    $exception->getMessage(),
-                );
-            }
+            self::assertEquals(
+                'Property Nelmio\Alice\Entity\Instantiator\DummyWithRequiredParameterInConstructor::$requiredParam'
+                .' does not exist',
+                $exception->getMessage(),
+            );
         }
     }
 
