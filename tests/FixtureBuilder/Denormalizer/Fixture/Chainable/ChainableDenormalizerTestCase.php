@@ -99,6 +99,7 @@ abstract class ChainableDenormalizerTestCase extends TestCase
     public function createDummyDenormalizer(): FixtureDenormalizerInterface
     {
         $decoratedDenormalizerProphecy = $this->prophesize(FixtureDenormalizerInterface::class);
+        // @phpstan-ignore method.notFound
         $decoratedDenormalizerProphecy
             ->denormalize(Argument::cetera())
             ->will(
