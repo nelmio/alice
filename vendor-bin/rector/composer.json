@@ -1,0 +1,12 @@
+{
+    "require-dev": {
+        "rector/rector": "^2.2"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "sort-packages": true,
+        "platform": {
+            "php": "8.3"
+        }
+    }
+}
