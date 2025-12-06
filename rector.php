@@ -17,6 +17,7 @@ use Rector\PHPUnit\PHPUnit100\Rector\Class_\StaticDataProviderClassMethodRector;
 use Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector;
 
 return RectorConfig::configure()
+    ->withCache(__DIR__.'/var/mrector-cache')
     ->withPaths([
         __DIR__ . '/fixtures',
         __DIR__ . '/profiling',

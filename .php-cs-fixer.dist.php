@@ -51,6 +51,6 @@ $config->addRules([
 ]);
 
 $config->setFinder($finder);
-$config->setCacheFile(__DIR__.'/dist/.php-cs-fixer.cache');
+$config->setCacheFile(__DIR__.'/var/.php-cs-fixer.cache');
 
 return $config;

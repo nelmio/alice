@@ -15,6 +15,7 @@
          colors="true"
          enforceTimeLimit="true"
          beStrictAboutTestsThatDoNotTestAnything="false"
+         cacheResultFile="var/phpunit.cache"
          executionOrder="random">
 
     <php>
