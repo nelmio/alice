@@ -16,8 +16,9 @@ namespace Nelmio\Alice\Definition\MethodCall;
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ServiceReferenceInterface;
 use Nelmio\Alice\NotCallableTrait;
+use Stringable;
 
-class MutableMethodCall implements MethodCallInterface
+class MutableMethodCall implements Stringable, MethodCallInterface
 {
     use NotCallableTrait;
 

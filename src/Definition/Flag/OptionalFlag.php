@@ -15,8 +15,9 @@ namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
+use Stringable;
 
-final class OptionalFlag implements FlagInterface
+final class OptionalFlag implements Stringable, FlagInterface
 {
     /**
      * @var int

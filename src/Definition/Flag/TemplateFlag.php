@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
+use Stringable;
 
-final class TemplateFlag implements FlagInterface
+final class TemplateFlag implements Stringable, FlagInterface
 {
     public function __toString(): string
     {

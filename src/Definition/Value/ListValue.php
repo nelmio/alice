@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 use function Nelmio\Alice\deep_clone;
 
 /**
  * Value representing a list of values which will be chained. For example '<foo()> <{bar}>' will be composed of a
  * function result, a static string (' ') and a parameter value.
  */
-final class ListValue implements ValueInterface
+final class ListValue implements Stringable, ValueInterface
 {
     /**
      * @var ValueInterface[]|array

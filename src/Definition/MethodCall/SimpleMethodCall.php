@@ -15,11 +15,12 @@ namespace Nelmio\Alice\Definition\MethodCall;
 
 use Nelmio\Alice\Definition\MethodCallInterface;
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
 /**
  * Minimalist implementation.
  */
-final class SimpleMethodCall implements MethodCallInterface
+final class SimpleMethodCall implements Stringable, MethodCallInterface
 {
     /**
      * @var string

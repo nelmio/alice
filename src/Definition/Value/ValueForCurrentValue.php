@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
 /**
  * Value object placeholder for '<current()>'.
  */
-final class ValueForCurrentValue implements ValueInterface
+final class ValueForCurrentValue implements Stringable, ValueInterface
 {
     public function getValue(): string
     {
