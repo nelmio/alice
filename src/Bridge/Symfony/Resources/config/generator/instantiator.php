@@ -47,11 +47,14 @@ return static function (ContainerConfigurator $container): void {
             service('nelmio_alice.generator.instantiator.registry'),
         ]);
 
-    $services->set(
-        'nelmio_alice.generator.instantiator.registry',
-        InstantiatorRegistry::class,
-        // Injected via a compiler pass
-    );
+    $services
+        ->set(
+            'nelmio_alice.generator.instantiator.registry',
+            InstantiatorRegistry::class,
+        )
+        ->args([
+            tagged_iterator('nelmio_alice.generator.instantiator.chainable_instantiator'),
+        ]);
 
     // Chainables
     $services

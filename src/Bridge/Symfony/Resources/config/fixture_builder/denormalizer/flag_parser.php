@@ -38,11 +38,14 @@ return static function (ContainerConfigurator $container): void {
             service('nelmio_alice.fixture_builder.denormalizer.flag_parser.registry'),
         ]);
 
-    $services->set(
-        'nelmio_alice.fixture_builder.denormalizer.flag_parser.registry',
-        FlagParserRegistry::class,
-        // Arguments injected via a compiler pass
-    );
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.denormalizer.flag_parser.registry',
+            FlagParserRegistry::class,
+        )
+        ->args([
+            tagged_iterator('nelmio_alice.fixture_builder.denormalizer.chainable_flag_parser'),
+        ]);
 
     // Chainables
     $services

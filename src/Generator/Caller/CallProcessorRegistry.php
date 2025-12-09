@@ -29,7 +29,10 @@ final class CallProcessorRegistry implements CallProcessorInterface
      */
     private $processors = [];
 
-    public function __construct(array $processors)
+    /**
+     * @param iterable<ChainableCallProcessorInterface> $processors
+     */
+    public function __construct(iterable $processors)
     {
         $processors = (static fn (ChainableCallProcessorInterface ...$processors) => $processors)(...$processors);
 

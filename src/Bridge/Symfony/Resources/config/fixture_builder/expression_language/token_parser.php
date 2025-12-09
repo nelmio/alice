@@ -42,11 +42,14 @@ return static function (ContainerConfigurator $container): void {
         'nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry',
     );
 
-    $services->set(
-        'nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry',
-        TokenParserRegistry::class,
-        // Arguments injected via compiler pass
-    );
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.parser.token_parser.registry',
+            TokenParserRegistry::class,
+        )
+        ->args([
+            tagged_iterator('nelmio_alice.fixture_builder.expression_language.chainable_token_parser'),
+        ]);
 
     $services->set(
         'nelmio_alice.fixture_builder.expression_language.parser.token_parser.chainable.argument_escaper',

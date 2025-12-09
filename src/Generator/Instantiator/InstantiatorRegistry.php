@@ -32,9 +32,9 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
     private $instantiators;
 
     /**
-     * @param ChainableInstantiatorInterface[] $instantiators
+     * @param iterable<ChainableInstantiatorInterface> $instantiators
      */
-    public function __construct(array $instantiators)
+    public function __construct(iterable $instantiators)
     {
         $this->instantiators = (
             static fn (ChainableInstantiatorInterface ...$instantiators) => $instantiators

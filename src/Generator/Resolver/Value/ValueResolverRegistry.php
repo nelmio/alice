@@ -36,9 +36,9 @@ final class ValueResolverRegistry implements ValueResolverInterface, ObjectGener
     private $resolvers;
 
     /**
-     * @param ChainableValueResolverInterface[] $resolvers
+     * @param iterable<ChainableValueResolverInterface> $resolvers
      */
-    public function __construct(array $resolvers, ?ObjectGeneratorInterface $generator = null)
+    public function __construct(iterable $resolvers, ?ObjectGeneratorInterface $generator = null)
     {
         $this->resolvers = (
             function (?ObjectGeneratorInterface $generator = null, ChainableValueResolverInterface ...$resolvers) {

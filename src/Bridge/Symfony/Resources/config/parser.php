@@ -56,11 +56,14 @@ return static function (ContainerConfigurator $container): void {
             service('nelmio_alice.file_locator'),
         ]);
 
-    $services->set(
-        'nelmio_alice.file_parser.registry',
-        ParserRegistry::class,
-        // Injected via compiler pass
-    );
+    $services
+        ->set(
+            'nelmio_alice.file_parser.registry',
+            ParserRegistry::class,
+        )
+        ->args([
+            tagged_iterator('nelmio_alice.file_parser'),
+        ]);
 
     // Chainables
     $services

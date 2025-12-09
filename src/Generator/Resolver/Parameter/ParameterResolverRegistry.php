@@ -33,21 +33,25 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
     private $resolvers;
 
     /**
-     * @param ChainableParameterResolverInterface[] $resolvers
+     * @param iterable<ChainableParameterResolverInterface> $resolvers
      */
-    public function __construct(array $resolvers)
+    public function __construct(iterable $resolvers)
     {
+        $indexedResolvers = [];
+
         foreach ($resolvers as $index => $resolver) {
             if (false === $resolver instanceof ChainableParameterResolverInterface) {
                 throw TypeErrorFactory::createForInvalidChainableParameterResolver($resolver);
             }
 
             if ($resolver instanceof ParameterResolverAwareInterface) {
-                $resolvers[$index] = $resolver->withResolver($this);
+                $indexedResolvers[$index] = $resolver->withResolver($this);
+            } else {
+                $indexedResolvers[$index] = $resolver;
             }
         }
 
-        $this->resolvers = $resolvers;
+        $this->resolvers = $indexedResolvers;
     }
 
     public function resolve(

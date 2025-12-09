@@ -47,11 +47,14 @@ return static function (ContainerConfigurator $container): void {
             service('nelmio_alice.generator.resolver.parameter.registry'),
         ]);
 
-    $services->set(
-        'nelmio_alice.generator.resolver.parameter.registry',
-        ParameterResolverRegistry::class,
-        // Arguments injected via a compiler pass
-    );
+    $services
+        ->set(
+            'nelmio_alice.generator.resolver.parameter.registry',
+            ParameterResolverRegistry::class,
+        )
+        ->args([
+            tagged_iterator('nelmio_alice.generator.resolver.parameter.chainable_resolver'),
+        ]);
 
     // Chainables
     $services
