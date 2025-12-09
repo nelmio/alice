@@ -31,9 +31,9 @@ final class FixtureDenormalizerRegistry implements FixtureDenormalizerInterface
     private $denormalizers = [];
 
     /**
-     * @param ChainableFixtureDenormalizerInterface[] $denormalizers
+     * @param iterable<ChainableFixtureDenormalizerInterface> $denormalizers
      */
-    public function __construct(FlagParserInterface $flagParser, array $denormalizers)
+    public function __construct(FlagParserInterface $flagParser, iterable $denormalizers)
     {
         foreach ($denormalizers as $index => $denormalizer) {
             if (false === $denormalizer instanceof ChainableFixtureDenormalizerInterface) {

@@ -65,10 +65,8 @@ return static function (ContainerConfigurator $container): void {
         )
         ->args([
             service('nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer'),
-            // Injected via a compiler pass
         ]);
 
-    // Chainables
     $services
         ->set(
             'nelmio_alice.fixture_builder.denormalizer.fixture.registry_denormalizer',
@@ -76,6 +74,7 @@ return static function (ContainerConfigurator $container): void {
         )
         ->args([
             service('nelmio_alice.fixture_builder.denormalizer.flag_parser'),
+            tagged_iterator('nelmio_alice.fixture_builder.denormalizer.chainable_fixture_denormalizer'),
         ]);
 
     $services->set(
@@ -83,6 +82,7 @@ return static function (ContainerConfigurator $container): void {
         NullListNameDenormalizer::class,
     );
 
+    // Chainables
     $services
         ->set(
             'nelmio_alice.fixture_builder.denormalizer.fixture.chainable.temporary_list',
@@ -261,6 +261,7 @@ return static function (ContainerConfigurator $container): void {
         )
         ->args([
             service('nelmio_alice.fixture_builder.denormalizer.fixture.specs.calls.function_denormalizer'),
+            tagged_iterator('nelmio_alice.fixture_builder.denormalizer.chainable_method_flag_handler'),
         ]);
 
     $services

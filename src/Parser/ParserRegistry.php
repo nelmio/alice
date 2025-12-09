@@ -27,9 +27,9 @@ final class ParserRegistry implements ParserInterface
     private $parsers;
 
     /**
-     * @param ChainableParserInterface[] $parsers
+     * @param iterable<ChainableParserInterface> $parsers
      */
-    public function __construct(array $parsers)
+    public function __construct(iterable $parsers)
     {
         $this->parsers = (static fn (ChainableParserInterface ...$parsers) => $parsers)(...$parsers);
     }

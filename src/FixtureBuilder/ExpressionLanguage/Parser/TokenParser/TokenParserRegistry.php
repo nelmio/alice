@@ -34,9 +34,9 @@ final class TokenParserRegistry implements TokenParserInterface, ParserAwareInte
     private $parsers;
 
     /**
-     * @param ChainableTokenParserInterface[] $parsers
+     * @param iterable<ChainableTokenParserInterface> $parsers
      */
-    public function __construct(array $parsers)
+    public function __construct(iterable $parsers)
     {
         $this->parsers = (
             static fn (ChainableTokenParserInterface ...$parsers) => $parsers

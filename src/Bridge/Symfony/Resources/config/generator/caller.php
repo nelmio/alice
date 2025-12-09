@@ -39,11 +39,14 @@ return static function (ContainerConfigurator $container): void {
             service('nelmio_alice.generator.named_arguments_resolver'),
         ]);
 
-    $services->set(
-        'nelmio_alice.generator.caller.registry',
-        CallProcessorRegistry::class,
-        // Injected via a compiler pass
-    );
+    $services
+        ->set(
+            'nelmio_alice.generator.caller.registry',
+            CallProcessorRegistry::class,
+        )
+        ->args([
+            tagged_iterator('nelmio_alice.generator.caller.chainable_call_processor'),
+        ]);
 
     // Chainables
     $services

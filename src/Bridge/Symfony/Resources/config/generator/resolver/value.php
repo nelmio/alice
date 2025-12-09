@@ -42,11 +42,14 @@ return static function (ContainerConfigurator $container): void {
         'nelmio_alice.generator.resolver.value.registry',
     );
 
-    $services->set(
-        'nelmio_alice.generator.resolver.value.registry',
-        ValueResolverRegistry::class,
-        // Injected via a compiler pass
-    );
+    $services
+        ->set(
+            'nelmio_alice.generator.resolver.value.registry',
+            ValueResolverRegistry::class,
+        )
+        ->args([
+            tagged_iterator('nelmio_alice.generator.resolver.value.chainable_resolver'),
+        ]);
 
     $services->set(
         'nelmio_alice.generator.resolver.value.unique_values_pool',
