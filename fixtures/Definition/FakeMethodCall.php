@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition;
 
 use Nelmio\Alice\NotCallableTrait;
+use Stringable;
 
-class FakeMethodCall implements MethodCallInterface
+class FakeMethodCall implements Stringable, MethodCallInterface
 {
     use NotCallableTrait;
 

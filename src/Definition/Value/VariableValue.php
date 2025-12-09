@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
 /**
  * Value object representing '$username'.
  */
-final class VariableValue implements ValueInterface
+final class VariableValue implements Stringable, ValueInterface
 {
     /**
      * @var string

@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
 /**
  * Value object a reference to a fixture e.g. "@user0" matching a pattern. For example "@user*" will result in a pattern
  * '~^user.*~' which can match "@user0", "@user_base" etc.
  */
-final class FixtureMatchReferenceValue implements ValueInterface
+final class FixtureMatchReferenceValue implements Stringable, ValueInterface
 {
     /**
      * @var string

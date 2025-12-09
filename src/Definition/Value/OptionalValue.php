@@ -15,11 +15,12 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Error\TypeErrorFactory;
+use Stringable;
 
 /**
  * Value object representing "80%? 'value': 'empty'".
  */
-final class OptionalValue implements ValueInterface
+final class OptionalValue implements Stringable, ValueInterface
 {
     /**
      * @var int|ValueInterface
