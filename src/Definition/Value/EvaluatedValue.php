@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
-final class EvaluatedValue implements ValueInterface
+final class EvaluatedValue implements Stringable, ValueInterface
 {
     private string $expression;
 

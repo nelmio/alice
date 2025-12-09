@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 use function Nelmio\Alice\deep_clone;
 
-final class ArrayValue implements ValueInterface
+final class ArrayValue implements Stringable, ValueInterface
 {
     /**
      * @var ValueInterface[]|array

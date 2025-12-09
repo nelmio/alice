@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
+use Stringable;
 
-class MutableValue implements ValueInterface
+class MutableValue implements Stringable, ValueInterface
 {
     private $value;
 

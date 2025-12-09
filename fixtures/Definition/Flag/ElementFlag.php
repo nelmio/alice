@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Nelmio\Alice\Definition\Flag;
 
 use Nelmio\Alice\Definition\FlagInterface;
+use Stringable;
 
-final class ElementFlag implements FlagInterface
+final class ElementFlag implements Stringable, FlagInterface
 {
     /**
      * @var string

@@ -15,9 +15,10 @@ namespace Nelmio\Alice\Definition\Value;
 
 use Nelmio\Alice\Definition\ValueInterface;
 use Nelmio\Alice\Throwable\Exception\InvalidArgumentExceptionFactory;
+use Stringable;
 use function Nelmio\Alice\deep_clone;
 
-final class UniqueValue implements ValueInterface
+final class UniqueValue implements Stringable, ValueInterface
 {
     /**
      * @var string
