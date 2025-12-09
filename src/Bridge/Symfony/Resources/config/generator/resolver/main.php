@@ -13,16 +13,31 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver;
+use Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver;
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->alias('nelmio_alice.generator.resolver.fixture_set', 'nelmio_alice.generator.resolver.fixture_set.remove_conflicting_objects');
+    $services->alias(
+        'nelmio_alice.generator.resolver.fixture_set',
+        'nelmio_alice.generator.resolver.fixture_set.remove_conflicting_objects',
+    );
 
-    $services->set('nelmio_alice.generator.resolver.fixture_set.remove_conflicting_objects', \Nelmio\Alice\Generator\Resolver\FixtureSet\RemoveConflictingObjectsResolver::class)
-        ->args([service('nelmio_alice.generator.resolver.fixture_set.simple')]);
+    $services
+        ->set(
+            'nelmio_alice.generator.resolver.fixture_set.remove_conflicting_objects',
+            RemoveConflictingObjectsResolver::class,
+        )
+        ->args([
+            service('nelmio_alice.generator.resolver.fixture_set.simple'),
+        ]);
 
-    $services->set('nelmio_alice.generator.resolver.fixture_set.simple', \Nelmio\Alice\Generator\Resolver\FixtureSet\SimpleFixtureSetResolver::class)
+    $services
+        ->set(
+            'nelmio_alice.generator.resolver.fixture_set.simple',
+            SimpleFixtureSetResolver::class,
+        )
         ->args([
             service('nelmio_alice.generator.resolver.parameter_bag'),
             service('nelmio_alice.generator.resolver.fixture_bag'),

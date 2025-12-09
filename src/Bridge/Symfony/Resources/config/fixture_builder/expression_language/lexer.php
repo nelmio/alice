@@ -13,29 +13,78 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer;
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->alias('nelmio_alice.fixture_builder.expression_language.lexer', 'nelmio_alice.fixture_builder.expression_language.lexer.empty_value_lexer');
+    $services->alias(
+        'nelmio_alice.fixture_builder.expression_language.lexer',
+        'nelmio_alice.fixture_builder.expression_language.lexer.empty_value_lexer',
+    );
 
-    $services->set('nelmio_alice.fixture_builder.expression_language.lexer.empty_value_lexer', \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\EmptyValueLexer::class)
-        ->args([service('nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer')]);
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.lexer.empty_value_lexer',
+            EmptyValueLexer::class,
+        )
+        ->args([
+            service('nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer'),
+        ]);
 
-    $services->set('nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer', \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceEscaperLexer::class)
-        ->args([service('nelmio_alice.fixture_builder.expression_language.lexer.globals_patterns_lexer')]);
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.lexer.reference_escaper_lexer',
+            ReferenceEscaperLexer::class,
+        )
+        ->args([
+            service('nelmio_alice.fixture_builder.expression_language.lexer.globals_patterns_lexer'),
+        ]);
 
-    $services->set('nelmio_alice.fixture_builder.expression_language.lexer.globals_patterns_lexer', \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\GlobalPatternsLexer::class)
-        ->args([service('nelmio_alice.fixture_builder.expression_language.lexer.function_lexer')]);
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.lexer.globals_patterns_lexer',
+            GlobalPatternsLexer::class,
+        )
+        ->args([
+            service('nelmio_alice.fixture_builder.expression_language.lexer.function_lexer'),
+        ]);
 
-    $services->set('nelmio_alice.fixture_builder.expression_language.lexer.function_lexer', \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\FunctionLexer::class)
-        ->args([service('nelmio_alice.fixture_builder.expression_language.lexer.string_then_reference_lexer')]);
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.lexer.function_lexer',
+            FunctionLexer::class,
+        )
+        ->args([
+            service('nelmio_alice.fixture_builder.expression_language.lexer.string_then_reference_lexer'),
+        ]);
 
-    $services->set('nelmio_alice.fixture_builder.expression_language.lexer.string_then_reference_lexer', \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\StringThenReferenceLexer::class)
-        ->args([service('nelmio_alice.fixture_builder.expression_language.lexer.sub_patterns_lexer')]);
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.lexer.string_then_reference_lexer',
+            StringThenReferenceLexer::class,
+        )
+        ->args([
+            service('nelmio_alice.fixture_builder.expression_language.lexer.sub_patterns_lexer'),
+        ]);
 
-    $services->set('nelmio_alice.fixture_builder.expression_language.lexer.sub_patterns_lexer', \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\SubPatternsLexer::class)
-        ->args([service('nelmio_alice.fixture_builder.expression_language.lexer.reference_lexer')]);
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.lexer.sub_patterns_lexer',
+            SubPatternsLexer::class,
+        )
+        ->args([
+            service('nelmio_alice.fixture_builder.expression_language.lexer.reference_lexer'),
+        ]);
 
-    $services->set('nelmio_alice.fixture_builder.expression_language.lexer.reference_lexer', \Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Lexer\ReferenceLexer::class);
+    $services->set(
+        'nelmio_alice.fixture_builder.expression_language.lexer.reference_lexer',
+        ReferenceLexer::class,
+    );
 };

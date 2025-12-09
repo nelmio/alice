@@ -13,18 +13,31 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Faker\Factory;
+use Faker\Generator;
+use Nelmio\Alice\Faker\Provider\AliceProvider;
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->alias(\Faker\Generator::class, 'nelmio_alice.faker.generator')
+    $services
+        ->alias(Generator::class, 'nelmio_alice.faker.generator')
         ->public();
 
-    $services->set('nelmio_alice.faker.generator', \Faker\Generator::class)
+    $services
+        ->set(
+            'nelmio_alice.faker.generator',
+            Generator::class,
+        )
         ->args(['%nelmio_alice.locale%'])
-        ->factory([\Faker\Factory::class, 'create'])
+        ->factory([Factory::class, 'create'])
         ->call('seed', ['%nelmio_alice.seed%']);
+    // Calls to add tagged providers are made in a compiler pass
 
-    $services->set('nelmio_alice.faker.provider.alice', \Nelmio\Alice\Faker\Provider\AliceProvider::class)
+    $services
+        ->set(
+            'nelmio_alice.faker.provider.alice',
+            AliceProvider::class,
+        )
         ->tag('nelmio_alice.faker.provider');
 };

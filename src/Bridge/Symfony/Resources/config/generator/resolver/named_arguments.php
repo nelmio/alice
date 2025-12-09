@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Nelmio\Alice\Generator\NamedArgumentsResolver;
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->set('nelmio_alice.generator.named_arguments_resolver', \Nelmio\Alice\Generator\NamedArgumentsResolver::class);
+    $services->set(
+        'nelmio_alice.generator.named_arguments_resolver',
+        NamedArgumentsResolver::class,
+    );
 };

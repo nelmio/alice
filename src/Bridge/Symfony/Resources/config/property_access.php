@@ -13,11 +13,22 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Nelmio\Alice\PropertyAccess\StdPropertyAccessor;
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
-    $services->alias('nelmio_alice.property_accessor', 'nelmio_alice.property_accessor.std');
+    $services->alias(
+        'nelmio_alice.property_accessor',
+        'nelmio_alice.property_accessor.std',
+    );
 
-    $services->set('nelmio_alice.property_accessor.std', \Nelmio\Alice\PropertyAccess\StdPropertyAccessor::class)
-        ->args([service('property_accessor')]);
+    $services
+        ->set(
+            'nelmio_alice.property_accessor.std',
+            StdPropertyAccessor::class,
+        )
+        ->args([
+            service('property_accessor'),
+        ]);
 };

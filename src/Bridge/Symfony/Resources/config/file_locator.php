@@ -13,10 +13,18 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Nelmio\Alice\FileLocator\DefaultFileLocator;
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
-    $services->alias('nelmio_alice.file_locator', 'nelmio_alice.file_locator.default');
+    $services->alias(
+        'nelmio_alice.file_locator',
+        'nelmio_alice.file_locator.default',
+    );
 
-    $services->set('nelmio_alice.file_locator.default', \Nelmio\Alice\FileLocator\DefaultFileLocator::class);
+    $services->set(
+        'nelmio_alice.file_locator.default',
+        DefaultFileLocator::class,
+    );
 };

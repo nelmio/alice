@@ -13,11 +13,18 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver;
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->alias('nelmio_alice.generator.resolver.fixture_bag', 'nelmio_alice.generator.resolver.fixture_bag.template_bag');
+    $services->alias(
+        'nelmio_alice.generator.resolver.fixture_bag',
+        'nelmio_alice.generator.resolver.fixture_bag.template_bag',
+    );
 
-    $services->set('nelmio_alice.generator.resolver.fixture_bag.template_bag', \Nelmio\Alice\Generator\Resolver\Fixture\TemplateFixtureBagResolver::class);
+    $services->set(
+        'nelmio_alice.generator.resolver.fixture_bag.template_bag',
+        TemplateFixtureBagResolver::class,
+    );
 };

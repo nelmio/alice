@@ -13,17 +13,37 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator;
+use Nelmio\Alice\Generator\Hydrator\SimpleHydrator;
+
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
-    $parameters = $container->parameters();
 
-    $services->alias('nelmio_alice.generator.hydrator', 'nelmio_alice.generator.hydrator.simple');
+    $services->alias(
+        'nelmio_alice.generator.hydrator',
+        'nelmio_alice.generator.hydrator.simple',
+    );
 
-    $services->set('nelmio_alice.generator.hydrator.simple', \Nelmio\Alice\Generator\Hydrator\SimpleHydrator::class)
-        ->args([service('nelmio_alice.generator.hydrator.property')]);
+    $services
+        ->set(
+            'nelmio_alice.generator.hydrator.simple',
+            SimpleHydrator::class,
+        )
+        ->args([
+            service('nelmio_alice.generator.hydrator.property'),
+        ]);
 
-    $services->alias('nelmio_alice.generator.hydrator.property', 'nelmio_alice.generator.hydrator.property.symfony_property_access');
+    $services->alias(
+        'nelmio_alice.generator.hydrator.property',
+        'nelmio_alice.generator.hydrator.property.symfony_property_access',
+    );
 
-    $services->set('nelmio_alice.generator.hydrator.property.symfony_property_access', \Nelmio\Alice\Generator\Hydrator\Property\SymfonyPropertyAccessorHydrator::class)
-        ->args([service('nelmio_alice.property_accessor')]);
+    $services
+        ->set(
+            'nelmio_alice.generator.hydrator.property.symfony_property_access',
+            SymfonyPropertyAccessorHydrator::class,
+        )
+        ->args([
+            service('nelmio_alice.property_accessor'),
+        ]);
 };
