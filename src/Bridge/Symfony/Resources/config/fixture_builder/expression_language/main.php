@@ -1,0 +1,55 @@
+<?php
+
+/*
+ * This file is part of the Alice package.
+ *
+ * (c) Nelmio <hello@nelm.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\FunctionFixtureReferenceParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\SimpleParser;
+use Nelmio\Alice\FixtureBuilder\ExpressionLanguage\Parser\StringMergerParser;
+
+return static function (ContainerConfigurator $container): void {
+    $services = $container->services();
+
+    $services->alias(
+        'nelmio_alice.fixture_builder.expression_language.parser',
+        'nelmio_alice.fixture_builder.expression_language.parser.function_fixture_reference_parser',
+    );
+
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.parser.function_fixture_reference_parser',
+            FunctionFixtureReferenceParser::class,
+        )
+        ->args([
+            service('nelmio_alice.fixture_builder.expression_language.parser.string_parser'),
+        ]);
+
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.parser.string_parser',
+            StringMergerParser::class,
+        )
+        ->args([
+            service('nelmio_alice.fixture_builder.expression_language.parser.simple_parser'),
+        ]);
+
+    $services
+        ->set(
+            'nelmio_alice.fixture_builder.expression_language.parser.simple_parser',
+            SimpleParser::class,
+        )
+        ->args([
+            service('nelmio_alice.fixture_builder.expression_language.lexer'),
+            service('nelmio_alice.fixture_builder.expression_language.parser.token_parser'),
+        ]);
+};
