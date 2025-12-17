@@ -50,12 +50,14 @@ jobs:
                   php-version: ${{ matrix.php }}
                   tools: composer, flex
 
+            - name: Configure Symfony version
+              run: echo "SYMFONY_REQUIRE=${{ matrix.symfony-versions }}" >> $GITHUB_ENV
+              if: matrix.symfony-versions
+
             - name: Install dependencies
               run: composer install
 
             - name: Install bin dependencies
-              env:
-                  SYMFONY_REQUIRE: ${{ matrix.symfony-version }}
               run: composer bin symfony install
               if: matrix.symfony-versions
 
