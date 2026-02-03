@@ -26,7 +26,7 @@ final class NoSuchMethodExceptionFactory
         FixtureInterface $fixture,
         FixtureMethodCallValue $value,
         int $code = 0,
-        ?Throwable $previous = null
+        ?Throwable $previous = null,
     ): NoSuchMethodException {
         return new NoSuchMethodException(
             sprintf(

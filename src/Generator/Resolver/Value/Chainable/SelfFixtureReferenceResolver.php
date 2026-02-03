@@ -74,7 +74,7 @@ final class SelfFixtureReferenceResolver implements ChainableValueResolverInterf
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         if ('self' === $value->getValue()) {
             return new ResolvedValueWithFixtureSet(

@@ -81,7 +81,7 @@ final class RecursiveParameterResolver implements ChainableParameterResolverInte
         ParameterBag $resolvedParameters,
         ?ResolvingContext $context = null,
         ?ParameterBag $previousResult = null,
-        int $counter = 1
+        int $counter = 1,
     ): ParameterBag {
         if (null === $previousResult) {
             $result = $this->resolver->resolve($parameter, $unresolvedParameters, $resolvedParameters, $context);

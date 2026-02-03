@@ -58,7 +58,7 @@ final class DynamicArrayValueResolver implements ChainableValueResolverInterface
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         $this->checkResolver(__METHOD__);
 

@@ -62,7 +62,7 @@ final class OptionalMethodCallProcessor implements ChainableCallProcessorInterfa
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        MethodCallInterface $methodCall
+        MethodCallInterface $methodCall,
     ): ResolvedFixtureSet {
         if (false === ($methodCall instanceof OptionalMethodCall)) {
             throw new LogicException('TODO');

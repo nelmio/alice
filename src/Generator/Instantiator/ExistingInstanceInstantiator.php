@@ -51,7 +51,7 @@ final class ExistingInstanceInstantiator implements InstantiatorInterface, Value
     public function instantiate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedFixtureSet {
         if ($fixtureSet->getObjects()->has($fixture)) {
             return $fixtureSet;

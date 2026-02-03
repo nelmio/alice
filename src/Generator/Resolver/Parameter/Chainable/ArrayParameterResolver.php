@@ -53,7 +53,7 @@ final class ArrayParameterResolver implements ChainableParameterResolverInterfac
         Parameter $unresolvedArrayParameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        ?ResolvingContext $context = null
+        ?ResolvingContext $context = null,
     ): ParameterBag {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);

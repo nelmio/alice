@@ -47,7 +47,7 @@ final class CallProcessorRegistry implements CallProcessorInterface
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        MethodCallInterface $methodCall
+        MethodCallInterface $methodCall,
     ): ResolvedFixtureSet {
         foreach ($this->processors as $processor) {
             if ($processor->canProcess($methodCall)) {

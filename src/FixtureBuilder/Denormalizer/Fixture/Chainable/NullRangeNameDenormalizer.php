@@ -46,7 +46,7 @@ final class NullRangeNameDenormalizer implements CollectionDenormalizer
         string $className,
         string $fixtureId,
         array $specs,
-        FlagBag $flags
+        FlagBag $flags,
     ): FixtureBag {
         return $builtFixtures;
     }

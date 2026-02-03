@@ -48,7 +48,7 @@ class ImmutableUser
         string $fullname,
         string $birthDate,
         string $email,
-        int $favoriteNumber
+        int $favoriteNumber,
     ) {
         $this->username = $username;
         $this->fullname = $fullname;

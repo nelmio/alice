@@ -52,7 +52,7 @@ class DummyChainableParserAwareDenormalizer implements ChainableFixtureDenormali
         string $className,
         string $fixtureId,
         array $specs,
-        FlagBag $flags
+        FlagBag $flags,
     ): FixtureBag {
         return $this->decoratedDenormalizer->denormalize($builtFixtures, $className, $fixtureId, $specs, $flags);
     }

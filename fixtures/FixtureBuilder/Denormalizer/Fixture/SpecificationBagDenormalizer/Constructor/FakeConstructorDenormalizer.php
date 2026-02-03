@@ -26,7 +26,7 @@ class FakeConstructorDenormalizer implements ConstructorDenormalizerInterface
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedConstructor
+        array $unparsedConstructor,
     ): MethodCallInterface {
         $this->__call(__FUNCTION__, func_get_args());
     }

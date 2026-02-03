@@ -49,7 +49,7 @@ class FakeChainableDenormalizerAwareDenormalizer implements ChainableFixtureDeno
         string $className,
         string $fixtureId,
         array $specs,
-        FlagBag $flags
+        FlagBag $flags,
     ): FixtureBag {
         $this->__call(__FUNCTION__, func_get_args());
     }

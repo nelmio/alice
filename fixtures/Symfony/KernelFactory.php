@@ -26,7 +26,7 @@ class KernelFactory
         ?string $config = null,
         string $kernelClass = AppKernel::class,
         string $environment = 'test',
-        $debug = true
+        $debug = true,
     ): KernelInterface {
         if (null !== $config) {
             if (false === array_key_exists($config, static::$environments)) {

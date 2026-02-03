@@ -36,7 +36,7 @@ final class SimpleArgumentsDenormalizer implements ArgumentsDenormalizerInterfac
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedArguments
+        array $unparsedArguments,
     ): array {
         $arguments = [];
         foreach ($unparsedArguments as $unparsedIndex => $argument) {

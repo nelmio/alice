@@ -67,7 +67,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
@@ -96,7 +96,7 @@ final class FixtureWildcardReferenceResolver implements ChainableValueResolverIn
     private function getSuitableIds(
         FixtureMatchReferenceValue $value,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): array {
         $pattern = $value->getValue();
 

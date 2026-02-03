@@ -57,7 +57,7 @@ final class InstantiationExceptionFactory
     public static function createForCouldNotGetConstructorData(
         FixtureInterface $fixture,
         int $code = 0,
-        ?Throwable $previous = null
+        ?Throwable $previous = null,
     ): InstantiationException {
         return new InstantiationException(
             sprintf(

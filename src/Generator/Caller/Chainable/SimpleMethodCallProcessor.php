@@ -34,7 +34,7 @@ final class SimpleMethodCallProcessor implements ChainableCallProcessorInterface
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        MethodCallInterface $methodCall
+        MethodCallInterface $methodCall,
     ): ResolvedFixtureSet {
         $result = $object->getInstance()->{$methodCall->getMethod()}(...array_values($methodCall->getArguments()));
 

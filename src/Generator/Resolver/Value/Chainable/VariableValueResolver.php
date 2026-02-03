@@ -43,7 +43,7 @@ final class VariableValueResolver implements ChainableValueResolverInterface
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         $variableName = $value->getValue();
         if (array_key_exists($variableName, $scope)) {

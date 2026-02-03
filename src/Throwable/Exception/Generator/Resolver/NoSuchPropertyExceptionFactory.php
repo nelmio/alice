@@ -26,7 +26,7 @@ final class NoSuchPropertyExceptionFactory
         FixtureInterface $fixture,
         FixturePropertyValue $value,
         int $code = 0,
-        ?Throwable $previous = null
+        ?Throwable $previous = null,
     ): NoSuchPropertyException {
         return new NoSuchPropertyException(
             sprintf(

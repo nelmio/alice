@@ -71,7 +71,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         if (null === $this->generator) {
             throw ObjectGeneratorNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
@@ -105,7 +105,7 @@ final class FixtureReferenceResolver implements ChainableValueResolverInterface,
         string $referredFixtureId,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        ?bool $passIncompleteObject = null
+        ?bool $passIncompleteObject = null,
     ): ResolvedValueWithFixtureSet {
         if ($fixtureSet->getObjects()->has($referredFixture)) {
             $referredObject = $fixtureSet->getObjects()->get($referredFixture);

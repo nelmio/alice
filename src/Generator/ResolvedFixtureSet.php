@@ -42,7 +42,7 @@ final class ResolvedFixtureSet
     public function __construct(
         ParameterBag $parameters,
         FixtureBag $fixtures,
-        ObjectBag $injectedObjects
+        ObjectBag $injectedObjects,
     ) {
         $this->parameters = $parameters;
         $this->fixtures = $fixtures;

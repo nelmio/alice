@@ -49,7 +49,7 @@ final class EvaluatedValueResolver implements ChainableValueResolverInterface
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         // Scope exclusive to the evaluated expression
         // We make use of the underscore prefix (`_`) here to limit the possible conflicts with the variables injected

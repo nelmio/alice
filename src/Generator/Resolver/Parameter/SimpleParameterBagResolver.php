@@ -39,7 +39,7 @@ final class SimpleParameterBagResolver implements ParameterBagResolverInterface
 
     public function resolve(
         ParameterBag $unresolvedParameters,
-        ?ParameterBag $injectedParameters = null
+        ?ParameterBag $injectedParameters = null,
     ): ParameterBag {
         $resolvedParameters = $injectedParameters ?? new ParameterBag();
         foreach ($unresolvedParameters as $key => $value) {

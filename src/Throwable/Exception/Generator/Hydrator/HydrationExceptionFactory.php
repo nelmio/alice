@@ -26,7 +26,7 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code,
-        Throwable $previous
+        Throwable $previous,
     ): HydrationException {
         return new HydrationException(
             sprintf(
@@ -44,7 +44,7 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code = 0,
-        ?Throwable $previous = null
+        ?Throwable $previous = null,
     ): InaccessiblePropertyException {
         return new InaccessiblePropertyException(
             sprintf(
@@ -62,7 +62,7 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code = 0,
-        ?Throwable $previous = null
+        ?Throwable $previous = null,
     ): InvalidArgumentException {
         return new InvalidArgumentException(
             sprintf(
@@ -80,7 +80,7 @@ final class HydrationExceptionFactory
         ObjectInterface $object,
         Property $property,
         int $code = 0,
-        ?Throwable $previous = null
+        ?Throwable $previous = null,
     ): NoSuchPropertyException {
         return new NoSuchPropertyException(
             sprintf(

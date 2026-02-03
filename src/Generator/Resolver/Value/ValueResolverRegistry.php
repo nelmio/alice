@@ -71,7 +71,7 @@ final class ValueResolverRegistry implements ValueResolverInterface, ObjectGener
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         foreach ($this->resolvers as $resolver) {
             if ($resolver->canResolve($value)) {

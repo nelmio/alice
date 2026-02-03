@@ -70,7 +70,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     public function instantiate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedFixtureSet {
         [$fixture, $fixtureSet] = $this->resolveFixtureConstructor($fixture, $fixtureSet, $context);
 
@@ -83,7 +83,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
     private function resolveFixtureConstructor(
         FixtureInterface $fixture,
         ResolvedFixtureSet $set,
-        GenerationContext $context
+        GenerationContext $context,
     ): array {
         $specs = $fixture->getSpecs();
         $constructor = $specs->getConstructor();
@@ -125,7 +125,7 @@ final class InstantiatorResolver implements InstantiatorInterface, ValueResolver
         ValueResolverInterface $resolver,
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): array {
         $scope = $fixtureSet->getParameters()->toArray();
 

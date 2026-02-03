@@ -55,7 +55,7 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
         ValueResolverInterface $valueResolver,
         InstantiatorInterface $instantiator,
         HydratorInterface $hydrator,
-        CallerInterface $caller
+        CallerInterface $caller,
     ) {
         if ($valueResolver instanceof ObjectGeneratorAwareInterface) {
             $valueResolver = $valueResolver->withObjectGenerator($this);
@@ -81,7 +81,7 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
     public function generate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ObjectBag {
         // TODO: move this outside of this in a dedicated class e.g. TolerantObjectGenerator which could decorate the
         // root ObjectGeneratorInterface instance used
@@ -114,7 +114,7 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
     private function generateObject(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ObjectBag {
         if ($context->isFirstPass()) {
             $fixtureSet = $this->instantiator->instantiate($fixture, $fixtureSet, $context);
@@ -134,7 +134,7 @@ final class SimpleObjectGenerator implements ObjectGeneratorInterface
     private function completeObject(
         FixtureInterface $fixture,
         ResolvedFixtureSet $set,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedFixtureSet {
         $instantiatedObject = $set->getObjects()->get($fixture);
 

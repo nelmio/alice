@@ -58,7 +58,7 @@ final class ParameterResolverRegistry implements ParameterResolverInterface
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $injectedParameters,
-        ?ResolvingContext $context = null
+        ?ResolvingContext $context = null,
     ): ParameterBag {
         foreach ($this->resolvers as $resolver) {
             if ($resolver->canResolve($parameter)) {
