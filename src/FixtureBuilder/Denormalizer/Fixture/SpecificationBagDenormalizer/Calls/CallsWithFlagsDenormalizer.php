@@ -47,7 +47,7 @@ final class CallsWithFlagsDenormalizer implements CallsDenormalizerInterface
         FixtureInterface $scope,
         FlagParserInterface $parser,
         string $unparsedMethod,
-        array $unparsedArguments
+        array $unparsedArguments,
     ): MethodCallInterface {
         $methodFlags = $parser->parse($unparsedMethod);
         $method = $methodFlags->getKey();

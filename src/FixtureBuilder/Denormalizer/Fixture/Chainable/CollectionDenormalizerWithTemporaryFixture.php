@@ -56,7 +56,7 @@ final class CollectionDenormalizerWithTemporaryFixture implements CollectionDeno
     public function __construct(
         CollectionDenormalizer $decoratedCollectionDenormalizer,
         ?FixtureDenormalizerInterface $decoratedDenormalizer = null,
-        ?FlagParserInterface $parser = null
+        ?FlagParserInterface $parser = null,
     ) {
         $this->collectionDenormalizer = $decoratedCollectionDenormalizer;
         $this->denormalizer = $decoratedDenormalizer;
@@ -88,7 +88,7 @@ final class CollectionDenormalizerWithTemporaryFixture implements CollectionDeno
         string $className,
         string $fixtureId,
         array $specs,
-        FlagBag $flags
+        FlagBag $flags,
     ): FixtureBag {
         if (null === $this->denormalizer) {
             throw DenormalizerExceptionFactory::createDenormalizerNotFoundUnexpectedCall(__METHOD__);
@@ -144,7 +144,7 @@ final class CollectionDenormalizerWithTemporaryFixture implements CollectionDeno
         FixtureBag $builtFixtures,
         string $className,
         array $specs,
-        FlagBag $flags
+        FlagBag $flags,
     ): array {
         $tempFixtureId = uniqid('temporary_id');
         $builtFixtures = $this->denormalizer->denormalize(

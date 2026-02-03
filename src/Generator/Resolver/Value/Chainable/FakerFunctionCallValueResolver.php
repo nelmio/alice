@@ -52,7 +52,7 @@ final class FakerFunctionCallValueResolver implements ChainableValueResolverInte
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         /**
          * @var FakerGenerator $generator

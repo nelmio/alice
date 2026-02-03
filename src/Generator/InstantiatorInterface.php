@@ -27,6 +27,6 @@ interface InstantiatorInterface
     public function instantiate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedFixtureSet;
 }

@@ -56,7 +56,7 @@ final class InstantiatorRegistry implements InstantiatorInterface, ValueResolver
     public function instantiate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedFixtureSet {
         foreach ($this->instantiators as $instantiator) {
             if ($instantiator->canInstantiate($fixture)) {

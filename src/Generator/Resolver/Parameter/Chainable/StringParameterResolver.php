@@ -58,7 +58,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        ?ResolvingContext $context = null
+        ?ResolvingContext $context = null,
     ): ParameterBag {
         $context = ResolvingContext::createFrom($context, $parameter->getKey());
 
@@ -94,7 +94,7 @@ final class StringParameterResolver implements ChainableParameterResolverInterfa
         string $key,
         ParameterBag $unresolvedParameters,
         ParameterBag $resolvedParameters,
-        ResolvingContext $context
+        ResolvingContext $context,
     ): ParameterBag {
         if ($resolvedParameters->has($key)) {
             return $resolvedParameters;

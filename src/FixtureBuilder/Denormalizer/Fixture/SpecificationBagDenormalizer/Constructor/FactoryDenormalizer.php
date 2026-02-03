@@ -38,7 +38,7 @@ final class FactoryDenormalizer implements ConstructorDenormalizerInterface
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedMethod
+        array $unparsedMethod,
     ): MethodCallInterface {
         $method = key($unparsedMethod);
 

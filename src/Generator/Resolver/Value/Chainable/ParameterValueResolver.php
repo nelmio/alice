@@ -43,7 +43,7 @@ final class ParameterValueResolver implements ChainableValueResolverInterface
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         $parameterKey = $value->getValue();
         $parameters = $fixtureSet->getParameters();

@@ -27,7 +27,7 @@ class FakeCallProcessor implements CallProcessorInterface
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        MethodCallInterface $methodCall
+        MethodCallInterface $methodCall,
     ): ResolvedFixtureSet {
         $this->__call(__METHOD__, func_get_args());
     }

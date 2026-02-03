@@ -27,7 +27,7 @@ class DummySpecificationBagDenormalizer implements SpecificationsDenormalizerInt
     public function denormalize(
         FixtureInterface $fixture,
         FlagParserInterface $parser,
-        array $unparsedSpecs
+        array $unparsedSpecs,
     ): SpecificationBag {
         return SpecificationBagFactory::create();
     }

@@ -43,7 +43,7 @@ final class FunctionDenormalizer implements CallsDenormalizerInterface
         FixtureInterface $scope,
         FlagParserInterface $parser,
         string $unparsedMethod,
-        array $unparsedArguments
+        array $unparsedArguments,
     ): MethodCallInterface {
         [$caller, $method] = $this->getCallerReference($scope, $unparsedMethod);
         $arguments = $this->argumentsDenormalizer->denormalize($scope, $parser, $unparsedArguments);

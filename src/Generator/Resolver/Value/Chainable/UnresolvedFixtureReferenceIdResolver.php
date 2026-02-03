@@ -86,7 +86,7 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
@@ -119,7 +119,7 @@ final class UnresolvedFixtureReferenceIdResolver implements ChainableValueResolv
         FixtureInterface $fixture,
         ResolvedFixtureSet $set,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): array {
         $referredFixtureId = $value->getValue();
         if ($referredFixtureId instanceof ValueInterface) {

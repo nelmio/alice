@@ -79,7 +79,7 @@ final class OptionalValueResolverTest extends TestCase
     public function testCanHandleExtremaQuantifiersCorrectly(
         OptionalValue $value,
         int $randomValue,
-        string $expectedValue
+        string $expectedValue,
     ): void {
         $generatorProphecy = $this->prophesize(Generator::class);
         $generatorProphecy->numberBetween(0, 99)->willReturn($randomValue);

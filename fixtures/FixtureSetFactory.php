@@ -19,7 +19,7 @@ class FixtureSetFactory
         ?ParameterBag $loadedParameters = null,
         ?ParameterBag $injectedParameters = null,
         ?FixtureBag $fixtures = null,
-        ?ObjectBag $objects = null
+        ?ObjectBag $objects = null,
     ): FixtureSet {
         return new FixtureSet(
             $loadedParameters ?? new ParameterBag(),

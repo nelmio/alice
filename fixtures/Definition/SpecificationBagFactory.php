@@ -18,7 +18,7 @@ class SpecificationBagFactory
     public static function create(
         ?MethodCallInterface $constructor = null,
         ?PropertyBag $properties = null,
-        ?MethodCallBag $calls = null
+        ?MethodCallBag $calls = null,
     ): SpecificationBag {
         return new SpecificationBag(
             $constructor,

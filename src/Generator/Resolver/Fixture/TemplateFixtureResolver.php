@@ -36,7 +36,7 @@ final class TemplateFixtureResolver
         FixtureInterface|TemplatingFixture $fixture,
         FixtureBag $unresolvedFixtures,
         TemplatingFixtureBag $resolvedFixtures,
-        ResolvingContext $context
+        ResolvingContext $context,
     ): FixtureInterface|TemplatingFixtureBag {
         $context->checkForCircularReference($fixture->getId());
 
@@ -77,7 +77,7 @@ final class TemplateFixtureResolver
         array $extendedFixtureReferences,
         FixtureBag $unresolvedFixtures,
         TemplatingFixtureBag $resolvedFixtures,
-        ResolvingContext $context
+        ResolvingContext $context,
     ): array {
         $fixtures = new FixtureBag();
         foreach ($extendedFixtureReferences as $reference) {

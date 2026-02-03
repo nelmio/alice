@@ -65,7 +65,7 @@ final class FixtureMethodCallReferenceResolver implements ChainableValueResolver
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         if (null === $this->argumentResolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);

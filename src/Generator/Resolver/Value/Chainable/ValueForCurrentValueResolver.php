@@ -43,7 +43,7 @@ final class ValueForCurrentValueResolver implements ChainableValueResolverInterf
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         $valueForCurrent = $fixture->getValueForCurrent();
 

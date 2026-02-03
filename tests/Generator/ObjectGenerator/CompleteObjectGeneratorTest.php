@@ -108,7 +108,7 @@ final class CompleteObjectGeneratorTest extends TestCase
         FixtureInterface $fixture,
         GenerationContext $context,
         Closure $decoratedGeneratorFactory,
-        ObjectBag $expected
+        ObjectBag $expected,
     ): void {
         $set = ResolvedFixtureSetFactory::create(
             null,

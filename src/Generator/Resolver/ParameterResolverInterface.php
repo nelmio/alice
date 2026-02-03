@@ -36,6 +36,6 @@ interface ParameterResolverInterface
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
-        ParameterBag $resolvedParameters
+        ParameterBag $resolvedParameters,
     ): ParameterBag;
 }

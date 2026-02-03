@@ -51,7 +51,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
     public function __construct(
         CallProcessorInterface $callProcessor,
         ?ValueResolverInterface $resolver = null,
-        ?NamedArgumentsResolver $namedArgumentsResolver = null
+        ?NamedArgumentsResolver $namedArgumentsResolver = null,
     ) {
         $this->callProcessor = $callProcessor;
         $this->resolver = $resolver;
@@ -66,7 +66,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
     public function doCallsOn(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedFixtureSet {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);
@@ -99,7 +99,7 @@ final class SimpleCaller implements CallerInterface, ValueResolverAwareInterface
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): array {
         $arguments = $methodCall->getArguments();
 

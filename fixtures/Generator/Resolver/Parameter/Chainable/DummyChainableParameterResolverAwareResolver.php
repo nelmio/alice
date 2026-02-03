@@ -44,7 +44,7 @@ class DummyChainableParameterResolverAwareResolver implements ChainableParameter
     public function resolve(
         Parameter $parameter,
         ParameterBag $unresolvedParameters,
-        ParameterBag $resolvedParameters
+        ParameterBag $resolvedParameters,
     ): ParameterBag {
         $this->__call(__FUNCTION__, func_get_args());
     }

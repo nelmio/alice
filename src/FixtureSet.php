@@ -42,7 +42,7 @@ final class FixtureSet
         ParameterBag $loadedParameters,
         ParameterBag $injectedParameters,
         FixtureBag $fixtures,
-        ObjectBag $injectedObjects
+        ObjectBag $injectedObjects,
     ) {
         $this->loadedParameters = $loadedParameters;
         $this->injectedParameters = $injectedParameters;

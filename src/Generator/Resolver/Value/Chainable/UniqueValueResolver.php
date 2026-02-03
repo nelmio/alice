@@ -80,7 +80,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         ResolvedFixtureSet $fixtureSet,
         array $scope,
         GenerationContext $context,
-        int $tryCounter = 0
+        int $tryCounter = 0,
     ): ResolvedValueWithFixtureSet {
         $this->checkResolver(__METHOD__);
         $tryCounter = $this->incrementCounter($tryCounter, $value, $this->limit);
@@ -128,7 +128,7 @@ final class UniqueValueResolver implements ChainableValueResolverInterface, Valu
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): array {
         $realValue = $value->getValue();
         if ($realValue instanceof ValueInterface) {

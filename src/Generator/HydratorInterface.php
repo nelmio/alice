@@ -29,6 +29,6 @@ interface HydratorInterface
     public function hydrate(
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedFixtureSet;
 }

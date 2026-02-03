@@ -53,7 +53,7 @@ final class ConfiguratorMethodCallProcessor implements ChainableCallProcessorInt
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        MethodCallInterface $methodCall
+        MethodCallInterface $methodCall,
     ): ResolvedFixtureSet {
         if (null === $this->processor
             || !method_exists($methodCall, 'getOriginalMethodCall')
