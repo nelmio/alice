@@ -36,7 +36,7 @@ final class RemoveConflictingParametersParameterBagResolver implements Parameter
 
     public function resolve(
         ParameterBag $unresolvedParameters,
-        ?ParameterBag $injectedParameters = null
+        ?ParameterBag $injectedParameters = null,
     ): ParameterBag {
         if (null === $injectedParameters) {
             $injectedParameters = new ParameterBag();

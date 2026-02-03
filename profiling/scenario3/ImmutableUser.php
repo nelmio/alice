@@ -47,7 +47,7 @@ class ImmutableUser implements UserInterface
         string $fullname,
         DateTimeInterface $birthDate,
         string $email,
-        int $favoriteNumber
+        int $favoriteNumber,
     ) {
         $this->username = $username;
         $this->fullname = $fullname;

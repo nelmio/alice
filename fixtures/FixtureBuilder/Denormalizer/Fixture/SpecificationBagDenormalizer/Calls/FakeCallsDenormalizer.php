@@ -27,7 +27,7 @@ class FakeCallsDenormalizer implements CallsDenormalizerInterface
         FixtureInterface $scope,
         FlagParserInterface $parser,
         string $unparsedMethod,
-        array $unparsedArguments
+        array $unparsedArguments,
     ): MethodCallInterface {
         $this->__call(__FUNCTION__, func_get_args());
     }

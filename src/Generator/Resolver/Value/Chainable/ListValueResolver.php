@@ -58,7 +58,7 @@ final class ListValueResolver implements ChainableValueResolverInterface, ValueR
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);

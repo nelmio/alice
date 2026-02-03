@@ -73,7 +73,7 @@ final class FixturePropertyReferenceResolver implements ChainableValueResolverIn
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet {
         if (null === $this->resolver) {
             throw ResolverNotFoundExceptionFactory::createUnexpectedCall(__METHOD__);

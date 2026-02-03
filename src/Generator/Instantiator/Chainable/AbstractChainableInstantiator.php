@@ -37,7 +37,7 @@ abstract class AbstractChainableInstantiator implements ChainableInstantiatorInt
     public function instantiate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedFixtureSet {
         try {
             $instance = $this->createInstance($fixture);

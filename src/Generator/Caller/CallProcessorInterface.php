@@ -24,6 +24,6 @@ interface CallProcessorInterface
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        MethodCallInterface $methodCall
+        MethodCallInterface $methodCall,
     ): ResolvedFixtureSet;
 }

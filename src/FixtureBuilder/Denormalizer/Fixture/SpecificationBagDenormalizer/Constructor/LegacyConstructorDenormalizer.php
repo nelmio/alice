@@ -36,7 +36,7 @@ final class LegacyConstructorDenormalizer implements ConstructorDenormalizerInte
 
     public function __construct(
         ConstructorDenormalizerInterface $constructorDenormalizer,
-        ConstructorDenormalizerInterface $factoryDenormalizer
+        ConstructorDenormalizerInterface $factoryDenormalizer,
     ) {
         $this->constructorDenormalizer = $constructorDenormalizer;
         $this->factoryDenormalizer = $factoryDenormalizer;
@@ -45,7 +45,7 @@ final class LegacyConstructorDenormalizer implements ConstructorDenormalizerInte
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedConstructor
+        array $unparsedConstructor,
     ): MethodCallInterface {
         try {
             return $this->factoryDenormalizer->denormalize($scope, $parser, $unparsedConstructor);

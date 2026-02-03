@@ -56,7 +56,7 @@ final class TemplateFixtureBagResolver implements FixtureBagResolverInterface
         TemplateFixtureResolver $resolver,
         FixtureInterface $fixture,
         FixtureBag $unresolvedFixtures,
-        TemplatingFixtureBag $resolvedFixtures
+        TemplatingFixtureBag $resolvedFixtures,
     ): TemplatingFixtureBag {
         /** @var FixtureInterface $fixture */
         $id = $fixture->getId();

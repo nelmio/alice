@@ -42,7 +42,7 @@ final class ConstructorDenormalizer implements ConstructorDenormalizerInterface
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedConstructor
+        array $unparsedConstructor,
     ): MethodCallInterface {
         return new SimpleMethodCall(
             '__construct',

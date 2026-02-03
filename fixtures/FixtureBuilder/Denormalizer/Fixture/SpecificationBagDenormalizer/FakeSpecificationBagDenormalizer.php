@@ -26,7 +26,7 @@ class FakeSpecificationBagDenormalizer implements SpecificationsDenormalizerInte
     public function denormalize(
         FixtureInterface $fixture,
         FlagParserInterface $parser,
-        array $unparsedSpecs
+        array $unparsedSpecs,
     ): SpecificationBag {
         $this->__call(__METHOD__, func_get_args());
     }

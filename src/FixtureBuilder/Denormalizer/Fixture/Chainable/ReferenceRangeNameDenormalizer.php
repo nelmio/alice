@@ -68,7 +68,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
         string $className,
         string $fixtureId,
         array $specs,
-        FlagBag $flags
+        FlagBag $flags,
     ): FixtureBag {
         $matches = [];
         if (false === $this->canDenormalize($fixtureId, $matches)) {
@@ -112,7 +112,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
     private function buildReferencedValues(
         FixtureBag $builtFixtures,
         string $referencedName,
-        bool $allFlag
+        bool $allFlag,
     ): array {
         if (false === $allFlag) {
             /** @var TemplatingFixture $fixture */
@@ -154,7 +154,7 @@ final class ReferenceRangeNameDenormalizer implements ChainableFixtureDenormaliz
         string $className,
         array $specs,
         FlagBag $flags,
-        FixtureInterface $valueForCurrent
+        FixtureInterface $valueForCurrent,
     ): FixtureInterface {
         $fixture = new SimpleFixture(
             $fixtureId,

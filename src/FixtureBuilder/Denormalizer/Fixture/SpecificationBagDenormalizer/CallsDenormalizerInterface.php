@@ -34,6 +34,6 @@ interface CallsDenormalizerInterface
         FixtureInterface $scope,
         FlagParserInterface $parser,
         string $unparsedMethod,
-        array $unparsedArguments
+        array $unparsedArguments,
     ): MethodCallInterface;
 }

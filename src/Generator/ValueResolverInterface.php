@@ -33,6 +33,6 @@ interface ValueResolverInterface
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
         array $scope,
-        GenerationContext $context
+        GenerationContext $context,
     ): ResolvedValueWithFixtureSet;
 }

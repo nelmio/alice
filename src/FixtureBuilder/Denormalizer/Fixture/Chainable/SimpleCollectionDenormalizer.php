@@ -54,7 +54,7 @@ final class SimpleCollectionDenormalizer implements CollectionDenormalizer, Fixt
     public function __construct(
         CollectionDenormalizer $decoratedCollectionDenormalizer,
         ?FixtureDenormalizerInterface $decoratedDenormalizer = null,
-        ?FlagParserInterface $parser = null
+        ?FlagParserInterface $parser = null,
     ) {
         if ($decoratedCollectionDenormalizer instanceof FixtureDenormalizerAwareInterface
             && null !== $decoratedDenormalizer
@@ -98,7 +98,7 @@ final class SimpleCollectionDenormalizer implements CollectionDenormalizer, Fixt
         string $className,
         string $fixtureId,
         array $specs,
-        FlagBag $flags
+        FlagBag $flags,
     ): FixtureBag {
         try {
             return $this->collectionDenormalizer->denormalize($builtFixtures, $className, $fixtureId, $specs, $flags);
@@ -138,7 +138,7 @@ final class SimpleCollectionDenormalizer implements CollectionDenormalizer, Fixt
         string $fixtureId,
         array $specs,
         FlagBag $flags,
-        string $valueForCurrent
+        string $valueForCurrent,
     ): FixtureBag {
         $builtFixtures = $this->denormalizer->denormalize(
             $builtFixtures,

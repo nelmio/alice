@@ -43,6 +43,6 @@ interface ConstructorDenormalizerInterface
     public function denormalize(
         FixtureInterface $scope,
         FlagParserInterface $parser,
-        array $unparsedConstructor
+        array $unparsedConstructor,
     ): MethodCallInterface;
 }

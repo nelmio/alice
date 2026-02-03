@@ -42,7 +42,7 @@ final class MethodCallWithReferenceProcessor implements ChainableCallProcessorIn
         ObjectInterface $object,
         ResolvedFixtureSet $fixtureSet,
         GenerationContext $context,
-        MethodCallInterface $methodCall
+        MethodCallInterface $methodCall,
     ): ResolvedFixtureSet {
         /** @var StaticReference $reference */
         $reference = $methodCall->getCaller();

@@ -39,7 +39,7 @@ final class CompleteObjectGenerator implements ObjectGeneratorInterface
     public function generate(
         FixtureInterface $fixture,
         ResolvedFixtureSet $fixtureSet,
-        GenerationContext $context
+        GenerationContext $context,
     ): ObjectBag {
         $objects = $fixtureSet->getObjects();
 
