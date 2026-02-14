@@ -52,7 +52,7 @@ final class FunctionFixtureReferenceParser implements ParserInterface
 
         $mergedValues = array_reduce(
             $parsedValue->getValue(),
-            [$this, 'mergeFunctionFixtureReferences'],
+            $this->mergeFunctionFixtureReferences(...),
             [],
         );
 

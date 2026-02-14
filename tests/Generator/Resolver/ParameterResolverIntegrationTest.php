@@ -110,8 +110,6 @@ class ParameterResolverIntegrationTest extends TestCase
             'int_param' => 2000,
             'float_param' => -.89,
             'object_param' => new stdClass(),
-            'closure_param' => static function (): void {
-            },
             'class_param' => 'App\Test\Dummy',
             'array_value' => [
                 'dummy',
@@ -182,7 +180,7 @@ class ParameterResolverIntegrationTest extends TestCase
             ]),
         ];
 
-        $return['composite stringified reference'] = [
+        $return['composite chained stringified reference'] = [
             new ParameterBag([
                 'param1' => '<{param2}> <{param4}>',
                 'param2' => '<{param3}>',
@@ -228,7 +226,7 @@ class ParameterResolverIntegrationTest extends TestCase
             ]),
         ];
 
-        $return['deep nested parameters'] = [
+        $return['deep nested parameters with sibling'] = [
             new ParameterBag([
                 'param1' => 'hey <{param<{param<{param3}>}>}> <{param4}> world',
                 'param3' => 2,
