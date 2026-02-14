@@ -68,73 +68,56 @@ final class Reference
             'malformed-element' => [
                 'non-empty string with empty flags' => [
                     'user ()',
-                    null,
                 ],
                 'non-empty string with empty flags with extra spaces' => [
                     ' user () ',
-                    null,
                 ],
                 'non-empty string with empty flags with lot of extra spaces' => [
                     '  user ()  ',
-                    null,
                 ],
 
                 'string with 1 flag and lot of extra space' => [
                     'user (  dummy_flag  )',
-                    null,
                 ],
                 'string with 1 flag and ending with useless comma' => [
                     'user (dummy_flag,)',
-                    null,
                 ],
                 'string with 1 flag and ending with useless comma and space' => [
                     'user (dummy_flag,  )',
-                    null,
                 ],
                 'string with 1 flag and starting with useless comma' => [
                     'user (, dummy_flag)',
-                    null,
                 ],
                 'string with 1 flag and starting with useless comma and space' => [
                     'user ( , dummy_flag)',
-                    null,
                 ],
                 'string with 1 flag and starting with useless comma and a lot of spaces' => [
                     'user (  , dummy_flag)',
-                    null,
                 ],
                 'string with 1 flag and starting with useless comma and extra spaces after comma' => [
                     'user (,  dummy_flag)',
-                    null,
                 ],
 
                 'string with 2 flags and lot of extra space' => [
                     'user (  dummy_flag  ,  another_dummy_flag  )',
-                    null,
                 ],
                 'string with 2 flags and ending with useless comma' => [
                     'user (dummy_flag, another_dummy_flag,)',
-                    null,
                 ],
                 'string with 2 flag and ending with useless comma and space' => [
                     'user (dummy_flag, another_dummy_flag,  )',
-                    null,
                 ],
                 'string with 2 flags and starting with useless comma' => [
                     'user (, dummy_flag, another_dummy_flag)',
-                    null,
                 ],
                 'string with 2 flags and starting with useless comma and space' => [
                     'user ( , dummy_flag, another_dummy_flag)',
-                    null,
                 ],
                 'string with 2 flags and starting with useless comma and a lot of spaces' => [
                     'user (  , dummy_flag, another_dummy_flag)',
-                    null,
                 ],
                 'string with 2 flags and starting with useless comma and extra spaces after comma' => [
                     'user (,  dummy_flag, another_dummy_flag)',
-                    null,
                 ],
             ],
             'extend' => [
@@ -147,7 +130,6 @@ final class Reference
             'malformed-extend' => [
                 'extend without space' => [
                     'extendsuser_base',
-                    null,
                 ],
             ],
             'optional' => [
@@ -159,19 +141,15 @@ final class Reference
             'malformed-optional' => [
                 'with negative number' => [
                     '-60%?',
-                    null,
                 ],
                 'with float' => [
                     '.6%?',
-                    null,
                 ],
                 'without percentile character' => [
                     '60?',
-                    null,
                 ],
                 'without question mark character' => [
                     '60%',
-                    null,
                 ],
             ],
             'template' => [
