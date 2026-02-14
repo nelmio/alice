@@ -49,7 +49,7 @@ final class StringMergerParser implements ParserInterface
 
         $mergedValues = array_reduce(
             $parsedValue->getValue(),
-            [$this, 'mergeStrings'],
+            $this->mergeStrings(...),
             $initial = [],
         );
 
