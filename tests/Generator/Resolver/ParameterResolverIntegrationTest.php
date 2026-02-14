@@ -182,7 +182,7 @@ class ParameterResolverIntegrationTest extends TestCase
             ]),
         ];
 
-        $return['composite stringified reference'] = [
+        $return['composite chained stringified reference'] = [
             new ParameterBag([
                 'param1' => '<{param2}> <{param4}>',
                 'param2' => '<{param3}>',
@@ -228,7 +228,7 @@ class ParameterResolverIntegrationTest extends TestCase
             ]),
         ];
 
-        $return['deep nested parameters'] = [
+        $return['deep nested parameters with sibling'] = [
             new ParameterBag([
                 'param1' => 'hey <{param<{param<{param3}>}>}> <{param4}> world',
                 'param3' => 2,
