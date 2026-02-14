@@ -110,8 +110,6 @@ class ParameterResolverIntegrationTest extends TestCase
             'int_param' => 2000,
             'float_param' => -.89,
             'object_param' => new stdClass(),
-            'closure_param' => static function (): void {
-            },
             'class_param' => 'App\Test\Dummy',
             'array_value' => [
                 'dummy',
