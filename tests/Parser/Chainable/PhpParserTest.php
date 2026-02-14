@@ -75,7 +75,7 @@ final class PhpParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    #[DataProvider('provideYamlList')]
+    #[DataProvider('provideYamlList', false)]
     public function testCannotParseYamlFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -83,7 +83,7 @@ final class PhpParserTest extends TestCase
         self::assertFalse($actual);
     }
 
-    #[DataProvider('provideJsonList')]
+    #[DataProvider('provideJsonList', false)]
     public function testCannotParseJsonFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);

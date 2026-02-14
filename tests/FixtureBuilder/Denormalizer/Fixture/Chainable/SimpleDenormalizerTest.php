@@ -172,31 +172,31 @@ final class SimpleDenormalizerTest extends ChainableDenormalizerTestCase
         $specsDenormalizerProphecy->denormalize(Argument::cetera())->shouldHaveBeenCalledTimes(1);
     }
 
-    #[DataProvider('provideSimpleFixtures')]
+    #[DataProvider('provideSimpleFixtures', false)]
     public function testCanBuildSimpleFixtures($name): void
     {
         $this->assertCanBuild($name);
     }
 
-    #[DataProvider('provideListFixtures')]
+    #[DataProvider('provideListFixtures', false)]
     public function testCanBuildListFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
 
-    #[DataProvider('provideMalformedListFixtures')]
+    #[DataProvider('provideMalformedListFixtures', false)]
     public function testCanBuildMalformedListFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
 
-    #[DataProvider('provideSegmentFixtures')]
+    #[DataProvider('provideSegmentFixtures', false)]
     public function testCanBuildSegmentFixtures($name): void
     {
         $this->assertCannotBuild($name);
     }
 
-    #[DataProvider('provideMalformedSegmentFixtures')]
+    #[DataProvider('provideMalformedSegmentFixtures', false)]
     public function testCanBuildMalformedSegmentFixtures($name): void
     {
         $this->assertCannotBuild($name);
