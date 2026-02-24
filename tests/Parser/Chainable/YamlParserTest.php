@@ -79,7 +79,7 @@ final class YamlParserTest extends TestCase
         self::assertFalse((new ReflectionClass(YamlParser::class))->isCloneable());
     }
 
-    #[DataProvider('providePhpList')]
+    #[DataProvider('providePhpList', false)]
     public function testCannotParsePhpFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
@@ -96,7 +96,7 @@ final class YamlParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    #[DataProvider('provideJsonList')]
+    #[DataProvider('provideJsonList', false)]
     public function testCannotParseJsonFiles(string $file): void
     {
         $actual = $this->parser->canParse($file);
