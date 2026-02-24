@@ -23,7 +23,7 @@
         "php": "^8.2",
         "fakerphp/faker": "^1.10",
         "myclabs/deep-copy": "^1.10",
-        "sebastian/comparator": "^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0",
+        "sebastian/comparator": "^6.0 || ^7.0",
         "symfony/polyfill-php84": "^1.31",
         "symfony/property-access": "^7.4 || ^8.0",
         "symfony/yaml": "^7.4 || ^8.0"
